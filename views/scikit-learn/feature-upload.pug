@@ -1,0 +1,118 @@
+doctype html
+html
+	head
+		link(href="../bootstrap/css/bootstrap.css", rel="stylesheet")
+		style(type="text/css").
+			body{
+				padding-top:40px;
+				padding-bottom:40px;
+				background-image: url("../bootstrap/img/logo/sklearn-logo.png");
+				background-size: 250px;
+				background-repeat: repeat;
+				background-color:rgba(0,0,0,.5);
+			}
+			.upload{
+				position:absolute;
+				left: 50%;
+				top: 40%;
+				transform: translate(-50%, -50%);
+				max-width: 800px;
+				padding: 19px 29px 29px;
+				margin: 0 auto 20px;
+				background-color: #fff;
+				border: 1px solid #e5e5e5;
+				border-radius: 10px;
+				box-shadow: 0 1px 2px rgba(0,0,0,.05);
+			}
+			.upload .checkbox {
+				margin-bottom: 10px;
+			}
+			.upload input[type="text"] {
+				font-size: 16px;
+				height: auto;
+				margin-bottom: 15px;
+				padding: 7px 9px;
+			}
+			.encode{
+				width: 70px;
+			}
+			
+				
+		
+		
+		script(type='text/javascript').
+			function addFields(){
+				
+				var container = document.getElementById('container');
+				
+				// if no input then don't allow to add more fields
+				var children = container.childNodes;
+				console.log(children);
+				if (children[children.length-1].value!==''){
+					var input = document.createElement("input");
+					input.type="text";
+					input.name="encode";
+					input.className="encode";
+					input.placeholder="col name";
+					container.appendChild(input);
+				}
+			}
+			
+			function toggle1(){
+				var model = document.getElementById('model');
+				model.options[1].disabled =false;
+				model.options[2].disabled =false;
+				model.options[0].disabled = true;
+				model.options[3].disabled = true;
+			}
+			
+			function toggle2(){
+				var model = document.getElementById('model');
+				model.options[0].disabled = false;
+				model.options[3].disabled = false;
+				model.options[1].disabled = true;
+				model.options[2].disabled = true;
+			}
+				
+
+	body
+			form(action='/sklearn/feature', name='sklearn',method='post',enctype="multipart/form-data", class="upload")
+				h2(align="center") FEATURE SELECTION
+				table(class="table table-striped")
+					tr
+						th upload raw data in .csv
+						td <label class="btn btn-default" for="browse">
+							<input id="browse" type="file" name="file" required="true"/>
+							</label>
+					tr
+						th transform categorical columns 
+						td  <div id="container">
+								<input type="button" id="add_form_field" onclick="addFields();" value="add" class="btn btn-default" /> 
+								<input type="text" name="encode" class="encode" placeholder="col name" />
+						</div>
+					tr
+						th target column
+						td <input type="text" name="column" placeholder="column_name" />
+					tr 
+						th target property
+						td <div class="radio">
+							<label class="radio-inline"><input type="radio" name="option" id="discrete" onclick="toggle1();"/>discrete</input></label>
+							<label class="radio-inline"><input type="radio" name="option" id="continuous" onclick="toggle2();" />continuous</input></label>
+						</div>
+					tr 
+						th model
+						td <select name="model" id="model" class="form-control">
+							option(value="mutual_info_regression") mutual info regression
+							option(value="mutual_info_classif" checked) mutual info classification 
+							option(value="f_classif") f classification
+							option(value="f_regression") f regression
+							option(value="chi2") chi2
+						</select>
+					tr
+						th specify K best Feature 
+							<br> ( k < total column number )
+						td <input type="number" name="k" placeholder="2" />
+				
+				<div class="col-md-3 text-center"> 		
+					button(type='submit', class='btn btn-primary') SELECT 
+				</div>

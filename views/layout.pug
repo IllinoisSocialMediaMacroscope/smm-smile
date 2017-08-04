@@ -1,0 +1,100 @@
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		
+		<!-- this is for bootstrap 3! -->
+		link(href="../bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		<!-- this is the customized dashboard style -->
+		link(href="../bootstrap/css/customized.css",rel="stylesheet")
+		
+		<!-- font family -->
+		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+		
+		<!-- scripts -->
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="https://www.gstatic.com/charts/loader.js")
+		script(src="../bootstrap/js/customized/view.js")
+		script(src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
+		script(src="../bootstrap/js/bootstrap.min.js")
+		
+
+	body(onload="init();")
+		block customized-script
+		
+		include components/topbar.pug
+		div(id="container-fluid")
+				<!-- side bar -->
+				div(class="col-sm-3 col-md-3 sidebar")
+					ul(class="nav nav-sidebar")
+						li(class="active" id="overview")
+							<a onclick="childMenu(`#side-configuration`);">
+								<span class="glyphicon glyphicon-tasks  pull-left"></span> Overview 
+								<span class="sr-only">(current)</span><span class="glyphicon glyphicon-menu-down pull-right"></span>
+							</a>
+							<ul class="nav child_menu" style="display:block;" id="side-configuration">
+								<li class="current-page">
+									<a href="#config-anchor"><span class="glyphicon glyphicon-wrench pull-left"></span> Configuration </a>
+								</li>
+								<li><a href="#img-anchor"><span class="glyphicon glyphicon glyphicon-picture pull-left"></span> Chart </a></li>
+								<li><a href="#result-anchor"><span class="glyphicon glyphicon-zoom-in pull-left"></span> Result Preview </a></li>
+							<ul>
+			
+		div(class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main")
+						
+					div(class="row")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							h1 #{title}
+					br
+							
+					div(class="row")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							a(class="anchor" name="config-anchor")
+								
+							<!-- setting area -->							
+							div(class="x_panel")
+								div(class="x_title")
+									h2 Configuration
+								div(class="x_content")
+									br
+									block config-form					
+						
+					div(class="loading",style="display:none;")
+						img(src="../bootstrap/img/loading.gif", width="400", height="400px",style="display:block; margin:auto;")
+			
+					<!-- img -->
+					br
+					div(class="row")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							a(class="anchor" name="img-anchor")
+							div(id="img-container")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							div(id="gaudge")
+										
+					<!-- result -->
+					br
+					div(class="row")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							a(class="anchor" name="result-anchor")
+							div(id="result-container")
+		
+		include components/warning.pug		
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							

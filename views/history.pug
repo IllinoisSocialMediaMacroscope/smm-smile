@@ -1,0 +1,108 @@
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		
+		<!-- this is for bootstrap 3! -->
+		link(href="../bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		<!-- this is the customized dashboard style -->
+		link(href="../bootstrap/css/customized.css",rel="stylesheet")
+		
+		<!-- font family -->
+		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+		
+		<!-- scripts -->
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="https://www.gstatic.com/charts/loader.js")
+		script(src="../bootstrap/js/customized/view.js")
+		script(src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
+		script(src="../bootstrap/js/bootstrap.min.js")
+		script.
+			console.log(!{JSON.stringify(directory)});
+		
+	body
+		script(src="../bootstrap/js/customized/history_pb.js")
+		include components/topbar.pug
+		
+		
+		div(class="container-fluid")
+			div(class="row")
+				div(class="col-sm-3 col-md-3 sidebar")
+					h2(style="color:#ffffff;text-align:center;") History 
+						img(src="../bootstrap/img/logo/history-logo.png" width="50px")
+					ul(class="nav nav-sidebar")
+						each val,key in directory
+							li <a onclick="toggle(this,`##{key}`);" id=#{key}-btn>
+								<span class="glyphicon glyphicon-minus"></span>
+								| #{key}
+								</a>
+							
+							ul(class="nav child_menu" style="display:block;" id=key)
+								each val1,key1 in val
+									li <a onclick="toggle(this,`##{key1}`);" id=#{key1}-btn>
+										<span class="glyphicon glyphicon-minus"></span>
+										| #{key1}
+										</a>
+										
+										ul(class="nav child_menu" style="display:block;" id=key1)
+											each val2,key2 in val1
+												li <form action='/history' id=#{key2} name='history' method='post'>
+													<input type="hidden" value="analytics" name="type" />
+													<input type="hidden" value=#{key} name="layer1" />
+													<input type="hidden" value=#{key1} name="layer2" />													
+													<input type="hidden" value=#{key2} name="historyID" />
+												</form>
+												<button class="link-button" style="#color:#ffffff;border-bottom:1px solid; margin-left:25px;margin-top:5px;margin-bottom:2px" onclick="submitHistory(`#{key2}`);">
+													<span class="glyphicon glyphicon-expand"></span>
+													| #{val2}
+												</button>
+					ul(class="nav nav-sidebar")
+						li <a onclick="toggle(this,`#graphql`);"><span class="glyphicon glyphicon-minus"></span>Social Media Search</a>
+							ul(class="nav child_menu" style="display:block;" id="graphql")
+								each val in searchResult
+									li <form action='/history' id=#{val} name='history' method='post'>
+										<input type="hidden" value=#{val} name="historyID" />
+										<input type="hidden" value="graphql" name="type" />
+									</form>
+									<button class="link-button" style="#color:#ffffff;border-bottom:1px solid; margin-left:50px;margin-top:5px;margin-bottom:2px" onclick="submitHistory(`#{val}`);">
+										<span class="glyphicon glyphicon-expand"></span>
+										| #{val}
+									</button>
+												
+		
+		div(class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main")
+			div(id="background")
+				div(class="col-md-12 col-sm-12 col-xs-12")
+					h1(style="text-align:center; margin-top:200px") 
+						<span class="glyphicon glyphicon-hand-left"></span>Please Click the Past Job ID to View ...
+					//img(src="../bootstrap/img/logo/pointleft-logo.png", width="400px", height="400px", style="display:block; margin-left:auto; margin-right:auto; margin-top:50px; margin-bottom:100px;")
+			
+			<!-- title -->
+			div(class="row")
+				div(class="col-md-12 col-sm-12 col-xs-12")
+					div(id="title-container")
+			br
+			<!-- overview -->
+			div(class="row")
+				div(class="col-md-12 col-sm-12 col-xs-12")
+					div(id="overview-container")
+					
+			<!-- img -->
+			br
+			div(class="row")
+				div(class="col-md-12 col-sm-12 col-xs-12")
+					a(class="anchor" name="img-anchor")
+					div(id="img-container")
+				div(class="col-md-12 col-sm-12 col-xs-12")
+					div(id="gaudge")
+								
+			<!-- result -->
+			br
+			div(class="row")
+				div(class="col-md-12 col-sm-12 col-xs-12")
+					a(class="anchor" name="result-anchor")
+					div(id="result-container")
+		
+		include components/warning.pug
+								

@@ -1,0 +1,53 @@
+{
+	"form-action": "/NLP/sentiment",
+	"containers":[
+		{"container-name":"",
+		"container-label-name":"format",
+		"inputs":[
+					{"type":"radio",
+						"name":"option",
+						"id":"file",
+						"value":"file",
+						"sytle":"position: absolute; visibility: hidden;",
+						"class":"customized-radio",
+						"checked":true,
+						"label":"file"
+					},
+					{"type":"radio",
+						"name":"option",
+						"id":"URL",
+						"value":"URL",
+						"sytle":"position: absolute; visibility: hidden;",
+						"class":"customized-radio",
+						"checked":false,
+						"label":"URL"
+					}
+				]},
+		{"container-name":"file-container",
+		"container-label-name":"select from your folder",
+		"inputs":[
+					{"type":"select",
+						"name":"selectFile",
+						"id":"selectFile",
+						"sytle":"",
+						"class":"form-control",
+						"data-width":"800px",
+						"optgroup": true,
+						"options":[]
+					}
+				]},
+		{"container-name":"url-container",
+		"container-label-name":"URL",
+		"inputs":[
+					{"type":"text",
+						"name":"input",
+						"id":"link",
+						"value":"https://techservices.illinois.edu/news/2015/telling-compelling-stories-social-media-analytics-team",
+						"sytle":"",
+						"class":"form-control col-md-7 col-xs-12"
+					}
+				]}
+	],
+	"custom-script":"../bootstrap/js/customized/view_sentiment.js"
+}
+			

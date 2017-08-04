@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="./styles/graphdoc.css" />
+    <title>twitterQuery</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet"><link type="text/css" rel="stylesheet" href="./assets/code.css" /><link type="text/css" rel="stylesheet" href="./assets/require-by.css" />
+</head>
+<body class="slds-scrollable--y">
+    <nav class="slds-grid slds-grid--vertical slds-col--rule-right">
+        <header class="slds-p-around--medium slds-col slds-shrik slds-grow-none">
+            <button class="slds-button slds-button--icon slds-float--right js-toggle-navigation less-than-medium">
+                <i class="material-icons">close</i>
+            </button>
+                <h3 class="slds-text-heading--medium"><a href="./">GraphQL Schema</a></h3>
+            <div class="slds-p-top--small">
+                <input id="type-search" type="text" placeholder="Search a type" autofocus="" class="slds-input" />
+            </div>
+        </header>
+        <div id="navication-scroll" class="slds-scrollable--y slds-col slds-grow">
+<div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
+    <h4 class="slds-text-title--caps slds-p-around--medium">Schema</h4>
+    <ul>
+        <li  title="Query">
+            <a href="query.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                Query
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
+    <h4 class="slds-text-title--caps slds-p-around--medium">Scalars</h4>
+    <ul>
+        <li  title="Boolean">
+            <a href="boolean.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                Boolean
+            </a>
+        </li>
+        <li  title="Int">
+            <a href="int.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                Int
+            </a>
+        </li>
+        <li  title="String">
+            <a href="string.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                String
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
+    <h4 class="slds-text-title--caps slds-p-around--medium">Enums</h4>
+    <ul>
+        <li  title="__DirectiveLocation">
+            <a href="directivelocation.spec.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                __DirectiveLocation
+            </a>
+        </li>
+        <li  title="__TypeKind">
+            <a href="typekind.spec.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                __TypeKind
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
+    <h4 class="slds-text-title--caps slds-p-around--medium">Unions</h4>
+    <ul>
+        <li  title="redditOverview">
+            <a href="redditoverview.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                redditOverview
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
+    <h4 class="slds-text-title--caps slds-p-around--medium">Objects</h4>
+    <ul>
+        <li  title="redditComment">
+            <a href="redditcomment.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                redditComment
+            </a>
+        </li>
+        <li  title="redditLink">
+            <a href="redditlink.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                redditLink
+            </a>
+        </li>
+        <li  title="redditQuery">
+            <a href="redditquery.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                redditQuery
+            </a>
+        </li>
+        <li  title="redditTrophy">
+            <a href="reddittrophy.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                redditTrophy
+            </a>
+        </li>
+        <li  title="retweet">
+            <a href="retweet.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                retweet
+            </a>
+        </li>
+        <li  title="subreddit">
+            <a href="subreddit.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                subreddit
+            </a>
+        </li>
+        <li  title="tweet">
+            <a href="tweet.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                tweet
+            </a>
+        </li>
+        <li class="slds-is-active" title="twitterQuery">
+            <a href="twitterquery.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                twitterQuery
+            </a>
+        </li>
+        <li  title="twtEntity">
+            <a href="twtentity.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                twtEntity
+            </a>
+        </li>
+        <li  title="twtGeo">
+            <a href="twtgeo.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                twtGeo
+            </a>
+        </li>
+        <li  title="twtUser">
+            <a href="twtuser.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                twtUser
+            </a>
+        </li>
+        <li  title="__Directive">
+            <a href="directive.spec.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                __Directive
+            </a>
+        </li>
+        <li  title="__EnumValue">
+            <a href="enumvalue.spec.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                __EnumValue
+            </a>
+        </li>
+        <li  title="__Field">
+            <a href="field.spec.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                __Field
+            </a>
+        </li>
+        <li  title="__InputValue">
+            <a href="inputvalue.spec.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                __InputValue
+            </a>
+        </li>
+        <li  title="__Schema">
+            <a href="schema.spec.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                __Schema
+            </a>
+        </li>
+        <li  title="__Type">
+            <a href="type.spec.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                __Type
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
+    <h4 class="slds-text-title--caps slds-p-around--medium">Directives</h4>
+    <ul>
+        <li  title="deprecated">
+            <a href="deprecated.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                deprecated
+            </a>
+        </li>
+        <li  title="include">
+            <a href="include.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                include
+            </a>
+        </li>
+        <li  title="skip">
+            <a href="skip.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                skip
+            </a>
+        </li>
+    </ul>
+</div>
+        </div>
+    </nav>
+    <main><section class="title slds-theme--inverse">
+    <div class="container slds-grid">
+        <div>
+        <button class="slds-button js-toggle-navigation less-than-medium">
+            <i class="material-icons slds-button__icon slds-button__icon--left">menu</i>
+            <span class="slds-text-title--caps">Types<span>
+        </button>
+        </div>
+        </div>
+    </div>
+    <div class="container">
+        <p class="slds-text-title--caps slds-text-color--weak">OBJECT</p>
+        <h1 class="slds-text-heading--large">twitterQuery</h1>
+        <div class="slds-text-body--regular"><p>Query user, tweet, geolocation by keywords.</p>
+</div>
+    </div>
+</section>
+<section>
+    <div class="container">
+        <h2 id="graphql-schema-definition" class="graphdoc-section__title slds-text-heading--medium slds-m-top--small">
+            <a href="#graphql-schema-definition">
+                <i class="material-icons">link</i>
+            </a>
+            GraphQL Schema definition
+        </h2>
+        <code class="highlight"><ul class="code" style="padding-left:56px"><li><span class="keyword operator ts">type</span> <span class="identifier">twitterQuery</span> {</li><li></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>q</strong>: The search query to run against people search.</span></span></li><li><span class="tab"><span class="comment line">#   <strong>count</strong>: The number of potential user results to retrieve per </span></span></li><li><span class="tab"><span class="comment line">#   page. This value has a maximum of 20.</span></span></li><li><span class="tab"><span class="comment line">#   <strong>pages</strong>: madeup field; the aggregated pages</span></span></li><li><span class="tab"><span class="meta">queryUser</span>(<span class="meta">q</span>: <a class="support type" href="string.doc.html">String</a>, <span class="meta">count</span>: <a class="support type" href="int.doc.html">Int</a>, <span class="meta">pages</span>: <a class="support type" href="int.doc.html">Int</a>): [<a class="support type" href="twtuser.doc.html">twtUser</a>] </span></li><li></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>q</strong>: A UTF-8, URL-encoded search query of 500 characters maximum, </span></span></li><li><span class="tab"><span class="comment line"># 										</span></span></li><li><span class="tab"><span class="comment line">#   including operators. Queries may additionally be limited </span></span></li><li><span class="tab"><span class="comment line"># 										</span></span></li><li><span class="tab"><span class="comment line">#   by complexity.</span></span></li><li><span class="tab"><span class="comment line">#   <strong>count</strong>: The number of tweets to return per page, up to a maximum </span></span></li><li><span class="tab"><span class="comment line">#   of 100. </span></span></li><li><span class="tab"><span class="comment line"># 										</span></span></li><li><span class="tab"><span class="comment line">#   Defaults to 15. This was formerly the “rpp” parameter in the </span></span></li><li><span class="tab"><span class="comment line"># 										</span></span></li><li><span class="tab"><span class="comment line">#   old Search API.</span></span></li><li><span class="tab"><span class="comment line">#   <strong>pages</strong>: This is not in the original twitter api. This fields is </span></span></li><li><span class="tab"><span class="comment line">#   the iterator that append new pages</span></span></li><li><span class="tab"><span class="comment line"># 										</span></span></li><li><span class="tab"><span class="comment line">#   to the search. if you specify the number of pages you want to go through, you </span></span></li><li><span class="tab"><span class="comment line">#   will get the </span></span></li><li><span class="tab"><span class="comment line"># 										</span></span></li><li><span class="tab"><span class="comment line">#   amount of tweets = count * pages; detail check out API/twitterAPI.js and the </span></span></li><li><span class="tab"><span class="comment line">#   max_id,since_id fields</span></span></li><li><span class="tab"><span class="comment line"># 										</span></span></li><li><span class="tab"><span class="comment line">#   in twitter restful API documentation.</span></span></li><li><span class="tab"><span class="comment line">#   <strong>geocode</strong>: 37.781157 -122.398720 1mi</span></span></li><li><span class="tab"><span class="comment line">#   <strong>result_type</strong>: Optional. Specifies what type of search results </span></span></li><li><span class="tab"><span class="comment line">#   you would prefer </span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   to receive. The current default is “mixed.” Valid values include:</span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   * mixed : Include both popular and real time results in the response.</span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   * recent : return only the most recent results in the response</span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   * popular : return only the most popular results in the response.</span></span></li><li><span class="tab"><span class="comment line">#   <strong>locale</strong>: Specify the language of the query you are sending </span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   (only ja is currently effective). This is intended for </span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   language-specific consumers and the default should work in </span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   the majority of cases.</span></span></li><li><span class="tab"><span class="comment line">#   <strong>until</strong>: Returns tweets created before the given date. Date </span></span></li><li><span class="tab"><span class="comment line">#   should</span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   be formatted as YYYY-MM-DD. Keep in mind that the search index </span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   has a 7-day limit. In other words, no tweets will be found </span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   for a date older than one week.</span></span></li><li><span class="tab"><span class="meta">queryTweet</span>(</span></li><li><span class="tab"><span class="tab"><span class="meta">q</span>: <a class="support type" href="string.doc.html">String</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">count</span>: <a class="support type" href="int.doc.html">Int</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">pages</span>: <a class="support type" href="int.doc.html">Int</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">geocode</span>: <a class="support type" href="string.doc.html">String</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">result_type</span>: <a class="support type" href="string.doc.html">String</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">locale</span>: <a class="support type" href="string.doc.html">String</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">until</span>: <a class="support type" href="string.doc.html">String</a></span></span></li><li><span class="tab">): [<a class="support type" href="tweet.doc.html">tweet</a>] </span></li><li></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>query</strong>: Free-form text to match against while executing a </span></span></li><li><span class="tab"><span class="comment line">#   geo-based query, </span></span></li><li><span class="tab"><span class="comment line"># 									</span></span></li><li><span class="tab"><span class="comment line">#   best suited for finding nearby locations by name. Remember </span></span></li><li><span class="tab"><span class="comment line"># 									</span></span></li><li><span class="tab"><span class="comment line">#   to URL encode the query.</span></span></li><li><span class="tab"><span class="comment line">#   <strong>ip</strong>: An IP address. Used when attempting to fix geolocation </span></span></li><li><span class="tab"><span class="comment line">#   based </span></span></li><li><span class="tab"><span class="comment line"># 									</span></span></li><li><span class="tab"><span class="comment line">#   off of the user’s IP address.</span></span></li><li><span class="tab"><span class="comment line">#   <strong>lat</strong>: eg. 37.7821120598956</span></span></li><li><span class="tab"><span class="comment line">#   <strong>long</strong>: eg. -122.400612831116</span></span></li><li><span class="tab"><span class="comment line">#   <strong>granularity</strong>: This is the minimal granularity of place types to </span></span></li><li><span class="tab"><span class="comment line">#   return and </span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   must be one of: poi , neighborhood , city , admin or country . </span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   If no granularity is provided for the request neighborhood is assumed.</span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   Setting this to city , for example, will find places which have </span></span></li><li><span class="tab"><span class="comment line"># 											</span></span></li><li><span class="tab"><span class="comment line">#   a type of city , admin or country .</span></span></li><li><span class="tab"><span class="comment line">#   <strong>accuracy</strong>: A hint on the “region” in which to search. If a </span></span></li><li><span class="tab"><span class="comment line">#   number, then this </span></span></li><li><span class="tab"><span class="comment line"># 								</span></span></li><li><span class="tab"><span class="comment line">#   is a radius in meters, but it can also take a string that is suffixed with ft to </span></span></li><li><span class="tab"><span class="comment line"># 								</span></span></li><li><span class="tab"><span class="comment line">#   specify feet. If this is not passed in, then it is assumed to be 0m . If coming </span></span></li><li><span class="tab"><span class="comment line"># 								</span></span></li><li><span class="tab"><span class="comment line">#   from a device, in practice, this value is whatever accuracy the device has </span></span></li><li><span class="tab"><span class="comment line">#   measuring </span></span></li><li><span class="tab"><span class="comment line"># 								</span></span></li><li><span class="tab"><span class="comment line">#   its location (whether it be coming from a GPS, WiFi triangulation, etc.).</span></span></li><li><span class="tab"><span class="comment line">#   <strong>max_results</strong>: A hint as to the number of results to return. This </span></span></li><li><span class="tab"><span class="comment line">#   does not guarantee </span></span></li><li><span class="tab"><span class="comment line"># 								</span></span></li><li><span class="tab"><span class="comment line">#   that the number of results returned will equal max_results, but instead informs </span></span></li><li><span class="tab"><span class="comment line">#   how </span></span></li><li><span class="tab"><span class="comment line"># 								</span></span></li><li><span class="tab"><span class="comment line">#   many “nearby” results to return. Ideally, only pass in the number of places you </span></span></li><li><span class="tab"><span class="comment line"># 								</span></span></li><li><span class="tab"><span class="comment line">#   intend to display to the user here.</span></span></li><li><span class="tab"><span class="meta">queryGeo</span>(</span></li><li><span class="tab"><span class="tab"><span class="meta">query</span>: <a class="support type" href="string.doc.html">String</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">ip</span>: <a class="support type" href="string.doc.html">String</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">lat</span>: <a class="support type" href="string.doc.html">String</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">long</span>: <a class="support type" href="string.doc.html">String</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">granularity</span>: <a class="support type" href="string.doc.html">String</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">accuracy</span>: <a class="support type" href="string.doc.html">String</a>,</span></span></li><li><span class="tab"><span class="tab"><span class="meta">max_results</span>: <a class="support type" href="string.doc.html">String</a></span></span></li><li><span class="tab">): [<a class="support type" href="twtgeo.doc.html">twtGeo</a>] </span></li><li>}</li></ul></code>
+    </div>
+</section>
+<section>
+    <div class="container">
+        <h2 id="require-by" class="graphdoc-section__title slds-text-heading--medium slds-m-top--small">
+            <a href="#require-by">
+                <i class="material-icons">link</i>
+            </a>
+            Require by
+        </h2>
+        <ul class="require-by"><li><a href="query.doc.html" title="Query - all api query type">Query<em>all api query type</em></a><li></ul>
+    </div>
+</section>
+<footer>
+<div class="container slds-p-around--large">
+    <p class="slds-text-align--right slds-text-title--caps">
+        Generated with <a href="https://github.com/2fd/graphdoc#readme" target="_blank">graphdoc 2.3.0</a>
+    </p>
+</div>
+</footer>
+</main>
+    <script src="./scripts/focus-active.js"></script>
+    <script src="./scripts/filter-types.js"></script>
+    <script src="./scripts/toggle-navigation.js"></script>
+</body>

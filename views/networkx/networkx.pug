@@ -1,0 +1,139 @@
+extends ../layout.pug
+	
+block h1
+	h1 networkX
+
+block customized-script
+	<!-- customized script -->
+	script.	
+		function toggle_directed(){
+			$(".component").show();
+			$(".triads").show();
+			$(".distance").hide();
+		}
+		function toggle_undirected(){
+			//console.log($(".component"));
+			$(".component").hide();
+			$(".triads").hide();
+			$(".distance").show();
+		}
+			
+block navigation
+	<a href="/"><span class="glyphicon glyphicon-arrow-up gi-2x"></span></a>			
+
+block config-form
+	form(action='/networkx', name='networkx', method='post',enctype="multipart/form-data",class="form-horizontal",id="upload")
+		div(class="form-group")
+			label(class="control-label col-md-2 col-md-2 col-xs-12",for="browse") upload .csv data
+			div(class="col-md-8 col-md-8 col-xs-12")
+				div(class="input-group preview")
+					span(class="input-group-btn")
+						div(class="btn btn-default preview-input")
+							span(class="glyphicon glyphicon-folder-open")
+							span(class="preview-input-title") Upload
+							input(id="browse", type="file", name="file", onchange=`handleFileSelect(this.files,"#previewTable",false)`, required)
+					input(type="text",class="form-control preview-filename") 
+												
+		div(id="preview-container")
+		
+		div(class="form-group")
+			label(class="control-label col-md-2 col-md-2 col-xs-12",for="") graph type
+			div(class="col-md-8 col-md-8 col-xs-12")
+				div(class="container")
+					<label class="radio-inline">
+							<input type="radio" name="type" id="directed" value="directed" sytle="position:absolute; visibility: hidden;" onclick="toggle_directed();" />directed</input>
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="type" id="undirected" value="undirected" sytle="position: absolute; visibility: hidden;" onclick="toggle_undirected();"/>undirected</input>
+					</label>
+					
+		div(class="form-group")
+			label(class="control-label col-md-2 col-md-2 col-xs-12",for="layout") select layout
+			div(class="col-md-8 col-md-8 col-xs-12")
+				<select name="layout" id="layout" class="form-control" required>
+					option(value="spring") spring layout
+					option(value="circular") circular layout
+					option(value="fruchterman") fruchterman reingold layout
+					option(value="random") random layout
+					option(value="shell") shell layout
+					option(value="spectral") spectral layout
+				</select>
+				
+		div(class="form-group")
+			label(class="control-label col-md-2 col-md-2 col-xs-12" for="") graph node size
+			div(class="col-md-8 col-md-8 col-xs-12")
+				div(class="range range-node")
+					<input type="range" min="5" max="50" value="10" step="5"  name="node_size" onchange="rangeNode.value=value"/>
+					<output id="rangeNode">10</output>
+				
+		div(class="form-group")
+			label(class="control-label col-md-2 col-md-2 col-xs-12" for="") graph edge width
+			div(class="col-md-8 col-md-8 col-xs-12")
+				div(class="range range-edge")
+					<input type="range" min="0.1" max="5" value="1" step="0.1"  name="edge_width" onchange="rangeEdge.value=value"/>
+					<output id="rangeEdge">1</output>
+				
+					
+		div(class="form-group")
+			label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Analysis
+			div(class="col-md-8 col-md-8 col-xs-12")
+				<label class>
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="approximation" value="approximation">
+					</div>approximation</label>
+				<label class>
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="assortativity" value="assortativity">
+					</div>assortativity</label>
+				<label class>
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="centrality" value="centrality">
+					</div>centrality</label>
+				<label class>
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="cluster" value="cluster">
+					</div>cluster</label>
+				<label class="component">
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="component" value="component">
+					</div>component</label>
+				<label class="distance">
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="distance" value="distance">
+					</div>distance</label>
+				<label class>
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="hierarchy" value="hierarchy">
+					</div>hierarchy</label>
+				<label class>
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="googleMatrix" value="googleMatrix">
+					</div>google matrix</label>
+				<label class>
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="path" value="path">
+					</div>path</label>	
+				<label class>
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="tree" value="tree">
+					</div>tree</label>
+				<label class="triads">
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="triads" value="triads">
+					</div>triads</label>	
+				<label class>
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="vitality" value="vitality">
+					</div>vitality</label>
+				<label class>
+					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
+						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="metrics" id="traversal" value="traversal">
+					</div>traversal</label>	
+		
+		div(class="form-group")
+			div(class="col-md-8 col-md-8 col-xs-12 col-md-offset-2")
+				input(type="button", onclick="ajaxSubmitFile(`#upload`,`#browse`);", class='btn btn-success',value="Submit") 
+				span 
+				input(type="button", class='btn btn-primary', value="Reset", onclick="customized_reset();") 
+					
+				

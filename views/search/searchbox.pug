@@ -1,0 +1,386 @@
+div(class="input-group", id="adv-search")
+	<!-- search box -->
+	input(type="text", class="form-control", placeholder="Search...", id="searchbox")
+				
+	<!-- search buttons -->
+	div(class="input-group-addon")
+		div(class="btn-group")
+			div(class="dropdown dropdown-lg")
+				button(id="dropdownButton" type="button",class="btn btn-default dropdown-toggle" aria-expanded="false") advanced
+					span(class="glyphicon glyphicon-cog")
+				
+				<!-- dropdown content start -->
+				div(class="dropdown-menu dropdown-menu-right")
+					br
+					form(class="form-horizontal")
+						<!-- tweet -->
+						div(class="tweet")
+							div(class="form-group")
+								<label class="label-control">tweet per page (maximum 100)</label>
+								div(class="range range-node")
+									input(type="range" min="5" max="100" value="100" step="1" id="tweet-count" onchange="twtrangeNode.value=value")
+									<output id="twtrangeNode">100</output>
+							div(class="form-group")
+								<label class="label-control warning">how many pages (maximum 180)<span class="warningText">Careful! Each page is a http request, and you only have 180 over 15 minutes window</span></label>
+								div(class="range range-node")
+									input(type="range" min="1" max="180" value="10" step="1" id="max_pages" onchange="max_pages_rangeNode.value=value")
+									<output id="max_pages_rangeNode">10</output>
+							
+							div(class="form-group")
+								<label class="label-control"><span class="glyphicon glyphicon-calendar" style="margin-right:5px;"></span>Date Range (Until)
+									<input type="checkbox" id="dateRange" value="dateRange">
+								</label>
+							div(class="form-group dateRange")
+								<label class="control-label col-sm-1"> until </label>
+								<div class="col-sm-11">
+									input(class="form-control",type="date",id="until",onclick="setDate();")
+								</div>
+							
+							div(class="form-group")
+								<label class=""><span class="glyphicon glyphicon-globe" style="margin-right:5px;"></span>GEOCODE ENABLE
+									<input type="checkbox" id="geocode" value="geocode">
+								</label>
+							div(class="form-group geocode")
+								div(class="col-md-5" style="display:inline-block;")
+									label Latitude
+									input(class="form-control",type="number",step="0.0001",id="lat")
+														
+								div(class="col-md-5" style="display:inline-block;")
+									label Longtitude
+									input(class="form-control",type="number",step="0.0001",id="lon")
+														
+								div(class="col-md-2" style="display:inline-block;")
+									label radius(mile)
+									input(class="form-control",type="number",step="0.01",id="radius")
+															
+								div(class="col-md-12")
+									iframe(id="googleMap" src="../googleMap/geolocation.html")
+													
+														
+														
+							div(class="form-group")
+								<label class="label-control">Select Fields</label>
+								br
+								select(multiple,id="twtTweetFields",class="fields")
+									optgroup(label="BasicFields")
+										option(value="id") id
+										option(value="created_at") created at  
+										option(value="text") text
+										option(value="retweet_count") retweet count
+										option(value="in_reply_to_user_id_str") in reply to user id
+										option(value="in_reply_to_status_id_str") in reply to status id
+										option(value="in_reply_to_screen_name") in reply to screen name
+									optgroup(label="AuthorInformation")
+										option(value="author_id") author id
+										option(value="screen_name") screen name
+										option(value="name") name
+										option(value="description") description
+										option(value="author_created_at") author created_at
+										option(value="profile_image_url") profile image URL
+										option(value="url") URL
+										option(value="location") location
+										option(value="tweets_count") tweets count
+										option(value="followers_count") followers count
+										option(value="friends_count") friends count
+										option(value="listed_count") listed count
+										option(value="favourites_count") favorites count
+										option(value="statuses_count") statuses count
+										option(value="time_zone") timezone
+									optgroup(label="TweetEntities")
+										option(value="urls") URLs
+										option(value="hashtags") hashtags
+										option(value="user_mentions") user_mentions
+															
+						<!-- user -->
+						div(class="user")
+							div(class="form-group")
+								<label class="label-control">user per page (maximum 20)</label>
+								div(class="range range-node")
+									input(type="range" min="5" max="20" value="20" step="1" id="twtUser-count" onchange="twtUserRange.value=value")
+									<output id="twtUserRange">20</output>
+							div(class="form-group")
+								<label class="label-control warning">how many pages (maximum 900)<span class="warningText">Careful! Each page is a http request, and you only have 900 over 15 minutes window</span></label>
+								div(class="range range-node")
+									input(type="range" min="1" max="900" value="20" step="1" id="max_pages_user" onchange="max_page_userRange.value=value")
+									<output id="max_page_userRange">20</output>
+							div(class="form-group")
+								<label class="label-control">Select Fields</label>
+								br
+								select(multiple,id="twtUserFields",class="fields")
+									optgroup(label="BasicFields")
+										option(value="author_id") user id
+										option(value="screen_name") screen name
+										option(value="description") description 
+										option(value="author_created_at") user created at 
+										option(value="profile_image_url") profile image
+										option(value="location") location
+										option(value="tweets_count") tweets count
+										option(value="followers_count") followers count
+										option(value="friends_count") friends count
+										option(value="favourites_count") favourites count
+										option(value="statuses_count") statuses count
+										option(value="time_zone") time zone
+									optgroup(label="UserTimeline")
+										option(value="id") tweet id
+										option(value="created_at") tweet created at
+										option(value="text") text
+										option(value="retweet_count") retweet_count
+														
+						<!-- elastic search -->
+						div(class="es-tweet")
+							div(class="form-group")
+								<label class="label-control">user per page (maximum 1000)</label>
+								div(class="range range-node")
+									input(type="range" min="1" max="1000" value="500" step="1" id="perPage" onchange="perPage_rangeNode.value=value")
+									<output id="perPage_rangeNode">500</output>
+							div(class="form-group")
+								<label class="label-control warning">how many pages (maximum 200)<span class="warningText">Careful! Each page is a http request</span></label>
+								div(class="range range-node")
+									input(type="range" min="1" max="200" value="1" step="1" id="pageNum" onchange="pageNum_rangeNode.value=value")
+									<output id="pageNum_rangeNode">1</output>
+							<!-- date -->
+							div(class="form-group")
+								<label class="label-control"><span class="glyphicon glyphicon-calendar" style="margin-right:5px;"></span>Filter based on DATE
+									<input type="checkbox" id="es-dateRange" value="es-dateRange">
+								</label>
+							div(class="form-group es-dateRange")
+								<label class="control-label col-sm-2"> start date</label>
+								<div class="col-sm-10">
+									input(class="form-control",type="date",id="start")
+								</div>
+								<label class="control-label col-sm-2"> end date</label>
+								<div class="col-sm-10">
+									input(class="form-control",type="date",id="end")
+								</div>
+							<!-- geocode -->
+							div(class="form-group")
+								<label class=""><span class="glyphicon glyphicon-globe" style="margin-right:5px;"></span>Filter based on GEOLOCATION
+									<input type="checkbox" id="es-geocode" value="es-geocode">
+								</label>
+							div(class="form-group es-geocode")
+								div(class="col-md-5" style="display:inline-block;")
+									label Latitude
+									input(class="form-control",type="number",step="0.0001",id="es-lat")
+														
+								div(class="col-md-5" style="display:inline-block;")
+									label Longtitude
+									input(class="form-control",type="number",step="0.0001",id="es-lon")
+														
+								div(class="col-md-2" style="display:inline-block;")
+									label radius(mile)
+									input(class="form-control",type="number",step="0.01",id="es-radius")
+															
+								div(class="col-md-12")
+									iframe(id="googleMap" src="../googleMap/geolocation.html")
+							<!-- popularity -->
+							div(class="form-group")
+								<label class=""><span class="glyphicon glyphicon-fire" style="margin-right:5px;"></span>Filter based on POPULARITY
+									<input type="checkbox" id="es-popularity" value="geocode">
+								</label>
+							div(class="form-group es-popularity")
+								<label class="label-control">author has followers larger than #</label>
+								div(class="range range-node")
+									input(type="range" min="10000" max="10000000" value="10000" step="1" id="followers_count" onchange="fc_rangeNode.value=value")
+									<output id="fc_rangeNode">10000</output>
+								<label class="label-control">author has statuses count larger than #</label>
+								div(class="range range-node")
+									input(type="range" min="100" max="10000" value="100" step="1" id="statuses_count" onchange="sc_rangeNode.value=value")
+									<output id="sc_rangeNode">100</output>
+							<!-- stream fields -->
+							div(class="form-group")
+								<label class="label-control">Select Fields</label>
+								br
+								select(multiple,id="twtStreamFields",class="fields")
+									optgroup(label="ElasticSearchMetadata")
+										option(value="_id") _id
+										option(value="_type") _type
+										option(value="_index") _index 
+										option(value="_score") _score 
+									optgroup(label="BasicFields")
+										option(value="id") id
+										option(value="id_str") id_str
+										option(value="created_at") created at
+										option(value="text") text
+										option(value="retweet_count") retweet count
+										option(value="in_reply_to_user_id_str") in reply to user id str
+										option(value="in_reply_to_status_id_str") in reply to status id str
+										option(value="timestamp_ms") timestamp ms
+										option(value="mentions") mentions
+										option(value="hashtags") hashtags
+										option(value="urls") urls
+									optgroup(label="GeoLocation")
+										option(value="lat") latitude
+										option(value="lon") longitude
+									optgroup(label="AuthorInformation")
+										option(value="author_id") author id
+										option(value="screen_name") screen name
+										option(value="name") name
+										option(value="description") description
+										option(value="author_created_at") author created_at
+										option(value="profile_image_url") profile image URL
+										option(value="url") URL
+										option(value="location") location
+										option(value="tweets_count") tweets count
+										option(value="followers_count") followers count
+										option(value="friends_count") friends count
+										option(value="listed_count") listed count
+										option(value="favourites_count") favorites count
+										option(value="statuses_count") statuses count
+										option(value="time_zone") timezone
+									
+						<!-- reddit -->	
+						div(class="reddit extra")
+							div(class="form-group")
+								<label class="label-control warning">Extra Count<span class="warningText">Reddit defaultly return 1000 comments! Adding extra might risk rate limit!</span></label>
+								div(class="range range-node")
+									input(type="range" min="5" max="5000" value="1000" step="1" id="reddit_extra" onchange="redditExtra.value=value")
+									<output id="redditExtra">1000</output>
+						div(class="reddit count")
+							div(class="form-group")
+								<label class="label-control warning">Count<span class="warningText">When the field "replies" are selected, every count needs 3 sec to fetch!</span></label>
+								div(class="range range-node")
+									input(type="range" min="1" max="1000" value="20" step="1" id="reddit_count" onchange="redditCount.value=value")
+									<output id="redditCount">20</output>
+																				
+						<!-- subreddit -->
+						div(class="reddit searchSubreddits")
+							<label class="label-control">Select Fields</label>
+							br
+							select(multiple,id="rdSubFields",class="fields")
+									option(value="header_img") header image
+									option(value="header_title") header title
+									option(value="over18") over 18? 
+									option(value="public_description") public description 
+									option(value="created") created
+									option(value="description") description
+									option(value="display_name") display name
+									option(value="subscribers") subscribers number
+									option(value="subreddit_type") subreddit type
+									option(value="title") title
+									option(value="url") url
+																											
+						<!-- Content -->
+						div(class="reddit searchContent")
+							div(class="form-group")
+								<label class="label-control">time</label>
+								select(class="form-control" id="time")
+									option(value="all" checked) all
+									option(value="hour") hour
+									option(value="day") day
+									option(value="week") week
+									option(value="month") month
+									option(value="year") year	
+							div(class="form-group")
+								<label class="label-control">sort</label>
+								select(class="form-control" id="sort")
+									option(value="relevance" checked) relevance
+									option(value="hot") hot
+									option(value="top") top
+									option(value="new") new
+									option(value="comments") comments
+							div(class="form-group")
+								<label class="label-control">Select Fields</label>
+								br
+								select(multiple,id="rdSearchFields",class="fields")
+									optgroup(label="BasicFields")
+										option(value="id") id
+										option(value="author_name") author name
+										option(value="created") created
+										option(value="name") name
+										option(value="num_reports") num reports
+										option(value="num_comments") num comments
+										option(value="over_18") over 18?
+										option(value="permalink") permalink
+										option(value="score") score
+										option(value="selftext") selftext
+										option(value="subreddit_id") subreddit id
+										option(value="subreddit_name_prefixed") subreddit name prefixed
+										option(value="thumbnail") thumbnail
+										option(value="title") title
+										option(value="url") url
+										option(value="ups") ups
+										option(value="downs") downs
+									optgroup(label="Replies")
+										option(value="comment_author_name") comment author name
+										option(value="body") body
+										option(value="comment_created") comment created at 
+										option(value="controversiality") controversiality
+										option(value="comment_downs") comment downs
+										option(value="comment_ups") comment ups
+										option(value="link_title") link title
+										option(value="likes") likes
+										option(value="comment_name") comment name
+										option(value="comment_num_comments") num comments of current comment
+										option(value="comment_num_reports") num reports of current comment
+										option(value="comment_over_18") over 18?
+										option(value="parent_id") parent id
+										option(value="comment_score") score
+										option(value="subreddit_type") subreddit type
+										option(value="comment_ups") ups
+						
+						<!-- get Complete replies -->
+						div(class="reddit getCompleteReplies")
+							div(class="form-group")
+								<label class="label-control">Select Fields</label>
+								br
+								select(multiple,id="rdReplyFields",class="fields")
+									option(value="comment_author_name") comment author name
+									option(value="body") body
+									option(value="comment_created") comment created at 
+									option(value="controversiality") controversiality
+									option(value="comment_downs") comment downs
+									option(value="comment_id") comment id
+									option(value="link_url") link url
+									option(value="link_permalink") link permalink
+									option(value="likes") likes
+									option(value="comment_name") comment name
+									option(value="comment_num_comments") num comments of current comment
+									option(value="comment_num_reports") num reports of current comment
+									option(value="comment_over_18") over 18?
+									option(value="parent_id") parent id
+									option(value="comment_score") score
+									option(value="subreddit_id") subreddit id
+									option(value="subreddit_display_name") subreddit display name
+									option(value="subreddit_name_prefixed") subreddit name prefixed
+									option(value="subreddit_type") subreddit type
+									option(value="comment_ups") comment ups
+							
+						<!-- search comment -->
+						div(class="reddit getNewComments")
+							div(class="form-group")
+								<label class="label-control">Select Fields</label>
+								br
+								select(multiple,id="rdCommentFields",class="fields")
+									option(value="comment_author_name") author name
+									option(value="body") body
+									option(value="comment_created") comment created at 
+									option(value="controversiality") controversiality
+									option(value="comment_downs") comment downs
+									option(value="comment_id") comment id
+									option(value="link_url") link url
+									option(value="link_permalink") link permalink
+									option(value="likes") likes
+									option(value="comment_name") comment name
+									option(value="comment_num_comments") num comments of current comment
+									option(value="comment_num_reports") num reports of current comment
+									option(value="comment_over_18") over 18?
+									option(value="parent_id") parent id
+									option(value="comment_score") score
+									option(value="subreddit_id") subreddit id
+									option(value="subreddit_display_name") subreddit display name
+									option(value="subreddit_name_prefixed") subreddit name prefixed
+									option(value="subreddit_type") subreddit type
+									option(value="comment_ups") comment ups
+							
+						div(class="col-md-12")
+							textarea(class="form-control", id="input", rows="15",placeholder="If you know GraphQL, try typing your own string! :-D") 
+						div(class="col-md-12")
+								button(type="button", class="btn btn-primary",onclick="modalPopUp('#input');",id="adv-search-btn") Search	
+									span(class="glyphicon glyphicon-search")
+								button(type="button", class="btn btn-info",id="expandDoc") Help
+									span(class="glyphicon glyphicon-tasks")
+												
+				<!-- search button -->								
+				button(type="button",class="btn btn-primary",id="simple-search-btn") Search
+					span(class="glyphicon glyphicon-search" aria-hidden="true")
+				

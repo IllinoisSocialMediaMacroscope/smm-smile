@@ -1,0 +1,144 @@
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		
+		<!-- this is for bootstrap 3! -->
+		link(href="../bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		<!-- this is the customized search box style -->
+		link(href="../bootstrap/css/search.css",rel="stylesheet")
+		
+		<!-- font family -->
+		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+		
+		<!-- JQUERY -->
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="../bootstrap/js/bootstrap.min.js")
+		
+		<!-- Include the plugin's CSS and JS: -->
+		<script src="../bootstrap/js/bootstrap-multiselect.js"></script>
+		<link rel="stylesheet" href="../bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
+		
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+	
+		script(src="../bootstrap/js/customized/query_pb.js")
+		script(src="../bootstrap/js/customized/query_formValid.js")
+		script(src="../bootstrap/js/customized/query_submit.js")
+		
+		script.			
+			function setDate(){
+				var current = new Date();
+				var max = current.toISOString().slice(0,10);
+				current.setDate(current.getDate()-7);
+				var min = current.toISOString().slice(0,10);
+				
+				$("#until").attr('min', min);
+				$("#until").attr('max', max);
+			}
+			
+	body(onload="init()")
+		<!-- top bar -->
+		include ../components/topbar.pug
+		
+		div(class="searchPage",id="searchPage")
+			<!-- logo -->
+			div(class="row")
+				img(src="../bootstrap/img/logo/graphql-logo.png",width="30%",style="display:block;margin-left:auto;margin-right:auto;margin-top:100px;")
+			
+			<!-- search --->
+			div(class="row")
+				div(id="tabs")
+				
+					img(src='../bootstrap/img/logo/twitter-sm-logo.png', class="headerImg")
+					//img(src='../bootstrap/img/logo/reddit-sm-logo.png',class="headerImg")
+					img(src='../bootstrap/img/logo/elasticsearch-sm-logo.png',class="headerImg")
+					
+					select(class="selectpicker show-tick" id="social-media" title="Choose a Platform..." data-width="680px")
+						optgroup(label="Twitter")
+							option(data-icon="glyphicon-envelope" value="queryTweet") Search for Tweets
+							option(data-icon="glyphicon-user" value="queryUser") Search for Twitter Users
+						optgroup(label="Twitter Stream Database")
+							option(data-icon="glyphicon-envelope" value="streamTweet") Search for Tweets from Elastic Search Database
+					//-	
+						optgroup(label="Reddit")
+							option(data-icon="glyphicon-file" value="searchContent") Search for Reddit Posts
+							option(data-icon="glyphicon-plus" value="getCompleteReplies") Get the Complete Replies of Given Post
+							option(data-icon="glyphicon-comment" value="getNewComments") Search for Reddit Comments within a Sub
+							option(data-icon="glyphicon-tag" value="searchSubreddits") Search for Subreddit Informations based on name and description
+						optgroup(label="ElasticSearch")
+					//
+								
+				include searchbox.pug
+						
+								
+			<!-- prose -->
+			div(class="row")
+				div(class="prose")
+					h2 GraphQL search engine
+					h4 Search Against Twitter API and 
+					h4 Twitter Streaming data stored in ElasticSearch
+			
+			<!-- footer -->
+			div(class="row")
+				div(class="footer")
+					img(src='../bootstrap/img/logo/twitter-bg-logo.png', class="footerImg")
+					//img(src='../bootstrap/img/logo/reddit-bg-logo.png',class="footerImg")
+					img(src='../bootstrap/img/logo/elasticsearch-bg-logo.png',class="footerImg")
+			
+		<!-- popup modal save -->
+		div(id="save" class="modal fade" role="dialog")
+			div(class="modal-dialog")
+				div(class="modal-content")
+					div(class="modal-header")
+						button(class="close" data-dismiss="modal") &times;
+						h2(class="modal-title") Save the result 
+							span(class="glyphicon glyphicon-floppy-disk" style="font-size:20px;margin-left:5px") 
+					
+					div(class="modal-body" style="text-align:center;vertical-align:middle;")
+						div(class="form-group form-inline")                        
+							label(for="filename") File Name
+								input(type="text" class="form-control" id="filename" placeholder="filename")
+						div(class="loading" style="display:none")
+							img(src="../bootstrap/img/loading2.gif", width="15%", height="15%", style="display:block; margin-left:auto; margin-right:auto; margin-top:10px")
+					div(class="modal-footer")
+						button(class="btn btn-primary" id="saveButton") Save
+						button(class="btn btn-default" data-dismiss="modal") Close
+		
+		<!-- popup modal download-->
+		div(id="success" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+			div(class="modal-dialog")
+				div(class="modal-content")
+					div(class="modal-header")
+						button(class="close" data-dismiss="modal" onclick="location.reload();") &times;
+						h2(class="modal-title" id="modal-title") Your Search Is Done!
+						div(id="modal-download")
+					
+					div(class="modal-body" style="text-align:center;vertical-align:middle;")
+						h4 You can to <a href="/"><img src='../bootstrap/img/logo/analytics-logo.png' width="20px"></img>analytics pages</a> to do some 
+						h4 <a href="/NLP"><img src='../bootstrap/img/logo/NLP-logo.png' width="20px"></img>text data analysis</a>, 
+							| and <a href="/sklearn"><img src='../bootstrap/img/logo/sklearn-logo.png' width="20px"></img>machine learning analysis</a>!
+							| Check out your past search results at the <a href="/history"><img src='../bootstrap/img/logo/history-logo-sm.png' width="20px"></img>history page</a>!
+						
+					div(class="modal-footer")
+						a(href="/" class="btn btn-primary") Go To Analytics
+						button(class="btn btn-default" data-dismiss="modal" onclick="location.reload();") Close
+						
+		
+		<!-- warning -->
+		include ../components/warning.pug
+		
+		<!-- side bar -->
+		div(class="documentation",id="documentation")
+			iframe(id="docIframe", src="../graphql-doc/schema/index.html",width="100%",scrolling="yes",style="padding-top: 40px;margin:0 0;")
+							
+							
+							
+							
+							
+							
+							

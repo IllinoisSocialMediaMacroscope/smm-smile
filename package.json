@@ -1,0 +1,34 @@
+{
+  "name": "social-media-analytics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "aws-sdk": "^2.94.0",
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "csv-string": "^2.3.2",
+    "debug": "^2.6.6",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.2",
+    "express-session": "^1.15.3",
+    "http-aws-es": "^2.0.5",
+    "jsonexport": "^2.0.10",
+    "morgan": "^1.8.1",
+    "node-fetch": "^1.7.1",
+    "nodemailer": "^4.0.1",
+    "nodemon": "^1.11.0",
+    "oauth": "^0.9.15",
+    "pug": "^2.0.0-rc.1",
+    "python-shell": "^0.4.0",
+    "serve-favicon": "^2.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "nodemon app.js",
+    "start": "concurrently \"node app.js\" \"cd graphql && npm start\" "
+  },
+  "author": "***REMOVED***",
+  "license": "MIT"
+}

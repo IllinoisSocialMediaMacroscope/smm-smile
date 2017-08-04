@@ -1,0 +1,75 @@
+script.
+	/*------------------------submit error emails ---------------------------*/
+	function submitEmail(formID){
+		if (emailValidation()){
+			console.log($(formID).attr('action'));
+			
+			$.ajax({
+				type:'POST',
+				url:$(formID).attr('action'), 
+				data: $(formID).serialize(),				
+				success:function(data){
+					$("#warning").modal('hide');
+					console.log(data);
+				},
+				error: function(jqXHR, exception){
+					var msg = '';
+					if (jqXHR.status === 0) {
+						msg = 'Not connect.\n Verify Network.';
+					} else if (jqXHR.status == 404) {
+						msg = 'Requested page not found. [404]';
+					} else if (jqXHR.status == 500) {
+						msg = 'Internal Server Error [500].';
+					} else if (exception === 'parsererror') {
+						msg = 'Requested JSON parse failed.';
+					} else if (exception === 'timeout') {
+						msg = 'Time out error.';
+					} else if (exception === 'abort') {
+						msg = 'Ajax request aborted.';
+					} else {
+						msg = 'Uncaught Error.\n' + jqXHR.responseText;
+					}
+					$("#error").val(msg);
+					$("#warning").modal('show');
+				
+				} 
+			}); 
+		}
+	}
+	
+	function emailValidation(){
+		if ($("#identifier").val() === '' || $("#identifier").val().indexOf('@')<0){
+			alert("Please Fill in Valid Email Address!");
+			$("#identifier").focus();
+			return false;
+		}
+		
+		return true;
+	
+	}
+	
+div(id="warning" class="modal fade" role="dialog")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close" data-dismiss="modal") &times;
+				h2(class="modal-title") Woops it collapsed...
+			
+			div(class="modal-body" style="text-align:center;vertical-align:middle;")
+				p Have you verified every input is valid?
+				form(action='/email', name='email', method='post',class="form-horizontal",id="email")
+					div(class="form-group")
+						label(class="control-label col-md-3 col-md-3 col-xs-12",for="") Your Email Address
+						div(class="col-md-8 col-md-8 col-xs-12")
+							input(class="form-control" id="identifier" name="identifier" type="email")
+					div(class="form-group")
+						label(class="control-label col-md-3 col-md-3 col-xs-12",for="") Error
+						div(class="col-md-8 col-md-8 col-xs-12")
+							textarea(class="form-control" id="error" name="error" style="resize:none;" rows="10")
+					div(class="form-group")
+						label(class="control-label col-md-3 col-md-3 col-xs-12",for="") Comment
+						div(class="col-md-8 col-md-8 col-xs-12")
+							textarea(class="form-control" id="comment" name="comment" style="resize:none;" rows="5")
+			div(class="modal-footer")
+				button(class="btn btn-primary" id="reportButton" onclick="submitEmail(`#email`);") Report the Error
+				button(class="btn btn-default" data-dismiss="modal") Close				

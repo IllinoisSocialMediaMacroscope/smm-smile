@@ -1,0 +1,20 @@
+nav(class="navbar navbar-inverse navbar-fixed-top")
+	div(class="container-fluid")
+		div(class="navbar-header")
+			button(type="button",class="navbar-toggle collapsed", data-toggle="collapse", data-target="#navbar", aria-expanded="true", aria-controls="navbar")
+				span(class="sr-only") Toggle navigation
+				span(class="icon-bar")
+				span(class="icon-bar")
+				span(class="icon-bar")
+				
+		div(id="navbar",class="navbar-collapse collapse")
+			if parent
+				<a href="/"><span class="glyphicon glyphicon-arrow-up gi-2x"></span></a>
+
+			ul(class="nav navbar-nav navbar-right")
+				li <a href="/">Analytics</a>
+				li <a href="/history">History</a>
+				li <a href="/query">Search Engine</a>
+					 
+			form(class="navbar-form navbar-right")
+				input(type="text" class="form-control" placeholder="Search...")

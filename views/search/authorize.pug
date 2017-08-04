@@ -1,0 +1,66 @@
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		
+		<!-- this is for bootstrap 3! -->
+		link(href="../bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		<!-- this is the customized search box style -->
+		link(href="../bootstrap/css/search.css",rel="stylesheet")
+		
+		<!-- font family -->
+		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+		
+		<!-- JQUERY -->
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="../bootstrap/js/bootstrap.min.js")
+				
+	body()
+		
+		<!-- top bar -->
+		include ../components/topbar.pug
+		
+		<!-- logo -->
+		div(class="row")
+			img(src="../bootstrap/img/logo/graphql-logo.png",width="30%",style="display:block;margin-left:auto;margin-right:auto;margin-top:100px;")
+				
+		<!-- prose -->
+		div(class="row")
+			h1(style="text-align:center; margin-top:100px;") 
+				| <kbd style="background-color:#e10098;"> Authroize us with your social media credentials</kbd>
+			h1(style="text-align:center; margin-top:50px;margin-bottom:50px;color:#e10098;") 
+				<span class="glyphicon glyphicon-hand-down"></span>
+				| click the icons below
+				<span class="glyphicon glyphicon-hand-down"></span>
+				
+		<!-- warning -->
+		include ../components/warning.pug
+		if error
+			script.
+				$("#error").val(!{JSON.stringify(error)});
+				$("#warning").modal('show');
+		
+		<!-- footer -->
+		div(style="text-align: center;")
+			a(href='/login/twitter', id="twitter-auth")
+				img(src='../bootstrap/img/logo/twitter-bg-logo.png', width="300px",class="oauth")
+			//a(href='/login/reddit', id="reddit-auth")
+			//	img(src='../bootstrap/img/logo/reddit-bg-logo.png', width="300px",class="oauth")
+			a(href='/login/es', id="es-auth")
+				img(src='../bootstrap/img/logo/elasticsearch-bg-logo.png', width="300px",class="oauth")
+				
+		script.
+			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
+				console.log($("#twitter-auth"));
+				$("#twitter-auth").hide();
+			}
+			if (!{JSON.stringify(success)}.indexOf('reddit') >=0){
+				console.log("done");
+				$("#reddit-auth").hide();
+			}
+			if (!{JSON.stringify(success)}.indexOf('es') >=0){
+				console.log("done");
+				$("#es-auth").hide();
+			}
+	

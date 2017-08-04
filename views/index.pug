@@ -1,0 +1,40 @@
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible",content="IE=edge")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		
+		title(Index)
+		<!-- this is for bootstrap 3! -->
+		link(href="../bootstrap/css/bootstrap.css", rel="stylesheet")
+		<!-- this is the customized dashboard style -->
+		link(href="../bootstrap/css/customized.css",rel="stylesheet")
+		
+		<!-- font family -->
+		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+		
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="../bootstrap/js/bootstrap.min.js")
+	
+	body(style="padding-top:100px;padding-left:50px; padding-right:50px")
+		include components/topbar.pug
+
+		div(class="container-fluid")
+				div(class="row")
+					div(class="col-md-12 col-sm-12 col-xs-12")
+						each page in pages
+							if pages.length === 4
+								div(class="col-md-3 col-sm-3 placeholder")
+									h1(style="text-align:center;") #{page.name}
+									a(href=page.url)
+										img(src=page.imgURL, width="300px", height="300px", class="logos")
+									p(class="intro") !{page.introduction}
+							else if pages.length === 3
+								div(class="col-md-4 col-sm-4 placeholder")
+									h1(style="text-align:center;") #{page.name}
+									a(href=page.url)
+										img(src=page.imgURL, width="400px", height="400px", class="logos")
+									p(class="intro") !{page.introduction}
+			 
+		
