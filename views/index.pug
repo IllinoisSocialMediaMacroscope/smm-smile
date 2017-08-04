@@ -9,7 +9,7 @@ html
 		<!-- this is for bootstrap 3! -->
 		link(href="../bootstrap/css/bootstrap.css", rel="stylesheet")
 		<!-- this is the customized dashboard style -->
-		link(href="../bootstrap/css/customized.css",rel="stylesheet")
+		link(href="../bootstrap/css/index.css",rel="stylesheet")
 		
 		<!-- font family -->
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
@@ -17,24 +17,39 @@ html
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
 		script(src="../bootstrap/js/bootstrap.min.js")
 	
-	body(style="padding-top:100px;padding-left:50px; padding-right:50px")
+	body
 		include components/topbar.pug
-
-		div(class="container-fluid")
-				div(class="row")
-					div(class="col-md-12 col-sm-12 col-xs-12")
-						each page in pages
-							if pages.length === 4
-								div(class="col-md-3 col-sm-3 placeholder")
-									h1(style="text-align:center;") #{page.name}
-									a(href=page.url)
-										img(src=page.imgURL, width="300px", height="300px", class="logos")
-									p(class="intro") !{page.introduction}
-							else if pages.length === 3
-								div(class="col-md-4 col-sm-4 placeholder")
-									h1(style="text-align:center;") #{page.name}
-									a(href=page.url)
-										img(src=page.imgURL, width="400px", height="400px", class="logos")
-									p(class="intro") !{page.introduction}
-			 
+		div(class="headers")
+			h1(class="caption") Social Media Macroscope
+			section(class="intro")
+				img(src="../bootstrap/img/logo/search-logo.png",width="150px")
+				h4(class="header") Search data from social media platforms
+				img(src="../bootstrap/img/logo/transform-logo.png",width="150px")
+				h4(class="header") Aggregate raw results and transform to tabular format
+				img(src="../bootstrap/img/logo/analytics-logo.png",width="150px")
+				h4(class="header") Analyze and visualize
+			div(class="button-unit")
+				a(class="button" href="/query") Get Started
+				a(class="button" href="/history") History
+		each page,i in pages
+			if i%2 === 0
+				div(class="even")
+					section(class="even")
+						div(class="prose")
+							h1(class="app-title") 
+								a(href=page.url) #{page.name}
+							p(class="intro") !{page.introduction}
+						div(class="app")
+							a(href=page.url)
+								img(src=page.imgURL, width="400px", class="logos")
+			else
+				div(class="odd")
+					section(class="odd")
+						div(class="app")
+							a(href=page.url)
+								img(src=page.imgURL, width="400px", class="logos")
+						div(class="prose")
+							h1(class="app-title")
+								a(href=page.url) #{page.name}
+							p(class="intro") !{page.introduction}
 		

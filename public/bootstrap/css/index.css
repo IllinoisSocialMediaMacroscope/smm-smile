@@ -1,0 +1,126 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+/*colors:
+	red: :#c84b49;
+	light blue:#428bca
+	dark blue:#2a5a84;
+	salmon color:#faeeee;
+	background light grey:#f7f7f7;
+	background dark grey:#eae8e8;
+*/
+.caption{
+	font-size:50px;
+	font-weight:900;
+	margin:20px 50px;
+	color:#f5f6f8;
+	text-align:center;
+}
+
+.navbar-fixed-top {
+	border: 0;
+}
+
+.navbar-inverse .navbar-nav>li>a,
+.navbar-inverse .navbar-brand{
+	color:#faeeee;
+}
+
+.navbar-inverse{
+	background-color:#c84b49;
+}
+a:link,
+a:visited,
+a:hover,
+a:active{
+	text-decoration:none;
+}
+
+body {
+	padding-top: 50px;
+    font-family: "Ubuntu", sans-serif;
+	font-size:20px;
+	line-height:28.8px;
+    color: #73879c;
+    background-color: #eae8e8;
+}
+
+.headers{
+	min-height: 600px;
+    max-height: 700px;
+    height: 35vh;
+    margin-top: 0;
+    padding-top: 50px;
+    z-index: 11;
+	position: relative;
+	background-color:#2a5a84;
+}
+
+.header{
+	width:150px;
+	text-align:center;
+	color:#e6e8ec;
+}
+
+.button-unit{
+	position: absolute;
+    text-align: center;
+	top: calc(70%);
+    width: 100%;
+	animation: fade 1.1s 3.2s ease-in-out both;
+}
+
+
+.button{
+	font-weight: 300;
+    color: white;
+    font-size: 20px;
+    line-height: 28.8px;
+    border: solid 1.5px rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    line-height: 1.0;
+    padding: 0.6em 1.6em;
+    margin: 0 0.8em;
+    display: inline-block;
+    text-decoration: none;
+}
+.button:hover{
+	background-color:white;
+}
+
+section{
+	max-width:1300px;
+	margin: 0 auto;
+	padding:0 15px;
+	align-items:center;
+	display:flex;
+	padding-top:1em;
+	padding-bottom:1em;
+	flex-direction: row;
+    justify-content: space-between;
+}
+
+.even{
+	background-color:#f5f6f8;
+}
+
+.odd{
+	background-color:#e6e8ec;
+}
+
+
+.prose{
+	max-width: 600px;
+}
+
+.app-title{
+    font-weight: 300;
+    font-size: 50px;
+    line-height: 100px;
+}
+
+.app{
+	width: 400px;
+    height: 500px;
+    position: relative;
+    margin: 80px -10px;
+}
+
