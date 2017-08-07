@@ -43,6 +43,9 @@ router.get('/query',function(req,res,next){
 router.post('/query',function(req,res,next){
 	
 	// make directory downloads/GraphQL before save things to it!
+	if (!fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD)){
+		fs.mkdirSync(process.env.ROOTDIR + process.env.DOWNLOAD);
+	}	
 	if (!fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL)){
 		fs.mkdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
 	}		
