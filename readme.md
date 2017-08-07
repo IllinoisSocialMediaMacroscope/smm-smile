@@ -8,8 +8,9 @@
 
 # How to Run:
 1. Download/or pull this repository to your local disk;
-2. Using nodejs command line tool (windows) or just use command line (linux), cd into this folder.
-3. Install all the dependency library by typing: **_npm install_**; cd into ./graphql folder to install graphql dependency library by typing **_cd graphql_** and **_npm install_**
+2. Put .env files in the rootDIR, another .env in the graphql directory. Link here: point_right: [googleDrive](https://drive.google.com/drive/folders/0B37hhRXKgRPOZG1MbUdwSEdVNWM)
+**Be Careful, sometimes google drive or your operating system will change the ".env" filename into "_env" or "env". Make sure to change it back to ".env" **
+3. Using nodejs command line tool (windows) or just use command line (linux), cd into this repo's root directory; Install all the dependency library by typing: **_npm install_**; cd into ./graphql folder to install graphql dependency library by typing **_cd graphql_** and **_npm install_**
 4. **TEST** the analytics server by typing **_npm test_**; **_cd graphql_** and **_npm test_** to test graphql server;
 5. **RUN** concurrently by typing **_npm start_**
 
@@ -19,5 +20,6 @@
 
 # WARNING:
 1.For safety and developing reason, **.env** files are not included, Please contact me to get a copy
+2.Once you get a copy of .env file, make sure the **rootDIR** variable in the file matches your desired destination 
 #### email me: _***REMOVED***_
 
