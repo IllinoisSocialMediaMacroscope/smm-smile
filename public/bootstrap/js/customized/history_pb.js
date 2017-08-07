@@ -70,6 +70,51 @@ function submitHistory(formID){
 	
 } 
 
+function deleteHistory(formID){	
+	console.log('hitted');
+	$.ajax({
+		type:'post',
+		url:'/delete', 
+		data: $("#"+formID).serialize(),				
+		success:function(data){
+			if(data){
+				$("#title-container").empty();
+				$("#overview-container").empty();
+				$("#img-container").empty();
+				$("#result-container").empty();
+				$("#gaudge").empty();
+				$("#title").empty();
+				// succesfully delete, then hide this tab
+				alert(data);
+				$("#" + formID).parent().css( "display", "none" );
+				$("#background").show();
+			}
+		},
+		error: function(jqXHR, exception){
+				var msg = '';
+				if (jqXHR.status === 0) {
+					msg = 'Not connect.\n Verify Network.';
+				} else if (jqXHR.status == 404) {
+					msg = 'Requested page not found. [404]';
+				} else if (jqXHR.status == 500) {
+					msg = 'Internal Server Error [500].';
+				} else if (exception === 'parsererror') {
+					msg = 'Requested JSON parse failed.';
+				} else if (exception === 'timeout') {
+					msg = 'Time out error.';
+				} else if (exception === 'abort') {
+					msg = 'Ajax request aborted.';
+				} else {
+					msg = 'Uncaught Error.\n' + jqXHR.responseText;
+				}
+				$("#error").val(msg);
+				$("#warning").modal('show');
+				
+			} 
+	}); 
+	
+} 
+
 function appendTitle(container, title,ID, config){
 	$(container).append(`<h1>`+ title+ `</h1><h4>ID: ` + ID +`</h4>`);
 }

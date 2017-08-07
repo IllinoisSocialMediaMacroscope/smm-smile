@@ -194,4 +194,45 @@ router.post('/history',function(req,res,next){
 	}
 });
 
+router.post('/delete',function(req,res,next){
+	if (req.body.type === 'analytics'){
+		var DIR = process.env.ROOTDIR + process.env.DOWNLOAD + '/' + req.body.layer1 + '/' + req.body.layer2 +'/' + req.body.historyID;
+		deleteFolderRecursive(DIR);
+		res.send('Successfully deleted!');
+	}
+	
+	else if (req.body.type === 'graphql'){
+		
+		var DIR_GraphQL = process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.historyID;
+		if (fs.existsSync(DIR_GraphQL + '.json')){
+			fs.unlinkSync(DIR_GraphQL + '.json');
+		}
+		if (fs.existsSync(DIR_GraphQL + '.csv')){
+			fs.unlinkSync(DIR_GraphQL + '.csv');
+		}
+		if (fs.existsSync(DIR_GraphQL + '.dat')){
+			fs.unlinkSync(DIR_GraphQL + '.dat');
+		}
+		if (fs.existsSync(DIR_GraphQL + '.zip')){
+			fs.unlinkSync(DIR_GraphQL + '.zip');
+		}
+		res.send('Successfully deleted!');
+		
+	}
+});
+
+var deleteFolderRecursive = function(path) {
+  if( fs.existsSync(path) ) {
+    fs.readdirSync(path).forEach(function(file,index){
+      var curPath = path + "/" + file;
+      if(fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath);
+      } else { // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+};
+
 module.exports = router;
