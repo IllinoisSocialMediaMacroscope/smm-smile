@@ -56,7 +56,7 @@ html
 													p(class="historyTabs") #{val2}
 													div(class="button-unit")
 														<button class="historyButtons" onclick="submitHistory(`#{key2}`);">view</button>
-														<button class="historyButtons" onclick="deleteHistory(`#{key2}`);">delete</button>
+														<button class="historyButtons" onclick="deleteModal(`#{key2}`);">delete</button>
 					
 						li <a onclick="toggle(this,`#graphql`);"><span class="glyphicon glyphicon-minus"></span>Social Media Search</a>
 							ul(class="nav child_menu" style="display:block;" id="graphql")
@@ -69,7 +69,7 @@ html
 										p(class="historyTabs") #{val}
 										div(class="button-unit")
 											<button class="historyButtons" onclick="submitHistory(`#{val}`);">view</button>
-											<button class="historyButtons" onclick="deleteHistory(`#{val}`);">delete</button>
+											<button class="historyButtons" onclick="deleteModal(`#{val}`);">delete</button>
 												
 		div(class="container-fluid")
 			div(class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main")
@@ -105,5 +105,16 @@ html
 						a(class="anchor" name="result-anchor")
 						div(id="result-container")
 		
+		<!-- popup modal delete -->
+		div(id="delete" class="modal fade" role="dialog")
+			div(class="modal-dialog")
+				div(class="modal-content")
+					div(class="modal-header")
+						button(class="close" data-dismiss="modal") &times;
+						h2(class="modal-title") Delete this Job? 
+							span(class="glyphicon glyphicon-trash" style="font-size:20px;margin-left:5px") 
+					div(class="modal-footer")
+						button(class="btn btn-primary" id="deleteButton") Delete
+						button(class="btn btn-default" data-dismiss="modal") Close
 		include components/warning.pug
 								

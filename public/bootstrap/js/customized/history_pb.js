@@ -70,6 +70,23 @@ function submitHistory(formID){
 	
 } 
 
+/* delete job modal */
+function deleteModal(formID){
+	
+	$("#delete").modal('show');
+		
+	$("#deleteButton").click(function(){
+		deleteHistory(formID);
+	});
+
+	$("#deleteButton").keypress(function(e){
+		if (e.which == 13){
+			deleteHistory(formID);
+		}
+	});
+	
+}
+
 function deleteHistory(formID){	
 	console.log('hitted');
 	$.ajax({
@@ -85,8 +102,9 @@ function deleteHistory(formID){
 				$("#gaudge").empty();
 				$("#title").empty();
 				// succesfully delete, then hide this tab
-				alert(data);
+				//alert(data);
 				$("#" + formID).parent().css( "display", "none" );
+				$("#delete").modal('hide');
 				$("#background").show();
 			}
 		},
