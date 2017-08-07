@@ -20,7 +20,9 @@
 
 # WARNING:
 1.For safety and developing reason, **.env** files are not included, Please contact me to get a copy
+
 2.Once you get a copy of .env file, make sure the **rootDIR** variable in the file matches your desired destination 
+
 3.Make sure to subtitute any **credentials** in .env if not provided!
 #### email me: _***REMOVED***_
 
