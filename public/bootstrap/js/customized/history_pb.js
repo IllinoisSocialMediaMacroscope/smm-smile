@@ -34,7 +34,8 @@ function submitHistory(formID){
 					
 					if ('compound' in data){
 						// add gauge for sentiment analysis
-						google.charts.setOnLoadCallback(drawGauge('Compound Sentiment Score of the whole document', parseFloat(data.compound)));
+						//google.charts.setOnLoadCallback(drawGauge('Compound Sentiment Score of the whole document', parseFloat(data.compound)));
+						console.log('revoke it');
 					}else if('iframe' in data){
 						// draw iframe for topic modeling
 						drawIframe(data.iframe.name, data.iframe.content);
