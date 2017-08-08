@@ -22,15 +22,25 @@ $(document).ready(function(){
 			data: "filename=" + this.value,				
 			success:function(data){
 				if (data){
-					var allowed_field_list = ['id','_source.id','retweet_count','_source.retweet_count','user.author_id','_source.user.author_id',
-						'user.screen_name','_source.user.screen_name', 'user.name', '_source.user.name','user.tweets_count', '_source.user.tweets_count',
-						'user.followers_count','_source.user.followers_count','user.friends_count','_source.user.friends_count','user.listed_count',
-						'_source.user.listed_count','user.favourites_count','_source.user.favourites_count','user.statuses_count', '_source.user.statuses_count',
-						'author_id','screen_name','tweets_count','followers_count',
+					var allowed_field_list = [
+						// tweet
+						'id','id_str','_source.id','retweet_count','favourite_count','retweeted','favorited','possibly_sensitive','truncated','lang','is_quote_status',
+						'user.author_id','user.author_id_str','user.name','user.screen_name','user.tweets_count', 'user.followers_count','user.friends_count',
+						'user.listed_count','user.favourites_count','user.statuses_count','user.protected','user.verified','user.is_translator','user.contributors_enabled',
+						'user.geo_enabled','user.lang',
+						// stream
+						'_score','_source.id','_source.id_str','_source.retweet_count','_source.favourite_count','_source.retweeted','_source.favorited','_source.possibly_sensitive',
+						'_source.truncated','_source.lang','_source.is_quote_status','_source.user.author_id','_source.user.author_id_str','_source.user.screen_name','_source.user.name',
+						'_source.user.tweets_count','_source.user.friends_count','_source.user.followers_count', '_source.user.listed_count',
+						'_source.user.favourites_count','_source.user.statuses_count','_source.user.protected','_source.user.verified','_source.user.is_translator',
+						'_source.user.contributors_enabled','_source.user.geo_enabled','_source.user.lang',
+						// twtUser
+						'author_id','author_id_str','screen_name','name','tweets_count','followers_count','friends_count','listed_count','favourites_count','statuses_count','protected',
+						'verified','is_translator','contributors_enabled','geo_enabled','lang',
+						// reddit
 						'over18','display_names','subscribers','subreddit_type',
 						'author_name','controversiality','downs','ups','name','num_comments','over_18','parent_id','score',
-						'subreddit_id','subreddit_display_name',
-						'created'];
+						'subreddit_id','subreddit_display_name','created'];
 					
 					var index = [];
 					$.each(data.preview[0],function(i,val){
