@@ -85,7 +85,7 @@ function submitSearchbox(searchboxID, filenameID){
 	if (queryTerm === 'queryTweet'){
 		var queryString = `{
 							  twitter {
-								queryTweet(q: "trump", count: 10) {
+								queryTweet(q:"` + keyword + `", count: 100,pages:18) {
 								  id
 								  id_str
 								  created_at
@@ -137,7 +137,7 @@ function submitSearchbox(searchboxID, filenameID){
 	}else if (queryTerm === 'queryUser'){
 		var queryString = `{
 							  twitter{
-								queryUser(q:"Trump"){
+								queryUser(q:"` + keyword + `", count:20){
 								  author_id
 								  author_id_str
 								  name
@@ -171,8 +171,12 @@ function submitSearchbox(searchboxID, filenameID){
 	}else if (queryTerm === 'streamTweet'){
 		var queryString = `{
 							  elasticSearch {
-								streamTweet(q:"@ronniecexo", perPage: 10) {
-								  _source {
+								streamTweet(q:"` + keyword + `", perPage: 1000) {
+								_id
+								_type
+								_index
+								_score
+								_source{
 									id
 									id_str
 									created_at
