@@ -16,7 +16,7 @@ block config-form
 							
 							if input['type'] == 'radio'
 								label(class="radio-inline")
-									input(type=input.type name=input.name id=input.id value=input.value class=input.class) 
+									input(type=input.type name=input.name id=input.id value=input.value class=input.class checked=input.checked) 
 									| #{input['label']}
 								
 								
@@ -28,6 +28,11 @@ block config-form
 											optgroup(label=key)
 											each item in val
 												option(val=item) #{item}
+									
+									script.
+										$(`##{container['container-name']}`).after(`<div id="selectFilePreview-container">`)
+										$("#selectFilePreview-container").after(`<div id="selectFileHeader-container">`)
+									
 								else
 									select(name=input.name id=input.id class=input.class)
 										each opt in input.options
@@ -41,9 +46,7 @@ block config-form
 									input(type=input.type min=input.min max=input.max value=input.value name=input.name onchange=input.onchange id=input.id)
 									output(id=input.output_id) #{input.value}
 	
-		div(id="selectFilePreview-container")
 		
-		div(id="selectFileHeader-container")
 		
 		div(class="form-group")
 			div(class="col-md-8 col-md-8 col-xs-12 col-md-offset-2")

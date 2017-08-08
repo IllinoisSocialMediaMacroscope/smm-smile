@@ -1,19 +1,22 @@
+require('dotenv').config();
 var express = require('express');
 var router = express.Router();
-var multer = require('multer');
-var upload = multer({dest:'uploads/'});
 var fs = require('fs');
 var path = require('path');
 var pythonShell = require('python-shell');
-
+var CSV = require('csv-string');
+var serverDIR = path.resolve('.');
+var readDIR = require(serverDIR + '/scripts/helper.js').readDIR;
 //TODO fs.unlink has some issues needed to be fixed
 var rootDIR = path.resolve('.');
 
 router.get('/networkx',function(req,res,next){
-	res.render('networkx/networkx');
+	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
+	var formParam = require('./networkx.json');
+	res.render('formTemplate',{parent:'/', title:'Network Visualization', directory:files, param:formParam}); 
 });
 
-router.post('/networkx',upload.single('file'),function(req,res,next){
+/*router.post('/networkx',upload.single('file'),function(req,res,next){
 	
 	//console.log(req.body);
 	
@@ -81,6 +84,6 @@ router.post('/networkx',upload.single('file'),function(req,res,next){
 			}); 
 		}); 
 	}
-});
+});*/
       
 module.exports = router;

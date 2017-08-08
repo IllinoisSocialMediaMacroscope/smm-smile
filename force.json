@@ -1,0 +1,309 @@
+{
+    "directed": true,
+    "multigraph": false,
+    "graph": {},
+    "nodes": [
+        {
+            "name": "mateo_dw",
+            "label": "mateo_dw",
+            "id": "mateo_dw"
+        },
+        {
+            "name": "JohnCMcGinley",
+            "label": "JohnCMcGinley",
+            "id": "JohnCMcGinley"
+        },
+        {
+            "name": "source4us",
+            "label": "source4us",
+            "id": "source4us"
+        },
+        {
+            "name": "CNN",
+            "label": "CNN",
+            "id": "CNN"
+        },
+        {
+            "name": "ljall78952",
+            "label": "ljall78952",
+            "id": "ljall78952"
+        },
+        {
+            "name": "hereandnow",
+            "label": "hereandnow",
+            "id": "hereandnow"
+        },
+        {
+            "name": "unseen1_unseen",
+            "label": "unseen1_unseen",
+            "id": "unseen1_unseen"
+        },
+        {
+            "name": "mitchellvii",
+            "label": "mitchellvii",
+            "id": "mitchellvii"
+        },
+        {
+            "name": "annoykurtz",
+            "label": "annoykurtz",
+            "id": "annoykurtz"
+        },
+        {
+            "name": "antmaurizio",
+            "label": "antmaurizio",
+            "id": "antmaurizio"
+        },
+        {
+            "name": "maryamericaj3",
+            "label": "maryamericaj3",
+            "id": "maryamericaj3"
+        },
+        {
+            "name": "Got2Ask",
+            "label": "Got2Ask",
+            "id": "Got2Ask"
+        },
+        {
+            "name": "NuclearKnights",
+            "label": "NuclearKnights",
+            "id": "NuclearKnights"
+        },
+        {
+            "name": "StefanMolyneux",
+            "label": "StefanMolyneux",
+            "id": "StefanMolyneux"
+        },
+        {
+            "name": "Lovie_19",
+            "label": "Lovie_19",
+            "id": "Lovie_19"
+        },
+        {
+            "name": "Greytdog",
+            "label": "Greytdog",
+            "id": "Greytdog"
+        },
+        {
+            "name": "erinamunson",
+            "label": "erinamunson",
+            "id": "erinamunson"
+        },
+        {
+            "name": "benshapiro",
+            "label": "benshapiro",
+            "id": "benshapiro"
+        },
+        {
+            "name": "cwhy65",
+            "label": "cwhy65",
+            "id": "cwhy65"
+        },
+        {
+            "name": "DTrumpExposed",
+            "label": "DTrumpExposed",
+            "id": "DTrumpExposed"
+        },
+        {
+            "name": "sharsheepdog",
+            "label": "sharsheepdog",
+            "id": "sharsheepdog"
+        },
+        {
+            "name": "kylegriffin1",
+            "label": "kylegriffin1",
+            "id": "kylegriffin1"
+        },
+        {
+            "name": "ToastingNights",
+            "label": "ToastingNights",
+            "id": "ToastingNights"
+        },
+        {
+            "name": "jeffreyrkelley",
+            "label": "jeffreyrkelley",
+            "id": "jeffreyrkelley"
+        },
+        {
+            "name": "NAnnPostma",
+            "label": "NAnnPostma",
+            "id": "NAnnPostma"
+        },
+        {
+            "name": "trumpimpeachmnt",
+            "label": "trumpimpeachmnt",
+            "id": "trumpimpeachmnt"
+        },
+        {
+            "name": "debinqueens",
+            "label": "debinqueens",
+            "id": "debinqueens"
+        },
+        {
+            "name": "trumpsterMG",
+            "label": "trumpsterMG",
+            "id": "trumpsterMG"
+        },
+        {
+            "name": "Mexicanpov",
+            "label": "Mexicanpov",
+            "id": "Mexicanpov"
+        },
+        {
+            "name": "JeniferStevens",
+            "label": "JeniferStevens",
+            "id": "JeniferStevens"
+        },
+        {
+            "name": "VelvetSparrow",
+            "label": "VelvetSparrow",
+            "id": "VelvetSparrow"
+        },
+        {
+            "name": "thehill",
+            "label": "thehill",
+            "id": "thehill"
+        },
+        {
+            "name": "TTCSteve",
+            "label": "TTCSteve",
+            "id": "TTCSteve"
+        },
+        {
+            "name": "GeorgWebb",
+            "label": "GeorgWebb",
+            "id": "GeorgWebb"
+        },
+        {
+            "name": "__sagit__",
+            "label": "__sagit__",
+            "id": "__sagit__"
+        },
+        {
+            "name": "Jeremy52072104",
+            "label": "Jeremy52072104",
+            "id": "Jeremy52072104"
+        },
+        {
+            "name": "OnlyOneLibya",
+            "label": "OnlyOneLibya",
+            "id": "OnlyOneLibya"
+        },
+        {
+            "name": "loayomran",
+            "label": "loayomran",
+            "id": "loayomran"
+        },
+        {
+            "name": "Mr_JamesLandis",
+            "label": "Mr_JamesLandis",
+            "id": "Mr_JamesLandis"
+        },
+        {
+            "name": "cp",
+            "label": "cp",
+            "id": "cp"
+        }
+    ],
+    "links": [
+        {
+            "from": "mateo_dw",
+            "to": "JohnCMcGinley",
+            "arrows": "to"
+        },
+        {
+            "from": "source4us",
+            "to": "CNN",
+            "arrows": "to"
+        },
+        {
+            "from": "ljall78952",
+            "to": "hereandnow",
+            "arrows": "to"
+        },
+        {
+            "from": "unseen1_unseen",
+            "to": "mitchellvii",
+            "arrows": "to"
+        },
+        {
+            "from": "annoykurtz",
+            "to": "antmaurizio",
+            "arrows": "to"
+        },
+        {
+            "from": "maryamericaj3",
+            "to": "Got2Ask",
+            "arrows": "to"
+        },
+        {
+            "from": "NuclearKnights",
+            "to": "StefanMolyneux",
+            "arrows": "to"
+        },
+        {
+            "from": "Lovie_19",
+            "to": "Greytdog",
+            "arrows": "to"
+        },
+        {
+            "from": "erinamunson",
+            "to": "benshapiro",
+            "arrows": "to"
+        },
+        {
+            "from": "cwhy65",
+            "to": "DTrumpExposed",
+            "arrows": "to"
+        },
+        {
+            "from": "sharsheepdog",
+            "to": "kylegriffin1",
+            "arrows": "to"
+        },
+        {
+            "from": "ToastingNights",
+            "to": "jeffreyrkelley",
+            "arrows": "to"
+        },
+        {
+            "from": "NAnnPostma",
+            "to": "trumpimpeachmnt",
+            "arrows": "to"
+        },
+        {
+            "from": "debinqueens",
+            "to": "trumpsterMG",
+            "arrows": "to"
+        },
+        {
+            "from": "Mexicanpov",
+            "to": "JeniferStevens",
+            "arrows": "to"
+        },
+        {
+            "from": "VelvetSparrow",
+            "to": "thehill",
+            "arrows": "to"
+        },
+        {
+            "from": "TTCSteve",
+            "to": "GeorgWebb",
+            "arrows": "to"
+        },
+        {
+            "from": "__sagit__",
+            "to": "Jeremy52072104",
+            "arrows": "to"
+        },
+        {
+            "from": "OnlyOneLibya",
+            "to": "loayomran",
+            "arrows": "to"
+        },
+        {
+            "from": "Mr_JamesLandis",
+            "to": "cp",
+            "arrows": "to"
+        }
+    ]
+}
