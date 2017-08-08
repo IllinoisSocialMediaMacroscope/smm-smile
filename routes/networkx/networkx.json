@@ -89,6 +89,6 @@
 					}
 				]}
 	],
-	"custom-script":"../bootstrap/js/customized/view_cluster.js"
+	"custom-script":"../bootstrap/js/customized/view_networkx.js"
 }
 			
