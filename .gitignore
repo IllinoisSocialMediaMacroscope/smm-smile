@@ -12,3 +12,5 @@ graphql/socialmedia_credential.json
 site-packages
 site-packages.zip
 example_data
+*.ipynb
+*.ipynb_checkpoints

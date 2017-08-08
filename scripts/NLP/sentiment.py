@@ -53,9 +53,9 @@ class Sentiment:
                     except Exception as e:
                         print(e)
                 
-                df = pd.DataFrame(Array[1:],columns=Array[0]).dropna()
+                df = pd.DataFrame(Array[1:],columns=Array[0])
                 #df = pd.read_csv(content,encoding="utf-8")
-                self.sent = df[column].astype('str').tolist()
+                self.sent = df[column].dropna().astype('str').tolist()
                 self.text = ''.join(self.sent)
     
     def documentSentiment(self):
