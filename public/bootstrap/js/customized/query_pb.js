@@ -369,7 +369,7 @@ function init(){
 	$("#twtStreamFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],ElasticSearchMetadata:[],AuthorInformation:[],GeoLocation:[]};
+		fields = {BasicFields:[],ElasticSearchMetadata:[],AuthorInformation:[],GeoLocation:[],Place:[],Mentions:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -395,6 +395,20 @@ function init(){
 			if (fields['GeoLocation'].length !== 0){
 				fields_string += '\n\t\t\t\tcoordinates{' ;
 				$.each(fields['GeoLocation'],function(i,val){
+					fields_string += '\n\t\t\t\t\t' + val;
+				});
+				fields_string += '\n\t\t\t\t}' ;
+			}
+			if (fields['Place'].length !== 0){
+				fields_string += '\n\t\t\t\tcoordinates{' ;
+				$.each(fields['Place'],function(i,val){
+					fields_string += '\n\t\t\t\t\t' + val;
+				});
+				fields_string += '\n\t\t\t\t}' ;
+			}
+			if (fields['Mentions'].length !== 0){
+				fields_string += '\n\t\t\t\tcoordinates{' ;
+				$.each(fields['Mentions'],function(i,val){
 					fields_string += '\n\t\t\t\t\t' + val;
 				});
 				fields_string += '\n\t\t\t\t}' ;

@@ -3,7 +3,8 @@ var {
 	GraphQLObjectType,
 	GraphQLString,
 	GraphQLList,
-	GraphQLInt
+	GraphQLInt,
+	GraphQLBoolean,
 } = require('graphql');
 
 var twitterAPI = require('../../../API/twitterAPI');
@@ -23,6 +24,7 @@ const twtUserType = module.exports = new GraphQLObjectType({
 		author_created_at:		{ type: GraphQLString,
 									resolve:({created_at}) =>{ return created_at} },
 		profile_image_url:		{ type: GraphQLString },
+		profile_banner_url:		{ type: GraphQLString },
 		url:					{ type: GraphQLString },
 		location: 				{ type: GraphQLString },
 		tweets_count: 			{ type: GraphQLInt,
@@ -31,12 +33,18 @@ const twtUserType = module.exports = new GraphQLObjectType({
 		friends_count :			{ type: GraphQLInt },
 		listed_count: 			{ type: GraphQLInt },
 		favourites_count: 		{ type: GraphQLInt },
-		statuses_count	: 		{type: GraphQLInt },
+		statuses_count	: 		{ type: GraphQLInt },
 		time_zone:				{ type: GraphQLString },
+		protected:				{ type: GraphQLBoolean },
+		verified:				{ type: GraphQLBoolean },
+		is_translator:			{ type: GraphQLBoolean },
+		contributors_enabled:	{ type: GraphQLBoolean },
+		geo_enabled:			{ type: GraphQLBoolean },
+		lang:					{ type: GraphQLString },
 		/*--------------------------nested------------------------*/
 		timeline:	{
 						type: new GraphQLList(tweetType),
-						args:{count:{type:GraphQLInt,defaultValue:200}},
+						args:{count:{type:GraphQLInt,defaultValue:10}},
 						description: 'Get the timeline of current User',
 						resolve:({id_str},args,context) =>twitterAPI(context,resolveName = 'fetchTimeline', id=id_str,args=args)
 					},

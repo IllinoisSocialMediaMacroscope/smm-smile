@@ -84,107 +84,152 @@ function submitSearchbox(searchboxID, filenameID){
 	
 	if (queryTerm === 'queryTweet'){
 		var queryString = `{
-							twitter{
-									queryTweet(q: "`+ keyword + `", count: 100,pages:18) {
-									  id
-									  created_at
-									  text
-									  retweet_count
-									  in_reply_to_user_id_str
-									  in_reply_to_status_id_str
-									  in_reply_to_screen_name
-									  user{
-										author_id
-										screen_name
-										name
-										description
-										author_created_at
-										profile_image_url
-										url
-										location
-										tweets_count
-										followers_count
-										friends_count
-										listed_count
-										favourites_count
-										statuses_count
-										time_zone
-									  }
-									}
+							  twitter {
+								queryTweet(q: "trump", count: 10) {
+								  id
+								  id_str
+								  created_at
+								  text
+								  retweet_count
+								  favorite_count
+								  retweeted
+								  favorited
+								  possibly_sensitive
+								  truncated
+								  lang
+								  in_reply_to_screen_name
+								  in_reply_to_user_id_str
+								  in_reply_to_status_id_str
+								  is_quote_status
+								  source
+								  user {
+									author_id
+									author_id_str
+									name
+									screen_name
+									description
+									author_created_at
+									profile_image_url
+									profile_banner_url
+									url
+									location
+									tweets_count
+									followers_count
+									friends_count
+									listed_count
+									favourites_count
+									statuses_count
+									time_zone
+									protected
+									verified
+									is_translator
+									contributors_enabled
+									geo_enabled
+									lang
+								  }
 								}
-						}`
+							  }
+							}
+							`
 		var filename = 'twitter-queryTweet-' + $(filenameID).val();
 		var params = parameters.tweet;
 		var pages = -999;
 	}else if (queryTerm === 'queryUser'){
 		var queryString = `{
-							twitter{
-								queryUser(q: "`+ keyword + `", count: 20) {
+							  twitter{
+								queryUser(q:"Trump"){
 								  author_id
+								  author_id_str
+								  name
 								  screen_name
 								  description
 								  author_created_at
 								  profile_image_url
+								  profile_banner_url
+								  url
 								  location
 								  tweets_count
 								  followers_count
 								  friends_count
+								  listed_count
 								  favourites_count
 								  statuses_count
 								  time_zone
+								  protected
+								  verified
+								  is_translator
+								  contributors_enabled
+								  geo_enabled
+								  lang
 								}
 							  }
-						}
-							`
+							}`
 		var filename = 'twitter-queryUser-' + $(filenameID).val();					
 		var params = parameters.twtUser;			
 		var pages = 90;
 		
 	}else if (queryTerm === 'streamTweet'){
 		var queryString = `{
-							elasticSearch{
-								streamTweet(q:"` + keyword + `",perPage:1000){
-									_id
-									_type
-									_index
-									_score
-									_source{
-										id
-										id_str
-										created_at
-										text
-										retweet_count
-										in_reply_to_user_id_str
-										in_reply_to_status_id_str
-										timestamp_ms
-										mentions
-										hashtags
-										urls
-										user{
-											author_id
-											screen_name
-											name
-											description
-											author_created_at
-											profile_image_url
-											url
-											location
-											tweets_count
-											followers_count
-											friends_count
-											listed_count
-											favourites_count
-											statuses_count
-											time_zone
-										}
-										coordinates{
-											lat
-											lon
-										}
+							  elasticSearch {
+								streamTweet(q:"@ronniecexo", perPage: 10) {
+								  _source {
+									id
+									id_str
+									created_at
+									text
+									retweet_count
+									favorite_count
+									retweeted
+									favorited
+									possibly_sensitive
+									truncated
+									lang
+									in_reply_to_user_id_str
+									in_reply_to_screen_name
+									in_reply_to_status_id_str
+									timestamp_ms
+									mentions
+									hashtags
+									urls
+									is_quote_status
+									emoticons
+									source
+									sentiments
+									filter_level
+									coordinates{
+									  type
+									  lon
+									  lat
 									}
+									user{
+									  author_id
+									  author_id_str
+									  name
+									  screen_name
+									  description
+									  author_created_at
+									  profile_image_url
+									  profile_banner_url
+									  url
+									  location
+									  tweets_count
+									  friends_count
+									  listed_count
+									  favourites_count
+									  statuses_count
+									  time_zone
+									  protected
+									  verified
+									  is_translator
+									  contributors_enabled
+									  geo_enabled
+									  lang
+									}
+								  }
 								}
+							  }
 							}
-						}`;
+							`;
 		var filename = 'twitter-streaming-' + $(filenameID).val();
 		var params = parameters.es;
 		var pages = 10;
