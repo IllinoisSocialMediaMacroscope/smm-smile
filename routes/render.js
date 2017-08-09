@@ -16,7 +16,7 @@ router.post('/render',function(req,res,next){
 			
 			var preview_string = fs.readFileSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.filename, "utf8");
 			var preview_arr = CSV.parse(preview_string);
-			res.send({preview:preview_arr.slice(0,25)}); // preview the top 25 line?
+			res.send({preview:preview_arr.slice(0,10)}); // preview the top 25 line?
 			
 		}else if (req.body.filename.substr(-4) === '.zip'){
 			

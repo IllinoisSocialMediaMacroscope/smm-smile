@@ -63,7 +63,7 @@ $(document).ready(function(){
 					<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 					<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
 					$("#selectFilePreview").append(arrayToTable(text_data ,'#selectFileTable'));
-					$("#selectFileTable").DataTable();
+					//$("#selectFileTable").DataTable();
 					
 					$("#selectFileHeader-container").append(`<div class="form-group">
 					<label class="control-label col-md-2 col-md-2 col-xs-12">Select Column to Analyze</label>

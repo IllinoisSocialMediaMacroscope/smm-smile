@@ -18,7 +18,7 @@ $(document).ready(function(){
 					<label class="control-label col-md-2 col-md-2 col-xs-12">files within this .zip</label>
 					<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)	
 					$("#selectFilePreview").append(arrayToTable(data,'#selectFileTable'));
-					$("#selectFileTable").DataTable();
+					//$("#selectFileTable").DataTable();
 				}
 			},
 			error: function(jqXHR, exception){

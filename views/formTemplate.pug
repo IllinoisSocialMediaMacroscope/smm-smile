@@ -43,7 +43,7 @@ block config-form
 								
 							else if input['type'] == 'range'
 								div(class="range range-node")
-									input(type=input.type min=input.min max=input.max value=input.value name=input.name onchange=input.onchange id=input.id)
+									input(type=input.type, min=input.min, max=input.max, value=input.value, step=input.step, name=input.name, onchange=input.onchange, id=input.id)
 									output(id=input.output_id) #{input.value}
 	
 		

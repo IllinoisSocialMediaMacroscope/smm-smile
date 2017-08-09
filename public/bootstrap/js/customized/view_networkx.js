@@ -47,7 +47,7 @@ $(document).ready(function(){
 					<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 					<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
 					$("#selectFilePreview").append(arrayToTable(numCat_data,'#selectFileTable'));
-					$("#selectFileTable").DataTable();
+					//$("#selectFileTable").DataTable();
 					
 					
 				}					
@@ -85,21 +85,24 @@ function formValidation(){
 		$("#selectFile").focus();
 		return false;
 	}
-	if ($("input[name='fields']:checked").val() === '' ||$("input[name='fields']:checked").val() === undefined){
-		alert("Please select a column of the text to analyze!");
-		return false;			
-	}else if ($("input[name='fields']:checked").length < 2){
-		alert("Must select at least two columns!");
-		return false;
-	}
-	if ($("#model option:selected").val() === '' || $("#model option:selected").val() === undefined){
+	if ($("#relationships option:selected").val() === '' || $("#relationships option:selected").val() === undefined){
 		alert("Please select a model to perform!");
-		$("#model").focus();
+		$("#relationships").focus();
 		return false;
 	}
-	if ($("#n_clusters").val()< 2 || $("#n_clusters").val() > 20){
-		alert("The valid number of cluster is between 0 to 20!");
-		$("#n_clusters").focus();
+	if ($("#layout option:selected").val() === '' || $("#layout option:selected").val() === undefined){
+		alert("Please select a model to perform!");
+		$("#layout").focus();
+		return false;
+	}
+	if ($("#node_size").val()< 5 || $("#node_size").val() > 50){
+		alert("The valid number of node size is between 5 to 50!");
+		$("#node_size").focus();
+		return false;
+	}
+	if ($("#edge_width").val()< 0.1 || $("#edge_width").val() > 5){
+		alert("The valid number of edge width is between 0.1 to 5!");
+		$("#edge_width").focus();
 		return false;
 	}
 	

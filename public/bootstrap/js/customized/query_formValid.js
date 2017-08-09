@@ -26,7 +26,7 @@ function formValid(searchID){
 	
 	// check the input box has English words or numbers or not
 	// before carry out to save the data part
-	var regx = /^[A-Za-z0-9_ _+-_&_|]+$/;
+	var regx = /^[#@A-Za-z0-9_ _+-_&_|]+$/;
 	if ($("#social-media option:selected").val() === ''){
 		
 		alert("Please select a platform!");

@@ -1,6 +1,7 @@
 import networkx as nx
 from collections import defaultdict
 import os
+from os.path import join, dirname
 import sys
 import uuid
 import json
@@ -9,30 +10,67 @@ from plotly import tools
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import argparse
 import numpy
+from dotenv import load_dotenv
+import csv
+import warnings
+import pandas
+warnings.filterwarnings('ignore')
+
 
 class Network:
 
-    def __init__(self, input_fname, directed):
-        self.uid = str(uuid.uuid4())
-        self.DIR = os.path.join(os.path.dirname(__file__), '../../downloads/networkx-graphs/' + self.uid)
-        if not os.path.exists(self.DIR):
-            os.makedirs(self.DIR)
-            
-        data = [ line.strip().split(',')
-                        for line in open(input_fname)][1:]
-        
-        if directed == 'directed':
-            self.graph = nx.DiGraph()
-        elif directed == 'undirected':
-            self.graph = nx.Graph()
-        self.directed = directed;
-        
-        for (node, followed_by) in data:
-            self.graph.add_edge(node, followed_by) # in undirected graph it will just be node1 and node2
+    def __init__(self, DIR, input_file, relationships):
 
+        self.DIR = DIR
+
+        Array = []
+        with open(input_file,'r',encoding="utf-8") as f:
+            reader = csv.reader(f)
+            try:
+                for row in reader:
+                    Array.append(row)
+            except Exception as e:
+                print(e)
+        df = pandas.DataFrame(Array[1:],columns=Array[0])
+        
+        if relationships == 'reply_to':
+            if input_file.find('queryTweet') != -1:
+                df['reply_to'] = df['text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
+                new_df = df[['reply_to','user.screen_name','text']].dropna()
+                self.graph = nx.DiGraph()
+                self.directed = 'directed'
+                for row in new_df.iterrows():
+                   self.graph.add_edge(row[1]['user.screen_name'], row[1]['reply_to'], text=row[1]['text'])
+            elif input_file.find('streaming') != -1:
+                df['reply_to'] = df['_source.text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
+                new_df = df[['reply_to','_source.user.screen_name','_source.text']].dropna()
+                self.graph = nx.DiGraph()
+                self.directed = 'directed'
+                for row in new_df.iterrows():
+                   self.graph.add_edge(row[1]['_source.user.screen_name'], row[1]['reply_to'], text=row[1]['_source.text'])
+               
+        elif relationships == 'retweet_from':
+            if input_file.find('queryTweet') != -1:
+                df['retweet_from'] = df['text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
+                new_df = df[['retweet_from','user.screen_name','text']].dropna()
+                self.graph = nx.DiGraph()
+                self.directed = 'directed'
+                for row in new_df.iterrows():
+                   self.graph.add_edge(row[1]['retweet_from'],row[1]['user.screen_name'],  text=row[1]['text'])
+            elif input_file.find('streaming') != -1:
+                df['retweet_from'] = df['_source.text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
+                new_df = df[['retweet_from','_source.user.screen_name','_source.text']].dropna()
+                self.graph = nx.DiGraph()
+                self.directed = 'directed'
+                for row in new_df.iterrows():
+                    self.graph.add_edge(row[1]['retweet_from'],row[1]['_source.user.screen_name'], text=row[1]['_source.text'])
+                
+        elif relationships == 'mentions':
+            pass
        
 
-    def draw_graph(self,layout,node_size,edge_width):
+       
+    def draw_graph(self,relationships,layout,node_size,edge_width):
 
         if layout == 'spring':
             pos = nx.spring_layout(self.graph)
@@ -47,20 +85,22 @@ class Network:
         elif layout == 'spectral':
             pos = nx.spectral_layout(self.graph)
 
-        edge_trace = Scatter(x=[], y=[], line=Line(width=edge_width,color='#428bca'), mode='lines')
+        edge_attri = nx.get_edge_attributes(self.graph,'text')
+        edge_trace = Scatter(x=[], y=[], text=[], line=Line(width=edge_width,color='#b5b5b5'), hoverinfo='text',mode='lines',hoveron='points')
         for edge in self.graph.edges():
             x0, y0 = pos[edge[0]]
             x1, y1 = pos[edge[1]]
             edge_trace['x'] += [x0,x1,None]
             edge_trace['y'] += [y0,y1,None]
+            edge_trace['text'].append(edge_attri[edge])
             
-        node_trace = Scatter(x=[],y=[],text=[],mode='markers', hoverinfo='all',hoveron='points',
+        node_trace = Scatter(x=[],y=[],text=[],mode='markers', hoverinfo='text',hoveron='points+fills',
             marker=Marker(
                 showscale=True,
                 # colorscale options
                 # 'Greys' | 'Greens' | 'Bluered' | 'Hot' | 'Picnic' | 'Portland' |
                 # Jet' | 'RdBu' | 'Blackbody' | 'Earth' | 'Electric' | 'YIOrRd' | 'YIGnBu'
-                colorscale='Portland', reversescale=True, color=[],
+                colorscale='Bluered', reversescale=True, color=[],
                 size=node_size,
                 colorbar=dict(
                     thickness=15,
@@ -75,19 +115,19 @@ class Network:
             node_trace['y'].append(y)
 
         # label
-        if self.directed == 'directed':
+        # if digraph
+        if relationships == 'reply_to' or relationships == 'retweet_from':
             for node in self.graph.nodes():
-                node_trace['marker']['color'].append(self.graph.in_degree()[node]+self.graph.out_degree()[node])
-                node_trace['text'].append(str({"label":node, "Followers":self.graph.in_degree()[node],
-                                                "Following":self.graph.out_degree()[node],"centrality":nx.betweenness_centrality(self.graph)[node]}))
-        elif self.directed == 'undirected':
+                node_trace['marker']['color'].append(self.graph.in_degree()[node] + self.graph.out_degree()[node])
+                node_trace['text'].append("@" + node + ", Followers:" + str(self.graph.in_degree()[node]) + ", Following:" + str(self.graph.out_degree()[node]))
+        # if undirected
+        elif directed == 'mentions':
             for node, adjacencies in zip(self.graph.nodes(),self.graph.adjacency_list()):
                 node_trace['marker']['color'].append(len(adjacencies))
-                node_trace['text'].append(str({"label":node, "# of connections":len(adjacencies),
-                                               "centrality":nx.betweenness_centrality(self.graph)[node]}))
+                node_trace['text'].append("@" + node + ", connections:" + str(len(adjacencies)))
                 
         fig = Figure(data=Data([edge_trace, node_trace]), layout=Layout(
-                title='Network Graph ( ' +self.directed +' )',
+                title= relationships + ' Network Graph',
                 titlefont=dict(size=16), showlegend=False,
                 hovermode='closest', margin=dict(b=20,l=5,r=5,t=40),
                 annotations=[ dict(
@@ -213,7 +253,7 @@ class Network:
         print(fname_cluster)
 
 
-
+    # only directed graph
     def component(self):
         rslt={}
         if self.directed == 'directed':
@@ -228,7 +268,7 @@ class Network:
             json.dump(rslt, f, cls=SetEncoder,indent=2)
         print(fname_component)
 
-
+    # only undirected graph
     def distance(self):
         rslt={}
         if self.directed =='undirected':
@@ -243,6 +283,7 @@ class Network:
             json.dump(rslt, f, cls=SetEncoder,indent=2)
         print(fname_distance)
 
+    # directed
     def hierarchy(self):
         rslt={}
 
@@ -266,7 +307,7 @@ class Network:
     def path(self):
         rslt={}
         rslt['shortest_path']=nx.shortest_path(self.graph)
-        rslt['average_shortest_path_length']=nx.average_shortest_path_length(self.graph)
+        #rslt['average_shortest_path_length']=nx.average_shortest_path_length(self.graph)
         rslt['all_pairs_shortest_path']=nx.all_pairs_shortest_path(self.graph)
 
         fname_path = self.DIR + '/path.json'
@@ -289,7 +330,7 @@ class Network:
         print(fname_tree)
 
 
-
+    # directed
     def triads(self):
         rslt={}
         if self.directed == 'directed':
@@ -339,41 +380,44 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Processing...")
     parser.add_argument('--file', required=True)
     parser.add_argument('--layout',required=True)
-    parser.add_argument('--directed',required=True)
+    parser.add_argument('--relationships',required=True)
     parser.add_argument('--node_size',required=True)
     parser.add_argument('--edge_width',required=True)
-    parser.add_argument('--metrics', nargs='+', required=False)
-
-
+   
     args = parser.parse_args()
-    
-    network = Network(args.file,args.directed)
-    network.draw_graph(args.layout, args.node_size, args.edge_width)
 
-    if args.metrics:
-        if 'approximation' in args.metrics:
-            network.approximation()
-        if 'assortativity' in args.metrics:
-            network.assortativity()
-        if 'centrality' in args.metrics:
-            network.centrality()
-        if 'cluster' in args.metrics:
-            network.cluster()
-        if 'component' in args.metrics:
-            network.component()
-        if 'distance' in args.metrics:
-            network.distance()
-        if 'hierarchy' in args.metrics:
-            network.hierarchy()
-        if 'googleMatrix' in args.metrics:
-            network.googleMatrix()
-        if 'path' in args.metrics:
-            network.path()
-        if 'tree' in args.metrics:
-            network.tree()
-        if 'triads' in args.metrics:
-            network.triads()
-        if 'vitality' in args.metrics:
-            network.vitality()
-        if 'traversal' in args.metrics:
-            network.traversal()
+    #save arguments
+    dotenv_path = join(dirname(__file__), '../../.env')
+    load_dotenv(dotenv_path)
+    
+    uid = str(uuid.uuid4())
+    DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NETWORK') +'/' + uid
+    if not os.path.exists(DIR):
+        os.makedirs(DIR)
+
+    fname = DIR + '/config.dat'
+    with open(fname,"w") as f:
+        json.dump(vars(args),f)
+    print(fname)
+    
+    network = Network(DIR, args.file, args.relationships)
+    network.draw_graph(args.relationships, args.layout, args.node_size, args.edge_width)
+
+    
+    #network.approximation()
+    network.assortativity()
+    network.centrality()
+    network.cluster()
+
+    if (args.relationships == 'reply_to' or args.relationships == 'retweet_from'):
+        network.component()
+        network.hierarchy()
+        network.triads()
+    if (args.relationships == 'mentions'):
+        network.distance()
+    
+    # network.googleMatrix()
+    network.path()
+    network.tree()
+    network.vitality()
+    network.traversal()

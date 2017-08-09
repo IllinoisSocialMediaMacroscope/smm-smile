@@ -25,10 +25,7 @@
 							"label":"reply to"},
 							
 							{"value":"retweet_from",
-							"label":"retweet from"},
-							
-							{"value":"mentions",
-							"label":" user mentions"}							
+							"label":"retweet from"}						
 						]
 					}
 				]},
@@ -41,8 +38,8 @@
 						"class":"form-control",
 						"optgroup": false,
 						"options":[
-							{"value":"spring",
-							"label":"spring layout"},
+							{"value":"random",
+							"label":"random layout"},
 							
 							{"value":"circular",
 							"label":"circular layout"},
@@ -50,8 +47,8 @@
 							{"value":"fruchterman",
 							"label":" fruchterman layout"},
 							
-							{"value":"random",
-							"label":" random layout"},
+							{"value":"spring",
+							"label":" spring layout"},
 							
 							{"value":"shell",
 							"label":" shell layout"},
@@ -67,8 +64,9 @@
 		"inputs":[
 					{"type":"range",
 						"min":"5",
-						"max":"100",
+						"max":"50",
 						"value":"10",
+						"step":"1",
 						"name":"node_size",
 						"onchange":"rangeNode.value=value",
 						"id":"node_size",
@@ -79,9 +77,10 @@
 		"container-label-name":"edge width",
 		"inputs":[
 					{"type":"range",
-						"min":"1",
-						"max":"20",
-						"value":"10",
+						"min":"0.1",
+						"max":"5",
+						"value":"1",
+						"step":"0.1",
 						"name":"edge_width",
 						"onchange":"rangeEdge.value=value",
 						"id":"edge_width",

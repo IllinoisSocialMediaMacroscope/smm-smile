@@ -42,8 +42,8 @@ router.post('/sklearn/cluster',function(req,res,next){
 		
 	pyshell.end(function(err){
 		if(err){ 
-			throw err;
-			//res.send({ERROR:err});	
+			//throw err;
+			res.send({ERROR:err});	
 		}
 		else{
 		
