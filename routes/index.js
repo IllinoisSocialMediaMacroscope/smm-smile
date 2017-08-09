@@ -7,7 +7,7 @@ router.get('/',function(req,res,next){
 			/*{name:'search',url:'/query',imgURL:'../bootstrap/img/logo/search-logo.svg',
 						introduction:`placeholder`
 			},*/
-			{name:'pre-processing',url:'/NLP/preprocess', imgURL:'../bootstrap/img/logo/NLP/NLP-preprocess.png',
+			{name:'Pre-processing',url:'/NLP/preprocess', imgURL:'../bootstrap/img/logo/NLP/NLP-preprocess.png',
 						introduction:`<a href="https://en.wikipedia.org/wiki/Text_segmentation#Word_segmentation"><b>Tokenization</b></a>
 						 is the process of dividing written text into meaningful units, such as words, <a href="https://en.wikipedia.org/wiki/Sentence_(linguistics)">sentences
 						</a>, or <a href="https://en.wikipedia.org/wiki/Topic_(linguistics)" title="Topic (linguistics)">topics</a>.<br><br>
@@ -22,7 +22,7 @@ router.get('/',function(req,res,next){
 						its definition and its context. A simplified form of this is commonly taught to school-age children, in the identification of 
 						words as <a href="https://en.wikipedia.org/wiki/Noun">nouns</a>, <a href="https://en.wikipedia.org/wiki/Verb">verbs</a>, 
 						<a href="https://en.wikipedia.org/wiki/Adjective">adjectives</a>, <a href="https://en.wikipedia.org/wiki/Adverb">adverbs</a>, etc.<br><br>`},
-            {name:'sentiment analysis', url:'/NLP/sentiment', imgURL:'../bootstrap/img/logo/NLP/SA.png',
+            {name:'Sentiment Analysis', url:'/NLP/sentiment', imgURL:'../bootstrap/img/logo/NLP/SA.png',
 						
 						introduction:`<a href="https://en.wikipedia.org/wiki/Sentiment_analysis"><b>Sentiment analysis</b></a> (sometimes known as opinion mining or emotion AI) refers to the
 						use of <a href="https://en.wikipedia.org/wiki/Sentiment_analysis/wiki/Natural_language_processing">
@@ -38,7 +38,7 @@ router.get('/',function(req,res,next){
 						(along with their associated sentiment intensity measures) which are specifically attuned to sentiment in 
 						<a href="https://en.wikipedia.org/wiki/Microblogging">microblog-like contexts</a>. It then combines these lexical features with consideration for five general rules that embody grammatical and syntactical 
 						conventions for expressing and emphasizing sentiment intensity. `},
-			{name:'topic modeling', url:'/NLP/topic', imgURL:'../bootstrap/img/logo/NLP/topic-model.png',
+			{name:'Topic Modeling', url:'/NLP/topic', imgURL:'../bootstrap/img/logo/NLP/topic-model.png',
 						
 						introduction:`In <a href="https://en.wikipedia.org/wiki/Machine_learning">machine learning</a> and <a href="https://en.wikipedia.org/wiki/Natural_language_processing">natural language processing</a>, 
 						a <a href="https://en.wikipedia.org/wiki/Topic_model"><b>topic model</b></a> is a type of <a href="https://en.wikipedia.org/wiki/Statistical_model">statistical model</a> 
@@ -48,7 +48,7 @@ router.get('/',function(req,res,next){
 						"cat" and "meow" will appear in documents about cats, and "the" and "is" will appear equally in both. A document typically concerns multiple topics 
 						in different proportions; thus, in a document that is 10% about cats and 90% about dogs, there would probably be about 9 times more dog words than cat words. 
 						The "topics" produced by topic modeling techniques are clusters of similar words.<br><br>`},
-			{name: 'clustering', url:'/sklearn/cluster', imgURL:'../bootstrap/img/logo/sklearn/clustering.png',
+			{name: 'Clustering', url:'/sklearn/cluster', imgURL:'../bootstrap/img/logo/sklearn/clustering.png',
 						introduction:`<a href="https://en.wikipedia.org/wiki/Cluster_analysis"><b>Cluster analysis</b></a> is the task of grouping a set of objects in such a 
 						way that objects in the same group (called a <b>cluster</b>) are more similar (in some sense or another) to each 
 						other than to those in other groups (clusters). It is a main task of exploratory <a href="https://en.wikipedia.org/wiki/Data_mining" title="Data mining">data mining</a>,
@@ -58,7 +58,22 @@ router.get('/',function(req,res,next){
 						image analysis</a>, <a href="https://en.wikipedia.org/wiki/Information_retrieval" title="Information retrieval">information retrieval</a>, <a href="https://en.wikipedia.org/wiki/Bioinformatics"
 						title="Bioinformatics">bioinformatics</a>, <a href="https://en.wikipedia.org/wiki/Data_compression" title="Data compression">data compression</a>, 
 						and <a href="https://en.wikipedia.org/wiki/Computer_graphics" title="Computer graphics">computer graphics</a>.Cluster analysis itself is not one specific <a href="https://en.wikipedia.org/wiki/Algorithm" title="Algorithm">algorithm</a>, but the general task to be solved. 
-						`}]
+						`},
+			{name: 'Network Analysis', url:'/networkx', imgURL:'../bootstrap/img/logo/networkX-logo.png',
+						introduction:`<a href="https://en.wikipedia.org/wiki/Social_network_analysis"><b>Social network analysis</b></a>is the process of investigating social 
+						structures through the use of <a href="https://en.wikipedia.org/wiki/Network_theory">networks</a> and <a href="https://en.wikipedia.org/wiki/Graph_theory">graph theory
+						</a>.It characterizes networked structures in terms of <i>nodes</i> (individual actors, people, or things within the network) and the <i>ties</i>, <i>edges</i>, 
+						or <i>links</i> (relationships or interactions) that connect them. Examples of social structures commonly visualized through social network analysis include 
+						<a href="https://en.wikipedia.org/wiki/Social_media">social media networks</a>,<a href="https://en.wikipedia.org/wiki/Internet_meme" title="Internet meme">memes</a> spread,
+						<a href="https://en.wikipedia.org/wiki/Weak_ties" class="mw-redirect">friendship and acquaintance networks</a>, 
+						<a href="https://en.wikipedia.org/wiki/Collaboration_graph">collaboration graphs</a>, <a href="https://en.wikipedia.org/wiki/Kinship">kinship</a>,
+						<a href="https://en.wikipedia.org/wiki/Disease_transmission">disease transmission</a> and so on.<br><br>
+						<a href="https://networkx.github.io/"><b>NetworkX</b></a> is a Python package for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks.The 
+						potential audience for NetworkX includes mathematicians, physicists, biologists, computer scientists, and social scientists. Good reviews of 
+						the state-of-the-art in the science of complex networks are presented in <a href="https://arxiv.org/abs/cond-mat/0106096">Albert and Barabási</a>, 
+						<a href="http://epubs.siam.org/doi/abs/10.1137/S003614450342480">Newman</a>, and <a href="https://arxiv.org/abs/cond-mat/0106144">Dorogovtsev and Mendes</a>. 
+						For basic graph algorithms,we recommend the texts of <a href="http://dl.acm.org/citation.cfm?id=523106">Sedgewick</a>, and the survey of <a href="http://www.springer.com/us/book/9783540249795">
+						Brandes and Erlebach</a>.`}]
                       });
 });
 
