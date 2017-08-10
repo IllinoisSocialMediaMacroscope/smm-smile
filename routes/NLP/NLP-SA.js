@@ -12,7 +12,7 @@ router.get('/NLP/sentiment',function(req,res,next){
 	//console.log(process.env.ROOTDIR);
 	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
 	var formParam = require('./sentiment.json');
-	res.render('formTemplate',{parent:'/NLP', title:'Sentiment Analysis', directory:files, param:formParam});
+	res.render('formTemplate',{parent:'/#Sentiment Analysis', title:'Sentiment Analysis', directory:files, param:formParam});
 });
  
 router.post('/NLP/sentiment',function(req,res,next){

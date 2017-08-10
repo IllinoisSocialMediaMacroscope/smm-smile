@@ -372,15 +372,7 @@ tr{
     width: 1%;
 }
 
-/* glyphicon */
-.gi-2x{
-	font-size: 1.5em;
-	top: 15px;
-	color:#eee;
-	margin-left:10px;
-	margin-right:10px;
-	}
-	
+
 .historyTabs{
 	color:#ffffff;
 	margin-top: 20px;

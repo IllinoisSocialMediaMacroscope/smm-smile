@@ -9,10 +9,14 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 				
 		div(id="navbar",class="navbar-collapse collapse")
 			if parent
-				<a href="/"><span class="glyphicon glyphicon-arrow-up gi-2x"></span></a>
+				ul(class="nav navbar-nav navbar-left")
+					li
+						a(href=parent) 
+							span(class="glyphicon glyphicon-step-backward")
+							| Return To Analytics
+						
 
 			ul(class="nav navbar-nav navbar-right")
-				li <a href="/" style="font-size:14px;">Analytics</a>
 				li <a href="/history" style="font-size:14px;">History</a>
 				li <a href="/query" style="font-size:14px;">Search Engine</a>
 					 

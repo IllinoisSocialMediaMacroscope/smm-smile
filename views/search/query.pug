@@ -53,17 +53,13 @@ html
 			<!-- search --->
 			div(class="row")
 				div(id="tabs")
-				
-					img(src='../bootstrap/img/logo/twitter-sm-logo.png', class="headerImg")
-					//img(src='../bootstrap/img/logo/reddit-sm-logo.png',class="headerImg")
-					img(src='../bootstrap/img/logo/elasticsearch-sm-logo.png',class="headerImg")
-					
-					select(class="selectpicker show-tick" id="social-media" title="Choose a Platform..." data-width="680px")
+								
+					select(class="selectpicker show-tick" id="social-media" title="Choose a Platform..." data-width="220px")
 						optgroup(label="Twitter")
-							option(data-icon="glyphicon-envelope" value="queryTweet") Search for Tweets
-							option(data-icon="glyphicon-user" value="queryUser") Search for Twitter Users
+							option(data-icon="glyphicon-envelope" value="queryTweet") Tweets
+							option(data-icon="glyphicon-user" value="queryUser") Twitter Users
 						optgroup(label="Twitter Stream Database")
-							option(data-icon="glyphicon-envelope" value="streamTweet") Search for Tweets from Elastic Search Database
+							option(data-icon="glyphicon-envelope" value="streamTweet") Streamed Tweets
 					//-	
 						optgroup(label="Reddit")
 							option(data-icon="glyphicon-file" value="searchContent") Search for Reddit Posts
@@ -73,7 +69,7 @@ html
 						optgroup(label="ElasticSearch")
 					//
 								
-				include searchbox.pug
+					include searchbox.pug
 						
 								
 			<!-- prose -->
@@ -86,9 +82,11 @@ html
 			<!-- footer -->
 			div(class="row")
 				div(class="footer")
-					img(src='../bootstrap/img/logo/twitter-bg-logo.png', class="footerImg")
+					a(href="https://dev.twitter.com/rest/public/search")
+						img(src='../bootstrap/img/logo/twitter-bg-logo.png', class="footerImg")
 					//img(src='../bootstrap/img/logo/reddit-bg-logo.png',class="footerImg")
-					img(src='../bootstrap/img/logo/elasticsearch-bg-logo.png',class="footerImg")
+					a(href="https://aws.amazon.com/blogs/big-data/building-a-near-real-time-discovery-platform-with-aws/")
+						img(src='../bootstrap/img/logo/elasticsearch-bg-logo.png',class="footerImg")
 			
 		<!-- popup modal save -->
 		div(id="save" class="modal fade" role="dialog")
@@ -115,17 +113,13 @@ html
 				div(class="modal-content")
 					div(class="modal-header")
 						button(class="close" data-dismiss="modal" onclick="location.reload();") &times;
-						h2(class="modal-title" id="modal-title") Your Search Is Done!
-						div(id="modal-download")
+						h2(class="modal-title" id="modal-title") Download Your Search Results
 					
-					div(class="modal-body" style="text-align:center;vertical-align:middle;")
-						h4 You can to <a href="/"><img src='../bootstrap/img/logo/analytics-logo.png' width="20px"></img>analytics pages</a> to do some 
-						h4 <a href="/NLP"><img src='../bootstrap/img/logo/NLP-logo.png' width="20px"></img>text data analysis</a>, 
-							| and <a href="/sklearn"><img src='../bootstrap/img/logo/sklearn-logo.png' width="20px"></img>machine learning analysis</a>!
-							| Check out your past search results at the <a href="/history"><img src='../bootstrap/img/logo/history-logo-sm.png' width="20px"></img>history page</a>!
+					div(class="modal-body" style=";vertical-align:middle;font-size:20px;")
+						div(id="modal-download")
 						
 					div(class="modal-footer")
-						a(href="/" class="btn btn-primary") Go To Analytics
+						a(href="/" class="btn btn-primary" style="background-color:#e10098;border-style:hidden") Go To Analytics
 						button(class="btn btn-default" data-dismiss="modal" onclick="location.reload();") Close
 						
 		

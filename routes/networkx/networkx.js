@@ -12,7 +12,7 @@ var rootDIR = path.resolve('.');
 router.get('/networkx',function(req,res,next){
 	var files = readDIR_NW(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);		
 	var formParam = require('./networkx.json');
-	res.render('formTemplate',{parent:'/', title:'NetworkX', directory:files, param:formParam}); 
+	res.render('formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:files, param:formParam}); 
 });
 
 router.post('/networkx',function(req,res,next){

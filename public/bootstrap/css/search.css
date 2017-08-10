@@ -32,23 +32,36 @@ body {
 .form-group .form-control:last-child {
     border-radius:4px;
 }
+#searchbox{
+	margin-top: 1px;
+	height: 33px;
+}
 
-@media screen and (min-width: 768px) {
-	#tabs {
-		width: 800px;
-		margin:auto auto;
-		padding: 15px 0px;
-	}
-    #adv-search {
-        width: 800px;
-        margin: 0 auto;
-    }
-    .dropdown.dropdown-lg {
-        position: static !important;
-    }
-    .dropdown.dropdown-lg .dropdown-menu {
-        min-width: 800px;
-    }
+#tabs {
+	width: 1000px;
+	margin:auto auto;
+	padding: 15px 0px;
+}
+#adv-search {
+	width: 550px;
+	margin: 0 auto;
+	display:inline-flex;
+}
+/* button groups */
+.input-group-addon {
+	padding: 0px 0px;
+	color: #555;
+	text-align: center;
+	background-color: #eee;
+	border: 0px solid #ccc;
+	border-radius: 4px;
+	display:inline-flex;
+}
+.dropdown.dropdown-lg {
+	position: static !important;
+}
+.dropdown.dropdown-lg .dropdown-menu {
+	min-width: 736px;
 }
 
 .oauth{
@@ -61,15 +74,6 @@ body {
 	border-style:outset;
 }
 
-/* button groups */
-.input-group-addon {
-    padding: 0px 0px;
-    color: #555;
-    text-align: center;
-    background-color: #eee;
-    border: 0px solid #ccc;
-    border-radius: 4px;
-}
 .row {
 	margin-top:10px;
 }

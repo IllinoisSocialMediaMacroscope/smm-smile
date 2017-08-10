@@ -12,7 +12,7 @@ var readDIR = require(serverDIR + '/scripts/helper').readDIR;
 router.get('/NLP/preprocess',function(req,res,next){
 	files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
 	var formParam = require('./preprocess.json');
-	res.render('formTemplate',{parent:'/NLP', title:'Natural Langurage PreProcessing', directory:files, param:formParam});
+	res.render('formTemplate',{parent:'/#Pre-processing', title:'Natural Langurage PreProcessing', directory:files, param:formParam});
 });
  
 router.post('/NLP/preprocess',function(req,res,next){

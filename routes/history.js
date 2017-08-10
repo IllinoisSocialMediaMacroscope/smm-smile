@@ -76,7 +76,7 @@ router.get('/history',function(req,res,next){
 			});
 		}
 	}
-	res.render('history',{directory: directory, searchResult:searchResult});
+	res.render('history',{parent:'/', directory: directory, searchResult:searchResult});
 });
 
 router.post('/history',function(req,res,next){

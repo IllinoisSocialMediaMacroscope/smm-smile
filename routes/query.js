@@ -15,7 +15,7 @@ router.get('/query',function(req,res,next){
 		&& req.session.es_access_token !== undefined
 		&& req.session.es_access_token_secret !== undefined
 		){
-		res.render('search/query');
+		res.render('search/query',{parent:'/'});
 		
 	}else{
 		var success = [];

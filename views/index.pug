@@ -35,7 +35,7 @@ html
 			if i%2 === 0
 				div(class="even")
 					section(class="even")
-						div(class="prose")
+						div(class="prose",id=page.name)
 							h1(class="app-title") #{page.name}
 							p(class="intro",id=page.name) !{page.introduction}
 							a(class="prose-button" href=page.wiki) Read More
@@ -46,7 +46,7 @@ html
 			else
 				div(class="odd")
 					section(class="odd")
-						div(class="app")
+						div(class="app", id=page.name)
 							a(href=page.url)
 								img(src=page.imgURL, width="400px", class="logos")
 						div(class="prose")
