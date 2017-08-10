@@ -100,7 +100,7 @@ class Network:
                 # colorscale options
                 # 'Greys' | 'Greens' | 'Bluered' | 'Hot' | 'Picnic' | 'Portland' |
                 # Jet' | 'RdBu' | 'Blackbody' | 'Earth' | 'Electric' | 'YIOrRd' | 'YIGnBu'
-                colorscale='Bluered', reversescale=True, color=[],
+                colorscale='Bluered', reversescale=False, color=[],
                 size=node_size,
                 colorbar=dict(
                     thickness=15,
@@ -391,7 +391,7 @@ if __name__ == "__main__":
     load_dotenv(dotenv_path)
     
     uid = str(uuid.uuid4())
-    DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NETWORK') +'/' + uid
+    DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NW_NETWORKX') +'/' + uid
     if not os.path.exists(DIR):
         os.makedirs(DIR)
 
@@ -405,19 +405,57 @@ if __name__ == "__main__":
 
     
     #network.approximation()
-    network.assortativity()
-    network.centrality()
-    network.cluster()
+    try:
+        network.assortativity()
+    except:
+        pass
+
+    try:
+        network.centrality()
+    except:
+        pass
+
+    try:
+        network.cluster()
+    except:
+        pass
 
     if (args.relationships == 'reply_to' or args.relationships == 'retweet_from'):
-        network.component()
-        network.hierarchy()
-        network.triads()
+        try:
+            network.component()
+        except:
+            pass
+
+        try:
+            network.hierarchy()
+        except:
+            pass
+
+        try:
+            network.triads()
+        except:
+            pass
+        
     if (args.relationships == 'mentions'):
-        network.distance()
+        try:
+            network.distance()
+        except:
+            pass
     
     # network.googleMatrix()
-    network.path()
-    network.tree()
-    network.vitality()
-    network.traversal()
+    try:
+        network.path()
+    except:
+        pass
+    try:
+        network.tree()
+    except:
+        pass
+    try:
+        network.vitality()
+    except:
+        pass
+    try:
+        network.traversal()
+    except:
+        pass

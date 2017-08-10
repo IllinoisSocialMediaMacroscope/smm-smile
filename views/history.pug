@@ -34,17 +34,35 @@ html
 						each val,key in directory
 							li <a onclick="toggle(this,`##{key}`);" id=#{key}-btn>
 								<span class="glyphicon glyphicon-minus"></span>
-								| #{key}
+								if key === 'ML'
+									| Machine Learning
+								else if key === 'NLP'
+									| Nature Language Processing
+								else if key === 'NW'
+									| Network Visualization and Analysis
+								else
+									| #{key}
 								</a>
 							
 							ul(class="nav child_menu" style="display:block;" id=key)
 								each val1,key1 in val
 									li <a onclick="toggle(this,`##{key1}`);" id=#{key1}-btn>
-										<span class="glyphicon glyphicon-minus"></span>
-										| #{key1}
+										<span class="glyphicon glyphicon-plus"></span>
+										if key1 === 'feature'
+											| Feature Selection
+										else if key1 === 'clustering'
+											| Unsupervised Learning (clustering)
+										else if key1 === 'preprocessing'
+											| NLP Preprocessing
+										else if key1 === 'sentiment'
+											| Sentiment Analysis
+										else if key1 === 'topic-modeling'
+											| LDA Topic Modeling
+										else
+											| #{key1}
 										</a>
 										
-										ul(class="nav child_menu" style="display:block;" id=key1)
+										ul(class="nav child_menu" style="display:none;" id=key1)
 											each val2,key2 in val1
 												li 
 													<form action='/history' id=#{key2} name='history' method='post'>
@@ -58,8 +76,8 @@ html
 														<button class="historyButtons" onclick="submitHistory(`#{key2}`);">view</button>
 														<button class="historyButtons" onclick="deleteModal(`#{key2}`);">delete</button>
 					
-						li <a onclick="toggle(this,`#graphql`);"><span class="glyphicon glyphicon-minus"></span>Social Media Search</a>
-							ul(class="nav child_menu" style="display:block;" id="graphql")
+						li <a onclick="toggle(this,`#graphql`);"><span class="glyphicon glyphicon-plus"></span>Social Media Search</a>
+							ul(class="nav child_menu" style="display:none;" id="graphql")
 								each val in searchResult
 									li 
 										<form action='/history' id=#{val} name='history' method='post'>

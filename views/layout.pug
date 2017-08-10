@@ -28,18 +28,18 @@ html
 				<!-- side bar -->
 				div(class="col-sm-3 col-md-3 sidebar")
 					ul(class="nav nav-sidebar")
-						li(class="active" id="overview")
-							<a onclick="childMenu(`#side-configuration`);">
-								<span class="glyphicon glyphicon-tasks  pull-left"></span> Overview 
-								<span class="sr-only">(current)</span><span class="glyphicon glyphicon-menu-down pull-right"></span>
-							</a>
-							<ul class="nav child_menu" style="display:block;" id="side-configuration">
-								<li class="current-page">
-									<a href="#config-anchor"><span class="glyphicon glyphicon-wrench pull-left"></span> Configuration </a>
-								</li>
-								<li><a href="#img-anchor"><span class="glyphicon glyphicon glyphicon-picture pull-left"></span> Chart </a></li>
-								<li><a href="#result-anchor"><span class="glyphicon glyphicon-zoom-in pull-left"></span> Result Preview </a></li>
-							<ul>
+						li <a><span class="glyphicon glyphicon-tasks  pull-left"></span>Overview</a>
+							ul(class="nav child_menu" style="display:block;" id="side-configuration")
+								li
+									<a href="#config-anchor"><span class="glyphicon glyphicon-wrench pull-left"></span>Configuration</a>
+								li
+									<a href="#img-anchor"><span class="glyphicon glyphicon glyphicon-picture pull-left"></span>Chart</a>
+								li
+									<a href="#result-anchor"><span class="glyphicon glyphicon-zoom-in pull-left"></span>Result Preview</a>
+							
+						li <a><span class="glyphicon glyphicon-download-alt  pull-left"></span>Download</a> 
+							ul(class="nav child_menu" style="display:block;" id="side-download")
+								
 			
 		div(class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main")
 						

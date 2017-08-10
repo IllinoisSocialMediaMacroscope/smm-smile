@@ -27,19 +27,35 @@ function submitHistory(formID){
 					
 					$("#background").hide();
 					
-					appendTitle("#title-container",data.title,data.ID);
-					appendOverview("#overview-container",data.config,data.download);
-					appendImg("#img-container",data.img);
-					appendPreview('#result-container',data.preview);
+					if ('title' in data || 'ID' in data){
+						appendTitle("#title-container",data.title,data.ID);
+					}
+					
+					if('config' in data || 'donwload' in data){
+						
+						appendOverview("#overview-container",data.config,data.download);
+					}
+					
+					if ('img' in data){
+						appendImg("#img-container",data.img);
+					}
+					
+					if ('preview' in data){
+						appendPreview('#result-container',data.preview);
+					}
 					
 					if ('compound' in data){
 						// add gauge for sentiment analysis
 						//google.charts.setOnLoadCallback(drawGauge('Compound Sentiment Score of the whole document', parseFloat(data.compound)));
 						console.log('revoke it');
-					}else if('iframe' in data){
+					}
+					
+					if('iframe' in data){
 						// draw iframe for topic modeling
 						drawIframe(data.iframe.name, data.iframe.content);
-					}else if('table' in data){
+					}
+					
+					if('table' in data){
 						// draw word tree for preprocessing
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
 					}

@@ -74,15 +74,36 @@ body {
     color: white;
     font-size: 20px;
     line-height: 28.8px;
-    border: solid 1.5px rgba(255, 255, 255, 0.4);
+    border: solid 1.5px white;
     border-radius: 6px;
     line-height: 1.0;
     padding: 0.6em 1.6em;
     margin: 0 0.8em;
+	margin-bottom: 30px;
     display: inline-block;
     text-decoration: none;
 }
 .button:hover{
+	background-color:white;
+}
+
+.prose-button{
+	font-weight: 300;
+	background-color:#73879c;
+    color: white;
+    font-size: 20px;
+    line-height: 28.8px;
+    border: solid 1.5px #73879c;
+    border-radius: 6px;
+    line-height: 1.0;
+    padding: 0.6em 1.6em;
+    margin: 0 0.8em;
+	margin-bottom: 30px;
+    display: inline-block;
+    text-decoration: none;
+}
+.prose-button:hover,
+.prose-button:active{
 	background-color:white;
 }
 

@@ -21,10 +21,6 @@ function init(){
 	});
 }
 
-function childMenu(id){
-	 $(id).toggle('fast');
-}
-
 function checkbox_onclick(){
 	$(document).on('change',':checkbox',function(){
 		$(this).parent().toggleClass('checkbox-flat checkbox-flat-checked');
@@ -122,11 +118,11 @@ function extractHeader2(array){
 
 /*----------------------------display results---------------------------------*/
 function appendDownload(downloadID, downloadData){
-	$(downloadID).nextAll().remove()
+	$(downloadID).empty()
 	if(downloadData !== []){
 		$.each(downloadData,function(i,val){
-			$(downloadID).after(`<li><form action='/download' name='download' method='post'><span class="glyphicon glyphicon-download-alt"></span>
-								<input type="hidden" value=`+val.content+`name="downloadURL" /><button type="submit" class="link-button">`
+			$(downloadID).append(`<li><form action='/download' name='download' method='post' class="side-form">
+								<input type="hidden" value=`+val.content+`name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download"></span>`
 								+val.name+`</button></form></li>`)
 		});
 	}
@@ -169,7 +165,7 @@ function ajaxSubmit(formID){
 					$("#warning").modal('show');
 				}else{
 					$(".loading").hide();
-					appendDownload("#overview",data.download);
+					appendDownload("#side-download",data.download);
 					appendImg("#img-container",data.img);
 					appendPreview('#result-container',data.preview);
 					

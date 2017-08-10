@@ -101,17 +101,16 @@ body {
 }
 
 /* another layer child */
-.nav.child_menu >li>form{
-	color:#ffffff;
-	background-color:#2a5a84;
-	margin-bottom:2px;
-}
-.nav.child_menu >li>form:hover,
-.nav.child_menu >li>form:focus{
+.side-form{
 	color:#ffffff;
 	background-color:#c84b49;
+	margin-bottom:1px;
+	padding:10px 15px;
 }
-
+.side-form:hover,
+.side-form:focus{
+	background-color:#75a1c6;
+}
 /* Main content	*/
 .main {
 	padding: 50px;

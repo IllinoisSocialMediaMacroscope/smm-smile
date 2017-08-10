@@ -30,15 +30,16 @@ html
 				h4(class="header") Analyze and visualize
 			div(class="button-unit")
 				a(class="button" href="/query") Get Started
-				a(class="button" href="/history") History
+				a(class="button" href="/history") Past Results
 		each page,i in pages
 			if i%2 === 0
 				div(class="even")
 					section(class="even")
 						div(class="prose")
-							h1(class="app-title") 
-								a(href=page.url) #{page.name}
-							p(class="intro") !{page.introduction}
+							h1(class="app-title") #{page.name}
+							p(class="intro",id=page.name) !{page.introduction}
+							a(class="prose-button" href=page.wiki) Read More
+							a(class="prose-button" href=page.url) Start
 						div(class="app")
 							a(href=page.url)
 								img(src=page.imgURL, width="400px", class="logos")
@@ -49,7 +50,11 @@ html
 							a(href=page.url)
 								img(src=page.imgURL, width="400px", class="logos")
 						div(class="prose")
-							h1(class="app-title")
-								a(href=page.url) #{page.name}
+							h1(class="app-title") #{page.name}
 							p(class="intro") !{page.introduction}
+							a(class="prose-button" href=page.wiki) Read More
+							a(class="prose-button" href=page.url) Start		
+			
+							
+		
 		

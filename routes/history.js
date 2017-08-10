@@ -7,12 +7,13 @@ var CSV = require('csv-string');
 router.get('/history',function(req,res,next){
 	var directory = {
 						"ML":
-							{"training":{},
+							{"feature":{},
 							"clustering":{}},
 						"NLP":
 							{"preprocessing":{},
 							"sentiment":{},
-							"topic-modeling":{}}
+							"topic-modeling":{}},
+						"NW":{"networkx":{}},
 					}
 					
 	if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD)){
@@ -28,7 +29,7 @@ router.get('/history',function(req,res,next){
 				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_TRAINING);
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at = fs.lstatSync(process.env.ROOTDIR + + process.env.DOWNLOAD_ML_TRAINING + '/' + fileList[i]).birthtime.toString();
-					directory['ML']['training'][fileList[i]] = created_at.substr(0, created_at.length-24);
+					directory['ML']['feature'][fileList[i]] = created_at.substr(0, created_at.length-24);
 				}
 			}
 		}
@@ -53,6 +54,15 @@ router.get('/history',function(req,res,next){
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC + '/' + fileList[i]).birthtime.toString();
 					directory['NLP']['topic-modeling'][fileList[i]] = created_at.substr(0, created_at.length-24);
+				}
+			}
+		}
+		if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW)){
+			if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW_NETWORKX)){
+				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW_NETWORKX);
+				for (var i = 0, length = fileList.length; i<length; i++){
+					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW_NETWORKX + '/' + fileList[i]).birthtime.toString();
+					directory['NW']['networkx'][fileList[i]] = created_at.substr(0, created_at.length-24);
 				}
 			}
 		}
@@ -127,7 +137,6 @@ router.post('/history',function(req,res,next){
 					{name: processed + ' text', content:DIR + '/' + processed + '.csv'},
 					{name:'POS tagged text', content:DIR +'/POStagged.csv'}],
 				table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
-				preview:'',
 				config:config
 			});
 			
@@ -166,6 +175,28 @@ router.post('/history',function(req,res,next){
 					config:config
 				});
 		}
+		else if (req.body.layer2 === 'networkx' && fs.readdirSync(DIR).length >=2){
+			var fnames = fs.readdirSync(DIR);
+			var div_data = fs.readFileSync(DIR + '/div.dat', 'utf8');
+			var config = JSON.parse(fs.readFileSync(DIR + '/config.dat','utf8'));
+			
+			fnames = fnames.filter(item => item !== 'div.dat' && item !== 'config.dat');
+			var downloadFiles = [];
+			for (var i=0; i< fnames.length; i++){
+				var fnameRegex = /(.*).json/g
+				var display_name = fnameRegex.exec(fnames[i])[1];
+				downloadFiles.push({'name':display_name + ' metrics', 'content':DIR + '/' + fnames[i]}); 
+			}
+			
+			//console.log(fnames);
+			res.send({
+				title:'Network Analysis', 
+				ID:req.body.historyID,
+				img:[{name:'Network Visualization',content:div_data}],
+				download: downloadFiles,
+				config: config
+			});
+		}
 		else{
 			res.send({ERROR:`Sorry! We cannot find specific analytic history associated with this ID`});
 		}
@@ -183,7 +214,6 @@ router.post('/history',function(req,res,next){
 		res.send({
 				title:'Social Media Past Search Result', 
 				ID:req.body.historyID,
-				img:[],
 				download:[
 					{name:'JSON format', content:DIR_GraphQL + '.json'},
 					{name:'CSV format', content:DIR_GraphQL + '.csv'}],
