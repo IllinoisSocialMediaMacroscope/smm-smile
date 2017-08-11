@@ -32,9 +32,9 @@ router.get('/query',function(req,res,next){
 		}
 		
 		if (req.query !== undefined && 'error' in req.query){
-			res.render('search/authorize',{error:req.query.error,success:success});
+			res.render('search/authorize',{error:req.query.error,success:success,parent:'/'});
 		}else{
-			res.render('search/authorize',{success:success});
+			res.render('search/authorize',{success:success,parent:'/'});
 		}
 	}
 });

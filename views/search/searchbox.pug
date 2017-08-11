@@ -6,9 +6,9 @@ div(class="input-group", id="adv-search")
 div(class="input-group-addon")
 	div(class="btn-group")
 		div(class="dropdown dropdown-lg")
-			button(id="dropdownButton" type="button",class="btn btn-default dropdown-toggle" aria-expanded="false") advanced
+			button(id="dropdownButton" type="button",class="btn btn-default dropdown-toggle" aria-expanded="false") 
 				span(class="glyphicon glyphicon-cog")
-			
+				| advanced
 			<!-- dropdown content start -->
 			div(class="dropdown-menu dropdown-menu-right")
 				br
@@ -423,12 +423,15 @@ div(class="input-group-addon")
 					div(class="col-md-12")
 						textarea(class="form-control", id="input", rows="15",placeholder="If you know GraphQL, try typing your own string! :-D") 
 					div(class="col-md-12")
-							button(type="button", class="btn btn-primary",onclick="modalPopUp('#input');",id="adv-search-btn") Search	
+							button(type="button", class="btn btn-primary",onclick="modalPopUp('#input');",id="adv-search-btn") 
 								span(class="glyphicon glyphicon-search")
-							button(type="button", class="btn btn-info",id="expandDoc") Help
+								| Search	
+							button(type="button", class="btn btn-info",id="expandDoc") 
 								span(class="glyphicon glyphicon-tasks")
+								| Help
 											
 			<!-- search button -->								
-			button(type="button",class="btn btn-primary",id="simple-search-btn") Search
+			button(type="button",class="btn btn-primary",id="simple-search-btn") 
 				span(class="glyphicon glyphicon-search" aria-hidden="true")
+				| Search
 			

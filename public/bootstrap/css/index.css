@@ -20,13 +20,11 @@
 	border: 0;
 }
 
-.navbar-inverse .navbar-nav>li>a,
-.navbar-inverse .navbar-brand{
-	color:#faeeee;
-}
-
 .navbar-inverse{
 	background-color:#c84b49;
+}
+.glyphicon:before {
+  margin-right: 10px;
 }
 a:link,
 a:visited,

@@ -20,36 +20,26 @@ html
 		
 		<!-- top bar -->
 		include ../components/topbar.pug
+				
+		<!-- auth -->
+		div(id="auth-panel")
+			p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
+			
+			a(href='/login/twitter', class="button", id="twitter-auth") 
+				img(src='../bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+				| Authorize with your Twitter account
 		
-		<!-- logo -->
-		div(class="row")
-			img(src="../bootstrap/img/logo/graphql-logo.png",width="30%",style="display:block;margin-left:auto;margin-right:auto;margin-top:100px;")
-				
-		<!-- prose -->
-		div(class="row")
-			h1(style="text-align:center; margin-top:100px;") 
-				| <kbd style="background-color:#e10098;"> Authroize us with your social media credentials</kbd>
-			h1(style="text-align:center; margin-top:50px;margin-bottom:50px;color:#e10098;") 
-				<span class="glyphicon glyphicon-hand-down"></span>
-				| click the icons below
-				<span class="glyphicon glyphicon-hand-down"></span>
-				
+			a(href='/login/es', class="button", id="es-auth")
+				img(src='../bootstrap/img/logo/elasticsearch-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+				| Authorize with your AWS ElasticSearch account
+			
+		
 		<!-- warning -->
 		include ../components/warning.pug
 		if error
 			script.
 				$("#error").val(!{JSON.stringify(error)});
-				$("#warning").modal('show');
-		
-		<!-- footer -->
-		div(style="text-align: center;")
-			a(href='/login/twitter', id="twitter-auth")
-				img(src='../bootstrap/img/logo/twitter-bg-logo.png', width="300px",class="oauth")
-			//a(href='/login/reddit', id="reddit-auth")
-			//	img(src='../bootstrap/img/logo/reddit-bg-logo.png', width="300px",class="oauth")
-			a(href='/login/es', id="es-auth")
-				img(src='../bootstrap/img/logo/elasticsearch-bg-logo.png', width="300px",class="oauth")
-				
+				$("#warning").modal('show');		
 		script.
 			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
 				console.log($("#twitter-auth"));

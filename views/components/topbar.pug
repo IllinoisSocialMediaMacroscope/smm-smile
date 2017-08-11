@@ -11,14 +11,20 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 			if parent
 				ul(class="nav navbar-nav navbar-left")
 					li
-						a(href=parent) 
+						a(href=parent,style="font-size:14px;color:white;background-color:#ffb804;margin:10px 10px;border-radius:30px;padding:6px 20px;") 
 							span(class="glyphicon glyphicon-step-backward")
 							| Return To Analytics
 						
 
 			ul(class="nav navbar-nav navbar-right")
-				li <a href="/history" style="font-size:14px;">History</a>
-				li <a href="/query" style="font-size:14px;">Search Engine</a>
+				li
+					a(href="/history" style="font-size:14px;color:white;background-color:#7fbb03;margin:10px 10px;border-radius:30px;padding:6px 20px;")
+						span(class="glyphicon glyphicon-time")
+						| History
+				li 
+					a(href="/query" style="font-size:14px;color:white;background-color:#428bca;margin:10px 10px;border-radius:30px;padding:6px 20px;")
+						span(class="glyphicon glyphicon-search")
+						| Query
 					 
 			form(class="navbar-form navbar-right")
-				input(type="text" class="form-control" placeholder="Search...")
+				input(type="text" class="form-control" placeholder="Search within the tool...",style="border-radius:30px;")

@@ -6,15 +6,16 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var favicon = require('express-favicon');
 var app = express();
-var favicon = require('serve-favicon');
+
 app.use(session({ secret: 'keyboard cat', 
                   resave: true, 
                   saveUninitialized: true,
 				  cookie: { maxAge: 1000*1800 }, // last half an hour?
 				  rolling: true
 }));
-app.use(favicon(__dirname + '/public/favicon.ico', { maxAge: 2592000000 }));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(express.static(path.join(__dirname, '/public')));
 
 app.set('views',path.join(__dirname,'views'));
