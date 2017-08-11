@@ -84,7 +84,11 @@ body {
 	color: #fff;
 	background-color:#5cb85c;
 }
-
+@keyframes blink-animation {
+  to {
+    transform: translate(0, 30px);
+  }
+}
 /* child */
 .nav .child_menu>li{
 	padding-left: 50px;

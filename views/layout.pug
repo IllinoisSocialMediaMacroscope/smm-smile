@@ -37,7 +37,8 @@ html
 								li
 									<a href="#result-anchor"><span class="glyphicon glyphicon-zoom-in pull-left"></span>Result Preview</a>
 							
-						li <a><span class="glyphicon glyphicon-download-alt  pull-left"></span>Download</a> 
+						li(id='side-download-li', style="display:none; animation:blink-animation 5s steps(50, start) infinite;") 
+							<a><span class="glyphicon glyphicon-download-alt  pull-left"></span>Download</a> 
 							ul(class="nav child_menu" style="display:block;" id="side-download")
 								
 		

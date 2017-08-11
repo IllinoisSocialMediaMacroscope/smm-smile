@@ -7,14 +7,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var app = express();
-
-
+var favicon = require('serve-favicon');
 app.use(session({ secret: 'keyboard cat', 
                   resave: true, 
                   saveUninitialized: true,
 				  cookie: { maxAge: 1000*1800 }, // last half an hour?
 				  rolling: true
 }));
+app.use(favicon(__dirname + '/public/favicon.ico', { maxAge: 2592000000 }));
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine', 'pug');
@@ -22,8 +23,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/public')));
-
 app.use('/',require('./routes/index'));
 app.use('/',require('./routes/networkx/networkx'));
 app.use('/',require('./routes/scikit-learn/scikit-learn-cluster'));

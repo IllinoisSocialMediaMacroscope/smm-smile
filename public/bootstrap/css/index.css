@@ -13,6 +13,7 @@
 	margin:20px 50px;
 	color:#f5f6f8;
 	text-align:center;
+	animation:fade 0.5s ease-in-out both;
 }
 
 .navbar-fixed-top {

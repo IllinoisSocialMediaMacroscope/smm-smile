@@ -118,6 +118,7 @@ function extractHeader2(array){
 
 /*----------------------------display results---------------------------------*/
 function appendDownload(downloadID, downloadData){
+	$('#side-download-li').show();
 	$(downloadID).empty()
 	if(downloadData !== []){
 		$.each(downloadData,function(i,val){
