@@ -231,7 +231,7 @@ function init(){
 	$("#twtTweetFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],AuthorInformation:[],TweetEntities:[]};
+		fields = {BasicFields:['text'],AuthorInformation:[],TweetEntities:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -374,7 +374,7 @@ function init(){
 	$("#twtStreamFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],ElasticSearchMetadata:[],AuthorInformation:[],GeoLocation:[]};
+		fields = {BasicFields:['text'],ElasticSearchMetadata:[],AuthorInformation:[],GeoLocation:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -439,7 +439,7 @@ function init(){
 			});
 		}
 		if (fields['UserTimeline'].length !== 0){
-			fields_string += '\n\t\t\ttimeline{' ;
+			fields_string += '\n\t\t\ttimeline(count:1){' ;
 			$.each(fields['UserTimeline'],function(i,val){
 				fields_string += '\n\t\t\t\t' + val;
 			});
