@@ -5,17 +5,20 @@ function submitQuery(textareaID,filenameID){
 	
 	var queryTerm = $("#social-media").find(':selected').val();
 	if (queryTerm === 'queryTweet'){
-		var filename = 'twitter-queryTweet-' + $(filenameID).val();
+		var filename =  $(filenameID).val();
+		var prefix = 'twitter-Tweet';
 		var params = parameters.tweet;
 		var pages = -999;
 	}else if (queryTerm === 'queryUser'){
-		var filename = 'twitter-queryUser-' + $(filenameID).val();
+		var filename = $(filenameID).val();
+		var prefix = 'twitter-User' ;
 		var params = parameters.twtUser;	
 		var pages = parameters['twtUser']['pageNum:'] 
 		//console.log(parameters);
 		//console.log(pages);			
 	}else if (queryTerm === 'streamTweet'){
-		var filename = 'twitter-streaming-' + $(filenameID).val();
+		var filename = $(filenameID).val();
+		var prefix = 'twitter-Stream'
 		var params = parameters.es;
 		var pages = parameters['es']['pageNum:'];	
 		//console.log(pages);
@@ -25,7 +28,12 @@ function submitQuery(textareaID,filenameID){
 	$.ajax({
 		url:"/query",
 		type:"post",
-		data:{"query":queryString,"filename":filename,"params":JSON.stringify(params),"pages":pages},
+		data:{"query":queryString,
+				"filename":filename,
+				"params":JSON.stringify(params),
+				"pages":pages,
+				"prefix":prefix
+			},
 		success:function(data){
 			// if error then prompt user to rename
 			if ('ERROR' in data){
@@ -123,10 +131,12 @@ function submitSearchbox(searchboxID, filenameID){
 							  }
 							}
 							`
-		var filename = 'twitter-queryTweet-' + $(filenameID).val();
+		var filename = $(filenameID).val();
+		var prefix = 'twitter-Tweet';
 		var pages = 18;
 		parameters['tweet']['pages:'] = 18;
 		var params = parameters.tweet;
+		
 	}else if (queryTerm === 'queryUser'){
 		var queryString = `{
 							  twitter{
@@ -157,7 +167,8 @@ function submitSearchbox(searchboxID, filenameID){
 								}
 							  }
 							}`
-		var filename = 'twitter-queryUser-' + $(filenameID).val();	
+		var filename = $(filenameID).val();	
+		var prefix = 'twitter-User';
 		var pages = 90;		
 		parameters['twtUser']['pageNum:'] = pages;
 		var params = parameters.twtUser;			
@@ -229,7 +240,8 @@ function submitSearchbox(searchboxID, filenameID){
 							  }
 							}
 							`;
-		var filename = 'twitter-streaming-' + $(filenameID).val();
+		var filename = $(filenameID).val();
+		var prefix = 'twitter-Stream';
 		var pages = 10;
 		params['es']['pageNum:'] = pages;
 		var params = parameters.es;
@@ -239,7 +251,12 @@ function submitSearchbox(searchboxID, filenameID){
 	$.ajax({
 		url:"/query",
 		type:"post",
-		data:{"query":queryString,"filename":filename,"params":JSON.stringify(params),"pages":pages},
+		data:{"query":queryString,
+				"filename":filename,
+				"params":JSON.stringify(params),
+				"pages":pages,
+				"prefix":prefix
+			},
 		success:function(data){
 			if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));

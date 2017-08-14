@@ -6,6 +6,10 @@ var CSV = require('csv-string');
 
 router.get('/history',function(req,res,next){
 	var directory = {
+						"GraphQL":
+							{"twitter-Tweet":{},
+							"twitter-User":{},
+							"twitter-Stream":{}},
 						"ML":
 							{"feature":{},
 							"clustering":{}},
@@ -68,15 +72,22 @@ router.get('/history',function(req,res,next){
 		}
 		
 		if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL)){
-			var searchResult = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL)
-			.filter(function(list){
-				return list.substr(-5) === '.json'
-			}).map(function(list){
-				return list.substr(0, list.length-5);
-			});
+			if (fs.existsSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Tweet')){
+				//add time?
+				var fileList = fs.readdirSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Tweet');
+				directory['GraphQL']['twitter-Tweet'] = fileList;
+			}
+			if (fs.existsSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-User')){
+				var fileList = fs.readdirSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-User');
+				directory['GraphQL']['twitter-User'] = fileList;
+			}
+			if (fs.existsSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Stream')){
+				var fileList = fs.readdirSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Stream');
+				directory['GraphQL']['twitter-Stream'] = fileList;
+			}
 		}
 	}
-	res.render('history',{parent:'/', directory: directory, searchResult:searchResult});
+	res.render('history',{parent:'/', directory: directory});
 });
 
 router.post('/history',function(req,res,next){
