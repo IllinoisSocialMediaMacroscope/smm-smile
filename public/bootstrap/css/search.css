@@ -6,38 +6,23 @@ body {
 }
 #header{
 	margin-top:100px;
-	animation: fade-left 1s ease-in-out both;
+	animation: fade 1s ease-in-out both;
 }
 #tabs{
-	animation: fade-right 1.5s ease-in-out both;
-}
-.prose{
-	animation: fade-left 2s ease-in-out both;
-}
-.footer{
-	animation: fade-right 2.5s ease-in-out both;
+	animation: fade 1.5s ease-in-out both;
 }
 	
-@keyframes fade-right {
+@keyframes fade{
   from {
     opacity: 0;
-    transform: translate(30px,0);
+    transform: translate(0,30px);
   }
   to {
     opacity: 1;
     transform: translate(0, 0);
   }
 }
-@keyframes fade-left {
-  from {
-    opacity: 0;
-    transform: translate(-30px,0);
-  }
-  to {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-}
+
 /*  drop down menu   */
 .dropdown.dropdown-lg .dropdown-menu {
     margin-top: 2px;
@@ -260,13 +245,13 @@ nav-tabs li a:hover{
 	margin-right:auto;
 }
 
-/* textarea 
+/* textarea */
 #input{
 	 resize:none;
 	 background-color:#e9f2f9;
-	 //color:#c84b49;
+	 color:#333;
 	 height:auto;
-}*/
+}
 
 /* tagsinput width */
 .bootstrap-tagsinput{
