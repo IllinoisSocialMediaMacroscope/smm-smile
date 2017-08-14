@@ -2,7 +2,10 @@
 function init(){
 	
 	// initialization
-
+	$("#searchbox").prop('disabled',true);
+	$("#dropdownButton").prop('disabled',true);
+	$("#simple-search-btn").prop('disabled',true);
+	
 	queryTerm = '';
 	Query ='';
 	parameters = { 	tweet: {},
@@ -64,6 +67,10 @@ function init(){
 	
 	// select box enable search
 	$("#social-media").change(function(){
+		$("#searchbox").prop('disabled',false);
+		$("#dropdownButton").prop('disabled',false);
+		$("#simple-search-btn").prop('disabled',false);
+		
 		$(".tweet").hide();
 		$(".user").hide();
 		$(".es-tweet").hide();
@@ -375,7 +382,7 @@ function init(){
 			});
 		}
 		if (fields['UserTimeline'].length !== 0){
-			fields_string += '\n\t\t\ttimeline(count:1){' ;
+			fields_string += '\n\t\t\ttimeline{' ;
 			$.each(fields['UserTimeline'],function(i,val){
 				fields_string += '\n\t\t\t\t' + val;
 			});
