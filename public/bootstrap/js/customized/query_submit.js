@@ -11,12 +11,16 @@ function submitQuery(textareaID,filenameID){
 	}else if (queryTerm === 'queryUser'){
 		var filename = 'twitter-queryUser-' + $(filenameID).val();
 		var params = parameters.twtUser;	
-		var pages = $("#max_pages_user").val();		
+		var pages = parameters['twtUser']['pageNum:'] 
+		//console.log(parameters);
+		//console.log(pages);			
 	}else if (queryTerm === 'streamTweet'){
 		var filename = 'twitter-streaming-' + $(filenameID).val();
 		var params = parameters.es;
-		var pages = $("#pageNum").val();
-	}else if (queryTerm ==='searchSubreddits'){
+		var pages = parameters['es']['pageNum:'];	
+		//console.log(pages);
+	}
+	/*else if (queryTerm ==='searchSubreddits'){
 		var filename = 'reddit-searchSubreddits-' + $(filenameID).val();
 		var params = parameters.rdSub;		
 	}else if (queryTerm === 'searchContent'){
@@ -28,7 +32,7 @@ function submitQuery(textareaID,filenameID){
 	}else if (queryTerm === 'getCompleteReplies'){
 		var filename = 'reddit-getCompleteReplies-' + $(filenameID).val();	
 		var params = parameters.rdReply;
-	}
+	}*/
 	
 	$.ajax({
 		url:"/query",
@@ -164,9 +168,11 @@ function submitSearchbox(searchboxID, filenameID){
 								}
 							  }
 							}`
-		var filename = 'twitter-queryUser-' + $(filenameID).val();					
+		var filename = 'twitter-queryUser-' + $(filenameID).val();	
+		var pages = 90;		
+		parameters['twtUser']['pageNum:'] = pages;
 		var params = parameters.twtUser;			
-		var pages = 90;
+		
 		
 	}else if (queryTerm === 'streamTweet'){
 		var queryString = `{
@@ -235,10 +241,12 @@ function submitSearchbox(searchboxID, filenameID){
 							}
 							`;
 		var filename = 'twitter-streaming-' + $(filenameID).val();
-		var params = parameters.es;
 		var pages = 10;
+		params['es']['pageNum:'] = pages;
+		var params = parameters.es;
 		
-	}else if (queryTerm ==='searchSubreddits'){
+	}
+	/*else if (queryTerm ==='searchSubreddits'){
 		var queryString=`{
 							reddit{
 								searchSubreddits(query: "`+ keyword +`") {
@@ -342,7 +350,7 @@ function submitSearchbox(searchboxID, filenameID){
 		var filename = 'reddit-getCompleteReplies-' + $(filenameID).val();	
 		var params = parameters.rdReply;
 	}
-	//params['keyword'] = parameters.keyword;
+	//params['keyword'] = parameters.keyword;*/
 	
 	$.ajax({
 		url:"/query",

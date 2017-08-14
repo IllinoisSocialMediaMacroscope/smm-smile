@@ -16,12 +16,13 @@ div(class="input-group-addon")
 					<!-- tweet -->
 					div(class="tweet")
 						div(class="form-group")
-							<label class="label-control">tweet per page (maximum 100)</label>
+							<label class="label-control warning">number of tweets
+								<span class="warningText">Careful! Every 100 count is ONE http request, and you only have 180 over 15 minutes window</span></label>
 							div(class="range range-node")
-								input(type="range" min="5" max="100" value="100" step="1" id="tweet-count" onchange="twtrangeNode.value=value")
-								<output id="twtrangeNode">100</output>
-						div(class="form-group")
-							<label class="label-control warning">how many pages (maximum 180)<span class="warningText">Careful! Each page is a http request, and you only have 180 over 15 minutes window</span></label>
+								input(type="range" min="100" max="18000" value="500" step="100" id="tweet-count" onchange="twtrangeNode.value=value")
+								<output id="twtrangeNode">500</output>
+						// div(class="form-group")
+							<label class="label-control warning">how many pages (maximum 180)</label>
 							div(class="range range-node")
 								input(type="range" min="1" max="180" value="10" step="1" id="max_pages" onchange="max_pages_rangeNode.value=value")
 								<output id="max_pages_rangeNode">10</output>
@@ -111,12 +112,13 @@ div(class="input-group-addon")
 					<!-- user -->
 					div(class="user")
 						div(class="form-group")
-							<label class="label-control">user per page (maximum 20)</label>
+							<label class="label-control warning">number of users
+								<span class="warningText">Careful! Every 20 count is ONE http request, and you only have 900 over 15 minutes window</span></label>
 							div(class="range range-node")
-								input(type="range" min="5" max="20" value="20" step="1" id="twtUser-count" onchange="twtUserRange.value=value")
-								<output id="twtUserRange">20</output>
-						div(class="form-group")
-							<label class="label-control warning">how many pages (maximum 900)<span class="warningText">Careful! Each page is a http request, and you only have 900 over 15 minutes window</span></label>
+								input(type="range" min="20" max="18000" value="100" step="20" id="twtUser-count" onchange="twtUserRange.value=value")
+								<output id="twtUserRange">100</output>
+						//div(class="form-group")
+							<label class="label-control warning">how many pages (maximum 900)</label>
 							div(class="range range-node")
 								input(type="range" min="1" max="900" value="20" step="1" id="max_pages_user" onchange="max_page_userRange.value=value")
 								<output id="max_page_userRange">20</output>
@@ -157,12 +159,13 @@ div(class="input-group-addon")
 					<!-- elastic search -->
 					div(class="es-tweet")
 						div(class="form-group")
-							<label class="label-control">user per page (maximum 1000)</label>
+							<label class="label-control warning">number of tweets
+								<span class="warningText">Careful! Each 1000 is a http request</span></label>
 							div(class="range range-node")
-								input(type="range" min="1" max="1000" value="500" step="1" id="perPage" onchange="perPage_rangeNode.value=value")
-								<output id="perPage_rangeNode">500</output>
-						div(class="form-group")
-							<label class="label-control warning">how many pages (maximum 200)<span class="warningText">Careful! Each page is a http request</span></label>
+								input(type="range" min="1000" max="100000" value="5000" step="1000" id="perPage" onchange="perPage_rangeNode.value=value")
+								<output id="perPage_rangeNode">5000</output>
+						//div(class="form-group")
+							<label class="label-control warning">how many pages (maximum 200)</label>
 							div(class="range range-node")
 								input(type="range" min="1" max="200" value="1" step="1" id="pageNum" onchange="pageNum_rangeNode.value=value")
 								<output id="pageNum_rangeNode">1</output>
@@ -276,150 +279,7 @@ div(class="input-group-addon")
 									option(value="geo_enabled") geo enabled
 									option(value="lang") lang				
 								
-					<!-- reddit -->	
-					div(class="reddit extra")
-						div(class="form-group")
-							<label class="label-control warning">Extra Count<span class="warningText">Reddit defaultly return 1000 comments! Adding extra might risk rate limit!</span></label>
-							div(class="range range-node")
-								input(type="range" min="5" max="5000" value="1000" step="1" id="reddit_extra" onchange="redditExtra.value=value")
-								<output id="redditExtra">1000</output>
-					div(class="reddit count")
-						div(class="form-group")
-							<label class="label-control warning">Count<span class="warningText">When the field "replies" are selected, every count needs 3 sec to fetch!</span></label>
-							div(class="range range-node")
-								input(type="range" min="1" max="1000" value="20" step="1" id="reddit_count" onchange="redditCount.value=value")
-								<output id="redditCount">20</output>
-																			
-					<!-- subreddit -->
-					div(class="reddit searchSubreddits")
-						<label class="label-control">Select Fields</label>
-						br
-						select(multiple,id="rdSubFields",class="fields")
-								option(value="header_img") header image
-								option(value="header_title") header title
-								option(value="over18") over 18? 
-								option(value="public_description") public description 
-								option(value="created") created
-								option(value="description") description
-								option(value="display_name") display name
-								option(value="subscribers") subscribers number
-								option(value="subreddit_type") subreddit type
-								option(value="title") title
-								option(value="url") url
-																										
-					<!-- Content -->
-					div(class="reddit searchContent")
-						div(class="form-group")
-							<label class="label-control">time</label>
-							select(class="form-control" id="time")
-								option(value="all" checked) all
-								option(value="hour") hour
-								option(value="day") day
-								option(value="week") week
-								option(value="month") month
-								option(value="year") year	
-						div(class="form-group")
-							<label class="label-control">sort</label>
-							select(class="form-control" id="sort")
-								option(value="relevance" checked) relevance
-								option(value="hot") hot
-								option(value="top") top
-								option(value="new") new
-								option(value="comments") comments
-						div(class="form-group")
-							<label class="label-control">Select Fields</label>
-							br
-							select(multiple,id="rdSearchFields",class="fields")
-								optgroup(label="BasicFields")
-									option(value="id") id
-									option(value="author_name") author name
-									option(value="created") created
-									option(value="name") name
-									option(value="num_reports") num reports
-									option(value="num_comments") num comments
-									option(value="over_18") over 18?
-									option(value="permalink") permalink
-									option(value="score") score
-									option(value="selftext") selftext
-									option(value="subreddit_id") subreddit id
-									option(value="subreddit_name_prefixed") subreddit name prefixed
-									option(value="thumbnail") thumbnail
-									option(value="title") title
-									option(value="url") url
-									option(value="ups") ups
-									option(value="downs") downs
-								optgroup(label="Replies")
-									option(value="comment_author_name") comment author name
-									option(value="body") body
-									option(value="comment_created") comment created at 
-									option(value="controversiality") controversiality
-									option(value="comment_downs") comment downs
-									option(value="comment_ups") comment ups
-									option(value="link_title") link title
-									option(value="likes") likes
-									option(value="comment_name") comment name
-									option(value="comment_num_comments") num comments of current comment
-									option(value="comment_num_reports") num reports of current comment
-									option(value="comment_over_18") over 18?
-									option(value="parent_id") parent id
-									option(value="comment_score") score
-									option(value="subreddit_type") subreddit type
-									option(value="comment_ups") ups
 					
-					<!-- get Complete replies -->
-					div(class="reddit getCompleteReplies")
-						div(class="form-group")
-							<label class="label-control">Select Fields</label>
-							br
-							select(multiple,id="rdReplyFields",class="fields")
-								option(value="comment_author_name") comment author name
-								option(value="body") body
-								option(value="comment_created") comment created at 
-								option(value="controversiality") controversiality
-								option(value="comment_downs") comment downs
-								option(value="comment_id") comment id
-								option(value="link_url") link url
-								option(value="link_permalink") link permalink
-								option(value="likes") likes
-								option(value="comment_name") comment name
-								option(value="comment_num_comments") num comments of current comment
-								option(value="comment_num_reports") num reports of current comment
-								option(value="comment_over_18") over 18?
-								option(value="parent_id") parent id
-								option(value="comment_score") score
-								option(value="subreddit_id") subreddit id
-								option(value="subreddit_display_name") subreddit display name
-								option(value="subreddit_name_prefixed") subreddit name prefixed
-								option(value="subreddit_type") subreddit type
-								option(value="comment_ups") comment ups
-						
-					<!-- search comment -->
-					div(class="reddit getNewComments")
-						div(class="form-group")
-							<label class="label-control">Select Fields</label>
-							br
-							select(multiple,id="rdCommentFields",class="fields")
-								option(value="comment_author_name") author name
-								option(value="body") body
-								option(value="comment_created") comment created at 
-								option(value="controversiality") controversiality
-								option(value="comment_downs") comment downs
-								option(value="comment_id") comment id
-								option(value="link_url") link url
-								option(value="link_permalink") link permalink
-								option(value="likes") likes
-								option(value="comment_name") comment name
-								option(value="comment_num_comments") num comments of current comment
-								option(value="comment_num_reports") num reports of current comment
-								option(value="comment_over_18") over 18?
-								option(value="parent_id") parent id
-								option(value="comment_score") score
-								option(value="subreddit_id") subreddit id
-								option(value="subreddit_display_name") subreddit display name
-								option(value="subreddit_name_prefixed") subreddit name prefixed
-								option(value="subreddit_type") subreddit type
-								option(value="comment_ups") comment ups
-						
 					div(class="col-md-12")
 						textarea(class="form-control", id="input", rows="15",placeholder="If you know GraphQL, try typing your own string! :-D" disabled) 
 					div(class="col-md-12")

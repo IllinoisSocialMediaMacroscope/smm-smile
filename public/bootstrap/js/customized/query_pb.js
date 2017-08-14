@@ -2,37 +2,35 @@
 function init(){
 	
 	// initialization
-	$("#searchbox").prop('disabled',true);
-	$("#dropdownButton").prop('disabled',true);
-	$("#simple-search-btn").prop('disabled',true);
+
 	queryTerm = '';
 	Query ='';
 	parameters = { 	tweet: {},
 					twtUser: {},
 					es: {},
-					rdComment: {},
+					/*rdComment: {},
 					rdSearch: {},
 					rdReply: {},
-					rdSub: {}
+					rdSub: {}*/
 				};
 	parameters['tweet']['q:'] = $("#searchbox").val();
-	parameters['tweet']['count:'] = parseInt($("#tweet-count").val());
-	parameters['tweet']['pages:'] = parseInt( $("#max_pages").val());
+	parameters['tweet']['count:'] = 100;
+	parameters['tweet']['pages:'] = parseInt($("#tweet-count").val())/100;
 	parameters['tweet']['fields'] = '';
 	
 	parameters['twtUser']['q:'] = $("#searchbox").val();
-	parameters['twtUser']['count:'] = parseInt($("#twtUser-count").val());
-	//parameters['twtUser']['pages:'] = parseInt($("#max_pages_user").val());
+	parameters['twtUser']['count:'] = 20;
+	parameters['twtUser']['pageNum:'] = parseInt($("#twtUser-count").val())/20;
 	parameters['twtUser']['fields'] = '';
 	
 	
 	parameters['es']['q:'] = $("#searchbox").val();
-	parameters['es']['perPage:'] =  parseInt($("#perPage").val());
-	//parameters['es']['pageNum:'] =  parseInt($("#pageNum").val());
+	parameters['es']['perPage:'] =  1000;
+	parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
 	parameters['es']['fields'] = '';
 	
 	
-	parameters['rdComment']['subredditName:'] = $("#searchbox").val();
+	/*parameters['rdComment']['subredditName:'] = $("#searchbox").val();
 	parameters['rdComment']['extra:'] = parseInt($("#reddit_extra").val());
 	parameters['rdComment']['fields'] = '';
 	
@@ -49,7 +47,7 @@ function init(){
 	
 	
 	parameters['rdSub']['query:'] = $("#searchbox").val();
-	parameters['rdSub']['fields'] = '';
+	parameters['rdSub']['fields'] = '';*/
 	
 	// customize dropdown
 	$('#dropdownButton').on('click',function(event){
@@ -86,20 +84,15 @@ function init(){
 	
 	// select box enable search
 	$("#social-media").change(function(){
-		
-		$("#searchbox").prop('disabled',false);
-		$("#dropdownButton").prop('disabled',false);
-		$("#simple-search-btn").prop('disabled',false);
-	
 		$(".tweet").hide();
 		$(".user").hide();
 		$(".es-tweet").hide();
-		$(".reddit.getNewComments").hide();
+		/*$(".reddit.getNewComments").hide();
 		$(".reddit.searchContent").hide();
 		$(".reddit.searchSubreddits").hide();
 		$(".reddit.getCompleteReplies").hide();
 		$(".reddit.extra").hide();
-		$(".reddit.count").hide();
+		$(".reddit.count").hide();*/
 		$(".form-group.geocode").hide();
 		$(".form-group.dateRange").hide();
 		$(".form-group.es-geocode").hide();
@@ -117,7 +110,8 @@ function init(){
 		}else if ( queryTerm === 'streamTweet'){
 			$(".es-tweet").show();
 			$("#searchbox").attr("placeholder","Tweet keywords that you wish to search...");
-		}else if (queryTerm === 'searchContent'){
+		}
+		/*else if (queryTerm === 'searchContent'){
 			$(".reddit.count").show();
 			$(".reddit.searchContent").show();
 			$("#searchbox").attr("placeholder","Reddit post keywords that you wish to search...");
@@ -132,7 +126,7 @@ function init(){
 		else if ( queryTerm === 'searchSubreddits'){
 			$(".reddit.searchSubreddits").show();
 			$("#searchbox").attr("placeholder","Subreddit keywords that you wish to search...");
-		}
+		}*/
 		
 		Query = updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
@@ -150,10 +144,10 @@ function init(){
 		parameters['tweet']['q:'] = $("#searchbox").val();
 		parameters['twtUser']['q:'] = $("#searchbox").val();
 		parameters['es']['q:'] = $("#searchbox").val();
-		parameters['rdComment']['subredditName:'] = $("#searchbox").val();
+		/*parameters['rdComment']['subredditName:'] = $("#searchbox").val();
 		parameters['rdSearch']['query:'] = $("#searchbox").val();
 		parameters['rdReply']['id:'] = $("#searchbox").val();
-		parameters['rdSub']['query:'] = $("#searchbox").val();
+		parameters['rdSub']['query:'] = $("#searchbox").val();*/
 		
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
@@ -219,15 +213,12 @@ function init(){
 	});
 	// tweet
 	$("#tweet-count").change(function(){
-		parameters['tweet']['count:'] = parseInt($("#tweet-count").val());
+		parameters['tweet']['count:'] = 100;
+		parameters['tweet']['pages:'] = parseInt($("#tweet-count").val())/100;
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
-	$("#max_pages").change(function(){
-		parameters['tweet']['pages:'] = parseInt($("#max_pages").val());
-		Query =updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
+	
 	$("#twtTweetFields").change(function(){
 		fields_string = '';
 		
@@ -358,19 +349,13 @@ function init(){
 	});	
 	// perPage
 	$("#perPage").change(function(){
-		parameters['es']['perPage:'] = parseInt($("#perPage").val());
+		parameters['es']['perPage:'] = 1000;
+		parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
 		Query =updateString(queryTerm,parameters);
 		//console.log(Query);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
-	// pageNum
-	/*$("#pageNum").change(function(){
-		parameters['es']['pageNum:'] =  parseInt($("#pageNum").val());
-		Query =updateString(queryTerm,parameters);
-		//console.log(Query);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});*/
-	
+		
 	$("#twtStreamFields").change(function(){
 		fields_string = '';
 		
@@ -415,15 +400,12 @@ function init(){
 	
 	/*----------------------------------------------------- twitter user-------------------------------------------------------*/
 	$("#twtUser-count").change(function(){
-		parameters['twtUser']['count:'] = parseInt($("#twtUser-count").val());
+		parameters['twtUser']['count:'] = 20;
+		parameters['twtUser']['pageNum:'] = parseInt($("#twtUser-count").val())/20;
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
-	/*$("#max_pages_user").change(function(){
-		parameters['twtUser']['pages:'] = parseInt($("#max_pages_user").val());
-		Query =updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});*/
+	
 	$("#twtUserFields").change(function(){
 		fields_string = '';
 		
@@ -453,7 +435,7 @@ function init(){
 		
 	});
 	
-	//-----------------------------------------------reddit getNewComments----------------------------------------------------------------
+	/*//-----------------------------------------------reddit getNewComments----------------------------------------------------------------
 	$("#reddit_extra").change(function(){
 		parameters['rdComment']['extra:'] = parseInt($("#reddit_extra").val());
 		Query = updateString(queryTerm,parameters);
@@ -537,9 +519,7 @@ function init(){
 		parameters['rdReply']['fields'] = fields;
 		Query = updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
-	
-	
+	});*/
 	
 }
 
@@ -547,7 +527,7 @@ function constructQuery(parameterObj){
 	//console.log(parameterObj);
 	var keys = [];
 	$.each(Object.keys(parameterObj),function(i,item){
-		if (item !== 'fields' && parameterObj[item] !== ''){
+		if (item !== 'fields' && parameterObj[item] !== '' && item !=='pageNum:'){
 			keys.push(item);
 		}
 	});
@@ -585,7 +565,8 @@ function updateString(queryTerm,parameters){
 		
 		query =  `\telasticSearch{\n\t\t`+ queryTerm + `(`+  constructQuery(parameters.es) +  `\n\t\t}\n\t}`;  
 			
-	}else if (queryTerm == 'getNewComments'){
+	}
+	/*else if (queryTerm == 'getNewComments'){
 		
 		query =  `\treddit{\n\t\t`	+ queryTerm + `(`+ constructQuery(parameters.rdComment)	+  `\n\t\t}\n\t}`;
 			
@@ -601,7 +582,7 @@ function updateString(queryTerm,parameters){
 		
 		query =  `\treddit{\n\t\tsearch(`+ constructQuery(parameters.rdSearch)+  `\n\t\t}\n\t}`;
 
-	}
+	}*/
 	
 	return query;
 }

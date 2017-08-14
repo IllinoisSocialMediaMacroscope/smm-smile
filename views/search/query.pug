@@ -60,14 +60,6 @@ html
 							option(data-icon="glyphicon-user" value="queryUser") Twitter Users
 						optgroup(label="Twitter Stream Database")
 							option(data-icon="glyphicon-envelope" value="streamTweet") Streamed Tweets
-					//-	
-						optgroup(label="Reddit")
-							option(data-icon="glyphicon-file" value="searchContent") Search for Reddit Posts
-							option(data-icon="glyphicon-plus" value="getCompleteReplies") Get the Complete Replies of Given Post
-							option(data-icon="glyphicon-comment" value="getNewComments") Search for Reddit Comments within a Sub
-							option(data-icon="glyphicon-tag" value="searchSubreddits") Search for Subreddit Informations based on name and description
-						optgroup(label="ElasticSearch")
-					//
 								
 					include searchbox.pug
 						
@@ -84,7 +76,6 @@ html
 				div(class="footer")
 					a(href="https://dev.twitter.com/rest/public/search")
 						img(src='../bootstrap/img/logo/twitter-bg-logo.png', class="footerImg")
-					//img(src='../bootstrap/img/logo/reddit-bg-logo.png',class="footerImg")
 					a(href="https://aws.amazon.com/blogs/big-data/building-a-near-real-time-discovery-platform-with-aws/")
 						img(src='../bootstrap/img/logo/elasticsearch-bg-logo.png',class="footerImg")
 			
