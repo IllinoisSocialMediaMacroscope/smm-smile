@@ -21,11 +21,7 @@ div(class="input-group-addon")
 							div(class="range range-node")
 								input(type="range" min="100" max="18000" value="500" step="100" id="tweet-count" onchange="twtrangeNode.value=value")
 								<output id="twtrangeNode">500</output>
-						// div(class="form-group")
-							<label class="label-control warning">how many pages (maximum 180)</label>
-							div(class="range range-node")
-								input(type="range" min="1" max="180" value="10" step="1" id="max_pages" onchange="max_pages_rangeNode.value=value")
-								<output id="max_pages_rangeNode">10</output>
+						
 						
 						div(class="form-group")
 							<label class="label-control"><span class="glyphicon glyphicon-calendar" style="margin-right:5px;"></span>Date Range (Until)
@@ -117,11 +113,7 @@ div(class="input-group-addon")
 							div(class="range range-node")
 								input(type="range" min="20" max="18000" value="100" step="20" id="twtUser-count" onchange="twtUserRange.value=value")
 								<output id="twtUserRange">100</output>
-						//div(class="form-group")
-							<label class="label-control warning">how many pages (maximum 900)</label>
-							div(class="range range-node")
-								input(type="range" min="1" max="900" value="20" step="1" id="max_pages_user" onchange="max_page_userRange.value=value")
-								<output id="max_page_userRange">20</output>
+						
 						div(class="form-group")
 							<label class="label-control">Select Fields</label>
 							br
@@ -164,11 +156,7 @@ div(class="input-group-addon")
 							div(class="range range-node")
 								input(type="range" min="1000" max="100000" value="5000" step="1000" id="perPage" onchange="perPage_rangeNode.value=value")
 								<output id="perPage_rangeNode">5000</output>
-						//div(class="form-group")
-							<label class="label-control warning">how many pages (maximum 200)</label>
-							div(class="range range-node")
-								input(type="range" min="1" max="200" value="1" step="1" id="pageNum" onchange="pageNum_rangeNode.value=value")
-								<output id="pageNum_rangeNode">1</output>
+						
 						<!-- date -->
 						div(class="form-group")
 							<label class="label-control"><span class="glyphicon glyphicon-calendar" style="margin-right:5px;"></span>Filter based on DATE
@@ -281,7 +269,7 @@ div(class="input-group-addon")
 								
 					
 					div(class="col-md-12")
-						textarea(class="form-control", id="input", rows="15",placeholder="If you know GraphQL, try typing your own string! :-D" disabled) 
+						textarea(class="form-control", id="input", rows="15",placeholder="If you know GraphQL, try typing your own string! :-D" disabled style="display:none;") 
 					div(class="col-md-12")
 							button(type="button", class="btn btn-primary",onclick="modalPopUp('#input');",id="adv-search-btn") 
 								span(class="glyphicon glyphicon-search")

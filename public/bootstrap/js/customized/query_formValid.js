@@ -44,11 +44,16 @@ function formValid(searchID){
 	// extra search for advanced
 	if (searchID === '#input'){
 		if ($("#social-media option:selected").val() === 'queryTweet'){
-			/* if ($("#until").val() === '' ||$("#until").val() === undefined){
+			if ( $("#dateRange").is(':checked') && ($("#until").val() === '' ||$("#until").val() === undefined)){
 				alert("Please select a search time frame");
 				$("#until").focus();
 				return false
-			} */
+			} 
+			if ( $("#geocode").is(':checked') && ($("#lat").val() === '' || $("#lon").val() === '' || $("#radius").val() === '' )){
+				alert("Please fill in the geolocation information");
+				$("#lat").focus();
+				return false
+			} 
 			if ($("#twtTweetFields option:selected").val()===undefined){
 				alert("Please select at least one Field of the search result");
 				$("#twtTweetFields").focus();
@@ -63,49 +68,27 @@ function formValid(searchID){
 			}
 		}
 		else if ($("#social-media option:selected").val() === 'streamTweet'){
+			if ($("#es-dateRange").is(':checked') && ($("#start").val() === '' || $("#end").val() === '')){
+				alert("Please select start time and end time");
+				$("#start").focus();
+				return false
+			} 
+			if ($("#es-geocode").is(':checked') && ($("#es-lat").val() === '' || $("#es-lat").val() === '' || $("#es-radius").val() === '')){
+				alert("Please fill in the geolocation information");
+				$("#es-lat").focus();
+				return false
+			} 
+			if ($("#es-popularity").is(':checked') && ($("#followers_count").val() === '' || $("#statuses_count").val() === '')){
+				alert("Please select followers and statuses range");
+				$("#followers_count").focus();
+				return false
+			} 
 			if ($("#twtStreamFields option:selected").val()===undefined){
 				alert("Please select at least one Field of the search result");
 				$("#twtStreamFields").focus();
 				return false
 			}
-		}
-		else if ($("#social-media option:selected").val() === 'searchContent'){
-			if ($("#time option:selected").val()===undefined){
-				alert("Please select an option for the field Time");
-				$("#time").focus();
-				return false
-			}
-			if ($("#sort option:selected").val()===undefined){
-				alert("Please select an option for the field Sort");
-				$("#sort").focus();
-				return false
-			}
-			if ($("#rdSearchFields option:selected").val()===undefined){
-				alert("Please select at least one Field of the search result");
-				$("#rdSearchFields").focus();
-				return false
-			}
-		}
-		else if ($("#social-media option:selected").val() === 'getNewComments'){
-			if ($("#rdCommentFields option:selected").val()===undefined){
-				alert("Please select at least one Field of the search result");
-				$("#rdCommentFields").focus();
-				return false
-			}
-		}
-		else if ($("#social-media option:selected").val() === 'searchSubreddits'){ 
-			if ($("#rdSubFields option:selected").val()===undefined){
-				alert("Please select at least one Field of the search result");
-				$("#rdSubFields").focus();
-				return false
-			}
-		}
-		else if ($("#social-media option:selected").val() === 'getCompleteReplies'){
-			if ($("#rdReplyFields option:selected").val()===undefined){
-				alert("Please select at least one Field of the search result");
-				$("#rdReplyFields").focus();
-				return false
-			}
+			
 		}
 	}
 	

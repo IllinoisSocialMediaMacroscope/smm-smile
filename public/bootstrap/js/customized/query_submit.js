@@ -20,19 +20,7 @@ function submitQuery(textareaID,filenameID){
 		var pages = parameters['es']['pageNum:'];	
 		//console.log(pages);
 	}
-	/*else if (queryTerm ==='searchSubreddits'){
-		var filename = 'reddit-searchSubreddits-' + $(filenameID).val();
-		var params = parameters.rdSub;		
-	}else if (queryTerm === 'searchContent'){
-		var filename = 'reddit-search-' + $(filenameID).val();
-		var params = parameters.rdSearch;		
-	}else if (queryTerm === 'getNewComments'){
-		var filename = 'reddit-getNewComments-' + $(filenameID).val();		
-		var params = parameters.rdComment;
-	}else if (queryTerm === 'getCompleteReplies'){
-		var filename = 'reddit-getCompleteReplies-' + $(filenameID).val();	
-		var params = parameters.rdReply;
-	}*/
+	
 	
 	$.ajax({
 		url:"/query",
@@ -247,111 +235,6 @@ function submitSearchbox(searchboxID, filenameID){
 		var params = parameters.es;
 		
 	}
-	/*else if (queryTerm ==='searchSubreddits'){
-		var queryString=`{
-							reddit{
-								searchSubreddits(query: "`+ keyword +`") {
-								  header_img
-								  header_title
-								  over18
-								  public_description
-								  created
-								  description
-								  display_name
-								  subscribers
-								  subreddit_type
-								  title
-								  url
-								}
-							  }
-						}`
-		var filename = 'reddit-searchSubreddits-' + $(filenameID).val();					
-		var params = parameters.rdSub;				
-	}else if (queryTerm === 'searchContent'){
-		var queryString = `{
-							reddit{
-									search(query: "`+ keyword + `", time: "all", sort: "relevance", count:1000) {
-									  id
-									  author_name
-									  created
-									  name
-									  num_reports
-									  num_comments
-									  over_18
-									  permalink
-									  score
-									  selftext
-									  subreddit_id
-									  subreddit_name_prefixed
-									  thumbnail
-									  title
-									  url
-									  ups
-									}
-								}
-						}`
-		var filename = 'reddit-search-' + $(filenameID).val();				
-		var params = parameters.rdSearch;
-	}else if (queryTerm === 'getNewComments'){
-		var queryString = `{
-							reddit{
-									getNewComments(subredditName:"` +keyword+`",extra:1000){
-									  comment_author_name
-									  body
-									  comment_created
-									  controversiality
-									  comment_downs
-									  comment_id
-									  link_url
-									  link_permalink
-									  likes
-									  comment_name
-									  comment_num_comments
-									  comment_num_reports
-									  comment_over_18
-									  parent_id
-									  comment_score
-									  subreddit_id
-									  subreddit_display_name
-									  subreddit_name_prefixed
-									  subreddit_type
-									  comment_ups
-									}
-								  }
-							}`
-		var filename = 'reddit-getNewComments-' + $(filenameID).val();						
-		var params = parameters.rdComment;				
-	}else if (queryTerm === 'getCompleteReplies'){
-		var queryString = `{
-							reddit{
-									getCompleteReplies(id:"`+ keyword+	`"){
-									  comment_author_name
-									  body
-									  comment_created
-									  controversiality
-									  comment_downs
-									  comment_id
-									  link_url
-									  link_permalink
-									  likes
-									  comment_name
-									  comment_num_comments
-									  comment_num_reports
-									  comment_over_18
-									  parent_id
-									  comment_score
-									  subreddit_id
-									  subreddit_display_name
-									  subreddit_name_prefixed
-									  subreddit_type
-									  comment_ups
-									}
-								  }
-						}`
-		var filename = 'reddit-getCompleteReplies-' + $(filenameID).val();	
-		var params = parameters.rdReply;
-	}
-	//params['keyword'] = parameters.keyword;*/
 	
 	$.ajax({
 		url:"/query",

@@ -29,26 +29,6 @@ function init(){
 	parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
 	parameters['es']['fields'] = '';
 	
-	
-	/*parameters['rdComment']['subredditName:'] = $("#searchbox").val();
-	parameters['rdComment']['extra:'] = parseInt($("#reddit_extra").val());
-	parameters['rdComment']['fields'] = '';
-	
-	
-	parameters['rdSearch']['query:'] = $("#searchbox").val();
-	parameters['rdSearch']['count:'] = parseInt($("#reddit_count").val());
-	parameters['rdSearch']['fields'] = '';
-	
-	parameters['rdSearch']['time:'] = $("#time").val();
-	parameters['rdSearch']['sort:'] = $("#sort").val();
-	
-	parameters['rdReply']['id:'] = $("#searchbox").val();
-	parameters['rdReply']['fields'] = '';
-	
-	
-	parameters['rdSub']['query:'] = $("#searchbox").val();
-	parameters['rdSub']['fields'] = '';*/
-	
 	// customize dropdown
 	$('#dropdownButton').on('click',function(event){
 		console.log($("#searchbox").val())
@@ -87,12 +67,6 @@ function init(){
 		$(".tweet").hide();
 		$(".user").hide();
 		$(".es-tweet").hide();
-		/*$(".reddit.getNewComments").hide();
-		$(".reddit.searchContent").hide();
-		$(".reddit.searchSubreddits").hide();
-		$(".reddit.getCompleteReplies").hide();
-		$(".reddit.extra").hide();
-		$(".reddit.count").hide();*/
 		$(".form-group.geocode").hide();
 		$(".form-group.dateRange").hide();
 		$(".form-group.es-geocode").hide();
@@ -111,23 +85,7 @@ function init(){
 			$(".es-tweet").show();
 			$("#searchbox").attr("placeholder","Tweet keywords that you wish to search...");
 		}
-		/*else if (queryTerm === 'searchContent'){
-			$(".reddit.count").show();
-			$(".reddit.searchContent").show();
-			$("#searchbox").attr("placeholder","Reddit post keywords that you wish to search...");
-		}else if ( queryTerm === 'getNewComments'){
-			$(".reddit.extra").show();
-			$(".reddit.getNewComments").show();
-			$("#searchbox").attr("placeholder","Type Subreddit name or ALL...");
-		}else if (queryTerm === 'getCompleteReplies'){
-			$(".reddit.getCompleteReplies").show();
-			$("#searchbox").attr("placeholder","Reddit post ID (e.g. mvdg3 )...");
-		}
-		else if ( queryTerm === 'searchSubreddits'){
-			$(".reddit.searchSubreddits").show();
-			$("#searchbox").attr("placeholder","Subreddit keywords that you wish to search...");
-		}*/
-		
+	
 		Query = updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
@@ -144,10 +102,6 @@ function init(){
 		parameters['tweet']['q:'] = $("#searchbox").val();
 		parameters['twtUser']['q:'] = $("#searchbox").val();
 		parameters['es']['q:'] = $("#searchbox").val();
-		/*parameters['rdComment']['subredditName:'] = $("#searchbox").val();
-		parameters['rdSearch']['query:'] = $("#searchbox").val();
-		parameters['rdReply']['id:'] = $("#searchbox").val();
-		parameters['rdSub']['query:'] = $("#searchbox").val();*/
 		
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
@@ -435,92 +389,6 @@ function init(){
 		
 	});
 	
-	/*//-----------------------------------------------reddit getNewComments----------------------------------------------------------------
-	$("#reddit_extra").change(function(){
-		parameters['rdComment']['extra:'] = parseInt($("#reddit_extra").val());
-		Query = updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
-	//reddit comments
-	$("#rdCommentFields").change(function(){
-		fields = '';
-		$.each($("#rdCommentFields").val(),function(i,val){
-			fields += '\n\t\t\t' + val;
-		});
-		parameters['rdComment']['fields'] = fields;
-		Query = updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
-	
-	//-----------------------------------------------reddit search content------------------------------------------------------------------
-	$("#reddit_count").change(function(){
-		parameters['rdSearch']['count:'] = parseInt($("#reddit_count").val());
-		Query = updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
-	
-	//reddit search Content
-	$("#rdSearchFields").change(function(){ 
-		fields_string = '';
-		fields = {BasicFields:[],Replies:[]};
-			
-		$.each($(this).find(':selected'),function(i,val){
-			var label = $(val.parentNode)[0].label;
-			fields[label].push(val.value);	  		
-		});
-		
-		if(fields['BasicFields'].length !== 0){
-			$.each(fields['BasicFields'],function(i,val){
-				fields_string += '\n\t\t\t' + val;
-				});
-		}
-		
-		if (fields['Replies'].length !== 0){
-			fields_string += '\n\t\t\treplies{' ;
-			$.each(fields['Replies'],function(i,val){
-				fields_string += '\n\t\t\t\t' + val;
-			});
-			fields_string += '\n\t\t\t}' ;
-		}
- 	
-		parameters['rdSearch']['fields'] = fields_string;
-  		Query = updateString(queryTerm,parameters);	
-  		$("#input").val(`{\n\n` + Query +`\n\n}`);		
-  	});
-	
-	$("#time").change(function(){
-		parameters['rdSearch']['time:'] = $("#time").val();
-		Query = updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
-	$("#sort").change(function(){
-		parameters['rdSearch']['sort:'] = $("#sort").val();
-		Query = updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
-	
-	//---------------------------------------------reddit Search subreddits----------------------------------------------------------------
-	$("#rdSubFields").change(function(){
-		fields = '';
-		$.each($("#rdSubFields").val(),function(i,val){
-			fields += '\n\t\t\t' + val;
-		});
-		parameters['rdSub']['fields'] = fields;
-		Query = updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
-	
-	//------------------------------------------ reddit getCompleteReplies-----------------------------------------------------------------
-	$("#rdReplyFields").change(function(){
-		fields = '';
-		$.each($("#rdReplyFields").val(),function(i,val){
-			fields += '\n\t\t\t' + val;
-		});
-		parameters['rdReply']['fields'] = fields;
-		Query = updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});*/
-	
 }
 
 function constructQuery(parameterObj){
@@ -566,23 +434,6 @@ function updateString(queryTerm,parameters){
 		query =  `\telasticSearch{\n\t\t`+ queryTerm + `(`+  constructQuery(parameters.es) +  `\n\t\t}\n\t}`;  
 			
 	}
-	/*else if (queryTerm == 'getNewComments'){
-		
-		query =  `\treddit{\n\t\t`	+ queryTerm + `(`+ constructQuery(parameters.rdComment)	+  `\n\t\t}\n\t}`;
-			
-	}else if(queryTerm == 'searchSubreddits'){
-		
-		query =  `\treddit{\n\t\t`	+ queryTerm + `(`+ constructQuery(parameters.rdSub)	+  `\n\t\t}\n\t}`;
-		
-	}else if(queryTerm ==='getCompleteReplies'){
-		
-		query =  `\treddit{\n\t\t` + queryTerm + `(`+ constructQuery(parameters.rdReply)+  `\n\t\t}\n\t}`;
-			
-	}else if(queryTerm === 'searchContent'){
-		
-		query =  `\treddit{\n\t\tsearch(`+ constructQuery(parameters.rdSearch)+  `\n\t\t}\n\t}`;
-
-	}*/
 	
 	return query;
 }
