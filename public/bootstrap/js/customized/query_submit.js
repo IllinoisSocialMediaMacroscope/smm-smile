@@ -136,8 +136,9 @@ function submitSearchbox(searchboxID, filenameID){
 							}
 							`
 		var filename = 'twitter-queryTweet-' + $(filenameID).val();
+		var pages = 18;
+		parameters['tweet']['pages:'] = 18;
 		var params = parameters.tweet;
-		var pages = -999;
 	}else if (queryTerm === 'queryUser'){
 		var queryString = `{
 							  twitter{

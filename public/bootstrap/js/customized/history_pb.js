@@ -105,7 +105,6 @@ function deleteModal(formID){
 }
 
 function deleteHistory(formID){	
-	console.log('hitted');
 	$.ajax({
 		type:'post',
 		url:'/delete', 
