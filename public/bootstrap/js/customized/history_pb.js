@@ -1,4 +1,12 @@
 function submitHistory(formID){	
+	$("#title-container").empty();
+	$("#overview-container").empty();
+	$("#img-container").empty();
+	$("#result-container").empty();
+	$("#gaudge").empty();
+	$("#title").empty();
+	$("#background").hide();			
+	$("#loading").show();
 	
 	$.ajax({
 		type:'post',
@@ -7,26 +15,12 @@ function submitHistory(formID){
 		success:function(data){
 			if(data){
 				if ('ERROR' in data){
-					$("#title-container").empty();
-					$("#overview-container").empty();
-					$("#img-container").empty();
-					$("#result-container").empty();
-					$("#gaudge").empty();
-					$("#title").empty();
-					
+					$("#loading").hide();
 					$("#background").show();
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
-					$("#title-container").empty();
-					$("#overview-container").empty();
-					$("#img-container").empty();
-					$("#result-container").empty();
-					$("#gaudge").empty();
-					$("#title").empty();
-					
-					$("#background").hide();
-					
+					$("#loading").hide();
 					if ('title' in data || 'ID' in data){
 						appendTitle("#title-container",data.title,data.ID);
 					}
@@ -117,8 +111,6 @@ function deleteHistory(formID){
 				$("#result-container").empty();
 				$("#gaudge").empty();
 				$("#title").empty();
-				// succesfully delete, then hide this tab
-				//alert(data);
 				$("#" + formID).parent().css( "display", "none" );
 				$("#delete").modal('hide');
 				$("#background").show();

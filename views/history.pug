@@ -18,7 +18,8 @@ html
 		script(src="../bootstrap/js/customized/view.js")
 		script(src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
 		script(src="../bootstrap/js/bootstrap.min.js")
-		
+		script.
+			console.log(!{JSON.stringify(directory)});
 		
 	body
 		script(src="../bootstrap/js/customized/history_pb.js")
@@ -40,6 +41,8 @@ html
 									| Nature Language Processing
 								else if key === 'NW'
 									| Network Visualization and Analysis
+								else if key === 'GraphQL'
+									| Social Media Data
 								else
 									| #{key}
 								</a>
@@ -58,6 +61,14 @@ html
 											| Sentiment Analysis
 										else if key1 === 'topic-modeling'
 											| LDA Topic Modeling
+										else if key1 === 'twitter-Tweet'
+											| Twitter Tweet
+										else if key1 === 'twitter-User'
+											| Twitter User
+										else if key1 === 'twitter-Stream'
+											| Twitter Streaming Data
+										else if key1 === 'networkx'
+											| Python NetworkX
 										else
 											| #{key1}
 										</a>
@@ -76,18 +87,6 @@ html
 														<button class="historyButtons" onclick="submitHistory(`#{key2}`);">view</button>
 														<button class="historyButtons" onclick="deleteModal(`#{key2}`);">delete</button>
 					
-						//li <a onclick="toggle(this,`#graphql`);"><span class="glyphicon glyphicon-plus"></span>Social Media Search</a>
-							ul(class="nav child_menu" style="display:none;" id="graphql")
-								each val in searchResult
-									li 
-										<form action='/history' id=#{val} name='history' method='post'>
-											<input type="hidden" value=#{val} name="historyID" />
-											<input type="hidden" value="graphql" name="type" />
-										</form>
-										p(class="historyTabs") #{val}
-										div(class="button-unit")
-											<button class="historyButtons" onclick="submitHistory(`#{val}`);">view</button>
-											<button class="historyButtons" onclick="deleteModal(`#{val}`);">delete</button>
 												
 		div(class="container-fluid")
 			div(class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main")
@@ -95,7 +94,10 @@ html
 					div(class="col-md-12 col-sm-12 col-xs-12")
 						p(style="text-align:center; margin-top:200px;font-size:20px;") 
 							<span class="glyphicon glyphicon-hand-left"></span>Please Click the Past Job ID to View ...
-						//img(src="../bootstrap/img/logo/pointleft-logo.png", width="400px", height="400px", style="display:block; margin-left:auto; margin-right:auto; margin-top:50px; margin-bottom:100px;")
+				div(id="loading",style="display:none;")
+					div(class="col-md-12 col-sm-12 col-xs-12")
+						p(style="text-align:center; margin-top:200px;font-size:20px;") 
+							<span class="glyphicon glyphicon-refresh"></span>Please Wait. Loading...	
 				
 				<!-- title -->
 				div(class="row")
@@ -129,8 +131,9 @@ html
 				div(class="modal-content")
 					div(class="modal-header")
 						button(class="close" data-dismiss="modal") &times;
-						h2(class="modal-title") Delete this Job? 
+						h2(class="modal-title") 
 							span(class="glyphicon glyphicon-trash" style="font-size:20px;margin-left:5px") 
+							| Delete this Job? 
 					div(class="modal-footer")
 						button(class="btn btn-primary" id="deleteButton") Delete
 						button(class="btn btn-default" data-dismiss="modal") Close
