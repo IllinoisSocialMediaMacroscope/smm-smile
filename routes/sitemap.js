@@ -10,45 +10,50 @@ router.post('/sitemap',function(req,res,next){
 		{
 		  "name": "index",
 		  "url": "/",
-		  "text": ""
+		  "text": fs.readFileSync(process.env.ROOTDIR + '/routes/index.js', "utf8")
 		},
 		{
 		  "name": "networkx",
-		  "text": "",
-		  "url":""
+		  "text": fs.readFileSync(process.env.ROOTDIR + '/routes/networkx/networkx.json'),
+		  "url":"/networkx"
 		}, 
 		{
 		  "name": "scikit learn clustering",
-		  "text": ""
+		  "text": fs.readFileSync(process.env.ROOTDIR + '/routes/scikit-learn/cluster.json'),
+		  "url":"/sklearn/cluster",
 		},
 		{
 			"name":"Natural Language Processing Tokenization",
-			"text": ""
+			"text": "",
+			"url":"/NLP/preprocess",
 		},
 		{	
 			"name": "Natural Language Processing Sentiment Analysis",
-			"text":""
+			"url":"/NLP/sentiment",
+			"text":"",
 		},
 		{
 			"name": "Search Social Media Source",
-			"text":""
+			"url":"/query",
+			"text":"",
 		},
 		{
 			"name": "History page",
-			"text":""
+			"text":"",
+			"url":"/history"
 		}
 	]
 		
 	var idx = lunr(function () {
 		this.ref('url')
 		this.field('text')
-		this.filed('name')
+		this.field('name')
 		documents.forEach(function (doc) {
 			this.add(doc)
 			}, this)
 	})
 	
-	var result = idx.search(req.body.searchTerm);
+	var result = JSON.stringify(idx.search(req.body.searchTerm));
 	
 	console.log(result);
 });
