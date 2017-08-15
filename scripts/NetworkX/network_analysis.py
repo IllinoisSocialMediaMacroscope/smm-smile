@@ -34,14 +34,14 @@ class Network:
         df = pandas.DataFrame(Array[1:],columns=Array[0])
         
         if relationships == 'reply_to':
-            if input_file.find('queryTweet') != -1:
+            if input_file.find('twitter-Tweet') != -1:
                 df['reply_to'] = df['text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
                 new_df = df[['reply_to','user.screen_name','text']].dropna()
                 self.graph = nx.DiGraph()
                 self.directed = 'directed'
                 for row in new_df.iterrows():
                    self.graph.add_edge(row[1]['user.screen_name'], row[1]['reply_to'], text=row[1]['text'])
-            elif input_file.find('streaming') != -1:
+            elif input_file.find('twitter-Stream') != -1:
                 df['reply_to'] = df['_source.text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
                 new_df = df[['reply_to','_source.user.screen_name','_source.text']].dropna()
                 self.graph = nx.DiGraph()
@@ -50,14 +50,14 @@ class Network:
                    self.graph.add_edge(row[1]['_source.user.screen_name'], row[1]['reply_to'], text=row[1]['_source.text'])
                
         elif relationships == 'retweet_from':
-            if input_file.find('queryTweet') != -1:
+            if input_file.find('twitter-Tweet') != -1:
                 df['retweet_from'] = df['text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
                 new_df = df[['retweet_from','user.screen_name','text']].dropna()
                 self.graph = nx.DiGraph()
                 self.directed = 'directed'
                 for row in new_df.iterrows():
                    self.graph.add_edge(row[1]['retweet_from'],row[1]['user.screen_name'],  text=row[1]['text'])
-            elif input_file.find('streaming') != -1:
+            elif input_file.find('twitter-Stream') != -1:
                 df['retweet_from'] = df['_source.text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
                 new_df = df[['retweet_from','_source.user.screen_name','_source.text']].dropna()
                 self.graph = nx.DiGraph()

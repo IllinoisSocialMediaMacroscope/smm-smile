@@ -152,13 +152,17 @@ function appendPreview(previewID, previewData){
 /*----------------------submit to analysis--------------------------------------------*/
 function ajaxSubmit(formID){
 	
+	var foldername = $("#selectFile").children(":selected").attr("id");
+	var directory = $("#selectFile").children(":selected").attr("class");
+	var data = $(formID).serialize() + "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv";
+	
 	if (formValidation()){
 		
 		$(".loading").show();
 		$.ajax({
 			type:'POST',
 			url:$(formID).attr('action'), 
-			data: $(formID).serialize(),				
+			data:data,				
 			success:function(data){
 				if ('ERROR' in data){
 					$(".loading").hide();

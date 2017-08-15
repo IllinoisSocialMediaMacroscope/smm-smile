@@ -6,11 +6,12 @@ var path = require('path');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
 var serverDIR = path.resolve('.');
-var readDIR_NW = require(serverDIR + '/scripts/helper.js').readDIR_NW;
+var readDIR = require(serverDIR + '/scripts/helper.js').readDIR;
 var rootDIR = path.resolve('.');
 
 router.get('/networkx',function(req,res,next){
-	var files = readDIR_NW(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);		
+	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
+	delete files['twitter-User'];
 	var formParam = require('./networkx.json');
 	res.render('formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:files, param:formParam}); 
 });
@@ -21,7 +22,7 @@ router.post('/networkx',function(req,res,next){
 	
 		
 	var options = {
-		args:[	'--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.selectFile, 
+		args:[	'--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, 
 				'--layout',req.body.layout, 
 				'--relationships',req.body.relationships, 
 				'--node_size',req.body.node_size,
@@ -45,6 +46,7 @@ router.post('/networkx',function(req,res,next){
 	 
 	pyshell.end(function(err){
 		if(err){
+			throw err;
 			res.send({ERROR:err});	
 		}
 		else{

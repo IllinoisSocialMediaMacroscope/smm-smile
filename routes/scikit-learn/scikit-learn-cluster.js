@@ -18,7 +18,7 @@ router.post('/sklearn/cluster',function(req,res,next){
 	//console.log(req.body);
 	
 	var options = {
-		args:['--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.selectFile, '--estimator',req.body.model,'--n_clusters',req.body.n_clusters,'--fields']
+		args:['--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, '--estimator',req.body.model,'--n_clusters',req.body.n_clusters,'--fields']
 	}; 
 		 
 	//put multiple fields header into args

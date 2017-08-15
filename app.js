@@ -38,7 +38,7 @@ app.use('/',require('./routes/history'));
 app.use('/',require('./routes/auth/twitter_auth'));
 app.use('/',require('./routes/auth/reddit_auth'));
 app.use('/',require('./routes/auth/es_auth'));
-
+app.use('/', require('./routes/sitemap'));
 /*app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;

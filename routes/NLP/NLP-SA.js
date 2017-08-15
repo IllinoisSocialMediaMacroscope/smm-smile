@@ -16,9 +16,9 @@ router.get('/NLP/sentiment',function(req,res,next){
 });
  
 router.post('/NLP/sentiment',function(req,res,next){
-	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select'){
+	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select...'){
 		var options = {
-			args:['--format',req.body.option, '--content',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+  req.body.selectFile, '--column', req.body.selectFileColumn]
+			args:['--format',req.body.option, '--content',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+  req.body.filename, '--column', req.body.selectFileColumn]
 		};
 	}else if (req.body.option === 'URL'){
 		var options = {

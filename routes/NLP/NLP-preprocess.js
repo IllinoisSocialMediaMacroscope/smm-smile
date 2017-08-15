@@ -19,16 +19,17 @@ router.post('/NLP/preprocess',function(req,res,next){
 	
 	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select'){
 		var options = {
-			args:['--format',req.body.option, '--content',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+  req.body.selectFile, '--column', req.body.selectFileColumn,
-			'--process',req.body.model, '--tagger',req.body.tagger, '--source']
+			args:['--format',req.body.option, '--content',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+  req.body.filename, '--column', req.body.selectFileColumn,
+			'--process',req.body.model, '--tagger',req.body.tagger, '--source','twitter']
 		};
 		
 		// different tokenizer for different social media
-		if (req.body.selectFile.substr(0,7) === 'twitter'){
+		/*if (req.body.selectFile.substr(0,7) === 'twitter'){
 			options.args.push('twitter');
+		
 		}else if (req.body.selectFile.substr(0,6) === 'reddit'){
 			options.args.push('reddit');
-		}
+		}*/
 		
 	}else if (req.body.option === 'URL'){ 
 		var options = {
@@ -54,8 +55,8 @@ router.post('/NLP/preprocess',function(req,res,next){
 		
 	pyshell.end(function(err){ 
 		if(err){ 
-			//throw err;
-			res.send({ERROR:err});	
+			throw err;
+			//res.send({ERROR:err});	
 		}
 		else{
 		

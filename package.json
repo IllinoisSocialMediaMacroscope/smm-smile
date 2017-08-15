@@ -17,6 +17,7 @@
     "form-data": "^2.2.0",
     "http-aws-es": "^2.0.5",
     "jsonexport": "^2.0.10",
+    "lunr": "^2.1.2",
     "morgan": "^1.8.1",
     "node-fetch": "^1.7.1",
     "nodemailer": "^4.0.1",

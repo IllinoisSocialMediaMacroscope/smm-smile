@@ -13,13 +13,15 @@ $(document).ready(function(){
 	
 	
 	$("#selectFile").on('change',function(){
-		
+		var foldername = $(this).children(":selected").attr("id");
+		var directory = $(this).children(":selected").attr("class");
+				
 		$("#selectFilePreview-container").empty();
 		$("#selectFileHeader-container").empty();
 		$.ajax({
 			type:'POST',
 			url:'/render', 
-			data: "filename=" + this.value,				
+			data: {"foldername":foldername, "directory":directory},				
 			success:function(data){
 				if (data){
 					var allowed_field_list = [

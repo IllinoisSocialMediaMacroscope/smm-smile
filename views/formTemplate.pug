@@ -4,7 +4,6 @@ block customized-script
 	<!-- customized script -->
 	script(src=param['custom-script']).	
 	
-	
 block config-form
 	form(action=param['form-action'], name='NLP', method='post',class="form-horizontal",id="upload")
 		each container in param['containers']
@@ -23,11 +22,11 @@ block config-form
 							else if input['type'] == 'select'
 								if input['optgroup']
 									select(class=input.class id=input.id name=input.name)
-										option(val="" checked) Please Select...
+										option(val="", class="", id="empty", checked) Please Select...
 										each val,key in directory
 											optgroup(label=key)
 											each item in val
-												option(val=item) #{item}
+												option(val=item, class=key, id=item) #{item}
 									
 									script.
 										$(`##{container['container-name']}`).after(`<div id="selectFilePreview-container">`)

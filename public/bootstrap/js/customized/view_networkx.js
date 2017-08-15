@@ -13,13 +13,14 @@ $(document).ready(function(){
 	
 	
 	$("#selectFile").on('change',function(){
-		
+		var foldername = $(this).children(":selected").attr("id");
+		var directory = $(this).children(":selected").attr("class");
 		$("#selectFilePreview-container").empty();
 		//$("#selectFileHeader-container").empty();
 		$.ajax({
 			type:'POST',
 			url:'/render', 
-			data: "filename=" + this.value,				
+			data: {"foldername":foldername, "directory":directory},				
 			success:function(data){
 				if (data){
 					var allowed_field_list = [
@@ -40,7 +41,7 @@ $(document).ready(function(){
 							$.each(index,function(i,indice){
 								line.push(val[indice]);
 							});
-							numCat_data.push(line);
+							numCat_data.push(line); 
 						});
 					
 					$("#selectFilePreview-container").append(`<div class="form-group">
