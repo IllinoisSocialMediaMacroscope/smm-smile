@@ -84,13 +84,20 @@ html
 				div(class="modal-content")
 					div(class="modal-header")
 						button(class="close" data-dismiss="modal") &times;
-						h2(class="modal-title") Save the result 
-							span(class="glyphicon glyphicon-floppy-disk" style="font-size:20px;margin-left:5px") 
+						h2(class="modal-title")
+							span(class="glyphicon glyphicon-floppy-save" style="font-size:20px;margin-left:5px") 
+							| Save the result 
 					
 					div(class="modal-body" style="text-align:center;vertical-align:middle;")
-						div(class="form-group form-inline")                        
-							label(for="filename") File Name
-								input(type="text" class="form-control" id="filename" placeholder="filename")
+						form(action='/email', name='email', method='post',class="form-horizontal",id="email")
+							div(class="form-group")
+								label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Filename
+								div(class="col-md-7 col-md-7 col-xs-12")
+									input(class="form-control" id="filename" placeholder="filename")
+							div(class="form-group")
+								label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Downloadable Files
+								div(class="col-md-7 col-md-7 col-xs-12")
+									div(id="display")
 						div(class="loading" style="display:none")
 							img(src="../bootstrap/img/loading2.gif", width="15%", height="15%", style="display:block; margin-left:auto; margin-right:auto; margin-top:10px")
 					div(class="modal-footer")
@@ -105,7 +112,7 @@ html
 						button(class="close" data-dismiss="modal" onclick="location.reload();") &times;
 						h2(class="modal-title" id="modal-title") Download Your Search Results
 					
-					div(class="modal-body" style=";vertical-align:middle;font-size:20px;")
+					div(class="modal-body" style="vertical-align:middle;font-size:20px;")
 						div(id="modal-download")
 						
 					div(class="modal-footer")

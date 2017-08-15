@@ -10,7 +10,7 @@ function saveValid(filenameID){
 		$(filenameID).focus();
 		return false
 	}else if (!regexp1.test($(filenameID).val())){
-		alert('filename illegal!');
+		alert('filename illegal! Legal Filename should only include Alphabet, Number, Underscore and/or Dash. Example: mySearch-cwang138');
 		$(filenameID).focus();
 		return false
 	}else if ($(filenameID).val()>=72){

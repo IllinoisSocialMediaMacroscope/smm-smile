@@ -32,6 +32,13 @@ function init(){
 	parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
 	parameters['es']['fields'] = '';
 	
+	// save the results display
+	$('#filename').keyup(function () {
+		$('#display').empty();
+		$('#display').append(`<p style="text-align:left;">` + $(this).val() + '.csv' 
+							+ `<br>` + $(this).val() + '.json' + `</p>` );
+	});
+	
 	// customize dropdown
 	$('#dropdownButton').on('click',function(event){
 		console.log($("#searchbox").val())
