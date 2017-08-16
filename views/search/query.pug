@@ -44,6 +44,8 @@ html
 	body(onload="init()")
 		<!-- top bar -->
 		include ../components/topbar.pug
+		include ../components/warning.pug
+		include ../components/sitemap.pug
 		
 		div(class="searchPage",id="searchPage")
 			<!-- logo -->
@@ -119,10 +121,7 @@ html
 						a(href="/" class="btn btn-primary" style="background-color:#c84b49;border-style:hidden") Go To Analytics
 						button(class="btn btn-default" data-dismiss="modal" onclick="location.reload();") Close
 						
-		
-		<!-- warning -->
-		include ../components/warning.pug
-		
+
 		<!-- side bar -->
 		div(class="documentation",id="documentation")
 			iframe(id="docIframe", src="../graphql-doc/schema/index.html",width="100%",scrolling="yes",style="padding-top: 40px;margin:0 0;")

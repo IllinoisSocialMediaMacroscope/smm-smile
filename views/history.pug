@@ -22,8 +22,9 @@ html
 	body
 		script(src="../bootstrap/js/customized/history_pb.js")
 		include components/topbar.pug
-		
-		
+		include components/sitemap.pug
+		include components/warning.pug
+								
 		div(class="container-fluid")
 			div(class="row")
 				div(class="col-sm-3 col-md-3 sidebar")
@@ -135,5 +136,4 @@ html
 					div(class="modal-footer")
 						button(class="btn btn-primary" id="deleteButton") Delete
 						button(class="btn btn-default" data-dismiss="modal") Close
-		include components/warning.pug
-								
+		

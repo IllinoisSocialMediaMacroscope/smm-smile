@@ -20,6 +20,9 @@ html
 		
 		<!-- top bar -->
 		include ../components/topbar.pug
+		include ../components/warning.pug
+		include ../components/sitemap.pug
+								
 				
 		<!-- auth -->
 		div(id="auth-panel")
@@ -34,12 +37,6 @@ html
 				| Authorize with your AWS ElasticSearch account
 			
 		
-		<!-- warning -->
-		include ../components/warning.pug
-		if error
-			script.
-				$("#error").val(!{JSON.stringify(error)});
-				$("#warning").modal('show');		
 		script.
 			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
 				console.log($("#twitter-auth"));

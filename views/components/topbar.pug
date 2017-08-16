@@ -26,40 +26,8 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 						span(class="glyphicon glyphicon-search")
 						| Social Media
 					 
-			form(class="navbar-form navbar-right")
-				input(type="text",id="sitemap",class="form-control",placeholder="Search within the tool...",style="border-radius:30px;")
-			
-			script.
-				$("#sitemap").on('keyup',function(e){
-					if (e.keyCode == 13){
-						$.ajax({
-							type:'post',
-							url:'/sitemap', 
-							data: {"searchTerm": $("#sitemap").val()},				
-							success:function(data){
-								console.log(data);
-							},
-							error: function(jqXHR, exception){
-									var msg = '';
-									if (jqXHR.status === 0) {
-										msg = 'Not connect.\n Verify Network.';
-									} else if (jqXHR.status == 404) {
-										msg = 'Requested page not found. [404]';
-									} else if (jqXHR.status == 500) {
-										msg = 'Internal Server Error [500].';
-									} else if (exception === 'parsererror') {
-										msg = 'Requested JSON parse failed.';
-									} else if (exception === 'timeout') {
-										msg = 'Time out error.';
-									} else if (exception === 'abort') {
-										msg = 'Ajax request aborted.';
-									} else {
-										msg = 'Uncaught Error.\n' + jqXHR.responseText;
-									}
-									$("#error").val(msg);
-									$("#warning").modal('show');
-									
-								} 
-							});
-					}
-				});
+			form(id="sitemap",class="navbar-form navbar-right")
+				input(id="sitemap-input", type="text",class="form-control",placeholder="Search within the tool...",style="border-radius:30px;")
+
+
+

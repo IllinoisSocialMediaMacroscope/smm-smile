@@ -22,8 +22,11 @@ html
 
 	body(onload="init();")
 		block customized-script
-		
 		include components/topbar.pug
+		include components/warning.pug
+		include components/sitemap.pug
+		
+		
 		div(id="container-fluid")
 				<!-- side bar -->
 				div(class="col-sm-3 col-md-3 sidebar")
@@ -81,7 +84,7 @@ html
 							a(class="anchor" name="result-anchor")
 							div(id="result-container")
 		
-		include components/warning.pug		
+		
 							
 							
 							

@@ -19,6 +19,7 @@ function init(){
 			$("#selectFileHeader-container").hide();
 		}
 	});
+	
 }
 
 function checkbox_onclick(){
@@ -212,9 +213,6 @@ function ajaxSubmit(formID){
 	}
 			
 } 
-
-
-
 
 
 
