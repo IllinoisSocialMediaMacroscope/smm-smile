@@ -7,7 +7,8 @@ html
 		<!-- this is for bootstrap 3! -->
 		link(href="../bootstrap/css/bootstrap.min.css", rel="stylesheet")
 		<!-- this is the customized search box style -->
-		link(href="../bootstrap/css/search.css",rel="stylesheet")
+		link(href="../bootstrap/css/customized/search.css",rel="stylesheet")
+		link(href="../bootstrap/css/customized/component.css",rel="stylesheet")
 		
 		<!-- font family -->
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
@@ -47,6 +48,19 @@ html
 		include ../components/warning.pug
 		include ../components/sitemap.pug
 		
+		<!-- auth -->
+		div(id="auth-panel")
+			p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
+			
+			a(href='/login/twitter', class="button", id="twitter-auth") 
+				img(src='../bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+				| Authorize with your Twitter account
+		
+			a(href='/login/es', class="button", id="es-auth")
+				img(src='../bootstrap/img/logo/elasticsearch-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+				| Authorize with your AWS ElasticSearch account
+			
+		
 		div(class="searchPage",id="searchPage")
 			<!-- logo -->
 			div(class="row" id="header")
@@ -80,8 +94,9 @@ html
 					a(href="https://aws.amazon.com/blogs/big-data/building-a-near-real-time-discovery-platform-with-aws/")
 						img(src='../bootstrap/img/logo/elasticsearch-bg-logo.png',class="footerImg")
 			
+		
 		<!-- popup modal save -->
-		div(id="save" class="modal fade" role="dialog")
+		div(id="save" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
 			div(class="modal-dialog")
 				div(class="modal-content")
 					div(class="modal-header")
@@ -127,6 +142,26 @@ html
 			iframe(id="docIframe", src="../graphql-doc/schema/index.html",width="100%",scrolling="yes",style="padding-top: 40px;margin:0 0;")
 							
 							
+		
+		script.
+			if ( !{JSON.stringify(success.length)} === 0 ){
+				console.log('here');
+				$(".searchPage").hide();
+			}
+			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
+				$("#twitter-auth").hide();
+				$("#searchPage").hide();
+			}
+			if (!{JSON.stringify(success)}.indexOf('es') >=0){
+				$("#es-auth").hide();
+				$("#searchPage").hide();
+			}
+			if (!{JSON.stringify(success)}.indexOf('es') >=0 && !{JSON.stringify(success)}.indexOf('twitter') >=0){
+				console.log("all done");
+				$("#auth-panel").hide();
+				$("#searchPage").show();
+			}
+		
 							
 							
 							

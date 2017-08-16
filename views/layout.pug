@@ -6,8 +6,10 @@ html
 		
 		<!-- this is for bootstrap 3! -->
 		link(href="../bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		
 		<!-- this is the customized dashboard style -->
-		link(href="../bootstrap/css/customized.css",rel="stylesheet")
+		link(href="../bootstrap/css/customized/component.css",rel="stylesheet")
+		link(href="../bootstrap/css/customized/customized.css",rel="stylesheet")
 		
 		<!-- font family -->
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
@@ -15,13 +17,15 @@ html
 		<!-- scripts -->
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
 		script(src="https://www.gstatic.com/charts/loader.js")
-		script(src="../bootstrap/js/customized/view.js")
 		script(src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
 		script(src="../bootstrap/js/bootstrap.min.js")
 		
+		<!-- customized scripts -->
+		script(src="../bootstrap/js/customized/view.js")
+		
+		
 
 	body(onload="init();")
-		block customized-script
 		include components/topbar.pug
 		include components/warning.pug
 		include components/sitemap.pug
@@ -84,7 +88,7 @@ html
 							a(class="anchor" name="result-anchor")
 							div(id="result-container")
 		
-		
+		block customized-script
 							
 							
 							

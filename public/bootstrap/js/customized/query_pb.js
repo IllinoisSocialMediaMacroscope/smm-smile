@@ -32,6 +32,17 @@ function init(){
 	parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
 	parameters['es']['fields'] = '';
 	
+	// save modal popup
+	$("#adv-search-btn").on('click', function(e){
+		//e.preventDefault();
+		modalPopUp('#input');
+	});
+	
+	$("#simple-search-btn").on('click', function(e){
+		//e.preventDefault();
+		modalPopUp('#searchbox');
+	});
+
 	// save the results display
 	$('#filename').keyup(function () {
 		$('#display').empty();
@@ -451,19 +462,3 @@ function updateString(queryTerm,parameters){
 	
 	return query;
 }
-
-
-// on key down for search box and save box
-$('document').ready(function(){
-	$("#searchbox").keypress(function(e){
-		if (e.which == 13){
-			modalPopUp("#searchbox");
-		}
-	});
-	
-	$("#simple-search-btn").click(function(e){
-		modalPopUp("#searchbox");
-		$("#filename").focus();
-	});
-	
-});

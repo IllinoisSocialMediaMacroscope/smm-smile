@@ -1,3 +1,29 @@
+div(id="warning" class="modal fade" role="dialog")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close" data-dismiss="modal") &times;
+				h2(class="modal-title") Whoops...
+			
+			div(class="modal-body" style="text-align:center;vertical-align:middle;")
+				p Have you verified every input is valid?
+				form(action='/email', name='email', method='post',class="form-horizontal",id="email")
+					div(class="form-group")
+						label(class="control-label col-md-3 col-md-3 col-xs-12",for="") Your Email Address
+						div(class="col-md-8 col-md-8 col-xs-12")
+							input(class="form-control" id="identifier" name="identifier" type="email")
+					div(class="form-group")
+						label(class="control-label col-md-3 col-md-3 col-xs-12",for="") Error
+						div(class="col-md-8 col-md-8 col-xs-12")
+							textarea(class="form-control", id="error", name="error", rows="10")
+					div(class="form-group")
+						label(class="control-label col-md-3 col-md-3 col-xs-12",for="") Comment
+						div(class="col-md-8 col-md-8 col-xs-12")
+							textarea(class="form-control", id="comment", name="comment", rows="5")
+			div(class="modal-footer")
+				button(class="btn btn-primary" id="reportButton" onclick="submitEmail(`#email`);") Report the Error
+				button(class="btn btn-default" data-dismiss="modal") Close				
+				
 script.
 	/*------------------------submit error emails ---------------------------*/
 	function submitEmail(formID){
@@ -36,7 +62,7 @@ script.
 			}); 
 		}
 	}
-	
+
 	function emailValidation(){
 		if ($("#identifier").val() === '' || $("#identifier").val().indexOf('@')<0){
 			alert("Please Fill in Valid Email Address!");
@@ -45,33 +71,6 @@ script.
 		}
 		
 		return true;
-	
+
 	}
-	
-div(id="warning" class="modal fade" role="dialog")
-	div(class="modal-dialog")
-		div(class="modal-content")
-			div(class="modal-header")
-				button(class="close" data-dismiss="modal") &times;
-				h2(class="modal-title") 
-					span(class="glyphicon glyphicon-bell" style="font-size:20px;margin-left:5px") 
-					| Whoops...
-			
-			div(class="modal-body" style="text-align:center;vertical-align:middle;")
-				p Have you verified every input is valid?
-				form(action='/email', name='email', method='post',class="form-horizontal",id="email")
-					div(class="form-group")
-						label(class="control-label col-md-3 col-md-3 col-xs-12",for="") Your Email Address
-						div(class="col-md-8 col-md-8 col-xs-12")
-							input(class="form-control" id="identifier" name="identifier" type="email")
-					div(class="form-group")
-						label(class="control-label col-md-3 col-md-3 col-xs-12",for="") Error
-						div(class="col-md-8 col-md-8 col-xs-12")
-							textarea(class="form-control" id="error" name="error" style="resize:none;" rows="10")
-					div(class="form-group")
-						label(class="control-label col-md-3 col-md-3 col-xs-12",for="") Comment
-						div(class="col-md-8 col-md-8 col-xs-12")
-							textarea(class="form-control" id="comment" name="comment" style="resize:none;" rows="5")
-			div(class="modal-footer")
-				button(class="btn btn-primary" id="reportButton" onclick="submitEmail(`#email`);") Report the Error
-				button(class="btn btn-default" data-dismiss="modal") Close				
+

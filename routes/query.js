@@ -7,36 +7,28 @@ var jsonexport = require('jsonexport');
 var zip = require('adm-zip');
 
 router.get('/query',function(req,res,next){
-	
-	if (req.session.twt_access_token_key !== undefined 
-		&& req.session.twt_access_token_secret !== undefined
-		//&& req.session.rd_access_token !== undefined
-		//&& req.session.rd_refresh_token !== undefined
-		&& req.session.es_access_token !== undefined
-		&& req.session.es_access_token_secret !== undefined
-		){
-		res.render('search/query',{parent:'/'});
 		
-	}else{
-		var success = [];
-		if (req.session.twt_access_token_key !== undefined && req.session.twt_access_token_secret !== undefined){
-			success.push('twitter');
-		}
-		
-		//if (req.session.rd_access_token !== undefined && req.session.rd_refresh_token !== undefined){
-		//	success.push('reddit');
-		//}
-		// add other social media following this context upppp 
-		if (req.session.es_access_token !== undefined && req.session.es_access_token_secret !== undefined){
-			success.push('es');
-		}
-		
-		if (req.query !== undefined && 'error' in req.query){
-			res.render('search/authorize',{error:req.query.error,success:success,parent:'/'});
-		}else{
-			res.render('search/authorize',{success:success,parent:'/'});
-		}
+	var success = [];
+	if (req.session.twt_access_token_key !== undefined && req.session.twt_access_token_secret !== undefined){
+		success.push('twitter');
 	}
+	
+	//if (req.session.rd_access_token !== undefined && req.session.rd_refresh_token !== undefined){
+	//	success.push('reddit');
+	//}
+	// add other social media following this context upppp 
+	if (req.session.es_access_token !== undefined && req.session.es_access_token_secret !== undefined){
+		success.push('es');
+	}
+	
+	if (req.query !== undefined && 'error' in req.query){
+		res.render('search/query',{error:req.query.error,success:success,parent:'/'});
+	}else{
+		res.render('search/query',{success:success,
+										parent:'/',
+										error:req.query.error});
+	}
+	
 });
 
 

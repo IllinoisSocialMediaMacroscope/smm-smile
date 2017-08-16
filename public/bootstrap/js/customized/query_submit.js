@@ -1,4 +1,6 @@
 function submitQuery(textareaID,filenameID){
+	// once the button is hit, disable the submit button until data comes back later!!
+	
 	$(".loading").show();
 	
 	var queryString = $(textareaID).val();
@@ -37,8 +39,14 @@ function submitQuery(textareaID,filenameID){
 		success:function(data){
 			// if error then prompt user to rename
 			if ('ERROR' in data){
+					console.log('ERROR');
+					
+					$("#save").modal('hide');
+					$("#success").modal('hide');
+					
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
+					
 					$(".loading").hide();
 			}else if ('URL' in data){
 				$("#modal-download").empty();
@@ -70,6 +78,10 @@ function submitQuery(textareaID,filenameID){
 				} else {
 					msg = 'Uncaught Error.\n' + jqXHR.responseText;
 				}
+				
+				$("#save").modal('hide');
+				$("#success").modal('hide');
+				
 				$("#error").val(msg);
 				$("#warning").modal('show');
 				
@@ -259,6 +271,9 @@ function submitSearchbox(searchboxID, filenameID){
 			},
 		success:function(data){
 			if ('ERROR' in data){
+					$("#save").modal('hide');
+					$("#success").modal('hide');
+					
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 					$(".loading").hide();
@@ -292,6 +307,9 @@ function submitSearchbox(searchboxID, filenameID){
 				} else {
 					msg = 'Uncaught Error.\n' + jqXHR.responseText;
 				}
+				$("#save").modal('hide');
+				$("#success").modal('hide');
+					
 				$("#error").val(msg);
 				$("#warning").modal('show');
 				
@@ -303,7 +321,6 @@ function submitSearchbox(searchboxID, filenameID){
 
 /* save file modal */
 function modalPopUp(searchID){
-	
 	// form validation! once it pass, popup modal
 	if ( formValid(searchID)){
 	
@@ -311,26 +328,31 @@ function modalPopUp(searchID){
 		$("#filename").focus();
 		
 		if (searchID === '#searchbox'){
-			$("#saveButton").click(function(){
+			$("#saveButton").on('click', function(e){
+				//e.preventDefault();
 				if (saveValid('#filename')){ 
-					submitSearchbox(`#searchbox`,`#filename`)
+					submitSearchbox(`#searchbox`,`#filename`);					
 				}
 			});
 			
 			$("#filename").keypress(function(e){
 				if (e.which == 13 && saveValid('#filename')){ 
+					//e.preventDefault();
 					submitSearchbox(`#searchbox`,`#filename`)
 				}
 			});
 		}else if (searchID === '#input'){
-			$("#saveButton").click(function(){
+			$("#saveButton").on('click', function(e){
+				//e.preventDefault();
 				if (saveValid('#filename')){
+					console.log("lala");
 					submitQuery(`#input`,`#filename`);
 				}
 			});
 			
 			$("#filename").keypress(function(e){
 				if (e.which == 13 && saveValid('#filename')){
+					//e.preventDefault();
 					submitQuery(`#input`,`#filename`);
 				}
 			});
@@ -338,4 +360,5 @@ function modalPopUp(searchID){
 	}
 	
 }
+
 
