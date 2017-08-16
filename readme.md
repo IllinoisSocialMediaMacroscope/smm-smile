@@ -23,6 +23,8 @@
 
 2.Once you get a copy of .env file, make sure the **rootDIR** variable in the file matches your desired destination 
 
+3. **_node_modules/python-shell/index.js_** might need to be modified if you're using it on mac! path issue!
+
 3.Make sure to subtitute any **credentials** in .env if not provided!
 #### email me: _***REMOVED***_
 
