@@ -2,12 +2,9 @@ require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-var path = require('path');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
-//TODO fs.unlink has some issues needed to be fixed
-var serverDIR = path.resolve('.');
-var readDIR = require(serverDIR + '/scripts/helper').readDIR;
+var readDIR = require(process.env.ROOTDIR + '/scripts/helper').readDIR;
 
 router.get('/NLP/preprocess',function(req,res,next){
 	files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	

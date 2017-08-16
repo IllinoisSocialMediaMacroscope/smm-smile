@@ -2,12 +2,9 @@ require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-var path = require('path');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
-var serverDIR = path.resolve('.');
-var readDIR = require(serverDIR + '/scripts/helper.js').readDIR;
-var rootDIR = path.resolve('.');
+var readDIR = require(process.env.ROOTDIR + '/scripts/helper.js').readDIR;
 
 router.get('/networkx',function(req,res,next){
 	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
@@ -29,7 +26,7 @@ router.post('/networkx',function(req,res,next){
 				'--edge_width',req.body.edge_width ] 
 	};
 	
-	var pyshell = new pythonShell(rootDIR +'/scripts/NetworkX/network_analysis.py',options); 
+	var pyshell = new pythonShell(process.env.ROOTDIR +'/scripts/NetworkX/network_analysis.py',options); 
 	
 	var count = 0;
 	downloadFiles = [];

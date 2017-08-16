@@ -2,11 +2,9 @@ require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-var path = require('path');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
-var serverDIR = path.resolve('.');
-var readZip = require(serverDIR + '/scripts/helper').readZip;
+var readZip = require(process.env.ROOTDIR  + '/scripts/helper').readZip;
 
 router.get('/NLP/topic',function(req,res,next){
 	files = readZip(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	

@@ -2,11 +2,9 @@ require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-var path = require('path');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string'); 
-var serverDIR = path.resolve('.');
-var readDIR = require(serverDIR + '/scripts/helper.js').readDIR;
+var readDIR = require(process.env.ROOTDIR + '/scripts/helper.js').readDIR;
 
 router.get('/NLP/sentiment',function(req,res,next){
 	//console.log(process.env.ROOTDIR);
