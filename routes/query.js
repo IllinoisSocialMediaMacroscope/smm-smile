@@ -96,7 +96,7 @@ router.post('/query',function(req,res,next){
 				res.send({ERROR:responseObj['errors'][0]['message']});
 			}else{				
 			
-				var response = saveFile(responseObj, req.body.params,req.body.prefix, req.body.filename,[key1,key2,key3]);	
+				var response = saveFile(responseObj, req.body.params,req.body.pages, req.body.prefix, req.body.filename,[key1,key2,key3]);	
 				res.send(response);
 			}
 			
@@ -113,7 +113,7 @@ router.post('/query',function(req,res,next){
 
 
 /****************************************************************** helper *****************************************************************************************/
-function saveFile(responseObj,params,prefix, filename,keys){
+function saveFile(responseObj,params,pages,prefix, filename,keys){
 	// ------------------------------------save csv file---------------------------------------------------------		
 	if (responseObj[keys[0]][keys[1]][keys[2]].length > 0){
 		
@@ -146,7 +146,14 @@ function saveFile(responseObj,params,prefix, filename,keys){
 		
 		// save query parameters to it so history page can use it!
 		var config = filename + '.dat';
-		fs.writeFile(directory +  config, params, 'utf8',function(err){
+		
+		// add page information back at server side
+		params = JSON.parse(params);
+		params['pages'] = pages;
+		if (params['fields'] === ""){
+			params['fields'] === "DEFAULT"
+		}
+		fs.writeFile(directory +  config, JSON.stringify(params), 'utf8',function(err){
 			if (err){
 					return {ERROR:err};
 				}

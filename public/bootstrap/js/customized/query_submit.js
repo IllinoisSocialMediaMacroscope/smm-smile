@@ -14,18 +14,16 @@ function submitQuery(textareaID,filenameID){
 	}else if (queryTerm === 'queryUser'){
 		var filename = $(filenameID).val();
 		var prefix = 'twitter-User' ;
-		var params = parameters.twtUser;	
-		var pages = parameters['twtUser']['pageNum:'] 
-		//console.log(parameters);
-		//console.log(pages);			
+		var params = parameters.twtUser;
+		var pages = parseInt($("#twtUser-count").val())/20;
+		//var pages = parameters['twtUser']['pageNum:'] 	
 	}else if (queryTerm === 'streamTweet'){
 		var filename = $(filenameID).val();
 		var prefix = 'twitter-Stream'
 		var params = parameters.es;
-		var pages = parameters['es']['pageNum:'];	
-		//console.log(pages);
+		var pages = parseInt($("#perPage").val())/1000;
+		//var pages = parameters['es']['pageNum:'];	
 	}
-	
 	
 	$.ajax({
 		url:"/query",
@@ -38,12 +36,7 @@ function submitQuery(textareaID,filenameID){
 			},
 		success:function(data){
 			// if error then prompt user to rename
-			if ('ERROR' in data){
-					console.log('ERROR');
-					
-					$("#save").modal('hide');
-					$("#success").modal('hide');
-					
+			if ('ERROR' in data){				
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 					
@@ -78,9 +71,6 @@ function submitQuery(textareaID,filenameID){
 				} else {
 					msg = 'Uncaught Error.\n' + jqXHR.responseText;
 				}
-				
-				$("#save").modal('hide');
-				$("#success").modal('hide');
 				
 				$("#error").val(msg);
 				$("#warning").modal('show');
@@ -146,7 +136,7 @@ function submitSearchbox(searchboxID, filenameID){
 		var filename = $(filenameID).val();
 		var prefix = 'twitter-Tweet';
 		var pages = 18;
-		parameters['tweet']['pages:'] = 18;
+		// parameters['tweet']['pages:'] = 18;
 		var params = parameters.tweet;
 		
 	}else if (queryTerm === 'queryUser'){
@@ -182,7 +172,7 @@ function submitSearchbox(searchboxID, filenameID){
 		var filename = $(filenameID).val();	
 		var prefix = 'twitter-User';
 		var pages = 90;		
-		parameters['twtUser']['pageNum:'] = pages;
+		// parameters['twtUser']['pageNum:'] = pages;
 		var params = parameters.twtUser;			
 		
 		
@@ -255,7 +245,7 @@ function submitSearchbox(searchboxID, filenameID){
 		var filename = $(filenameID).val();
 		var prefix = 'twitter-Stream';
 		var pages = 10;
-		params['es']['pageNum:'] = pages;
+		// params['es']['pageNum:'] = pages;
 		var params = parameters.es;
 		
 	}
@@ -271,9 +261,6 @@ function submitSearchbox(searchboxID, filenameID){
 			},
 		success:function(data){
 			if ('ERROR' in data){
-					$("#save").modal('hide');
-					$("#success").modal('hide');
-					
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 					$(".loading").hide();
@@ -307,9 +294,7 @@ function submitSearchbox(searchboxID, filenameID){
 				} else {
 					msg = 'Uncaught Error.\n' + jqXHR.responseText;
 				}
-				$("#save").modal('hide');
-				$("#success").modal('hide');
-					
+			
 				$("#error").val(msg);
 				$("#warning").modal('show');
 				
@@ -319,46 +304,5 @@ function submitSearchbox(searchboxID, filenameID){
 
 	
 
-/* save file modal */
-function modalPopUp(searchID){
-	// form validation! once it pass, popup modal
-	if ( formValid(searchID)){
-	
-		$("#save").modal('show');
-		$("#filename").focus();
-		
-		if (searchID === '#searchbox'){
-			$("#saveButton").on('click', function(e){
-				//e.preventDefault();
-				if (saveValid('#filename')){ 
-					submitSearchbox(`#searchbox`,`#filename`);					
-				}
-			});
-			
-			$("#filename").keypress(function(e){
-				if (e.which == 13 && saveValid('#filename')){ 
-					//e.preventDefault();
-					submitSearchbox(`#searchbox`,`#filename`)
-				}
-			});
-		}else if (searchID === '#input'){
-			$("#saveButton").on('click', function(e){
-				//e.preventDefault();
-				if (saveValid('#filename')){
-					console.log("lala");
-					submitQuery(`#input`,`#filename`);
-				}
-			});
-			
-			$("#filename").keypress(function(e){
-				if (e.which == 13 && saveValid('#filename')){
-					//e.preventDefault();
-					submitQuery(`#input`,`#filename`);
-				}
-			});
-		}
-	}
-	
-}
 
 

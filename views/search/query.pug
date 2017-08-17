@@ -46,6 +46,7 @@ html
 		<!-- top bar -->
 		include ../components/topbar.pug
 		include ../components/warning.pug
+		include ../components/clientside-warning.pug
 		include ../components/sitemap.pug
 		
 		<!-- auth -->
@@ -106,7 +107,7 @@ html
 							| Save the result 
 					
 					div(class="modal-body" style="text-align:center;vertical-align:middle;")
-						form(action='/email', name='email', method='post',class="form-horizontal",id="email")
+						form(class="form-horizontal")
 							div(class="form-group")
 								label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Filename
 								div(class="col-md-7 col-md-7 col-xs-12")
@@ -118,15 +119,15 @@ html
 						div(class="loading" style="display:none")
 							img(src="../bootstrap/img/loading2.gif", width="15%", height="15%", style="display:block; margin-left:auto; margin-right:auto; margin-top:10px")
 					div(class="modal-footer")
-						button(class="btn btn-primary" id="saveButton") Save
-						button(class="btn btn-default" data-dismiss="modal") Close
+						button(class="btn btn-primary", id="saveButton") Save
+						button(class="btn btn-default",data-dismiss="modal") Close
 		
 		<!-- popup modal download-->
 		div(id="success" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
 			div(class="modal-dialog")
 				div(class="modal-content")
 					div(class="modal-header")
-						button(class="close" data-dismiss="modal" onclick="location.reload();") &times;
+						button(class="close" data-dismiss="modal") &times;
 						h2(class="modal-title" id="modal-title") Download Your Search Results
 					
 					div(class="modal-body" style="vertical-align:middle;font-size:20px;")
@@ -134,10 +135,11 @@ html
 						
 					div(class="modal-footer")
 						a(href="/" class="btn btn-primary" style="background-color:#c84b49;border-style:hidden") Go To Analytics
-						button(class="btn btn-default" data-dismiss="modal" onclick="location.reload();") Close
+						button(class="btn btn-default" data-dismiss="modal") Close
 						
-
-		<!-- side bar -->
+						
+						
+		<!-- side bar HELP-->
 		div(class="documentation",id="documentation")
 			iframe(id="docIframe", src="../graphql-doc/schema/index.html",width="100%",scrolling="yes",style="padding-top: 40px;margin:0 0;")
 							

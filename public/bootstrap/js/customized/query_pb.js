@@ -23,36 +23,66 @@ function init(){
 	
 	parameters['twtUser']['q:'] = $("#searchbox").val();
 	parameters['twtUser']['count:'] = 20;
-	parameters['twtUser']['pageNum:'] = parseInt($("#twtUser-count").val())/20;
+	//parameters['twtUser']['pageNum:'] = parseInt($("#twtUser-count").val())/20;
 	parameters['twtUser']['fields'] = '';
 	
 	
 	parameters['es']['q:'] = $("#searchbox").val();
 	parameters['es']['perPage:'] =  1000;
-	parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
+	//parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
 	parameters['es']['fields'] = '';
 	
 	// save modal popup
 	$("#adv-search-btn").on('click', function(e){
-		//e.preventDefault();
 		modalPopUp('#input');
-	});
-	
+	});	
 	$("#simple-search-btn").on('click', function(e){
-		//e.preventDefault();
 		modalPopUp('#searchbox');
 	});
-
-	// save the results display
-	$('#filename').keyup(function () {
-		$('#display').empty();
-		$('#display').append(`<p style="text-align:left;">` + $(this).val() + '.csv' 
-							+ `<br>` + $(this).val() + '.json' + `</p>` );
+	$("#searchbox").on('keypress', function(e){
+		if ( (e.keyCode == 13 || e.keycode == 10 )&& !$("#simple-search-btn").attr('disabled')){
+			e.preventDefault();
+			modalPopUp('#searchbox');
+		}
 	});
 	
+	// save modal click
+	$("#saveButton").on('click',function(e){
+		saveModalClick()
+	});
+	$("#filename").on('keypress',function(e){
+		if (e.keyCode === 13 || e.keycode == 10){
+			e.preventDefault(); 
+			saveModalClick()
+		}else{
+			$('#display').empty();
+			$('#display').append(`<p style="text-align:left;">` + $(this).val() + '.csv' 
+							+ `<br>` + $(this).val() + '.json' + `</p>` );
+		}
+	});
+
+	// modal overlay
+	$(document).on({
+		'show.bs.modal': function () {
+			var zIndex = 1040 + (10 * $('.modal:visible').length);
+			$(this).css('z-index', zIndex);
+			setTimeout(function() {
+				$('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+			}, 0);
+		},
+		'hidden.bs.modal': function() {
+			if ($('.modal:visible').length > 0) {
+				// restore the modal-open class to the body element, so that scrolling works
+				// properly after de-stacking a modal.
+				setTimeout(function() {
+					$(document.body).addClass('modal-open');
+				}, 0);
+			}
+		}
+	}, '.modal');
+		
 	// customize dropdown
 	$('#dropdownButton').on('click',function(event){
-		console.log($("#searchbox").val())
 		if ($("#searchbox").val() !== '' && $("#searchbox").val() !== undefined ){
 			$(this).parent().toggleClass('open');
 			if ($(this).parent().attr('class') === 'dropdown dropdown-lg open'){
@@ -62,7 +92,9 @@ function init(){
 				$("#simple-search-btn").prop('disabled',false);
 			}
 		}else{
-			alert("Please type in search keyword in the form of English words/number/or any combination of them! Length shouldn't exceed 72 characters!");
+			$("#modal-message").append(`<h4>filename illegal!<br> Legal Filename should only include <i>Alphabet, Number,
+										Underscore</i> and/or <i>Dash</i>. <b>Example: mySearch-cwang138</b></h4>`);
+			$("#alert").modal('show');
 			$("#searchbox").focus();
 		}
 	});
@@ -329,7 +361,7 @@ function init(){
 	// perPage
 	$("#perPage").change(function(){
 		parameters['es']['perPage:'] = 1000;
-		parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
+		//parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
 		Query =updateString(queryTerm,parameters);
 		//console.log(Query);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
@@ -380,7 +412,7 @@ function init(){
 	/*----------------------------------------------------- twitter user-------------------------------------------------------*/
 	$("#twtUser-count").change(function(){
 		parameters['twtUser']['count:'] = 20;
-		parameters['twtUser']['pageNum:'] = parseInt($("#twtUser-count").val())/20;
+		//parameters['twtUser']['pageNum:'] = parseInt($("#twtUser-count").val())/20;
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
@@ -461,4 +493,32 @@ function updateString(queryTerm,parameters){
 	}
 	
 	return query;
+}
+
+
+/* save file modal */
+function modalPopUp(searchID){
+	if ( formValid(searchID)){
+		$("#save").modal('show');
+	}	
+	
+	//pass the searchID to somewhere
+	$("#saveButton").attr('name',searchID);
+}
+
+/* save file modal click events */
+function saveModalClick(){
+	var searchID = $("#saveButton").attr('name');
+	
+	if (searchID === '#searchbox'){
+		if (saveValid('#filename')){ 
+			submitSearchbox(`#searchbox`,`#filename`);					
+		}
+					
+	}
+	else if (searchID === '#input'){
+		if (saveValid('#filename')){
+			submitQuery(`#input`,`#filename`);
+		}
+	}
 }

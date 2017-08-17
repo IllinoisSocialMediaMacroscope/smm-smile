@@ -1,0 +1,20 @@
+// client side warning
+div(id="alert" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				h2(class="modal-title" id="modal-title") Illegal!
+			
+			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-left:20px;")
+				div(id="modal-message")
+				
+			div(class="modal-footer")
+				button(class="btn btn-default",onclick=`clearModalMessage("#alert","#modal-message")`) Close
+
+script.
+	// close this modal and clear the message part
+	function clearModalMessage(modalID,modalMessageID){
+		
+		$(modalMessageID).empty();
+		$(modalID).modal('hide');
+	}
