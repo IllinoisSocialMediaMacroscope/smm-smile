@@ -16,6 +16,7 @@ router.post('/NLP/preprocess',function(req,res,next){
 	
 	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select'){
 		var options = {
+			pythonPath:process.env.PYTHONPATH,
 			args:['--format',req.body.option, '--content',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+  req.body.filename, '--column', req.body.selectFileColumn,
 			'--process',req.body.model, '--tagger',req.body.tagger, '--source','twitter']
 		};
@@ -30,6 +31,7 @@ router.post('/NLP/preprocess',function(req,res,next){
 		
 	}else if (req.body.option === 'URL'){ 
 		var options = {
+			pythonPath:process.env.PYTHONPATH,
 			args:['--format',req.body.option, '--content',req.body.input, '--process',req.body.model, '--tagger',req.body.tagger]
 		};	
 	}

@@ -19,6 +19,7 @@ router.post('/networkx',function(req,res,next){
 	
 		
 	var options = {
+		pythonPath:process.env.PYTHONPATH,
 		args:[	'--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, 
 				'--layout',req.body.layout, 
 				'--relationships',req.body.relationships, 

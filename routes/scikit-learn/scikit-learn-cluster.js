@@ -16,6 +16,7 @@ router.post('/sklearn/cluster',function(req,res,next){
 	//console.log(req.body);
 	
 	var options = {
+		pythonPath:process.env.PYTHONPATH,
 		args:['--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, '--estimator',req.body.model,'--n_clusters',req.body.n_clusters,'--fields']
 	}; 
 		 
