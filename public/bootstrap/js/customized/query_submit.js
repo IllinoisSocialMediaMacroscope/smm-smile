@@ -42,6 +42,8 @@ function submitQuery(textareaID,filenameID){
 					
 					$(".loading").hide();
 			}else if ('URL' in data){
+				// hide the header and insert preview in twitter style in the body
+				
 				$("#modal-download").empty();
 				$("#modal-download").append(`<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
 									<input type="hidden" value=`+data.URL[0]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
@@ -264,7 +266,15 @@ function submitSearchbox(searchboxID, filenameID){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 					$(".loading").hide();
-			}else if ('URL' in data){
+			}else{
+				// hide the saving modal
+				$("#save").modal('hide');
+				$(".loading").hide();
+				
+				// hide the header and insert preview in twitter style in the body
+				$("#header").hide();
+				
+				// append modal-download in the background								
 				$("#modal-download").empty();
 				$("#modal-download").append(`<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
 									<input type="hidden" value=`+data.URL[0]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
@@ -272,9 +282,24 @@ function submitSearchbox(searchboxID, filenameID){
 									<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
 									<input type="hidden" value=`+data.URL[1]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
 									+data.fname[1]+`</button></form></ul>`);
-				$("#success").modal('show');
-				$("#save").modal('hide');
-				$(".loading").hide();
+				
+				// construct previews
+				$.each(data.rendering, function(i,val){
+					$("#preview-search").append(`<div class="tweet-container">
+													<div class="control-label col-md-2 col-md-2 col-xs-12">
+														<img src="` + val._source.user.profile_image_url + `" class="user-img"/>
+													</div>
+													<div class="control-label col-md-10 col-md-10 col-xs-12">
+														<p style="display:inline;font-size:15px;"><b>` + val._source.user.name + `‏</b></p> 
+														<p style="display:inline;color:green;"><i>&nbsp;&bull;@`+ val._source.user.screen_name + `</i></p>
+														<p style="display:inline;color:grey;">&nbsp;&bull;`+val._source.created_at+`</p>
+														<p>`+ val._source.text + `<a href="` + val._source.urls + `">`+ val._source.urls + `</a></p>
+													</div>
+												</div>`);
+				});
+				
+				$("#preview-search").show();
+					
 			}
 		},
 		error: function(jqXHR, exception){

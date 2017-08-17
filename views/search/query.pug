@@ -64,7 +64,7 @@ html
 		
 		div(class="searchPage",id="searchPage")
 			<!-- logo -->
-			div(class="row" id="header")
+			div(class="row" id="header",style="display:none;")
 				img(src="../bootstrap/img/logo/queryPage-logo.png",width="800px",style="display:block;margin:auto auto;")
 			
 			<!-- search --->
@@ -79,7 +79,13 @@ html
 								
 					include searchbox.pug
 						
-								
+			<!-- rendering -->
+			div(id="preview-search", style="width:950px;margin:auto auto; padding:25px 0; background-color:#e1e5ea;border-radius:4px;display:none;")
+				div(style="margin-left:25px;margin-bottom:10px;")
+					button(class="btn btn-primary", id="export", onclick="") Export
+				div(style="margin-left:30px;margin-bottom:10px;")
+					p preview
+					
 			<!-- prose -->
 			div(class="row")
 				div(class="prose")
@@ -106,7 +112,7 @@ html
 							span(class="glyphicon glyphicon-floppy-save" style="font-size:20px;margin-left:5px") 
 							| Save the result 
 					
-					div(class="modal-body" style="text-align:center;vertical-align:middle;")
+					div(class="modal-body" style="text-align:center;vertical-aligcd :middle;")
 						form(class="form-horizontal")
 							div(class="form-group")
 								label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Filename

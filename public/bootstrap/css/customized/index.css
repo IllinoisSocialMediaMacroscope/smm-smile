@@ -27,8 +27,8 @@
   margin-right: 10px;
 }
 a:link,
-a:visited,
 a:hover,
+a:visited,
 a:active{
 	text-decoration:none;
 }
@@ -111,6 +111,10 @@ body {
 }
 .button:hover{
 	background-color:white;
+}
+.button:visited,
+.button:active{
+	text-decoration:none;
 }
 
 .prose-button{

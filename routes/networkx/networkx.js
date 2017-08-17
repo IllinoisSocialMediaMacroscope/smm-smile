@@ -48,10 +48,12 @@ router.post('/networkx',function(req,res,next){
 			res.send({ERROR:err});	
 		}
 		else{
-		
-			var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r
 			
-			
+			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
+				var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r
+			}else{
+				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
+			}
 			res.send({
 				title:'Network Analysis', 
 				img:[{name:'Network Visualization',content:div_data}],

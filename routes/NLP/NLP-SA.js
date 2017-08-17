@@ -47,11 +47,27 @@ router.post('/NLP/sentiment',function(req,res,next){
 			//res.send({ERROR:err});
 		}
 		else{
-		
-			var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r 
-			var preview_string = fs.readFileSync(sentiment.slice(0,-1), "utf8"); 
+			
+			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
+				var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r
+			}else{
+				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
+			}
+			
+			if (sentiment.slice(-1) === '\r' || sentiment.slice(-1) === '\n' || sentiment.slice(-1) === '\t' || sentiment.slice(-1) === '\0' || sentiment.slice(-1) === ' '){
+				var preview_string = fs.readFileSync(sentiment.slice(0,-1), "utf8"); 
+			}else{
+				var preview_string = fs.readFileSync(sentiment, "utf8");
+			}
+			
 			var preview_arr = CSV.parse(preview_string);
-			var compound = JSON.parse(fs.readFileSync(doc_sentiment.slice(0,-1)))['compound'];
+			
+			if (doc_sentiment.slice(-1) === '\r' || doc_sentiment.slice(-1) === '\n' || doc_sentiment.slice(-1) === '\t' || doc_sentiment.slice(-1) === '\0' || doc_sentiment.slice(-1) === ' '){
+				var compound = JSON.parse(fs.readFileSync(doc_sentiment.slice(0,-1)))['compound']; 
+			}else{
+				var compound = JSON.parse(fs.readFileSync(doc_sentiment))['compound'];
+			}
+			
 			
 			res.send({
 						title:'Sentiment Analysis',

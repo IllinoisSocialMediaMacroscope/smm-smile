@@ -4,8 +4,12 @@ body {
     background-color: #eae8e8;
 	
 }
-#header{
+.searchPage{
+	display:block;
 	margin-top:100px;
+}
+
+#header{
 	animation: fade 1s ease-in-out both;
 }
 #tabs{
@@ -68,7 +72,7 @@ body {
 	padding: 15px 0px;
 }
 #adv-search {
-	width: 550px;
+	width: 575px;
 	margin: 0 auto;
 	display:inline-flex;
 }
@@ -283,9 +287,7 @@ nav-tabs li a:hover{
 .documentation{
 	display:none;
 }
-.searchPage{
-	display:block;
-}
+
 .documentation.expand{
 	display:inline-block;
 	width:30%;
@@ -421,3 +423,18 @@ nav-tabs li a:hover{
     margin-left: 15px;
 }*/
 
+/* preview tweet */
+.tweet-container{
+	width:900px; 
+	overflow:auto; 
+	margin:5px auto;
+	background-color:#f5f5f5;
+	color:black;
+	padding:10px 10px;
+	border-radius:4px;
+}
+
+.user-img{
+	float:right;
+	border-radius:100px;
+}

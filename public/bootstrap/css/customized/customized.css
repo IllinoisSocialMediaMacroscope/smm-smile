@@ -172,13 +172,18 @@ a.anchor{
     visibility: hidden;
 }
 
-.btn-success:hover,
+/*.btn-success:hover,
 .btn-success:focus,
 .btn-success:active,
 .btn-success {
     color: #fff;
     background-color: #a94442;
     border-color: #f2dede;
+}*/
+.btn:hover,
+.btn:active{
+	color:black;
+	background-color:#eae8e8;
 }
 
 .preview-input {

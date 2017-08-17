@@ -25,6 +25,13 @@
 	padding:6px 20px;
 }
 
+#topbar-home:hover,
+#topbar-history:hover,
+#topbar-query:hover{
+	color:black;
+	background-color:#eae8e8;
+}
+
 #sitemap-input{
 	border-radius:30px;
 }

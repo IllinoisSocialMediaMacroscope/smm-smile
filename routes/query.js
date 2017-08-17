@@ -159,6 +159,8 @@ function saveFile(responseObj,params,pages,prefix, filename,keys){
 				}
 		});	
 		
+		var rendering = responseObj[keys[0]][keys[1]][keys[2]];
+		
 	}
 	else{
 		var processed = '';
@@ -170,7 +172,8 @@ function saveFile(responseObj,params,pages,prefix, filename,keys){
 	
 	return {
 				fname:[raw,processed],
-				URL: [directory + raw, directory + processed]
+				URL: [directory + raw, directory + processed],
+				rendering:rendering.slice(0,100)
 	};
 }
 					
