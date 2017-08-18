@@ -319,7 +319,7 @@ function renderPreview(data,prefix){
 	// construct previews
 	$("#grid").empty();
 	$("#grid").append(`<div style="align-item:left;margin-top:100px;">
-									<button class="btn btn-default" id="togglePreview" onclick="togglepreview();"><span id="togggleIcon" class="glyphicon glyphicon-minus"></span>Hide Preview</button>
+									<button class="btn btn-default" id="togglePreview" onclick="togglepreview();"><span id="togggleIcon" class="glyphicon glyphicon-minus"></span>Preview</button>
 									<button class="btn btn-primary" id="export" onclick="showSuccess();"><span class="glyphicon glyphicon-export"></span>Export</button>
 									
 								</div>

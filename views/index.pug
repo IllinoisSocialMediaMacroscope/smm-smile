@@ -23,23 +23,11 @@ html
 		include components/sitemap.pug					
 								
 		div(class="headers")
-			h1(class="caption") Social Media Analytics Research Toolset
-			section(class="intro")
-				div(class="header-component")
-					img(src="../bootstrap/img/logo/search-logo.png",width="150px")
-				div(class="header-component")
-					h4(class="header") Search data from social media platforms
-				div(class="header-component")
-					img(src="../bootstrap/img/logo/transform-logo.png",width="150px")
-				div(class="header-component")
-					h4(class="header") Aggregate raw results and transform to tabular format
-				div(class="header-component")
-					img(src="../bootstrap/img/logo/analytics-logo.png",width="150px")
-				div(class="header-component")
-					h4(class="header") Analyze and visualize
+			img(id="index-banner", src="../bootstrap/img/logo/index-banner.png",width="100%")
 			div(class="button-unit")
 				a(class="button" href="/query") Get Started
 				a(class="button" href="/history") Past Results
+	
 		each page,i in pages
 			if i%2 === 0
 				div(class="even")
