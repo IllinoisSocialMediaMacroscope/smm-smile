@@ -66,11 +66,7 @@ function init(){
 		}
 	});
 	
-	// export button click revoke download modal
-	$("#export").on('click',function(e){
-		$("#success").modal('show');
-	});
-
+	
 	// modal overlay
 	$(document).on({
 		'show.bs.modal': function () {

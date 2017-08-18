@@ -41,19 +41,8 @@ function submitQuery(textareaID,filenameID){
 					$("#warning").modal('show');
 					
 					$(".loading").hide();
-			}else if ('URL' in data){
-				// hide the header and insert preview in twitter style in the body
-				
-				$("#modal-download").empty();
-				$("#modal-download").append(`<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
-									<input type="hidden" value=`+data.URL[0]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
-									+data.fname[0]+`</button></form></ul>
-									<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
-									<input type="hidden" value=`+data.URL[1]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
-									+data.fname[1]+`</button></form></ul>`);
-				$("#success").modal('show');
-				$("#save").modal('hide');
-				$(".loading").hide();
+			}else{
+				renderPreview(data, prefix);
 			}
 		},
 		error: function(jqXHR, exception){
@@ -266,40 +255,8 @@ function submitSearchbox(searchboxID, filenameID){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 					$(".loading").hide();
-			}else{
-				// hide the saving modal
-				$("#save").modal('hide');
-				$(".loading").hide();
-				
-				// hide the header and insert preview in twitter style in the body
-				$("#header").hide();
-				
-				// append modal-download in the background								
-				$("#modal-download").empty();
-				$("#modal-download").append(`<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
-									<input type="hidden" value=`+data.URL[0]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
-									+data.fname[0]+`</button></form></ul>
-									<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
-									<input type="hidden" value=`+data.URL[1]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
-									+data.fname[1]+`</button></form></ul>`);
-				
-				// construct previews
-				$.each(data.rendering, function(i,val){
-					$("#preview-search").append(`<div class="tweet-container">
-													<div class="control-label col-md-2 col-md-2 col-xs-12">
-														<img src="` + val._source.user.profile_image_url + `" class="user-img"/>
-													</div>
-													<div class="control-label col-md-10 col-md-10 col-xs-12">
-														<p style="display:inline;font-size:15px;"><b>` + val._source.user.name + `‏</b></p> 
-														<p style="display:inline;color:green;"><i>&nbsp;&bull;@`+ val._source.user.screen_name + `</i></p>
-														<p style="display:inline;color:grey;">&nbsp;&bull;`+val._source.created_at+`</p>
-														<p>`+ val._source.text + `<a href="` + val._source.urls + `">`+ val._source.urls + `</a></p>
-													</div>
-												</div>`);
-				});
-				
-				$("#preview-search").show();
-					
+			}else{				
+				renderPreview(data,prefix);					
 			}
 		},
 		error: function(jqXHR, exception){
@@ -328,6 +285,99 @@ function submitSearchbox(searchboxID, filenameID){
 }
 
 	
+// export button click revoke download modal
+function showSuccess(){
+	$("#success").modal('show');
+}
 
+function renderPreview(data,prefix){
+	
+	// hide the saving modal
+	$("#save").modal('hide');
+	$(".loading").hide();
+	
+	// append modal-download in the background								
+	$("#modal-download").empty();
+	$("#modal-download").append(`<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
+						<input type="hidden" value=`+data.URL[0]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
+						+data.fname[0]+`</button></form></ul>
+						<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
+						<input type="hidden" value=`+data.URL[1]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
+						+data.fname[1]+`</button></form></ul>`);
+	$("#success").modal('show');
+	
+	// construct previews
+	$("#grid").empty();
+	$("#grid").append(`<div style="align-item:left;margin-top:100px;">
+											<button class="btn btn-primary" id="export" onclick="showSuccess();">Export</button>
+								</div>
+								<div id="grid"></div>`)
+	if (prefix === 'twitter-Stream'){
+		$.each(data.rendering, function(i,val){
+			
+			var img_url =  val._source.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
+			var user_name =  val._source.user.name || 'Not Provided';
+			var screen_name = val._source.user.screen_name || 'NotProvided';
+			var created_at =  val._source.created_at || 'Not Provided';
+			var url = val._source.urls || 'Not Provided';
+			
+			$("#grid").append(`<div class="grid-element">
+									<img src="` + img_url + `" class="user-img"/>
+									<div style="margin-top:10px;">
+										<p style="display:inline;font-size:15px;"><b>` + user_name + `‏</b></p> 
+										<p style="display:inline;color:green;"><i>&nbsp;&bull;@`+ screen_name + `</i></p>
+										<p style="display:inline;color:grey;">&nbsp;&bull;`+ created_at +`</p>
+									</div>
+									<p style="margin-top:10px;">`+ val._source.text + `<br><a href="` + url + `">`+ url + `</a></p>
+							</div>`);
+		});
+	}else if (prefix === 'twitter-Tweet'){
+		$.each(data.rendering, function(i,val){
+			
+			if (val.user === undefined){
+				var img_url = 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
+				var user_name = 'Not Provided';
+				var screen_name = 'NotProvided';
+			}else{
+				var img_url = val.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
+				var user_name = val.user.name || 'Not Provided';
+				var screen_name =  val.user.screen_name || 'NotProvided';
+			}
+			var created_at = val.created_at || 'Not Provided' ;
+			var url = val.urls || 'Not Provided';
+			
+			$("#grid").append(`<div class="grid-element">
+									<img src="` + img_url + `" class="user-img"/>
+									<div style="margin-top:10px;">
+										<p style="display:inline;font-size:15px;"><b>` + user_name + `‏</b></p> 
+										<p style="display:inline;color:green;"><i>&nbsp;&bull;@`+ screen_name + `</i></p>
+										<p style="display:inline;color:grey;">&nbsp;&bull;`+ created_at +`</p>
+									</div>
+									<p style="margin-top:10px;">`+ val.text + `<br><a href="` + url + `">`+ url + `</a></p>
+							</div>`);
+		});
+	}else if (prefix === 'twitter-User'){
+		$.each(data.rendering, function(i,val){
+			
+			var img_url = val.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
+			var user_name = val.name || 'Not Provided';
+			var screen_name = val.screen_name || 'NotProvided';
+			var created_at = val.author_created_at || 'Not Provided';
+			var url = val.url || 'Not Provided';
+			var description = val.description || 'Not Provided';
+			
+			$("#grid").append(`<div class="grid-element">
+									<img src="` + img_url + `" class="user-img"/>
+									<div style="margin-top:10px;">
+										<p style="display:inline;font-size:15px;"><b>` + user_name + `‏</b></p> 
+										<p style="display:inline;color:green;"><i>&nbsp;&bull;@`+ screen_name + `</i></p>
+										<p style="display:inline;color:grey;">&nbsp;&bull;`+ created_at +`</p>
+									</div>
+									<p style="margin-top:10px;">`+ description + `<br><a href="` + url + `">`+ url + `</a></p>
+							</div>`);
+		});
+	}
+	
+	$("#grid").show();
 
-
+}

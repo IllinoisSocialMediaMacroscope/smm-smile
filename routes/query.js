@@ -173,7 +173,7 @@ function saveFile(responseObj,params,pages,prefix, filename,keys){
 	return {
 				fname:[raw,processed],
 				URL: [directory + raw, directory + processed],
-				rendering:rendering.slice(0,100)
+				rendering:rendering.slice(0,99)
 	};
 }
 					

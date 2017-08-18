@@ -62,7 +62,7 @@ body {
 	height: 33px;
 }
 #dropdownButton{
-	background-color:#005fb2;
+	background-color:#73879c;
 	color:#ffffff;
 	border:none;
 }
@@ -424,17 +424,46 @@ nav-tabs li a:hover{
 }*/
 
 /* preview tweet */
-.tweet-container{
-	width:900px; 
-	overflow:auto; 
-	margin:5px auto;
-	background-color:#f5f5f5;
-	color:black;
-	padding:10px 10px;
-	border-radius:4px;
+.user-img{
+	float:middle;
+	border-radius:100px;
+	width:50px;
+	height:50px;
+	display:block;
 }
 
-.user-img{
-	float:right;
-	border-radius:100px;
+#export{
+	animation:blink-animation 1500ms infinite;
+	width:200px;
+	margin-left:8px;
+}
+
+@-webkit-keyframes blink-animation{
+  0% { background-color: #73879c; -webkit-box-shadow: 0 0 3px #428bca; }
+  50% { background-color: #5492c7; -webkit-box-shadow: 0 0 40px #5492c7; }
+  100% { background-color: #6ba1d0; -webkit-box-shadow: 0 0 3px #6ba1d0;}
+}
+
+@-moz-keyframes blink-animation{
+  0% { background-color:#73879c; -webkit-box-shadow: 0 0 3px #428bca; }
+  50% { background-color: #5492c7; -webkit-box-shadow: 0 0 40px #5492c7; }
+  100% { background-color: #6ba1d0; -webkit-box-shadow: 0 0 3px #6ba1d0;}
+}
+
+#grid{
+	margin-top:40px;
+	width: 1100px;
+	overflow:auto;
+	margin:auto auto;
+	display:none;
+}
+.grid-element{
+	width:350px;
+	height:350px;
+	float:left;
+	margin:8px 8px;
+	background-color:#f5f5f5;
+	border-radius:4px;
+	padding:30px 30px;
+	vertical-align:middle;
 }

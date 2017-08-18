@@ -64,7 +64,7 @@ html
 		
 		div(class="searchPage",id="searchPage")
 			<!-- logo -->
-			div(class="row" id="header",style="display:none;")
+			div(class="row" id="header",style="")
 				img(src="../bootstrap/img/logo/queryPage-logo.png",width="800px",style="display:block;margin:auto auto;")
 			
 			<!-- search --->
@@ -80,28 +80,8 @@ html
 					include searchbox.pug
 						
 			<!-- rendering -->
-			div(id="preview-search", style="width:950px;margin:auto auto; padding:25px 0; background-color:#e1e5ea;border-radius:4px;display:none;")
-				div(style="margin-left:25px;margin-bottom:10px;")
-					button(class="btn btn-primary", id="export", onclick="") Export
-				div(style="margin-left:30px;margin-bottom:10px;")
-					p preview
-					
-			<!-- prose -->
-			div(class="row")
-				div(class="prose")
-					h2 GraphQL search engine
-					h4 Search Against Twitter API and 
-					h4 Twitter Streaming data stored in ElasticSearch
-			
-			<!-- footer -->
-			div(class="row")
-				div(class="footer")
-					a(href="https://dev.twitter.com/rest/public/search")
-						img(src='../bootstrap/img/logo/twitter-bg-logo.png', class="footerImg")
-					a(href="https://aws.amazon.com/blogs/big-data/building-a-near-real-time-discovery-platform-with-aws/")
-						img(src='../bootstrap/img/logo/elasticsearch-bg-logo.png',class="footerImg")
-			
-		
+			div(id="grid")
+								
 		<!-- popup modal save -->
 		div(id="save" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
 			div(class="modal-dialog")

@@ -77,11 +77,22 @@ body {
 	color: #fff;
 	background-color:#5cb85c;
 }
-@keyframes blink-animation {
-  to {
-    transform: translate(0, 30px);
-  }
+#side-download-head{
+	animation:blink-animation 1500ms infinite;
 }
+
+@-webkit-keyframes blink-animation{
+  0% { background-color: #73879c; -webkit-box-shadow: 0 0 3px #428bca; }
+  50% { background-color: #5492c7; -webkit-box-shadow: 0 0 40px #5492c7; }
+  100% { background-color: #6ba1d0; -webkit-box-shadow: 0 0 3px #6ba1d0;}
+}
+
+@-moz-keyframes blink-animation{
+  0% { background-color:#73879c; -webkit-box-shadow: 0 0 3px #428bca; }
+  50% { background-color: #5492c7; -webkit-box-shadow: 0 0 40px #5492c7; }
+  100% { background-color: #6ba1d0; -webkit-box-shadow: 0 0 3px #6ba1d0;}
+}
+
 /* child */
 .nav .child_menu>li{
 	padding-left: 50px;
