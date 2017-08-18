@@ -331,7 +331,8 @@ function renderPreview(data,prefix){
 			var user_name =  val._source.user.name || 'Not Provided';
 			var screen_name = val._source.user.screen_name || 'NotProvided';
 			var created_at =  val._source.created_at || 'Not Provided';
-			var url = val._source.urls || 'Not Provided';
+			var retweet_count = val._source.retweet_count || 'Not Provided';
+			var favorite_count = val._source.favorite_count || 'Not Provided';
 			
 			$("#grid").append(`<div class="grid-element">
 									<img src="` + img_url + `" class="user-img"/>
@@ -340,7 +341,9 @@ function renderPreview(data,prefix){
 										<p style="display:inline;color:green;"><i>&nbsp;&bull;@`+ screen_name + `</i></p>
 										<p style="display:inline;color:grey;">&nbsp;&bull;`+ created_at +`</p>
 									</div>
-									<p style="margin-top:10px;">`+ val._source.text + `<br><a href="` + url + `">`+ url + `</a></p>
+									<p style="margin-top:10px;">`+ val._source.text + `</p>
+									<p style="margin-top:10px;"><span class="glyphicon glyphicon-retweet"></span>`+ retweet_count + 
+									`&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-heart"></span>` +favorite_count +`</p>
 							</div>`);
 		});
 	}else if (prefix === 'twitter-Tweet'){
@@ -356,7 +359,8 @@ function renderPreview(data,prefix){
 				var screen_name =  val.user.screen_name || 'NotProvided';
 			}
 			var created_at = val.created_at || 'Not Provided' ;
-			var url = val.urls || 'Not Provided';
+			var retweet_count = val.retweet_count || 'Not Provided';
+			var favorite_count = val.favorite_count || 'Not Provided';
 			
 			$("#grid").append(`<div class="grid-element">
 									<img src="` + img_url + `" class="user-img"/>
@@ -365,7 +369,9 @@ function renderPreview(data,prefix){
 										<p style="display:inline;color:green;"><i>&nbsp;&bull;@`+ screen_name + `</i></p>
 										<p style="display:inline;color:grey;">&nbsp;&bull;`+ created_at +`</p>
 									</div>
-									<p style="margin-top:10px;">`+ val.text + `<br><a href="` + url + `">`+ url + `</a></p>
+									<p style="margin-top:10px;">`+ val.text + `</p>
+									<p style="margin-top:10px;"><span class="glyphicon glyphicon-retweet"></span>&nbsp;`+ retweet_count + 
+									`&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-heart"></span>&nbsp;` +favorite_count +`</p>
 							</div>`);
 		});
 	}else if (prefix === 'twitter-User'){
