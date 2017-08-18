@@ -418,11 +418,6 @@ nav-tabs li a:hover{
 	background-color:#deddde;
 }
 
-/*#filename {
-	width: 400px;
-    margin-left: 15px;
-}*/
-
 /* preview tweet */
 .user-img{
 	float:middle;
@@ -432,12 +427,9 @@ nav-tabs li a:hover{
 	display:block;
 }
 
-#export{
-	animation:blink-animation 1500ms infinite;
-	width:200px;
+#togglePreview{
 	margin-left:8px;
 }
-
 @-webkit-keyframes blink-animation{
   0% { background-color: #73879c; -webkit-box-shadow: 0 0 3px #428bca; }
   50% { background-color: #5492c7; -webkit-box-shadow: 0 0 40px #5492c7; }
