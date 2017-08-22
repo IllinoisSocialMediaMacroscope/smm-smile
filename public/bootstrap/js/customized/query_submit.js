@@ -331,8 +331,18 @@ function renderPreview(data,prefix){
 			var user_name =  val._source.user.name || 'Not Provided';
 			var screen_name = val._source.user.screen_name || 'NotProvided';
 			var created_at =  val._source.created_at || 'Not Provided';
-			var retweet_count = val._source.retweet_count || 'Not Provided';
-			var favorite_count = val._source.favorite_count || 'Not Provided';
+			
+			if (val._source.retweet_count !== undefined){
+				var retweet_count = val._source.retweet_count;
+			}else{
+				var retweet_count = 'Not Provided';
+			}
+			
+			if (val._source.favorite_count !== undefined){
+				var favorite_count = val._source.favorite_count;
+			}else{
+				var favorite_count = 'Not Provided';
+			}
 			
 			$("#grid").append(`<div class="grid-element">
 									<img src="` + img_url + `" class="user-img"/>
@@ -359,8 +369,18 @@ function renderPreview(data,prefix){
 				var screen_name =  val.user.screen_name || 'NotProvided';
 			}
 			var created_at = val.created_at || 'Not Provided' ;
-			var retweet_count = val.retweet_count || 'Not Provided';
-			var favorite_count = val.favorite_count || 'Not Provided';
+			
+			if (val.retweet_count !== undefined){
+				var retweet_count = val.retweet_count;
+			}else{
+				var retweet_count = 'Not Provided';
+			}
+			
+			if (val.favorite_count !== undefined){
+				var favorite_count = val.favorite_count;
+			}else{	
+				var favorite_count = 'Not Provided';
+			}
 			
 			$("#grid").append(`<div class="grid-element">
 									<img src="` + img_url + `" class="user-img"/>
