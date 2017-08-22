@@ -26,14 +26,14 @@ router.get('/history',function(req,res,next){
 				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_CLUSTERING)
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at = fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_CLUSTERING + '/' + fileList[i]).birthtime.toString();
-					directory['ML']['clustering'][fileList[i]] = created_at.substr(0, created_at.length-33);
+					directory['ML']['clustering'][fileList[i]] = created_at;
 				}
 			}
 			if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_TRAINING)){
 				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_TRAINING);
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at = fs.lstatSync(process.env.ROOTDIR + + process.env.DOWNLOAD_ML_TRAINING + '/' + fileList[i]).birthtime.toString();
-					directory['ML']['feature'][fileList[i]] = created_at.substr(0, created_at.length-33);
+					directory['ML']['feature'][fileList[i]] = created_at;
 				}
 			}
 		}
@@ -43,21 +43,21 @@ router.get('/history',function(req,res,next){
 				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_PREPROCESSING);
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at = fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_PREPROCESSING + '/'+ fileList[i]).birthtime.toString();
-					directory['NLP']['preprocessing'][fileList[i]] = created_at.substr(0, created_at.length-33);
+					directory['NLP']['preprocessing'][fileList[i]] = created_at;
 				}
 			}
 			if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_SENTIMENT)){
 				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_SENTIMENT);
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at = fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_SENTIMENT + '/' + fileList[i]).birthtime.toString(); 
-					directory['NLP']['sentiment'][fileList[i]] = created_at.substr(0, created_at.length-33);
+					directory['NLP']['sentiment'][fileList[i]] = created_at;
 				}
 			}
 			if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC)){
 				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC);
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC + '/' + fileList[i]).birthtime.toString();
-					directory['NLP']['topic-modeling'][fileList[i]] = created_at.substr(0, created_at.length-33);
+					directory['NLP']['topic-modeling'][fileList[i]] = created_at;
 				}
 			}
 		}
@@ -66,7 +66,7 @@ router.get('/history',function(req,res,next){
 				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW_NETWORKX);
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW_NETWORKX + '/' + fileList[i]).birthtime.toString();
-					directory['NW']['networkx'][fileList[i]] = created_at.substr(0, created_at.length-33);
+					directory['NW']['networkx'][fileList[i]] = created_at;
 				}
 			}
 		}
@@ -76,21 +76,21 @@ router.get('/history',function(req,res,next){
 				var fileList = fs.readdirSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Tweet');
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/twitter-Tweet/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['twitter-Tweet'][fileList[i]] = fileList[i] + ' (' + created_at.substr(0,created_at.length-33)+ ')';
+					directory['GraphQL']['twitter-Tweet'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
 				}
 			}
 			if (fs.existsSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-User')){
 				var fileList = fs.readdirSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-User');
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/twitter-User/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['twitter-User'][fileList[i]] = fileList[i] + ' (' + created_at.substr(0,created_at.length-33) + ')';
+					directory['GraphQL']['twitter-User'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
 				}
 			}
 			if (fs.existsSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Stream')){
 				var fileList = fs.readdirSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Stream');
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/twitter-Stream/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['twitter-Stream'][fileList[i]] = fileList[i] + ' (' + created_at.substr(0,created_at.length-33)+ ')';
+					directory['GraphQL']['twitter-Stream'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
 				}
 			}
 		}

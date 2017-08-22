@@ -39,7 +39,7 @@ router.get('/',function(req,res,next){
 						(along with their associated sentiment intensity measures) which are specifically attuned to sentiment in 
 						<a href="https://en.wikipedia.org/wiki/Microblogging">microblog-like contexts</a>. It then combines these lexical features with consideration for five general rules that embody grammatical and syntactical 
 						conventions for expressing and emphasizing sentiment intensity. `},
-			{name:'Topic Modeling', url:'/NLP/topic', imgURL:'../bootstrap/img/logo/NLP/topic-model.png',
+			/*{name:'Topic Modeling', url:'/NLP/topic', imgURL:'../bootstrap/img/logo/NLP/topic-model.png',
 						wiki:'https://en.wikipedia.org/wiki/Topic_model',
 						introduction:`In <a href="https://en.wikipedia.org/wiki/Machine_learning">machine learning</a> and <a href="https://en.wikipedia.org/wiki/Natural_language_processing">natural language processing</a>, 
 						a <b>topic model</b> is a type of <a href="https://en.wikipedia.org/wiki/Statistical_model">statistical model</a> 
@@ -48,8 +48,8 @@ router.get('/',function(req,res,next){
 						one would expect particular words to appear in the document more or less frequently: "dog" and "bone" will appear more often in documents about dogs,
 						"cat" and "meow" will appear in documents about cats, and "the" and "is" will appear equally in both. A document typically concerns multiple topics 
 						in different proportions; thus, in a document that is 10% about cats and 90% about dogs, there would probably be about 9 times more dog words than cat words. 
-						The "topics" produced by topic modeling techniques are clusters of similar words.`},
-			{name: 'Clustering', url:'/sklearn/cluster', imgURL:'../bootstrap/img/logo/sklearn/clustering.png',
+						The "topics" produced by topic modeling techniques are clusters of similar words.`},*/
+			{name: 'Clustering', url:'/sklearn/cluster', imgURL:'../bootstrap/img/logo/sklearn/cluster.png',
 						wiki:'https://en.wikipedia.org/wiki/Cluster_analysis',
 						introduction:`<b>Cluster analysis</b> is the task of grouping a set of objects in such a 
 						way that objects in the same group (called a <b>cluster</b>) are more similar (in some sense or another) to each 

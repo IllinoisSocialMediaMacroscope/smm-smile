@@ -160,6 +160,13 @@ function init(){
 		$("#searchPage").toggleClass("shrink");
 		
 	});
+	
+	/* everything related to date!!!!!!!!! */
+	var current = new Date();
+	current.setDate(current.getDate()-6);
+	var until_start = current.toISOString().slice(0,10);
+	$("#until-start").val(until_start);
+			
 	/*---------------------------------------global search term---------------------------------------------------------------------------*/
 	$("#searchbox").change(function(){
 		parameters['tweet']['q:'] = $("#searchbox").val();
@@ -527,4 +534,15 @@ function saveModalClick(){
 			submitQuery(`#input`,`#filename`);
 		}
 	}
+}
+
+/* until setting */
+function setDate(){
+	var current = new Date();
+	var max = current.toISOString().slice(0,10);
+	current.setDate(current.getDate()-6);
+	var min = current.toISOString().slice(0,10);
+	
+	$("#until").attr('min', min);
+	$("#until").attr('max', max);
 }

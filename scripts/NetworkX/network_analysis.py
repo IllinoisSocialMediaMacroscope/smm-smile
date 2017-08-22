@@ -56,7 +56,7 @@ class Network:
                 self.graph = nx.DiGraph()
                 self.directed = 'directed'
                 for row in new_df.iterrows():
-                   self.graph.add_edge(row[1]['retweet_from'],row[1]['user.screen_name'],  text=row[1]['text'])
+                   self.graph.add_edge(row[1]['user.screen_name'], row[1]['retweet_from'], text=row[1]['text'])
             elif input_file.find('twitter-Stream') != -1:
                 df['retweet_from'] = df['_source.text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
                 new_df = df[['retweet_from','_source.user.screen_name','_source.text']].dropna()
@@ -116,12 +116,18 @@ class Network:
 
         # label
         # if digraph
-        if relationships == 'reply_to' or relationships == 'retweet_from':
+        if relationships == 'reply_to':
             for node in self.graph.nodes():
                 node_trace['marker']['color'].append(self.graph.in_degree()[node] + self.graph.out_degree()[node])
-                node_trace['text'].append("@" + node + ", Followers:" + str(self.graph.in_degree()[node]) + ", Following:" + str(self.graph.out_degree()[node]))
+                node_trace['text'].append("@" + node + " replies to " + str(self.graph.in_degree()[node]) + " users, and is replied by " + str(self.graph.out_degree()[node]) + " users")
+                
+        elif relationships == 'retweet_from':
+            for node in self.graph.nodes():
+                node_trace['marker']['color'].append(self.graph.in_degree()[node] + self.graph.out_degree()[node])
+                node_trace['text'].append("@" + node + " retweets from " + str(self.graph.in_degree()[node]) + " users and is retweeted from " + str(self.graph.out_degree()[node]) + " users")
+
         # if undirected
-        elif directed == 'mentions':
+        elif relationships == 'mentions':
             for node, adjacencies in zip(self.graph.nodes(),self.graph.adjacency_list()):
                 node_trace['marker']['color'].append(len(adjacencies))
                 node_trace['text'].append("@" + node + ", connections:" + str(len(adjacencies)))
@@ -131,7 +137,7 @@ class Network:
                 titlefont=dict(size=16), showlegend=False,
                 hovermode='closest', margin=dict(b=20,l=5,r=5,t=40),
                 annotations=[ dict(
-                    text="Plotly Python code: <a href='https://plot.ly/ipython-notebooks/network-graphs/'> https://plot.ly/ipython-notebooks/network-graphs/</a>",
+                    text="Export to plot.ly to view the tweets and user information!",
                     showarrow=False,
                     xref="paper", yref="paper",
                     x=0.005, y=-0.002 ) ],

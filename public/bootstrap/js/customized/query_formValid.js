@@ -79,12 +79,19 @@ function formValid(searchID){
 			}
 		}
 		else if ($("#social-media option:selected").val() === 'streamTweet'){
-			if ($("#es-dateRange").is(':checked') && ($("#start").val() === '' || $("#end").val() === '')){
-				$("#modal-message").append(`<h4>Please select start time and end time!</h4>`);
-				$("#alert").modal('show');
-				$("#start").focus();
-				return false
-			} 
+			if ($("#es-dateRange").is(':checked')){
+				if ($("#start").val() === '' || $("#end").val() === ''){
+					$("#modal-message").append(`<h4>Please select start time and end time!</h4>`);
+					$("#alert").modal('show');
+					$("#start").focus();
+					return false
+				}else if($("#start").val() > $("#end").val()){
+					$("#modal-message").append(`<h4>Start time cannot be later than end time!</h4>`);
+					$("#alert").modal('show');
+					$("#start").focus();
+					return false
+				}
+			}
 			if ($("#es-geocode").is(':checked') && ($("#es-lat").val() === '' || $("#es-lat").val() === '' || $("#es-radius").val() === '')){
 				$("#modal-message").append(`<h4>Please fill in the geolocation information!</h4>`);
 				$("#alert").modal('show');

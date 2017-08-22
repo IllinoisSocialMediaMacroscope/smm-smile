@@ -31,17 +31,6 @@ html
 		script(src="../bootstrap/js/customized/query_formValid.js")
 		script(src="../bootstrap/js/customized/query_submit.js")
 		
-		script.			
-			function setDate(){
-				var current = new Date();
-				var max = current.toISOString().slice(0,10);
-				current.setDate(current.getDate()-7);
-				var min = current.toISOString().slice(0,10);
-				
-				$("#until").attr('min', min);
-				$("#until").attr('max', max);
-			}
-			
 	body(onload="init()")
 		<!-- top bar -->
 		include ../components/topbar.pug

@@ -29,7 +29,7 @@ app.use('/',require('./routes/networkx/networkx'));
 app.use('/',require('./routes/scikit-learn/scikit-learn-cluster'));
 app.use('/',require('./routes/NLP/NLP-preprocess')); 
 app.use('/',require('./routes/NLP/NLP-SA'));
-app.use('/',require('./routes/NLP/NLP-topic'));
+//app.use('/',require('./routes/NLP/NLP-topic'));
 app.use('/',require('./routes/query'));
 app.use('/',require('./routes/download'));
 app.use('/',require('./routes/render'));

@@ -28,8 +28,12 @@ div(class="input-group-addon")
 								<input type="checkbox" id="dateRange" value="dateRange">
 							</label>
 						div(class="form-group dateRange")
-							<label class="control-label col-sm-1"> until </label>
-							<div class="col-sm-11">
+							<label class="control-label col-sm-2">start date</label>
+							<div class="col-sm-10">
+								input(class="form-control",type="date",id="until-start", disabled)
+							</div>
+							<label class="control-label col-sm-2">end date </label>
+							<div class="col-sm-10">
 								input(class="form-control",type="date",id="until",onclick="setDate();")
 							</div>
 						
