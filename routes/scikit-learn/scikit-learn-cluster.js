@@ -9,7 +9,7 @@ var readDIR = require(process.env.ROOTDIR + '/scripts/helper.js').readDIR;
 router.get('/sklearn/cluster',function(req,res,next){
 	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
 	var formParam = require('./cluster.json');
-	res.render('formTemplate',{parent:'/#Clustering', title:'Unsupervised Learning', directory:files, param:formParam}); 
+	res.render('analytics/formTemplate',{parent:'/#Clustering', title:'Unsupervised Learning', directory:files, param:formParam}); 
 });
  
 router.post('/sklearn/cluster',function(req,res,next){
@@ -17,6 +17,7 @@ router.post('/sklearn/cluster',function(req,res,next){
 	
 	var options = {
 		pythonPath:process.env.PYTHONPATH,
+		scriptPath:process.env.ROOTDIR + '/scripts/ML/',
 		args:['--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, '--estimator',req.body.model,'--n_clusters',req.body.n_clusters,'--fields']
 	}; 
 		 
@@ -29,22 +30,16 @@ router.post('/sklearn/cluster',function(req,res,next){
 			if (req.body.fields[i] !== ''){options.args.push(req.body.fields[i])}
 		}
 	} 
-		
-	var pyshell = new pythonShell(process.env.ROOTDIR +'/scripts/ML/clustering.py',options);
 	
-	var count = 0;
-	pyshell.on('message',function(message){
-		if (count === 1){	cluster = message;	}
-		if (count === 2){ 	div = message; } 
-		count += 1;
-	});
-		
-	pyshell.end(function(err){
+	pythonShell.run('clustering.py',options,function(err,results){	
 		if(err){ 
 			//throw err;
 			res.send({ERROR:err});	
-		}
-		else{
+		}else{
+			
+			var cluster = results[1];
+			var div = results[2];
+			
 			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
 				var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r
 			}else{
@@ -67,7 +62,7 @@ router.post('/sklearn/cluster',function(req,res,next){
 				});
 		}
 		
-		});
+	});
 	
 });
 

@@ -40,6 +40,11 @@
                 Boolean
             </a>
         </li>
+        <li  title="Float">
+            <a href="float.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                Float
+            </a>
+        </li>
         <li  title="Int">
             <a href="int.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 Int
@@ -68,18 +73,18 @@
     </ul>
 </div>
 <div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
-    <h4 class="slds-text-title--caps slds-p-around--medium">Unions</h4>
-    <ul>
-        <li  title="redditOverview">
-            <a href="redditoverview.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
-                redditOverview
-            </a>
-        </li>
-    </ul>
-</div>
-<div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
     <h4 class="slds-text-title--caps slds-p-around--medium">Objects</h4>
     <ul>
+        <li  title="elasticSearch">
+            <a href="elasticsearch.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                elasticSearch
+            </a>
+        </li>
+        <li  title="esMeta">
+            <a href="esmeta.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                esMeta
+            </a>
+        </li>
         <li  title="redditComment">
             <a href="redditcomment.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 redditComment
@@ -93,11 +98,6 @@
         <li  title="redditQuery">
             <a href="redditquery.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 redditQuery
-            </a>
-        </li>
-        <li  title="redditTrophy">
-            <a href="reddittrophy.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
-                redditTrophy
             </a>
         </li>
         <li  title="retweet">
@@ -120,6 +120,11 @@
                 twitterQuery
             </a>
         </li>
+        <li  title="twtCoordinateType">
+            <a href="twtcoordinatetype.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                twtCoordinateType
+            </a>
+        </li>
         <li  title="twtEntity">
             <a href="twtentity.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 twtEntity
@@ -130,9 +135,19 @@
                 twtGeo
             </a>
         </li>
+        <li  title="twtPlace">
+            <a href="twtplace.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                twtPlace
+            </a>
+        </li>
         <li  title="twtUser">
             <a href="twtuser.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 twtUser
+            </a>
+        </li>
+        <li  title="twtUserMention">
+            <a href="twtusermention.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                twtUserMention
             </a>
         </li>
         <li  title="__Directive">
@@ -214,7 +229,7 @@
             </a>
             GraphQL Schema definition
         </h2>
-        <code class="highlight"><ul class="code" style="padding-left:42px"><li><span class="keyword operator ts">type</span> <span class="identifier">tweet</span> {</li><li></li><li><span class="tab"><span class="meta">id</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">id_str</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">created_at</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">text</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">retweet_count</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">in_reply_to_user_id_str</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">in_reply_to_status_id_str</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">in_reply_to_screen_name</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">user</span>: <a class="support type" href="twtuser.doc.html">twtUser</a> </span></li><li></li><li><span class="tab"><span class="meta">entities</span>: <a class="support type" href="twtentity.doc.html">twtEntity</a> </span></li><li></li><li><span class="tab"><span class="comment line">#   Get a list of retweets</span></span></li><li><span class="tab"><span class="comment line"># </span></span></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>count</strong>: [<strong>Not documented</strong>]</span></span></li><li><span class="tab"><span class="meta">retweet</span>(<span class="meta">count</span>: <a class="support type" href="int.doc.html">Int</a>): [<a class="support type" href="retweet.doc.html">retweet</a>] </span></li><li>}</li></ul></code>
+        <code class="highlight"><ul class="code" style="padding-left:42px"><li><span class="keyword operator ts">type</span> <span class="identifier">tweet</span> {</li><li></li><li><span class="tab"><span class="meta">id</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">id_str</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">created_at</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">text</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">retweet_count</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">favorite_count</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">retweeted</span>: <a class="support type" href="boolean.doc.html">Boolean</a> </span></li><li></li><li><span class="tab"><span class="meta">favorited</span>: <a class="support type" href="boolean.doc.html">Boolean</a> </span></li><li></li><li><span class="tab"><span class="meta">possibly_sensitive</span>: <a class="support type" href="boolean.doc.html">Boolean</a> </span></li><li></li><li><span class="tab"><span class="meta">truncated</span>: <a class="support type" href="boolean.doc.html">Boolean</a> </span></li><li></li><li><span class="tab"><span class="meta">lang</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">in_reply_to_user_id_str</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">in_reply_to_status_id_str</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">in_reply_to_screen_name</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">timestamp_ms</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">mentions</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">hashtags</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">urls</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">is_quote_status</span>: <a class="support type" href="boolean.doc.html">Boolean</a> </span></li><li></li><li><span class="tab"><span class="meta">emoticons</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">source</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">sentiments</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">filter_level</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">place</span>: <a class="support type" href="twtplace.doc.html">twtPlace</a> </span></li><li></li><li><span class="tab"><span class="meta">coordinates</span>: <a class="support type" href="twtcoordinatetype.doc.html">twtCoordinateType</a> </span></li><li></li><li><span class="tab"><span class="meta">user_mentions</span>: <a class="support type" href="twtusermention.doc.html">twtUserMention</a> </span></li><li></li><li><span class="tab"><span class="meta">user</span>: <a class="support type" href="twtuser.doc.html">twtUser</a> </span></li><li></li><li><span class="tab"><span class="meta">entities</span>: <a class="support type" href="twtentity.doc.html">twtEntity</a> </span></li><li></li><li><span class="tab"><span class="comment line">#   Get a list of retweets</span></span></li><li><span class="tab"><span class="comment line"># </span></span></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>count</strong>: [<strong>Not documented</strong>]</span></span></li><li><span class="tab"><span class="meta">retweet</span>(<span class="meta">count</span>: <a class="support type" href="int.doc.html">Int</a>): [<a class="support type" href="retweet.doc.html">retweet</a>] </span></li><li>}</li></ul></code>
     </div>
 </section>
 <section>
@@ -225,13 +240,13 @@
             </a>
             Require by
         </h2>
-        <ul class="require-by"><li><a href="retweet.doc.html" title="retweet - Retweet of a tweet">retweet<em>Retweet of a tweet</em></a><li><li><a href="twitterquery.doc.html" title="twitterQuery - Query user, tweet, geolocation by keywords.">twitterQuery<em>Query user, tweet, geolocation by keywords.</em></a><li><li><a href="twtuser.doc.html" title="twtUser - Return a twitter user.">twtUser<em>Return a twitter user.</em></a><li></ul>
+        <ul class="require-by"><li><a href="esmeta.doc.html" title="esMeta - Return a elastic meta data">esMeta<em>Return a elastic meta data</em></a><li><li><a href="retweet.doc.html" title="retweet - Retweet of a tweet">retweet<em>Retweet of a tweet</em></a><li><li><a href="twitterquery.doc.html" title="twitterQuery - Query user, tweet, geolocation by keywords.">twitterQuery<em>Query user, tweet, geolocation by keywords.</em></a><li><li><a href="twtuser.doc.html" title="twtUser - Return a twitter user.">twtUser<em>Return a twitter user.</em></a><li></ul>
     </div>
 </section>
 <footer>
 <div class="container slds-p-around--large">
     <p class="slds-text-align--right slds-text-title--caps">
-        Generated with <a href="https://github.com/2fd/graphdoc#readme" target="_blank">graphdoc 2.3.0</a>
+        Generated with <a href="https://github.com/2fd/graphdoc#readme" target="_blank">graphdoc 2.4.0</a>
     </p>
 </div>
 </footer>

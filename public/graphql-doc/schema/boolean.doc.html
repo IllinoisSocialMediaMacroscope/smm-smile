@@ -40,6 +40,11 @@
                 Boolean
             </a>
         </li>
+        <li  title="Float">
+            <a href="float.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                Float
+            </a>
+        </li>
         <li  title="Int">
             <a href="int.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 Int
@@ -68,18 +73,18 @@
     </ul>
 </div>
 <div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
-    <h4 class="slds-text-title--caps slds-p-around--medium">Unions</h4>
-    <ul>
-        <li  title="redditOverview">
-            <a href="redditoverview.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
-                redditOverview
-            </a>
-        </li>
-    </ul>
-</div>
-<div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
     <h4 class="slds-text-title--caps slds-p-around--medium">Objects</h4>
     <ul>
+        <li  title="elasticSearch">
+            <a href="elasticsearch.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                elasticSearch
+            </a>
+        </li>
+        <li  title="esMeta">
+            <a href="esmeta.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                esMeta
+            </a>
+        </li>
         <li  title="redditComment">
             <a href="redditcomment.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 redditComment
@@ -93,11 +98,6 @@
         <li  title="redditQuery">
             <a href="redditquery.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 redditQuery
-            </a>
-        </li>
-        <li  title="redditTrophy">
-            <a href="reddittrophy.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
-                redditTrophy
             </a>
         </li>
         <li  title="retweet">
@@ -120,6 +120,11 @@
                 twitterQuery
             </a>
         </li>
+        <li  title="twtCoordinateType">
+            <a href="twtcoordinatetype.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                twtCoordinateType
+            </a>
+        </li>
         <li  title="twtEntity">
             <a href="twtentity.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 twtEntity
@@ -130,9 +135,19 @@
                 twtGeo
             </a>
         </li>
+        <li  title="twtPlace">
+            <a href="twtplace.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                twtPlace
+            </a>
+        </li>
         <li  title="twtUser">
             <a href="twtuser.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 twtUser
+            </a>
+        </li>
+        <li  title="twtUserMention">
+            <a href="twtusermention.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                twtUserMention
             </a>
         </li>
         <li  title="__Directive">
@@ -225,7 +240,7 @@
             </a>
             Require by
         </h2>
-        <ul class="require-by"><li><a href="redditcomment.doc.html" title="redditComment - ">redditComment<em></em></a><li><li><a href="redditlink.doc.html" title="redditLink - ">redditLink<em></em></a><li><li><a href="redditquery.doc.html" title="redditQuery - ">redditQuery<em></em></a><li><li><a href="subreddit.doc.html" title="subreddit - ">subreddit<em></em></a><li><li><a href="directive.spec.html" title="__Directive - A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.
+        <ul class="require-by"><li><a href="redditcomment.doc.html" title="redditComment - ">redditComment<em></em></a><li><li><a href="redditlink.doc.html" title="redditLink - ">redditLink<em></em></a><li><li><a href="redditquery.doc.html" title="redditQuery - ">redditQuery<em></em></a><li><li><a href="subreddit.doc.html" title="subreddit - ">subreddit<em></em></a><li><li><a href="tweet.doc.html" title="tweet - Return a tweet.">tweet<em>Return a tweet.</em></a><li><li><a href="twtuser.doc.html" title="twtUser - Return a twitter user.">twtUser<em>Return a twitter user.</em></a><li><li><a href="directive.spec.html" title="__Directive - A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.
 
 In some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.">__Directive<em>A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.
 
@@ -239,7 +254,7 @@ Depending on the kind of a type, certain fields describe information about that 
 <footer>
 <div class="container slds-p-around--large">
     <p class="slds-text-align--right slds-text-title--caps">
-        Generated with <a href="https://github.com/2fd/graphdoc#readme" target="_blank">graphdoc 2.3.0</a>
+        Generated with <a href="https://github.com/2fd/graphdoc#readme" target="_blank">graphdoc 2.4.0</a>
     </p>
 </div>
 </footer>

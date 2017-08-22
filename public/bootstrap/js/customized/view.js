@@ -31,9 +31,8 @@ function checkbox_onclick(){
 function customized_reset(){
 	$("#img-container").empty();
 	$("#result-container").empty();
-	$("#download-container").empty();
-	//sidebar
-	$("#overview").nextAll().remove()
+	$("#side-download").empty();
+	$("#side-download-li").hide();
 }
 
 /*----------------------------display uploaded csv --------------------------*/
@@ -68,9 +67,9 @@ function arrayToTable(array,tableID){
 		tableContent += "<tr>";
 		$.each(val,function(j,cval){
 			// trim the content to 100 character maximum
-			if (cval.length >=100){
-				cval = cval.slice(0,100) + '...';
-			}else if (cval === '' || cval === undefined){
+			//if (cval.length >=100){
+			//	cval = cval.slice(0,100) + '...';
+			if (cval === '' || cval === undefined){
 				cval = 'NaN';
 			}
 			tableContent += `<td>` + cval + "</td>"

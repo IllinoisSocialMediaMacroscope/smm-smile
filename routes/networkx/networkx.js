@@ -10,16 +10,14 @@ router.get('/networkx',function(req,res,next){
 	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
 	delete files['twitter-User'];
 	var formParam = require('./networkx.json');
-	res.render('formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:files, param:formParam}); 
+	res.render('analytics/formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:files, param:formParam}); 
 });
 
 router.post('/networkx',function(req,res,next){
 	
-	//console.log(req.body);
-	
-		
 	var options = {
 		pythonPath:process.env.PYTHONPATH,
+		scriptPath:process.env.ROOTDIR + '/scripts/NetworkX/',
 		args:[	'--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, 
 				'--layout',req.body.layout, 
 				'--relationships',req.body.relationships, 
@@ -27,33 +25,27 @@ router.post('/networkx',function(req,res,next){
 				'--edge_width',req.body.edge_width ] 
 	};
 	
-	var pyshell = new pythonShell(process.env.ROOTDIR +'/scripts/NetworkX/network_analysis.py',options); 
-	
-	var count = 0;
-	downloadFiles = [];
-	pyshell.on('message',function(message){
-		if (count === 1){ div = message; }
-		if (count >= 2) { 
-			var fnameRegex = /\/(?=[^\/]*$)(.*).json/g
-			var display_name = fnameRegex.exec(message)[1];
-			downloadFiles.push({'name':display_name + ' metrics', 'content':message}); 
-		}
-		count += 1;
-	});
-		
-	 
-	pyshell.end(function(err){
-		if(err){
-			throw err;
-			res.send({ERROR:err});	
-		}
-		else{
+	pythonShell.run('network_analysis.py',options,function(err,results){
+		if (err){
+			//throw err;
+			res.send({'ERROR':err});
+		}else{
+			
+			var div= results[1];
+			var downloadFiles = [];
+			
+			for (var j=2; j< results.length; j++){
+				var fnameRegex = /\/(?=[^\/]*$)(.*).json/g;
+				var display_name = fnameRegex.exec(results[j])[1];
+				downloadFiles.push({'name':display_name + ' metrics', 'content':results[j]});
+			}				
 			
 			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
 				var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r
 			}else{
 				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
 			}
+			
 			res.send({
 				title:'Network Analysis', 
 				img:[{name:'Network Visualization',content:div_data}],
@@ -61,8 +53,9 @@ router.post('/networkx',function(req,res,next){
 				metrics:{name:'', content:''}, 
 				preview:{name:'',content:''}						
 			});
+			
 		}
-	}); 
+	});
 	
 });
       

@@ -9,7 +9,7 @@ var readDIR = require(process.env.ROOTDIR + '/scripts/helper').readDIR;
 router.get('/NLP/preprocess',function(req,res,next){
 	files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
 	var formParam = require('./preprocess.json');
-	res.render('formTemplate',{parent:'/#Pre-processing', title:'Natural Langurage PreProcessing', directory:files, param:formParam});
+	res.render('analytics/formTemplate',{parent:'/#Pre-processing', title:'Natural Langurage PreProcessing', directory:files, param:formParam});
 });
  
 router.post('/NLP/preprocess',function(req,res,next){
@@ -17,6 +17,7 @@ router.post('/NLP/preprocess',function(req,res,next){
 	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select'){
 		var options = {
 			pythonPath:process.env.PYTHONPATH,
+			scriptPath:process.env.ROOTDIR + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+  req.body.filename, '--column', req.body.selectFileColumn,
 			'--process',req.body.model, '--tagger',req.body.tagger, '--source','twitter']
 		};
@@ -32,33 +33,23 @@ router.post('/NLP/preprocess',function(req,res,next){
 	}else if (req.body.option === 'URL'){ 
 		var options = {
 			pythonPath:process.env.PYTHONPATH,
+			scriptPath:process.env.ROOTDIR + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',req.body.input, '--process',req.body.model, '--tagger',req.body.tagger]
 		};	
 	}
-	//console.log(options);
-	var pyshell = new pythonShell(process.env.ROOTDIR +'/scripts/NLP/preprocessing.py',options);
-		
-	var count = 0;
-	pyshell.on('message',function(message){ 
-			if (count === 1){ phrases = message;}
-			if (count === 2){ filtered = message;}
-			if (count === 3){ processed = message;}
-			if (count === 4){ most_common = message;}
-			if (count === 5){ div = message; } 
-			if (count === 6){ tagged = message;} 
-			//if (count === 6){ NE = message;}
-			//if (count === 7){ div_NE = message;}
-			count += 1;
-			//console.log(message);
-	});
-		
-	pyshell.end(function(err){ 
+	
+	pythonShell.run('preprocessing.py',options,function(err,results){
 		if(err){ 
-			throw err;
-			//res.send({ERROR:err});	
-		}
-		else{
-		
+			//throw err;
+			res.send({ERROR:err});	
+		}else{
+			var phrases = results[1];
+			var filtered = results[2];
+			var processed = results[3];
+			var most_common = results[4];
+			var div = results[5];
+			var tagged = results[6];
+			
 			var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r 
 			var sentence_array = fs.readFileSync(phrases.slice(0,-1)).toString().split("\n")
 			var new_sentence_array = [];
@@ -83,10 +74,10 @@ router.post('/NLP/preprocess',function(req,res,next){
 							//{name:'name entity recognition' + 'text', content:NE}],
 						table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
 						preview:'',						
-					});
+					});		
 		}
-		
-	}); 
+			
+	});
 }); 
 
 module.exports = router;

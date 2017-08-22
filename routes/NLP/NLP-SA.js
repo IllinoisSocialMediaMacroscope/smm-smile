@@ -10,43 +10,36 @@ router.get('/NLP/sentiment',function(req,res,next){
 	//console.log(process.env.ROOTDIR);
 	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
 	var formParam = require('./sentiment.json');
-	res.render('formTemplate',{parent:'/#Sentiment Analysis', title:'Sentiment Analysis', directory:files, param:formParam});
+	res.render('analytics/formTemplate',{parent:'/#Sentiment Analysis', title:'Sentiment Analysis', directory:files, param:formParam});
 });
  
 router.post('/NLP/sentiment',function(req,res,next){
 	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select...'){
 		var options = {
 			pythonPath:process.env.PYTHONPATH,
+			scriptPath:process.env.ROOTDIR + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+  req.body.filename, '--column', req.body.selectFileColumn]
 		};
 	}else if (req.body.option === 'URL'){
 		var options = {
 			pythonPath:process.env.PYTHONPATH,
+			scriptPath:process.env.ROOTDIR + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',req.body.input]
 		};	
 	}else{
 		res.end('no file selected!');
 	}
 	
-	var pyshell = new pythonShell(process.env.ROOTDIR +'/scripts/NLP/sentiment.py',options); 
-		
-	var count = 0;
-	pyshell.on('message',function(message){
-		// first line is filename
-		if (count === 1){	div = message;	}
-		if (count === 2){ 	doc_sentiment = message; } 
-		if (count === 3){	sentiment = message; }
-		if (count === 4){ 	negation = message; }
-		if (count === 5){ 	allcap = message; }
-		count += 1;
-	});
-
-	pyshell.end(function(err){
-		if(err){ 
+	pythonShell.run('sentiment.py',options,function(err,results){
+		if (err){
 			throw err;
-			//res.send({ERROR:err});
-		}
-		else{
+		}else{
+			
+			var div=results[1];
+			var doc_sentiment=results[2];
+			var sentiment = results[3];
+			var negation = results[4];
+			var allcap = results[5];
 			
 			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
 				var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r

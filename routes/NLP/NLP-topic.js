@@ -9,7 +9,7 @@ var readZip = require(process.env.ROOTDIR  + '/scripts/helper').readZip;
 router.get('/NLP/topic',function(req,res,next){
 	files = readZip(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
 	var formParam = require('./topic.json');
-	res.render('formTemplate',{parent:'/#Topic Modeling', title:'LDA Topic Modeling', directory:files, param:formParam});
+	res.render('analytics/formTemplate',{parent:'/#Topic Modeling', title:'LDA Topic Modeling', directory:files, param:formParam});
 });
  
 router.post('/NLP/topic',function(req,res,next){
