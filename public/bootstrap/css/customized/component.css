@@ -7,7 +7,7 @@
 	border-radius:30px;
 	padding:6px 30px;
 	color:white;
-	background-color:#ffb804;
+	background-color:#ea4a36;
 	border:none;
 }
 
@@ -74,6 +74,15 @@ cite{
 
 #error{
 	resize:none;
+}
+
+/* top bar */
+.navbar-fixed-top {
+	border: 0;
+}
+
+.navbar-inverse{
+	background-color:#1e325a;
 }
 
 

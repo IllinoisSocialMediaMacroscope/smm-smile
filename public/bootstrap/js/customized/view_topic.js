@@ -50,25 +50,29 @@ $(document).ready(function(){
 function formValidation(){
 	
 	if ($("#selectZip").val() === 'Please Select...' || $("#selectZip").val() === undefined){
-		alert("Please upload a corpus in .zip format!");
+		$("#modal-message").append(`<h4>Please upload a corpus in .zip format!</h4>`);
+		$("#alert").modal('show');
 		$("#selectZip").focus();
 		return false;
 	}
 	
 	if ($("#vectorizer option:selected").val() === '' || $("#vectorizer option:selected").val() === undefined){
-		alert("Please select a vectorize method!");
+		$("#modal-message").append(`<h4>Please select a vectorize method!</h4>`);
+		$("#alert").modal('show');
 		$("#vectorizer").focus();
 		return false;
 	}
 	
 	if ($("#n_features").val() < 10 || $("#n_features").val() > 1000){
-		alert("The valid range of features is between 10 to 1000!");
+		$("#modal-message").append(`<h4>The valid range of features is between 10 to 1000!</h4>`);
+		$("#alert").modal('show');
 		$("#n_features").focus();
 		return false;
 	}
 	
 	if ($("#n_topics").val() < 2 || $("#n_topics").val() > 50){
-		alert("The valid range of topics is between 2 to 50!");
+		$("#modal-message").append(`<h4>The valid range of topics is between 2 to 50!</h4>`);
+		$("#alert").modal('show');
 		$("#n_topics").focus();
 		return false;
 	}
