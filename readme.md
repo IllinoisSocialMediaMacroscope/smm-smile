@@ -13,6 +13,7 @@
 	* Link here :point_right: [googleDrive](https://drive.google.com/drive/folders/0B37hhRXKgRPOZG1MbUdwSEdVNWM)
 	* **Be Careful** sometimes google drive or your operating system will change the ".env" filename into "_env" or "env". Make sure to change it back to ".env" 
 	* make sure the **rootDIR** variable in the file matches your desired destination (home directory or any places). This rootDIR will be where it starts to hold analytics and downloadable data.
+	e.g.```rootDIR=/home/chen/analytics-standalone```
 	* make sure the **PYTHONPATH** variable points to where your python3 executable locates. e.g. ```PYTHONPATH = /usr/bin/python3```
 4. **TEST** the analytics server by typing **_npm test_**; **_cd graphql_** and **_npm test_** to test graphql server;
 5. **RUN** concurrently by typing **_npm start_**
