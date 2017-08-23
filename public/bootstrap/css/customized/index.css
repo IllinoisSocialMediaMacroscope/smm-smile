@@ -16,13 +16,7 @@
 	animation:fade 0.5s ease-in-out both;
 }
 
-.navbar-fixed-top {
-	border: 0;
-}
 
-.navbar-inverse{
-	background-color:#c84b49;
-}
 .glyphicon:before {
   margin-right: 10px;
 }

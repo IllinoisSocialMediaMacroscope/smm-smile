@@ -93,7 +93,7 @@ body {
 }
 
 #adv-search-btn {
-	 background-color:#c84b49;
+	 background-color:#ea4a36;
 	 border-radius:4px;
 	 outline:none;
 	 margin-top:10px; 
@@ -104,7 +104,7 @@ body {
 	border:none;
 }
 #simple-search-btn{
-	 background-color:#c84b49;
+	 background-color:#ea4a36;
 	 color:#fff;
 	 border:none;
 	 overflow:auto;
@@ -166,7 +166,7 @@ nav-tabs li a:hover{
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #c84b49;
+    background: #ea4a36;
     margin: 0 auto;
     position: absolute;
     bottom: 2px;
@@ -179,7 +179,7 @@ nav-tabs li a:hover{
 .nav-tabs li.active a:focus,
 .nav-tabs li.active a:hover{
     border: none;
-    color: #c84b49;
+    color: #ea4a36;
 }
 .nav-tabs li a:hover:before,
 .nav-tabs li.active a:before,
@@ -203,14 +203,6 @@ nav-tabs li a:hover{
     .nav-tabs li a{ text-align: center; }
 }
 
-/* top bar */
-.navbar-fixed-top {
-	border: 0;
-}
-
-.navbar-inverse{
-	background-color:#c84b49;
-}
 
 .glyphicon:before {
   margin-right: 10px;
@@ -400,7 +392,7 @@ nav-tabs li a:hover{
     color: white;
     font-size: 20px;
     line-height: 28.8px;
-	background-color:#c84b49;
+	background-color:#ea4a36;
     border-radius: 6px;
     padding: 0.6em 1.6em;
     margin: 0 0.8em;

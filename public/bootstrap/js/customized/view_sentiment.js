@@ -103,25 +103,29 @@ function formValidation(){
 	if ($("#file").is(":checked")){
 		
 		if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
-			alert("Please select a csv file from your folder!");
+			$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
+			$("#alert").modal('show');
 			$("#selectFile").focus();
 			return false;
 		}
 		
 		if ($("input[name='selectFileColumn']:checked").val() === '' ||$("input[name='selectFileColumn']:checked").val() === undefined){
-			alert("Please select a column of the text to analyze!");
+			$("#modal-message").append(`<h4>Please select a column of the text to analyze!</h4>`);
+			$("#alert").modal('show');
 			return false;			
 		}
 		
 	}else if ($("#URL").is(":checked")){
 		if ($("#link").val() === '' || $("#link").val() === undefined){
-			alert("Please input the URL of the document that you want t !");
+			$("#modal-message").append(`<h4>Please input the URL!</h4>`);
+			$("#alert").modal('show');
 			$("#link").focus();
 			return false;
 		}
 		
 	}else{
-		alert("Please select the format between File and URL!");
+		$("#modal-message").append(`<h4>Please select the format between File and URL!</h4>`);
+		$("#alert").modal('show');
 		return false;
 	}
 	

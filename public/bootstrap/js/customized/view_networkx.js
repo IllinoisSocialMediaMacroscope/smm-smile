@@ -82,27 +82,32 @@ $(document).ready(function(){
 function formValidation(){
 	
 	if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
-		alert("Please select a csv file from your folder!");
+		$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
+		$("#alert").modal('show');
 		$("#selectFile").focus();
 		return false;
 	}
 	if ($("#relationships option:selected").val() === '' || $("#relationships option:selected").val() === undefined){
-		alert("Please select a model to perform!");
+		$("#modal-message").append(`<h4>Please select a model to perform!</h4>`);
+		$("#alert").modal('show');
 		$("#relationships").focus();
 		return false;
 	}
 	if ($("#layout option:selected").val() === '' || $("#layout option:selected").val() === undefined){
-		alert("Please select a model to perform!");
+		$("#modal-message").append(`<h4>Please select a network layout!</h4>`);
+		$("#alert").modal('show');
 		$("#layout").focus();
 		return false;
 	}
 	if ($("#node_size").val()< 5 || $("#node_size").val() > 50){
-		alert("The valid number of node size is between 5 to 50!");
+		$("#modal-message").append(`<h4>The valid number of node size is between 5 to 50!</h4>`);
+		$("#alert").modal('show');
 		$("#node_size").focus();
 		return false;
 	}
 	if ($("#edge_width").val()< 0.1 || $("#edge_width").val() > 5){
-		alert("The valid number of edge width is between 0.1 to 5!");
+		$("#modal-message").append(`<h4>The valid number of edge width is between 0.1 to 5!</h4>`);
+		$("#alert").modal('show');
 		$("#edge_width").focus();
 		return false;
 	}

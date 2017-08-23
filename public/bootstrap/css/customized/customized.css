@@ -26,10 +26,6 @@ body {
 .glyphicon:before {
   margin-right: 10px;
 }
-
-.navbar-inverse{
-	background-color:#c84b49;
-}
 			
 .sidebar {
 	position: fixed;

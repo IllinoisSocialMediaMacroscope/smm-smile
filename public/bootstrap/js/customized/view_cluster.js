@@ -100,24 +100,29 @@ $(document).ready(function(){
 function formValidation(){
 	
 	if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
-		alert("Please select a csv file from your folder!");
+		$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
+		$("#alert").modal('show');
 		$("#selectFile").focus();
 		return false;
 	}
 	if ($("input[name='fields']:checked").val() === '' ||$("input[name='fields']:checked").val() === undefined){
-		alert("Please select a column of the text to analyze!");
+		$("#modal-message").append(`<h4>Please select a column of the text to analyze!</h4>`);
+		$("#alert").modal('show');
 		return false;			
 	}else if ($("input[name='fields']:checked").length < 2){
-		alert("Must select at least two columns!");
+		$("#modal-message").append(`<h4>Must select at least two columns!</h4>`);
+		$("#alert").modal('show');
 		return false;
 	}
 	if ($("#model option:selected").val() === '' || $("#model option:selected").val() === undefined){
-		alert("Please select a model to perform!");
+		$("#modal-message").append(`<h4>Please select a model to perform!</h4>`);
+		$("#alert").modal('show');
 		$("#model").focus();
 		return false;
 	}
 	if ($("#n_clusters").val()< 2 || $("#n_clusters").val() > 20){
-		alert("The valid number of cluster is between 0 to 20!");
+		$("#modal-message").append(`<h4>The valid number of cluster is between 0 to 20!</h4>`);
+		$("#alert").modal('show');
 		$("#n_clusters").focus();
 		return false;
 	}
