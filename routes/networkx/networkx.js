@@ -5,7 +5,7 @@ var fs = require('fs');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
 var path = require('path');
-var appPath = path.resolve('.'
+var appPath = path.resolve('.');
 var readDIR = require(appPath + '/scripts/helper.js').readDIR;
 
 router.get('/networkx',function(req,res,next){
