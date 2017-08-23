@@ -4,7 +4,9 @@ var router = express.Router();
 var fs = require('fs');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
-var readZip = require(process.env.ROOTDIR  + '/scripts/helper').readZip;
+var path = require('path');
+var appPath = path.resolve('.');
+var readZip = require(appPath  + '/scripts/helper').readZip;
 
 router.get('/NLP/topic',function(req,res,next){
 	files = readZip(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
@@ -16,6 +18,7 @@ router.post('/NLP/topic',function(req,res,next){
 	
 	var options = {
 		pythonPath:process.env.PYTHONPATH,
+		scriptPath:appPath +'/NLP/',
 		args:['--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.selectZip, '--vectorizer',req.body.vectorizer, '--n_topics',req.body.n_topics, '--n_features',req.body.n_features]
 	};
 	

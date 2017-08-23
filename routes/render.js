@@ -3,8 +3,6 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var CSV = require('csv-string');
-//TODO fs.unlink has some issues needed to be fixed
-//var rootDIR = path.resolve('.');
 var admZip = require('adm-zip');
 
 router.post('/render',function(req,res,next){

@@ -4,7 +4,9 @@ var router = express.Router();
 var fs = require('fs');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
-var readDIR = require(process.env.ROOTDIR + '/scripts/helper').readDIR;
+var path = require('path');
+var appPath = path.resolve('.');
+var readDIR = require(appPath + '/scripts/helper').readDIR;
 
 router.get('/NLP/preprocess',function(req,res,next){
 	files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
@@ -17,7 +19,7 @@ router.post('/NLP/preprocess',function(req,res,next){
 	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select'){
 		var options = {
 			pythonPath:process.env.PYTHONPATH,
-			scriptPath:process.env.ROOTDIR + '/scripts/NLP/',
+			scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+  req.body.filename, '--column', req.body.selectFileColumn,
 			'--process',req.body.model, '--tagger',req.body.tagger, '--source','twitter']
 		};
@@ -33,7 +35,7 @@ router.post('/NLP/preprocess',function(req,res,next){
 	}else if (req.body.option === 'URL'){ 
 		var options = {
 			pythonPath:process.env.PYTHONPATH,
-			scriptPath:process.env.ROOTDIR + '/scripts/NLP/',
+			scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',req.body.input, '--process',req.body.model, '--tagger',req.body.tagger]
 		};	
 	}
@@ -50,31 +52,14 @@ router.post('/NLP/preprocess',function(req,res,next){
 			var div = results[5];
 			var tagged = results[6];
 			
-			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
-				var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r 
-			}else{
-				var div_data = fs.readFileSync(div, 'utf8');
-			}
-			
-			if (phrases.slice(-1) === '\r' || phrases.slice(-1) === '\n' || phrases.slice(-1) === '\t' || phrases.slice(-1) === '\0' || phrases.slice(-1) === ' '){
-				var sentence_array = fs.readFileSync(phrases.slice(0,-1)).toString().split("\n");
-			}else{
-				var sentence_array = fs.readFileSync(phrases).toString().split("\n");
-			}
-			
+			var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r 
+			var sentence_array = fs.readFileSync(phrases.slice(0,-1)).toString().split("\n")
 			var new_sentence_array = [];
 			for (var i = 0, length= sentence_array.length; i<length; i++){
-				new_sentence_array.push([sentence_array[i]]); //add [] to make it comply with google word tree requirement
+				new_sentence_array.push([sentence_array[i]]) //add [] to make it comply with google word tree requirement
 			}
-			
-			if (most_common.slice(-1) === '\r' || most_common.slice(-1) === '\n' || most_common.slice(-1) === '\t' || most_common.slice(-1) === '\0' || most_common.slice(-1) === ' '){
-				var most_common_array = fs.readFileSync(most_common.slice(0,-1)).toString().split("\n")[1];
-			}else{
-				var most_common_array = fs.readFileSync(most_common).toString().split("\n")[1];
-			}
-				
-			var most_freq_word = most_common_array.split(",")[0];
-			
+			var most_common_array = fs.readFileSync(most_common.slice(0,-1)).toString().split("\n")[1]
+			var most_freq_word = most_common_array.split(",")[0]
 			//console.log(most_freq_word);
 			//console.log(sentence_array); 
 			

@@ -4,7 +4,9 @@ var router = express.Router();
 var fs = require('fs');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
-var readDIR = require(process.env.ROOTDIR + '/scripts/helper.js').readDIR;
+var path = require('path');
+var appPath = path.resolve('.'
+var readDIR = require(appPath + '/scripts/helper.js').readDIR;
 
 router.get('/networkx',function(req,res,next){
 	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
@@ -17,7 +19,7 @@ router.post('/networkx',function(req,res,next){
 	
 	var options = {
 		pythonPath:process.env.PYTHONPATH,
-		scriptPath:process.env.ROOTDIR + '/scripts/NetworkX/',
+		scriptPath:appPath + '/scripts/NetworkX/',
 		args:[	'--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, 
 				'--layout',req.body.layout, 
 				'--relationships',req.body.relationships, 
