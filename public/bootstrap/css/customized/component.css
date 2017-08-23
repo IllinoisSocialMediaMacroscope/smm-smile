@@ -1,11 +1,16 @@
 #topbar-home{
 	font-size:14px;
+	display:inline-block;
+	margin:10px 10px;
+}
+#topbar-home-btn{
+	border-radius:30px;
+	padding:6px 30px;
 	color:white;
 	background-color:#ffb804;
-	margin:10px 10px;
-	border-radius:30px;
-	padding:6px 20px;
+	border:none;
 }
+
 
 #topbar-history{
 	font-size:14px;
@@ -25,7 +30,7 @@
 	padding:6px 20px;
 }
 
-#topbar-home:hover,
+#topbar-home-btn:hover,
 #topbar-history:hover,
 #topbar-query:hover{
 	color:black;

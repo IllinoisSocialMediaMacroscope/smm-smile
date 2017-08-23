@@ -8,14 +8,25 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 				span(class="icon-bar")
 				
 		div(id="navbar",class="navbar-collapse collapse")
-			if parent
-				ul(class="nav navbar-nav navbar-left")
-					li
-						a(href=parent, id="topbar-home") 
-							span(class="glyphicon glyphicon-home")
-							| Return To Analytics
-						
-
+			div(class="dropdown",id="topbar-home")
+				button(type="button",id="topbar-home-btn", class="btn btn-default dropdown-toggle", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true") Analytics Tools &nbsp;
+					span(class="caret")
+				ul(class="dropdown-menu", aria-labelledby="dropdownMenu1")
+					li 
+						a(href="/")
+							span(class="glyphicon glyphicon-home") 
+							| home
+					li(role="separator", class="divider")
+					li 
+						a(href="/NLP/preprocess") Text Preprocessing
+					li 
+						a(href="/NLP/sentiment") Sentiment Analysis
+					li 
+						a(href="/sklearn/cluster") Clustering
+					li 
+						a(href="/networkx") Network Analysis
+			  
+		
 			ul(class="nav navbar-nav navbar-right")
 				li
 					a(href="/history",id="topbar-history")
