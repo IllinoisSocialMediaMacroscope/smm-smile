@@ -123,7 +123,7 @@ function appendDownload(downloadID, downloadData){
 	if(downloadData !== []){
 		$.each(downloadData,function(i,val){
 			$(downloadID).append(`<li><form action='/download' name='download' method='post' class="side-form">
-								<input type="hidden" value=`+val.content+`name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download"></span>`
+								<input type="hidden" value=`+val.content+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download"></span>`
 								+val.name+`</button></form></li>`)
 		});
 	}
