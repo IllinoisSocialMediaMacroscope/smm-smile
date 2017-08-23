@@ -3,11 +3,7 @@ var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
 var fs = require('fs');
-//var path = require('path');
-//var rootDIR = path.resolve('.');
 var crypto = require('crypto');
-var FormData = require('form-data');
-var form = new FormData();
 
 router.get('/login/reddit', function(req,res,next){
 	crypto.randomBytes(24, function(err, buffer) {

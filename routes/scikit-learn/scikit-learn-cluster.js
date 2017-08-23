@@ -3,8 +3,10 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var pythonShell = require('python-shell');
-var CSV = require('csv-string');;
-var readDIR = require(process.env.ROOTDIR + '/scripts/helper.js').readDIR;
+var CSV = require('csv-string');
+var path = require('path');
+var appPath = path.resolve('.'
+var readDIR = require(appPath + '/scripts/helper.js').readDIR;
 
 router.get('/sklearn/cluster',function(req,res,next){
 	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
@@ -17,7 +19,7 @@ router.post('/sklearn/cluster',function(req,res,next){
 	
 	var options = {
 		pythonPath:process.env.PYTHONPATH,
-		scriptPath:process.env.ROOTDIR + '/scripts/ML/',
+		scriptPath:appPath + '/scripts/ML/',
 		args:['--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, '--estimator',req.body.model,'--n_clusters',req.body.n_clusters,'--fields']
 	}; 
 		 

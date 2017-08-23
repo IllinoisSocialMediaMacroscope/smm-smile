@@ -3,7 +3,6 @@ var router = express.Router();
 
 router.post('/download',function(req,res,next){
 	var downloadURL = req.body.downloadURL;
-	//console.log(downloadURL);
 	res.download(downloadURL);
 });
 

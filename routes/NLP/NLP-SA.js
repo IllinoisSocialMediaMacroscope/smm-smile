@@ -4,7 +4,9 @@ var router = express.Router();
 var fs = require('fs');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string'); 
-var readDIR = require(process.env.ROOTDIR + '/scripts/helper.js').readDIR;
+var path = require('path');
+var appPath = path.resolve('.');
+var readDIR = require(appPath + '/scripts/helper.js').readDIR;
 
 router.get('/NLP/sentiment',function(req,res,next){
 	//console.log(process.env.ROOTDIR);
@@ -17,13 +19,13 @@ router.post('/NLP/sentiment',function(req,res,next){
 	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select...'){
 		var options = {
 			pythonPath:process.env.PYTHONPATH,
-			scriptPath:process.env.ROOTDIR + '/scripts/NLP/',
+			scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+  req.body.filename, '--column', req.body.selectFileColumn]
 		};
 	}else if (req.body.option === 'URL'){
 		var options = {
 			pythonPath:process.env.PYTHONPATH,
-			scriptPath:process.env.ROOTDIR + '/scripts/NLP/',
+			scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',req.body.input]
 		};	
 	}else{
