@@ -5,7 +5,7 @@ var fetch = require('node-fetch');
 var fs = require('fs');
 //var path = require('path');
 //var rootDIR = path.resolve('.');
-var OAuth1 = require('OAuth').OAuth;
+var OAuth1 = require('oauth').OAuth;
 var consumer = new OAuth1(
 	"https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token", 
 	process.env.TWITTER_CLIENT_ID, process.env.TWITTER_CLIENT_SECRET, "1.0", process.env.TWITTER_CALLBACK_URI, "HMAC-SHA1");
