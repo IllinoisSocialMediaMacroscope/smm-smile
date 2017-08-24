@@ -352,8 +352,8 @@ function renderPreview(data,prefix){
 										<p style="display:inline;color:grey;">&nbsp;&bull;`+ created_at +`</p>
 									</div>
 									<p style="margin-top:10px;">`+ val._source.text + `</p>
-									<p style="margin-top:10px;"><span class="glyphicon glyphicon-retweet"></span>`+ retweet_count + 
-									`&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-heart"></span>` +favorite_count +`</p>
+									<p style="margin-top:10px;"><span class="glyphicon glyphicon-retweet" style="position:inherit;"></span>`+ retweet_count + 
+									`&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-heart" style="position:inherit;"></span>` +favorite_count +`</p>
 							</div>`);
 		});
 	}else if (prefix === 'twitter-Tweet'){
@@ -390,8 +390,8 @@ function renderPreview(data,prefix){
 										<p style="display:inline;color:grey;">&nbsp;&bull;`+ created_at +`</p>
 									</div>
 									<p style="margin-top:10px;">`+ val.text + `</p>
-									<p style="margin-top:10px;"><span class="glyphicon glyphicon-retweet"></span>&nbsp;`+ retweet_count + 
-									`&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-heart"></span>&nbsp;` +favorite_count +`</p>
+									<p style="margin-top:10px;"><span class="glyphicon glyphicon-retweet" style="position:inherit;"></span>&nbsp;`+ retweet_count + 
+									`&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-heart" style="position:inherit;"></span>&nbsp;` +favorite_count +`</p>
 							</div>`);
 		});
 	}else if (prefix === 'twitter-User'){

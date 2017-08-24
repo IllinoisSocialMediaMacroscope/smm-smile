@@ -149,7 +149,9 @@ function saveFile(responseObj,params,pages,prefix, filename,keys){
 		
 		// add page information back at server side
 		params = JSON.parse(params);
-		params['pages'] = pages;
+		if (pages !== '-999'){
+			params['pages:'] = pages;
+		}
 		if (params['fields'] === ""){
 			params['fields'] === "DEFAULT"
 		}
