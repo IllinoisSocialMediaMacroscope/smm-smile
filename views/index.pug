@@ -36,8 +36,8 @@ html
 						div(class="prose",id=page.name)
 							h1(class="app-title") #{page.name}
 							p(class="intro",id=page.name) !{page.introduction}
-							a(class="prose-button" href=page.wiki) Read More
-							a(class="prose-button" href=page.url) Start
+							a(class="prose-button",href=page.wiki,target="_blank") Read More
+							a(class="prose-button",href=page.url,target="_blank") Start
 						div(class="app")
 							a(href=page.url)
 								img(src=page.imgURL, width="400px", class="logos")
@@ -50,9 +50,9 @@ html
 						div(class="prose")
 							h1(class="app-title") #{page.name}
 							p(class="intro") !{page.introduction}
-							a(class="prose-button" href=page.wiki) Read More
-							a(class="prose-button" href=page.url) Start		
+							a(class="prose-button",href=page.wiki,target="_blank") Read More
+							a(class="prose-button",href=page.url,target="_blank") Start		
 			
-							
+		include components/footer.pug								
 		
 		
