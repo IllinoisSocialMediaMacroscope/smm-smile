@@ -17,7 +17,7 @@ div(class="input-group-addon-btn")
 					div(class="tweet")
 						div(class="form-group")
 							<label class="label-control warning">maximum numbre of tweets
-								<span class="warningText">Careful! Every 100 count is ONE http request, and you only have 180 over 15 minutes window</span></label>
+								<span class="warningText">Careful! Every 100 count is ONE http request, and you only have 180 requests allowed over 15 minutes window</span></label>
 							div(class="range range-node")
 								input(type="range" min="100" max="18000" value="500" step="100" id="tweet-count" onchange="twtrangeNode.value=value")
 								<output id="twtrangeNode">500</output>
@@ -113,7 +113,7 @@ div(class="input-group-addon-btn")
 					div(class="user")
 						div(class="form-group")
 							<label class="label-control warning">maximum numbre of users
-								<span class="warningText">Careful! Every 20 count is ONE http request, and you only have 900 over 15 minutes window</span></label>
+								<span class="warningText">Careful! Every 20 count is ONE http request, and you only have 900 requests allowed over 15 minutes window</span></label>
 							div(class="range range-node")
 								input(type="range" min="20" max="18000" value="100" step="20" id="twtUser-count" onchange="twtUserRange.value=value")
 								<output id="twtUserRange">100</output>
