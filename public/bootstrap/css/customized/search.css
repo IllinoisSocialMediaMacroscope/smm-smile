@@ -1,6 +1,6 @@
 body {
 	font-family: "Ubuntu", sans-serif;
-    color: #73879c;
+    color: black;
     background-color: #eae8e8;
 	
 }
@@ -77,7 +77,7 @@ body {
 	display:inline-flex;
 }
 /* button groups */
-.input-group-addon {
+.input-group-addon-btn {
 	padding: 0px 0px;
 	text-align: center;
 	background-color: #eee;
@@ -258,8 +258,7 @@ nav-tabs li a:hover{
 /* hover text */
 .warningText{
 	display:none;
-	color:#fff;
-	background-color: #e044ad;
+	color:#ea4a36;
 	padding-left:5px;
 }
 .warning:hover .warningText{
