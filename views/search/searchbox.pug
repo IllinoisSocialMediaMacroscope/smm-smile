@@ -3,7 +3,7 @@ div(class="input-group", id="adv-search")
 	input(type="text", class="form-control", id="searchbox", placeholder="Search...")
 				
 <!-- search buttons -->
-div(class="input-group-addon")
+div(class="input-group-addon-btn")
 	div(class="btn-group")
 		div(class="dropdown dropdown-lg")
 			button(id="dropdownButton" type="button",class="btn btn-default dropdown-toggle" aria-expanded="false") 
@@ -16,7 +16,7 @@ div(class="input-group-addon")
 					<!-- tweet -->
 					div(class="tweet")
 						div(class="form-group")
-							<label class="label-control warning">number of tweets
+							<label class="label-control warning">maximum numbre of tweets
 								<span class="warningText">Careful! Every 100 count is ONE http request, and you only have 180 over 15 minutes window</span></label>
 							div(class="range range-node")
 								input(type="range" min="100" max="18000" value="500" step="100" id="tweet-count" onchange="twtrangeNode.value=value")
@@ -112,7 +112,7 @@ div(class="input-group-addon")
 					<!-- user -->
 					div(class="user")
 						div(class="form-group")
-							<label class="label-control warning">number of users
+							<label class="label-control warning">maximum numbre of users
 								<span class="warningText">Careful! Every 20 count is ONE http request, and you only have 900 over 15 minutes window</span></label>
 							div(class="range range-node")
 								input(type="range" min="20" max="18000" value="100" step="20" id="twtUser-count" onchange="twtUserRange.value=value")
@@ -155,7 +155,7 @@ div(class="input-group-addon")
 					<!-- elastic search -->
 					div(class="es-tweet")
 						div(class="form-group")
-							<label class="label-control warning">number of tweets
+							<label class="label-control warning">maximum numbre of tweets
 								<span class="warningText">Careful! Each 1000 is a http request</span></label>
 							div(class="range range-node")
 								input(type="range" min="1000" max="100000" value="5000" step="1000" id="perPage" onchange="perPage_rangeNode.value=value")
