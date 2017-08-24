@@ -401,3 +401,20 @@ tr{
 	background-color:white;
 	color:#2a5a84;
 }
+
+/* network */
+circle.node {
+    stroke: #fff;
+    stroke-width: 3px;
+}
+
+line.link {
+    stroke-width: 5px;
+    stroke: #999;
+    stroke-opacity: 0.6;
+}
+
+marker#arrow {
+    stroke: #999;
+    fill: #999;
+}
