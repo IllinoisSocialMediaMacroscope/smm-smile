@@ -185,6 +185,8 @@ function ajaxSubmit(formID){
 						// draw word tree for preprocessing
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
 					}
+					
+					
 				}
 			},
 			error: function(jqXHR, exception){
@@ -212,6 +214,5 @@ function ajaxSubmit(formID){
 	}
 			
 } 
-
 
 

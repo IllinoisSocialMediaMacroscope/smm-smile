@@ -88,9 +88,143 @@ html
 						div(class="col-md-12 col-sm-12 col-xs-12")
 							a(class="anchor" name="result-anchor")
 							div(id="result-container")
+							
+					<!-- network graph -->
+					div(class="row")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							<svg width="100%" height="1000px">
+								<defs>
+									<marker id="arrow" viewbox="0 -5 10 10" refX="18" refY="0" markerWidth="6" markerHeight="6" orient="auto">
+										<path d="M0,-5L10,0L0,5Z">
+									</marker>
+								</defs>
+							</svg>
 		
 		block customized-script
 							
+		
+		<script src="https://d3js.org/d3.v2.js"></script>
+		script.
+
+			var width = 1000;
+			var height = 800;
+
+			var color = d3.scale.category10();
+
+			var force = d3.layout.force()
+				.charge(-80)
+				.linkDistance(150)
+				.size([width, height]);
+
+			var vis = d3.select("svg");
+
+			d3.json("d3js_graph.json", function(json) {
+				force
+					.nodes(json.nodes)
+					.links(json.links)
+					.start();
+					
+
+				var links = vis.append("g").selectAll("line.link")
+					.data(force.links())
+					.enter().append("line")
+					.attr("class", "link")
+					.attr("marker-end", "url(#arrow)");
+
+				var nodes = vis.selectAll("circle.node")
+					.data(force.nodes())
+					.enter()
+					
+					.append("circle")
+					.attr("class", "node")
+					.attr("r", 8)
+					.style("fill", function(d) { return color(d.group); })
+					.call(force.drag);
+
+				var node_label = vis.selectAll("node_text")
+					.data(force.nodes())
+					.enter()
+					.append("text")
+						.text(function (d) { return "@" + d.id; })
+						.attr("id",	function(d){return d.id; })
+						.style("visibility", "hidden")
+						.style("text-anchor", "middle")
+						.style("fill", "#555")
+						.style("font-family", "Arial")
+						.style("font-size", 12);
+				
+				var link_label = vis.selectAll("link_text")
+					.data(force.links())
+					.enter()
+					.append("text")
+						.text(function (d) { return d.text; })
+						.style("visibility", "hidden")
+						.style("text-anchor", "middle")
+						.style("fill", "red")
+						.style("font-family", "Arial")
+						.style("font-size", 12);
+
+				force.on("tick", function() {
+					links.attr("x1", function(d) { return d.source.x; })
+						.attr("y1", function(d) { return d.source.y; })
+						.attr("x2", function(d) { return d.target.x; })
+						.attr("y2", function(d) { return d.target.y; });
+						
+					link_label.attr("x", function(d) { return d.source.x; })
+						.attr("y", function(d) { return d.target.y; })
+						
+
+					nodes.attr("cx", function(d) { return d.x; })
+							.attr("cy", function(d) { return d.y; });
+					node_label.attr("x", function(d) { return d.x; })
+						.attr("y", function(d) { return d.y-20; });
+					
+				});
+				
+				// hover on nodes show screen name
+				vis.selectAll("circle.node").on("mouseover",function(){
+					d3.select(this).attr("r", 12);
+					var cx = d3.select(this).attr("cx");
+					var cy = d3.select(this).attr("cy");
+					
+					node_label.each(function(d){
+						if (d.x == cx && d.y == cy){
+							d3.select("#" + d.id).style("visibility", "visible");
+						}
+					});
+					
+				})
+				 .on("mouseout", function() {
+					d3.select(this).attr("r", 8);
+					var cx = d3.select(this).attr("cx");
+					var cy = d3.select(this).attr("cy");
+					
+					node_label.each(function(d){
+						if (d.x == cx && d.y == cy){
+							d3.select("#" + d.id).style("visibility", "hidden");
+						}
+					});
+					
+				});
+				
+				// click on edges show tweet
+				vis.selectAll("line.link").on("click",function(){
+					var x1 = d3.select(this).attr("x1");
+					var y2 = d3.select(this).attr("y2");
+					console.log(x1);
+					
+					node_label.each(function(d){
+						if (d.x == cx && d.y == cy){
+							d3.select("#" + d.id).style("visibility", "visible");
+						}
+					});
+					
+				})
+				 .on("mouseout", function() {
+					
+				});
+
+			});
 							
 							
 							
