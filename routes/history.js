@@ -194,7 +194,7 @@ router.post('/history',function(req,res,next){
 				config:config
 			});
 	}
-	else if (req.body.layer2 === 'networkx' && fs.readdirSync(DIR).length >=2){
+	else if (req.body.layer2 === 'networkx' && fs.readdirSync(DIR).length >=3){
 		var fnames = fs.readdirSync(DIR);
 		var div_data = fs.readFileSync(DIR + '/div.dat', 'utf8');
 		var config = JSON.parse(fs.readFileSync(DIR + '/config.dat','utf8'));
