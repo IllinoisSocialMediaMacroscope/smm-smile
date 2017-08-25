@@ -116,9 +116,10 @@ function formValidation(){
 	
 }
 
-function draw_d3js(d3js_data){
-	var vis = d3.select("#d3js-network-svg");
-	var width = document.getElementById("d3js-network-container").offsetWidth;;
+
+/*************************************************************d3js***************************************/
+function draw_d3js(d_nodes,d_links){
+	var width = 2000;
 	var height = 800;
 
 	var color = d3.scale.category10();
@@ -129,35 +130,26 @@ function draw_d3js(d3js_data){
 		.charge(-30)
 		.linkDistance(width/3)
 		.size([width, height]);
-
-
-	/* zoom-in
-	function zoomed() {
-		vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-	}
-	var zoom = d3.behavior.zoom()
-				.scaleExtent([1, 10])
-				.on("zoom", zoomed);*/					
+		
+	var vis = d3.select("#d3js-network-svg")		
 
 	force
-		.nodes(d3js_data.nodes)
-		.links(d3js_data.links)
+		.nodes(d_nodes)
+		.links(d_links)
 		.start();
 	
-	//console.log(force.links());
+
 	var links = vis.append("g").selectAll("line.link")
 		.data(force.links())
 		.enter()
 		.append("line")
 		.attr("id",function(d){ return d.source.id + '-' + d.target.id })
 		.attr("class", "link")
-		.attr("text",function(d){ return d.text })
-		.attr("author",function(d){ return d.source.id })
 		.attr("marker-end", "url(#arrow)")
 		.style("stroke-width", "6px")
 		.style("stroke", "#999")
 		.style("opacity","0.3");
-			
+	
 	// drag
 	var drag = d3.behavior.drag()
 				.on("dragstart", dragstart)
@@ -241,19 +233,14 @@ function draw_d3js(d3js_data){
 	});
 	
 	// click on edges show tweet
-	vis.selectAll("line.link").on("mouseover",function(){
+	vis.selectAll("line.link").on("click",function(){
 		d3.select(this).style("stroke", "red");
 		var tweet = d3.select(this).attr("text");
 		var author = d3.select(this).attr("author");
-		$("#tweet-display").text(tweet);
-		$("#author-display").text("@" + author);
 	})
 	 .on("mouseout", function() {
 		d3.select(this).style("stroke", "#999");
-		$("#tweet-display").text('...');
-		$("#author-display").text('Author');
+		
 	});
-
-	
 
 }
