@@ -115,3 +115,145 @@ function formValidation(){
 	return true;
 	
 }
+
+var width = document.getElementById("d3js-network-container").offsetWidth;;
+var height = 1000;
+
+var color = d3.scale.category10();
+
+var force = d3.layout.force()
+	.gravity(.05)
+	.linkStrength(0.1)
+	.charge(-30)
+	.linkDistance(width/3)
+	.size([width, height]);
+
+
+// zoom-in
+function zoomed() {
+	vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
+var zoom = d3.behavior.zoom()
+			.scaleExtent([1, 10])
+			.on("zoom", zoomed);			
+var vis = d3.select("svg")
+			.call(zoom);				
+
+d3.json("d3js_graph.json", function(json) {
+	force
+		.nodes(json.nodes)
+		.links(json.links)
+		.start();
+	
+
+	var links = vis.append("g").selectAll("line.link")
+		.data(force.links())
+		.enter()
+		.append("line")
+		.attr("id",function(d){ return d.source.id + '-' + d.target.id })
+		.attr("class", "link")
+		.attr("text",function(d){ return d.text })
+		.attr("author",function(d){ return d.source.id })
+		.attr("marker-end", "url(#arrow)")
+		.style("stroke-width", "6px")
+		.style("stroke", "#999")
+		.style("opacity","0.3");
+			
+	// drag
+	var drag = d3.behavior.drag()
+				.on("dragstart", dragstart)
+				.on("drag", dragmove)
+				.on("dragend", dragend);
+	function dragstart(d) {
+	  force.stop()
+	}	
+	function dragmove(d, i) {
+		d.px += d3.event.dx;
+		d.py += d3.event.dy;
+		d.x += d3.event.dx;
+		d.y += d3.event.dy; 
+		tick(d);
+	}
+	function dragend(d, i) {
+		var e = d3.event.sourceEvent;
+		if (e.ctrlKey){
+			d.fixed = true; 
+		}else{
+			d.fixed =false;
+		}
+		force.resume();
+	}
+	function tick(d) {
+	  links.attr("x1", function(d) { return d.source.x; })
+			.attr("y1", function(d) { return d.source.y; })
+			.attr("x2", function(d) { return d.target.x; })
+			.attr("y2", function(d) { return d.target.y; });
+	  nodes.attr("cx", function(d) { return d.x; })
+				.attr("cy", function(d) { return d.y; });
+	};
+	
+	var nodes = vis.selectAll("circle.node")
+		.data(force.nodes())
+		.enter()
+		.append("circle")
+		.attr("class", "node")
+		.attr("r", 8)
+		.attr("id",function(d){ return d.id })
+		.style("fill", function(d) { return color(d.connectivity); })
+		.call(drag);
+
+	var node_label = vis.selectAll("node_text")
+		.data(force.nodes())
+		.enter()
+		.append("text")
+			.text(function (d) { return "@" + d.id; })
+			.attr("id",	function(d){return 'label-' + d.id; })
+			.style("visibility", "hidden")
+			.style("text-anchor", "middle")
+			.style("fill", "#73879c")
+			.style("font-family", "Arial")
+			.style("font-size", 18);
+	
+	
+		
+	force.on("tick", function() {
+		links.attr("x1", function(d) { return d.source.x; })
+			.attr("y1", function(d) { return d.source.y; })
+			.attr("x2", function(d) { return d.target.x; })
+			.attr("y2", function(d) { return d.target.y; });			
+
+		nodes.attr("cx", function(d) { return d.x; })
+				.attr("cy", function(d) { return d.y; });
+		node_label.attr("x", function(d) { return d.x; })
+			.attr("y", function(d) { return d.y-20; });
+		
+	});
+	
+	// hover on nodes show screen name
+	vis.selectAll("circle.node").on("mouseover",function(){
+		d3.select(this).attr("r", 18);
+		var id = d3.select(this).attr("id");
+		d3.select("#label-" + id).style("visibility","visible");
+	})
+	 .on("mouseout", function() {
+		d3.select(this).attr("r", 8);
+		var id = d3.select(this).attr("id");
+		d3.select("#label-" + id).style("visibility","hidden");
+	});
+	
+	// click on edges show tweet
+	vis.selectAll("line.link").on("mouseover",function(){
+		d3.select(this).style("stroke", "red");
+		var tweet = d3.select(this).attr("text");
+		var author = d3.select(this).attr("author");
+		$("#tweet-display").text(tweet);
+		$("#author-display").text("@" + author);
+	})
+	 .on("mouseout", function() {
+		d3.select(this).style("stroke", "#999");
+		$("#tweet-display").text('...');
+		$("#author-display").text('Author');
+	});
+
+});
+
