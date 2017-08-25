@@ -1,4 +1,5 @@
 import networkx as nx
+from networkx.readwrite import json_graph
 from collections import defaultdict
 import os
 from os.path import join, dirname
@@ -14,6 +15,7 @@ from dotenv import load_dotenv
 import csv
 import warnings
 import pandas
+import json
 warnings.filterwarnings('ignore')
 
 
@@ -70,6 +72,20 @@ class Network:
        
 
        
+    def export_graph(self):
+        d3js_graph = json_graph.node_link_data(self.graph)
+        d3js_graph['nodes'] = [
+            {
+                'id':node['id'],
+                'connectivity':self.graph.in_degree()[node['id']] + self.graph.out_degree()[node['id']]
+            }
+            for node in d3js_graph['nodes']
+        ]
+        fname_d3js = self.DIR + '/d3js.json'
+        with open(fname_d3js,"w") as f:
+            json.dump(d3js_graph,f)
+        print(fname_d3js)
+
     def draw_graph(self,relationships,layout,node_size,edge_width):
 
         if layout == 'spring':
@@ -407,6 +423,7 @@ if __name__ == "__main__":
     print(fname)
     
     network = Network(DIR, args.file, args.relationships)
+    network.export_graph()
     network.draw_graph(args.relationships, args.layout, args.node_size, args.edge_width)
 
     

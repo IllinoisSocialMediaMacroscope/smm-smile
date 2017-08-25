@@ -171,8 +171,11 @@ function ajaxSubmit(formID){
 				}else{
 					$(".loading").hide();
 					appendDownload("#side-download",data.download);
-					appendImg("#img-container",data.img);
-					appendPreview('#result-container',data.preview);
+					//appendImg("#img-container",data.img);
+					
+					if (data.preview.content !== ''){
+						appendPreview('#result-container',data.preview);
+					}
 					
 					if ('compound' in data){
 						// add gauge for sentiment analysis
@@ -184,9 +187,10 @@ function ajaxSubmit(formID){
 					}else if('table' in data){
 						// draw word tree for preprocessing
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
-					}
-					
-					
+					}else if('d3js_data' in data){
+						draw_d3js(data.d3js_data);
+						$("#d3js-network-container").show();
+					}					
 				}
 			},
 			error: function(jqXHR, exception){

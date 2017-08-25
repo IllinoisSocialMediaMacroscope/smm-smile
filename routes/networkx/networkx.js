@@ -33,14 +33,23 @@ router.post('/networkx',function(req,res,next){
 			res.send({'ERROR':err});
 		}else{
 			
-			var div= results[1];
+			var d3js = results[1];
+			var div= results[2];
 			var downloadFiles = [];
 			
-			for (var j=2; j< results.length; j++){
+			for (var j=3; j< results.length; j++){
 				var fnameRegex = /\/(?=[^\/]*$)(.*).json/g;
 				var display_name = fnameRegex.exec(results[j])[1];
 				downloadFiles.push({'name':display_name + ' metrics', 'content':results[j]});
 			}				
+			
+			
+			if (d3js.slice(-1)=== '\r' || d3js.slice(-1) === '\n' || d3js.slice(-1) === '\t' || d3js.slice(-1) === '\0' || d3js.slice(-1) === ' '){
+				var d3js_data = JSON.parse(fs.readFileSync(d3js.slice(0,-1),'utf8'));
+			}else{
+				var d3js_data = JSON.parse(fs.readFileSync(d3js,'utf8'));
+			}
+			
 			
 			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
 				var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r
@@ -53,7 +62,8 @@ router.post('/networkx',function(req,res,next){
 				img:[{name:'Network Visualization',content:div_data}],
 				download: downloadFiles,
 				metrics:{name:'', content:''}, 
-				preview:{name:'',content:''}						
+				preview:{name:'',content:''},
+				d3js_data:d3js_data
 			});
 			
 		}

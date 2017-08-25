@@ -116,36 +116,35 @@ function formValidation(){
 	
 }
 
-var width = document.getElementById("d3js-network-container").offsetWidth;;
-var height = 1000;
+function draw_d3js(d3js_data){
+	var vis = d3.select("#d3js-network-svg");
+	var width = document.getElementById("d3js-network-container").offsetWidth;;
+	var height = 800;
 
-var color = d3.scale.category10();
+	var color = d3.scale.category10();
 
-var force = d3.layout.force()
-	.gravity(.05)
-	.linkStrength(0.1)
-	.charge(-30)
-	.linkDistance(width/3)
-	.size([width, height]);
+	var force = d3.layout.force()
+		.gravity(.05)
+		.linkStrength(0.1)
+		.charge(-30)
+		.linkDistance(width/3)
+		.size([width, height]);
 
 
-// zoom-in
-function zoomed() {
-	vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-}
-var zoom = d3.behavior.zoom()
-			.scaleExtent([1, 10])
-			.on("zoom", zoomed);			
-var vis = d3.select("svg")
-			.call(zoom);				
+	/* zoom-in
+	function zoomed() {
+		vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	}
+	var zoom = d3.behavior.zoom()
+				.scaleExtent([1, 10])
+				.on("zoom", zoomed);*/					
 
-d3.json("d3js_graph.json", function(json) {
 	force
-		.nodes(json.nodes)
-		.links(json.links)
+		.nodes(d3js_data.nodes)
+		.links(d3js_data.links)
 		.start();
 	
-
+	//console.log(force.links());
 	var links = vis.append("g").selectAll("line.link")
 		.data(force.links())
 		.enter()
@@ -255,5 +254,6 @@ d3.json("d3js_graph.json", function(json) {
 		$("#author-display").text('Author');
 	});
 
-});
+	
 
+}
