@@ -188,7 +188,7 @@ function ajaxSubmit(formID){
 						// draw word tree for preprocessing
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
 					}else if('d3js_data' in data){
-						draw_d3js(data.d3js_data);
+						draw_d3js(data.d3js_data['nodes'],data.d3js_data['links']);
 						$("#d3js-network-container").show();
 					}					
 				}
