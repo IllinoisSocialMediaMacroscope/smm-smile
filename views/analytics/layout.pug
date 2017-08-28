@@ -88,37 +88,28 @@ html
 						div(class="col-md-12 col-sm-12 col-xs-12")
 							a(class="anchor" name="result-anchor")
 							div(id="result-container")
-							
+						
 					<!-- network graph -->
+					br
 					div(class="row")
 						div(class="col-md-12 col-sm-12 col-xs-12")
-							div(id="d3js-network-container", style="display:block;")
+							div(id="d3js-container", style="display:none;")
 								div(class="x_title")
 									h2 Interactive Network Visualization (D3JS)
 								div(class="x_content")
-									div(style="padding:20px 20px;color:#333;background-color:#ccc;border-radius:6px;height:300px;")
-										div(style="margin:20px 20px;")
-											//img(src="/bootstrap/img/logo/img-materials/notes.png",width="25px",style="display:inline-block;")
-											//h4(style=style="font-weight:600;display:inline;padding:0px 10px;vertical-align:bottom;") Notes:
-											li mouseover <img src="/bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the node will display the user screen name
-											li mouseover <img src="/bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over the edge will display the tweet
-											li dragging <img src="/bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node enabled
-											li dragging <img src="/bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node with <kbd>ctrl</kbd> pressed will fix the node in your desired location
-											li scroll <img src="/bootstrap/img/logo/img-materials/scroll.png" width="20px"/> zoom-in and out disabled (temp)
-										div(style="margin:20px 20px;")
-											img(src="/bootstrap/img/logo/img-materials/tweet.png",width="25px",style="display:inline-block;")
-											h4(id='author-display',style="font-weight:600;display:inline;padding:0px 10px;vertical-align:bottom;") Auhtor
-											p(id='tweet-display',style="margin:10px 0px; padding:10px 20px;background-color:white; border:solid 1.5px;border-radius:5px;") ...
-										
-									<svg id="d3js-network-svg" width="100%" height="1000px" preserveAspectRatio="xMidYMin">
-										<defs>
-											<marker id="arrow" viewbox="0 -5 10 10" refX="10" refY="0" markerWidth="3" markerHeight="3" orient="auto">
-												<path d="M0,-5L10,0L0,5Z">
-											</marker>
-										</defs>
-									</svg>
-								
-		
+									div(id="note")
+										li mouseover <img src="/bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the node will display the user screen name
+										li mouseover <img src="/bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over the edge will display the tweet
+										li dragging <img src="/bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node enabled
+										li dragging <img src="/bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node with <kbd>ctrl</kbd> pressed will fix the node in your desired location
+										li scroll <img src="/bootstrap/img/logo/img-materials/scroll.png" width="20px"/> zoom-in and out disabled (temp)
+										li(id="colorscale") colorscale:
+									div(style="margin:20px 20px;")
+										img(src="/bootstrap/img/logo/img-materials/tweet.png",width="25px",style="display:inline-block;")
+										h4(id='author-display') Auhtor
+										p(id='tweet-display') ...
+									div(id="d3js-network-container",style="background-color:white;overflow:hidden;")
+									
 		block customized-script
 							
 		

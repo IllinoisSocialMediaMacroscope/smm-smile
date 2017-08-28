@@ -19,6 +19,7 @@ html
 		script(src="../bootstrap/js/customized/view.js")
 		script(src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
 		script(src="../bootstrap/js/bootstrap.min.js")
+		script(src="https://d3js.org/d3.v2.js")
 		
 	body
 		include components/topbar.pug
@@ -124,6 +125,27 @@ html
 					div(class="col-md-12 col-sm-12 col-xs-12")
 						a(class="anchor" name="result-anchor")
 						div(id="result-container")
+						
+				<!-- network graph -->
+				br
+				div(class="row")
+					div(class="col-md-12 col-sm-12 col-xs-12")
+						div(id="d3js-container", style="display:none;")
+							div(class="x_title")
+								h2 Interactive Network Visualization (D3JS)
+							div(class="x_content")
+								div(id="note")
+									li mouseover <img src="/bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the node will display the user screen name
+									li mouseover <img src="/bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over the edge will display the tweet
+									li dragging <img src="/bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node enabled
+									li dragging <img src="/bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node with <kbd>ctrl</kbd> pressed will fix the node in your desired location
+									li scroll <img src="/bootstrap/img/logo/img-materials/scroll.png" width="20px"/> zoom-in and out disabled (temp)
+									li(id="colorscale") colorscale:
+								div(style="margin:20px 20px;")
+									img(src="/bootstrap/img/logo/img-materials/tweet.png",width="25px",style="display:inline-block;")
+									h4(id='author-display') Auhtor
+									p(id='tweet-display') ...
+								div(id="d3js-network-container",style="background-color:white;overflow:hidden;")
 		
 		<!-- popup modal delete -->
 		div(id="delete" class="modal fade" role="dialog")

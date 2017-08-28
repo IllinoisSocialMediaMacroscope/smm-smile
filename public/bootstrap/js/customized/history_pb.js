@@ -5,6 +5,7 @@ function submitHistory(formID){
 	$("#result-container").empty();
 	$("#gaudge").empty();
 	$("#title").empty();
+	$("#d3js-container").hide();
 	$("#background").hide();			
 	$("#loading").show();
 	
@@ -53,6 +54,10 @@ function submitHistory(formID){
 						// draw word tree for preprocessing
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
 					}
+					
+					if('d3js_data' in data){
+						appendD3JS(data);
+					}					
 				}
 			}
 		},

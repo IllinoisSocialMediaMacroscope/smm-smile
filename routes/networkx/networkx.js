@@ -59,7 +59,7 @@ router.post('/networkx',function(req,res,next){
 			
 			res.send({
 				title:'Network Analysis', 
-				img:[{name:'Network Visualization',content:div_data}],
+				img:[{name:'Static Network Visualization',content:div_data}],
 				download: downloadFiles,
 				metrics:{name:'', content:''}, 
 				preview:{name:'',content:''},
