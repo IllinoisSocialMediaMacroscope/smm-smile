@@ -33,6 +33,7 @@ function customized_reset(){
 	$("#result-container").empty();
 	$("#side-download").empty();
 	$("#side-download-li").hide();
+	$("#d3js-container").hide();
 }
 
 /*----------------------------display uploaded csv --------------------------*/
