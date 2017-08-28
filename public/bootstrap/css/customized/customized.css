@@ -402,7 +402,28 @@ tr{
 	color:#2a5a84;
 }
 
+/******** d3js **************/
 marker#arrow {
     stroke: #999;
     fill: #999;
+}
+
+#note{
+	margin:20px 20px;
+	color:black;
+}
+
+#author-display{
+	font-weight:600;
+	display:inline;
+	padding:0px 10px;
+	vertical-align:bottom;
+}
+
+#tweet-display{
+	margin:10px 0px; 
+	padding:10px 20px;
+	background-color:white; 
+	border:solid 1.5px;
+	border-radius:5px;
 }

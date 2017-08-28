@@ -198,6 +198,11 @@ router.post('/history',function(req,res,next){
 		var fnames = fs.readdirSync(DIR);
 		var div_data = fs.readFileSync(DIR + '/div.dat', 'utf8');
 		var config = JSON.parse(fs.readFileSync(DIR + '/config.dat','utf8'));
+		if (fs.existsSync(DIR + '/d3js.json')){
+			var d3js_data = JSON.parse(fs.readFileSync(DIR + '/d3js.json','utf8'));
+		}else{
+			var d3js_data = '';
+		}
 		
 		fnames = fnames.filter(item => item !== 'div.dat' && item !== 'config.dat');
 		var downloadFiles = [];
@@ -211,9 +216,10 @@ router.post('/history',function(req,res,next){
 		res.send({
 			title:'Network Analysis', 
 			ID:req.body.historyID,
-			img:[{name:'Network Visualization',content:div_data}],
+			img:[{name:'Static Network Visualization',content:div_data}],
 			download: downloadFiles,
-			config: config
+			config: config,
+			d3js_data:d3js_data
 		});
 	}
 	else if ((
