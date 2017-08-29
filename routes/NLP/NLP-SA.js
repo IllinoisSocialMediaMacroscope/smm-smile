@@ -34,7 +34,8 @@ router.post('/NLP/sentiment',function(req,res,next){
 	
 	pythonShell.run('sentiment.py',options,function(err,results){
 		if (err){
-			throw err;
+			//throw err;
+			res.send({'ERROR':err});
 		}else{
 			
 			var div=results[1];
@@ -44,23 +45,23 @@ router.post('/NLP/sentiment',function(req,res,next){
 			var allcap = results[5];
 			
 			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
-				var div_data = fs.readFileSync(div.slice(0,-1), 'utf8'); //trailing /r
+				var div_data = fs.readFileSync(div.slice(0,-1),'utf8');
 			}else{
-				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
+				var div_data = fs.readFileSync(div,'utf8');
 			}
 			
 			if (sentiment.slice(-1) === '\r' || sentiment.slice(-1) === '\n' || sentiment.slice(-1) === '\t' || sentiment.slice(-1) === '\0' || sentiment.slice(-1) === ' '){
-				var preview_string = fs.readFileSync(sentiment.slice(0,-1), "utf8"); 
+				var preview_string = fs.readFileSync(sentiment.slice(0,-1),'utf8');
 			}else{
-				var preview_string = fs.readFileSync(sentiment, "utf8");
+				var preview_string = fs.readFileSync(sentiment,'utf8');
 			}
 			
 			var preview_arr = CSV.parse(preview_string);
 			
 			if (doc_sentiment.slice(-1) === '\r' || doc_sentiment.slice(-1) === '\n' || doc_sentiment.slice(-1) === '\t' || doc_sentiment.slice(-1) === '\0' || doc_sentiment.slice(-1) === ' '){
-				var compound = JSON.parse(fs.readFileSync(doc_sentiment.slice(0,-1)))['compound']; 
+				var compound = fs.readFileSync(doc_sentiment.slice(0,-1),'utf8')['compound']; 
 			}else{
-				var compound = JSON.parse(fs.readFileSync(doc_sentiment))['compound'];
+				var compound = fs.readFileSync(doc_sentiment,'utf8')['compound']; 
 			}
 			
 			

@@ -38,20 +38,20 @@ router.post('/NLP/topic',function(req,res,next){
 		
 	pyshell.end(function(err){
 		if(err){
-			throw err;
-			//res.send({ERROR:err});	
+			//throw err;
+			res.send({ERROR:err});	
 		}
 		else{
 			if (div_features.slice(-1) === '\r' || div_features.slice(-1) === '\n' || div_features.slice(-1) === '\t' || div_features.slice(-1) === '\0' || div_features.slice(-1) === ' '){
-				var div_features_data = fs.readFileSync(div_features.slice(0,-1), 'utf8'); //trailing /r 
+				var div_features_data = fs.readFileSync(div_features.slice(0,-1),'utf8');
 			}else{
-				var div_features_data = fs.readFileSync(div_features, 'utf8'); //trailing /r 
+				var div_features_data = fs.readFileSync(div_features,'utf8');
 			}
 			
 			if (topic.slice(-1) === '\r' || topic.slice(-1) === '\n' || topic.slice(-1) === '\t' || topic.slice(-1) === '\0' || topic.slice(-1) === ' '){
-				var preview_string = fs.readFileSync(topic.slice(0,-1), "utf8");
+				var preview_string = fs.readFileSync(topic.slice(0,-1),'utf8');
 			}else{
-				var preview_string = fs.readFileSync(topic, "utf8");
+				var preview_string = fs.readFileSync(topic,'utf8');
 			}
 			
 			var preview_arr = CSV.parse(preview_string);

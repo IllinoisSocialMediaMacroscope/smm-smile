@@ -37,13 +37,31 @@ router.post('/query',function(req,res,next){
 	
 	// make directory downloads/GraphQL before save things to it!
 	if (!fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD)){
-		fs.mkdirSync(process.env.ROOTDIR + process.env.DOWNLOAD);
+		fs.mkdir(process.env.ROOTDIR + process.env.DOWNLOAD, function(err){
+			if (err) {
+				res.send({'ERROR':err});
+			}else{
+				console.log("successfully created" + process.env.ROOTDIR + process.env.DOWNLOAD + " folder");
+			}
+		});
 	}	
 	if (!fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL)){
-		fs.mkdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
+		fs.mkdir(process.env.ROOTDIR + process.env.DOWNLOAD, function(err){
+			if (err) {
+				res.send({'ERROR':err});
+			}else{
+				console.log("successfully created" + process.env.ROOTDIR + process.env.DOWNLOAD + " folder");
+			}
+		});
 	}
 	if (!fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.prefix)){
-		fs.mkdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.prefix);
+		fs.mkdir(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.prefix, function(err){
+			if (err) {
+				res.send({'ERROR':err});
+			}else{
+				console.log("successfully created" + process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.prefix + " folder");
+			}
+		});
 	} 
 	
 	// make sure files that already exist in the directory wont be allowed
@@ -118,7 +136,11 @@ function saveFile(responseObj,params,pages,prefix, filename,keys){
 	if (responseObj[keys[0]][keys[1]][keys[2]].length > 0){
 		
 		var directory = process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + prefix + '/' + filename +'/';
-		fs.mkdirSync(directory);
+		fs.mkdir(directory, function(err){
+			if (err){
+							return {ERROR:err};
+						}	
+		});
 		
 		// save CSV
 		var processed = filename + '.csv';		
