@@ -207,11 +207,18 @@ router.post('/history',function(req,res,next){
 		}
 		
 		fnames = fnames.filter(item => item !== 'div.dat' && item !== 'config.dat');
+		
 		var downloadFiles = [];
 		for (var i=0; i< fnames.length; i++){
-			var fnameRegex = /(.*).json/g
-			var display_name = fnameRegex.exec(fnames[i])[1];
-			downloadFiles.push({'name':display_name , 'content':DIR + '/' + fnames[i]}); 
+			if (fnames[i] === 'd3js.json'){
+				downloadFiles.push({'name':'graph exported in JSON format', 'content':DIR + '/' + fnames[i]}); 
+			}else if (fnames[i] === 'gephi.json'){
+				downloadFiles.push({'name':'graph exported in Gephi format', 'content':DIR + '/' + fnames[i]}); 
+			}else{
+				var fnameRegex = /(.*).json/g
+				var display_name = fnameRegex.exec(fnames[i])[1];
+				downloadFiles.push({'name':display_name + ' metrics', 'content':DIR + '/' + fnames[i]}); 
+			}
 		}
 		
 		//console.log(fnames);
