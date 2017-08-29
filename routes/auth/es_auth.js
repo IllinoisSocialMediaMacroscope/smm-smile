@@ -2,7 +2,6 @@
 var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
-var fs = require('fs');
 
 router.get('/login/es', function(req,res,next){
 	//mock

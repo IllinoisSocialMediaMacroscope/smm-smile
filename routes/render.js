@@ -8,9 +8,9 @@ var admZip = require('adm-zip');
 router.post('/render',function(req,res,next){
 
 	if (req.body.foldername !== 'empty'){
-				
+		
 		var preview_string = fs.readFileSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.directory +
-												'/' + req.body.foldername + '/' + req.body.foldername + '.csv', "utf8");
+					'/' + req.body.foldername + '/' + req.body.foldername + '.csv', "utf8");
 		var preview_arr = CSV.parse(preview_string);
 		res.send({preview:preview_arr.slice(0,10)}); // preview the top 25 line?
 			

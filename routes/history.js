@@ -11,12 +11,14 @@ router.get('/history',function(req,res,next){
 							"twitter-User":{},
 							"twitter-Stream":{}},
 						"ML":
-							{"feature":{},
+							{
+								//"feature":{},
 							"clustering":{}},
 						"NLP":
 							{"preprocessing":{},
-							"sentiment":{},
-							"topic-modeling":{}},
+							"sentiment":{}
+							//"topic-modeling":{}
+							},
 						"NW":{"networkx":{}},
 					}
 					
@@ -29,13 +31,13 @@ router.get('/history',function(req,res,next){
 					directory['ML']['clustering'][fileList[i]] = created_at;
 				}
 			}
-			if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_TRAINING)){
+			/*if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_TRAINING)){
 				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_TRAINING);
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at = fs.lstatSync(process.env.ROOTDIR + + process.env.DOWNLOAD_ML_TRAINING + '/' + fileList[i]).birthtime.toString();
 					directory['ML']['feature'][fileList[i]] = created_at;
 				}
-			}
+			}*/
 		}
 		
 		if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP)){
@@ -53,13 +55,13 @@ router.get('/history',function(req,res,next){
 					directory['NLP']['sentiment'][fileList[i]] = created_at;
 				}
 			}
-			if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC)){
+			/*if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC)){
 				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC);
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC + '/' + fileList[i]).birthtime.toString();
 					directory['NLP']['topic-modeling'][fileList[i]] = created_at;
 				}
-			}
+			}*/
 		}
 		if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW)){
 			if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW_NETWORKX)){
@@ -209,7 +211,7 @@ router.post('/history',function(req,res,next){
 		for (var i=0; i< fnames.length; i++){
 			var fnameRegex = /(.*).json/g
 			var display_name = fnameRegex.exec(fnames[i])[1];
-			downloadFiles.push({'name':display_name + ' metrics', 'content':DIR + '/' + fnames[i]}); 
+			downloadFiles.push({'name':display_name , 'content':DIR + '/' + fnames[i]}); 
 		}
 		
 		//console.log(fnames);

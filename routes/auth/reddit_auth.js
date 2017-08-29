@@ -2,7 +2,6 @@ require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
-var fs = require('fs');
 var crypto = require('crypto');
 
 router.get('/login/reddit', function(req,res,next){

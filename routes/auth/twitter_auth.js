@@ -2,7 +2,6 @@ require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
-var fs = require('fs');
 var OAuth1 = require('oauth').OAuth;
 var consumer = new OAuth1(
 	"https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token", 
