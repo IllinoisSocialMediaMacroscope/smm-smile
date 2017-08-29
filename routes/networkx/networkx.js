@@ -40,7 +40,7 @@ router.post('/networkx',function(req,res,next){
 			for (var j=3; j< results.length; j++){
 				var fnameRegex = /\/(?=[^\/]*$)(.*).json/g;
 				var display_name = fnameRegex.exec(results[j])[1];
-				downloadFiles.push({'name':display_name, 'content':results[j]});
+				downloadFiles.push({'name':display_name + ' metrics', 'content':results[j]});
 			}				
 			
 			
