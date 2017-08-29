@@ -37,14 +37,14 @@ class Network:
         
         if relationships == 'reply_to':
             if input_file.find('twitter-Tweet') != -1:
-                df['reply_to'] = df['text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
+                df['reply_to'] = df['text'].str.extract('^@([A-Za-z0-9-_]+)',expand=True)
                 new_df = df[['reply_to','user.screen_name','text']].dropna()
                 self.graph = nx.DiGraph()
                 self.directed = 'directed'
                 for row in new_df.iterrows():
                    self.graph.add_edge(row[1]['user.screen_name'], row[1]['reply_to'], text=row[1]['text'])
             elif input_file.find('twitter-Stream') != -1:
-                df['reply_to'] = df['_source.text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
+                df['reply_to'] = df['_source.text'].str.extract('^@([A-Za-z0-9-_]+)',expand=True)
                 new_df = df[['reply_to','_source.user.screen_name','_source.text']].dropna()
                 self.graph = nx.DiGraph()
                 self.directed = 'directed'
@@ -53,14 +53,14 @@ class Network:
                
         elif relationships == 'retweet_from':
             if input_file.find('twitter-Tweet') != -1:
-                df['retweet_from'] = df['text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
+                df['retweet_from'] = df['text'].str.extract('RT @([A-Za-z0-9-_]+):',expand=True)
                 new_df = df[['retweet_from','user.screen_name','text']].dropna()
                 self.graph = nx.DiGraph()
                 self.directed = 'directed'
                 for row in new_df.iterrows():
                    self.graph.add_edge(row[1]['user.screen_name'], row[1]['retweet_from'], text=row[1]['text'])
             elif input_file.find('twitter-Stream') != -1:
-                df['retweet_from'] = df['_source.text'].str.extract('^@([A-Za-z]+[A-Za-z0-9-]+)',expand=True)
+                df['retweet_from'] = df['_source.text'].str.extract('RT @([A-Za-z0-9-_]+):',expand=True)
                 new_df = df[['retweet_from','_source.user.screen_name','_source.text']].dropna()
                 self.graph = nx.DiGraph()
                 self.directed = 'directed'
@@ -116,7 +116,7 @@ class Network:
                 # colorscale options
                 # 'Greys' | 'Greens' | 'Bluered' | 'Hot' | 'Picnic' | 'Portland' |
                 # Jet' | 'RdBu' | 'Blackbody' | 'Earth' | 'Electric' | 'YIOrRd' | 'YIGnBu'
-                colorscale='Bluered', reversescale=False, color=[],
+                colorscale='Portland', reversescale=False, color=[],
                 size=node_size,
                 colorbar=dict(
                     thickness=15,
@@ -135,12 +135,12 @@ class Network:
         if relationships == 'reply_to':
             for node in self.graph.nodes():
                 node_trace['marker']['color'].append(self.graph.in_degree()[node] + self.graph.out_degree()[node])
-                node_trace['text'].append("@" + node + " replies to " + str(self.graph.in_degree()[node]) + " users, and is replied by " + str(self.graph.out_degree()[node]) + " users")
+                node_trace['text'].append("@" + node + " is replied by " + str(self.graph.in_degree()[node]) + " user(s), and replies to " + str(self.graph.out_degree()[node]) + " user(s)")
                 
         elif relationships == 'retweet_from':
             for node in self.graph.nodes():
                 node_trace['marker']['color'].append(self.graph.in_degree()[node] + self.graph.out_degree()[node])
-                node_trace['text'].append("@" + node + " retweets from " + str(self.graph.in_degree()[node]) + " users and is retweeted from " + str(self.graph.out_degree()[node]) + " users")
+                node_trace['text'].append("@" + node + " is retweeted by " + str(self.graph.in_degree()[node]) + " user(s) and retweets from " + str(self.graph.out_degree()[node]) + " user(s)")
 
         # if undirected
         elif relationships == 'mentions':

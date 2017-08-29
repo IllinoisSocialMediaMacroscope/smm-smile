@@ -35,7 +35,7 @@ router.post('/networkx',function(req,res,next){
 			
 			var d3js = results[1];
 			var div= results[2];
-			var downloadFiles = [];
+			var downloadFiles = [{'name':'graph exported in JSON format', 'content':d3js}];
 			
 			for (var j=3; j< results.length; j++){
 				var fnameRegex = /\/(?=[^\/]*$)(.*).json/g;
