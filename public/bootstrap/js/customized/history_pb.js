@@ -116,6 +116,8 @@ function deleteHistory(formID){
 				$("#result-container").empty();
 				$("#gaudge").empty();
 				$("#title").empty();
+				$("#d3js-network-container").empty();
+				$("#d3js-container").hide();
 				$("#" + formID).parent().css( "display", "none" );
 				$("#delete").modal('hide');
 				$("#background").show();
