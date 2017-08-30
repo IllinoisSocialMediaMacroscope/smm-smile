@@ -94,8 +94,8 @@ html
 						div(class="loading" style="display:none")
 							img(src="../bootstrap/img/loading2.gif", width="15%", height="15%", style="display:block; margin-left:auto; margin-right:auto; margin-top:10px")
 					div(class="modal-footer")
-						button(class="btn btn-primary", id="saveButton") Save
-						button(class="btn btn-default",data-dismiss="modal") Close
+						button(class="btn btn-default", id="saveButton", style="background-color:#ea4a36;color:white;border-style:hidden") Save
+						button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden", data-dismiss="modal") Close
 		
 		<!-- popup modal download-->
 		div(id="success" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
@@ -107,10 +107,14 @@ html
 					
 					div(class="modal-body" style="vertical-align:middle;font-size:20px;")
 						div(id="modal-download")
+						p(id="download-note") <b>NOTE</b>: Your search results are saved in your home directory. You can either <b>download</b> here; 
+							| or go to any of the analytics tools --> <b>select from your folder</b>;
+							| or review, manage and download it in the <b>history</b> page
+							| If you accidentally close this modal window, you can click <b>export</b> button in this page to resume.
 						
 					div(class="modal-footer")
-						a(href="/" class="btn btn-primary" style="background-color:#c84b49;border-style:hidden") Go To Analytics
-						button(class="btn btn-default" data-dismiss="modal") Close
+						a(href="/", class="btn btn-primary",style="background-color:#ea4a36;border-style:hidden") Go To Analytics
+						a(href="/history", class="btn btn-primary", style="background-color:#1e325a;border-style:hidden") Review in History
 						
 						
 						

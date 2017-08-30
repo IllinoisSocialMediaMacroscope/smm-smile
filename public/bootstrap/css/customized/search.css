@@ -376,16 +376,6 @@ nav-tabs li a:hover{
 	border-radius:6px;
 }
 
-.link-button{
-	background:none;
-		border:none;
-		color:#005fb2;
-}
-.link-button:hover{
-	background-color:#e9f2f9;
-	color:#fff;
-}
-
 .button{
 	font-weight: 600;
     color: white;
@@ -450,3 +440,23 @@ nav-tabs li a:hover{
 	padding:30px 30px;
 	vertical-align:middle;
 }
+
+/* download modal */
+#download-note{
+	margin-left:20px;
+	margin-top:40px; 
+	font-size:14px; 
+	color:#777;
+}
+
+.link-button{
+	background:none;
+	border:none;
+	border-bottom: 1px solid #1e325a;
+	color:#1e325a;
+}
+.link-button:hover{
+	color:#ea4a36;
+	border-bottom: 1px solid #ea4a36;
+}
+	
