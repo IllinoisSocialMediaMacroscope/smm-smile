@@ -104,7 +104,7 @@ router.post('/history',function(req,res,next){
 	
 	var DIR = process.env.ROOTDIR + process.env.DOWNLOAD + '/' + req.body.layer1 + '/' + req.body.layer2 +'/' + req.body.historyID;
 	
-	if (req.body.layer2 ==='topic-modeling' 
+	/*if (req.body.layer2 ==='topic-modeling' 
 			&& fs.readdirSync(DIR).length === 4 
 			&& fs.existsSync(process.env.ROOTDIR + '/public/pyLDAvis/pyLDAvis-' + req.body.historyID + '.html')){
 		var div_features_data = fs.readFileSync(DIR + '/div_features.dat', 'utf8'); 		
@@ -124,8 +124,8 @@ router.post('/history',function(req,res,next){
 			config:config
 		});
 		
-	}
-	else if (req.body.layer2=== 'preprocessing' && fs.readdirSync(DIR).length === 7){
+	}*/
+	if (req.body.layer2=== 'preprocessing' && fs.readdirSync(DIR).length === 7){
 		
 		var div_data = fs.readFileSync(DIR +'/div.dat', 'utf8'); 
 		var sentence_array = fs.readFileSync(DIR +'/sentence.csv','utf8').toString().split("\n")
@@ -196,7 +196,7 @@ router.post('/history',function(req,res,next){
 				config:config
 			});
 	}
-	else if (req.body.layer2 === 'networkx' && fs.readdirSync(DIR).length >=3){
+	else if (req.body.layer2 === 'networkx' && fs.readdirSync(DIR).length >=4){
 		var fnames = fs.readdirSync(DIR);
 		var div_data = fs.readFileSync(DIR + '/div.dat', 'utf8');
 		var config = JSON.parse(fs.readFileSync(DIR + '/config.dat','utf8'));
@@ -212,8 +212,8 @@ router.post('/history',function(req,res,next){
 		for (var i=0; i< fnames.length; i++){
 			if (fnames[i] === 'd3js.json'){
 				downloadFiles.push({'name':'graph exported in JSON format', 'content':DIR + '/' + fnames[i]}); 
-			}else if (fnames[i] === 'gephi.json'){
-				downloadFiles.push({'name':'graph exported in Gephi format', 'content':DIR + '/' + fnames[i]}); 
+			}else if (fnames[i] === 'network.gml'){
+				downloadFiles.push({'name':'graph exported in GML (Gephi) format', 'content':DIR + '/' + fnames[i]}); 
 			}else{
 				var fnameRegex = /(.*).json/g
 				var display_name = fnameRegex.exec(fnames[i])[1];

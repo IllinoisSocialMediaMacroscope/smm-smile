@@ -73,6 +73,7 @@ class Network:
 
        
     def export_graph(self):
+        # JSON format
         d3js_graph = json_graph.node_link_data(self.graph)
         d3js_graph['nodes'] = [
             {
@@ -85,6 +86,11 @@ class Network:
         with open(fname_d3js,"w") as f:
             json.dump(d3js_graph,f)
         print(fname_d3js)
+
+        # Gehpi readable format
+        fname_gephi = self.DIR + '/network.gml'
+        nx.write_gml(self.graph,fname_gephi)
+        print(fname_gephi)
 
     def draw_graph(self,relationships,layout,node_size,edge_width):
 

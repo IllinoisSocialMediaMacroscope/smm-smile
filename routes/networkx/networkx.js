@@ -34,10 +34,13 @@ router.post('/networkx',function(req,res,next){
 		}else{
 			
 			var d3js = results[1];
-			var div= results[2];
-			var downloadFiles = [{'name':'graph exported in JSON format', 'content':d3js}];
+			var gephi = results[2];
+			var div= results[3];
+			var downloadFiles = [	{'name':'graph exported in GML (Gephi) format', 'content':gephi},
+									{'name':'graph exported in JSON format', 'content':d3js}
+									];
 			
-			for (var j=3; j< results.length; j++){
+			for (var j=4; j< results.length; j++){
 				var fnameRegex = /\/(?=[^\/]*$)(.*).json/g;
 				var display_name = fnameRegex.exec(results[j])[1];
 				downloadFiles.push({'name':display_name + ' metrics', 'content':results[j]});
