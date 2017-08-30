@@ -92,7 +92,7 @@ class Network:
         nx.write_gml(self.graph,fname_gephi)
         print(fname_gephi)
 
-    def draw_graph(self,relationships,layout,node_size,edge_width):
+    def draw_graph(self,relationships,layout):
 
         if layout == 'spring':
             pos = nx.spring_layout(self.graph)
@@ -108,7 +108,7 @@ class Network:
             pos = nx.spectral_layout(self.graph)
 
         edge_attri = nx.get_edge_attributes(self.graph,'text')
-        edge_trace = Scatter(x=[], y=[], text=[], line=Line(width=edge_width,color='#b5b5b5'), hoverinfo='text',mode='lines',hoveron='points')
+        edge_trace = Scatter(x=[], y=[], text=[], line=Line(width=1,color='#b5b5b5'), hoverinfo='text',mode='lines',hoveron='points')
         for edge in self.graph.edges():
             x0, y0 = pos[edge[0]]
             x1, y1 = pos[edge[1]]
@@ -123,7 +123,7 @@ class Network:
                 # 'Greys' | 'Greens' | 'Bluered' | 'Hot' | 'Picnic' | 'Portland' |
                 # Jet' | 'RdBu' | 'Blackbody' | 'Earth' | 'Electric' | 'YIOrRd' | 'YIGnBu'
                 colorscale='Portland', reversescale=False, color=[],
-                size=node_size,
+                size=10,
                 colorbar=dict(
                     thickness=15,
                     title='node connectivity',
@@ -409,8 +409,8 @@ if __name__ == "__main__":
     parser.add_argument('--file', required=True)
     parser.add_argument('--layout',required=True)
     parser.add_argument('--relationships',required=True)
-    parser.add_argument('--node_size',required=True)
-    parser.add_argument('--edge_width',required=True)
+    #parser.add_argument('--node_size',required=True)
+    #parser.add_argument('--edge_width',required=True)
    
     args = parser.parse_args()
 
@@ -430,7 +430,7 @@ if __name__ == "__main__":
     
     network = Network(DIR, args.file, args.relationships)
     network.export_graph()
-    network.draw_graph(args.relationships, args.layout, args.node_size, args.edge_width)
+    network.draw_graph(args.relationships, args.layout) #, args.node_size, args.edge_width)
 
     
     #network.approximation()

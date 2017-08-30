@@ -98,8 +98,7 @@ function init(){
 				$("#simple-search-btn").prop('disabled',false);
 			}
 		}else{
-			$("#modal-message").append(`<h4>filename illegal!<br> Legal Filename should only include <i>Alphabet, Number,
-										Underscore</i> and/or <i>Dash</i>. <b>Example: mySearch-cwang138</b></h4>`);
+			$("#modal-message").append(`<h4>Advanced search disabled unless you provide some search keywords!</h4>`);
 			$("#alert").modal('show');
 			$("#searchbox").focus();
 		}

@@ -23,8 +23,9 @@ router.post('/networkx',function(req,res,next){
 		args:[	'--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, 
 				'--layout',req.body.layout, 
 				'--relationships',req.body.relationships, 
-				'--node_size',req.body.node_size,
-				'--edge_width',req.body.edge_width ] 
+				//'--node_size',req.body.node_size,
+				//'--edge_width',req.body.edge_width 
+			] 
 	};
 	
 	pythonShell.run('network_analysis.py',options,function(err,results){

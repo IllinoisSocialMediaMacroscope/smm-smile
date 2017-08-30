@@ -310,10 +310,10 @@ function renderPreview(data,prefix){
 	$("#modal-download").empty();
 	$("#modal-download").append(`<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
 						<input type="hidden" value=`+data.URL[0]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
-						+data.fname[0]+`</button></form></ul>
+						+'DOWNLOAD ' + data.fname[0]+`</button></form></ul>
 						<ul style="margin:5px 5px;"><form action='/download' name='download' method='post'>
 						<input type="hidden" value=`+data.URL[1]+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
-						+data.fname[1]+`</button></form></ul>`);
+						+'DOWNLOAD ' + data.fname[1]+`</button></form></ul>`);
 	$("#success").modal('show');
 	
 	// construct previews
