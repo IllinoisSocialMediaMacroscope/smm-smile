@@ -25,7 +25,10 @@
 							"label":"reply to"},
 							
 							{"value":"retweet_from",
-							"label":"retweet from"}						
+							"label":"retweet from"},
+
+							{"value":"mentions",
+							"label":"mentions"}							
 						]
 					}
 				]},
