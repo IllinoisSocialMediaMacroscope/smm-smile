@@ -25,15 +25,16 @@ class Network:
 
         self.DIR = DIR
 
-        Array = []
+        '''Array = []
         with open(input_file,'r',encoding="utf-8") as f:
             reader = csv.reader(f)
             try:
                 for row in reader:
                     Array.append(row)
             except Exception as e:
-                print(e)
-        df = pandas.DataFrame(Array[1:],columns=Array[0])
+                print(e)'''
+        #df = pandas.DataFrame(Array[1:],columns=Array[0])
+        df = pandas.read_csv(input_file, encoding="utf-8")
         
         if relationships == 'reply_to':
             if input_file.find('twitter-Tweet') != -1:
@@ -68,7 +69,39 @@ class Network:
                     self.graph.add_edge(row[1]['retweet_from'],row[1]['_source.user.screen_name'], text=row[1]['_source.text'])
                 
         elif relationships == 'mentions':
-            pass
+            
+            if input_file.find('twitter-Tweet') != -1:
+                df['mentions'] = df['text'].str.findall('@([A-Za-z0-9-_]+)')
+                tmp = []
+                def backend(r):
+                    x = r['user.screen_name']
+                    y = r['text']
+                    zz = r['mentions']
+                    for z in zz:
+                        tmp.append({'screen_name':x, 
+                                    'tweet':y,
+                                    'mention':z})
+                df.apply(backend,axis=1)
+                new_df = pandas.DataFrame(tmp).dropna()
+                    
+            elif input_file.find('twitter-Stream') != -1:
+                df['mentions'] = df['_source.text'].str.findall('@([A-Za-z0-9-_]+)')
+                tmp = []
+                def backend(r):
+                    x = r['_source.user.screen_name']
+                    y = r['_source.text']
+                    zz = r['mentions']
+                    for z in zz:
+                        tmp.append({'screen_name':x, 
+                                   'tweet':y,
+                                   'mention':z})
+                df.apply(backend,axis=1)
+                new_df = pandas.DataFrame(tmp).dropna()
+                               
+            self.graph = nx.DiGraph()
+            self.directed = 'directed'
+            for row in new_df.iterrows():
+                self.graph.add_edge(row[1]['screen_name'], row[1]['mention'], text=row[1]['tweet'])
        
         # prune the network or not
         if prune == 'true':
@@ -164,11 +197,10 @@ class Network:
                 node_trace['marker']['color'].append(self.graph.in_degree()[node] + self.graph.out_degree()[node])
                 node_trace['text'].append("@" + node + " is retweeted by " + str(self.graph.in_degree()[node]) + " user(s) and retweets from " + str(self.graph.out_degree()[node]) + " user(s)")
 
-        # if undirected
         elif relationships == 'mentions':
-            for node, adjacencies in zip(self.graph.nodes(),self.graph.adjacency_list()):
-                node_trace['marker']['color'].append(len(adjacencies))
-                node_trace['text'].append("@" + node + ", connections:" + str(len(adjacencies)))
+            for node in self.graph.nodes():
+                node_trace['marker']['color'].append(self.graph.in_degree()[node] + self.graph.out_degree()[node])
+                node_trace['text'].append("@" + node + " is mentioned by " + str(self.graph.in_degree()[node]) + " user(s) and mentions " + str(self.graph.out_degree()[node]) + " user(s)")
                 
         fig = Figure(data=Data([edge_trace, node_trace]), layout=Layout(
                 title= relationships + ' Network Graph',

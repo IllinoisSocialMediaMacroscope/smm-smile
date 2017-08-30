@@ -182,8 +182,8 @@ function draw_d3js(d_nodes,d_links){
 	}
 	
 	var force = d3.layout.force()
-		.gravity(.05)
-		.linkStrength(0.1)
+		.friction(0.0)
+		.gravity(0.05)
 		.charge(-15)
 		.linkDistance(100)
 		.size([width, height]);
@@ -193,7 +193,6 @@ function draw_d3js(d_nodes,d_links){
 		.nodes(d_nodes)
 		.links(d_links)
 		.start();
-	
 
 	var links = vis.append("g").selectAll("line.link")
 		.data(force.links())
