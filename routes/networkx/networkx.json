@@ -58,6 +58,28 @@
 							
 						]
 					}
+				]},
+		{"container-name":"",
+		"container-label-name":"remove isolate pairs",
+		"inputs":[
+					{"type":"radio",
+						"name":"prune",
+						"id":"false",
+						"value":"false",
+						"sytle":"position: absolute; visibility: hidden;",
+						"class":"customized-radio",
+						"checked":true,
+						"label":"No"
+					},
+					{"type":"radio",
+						"name":"prune",
+						"id":"true",
+						"value":"true",
+						"sytle":"position: absolute; visibility: hidden;",
+						"class":"customized-radio",
+						"checked":false,
+						"label":"Yes"
+					}
 				]}
 	],
 	"custom-script":"../bootstrap/js/customized/view_networkx.js"

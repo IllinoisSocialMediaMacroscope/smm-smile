@@ -16,13 +16,13 @@ router.get('/networkx',function(req,res,next){
 });
 
 router.post('/networkx',function(req,res,next){
-	
 	var options = {
 		pythonPath:process.env.PYTHONPATH,
 		scriptPath:appPath + '/scripts/NetworkX/',
 		args:[	'--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, 
 				'--layout',req.body.layout, 
 				'--relationships',req.body.relationships, 
+				'--prune',req.body.prune
 				//'--node_size',req.body.node_size,
 				//'--edge_width',req.body.edge_width 
 			] 
@@ -30,8 +30,8 @@ router.post('/networkx',function(req,res,next){
 	
 	pythonShell.run('network_analysis.py',options,function(err,results){
 		if (err){
-			//throw err;
-			res.send({'ERROR':err});
+			throw err;
+			//res.send({'ERROR':err});
 		}else{
 			
 			var d3js = results[1];
