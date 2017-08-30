@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 
 class Network:
 
-    def __init__(self, DIR, input_file, relationships):
+    def __init__(self, DIR, input_file, relationships,prune):
 
         self.DIR = DIR
 
@@ -70,7 +70,17 @@ class Network:
         elif relationships == 'mentions':
             pass
        
+        # prune the network or not
+        if prune == 'true':
+            for n in self.graph.nodes():
+                if self.graph.out_degree()[n] + self.graph.in_degree()[n] <= 1:
+                    # check if its neighbour's total degree
+                    for neighbour in self.graph[n].keys():
+                        if self.graph.out_degree()[neighbour] + self.graph.in_degree()[neighbour] <= 1:
+                            self.graph.remove_node(n)
 
+            self.graph.remove_nodes_from(nx.isolates(self.graph))
+                    
        
     def export_graph(self):
         # JSON format
@@ -415,6 +425,7 @@ if __name__ == "__main__":
     parser.add_argument('--file', required=True)
     parser.add_argument('--layout',required=True)
     parser.add_argument('--relationships',required=True)
+    parser.add_argument('--prune',required=True)
     #parser.add_argument('--node_size',required=True)
     #parser.add_argument('--edge_width',required=True)
    
@@ -434,7 +445,7 @@ if __name__ == "__main__":
         json.dump(vars(args),f)
     print(fname)
     
-    network = Network(DIR, args.file, args.relationships)
+    network = Network(DIR, args.file, args.relationships, args.prune)
     network.export_graph()
     network.draw_graph(args.relationships, args.layout) #, args.node_size, args.edge_width)
 
