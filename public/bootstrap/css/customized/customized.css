@@ -131,6 +131,7 @@ body {
 	border:none;
 	color:#eae8e8;
 }
+
 h3 {
 		text-align: center;
 }
@@ -426,4 +427,19 @@ marker#arrow {
 	background-color:white; 
 	border:solid 1.5px;
 	border-radius:5px;
+}
+
+
+/**********history page download ****************/
+.link-button-download{
+	background:none;
+	border:none;
+	color:#73879c;
+	border-bottom:1px solid;
+}
+.link-button-download:hover{
+	background:none;
+	border:none;
+	color:#ea4a36;
+	border-bottom:1px solid #ea4a36;
 }

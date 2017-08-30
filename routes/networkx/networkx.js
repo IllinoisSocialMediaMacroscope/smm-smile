@@ -36,12 +36,14 @@ router.post('/networkx',function(req,res,next){
 			
 			var d3js = results[1];
 			var gephi = results[2];
-			var div= results[3];
+			var pajek = results[3];
+			var div= results[4];
 			var downloadFiles = [	{'name':'graph exported in GML (Gephi) format', 'content':gephi},
-									{'name':'graph exported in JSON format', 'content':d3js}
+									{'name':'graph exported in JSON format', 'content':d3js},
+									{'name':'graph exported in net (Pajek) format', 'content':pajek}
 									];
 			
-			for (var j=4; j< results.length; j++){
+			for (var j=5; j< results.length; j++){
 				var fnameRegex = /\/(?=[^\/]*$)(.*).json/g;
 				var display_name = fnameRegex.exec(results[j])[1];
 				downloadFiles.push({'name':display_name + ' metrics', 'content':results[j]});

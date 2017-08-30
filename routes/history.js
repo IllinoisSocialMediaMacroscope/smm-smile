@@ -196,7 +196,7 @@ router.post('/history',function(req,res,next){
 				config:config
 			});
 	}
-	else if (req.body.layer2 === 'networkx' && fs.readdirSync(DIR).length >=4){
+	else if (req.body.layer2 === 'networkx' && fs.readdirSync(DIR).length >=5){
 		var fnames = fs.readdirSync(DIR);
 		var div_data = fs.readFileSync(DIR + '/div.dat', 'utf8');
 		var config = JSON.parse(fs.readFileSync(DIR + '/config.dat','utf8'));
@@ -214,6 +214,8 @@ router.post('/history',function(req,res,next){
 				downloadFiles.push({'name':'graph exported in JSON format', 'content':DIR + '/' + fnames[i]}); 
 			}else if (fnames[i] === 'network.gml'){
 				downloadFiles.push({'name':'graph exported in GML (Gephi) format', 'content':DIR + '/' + fnames[i]}); 
+			}else if (fnames[i] === 'network.net'){
+				downloadFiles.push({'name':'graph exported in NET (Pajek) format', 'content':DIR + '/' + fnames[i]}); 
 			}else{
 				var fnameRegex = /(.*).json/g
 				var display_name = fnameRegex.exec(fnames[i])[1];

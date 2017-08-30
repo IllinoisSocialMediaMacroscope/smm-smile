@@ -50,7 +50,7 @@ class Network:
                 self.directed = 'directed'
                 for row in new_df.iterrows():
                    self.graph.add_edge(row[1]['_source.user.screen_name'], row[1]['reply_to'], text=row[1]['_source.text'])
-               
+
         elif relationships == 'retweet_from':
             if input_file.find('twitter-Tweet') != -1:
                 df['retweet_from'] = df['text'].str.extract('RT @([A-Za-z0-9-_]+):',expand=True)
@@ -91,6 +91,12 @@ class Network:
         fname_gephi = self.DIR + '/network.gml'
         nx.write_gml(self.graph,fname_gephi)
         print(fname_gephi)
+
+        # Pajek format
+        fname_pajek = self.DIR + '/network.net'
+        nx.write_pajek(self.graph,fname_pajek)
+        print(fname_pajek)
+        
 
     def draw_graph(self,relationships,layout):
 
