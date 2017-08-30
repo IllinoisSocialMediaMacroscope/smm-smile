@@ -175,7 +175,8 @@ function draw_d3js(d_nodes,d_links){
 	for(let i = 0; i < 20; i++) {
 		d3.select(output)
 			.append('p')
-			.text(`${i}`)
+			.text(`ccc`)
+			.style('color',color(i))
 			.style('background-color', color(i))
 			.style('display','inline');
 	}
@@ -183,8 +184,8 @@ function draw_d3js(d_nodes,d_links){
 	var force = d3.layout.force()
 		.gravity(.05)
 		.linkStrength(0.1)
-		.charge(-30)
-		.linkDistance(width/3)
+		.charge(-15)
+		.linkDistance(100)
 		.size([width, height]);
 	var vis = d3.select("#d3js-network-svg");
 	
@@ -240,6 +241,18 @@ function draw_d3js(d_nodes,d_links){
 				.attr("cy", function(d) { return d.y; });
 	};
 	
+	// normalize the connectivity in order to put color on it
+	var min_conn = Infinity;
+	var max_conn = 0;
+	$.each(d_nodes,function(i,val){
+		if (val['connectivity'] > max_conn){
+			max_conn = val['connectivity'];
+		}
+		if (val['connectivity'] < min_conn){
+			min_conn = val['connectivity'];
+		}
+	});
+
 	var nodes = vis.selectAll("circle.node")
 		.data(force.nodes())
 		.enter()
@@ -247,7 +260,8 @@ function draw_d3js(d_nodes,d_links){
 		.attr("class", "node")
 		.attr("r", 8)
 		.attr("id",function(d){ return d.id })
-		.style("fill", function(d) { return color(d.connectivity); })
+		.style("fill", function(d) { 
+			return color((d.connectivity - min_conn)/(max_conn-min_conn)*10); })
 		.call(drag);
 
 	var node_label = vis.selectAll("node_text")
