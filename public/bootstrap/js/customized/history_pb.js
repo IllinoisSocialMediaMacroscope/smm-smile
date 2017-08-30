@@ -166,7 +166,7 @@ function appendOverview(container,config, download){
 	tableContent += `<tr><th>downloadables</th><td>`;
 	$.each(download,function(i,val){
 		tableContent += `<form action='/download' name='download' method='post'><input type="hidden" value=`+val.content+` name="downloadURL" />
-		<button type="submit" class="link-button" style="color:#73879c;border-bottom:1px solid "><span class="glyphicon glyphicon-download-alt"></span>`
+		<button type="submit" class="link-button-download"><span class="glyphicon glyphicon-download-alt"></span>`
 								+val.name+`</button></form>`;
 	});
 	tableContent += `</td></tr></tbody></table></div>`;
