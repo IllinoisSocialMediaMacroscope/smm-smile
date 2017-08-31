@@ -112,15 +112,28 @@ class Network:
                 self.graph.add_edge(row[1]['screen_name'], row[1]['mention'], text=row[1]['tweet'])
        
         # prune the network or not
-        if prune == 'true':
+        if prune == 'isolates':
             for n in self.graph.nodes():
-                if self.graph.out_degree()[n] + self.graph.in_degree()[n] <= 1:
+                if self.graph.degree()[n] <= 1:
                     # check if its neighbour's total degree
                     for neighbour in self.graph[n].keys():
-                        if self.graph.out_degree()[neighbour] + self.graph.in_degree()[neighbour] <= 1:
+                        if self.graph.degree()[neighbour] <= 1:
                             self.graph.remove_node(n)
-
             self.graph.remove_nodes_from(nx.isolates(self.graph))
+        elif prune == 'weakly_connected':
+            weak = nx.weakly_connected_components(self.graph)
+            to_remove = []
+            for n in weak:
+                to_remove.append(list(n)[0])   
+            self.graph.remove_nodes_from(to_remove)
+            self.graph.remove_nodes_from(nx.isolates(self.graph))
+
+        elif prune == 'influencer':
+             for n in self.graph.nodes():
+                if self.graph.in_degree()[n] == 0:
+                     self.graph.remove_node(n)
+            
+        
                     
        
     def export_graph(self):
@@ -342,8 +355,23 @@ class Network:
         rslt={}
         if self.directed == 'directed':
             rslt['is_strongly_connected']=nx.is_strongly_connected(self.graph)
+
+            strong = nx.strongly_connected_components(self.graph)
+            strong_nodes = []
+            for n in strong:
+                strong_nodes.append(list(n)[0])
+            rslt['strongly_connected'] =  strong_nodes
+
+            
             rslt['number_strongly_connected_components']=nx.number_strongly_connected_components(self.graph)
             rslt['is_semiconnected']=nx.is_semiconnected(self.graph)
+
+            weak = nx.weakly_connected_components(self.graph)
+            weak_nodes = []
+            for n in weak:
+                weak_nodes.append(list(n)[0])
+            rslt['wealy_connected'] =  weak_nodes
+
             rslt['is_weakly_connected']=nx.is_weakly_connected(self.graph)
             rslt['number_weakly_connected_components']=nx.number_weakly_connected_components(self.graph)
         
@@ -506,28 +534,21 @@ if __name__ == "__main__":
     except:
         pass
 
-    if (args.relationships == 'reply_to' or args.relationships == 'retweet_from'):
-        try:
-            network.component()
-        except:
-            pass
+    try:
+        network.component()
+    except:
+        pass
 
-        try:
-            network.hierarchy()
-        except:
-            pass
+    try:
+        network.hierarchy()
+    except:
+        pass
 
-        try:
-            network.triads()
-        except:
-            pass
-        
-    if (args.relationships == 'mentions'):
-        try:
-            network.distance()
-        except:
-            pass
-    
+    try:
+        network.triads()
+    except:
+        pass
+            
     # network.googleMatrix()
     try:
         network.path()
