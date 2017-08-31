@@ -182,18 +182,17 @@ function draw_d3js(d_nodes,d_links){
 	}
 	
 	var force = d3.layout.force()
-		.friction(0.0)
-		.gravity(0.05)
-		.charge(-15)
+		.size([width, height])
+		.charge(-20)
 		.linkDistance(100)
-		.size([width, height]);
-	var vis = d3.select("#d3js-network-svg");
-	
-	force
+		.on('start',start)
 		.nodes(d_nodes)
 		.links(d_links)
+		//.on("tick",tick)
 		.start();
-
+		
+	var vis = d3.select("#d3js-network-svg");
+	
 	var links = vis.append("g").selectAll("line.link")
 		.data(force.links())
 		.enter()
@@ -231,14 +230,7 @@ function draw_d3js(d_nodes,d_links){
 		}
 		force.resume();
 	}
-	function tick(d) {
-	  links.attr("x1", function(d) { return d.source.x; })
-			.attr("y1", function(d) { return d.source.y; })
-			.attr("x2", function(d) { return d.target.x; })
-			.attr("y2", function(d) { return d.target.y; });
-	  nodes.attr("cx", function(d) { return d.x; })
-				.attr("cy", function(d) { return d.y; });
-	};
+	
 	
 	// normalize the connectivity in order to put color on it
 	var min_conn = Infinity;
@@ -275,9 +267,40 @@ function draw_d3js(d_nodes,d_links){
 			.style("font-family", "Arial")
 			.style("font-size", 18);
 	
-	
+	function start(){
+		var ticksPerRender = 3;
+		requestAnimationFrame(function render(){
+			for (var i=0; i< ticksPerRender; i++){
+				force.tick();
+			}
+			links.attr("x1", function(d) { return d.source.x; })
+				.attr("y1", function(d) { return d.source.y; })
+				.attr("x2", function(d) { return d.target.x; })
+				.attr("y2", function(d) { return d.target.y; });
+			nodes.attr("cx", function(d) { return d.x; })
+				.attr("cy", function(d) { return d.y; });
+			node_label.attr("x", function(d) { return d.x; })
+				.attr("y", function(d) { return d.y-20; });
+				
+			if (force.alpha() > 0){
+				requestAnimationFrame(render);
+			}
+		})
+	}
+
+	function tick(d) {
+		links.attr("x1", function(d) { return d.source.x; })
+			.attr("y1", function(d) { return d.source.y; })
+			.attr("x2", function(d) { return d.target.x; })
+			.attr("y2", function(d) { return d.target.y; });
+		nodes.attr("cx", function(d) { return d.x; })
+			.attr("cy", function(d) { return d.y; });
+		node_label.attr("x", function(d) { return d.x; })
+			.attr("y", function(d) { return d.y-20; });
+	};
 		
-	force.on("tick", function() {
+	/*force.on("tick", function() {
+		//this takes time
 		links.attr("x1", function(d) { return d.source.x; })
 			.attr("y1", function(d) { return d.source.y; })
 			.attr("x2", function(d) { return d.target.x; })
@@ -288,7 +311,7 @@ function draw_d3js(d_nodes,d_links){
 		node_label.attr("x", function(d) { return d.x; })
 			.attr("y", function(d) { return d.y-20; });
 		
-	});
+	});*/
 	
 	// hover on nodes show screen name
 	vis.selectAll("circle.node").on("mouseover",function(){
