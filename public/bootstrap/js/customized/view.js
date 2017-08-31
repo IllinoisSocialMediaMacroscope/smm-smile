@@ -152,7 +152,7 @@ function appendPreview(previewID, previewData){
 function appendD3JS(data){
 	$("#d3js-container").hide();
 	$("#d3js-network-container").empty();
-	$("#d3js-network-container").append(`<div style="display:block;">
+	$("#d3js-network-container").append(`<div style="display:block;text-align:left;">
 											<button class="zoomin">+</button><button class="zoomout">-</button>
 										</div>
 	<svg id="d3js-network-svg" width="800px" height="800px" preserveAspectRatio="xMidYMin">
@@ -340,15 +340,15 @@ function draw_d3js(d_nodes,d_links){
 		zoomfactor = zoomfactor + 0.05;
 		var dcx = width/2 + ( zoomlistener.translate()[0] - width/2 )*zoomfactor;
 		var dcy = height/2 + (zoomlistener.translate()[1] - height/2)*zoomfactor;
-		if (zoomfactor >1 ){
-			zoomfactor = 1;
+		if (zoomfactor >=1 ){
+			zoomfactor = 1.05;
 			dcx = zoomlistener.translate()[0];
 			dcy = zoomlistener.translate()[1]
 		}
 		
 		zoomlistener.scale(zoomfactor);
-		console.log(dcx);
-		console.log(dcy);
+		//console.log(dcx);
+		//console.log(dcy);
 		zoomlistener.translate([dcx,dcy]);
 		redraw();
 	});
@@ -364,8 +364,8 @@ function draw_d3js(d_nodes,d_links){
 		}
 		zoomlistener.scale(zoomfactor);
 		
-		console.log(dcx);
-		console.log(dcy);
+		//console.log(dcx);
+		//console.log(dcy);
 		zoomlistener.translate([dcx,dcy]);
 		redraw();
 	});
