@@ -298,21 +298,7 @@ function draw_d3js(d_nodes,d_links){
 		node_label.attr("x", function(d) { return d.x; })
 			.attr("y", function(d) { return d.y-20; });
 	};
-		
-	/*force.on("tick", function() {
-		//this takes time
-		links.attr("x1", function(d) { return d.source.x; })
-			.attr("y1", function(d) { return d.source.y; })
-			.attr("x2", function(d) { return d.target.x; })
-			.attr("y2", function(d) { return d.target.y; });			
-
-		nodes.attr("cx", function(d) { return d.x; })
-				.attr("cy", function(d) { return d.y; });
-		node_label.attr("x", function(d) { return d.x; })
-			.attr("y", function(d) { return d.y-20; });
-		
-	});*/
-	
+			
 	// hover on nodes show screen name
 	vis.selectAll("circle.node").on("mouseover",function(){
 		d3.select(this).attr("r", 18);

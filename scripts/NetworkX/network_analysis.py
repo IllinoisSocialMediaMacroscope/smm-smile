@@ -25,26 +25,29 @@ class Network:
 
         self.DIR = DIR
 
-        '''Array = []
+        Array = []
         with open(input_file,'r',encoding="utf-8") as f:
             reader = csv.reader(f)
             try:
                 for row in reader:
                     Array.append(row)
             except Exception as e:
-                print(e)'''
-        #df = pandas.DataFrame(Array[1:],columns=Array[0])
-        df = pandas.read_csv(input_file, encoding="utf-8")
+                print(e)
+        df = pandas.DataFrame(Array[1:],columns=Array[0])
+        #df = pandas.read_csv(input_file, encoding="utf-8")
         
         if relationships == 'reply_to':
             if input_file.find('twitter-Tweet') != -1:
+                df = df[['text','user.screen_name']].dropna()
                 df['reply_to'] = df['text'].str.extract('^@([A-Za-z0-9-_]+)',expand=True)
                 new_df = df[['reply_to','user.screen_name','text']].dropna()
                 self.graph = nx.DiGraph()
                 self.directed = 'directed'
                 for row in new_df.iterrows():
                    self.graph.add_edge(row[1]['user.screen_name'], row[1]['reply_to'], text=row[1]['text'])
+
             elif input_file.find('twitter-Stream') != -1:
+                df = df[['_source.text','_source.user.screen_name']].dropna()
                 df['reply_to'] = df['_source.text'].str.extract('^@([A-Za-z0-9-_]+)',expand=True)
                 new_df = df[['reply_to','_source.user.screen_name','_source.text']].dropna()
                 self.graph = nx.DiGraph()
@@ -54,23 +57,27 @@ class Network:
 
         elif relationships == 'retweet_from':
             if input_file.find('twitter-Tweet') != -1:
+                df = df[['text','user.screen_name']].dropna()
                 df['retweet_from'] = df['text'].str.extract('RT @([A-Za-z0-9-_]+):',expand=True)
                 new_df = df[['retweet_from','user.screen_name','text']].dropna()
                 self.graph = nx.DiGraph()
                 self.directed = 'directed'
                 for row in new_df.iterrows():
-                   self.graph.add_edge(row[1]['user.screen_name'], row[1]['retweet_from'], text=row[1]['text'])
+                   self.graph.add_edge(row[1]['user.screen_name'],row[1]['retweet_from'],  text=row[1]['text'])
+
             elif input_file.find('twitter-Stream') != -1:
+                df = df[['_source.text','_source.user.screen_name']].dropna()
                 df['retweet_from'] = df['_source.text'].str.extract('RT @([A-Za-z0-9-_]+):',expand=True)
                 new_df = df[['retweet_from','_source.user.screen_name','_source.text']].dropna()
                 self.graph = nx.DiGraph()
                 self.directed = 'directed'
                 for row in new_df.iterrows():
-                    self.graph.add_edge(row[1]['retweet_from'],row[1]['_source.user.screen_name'], text=row[1]['_source.text'])
+                    self.graph.add_edge(row[1]['_source.user.screen_name'],row[1]['retweet_from'], text=row[1]['_source.text'])
                 
         elif relationships == 'mentions':
             
             if input_file.find('twitter-Tweet') != -1:
+                df = df[['text','user.screen_name']].dropna()
                 df['mentions'] = df['text'].str.findall('@([A-Za-z0-9-_]+)')
                 tmp = []
                 def backend(r):
@@ -85,6 +92,7 @@ class Network:
                 new_df = pandas.DataFrame(tmp).dropna()
                     
             elif input_file.find('twitter-Stream') != -1:
+                df = df[['_source.text','_source.user.screen_name']].dropna()
                 df['mentions'] = df['_source.text'].str.findall('@([A-Za-z0-9-_]+)')
                 tmp = []
                 def backend(r):
