@@ -21,12 +21,13 @@
 						"class":"form-control",
 						"optgroup": false,
 						"options":[
+						
+							{"value":"retweet_from",
+							"label":"retweet from"},
+							
 							{"value":"reply_to",
 							"label":"reply to"},
 							
-							{"value":"retweet_from",
-							"label":"retweet from"},
-
 							{"value":"mentions",
 							"label":"mentions"}							
 						]
