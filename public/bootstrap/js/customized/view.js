@@ -152,23 +152,25 @@ function appendPreview(previewID, previewData){
 function appendD3JS(data){
 	$("#d3js-container").hide();
 	$("#d3js-network-container").empty();
-	$("#d3js-network-container").append(`
-	<svg id="d3js-network-svg" width="100%" height="1000px" preserveAspectRatio="xMidYMin">
+	$("#d3js-network-container").append(`<div style="display:block;">
+											<button class="zoomin">+</button><button class="zoomout">-</button>
+										</div>
+	<svg id="d3js-network-svg" width="800px" height="800px" preserveAspectRatio="xMidYMin">
 		<defs>
 			<marker id="arrow" viewbox="0 -5 10 10" refX="10" refY="0" markerWidth="3" markerHeight="3" orient="auto">
 				<path d="M0,-5L10,0L0,5Z">
 			</marker>
 		</defs>
 	</svg>
-	<button class="zoomin">+</button><button class="zoomout">-</button>`);
+	`);
 	draw_d3js(data.d3js_data['nodes'],data.d3js_data['links']);
 	$("#d3js-container").show();
 }
 
 /*************************************************************d3js***************************************/
 function draw_d3js(d_nodes,d_links){
-	var width = 1000;
-	var height =800;
+	var width = 800;
+	var height = 800;
 	
 	// colorscale
 	var color = d3.scale.category20();
@@ -331,28 +333,47 @@ function draw_d3js(d_nodes,d_links){
 	
 	
 	var zoomfactor = 1;
-	var zoomlistener = d3.behavior.zoom().on("zoom", redraw);
+	var zoomlistener = d3.behavior.zoom()
+		.on("zoom", redraw);
 
 	d3.select(".zoomin").on("click", function (){
 		zoomfactor = zoomfactor + 0.05;
-		if (zoomfactor >= 1){
+		var dcx = width/2 + ( zoomlistener.translate()[0] - width/2 )*zoomfactor;
+		var dcy = height/2 + (zoomlistener.translate()[1] - height/2)*zoomfactor;
+		if (zoomfactor >1 ){
 			zoomfactor = 1;
+			dcx = zoomlistener.translate()[0];
+			dcy = zoomlistener.translate()[1]
 		}
+		
 		zoomlistener.scale(zoomfactor);
+		console.log(dcx);
+		console.log(dcy);
+		zoomlistener.translate([dcx,dcy]);
 		redraw();
 	});
 
 	d3.select(".zoomout").on("click", function (){
 		zoomfactor = zoomfactor - 0.05;
+		var dcx = width/2 + ( zoomlistener.translate()[0] - width/2 )*zoomfactor;
+		var dcy = height/2 + (zoomlistener.translate()[1] - height/2)*zoomfactor;
 		if (zoomfactor <= 0 ){
 			zoomfactor = 0.05;
+			dcx = zoomlistener.translate()[0];
+			dcy = zoomlistener.translate()[1]
 		}
 		zoomlistener.scale(zoomfactor);
+		
+		console.log(dcx);
+		console.log(dcy);
+		zoomlistener.translate([dcx,dcy]);
 		redraw();
 	});
 	function redraw() {
-		console.log("here",zoomlistener.scale());
-		vis.select("g").attr("transform","translate(1,2)scale(" + zoomlistener.scale() + ")"); 
+		console.log("here",zoomlistener.translate());
+		//x = (x - center[0]) * factor + center[0];
+		//y = (y - center[1]) * factor + center[1];
+		vis.select("g").attr("transform","translate(" + zoomlistener.translate() +")scale(" + zoomlistener.scale() + ")"); 
 	} 
 }
 
