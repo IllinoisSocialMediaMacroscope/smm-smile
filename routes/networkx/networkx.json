@@ -63,25 +63,27 @@
 					}
 				]},
 		{"container-name":"",
-		"container-label-name":"remove isolate pairs",
+		"container-label-name":"prune the network",
 		"inputs":[
-					{"type":"radio",
+					{"type":"select",
 						"name":"prune",
-						"id":"false",
-						"value":"false",
-						"sytle":"position: absolute; visibility: hidden;",
-						"class":"customized-radio",
-						"checked":true,
-						"label":"No"
-					},
-					{"type":"radio",
-						"name":"prune",
-						"id":"true",
-						"value":"true",
-						"sytle":"position: absolute; visibility: hidden;",
-						"class":"customized-radio",
-						"checked":false,
-						"label":"Yes"
+						"id":"prune",
+						"class":"form-control",
+						"optgroup": false,
+						"options":[
+							{"value":"isolates",
+							"label":"remove isolate pairs"},
+							
+							{"value":"weakly_connected",
+							"label":"remove weakly connected nodes"},
+							
+							{"value":"influencer",
+							"label":"remove zero in-degree nodes"},
+							
+							{"value":"none",
+							"label":"keep original"}
+							
+						]
 					}
 				]}
 	],
