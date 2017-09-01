@@ -445,8 +445,8 @@ nav-tabs li a:hover{
 #download-note{
 	margin-left:20px;
 	margin-top:40px; 
-	font-size:14px; 
-	color:#777;
+	font-size:16px; 
+	color:#1e325a;
 }
 
 .link-button{
@@ -459,4 +459,12 @@ nav-tabs li a:hover{
 	color:#ea4a36;
 	border-bottom: 1px solid #ea4a36;
 }
-	
+
+#gotoAnalytics-demo{
+	max-width:90%; 
+	max-height:90%;
+	display:block;
+	margin:auto auto; 
+	box-shadow: 10px 10px 5px #888888;
+}
+
