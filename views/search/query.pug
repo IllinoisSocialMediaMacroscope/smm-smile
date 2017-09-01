@@ -99,7 +99,7 @@ html
 		
 		<!-- popup modal download-->
 		div(id="success" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
-			div(class="modal-dialog")
+			div(class="modal-dialog", style="width:1000px;")
 				div(class="modal-content")
 					div(class="modal-header")
 						button(class="close" data-dismiss="modal") &times;
@@ -111,13 +111,13 @@ html
 							| or go to any of the analytics tools --> <b>select from your folder</b>;
 							| or review, manage and download it in the <b>history</b> page
 							| If you accidentally close this modal window, you can click <b>export</b> button in this page to resume.
+						p(style="margin-left:20px;color:#1e325a;") <b>Example of usage:</b>
+						img(src="/bootstrap/img/gotoAnalytics.gif",id="gotoAnalytics-demo") 
 						
 					div(class="modal-footer")
 						a(href="/", class="btn btn-primary",style="background-color:#ea4a36;border-style:hidden") Go To Analytics
 						a(href="/history", class="btn btn-primary", style="background-color:#1e325a;border-style:hidden") Review in History
-						
-						
-						
+								
 		<!-- side bar HELP-->
 		div(class="documentation",id="documentation")
 			iframe(id="docIframe", src="../graphql-doc/schema/index.html",width="100%",scrolling="yes",style="padding-top: 40px;margin:0 0;")
