@@ -1,4 +1,4 @@
-# Social Media Analytics and Query Tool
+# SMILE (Social Media Intelligence and Learning Environment)
 ![Architecture](/docs/architecture.png)
 
 ## Pre-requisit:
