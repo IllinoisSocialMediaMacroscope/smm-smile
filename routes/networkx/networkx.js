@@ -30,8 +30,8 @@ router.post('/networkx',function(req,res,next){
 	
 	pythonShell.run('network_analysis.py',options,function(err,results){
 		if (err){
-			throw err;
-			//res.send({'ERROR':err});
+			//throw err;
+			res.send({'ERROR':err});
 		}else{
 			
 			var d3js = results[1];

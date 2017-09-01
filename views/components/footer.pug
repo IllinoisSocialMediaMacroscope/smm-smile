@@ -35,10 +35,68 @@ footer(class="footer-bs")
 											
 		div(class="col-md-3 footer-ns")
 			h4 Comment
-			p We would appreciate any comments or suggestions that will help us to improve the SMILE application 
-			p
-				div(class="input-group")
-					input(type="text", class="form-control", placeholder="Help us make SMILE better!")
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-envelope"></span></button>
-					</span>
+			div(class="form-group")
+				p Your address
+				input(type="email", id="commenter-email", class="form-control",placeholder="myaddress@illinois.edu")
+			div(class="form-group")
+				p Comment
+				input(type="text", id="commenter-content", class="form-control", placeholder="Thank you for helping us make SMILE better!")
+			button(type="submit", class="btn btn-primary pull-right", onclick="submitComment()") Submit
+					
+					
+script.
+	/*------------------------submit error emails ---------------------------*/
+	function submitComment(){
+		if (commentValidation()){
+			
+			$.ajax({
+				type:'POST',
+				url:'/comment', 
+				data: "comment="+$("#commenter-content")+"&identifier="+ $("#commenter-email"),				
+				success:function(data){
+					console.log(data);
+				},
+				error: function(jqXHR, exception){
+					var msg = '';
+					if (jqXHR.status === 0) {
+						msg = 'Not connect.\n Verify Network.';
+					} else if (jqXHR.status == 404) {
+						msg = 'Requested page not found. [404]';
+					} else if (jqXHR.status == 500) {
+						msg = 'Internal Server Error [500].';
+					} else if (exception === 'parsererror') {
+						msg = 'Requested JSON parse failed.';
+					} else if (exception === 'timeout') {
+						msg = 'Time out error.';
+					} else if (exception === 'abort') {
+						msg = 'Ajax request aborted.';
+					} else {
+						msg = 'Uncaught Error.\n' + jqXHR.responseText;
+					}
+					$("#error").val(msg);
+					$("#warning").modal('show');
+				
+				} 
+			}); 
+		}
+	}
+
+	function commentValidation(){
+		if ($("#commenter-email").val() === '' || $("#commenter-email").val().indexOf('@')<0){
+			$("#modal-message").append(`<h4>Please Fill in Valid Email Address!</h4>`);
+			$("#alert").modal('show');
+			$("#commenter-email").focus();
+			return false;
+		}
+		
+		
+		if ($("#commenter-content").val() === ''){
+			$("#modal-message").append(`<h4>Please Provide Some Comments!</h4>`);
+			$("#alert").modal('show');
+			$("#commenter-content").focus();
+			return false;
+		}
+		
+		return true;
+
+	}

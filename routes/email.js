@@ -32,4 +32,24 @@ router.post('/email',function(req,res,next){
 
 });
 
+router.post('/comment',function(req,res,next){
+
+	var mailOptions = {
+		//to: '***REMOVED***, jmtroy2@illinois.edu', 
+		to: '***REMOVED***,' + req.body.identifier, 		
+		subject: 'Social Media Macroscope User Comment by' + req.body.identifier, // Subject line
+		html: `<p><b>Comment: </b>` + req.body.comment + `<p>`
+	};
+
+	// send mail with defined transport object
+	transporter.sendMail(mailOptions, (error, info) => {
+		if (error) {
+			res.send({'ERROR':error});
+		}else{
+			res.send('Message %s sent: %s', info.messageId, info.response);
+		}
+	});
+
+});
+
 module.exports = router;
