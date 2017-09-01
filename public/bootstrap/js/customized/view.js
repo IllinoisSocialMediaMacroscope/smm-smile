@@ -155,7 +155,7 @@ function appendD3JS(data){
 	$("#d3js-network-container").append(`<div style="display:block;text-align:left;">
 											<button class="zoomin">+</button><button class="zoomout">-</button>
 										</div>
-	<svg id="d3js-network-svg" width="1000px" height="1000px" preserveAspectRatio="xMidYMin">
+	<svg id="d3js-network-svg" width="100%" height="1000px" preserveAspectRatio="xMidYMin">
 		<defs>
 			<marker id="arrow" viewbox="0 -5 10 10" refX="10" refY="0" markerWidth="3" markerHeight="3" orient="auto">
 				<path d="M0,-5L10,0L0,5Z">
@@ -169,7 +169,7 @@ function appendD3JS(data){
 
 /*************************************************************d3js***************************************/
 function draw_d3js(d_nodes,d_links){
-	var width = 1000;
+	var width = 1200;
 	var height = 1000;
 	
 	// colorscale
