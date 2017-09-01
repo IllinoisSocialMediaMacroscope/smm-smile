@@ -40,16 +40,18 @@ body {
     z-index: 11;
 	position: relative;
 	background-color:#2a5a84;
-	height:600px;
+	height:800px;
 }
 
 .fadein {
     margin:auto;
+	text-align:center;
+	position:relative;
+	top:calc(9%);
 }
 .fadein img {
-	position:absolute;
-	left: calc(23%);
-	top:calc(15%);
+	position:relative;
+	margin: 0 -50px;
     -webkit-animation-name: fade;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-duration: 6s;
@@ -78,8 +80,6 @@ body {
     #background-color: lightgreen;
 }
 
-
-
 @keyframes slide {
   from {
     opacity: 0;
@@ -94,15 +94,14 @@ body {
 .button-unit{
 	position: absolute;
     text-align: center;
-	top: calc(80%);
+	top: calc(83%);
     width: 100%;
 	animation: slide 1s 1.5s ease-in-out both;
 }
 #index-banner{
 	margin:auto auto;
-	position:absolute;
-	top:calc(15%);
-	left:calc(15%);
+	top:100px;
+	position:relative;
 	display:block;
 }
 
