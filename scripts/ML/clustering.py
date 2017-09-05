@@ -34,7 +34,7 @@ class Cluster:
 
         self.DIR = DIR
 
-        Array = []
+        '''Array = []
         with open(input_file,'r',encoding="utf-8") as f:
             reader = csv.reader(f)
             try:
@@ -43,20 +43,26 @@ class Cluster:
             except Exception as e:
                 print(e)
 
-        self.df = pandas.DataFrame(Array[1:],columns=Array[0])
-        #self.df = pandas.read_csv(input_file,encoding="utf-8")
-        self.df = self.df[fields].dropna()
+        self.df = pandas.DataFrame(Array[1:],columns=Array[0])'''
+
+        self.original = pandas.read_csv(input_file,encoding="utf-8")
+        self.original = self.original.dropna(axis=0, how='any', subset=fields)
+        
+        self.features = self.original.copy(deep=True)
+        self.features = self.features[fields] 
+        
 
         # transform the categorical fields
-        column_headers = self.df.select_dtypes(include = ['object']).columns
+        # should change this part. name field shouldn't participate in the algorithm
+        column_headers = self.features.select_dtypes(include = ['object']).columns
         labeler = preprocessing.LabelEncoder()
         for CH in column_headers:
-            self.df[CH] = labeler.fit_transform(self.df[CH])       
+            self.features[CH] = labeler.fit_transform(self.features[CH])       
        
     def estimating(self, es_model, n_clusters=5):
         t0 = time()
         if es_model == 'PCA-Kmeans':
-            pca = PCA(n_components=n_clusters).fit(self.df)
+            pca = PCA(n_components=n_clusters).fit(self.features)
             estimator = KMeans(init=pca.components_, n_clusters=n_clusters, random_state=42,n_init=1)
         elif es_model == 'random-Kmeans':
             estimator = KMeans(init='random', n_clusters=n_clusters, random_state=42)
@@ -77,25 +83,27 @@ class Cluster:
         #elif es_model == 'SpectralClustering':
         #   estimator = SpectralClustering(n_clusters=n_clusters,affinity="nearest_neighbors")
             
-        result = self.df.copy(deep=True)
-        y_pred = estimator.fit_predict(self.df)
-        result['y_pred']= y_pred
+        y_pred = estimator.fit_predict(self.features)
+        self.original['y_pred'] = y_pred
+        self.features['y_pred'] = y_pred
 
         # save 
-        filename = self.DIR + '/clustering.csv'
-        result.to_csv(filename,sep=',',encoding='utf-8',index=False)
-        print(filename) # first line
-        
-        #n_samples, n_features = self.df.shape
-        #print("n_samples n_features init time")
-        #print(n_samples, n_features,es_model, time()-t0)
+        filename1 = self.DIR + '/clustering-complete.csv'
+        self.original.to_csv(filename1,sep=',',encoding='utf-8',index=False)
+        print(filename1) # first line
+
+        # save 
+        filename2 = self.DIR + '/clustering-features.csv'
+        self.features.to_csv(filename2,sep=',',encoding='utf-8',index=False)
+        print(filename2) # first line
+
 
         return y_pred
 
         
         
     def visualization(self,y_pred):
-        reduced_data = PCA(n_components=2).fit_transform(self.df)
+        reduced_data = PCA(n_components=2).fit_transform(self.features)
 
         # change to plotly.py
         data = [

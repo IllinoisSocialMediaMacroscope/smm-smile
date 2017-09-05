@@ -182,7 +182,7 @@ router.post('/history',function(req,res,next){
 					config:config
 				});
 	}
-	else if (req.body.layer2 === 'clustering'  && fs.readdirSync(DIR).length === 3){
+	else if (req.body.layer2 === 'clustering'  && fs.readdirSync(DIR).length === 4){
 		var div_data = fs.readFileSync(DIR +'/div.dat', 'utf8'); //trailing /r 
 		var preview_string = fs.readFileSync(DIR +'/clustering.csv', "utf8"); 
 		var preview_arr = CSV.parse(preview_string);
