@@ -153,7 +153,8 @@ function appendD3JS(data){
 	$("#d3js-container").hide();
 	$("#d3js-network-container").empty();
 	$("#d3js-network-container").append(`<div style="display:block;text-align:left;">
-											<button class="zoomin">+</button><button class="zoomout">-</button>
+											<button style="font-size:25px; padding:5px; width:50px; height:50px;" id="zoomin" class="zoom">+</button>
+											<button style="font-size:25px; padding:5px; width:50px; height:50px;margin-left:-1px;" id="zoomout" class="zoom">-</button>
 										</div>
 	<svg id="d3js-network-svg" width="100%" height="1000px" preserveAspectRatio="xMidYMin">
 		<defs>
@@ -331,50 +332,58 @@ function draw_d3js(d_nodes,d_links){
 		$("#tweet-display").text("tweet");
 	});
 	
-	
-	var zoomfactor = 1;
-	var zoomlistener = d3.behavior.zoom()
-		.on("zoom", redraw);
+	var zoom = d3.behavior.zoom().scaleExtent([0.1, 10]).on("zoom", zoomed);
+	function zoomed() {
+		vis.select("g").attr("transform",
+			"translate(" + zoom.translate() + ")" +
+			"scale(" + zoom.scale() + ")"
+		);
+	}
 
-	d3.select(".zoomin").on("click", function (){
-		zoomfactor = zoomfactor + 0.05;
-		var dcx = width/2 + ( zoomlistener.translate()[0] - width/2 )*zoomfactor;
-		var dcy = height/2 + (zoomlistener.translate()[1] - height/2)*zoomfactor;
-		if (zoomfactor >=1 ){
-			zoomfactor = 1.05;
-			dcx = zoomlistener.translate()[0];
-			dcy = zoomlistener.translate()[1]
-		}
-		
-		zoomlistener.scale(zoomfactor);
-		//console.log(dcx);
-		//console.log(dcy);
-		zoomlistener.translate([dcx,dcy]);
-		redraw();
-	});
+	function interpolateZoom (translate, scale) {
+		var self = this;
+		return d3.transition().duration(350).tween("zoom", function () {
+			var iTranslate = d3.interpolate(zoom.translate(), translate),
+				iScale = d3.interpolate(zoom.scale(), scale);
+			return function (t) {
+				zoom
+					.scale(iScale(t))
+					.translate(iTranslate(t));
+				zoomed();
+			};
+		});
+	}
 
-	d3.select(".zoomout").on("click", function (){
-		zoomfactor = zoomfactor - 0.05;
-		var dcx = width/2 + ( zoomlistener.translate()[0] - width/2 )*zoomfactor;
-		var dcy = height/2 + (zoomlistener.translate()[1] - height/2)*zoomfactor;
-		if (zoomfactor <= 0 ){
-			zoomfactor = 0.05;
-			dcx = zoomlistener.translate()[0];
-			dcy = zoomlistener.translate()[1]
-		}
-		zoomlistener.scale(zoomfactor);
-		
-		//console.log(dcx);
-		//console.log(dcy);
-		zoomlistener.translate([dcx,dcy]);
-		redraw();
-	});
-	function redraw() {
-		console.log("here",zoomlistener.translate());
-		//x = (x - center[0]) * factor + center[0];
-		//y = (y - center[1]) * factor + center[1];
-		vis.select("g").attr("transform","translate(" + zoomlistener.translate() +")scale(" + zoomlistener.scale() + ")"); 
-	} 
+	function zoomClick() {
+		console.log("clicked");
+		var clicked = d3.event.target,
+			direction = 1,
+			factor = 0.2,
+			target_zoom = 1,
+			center = [width / 2, height / 2],
+			extent = zoom.scaleExtent(),
+			translate = zoom.translate(),
+			translate0 = [],
+			l = [],
+			view = {x: translate[0], y: translate[1], k: zoom.scale()};
+
+		d3.event.preventDefault();
+		direction = (this.id === 'zoomin') ? 1 : -1;
+		target_zoom = zoom.scale() * (1 + factor * direction);
+
+		if (target_zoom < extent[0] || target_zoom > extent[1]) { return false; }
+
+		translate0 = [(center[0] - view.x) / view.k, (center[1] - view.y) / view.k];
+		view.k = target_zoom;
+		l = [translate0[0] * view.k + view.x, translate0[1] * view.k + view.y];
+
+		view.x += center[0] - l[0];
+		view.y += center[1] - l[1];
+
+		interpolateZoom([view.x, view.y], view.k);
+	}
+
+	d3.selectAll(".zoom").on('click', zoomClick);
 }
 
 /*----------------------submit to analysis--------------------------------------------*/
