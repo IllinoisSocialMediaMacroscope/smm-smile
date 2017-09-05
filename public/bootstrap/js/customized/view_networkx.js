@@ -87,10 +87,11 @@ function formValidation(){
 		$("#selectFile").focus();
 		return false;
 	}
-	if ($("#relationships option:selected").val() === '' || $("#relationships option:selected").val() === undefined){
+	console.log($("#relations option:selected").val());
+	if ($("#relations option:selected").val() === '' || $("#relations option:selected").val() === undefined){
 		$("#modal-message").append(`<h4>Please select a model to perform!</h4>`);
 		$("#alert").modal('show');
-		$("#relationships").focus();
+		$("#relations").focus();
 		return false;
 	}
 	if ($("#layout option:selected").val() === '' || $("#layout option:selected").val() === undefined){

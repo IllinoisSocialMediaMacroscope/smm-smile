@@ -16,8 +16,8 @@
 		"container-label-name":"network relation",
 		"inputs":[
 					{"type":"select",
-						"name":"relationships",
-						"id":"relationships",
+						"name":"relations",
+						"id":"relations",
 						"class":"form-control",
 						"optgroup": false,
 						"options":[
