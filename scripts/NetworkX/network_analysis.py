@@ -492,7 +492,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Processing...")
     parser.add_argument('--file', required=True)
     parser.add_argument('--layout',required=True)
-    parser.add_argument('--relationships',required=True)
+    parser.add_argument('--relations',required=True)
     parser.add_argument('--prune',required=True)
     #parser.add_argument('--node_size',required=True)
     #parser.add_argument('--edge_width',required=True)
@@ -513,9 +513,9 @@ if __name__ == "__main__":
         json.dump(vars(args),f)
     print(fname)
     
-    network = Network(DIR, args.file, args.relationships, args.prune)
+    network = Network(DIR, args.file, args.relations, args.prune)
     network.export_graph()
-    network.draw_graph(args.relationships, args.layout) #, args.node_size, args.edge_width)
+    network.draw_graph(args.relations, args.layout) #, args.node_size, args.edge_width)
 
     
     #network.approximation()
