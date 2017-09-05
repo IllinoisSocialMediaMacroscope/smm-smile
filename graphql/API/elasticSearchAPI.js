@@ -25,7 +25,8 @@ function elasticSearchAPI(args){
 			query: {
 				bool: {
 					must:[
-						{ match: { 'text':args['q']} }
+						{ match: { 'text':args['q']} },
+						{ match: {'lang':'en'}}
 					],
 					filter:[]
 				}
