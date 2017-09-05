@@ -35,12 +35,12 @@ router.post('/sklearn/cluster',function(req,res,next){
 	
 	pythonShell.run('clustering.py',options,function(err,results){	
 		if(err){ 
-			//throw err;
+			throw err;
 			res.send({ERROR:err});	
 		}else{
-			
-			var cluster = results[1];
-			var div = results[2];
+			var cluster_complete = results[1];
+			var cluster_features = results[2];
+			var div = results[3];
 			
 			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
 				var div_data = fs.readFileSync(div.slice(0,-1),'utf8');
@@ -48,10 +48,10 @@ router.post('/sklearn/cluster',function(req,res,next){
 				var div_data = fs.readFileSync(div,'utf8');
 			}
 			
-			if (cluster.slice(-1) === '\r' || cluster.slice(-1) === '\n' || cluster.slice(-1) === '\t' || cluster.slice(-1) === '\0' || cluster.slice(-1) === ' '){
-				var preview_string = fs.readFileSync(cluster.slice(0,-1),'utf8');
+			if (cluster_features.slice(-1) === '\r' || cluster_features.slice(-1) === '\n' || cluster_features.slice(-1) === '\t' || cluster_features.slice(-1) === '\0' || cluster_features.slice(-1) === ' '){
+				var preview_string = fs.readFileSync(cluster_features.slice(0,-1),'utf8');
 			}else{
-				var preview_string = fs.readFileSync(cluster,'utf8');
+				var preview_string = fs.readFileSync(cluster_features,'utf8');
 			}
 			
 			var preview_arr = CSV.parse(preview_string);
@@ -59,7 +59,8 @@ router.post('/sklearn/cluster',function(req,res,next){
 			res.send({
 					title:'scikit-learn clustering', 
 					img:[{name:'Clustering down-grade to 2D',content:div_data}],
-					download:[{name:'Download clustered data', content:cluster}],
+					download:[{name:'Download clustered data', content:cluster_complete},
+						{name:'Download features and clustered label',content:cluster_features}],
 					preview:{name:'preview some of the clustered data',content:preview_arr}						
 				});
 		}
