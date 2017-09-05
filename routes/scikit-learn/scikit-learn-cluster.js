@@ -40,12 +40,19 @@ router.post('/sklearn/cluster',function(req,res,next){
 		}else{
 			var cluster_complete = results[1];
 			var cluster_features = results[2];
-			var div = results[3];
+			var div_comp = results[3]
+			var div = results[4];
 			
 			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
 				var div_data = fs.readFileSync(div.slice(0,-1),'utf8');
 			}else{
 				var div_data = fs.readFileSync(div,'utf8');
+			}
+			
+			if (div_comp.slice(-1) === '\r' || div_comp.slice(-1) === '\n' || div_comp.slice(-1) === '\t' || div_comp.slice(-1) === '\0' || div_comp.slice(-1) === ' '){
+				var div_comp_data = fs.readFileSync(div_comp.slice(0,-1),'utf8');
+			}else{
+				var div_comp_data = fs.readFileSync(div_comp,'utf8');
 			}
 			
 			if (cluster_features.slice(-1) === '\r' || cluster_features.slice(-1) === '\n' || cluster_features.slice(-1) === '\t' || cluster_features.slice(-1) === '\0' || cluster_features.slice(-1) === ' '){
@@ -58,7 +65,8 @@ router.post('/sklearn/cluster',function(req,res,next){
 			
 			res.send({
 					title:'scikit-learn clustering', 
-					img:[{name:'Clustering down-grade to 2D',content:div_data}],
+					img:[{name:'Clustering down-grade to 2D',content:div_data},
+						{name:'Composition of predicted clusters', content:div_comp_data}],
 					download:[{name:'Download clustered data', content:cluster_complete},
 						{name:'Download features and clustered label',content:cluster_features}],
 					preview:{name:'preview some of the clustered data',content:preview_arr}						

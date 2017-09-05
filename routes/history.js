@@ -182,15 +182,17 @@ router.post('/history',function(req,res,next){
 					config:config
 				});
 	}
-	else if (req.body.layer2 === 'clustering'  && fs.readdirSync(DIR).length === 4){
+	else if (req.body.layer2 === 'clustering'  && fs.readdirSync(DIR).length === 5){
 		var div_data = fs.readFileSync(DIR +'/div.dat', 'utf8'); //trailing /r 
+		var div_comp_data = fs.readFileSync(DIR + '/div_comp.dat', 'utf8');
 		var preview_string = fs.readFileSync(DIR +'/clustering-features.csv', "utf8"); 
 		var preview_arr = CSV.parse(preview_string);
 		var config = JSON.parse(fs.readFileSync(DIR + '/config.dat','utf8'));
 		res.send({
 				title:'scikit-learn clustering', 
 				ID:req.body.historyID,
-				img:[{name:'Clustering down-grade to 2D',content:div_data}],
+				img:[{name:'Clustering down-grade to 2D',content:div_data},
+						{name:'Composition of predicted clusters', content:div_comp_data}],
 				download:[{name:'Download clustered data', content:DIR + '/clustering-complete.csv'},
 						{name:'Download features and clustered label',content:DIR + '/clustering-features.csv'}],
 				preview:{name:'preview some of the clustered data',content:preview_arr},

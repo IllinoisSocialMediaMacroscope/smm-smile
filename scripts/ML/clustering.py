@@ -25,6 +25,7 @@ import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 import csv
+from collections import Counter
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -103,9 +104,9 @@ class Cluster:
         
         
     def visualization(self,y_pred):
-        reduced_data = PCA(n_components=2).fit_transform(self.features)
 
-        # change to plotly.py
+        # print pca reduced 2d graph
+        reduced_data = PCA(n_components=2).fit_transform(self.features)
         data = [
             go.Scatter(
                 x=reduced_data[:,0], 
@@ -115,7 +116,7 @@ class Cluster:
                     size=8,
                     color=y_pred,
                     autocolorscale=False,
-                    colorscale = 'Y1GnBu'
+                    colorscale = 'Portland'
                     #[[-1,'Greys'], [1,'YlGnBu'], [2,'Greens'], [3,'YlOrRd'], [4,'Bluered'], [5,'RdBu'],
                                   #[6,'Reds'], [7,'Blues'], [8,'Picnic'], [9,'Rainbow'], [10,'Portland'], [11,'Jet'],
                                   #[12,'Hot'], [13,'Blackbody'], [14,'Earth'], [15,'Electric'], [0,'Viridis']]                    
@@ -132,8 +133,22 @@ class Cluster:
         fname_div = self.DIR + '/div.dat'
         with open(fname_div,"w") as f:
             f.write(div)
-        print(fname_div) #second line
+        print(fname_div)
 
+
+        # visualize the prediction
+        y_pred_dict = Counter(y_pred)
+        labels = []
+        values = []
+        for i in y_pred_dict.keys():
+            labels.append("cluster #" + str(i))
+            values.append(y_pred_dict[i])
+        trace = go.Pie(labels=labels, values = values, textinfo='label')
+        div_comp = plot([trace], output_type='div',image='png',auto_open=False, image_filename='plot_img')
+        fname_div_comp = self.DIR + '/div_comp.dat'
+        with open(fname_div_comp,"w") as f:
+            f.write(div_comp)
+        print(fname_div_comp)
         
 
 if __name__ =='__main__':
