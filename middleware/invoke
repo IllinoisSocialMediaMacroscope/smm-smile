@@ -1,0 +1,10 @@
+#!/bin/sh
+
+/usr/bin/invoke_app "$@" -t smiletest \
+ -u wrwroxy-0.1 \
+ -u node-6.11.2 \
+ -u python-3.4 \
+ -w "none" \
+ -c "wroxy --stream-log --logfile /dev/null" \
+ -C "./bootstrap.sh"
+
