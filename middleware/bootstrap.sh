@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cd ../www && npm start
+cd ${TOOLDIR}/www && npm start
 

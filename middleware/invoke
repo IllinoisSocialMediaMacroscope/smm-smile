@@ -5,6 +5,7 @@
  -u node-6.11.2 \
  -u python-3.4 \
  -w "none" \
- -c "wroxy --stream-log --logfile /dev/null" \
- -C "./bootstrap.sh"
+ -c "wrwroxy --stream-log --logfile /dev/null" \
+ -C "@tool/middleware/bootstrap.sh"
+
 
