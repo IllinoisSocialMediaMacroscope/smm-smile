@@ -5,7 +5,8 @@
  -u node-6.11.2 \
  -u python-3.4 \
  -w "none" \
- -c "wrwroxy --stream-log --logfile /dev/null" \
+ -c "xview -fullscreen -onroot @tool/www/public/bootstrap/img/logo/NLP/SA.png" \
+ -c "wrwroxy --no-auth --stream-log --logfile /dev/null" \
  -C "@tool/middleware/bootstrap.sh"
 
 
