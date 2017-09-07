@@ -5,20 +5,20 @@ html
 		meta(name="viewport", content="width=device-width, initial-scale=1")
 		
 		<!-- this is for bootstrap 3! -->
-		link(href="../bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
 		<!-- this is the customized search box style -->
-		link(href="../bootstrap/css/customized/search.css",rel="stylesheet")
-		link(href="../bootstrap/css/customized/component.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/search.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/component.css",rel="stylesheet")
 		
 		<!-- font family -->
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
 		
 		<!-- JQUERY -->
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
-		script(src="../bootstrap/js/bootstrap.min.js")
+		script(src="bootstrap/js/bootstrap.min.js")
 		
 		<!-- Include the plugin's CSS and JS: -->
-		<script src="../bootstrap/js/bootstrap-multiselect.js"></script>
+		<script src="bootstrap/js/bootstrap-multiselect.js"></script>
 		<link rel="stylesheet" href="../bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
 		
 		<!-- Latest compiled and minified CSS -->
@@ -27,9 +27,9 @@ html
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 	
-		script(src="../bootstrap/js/customized/query_pb.js")
-		script(src="../bootstrap/js/customized/query_formValid.js")
-		script(src="../bootstrap/js/customized/query_submit.js")
+		script(src="bootstrap/js/customized/query_pb.js")
+		script(src="bootstrap/js/customized/query_formValid.js")
+		script(src="bootstrap/js/customized/query_submit.js")
 		
 	body(onload="init()")
 		<!-- top bar -->
@@ -43,18 +43,18 @@ html
 			p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
 			
 			a(href='/login/twitter', class="button", id="twitter-auth") 
-				img(src='../bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+				img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 				| Authorize with your Twitter account
 		
 			a(href='/login/es', class="button", id="es-auth")
-				img(src='../bootstrap/img/logo/elasticsearch-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+				img(src='bootstrap/img/logo/elasticsearch-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 				| Authorize with your AWS ElasticSearch account
 			
 		
 		div(class="searchPage",id="searchPage")
 			<!-- logo -->
 			div(class="row" id="header",style="")
-				img(src="../bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
+				img(src="bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
 			
 			<!-- search --->
 			div(class="row")
