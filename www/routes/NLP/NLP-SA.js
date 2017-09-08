@@ -32,7 +32,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 		res.end('no file selected!');
 	}
 
-    res.send({ERROR:pythonPath});
+    //res.send({ERROR:pythonPath});
 
 	pythonShell.run('sentiment.py',options,function(err,results){
 		if (err){
