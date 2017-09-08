@@ -70,7 +70,7 @@ router.post('/sitemap',function(req,res,next){
 	
 	// use hashtable to look up the match URL with name and tags
 	var hashtable = { 
-		"/":"Homepage",
+		"./":"Homepage",
 		"networkx":"Network visualization and analysis",
 		"sklearn-cluster":"Unsupervised learning",
 		"NLP-preprocess":"Natural language preprocessing",
