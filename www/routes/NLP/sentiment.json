@@ -1,5 +1,5 @@
 {
-	"form-action": "/NLP/sentiment",
+	"form-action": "/NLP-sentiment",
 	"containers":[
 		{"container-name":"",
 		"container-label-name":"format",

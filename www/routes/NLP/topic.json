@@ -1,5 +1,5 @@
 {
-	"form-action": "/NLP/topic",
+	"form-action": "/NLP-topic",
 	"containers":[
 		{"container-name":"",
 		"container-label-name":"select corpus (.zip)",
