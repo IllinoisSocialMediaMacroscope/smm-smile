@@ -3,22 +3,24 @@ var fs = require('fs');
 function readDIR(path){
 	var structure = {};
 	
-	var directory = fs.readdirSync(path);
-	for (var i=0; i<directory.length; i++){
-		if (directory[i] !== '.DS_Store'){
-			var subdirectory = fs.readdirSync(path + '/' +directory[i]);
-			var filelist =[];
-			for (var j=0; j< subdirectory.length; j++){
-				// check if it exist!
-				var file =  path + '/' + directory[i] + '/' + subdirectory[j] + '/' + subdirectory[j] + '.csv';
+	if (fs.existsSync(path)){
+		var directory = fs.readdirSync(path);
+		for (var i=0; i<directory.length; i++){
+			if (directory[i] !== '.DS_Store'){
+				var subdirectory = fs.readdirSync(path + '/' +directory[i]);
+				var filelist =[];
+				for (var j=0; j< subdirectory.length; j++){
+					// check if it exist!
+					var file =  path + '/' + directory[i] + '/' + subdirectory[j] + '/' + subdirectory[j] + '.csv';
+						
+					if (fs.existsSync(file)){
+						filelist.push(subdirectory[j]);
+					}
 					
-				if (fs.existsSync(file)){
-					filelist.push(subdirectory[j]);
 				}
-				
+			
+				structure[directory[i]] = filelist;
 			}
-		
-			structure[directory[i]] = filelist;
 		}
 	}
 
