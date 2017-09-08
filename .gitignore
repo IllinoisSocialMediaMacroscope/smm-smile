@@ -1,16 +1,4 @@
-credential
-downloads
 node_modules
-old
-uploads
-public/pyLDAvis
-routes/gmail.credential.json
+downloads
 graphql/node_modules
-graphql/socialmedia_credential.json
-site-packages
-site-packages.zip
-example_data
-*.ipynb
-*.ipynb_checkpoints
-*.html
 *.DS_Store
