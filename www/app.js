@@ -15,7 +15,7 @@ app.use(session({ secret: 'keyboard cat',
 				  cookie: { maxAge: 1000*1800 }, // last half an hour?
 				  rolling: true
 }));
-app.use(favicon(__dirname + '/public/favicon.ico'));
+//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(express.static(path.join(__dirname, '/public')));
 
 app.set('views',path.join(__dirname,'views'));
@@ -51,7 +51,7 @@ app.use('/', require('./routes/sitemap'));
 
 /*--------------------set server----------------------*/
 var debug = require('debug');
-var port = normalizePort(process.env.PORT || '8001');
+var port = normalizePort('8001');
 app.set('port', port);
 var server = http.createServer(app);
 server.listen(port);
