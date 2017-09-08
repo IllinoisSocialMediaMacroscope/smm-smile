@@ -5,11 +5,11 @@ html
 		meta(name="viewport", content="width=device-width, initial-scale=1")
 		
 		<!-- this is for bootstrap 3! -->
-		link(href="../bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
 		
 		<!-- this is the customized dashboard style -->
-		link(href="../bootstrap/css/customized/component.css",rel="stylesheet")
-		link(href="../bootstrap/css/customized/customized.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/component.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/customized.css",rel="stylesheet")
 		
 		<!-- font family -->
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
@@ -17,19 +17,19 @@ html
 		<!-- scripts -->
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
 		script(src="https://www.gstatic.com/charts/loader.js")
-		script(src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
-		script(src="../bootstrap/js/bootstrap.min.js")
+		script(src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
+		script(src="bootstrap/js/bootstrap.min.js")
 		script(src="https://d3js.org/d3.v2.js")
 		<!-- customized scripts -->
-		script(src="../bootstrap/js/customized/view.js")
+		script(src="bootstrap/js/customized/view.js")
 		
 		
 
 	body(onload="init();")
-		include ../components/topbar.pug
-		include ../components/warning.pug
-		include ../components/clientside-warning.pug
-		include ../components/sitemap.pug
+		include components/topbar.pug
+		include components/warning.pug
+		include components/clientside-warning.pug
+		include components/sitemap.pug
 		
 		
 		div(id="container-fluid")
@@ -71,7 +71,7 @@ html
 									block config-form					
 						
 					div(class="loading",style="display:none;")
-						img(src="../bootstrap/img/gifs/loading.gif", width="400", height="400px",style="display:block; margin:auto;")
+						img(src="bootstrap/img/gifs/loading.gif", width="400", height="400px",style="display:block; margin:auto;")
 			
 					<!-- img -->
 					br
@@ -98,14 +98,14 @@ html
 									h2 Interactive Network Visualization (D3JS)
 								div(class="x_content")
 									div(id="note")
-										li mouseover <img src="/bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the node will display the user screen name
-										li mouseover <img src="/bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over the edge will display the tweet
-										li dragging <img src="/bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node enabled
-										li dragging <img src="/bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node with <kbd>ctrl</kbd> pressed will fix the node in your desired location
-										li scroll <img src="/bootstrap/img/logo/img-materials/scroll.png" width="20px"/> zoom-in and out disabled (temp)
+										li mouseover <img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the node will display the user screen name
+										li mouseover <img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over the edge will display the tweet
+										li dragging <img src="bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node enabled
+										li dragging <img src="bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node with <kbd>ctrl</kbd> pressed will fix the node in your desired location
+										li scroll <img src="bootstrap/img/logo/img-materials/scroll.png" width="20px"/> zoom-in and out disabled (temp)
 										li(id="colorscale") connectivity is reflected by the colorscale in a rolling base:
 									div(style="margin:20px 20px;")
-										img(src="/bootstrap/img/logo/img-materials/tweet.png",width="25px",style="display:inline-block;")
+										img(src="bootstrap/img/logo/img-materials/tweet.png",width="25px",style="display:inline-block;")
 										h4(id='author-display') Auhtor
 										p(id='tweet-display') ...
 									div(id="d3js-network-container",style="background-color:white;overflow:hidden;")

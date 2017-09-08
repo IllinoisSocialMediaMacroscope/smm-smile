@@ -4,10 +4,10 @@ var router = express.Router();
 router.get('/',function(req,res,next){
 	res.render('index',{ 
 		pages:[
-			/*{name:'search',url:'/query',imgURL:'../bootstrap/img/logo/search-logo.svg',
+			/*{name:'search',url:'/query',imgURL:'bootstrap/img/logo/search-logo.svg',
 						introduction:`placeholder`
 			},*/
-			{name:'Pre-processing',url:'/NLP/preprocess', imgURL:'../bootstrap/img/logo/NLP/NLP-preprocess.png',
+			{name:'Pre-processing',url:'/NLP/preprocess', imgURL:'bootstrap/img/logo/NLP/NLP-preprocess.png',
 						wiki:'http://pages.cs.wisc.edu/~jerryzhu/cs769/text_preprocessing.pdf',
 						introduction:`<a href="https://en.wikipedia.org/wiki/Text_segmentation#Word_segmentation"><b>Tokenization</b></a>
 						 is the process of dividing written text into meaningful units, such as words, <a href="https://en.wikipedia.org/wiki/Sentence_(linguistics)">sentences
@@ -23,7 +23,7 @@ router.get('/',function(req,res,next){
 						its definition and its context. A simplified form of this is commonly taught to school-age children, in the identification of 
 						words as <a href="https://en.wikipedia.org/wiki/Noun">nouns</a>, <a href="https://en.wikipedia.org/wiki/Verb">verbs</a>, 
 						<a href="https://en.wikipedia.org/wiki/Adjective">adjectives</a>, <a href="https://en.wikipedia.org/wiki/Adverb">adverbs</a>, etc.`},
-            {name:'Sentiment Analysis', url:'/NLP/sentiment', imgURL:'../bootstrap/img/logo/NLP/SA.png',
+            {name:'Sentiment Analysis', url:'/NLP/sentiment', imgURL:'bootstrap/img/logo/NLP/SA.png',
 						wiki:'https://en.wikipedia.org/wiki/Sentiment_analysis',
 						introduction:`<b>Sentiment analysis</b> (sometimes known as opinion mining or emotion AI) refers to the
 						use of <a href="https://en.wikipedia.org/wiki/Sentiment_analysis/wiki/Natural_language_processing">
@@ -39,7 +39,7 @@ router.get('/',function(req,res,next){
 						(along with their associated sentiment intensity measures) which are specifically attuned to sentiment in 
 						<a href="https://en.wikipedia.org/wiki/Microblogging">microblog-like contexts</a>. It then combines these lexical features with consideration for five general rules that embody grammatical and syntactical 
 						conventions for expressing and emphasizing sentiment intensity. `},
-			/*{name:'Topic Modeling', url:'/NLP/topic', imgURL:'../bootstrap/img/logo/NLP/topic-model.png',
+			/*{name:'Topic Modeling', url:'/NLP/topic', imgURL:'bootstrap/img/logo/NLP/topic-model.png',
 						wiki:'https://en.wikipedia.org/wiki/Topic_model',
 						introduction:`In <a href="https://en.wikipedia.org/wiki/Machine_learning">machine learning</a> and <a href="https://en.wikipedia.org/wiki/Natural_language_processing">natural language processing</a>, 
 						a <b>topic model</b> is a type of <a href="https://en.wikipedia.org/wiki/Statistical_model">statistical model</a> 
@@ -49,7 +49,7 @@ router.get('/',function(req,res,next){
 						"cat" and "meow" will appear in documents about cats, and "the" and "is" will appear equally in both. A document typically concerns multiple topics 
 						in different proportions; thus, in a document that is 10% about cats and 90% about dogs, there would probably be about 9 times more dog words than cat words. 
 						The "topics" produced by topic modeling techniques are clusters of similar words.`},*/
-			{name: 'Clustering', url:'/sklearn/cluster', imgURL:'../bootstrap/img/logo/sklearn/cluster.png',
+			{name: 'Clustering', url:'/sklearn/cluster', imgURL:'bootstrap/img/logo/sklearn/cluster.png',
 						wiki:'https://en.wikipedia.org/wiki/Cluster_analysis',
 						introduction:`<b>Cluster analysis</b> is the task of grouping a set of objects in such a 
 						way that objects in the same group (called a <b>cluster</b>) are more similar (in some sense or another) to each 
@@ -61,7 +61,7 @@ router.get('/',function(req,res,next){
 						title="Bioinformatics">bioinformatics</a>, <a href="https://en.wikipedia.org/wiki/Data_compression" title="Data compression">data compression</a>, 
 						and <a href="https://en.wikipedia.org/wiki/Computer_graphics" title="Computer graphics">computer graphics</a>.Cluster analysis itself is not one specific <a href="https://en.wikipedia.org/wiki/Algorithm" title="Algorithm">algorithm</a>, but the general task to be solved. 
 						`},
-			{name: 'Network Analysis', url:'/networkx', imgURL:'../bootstrap/img/logo/networkX-logo.png',
+			{name: 'Network Analysis', url:'/networkx', imgURL:'bootstrap/img/logo/networkX-logo.png',
 						wiki:"https://en.wikipedia.org/wiki/Social_network_analysis",
 						introduction:`<b>Social network analysis</b> is the process of investigating social 
 						structures through the use of <a href="https://en.wikipedia.org/wiki/Network_theory">networks</a> and <a href="https://en.wikipedia.org/wiki/Graph_theory">graph theory
