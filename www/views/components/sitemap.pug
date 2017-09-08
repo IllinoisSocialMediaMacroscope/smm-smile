@@ -20,7 +20,7 @@ script.
 			$("#sitemap-list").empty();
 			$.ajax({
 				type:'post',
-				url:'/sitemap', 
+				url:'sitemap', 
 				data: {"searchTerm": $("#sitemap-input").val()},				
 				success:function(data){
 				
