@@ -9,7 +9,7 @@ router.post('/sitemap',function(req,res,next){
 	var documents = [
 		{
 		  "tags": "index; home; homepage; macroscope; introduction; social media analytics;tool overview; tools; wiki; wikipedia page; reading materials;",
-		  "url": "/",
+		  "url": "./",
 		  "text": fs.readFileSync(process.env.ROOTDIR + '/routes/index.js', "utf8")
 		},
 		{
