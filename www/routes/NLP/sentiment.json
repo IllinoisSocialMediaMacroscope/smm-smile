@@ -48,6 +48,6 @@
 					}
 				]}
 	],
-	"custom-script":"../bootstrap/js/customized/view_sentiment.js"
+	"custom-script":"bootstrap/js/customized/view_sentiment.js"
 }
 			
