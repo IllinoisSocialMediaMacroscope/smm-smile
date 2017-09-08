@@ -19,7 +19,7 @@ html
 		
 		<!-- Include the plugin's CSS and JS: -->
 		<script src="bootstrap/js/bootstrap-multiselect.js"></script>
-		<link rel="stylesheet" href="../bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
+		<link rel="stylesheet" href="bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
 		
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
@@ -42,11 +42,11 @@ html
 		div(id="auth-panel")
 			p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
 			
-			a(href='/login/twitter', class="button", id="twitter-auth") 
+			a(href='login/twitter', class="button", id="twitter-auth") 
 				img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 				| Authorize with your Twitter account
 		
-			a(href='/login/es', class="button", id="es-auth")
+			a(href='login/es', class="button", id="es-auth")
 				img(src='bootstrap/img/logo/elasticsearch-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 				| Authorize with your AWS ElasticSearch account
 			
@@ -116,7 +116,7 @@ html
 						
 					div(class="modal-footer")
 						a(href="/", class="btn btn-primary",style="background-color:#ea4a36;border-style:hidden") Go To Analytics
-						a(href="/history", class="btn btn-primary", style="background-color:#1e325a;border-style:hidden") Review in History
+						a(href="history", class="btn btn-primary", style="background-color:#1e325a;border-style:hidden") Review in History
 								
 		<!-- side bar HELP-->
 		div(class="documentation",id="documentation")

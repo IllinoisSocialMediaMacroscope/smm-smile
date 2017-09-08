@@ -5,10 +5,10 @@ html
 		meta(name="viewport", content="width=device-width, initial-scale=1")
 		
 		<!-- this is for bootstrap 3! -->
-		link(href="../bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
 		<!-- this is the customized dashboard style -->
-		link(href="../bootstrap/css/customized/customized.css",rel="stylesheet")
-		link(href="../bootstrap/css/customized/component.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/customized.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/component.css",rel="stylesheet")
 		
 		<!-- font family -->
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
@@ -16,9 +16,9 @@ html
 		<!-- scripts -->
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
 		script(src="https://www.gstatic.com/charts/loader.js")
-		script(src="../bootstrap/js/customized/view.js")
-		script(src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
-		script(src="../bootstrap/js/bootstrap.min.js")
+		script(src="bootstrap/js/customized/view.js")
+		script(src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
+		script(src="bootstrap/js/bootstrap.min.js")
 		script(src="https://d3js.org/d3.v2.js")
 		<script src="https://d3js.org/d3-color.v1.min.js"></script>
 		<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
@@ -34,7 +34,7 @@ html
 			div(class="row")
 				div(class="col-sm-3 col-md-3 sidebar")
 					h2(style="color:#ffffff;text-align:center;") History 
-						img(src="../bootstrap/img/logo/history-logo.png" width="50px")
+						img(src="bootstrap/img/logo/history-logo.png" width="50px")
 					ul(class="nav nav-sidebar")
 						each val,key in directory
 							li <a onclick="toggle(this,`##{key}`);" id=#{key}-btn>
@@ -138,14 +138,14 @@ html
 								h2 Interactive Network Visualization (D3JS)
 							div(class="x_content")
 								div(id="note")
-									li mouseover <img src="/bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the node will display the user screen name
-									li mouseover <img src="/bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over the edge will display the tweet
-									li dragging <img src="/bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node enabled
-									li dragging <img src="/bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node with <kbd>ctrl</kbd> pressed will fix the node in your desired location
-									li scroll <img src="/bootstrap/img/logo/img-materials/scroll.png" width="20px"/> zoom-in and out disabled (temp)
+									li mouseover <img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the node will display the user screen name
+									li mouseover <img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over the edge will display the tweet
+									li dragging <img src="bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node enabled
+									li dragging <img src="bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node with <kbd>ctrl</kbd> pressed will fix the node in your desired location
+									li scroll <img src="bootstrap/img/logo/img-materials/scroll.png" width="20px"/> zoom-in and out disabled (temp)
 									li(id="colorscale") connectivity is reflected by the colorscale in a rolling base:
 								div(style="margin:20px 20px;")
-									img(src="/bootstrap/img/logo/img-materials/tweet.png",width="25px",style="display:inline-block;")
+									img(src="bootstrap/img/logo/img-materials/tweet.png",width="25px",style="display:inline-block;")
 									h4(id='author-display') Auhtor
 									p(id='tweet-display') ...
 								div(id="d3js-network-container",style="background-color:white;overflow:hidden;text-align:center;")
@@ -164,5 +164,5 @@ html
 						button(class="btn btn-default" data-dismiss="modal") Close
 		
 		
-		script(src="../bootstrap/js/customized/history_pb.js")
+		script(src="bootstrap/js/customized/history_pb.js")
 		
