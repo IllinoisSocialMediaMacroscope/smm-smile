@@ -78,6 +78,6 @@
 					}
 				]}
 	],
-	"custom-script":"../bootstrap/js/customized/view_preprocess.js"
+	"custom-script":"bootstrap/js/customized/view_preprocess.js"
 }
 			

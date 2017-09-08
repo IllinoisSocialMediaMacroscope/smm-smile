@@ -55,6 +55,6 @@
 					}
 				]}
 	],
-	"custom-script":"../bootstrap/js/customized/view_topic.js"
+	"custom-script":"bootstrap/js/customized/view_topic.js"
 }
 			
