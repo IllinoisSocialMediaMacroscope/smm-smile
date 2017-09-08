@@ -1,5 +1,5 @@
 {
-	"form-action": "/NLP/preprocess",
+	"form-action": "/NLP-preprocess",
 	"containers":[
 		{"container-name":"",
 		"container-label-name":"format",
