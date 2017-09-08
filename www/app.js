@@ -6,7 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var favicon = require('express-favicon');
+//var favicon = require('express-favicon');
 var app = express();
 
 app.use(session({ secret: 'keyboard cat', 
