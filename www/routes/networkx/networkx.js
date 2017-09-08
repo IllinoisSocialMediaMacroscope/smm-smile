@@ -10,6 +10,7 @@ var readDIR = require(appPath + '/scripts/helper.js').readDIR;
 
 router.get('/networkx',function(req,res,next){
 	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
+	
 	delete files['twitter-User'];
 	var formParam = require('./networkx.json');
 	res.render('analytics/formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:files, param:formParam}); 
