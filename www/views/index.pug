@@ -6,16 +6,16 @@ html
 		meta(name="viewport", content="width=device-width, initial-scale=1")
 		
 		<!-- this is for bootstrap 3! -->
-		link(href="../bootstrap/css/bootstrap.css", rel="stylesheet")
+		link(href="bootstrap/css/bootstrap.css", rel="stylesheet")
 		<!-- this is the customized dashboard style -->
-		link(href="../bootstrap/css/customized/component.css",rel="stylesheet")
-		link(href="../bootstrap/css/customized/index.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/component.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/index.css",rel="stylesheet")
 		
 		<!-- font family -->
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
 		
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
-		script(src="../bootstrap/js/bootstrap.min.js")
+		script(src="bootstrap/js/bootstrap.min.js")
 	
 	body
 		include components/topbar.pug
@@ -24,12 +24,12 @@ html
 		include components/clientside-warning.pug			
 								
 		div(class="headers")
-			//img(id="index-banner", src="../bootstrap/img/logo/index-banner.png",width="100%")
-			img(id="index-banner", src="../bootstrap/img/logo/index-banner.png",width="70%")
+			//img(id="index-banner", src="bootstrap/img/logo/index-banner.png",width="100%")
+			img(id="index-banner", src="bootstrap/img/logo/index-banner.png",width="70%")
 			div(class="fadein")
-				img(id="f1", src="../bootstrap/img/logo/1.png",width="240px")
-				img(id="f2", src="../bootstrap/img/logo/2.png",width="240px")
-				img(id="f3", src="../bootstrap/img/logo/3.png",width="240px")
+				img(id="f1", src="bootstrap/img/logo/1.png",width="240px")
+				img(id="f2", src="bootstrap/img/logo/2.png",width="240px")
+				img(id="f3", src="bootstrap/img/logo/3.png",width="240px")
 			div(class="button-unit")
 				a(class="button" href="/query") Get Started
 				a(class="button" href="/history") Past Results

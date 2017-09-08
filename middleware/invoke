@@ -1,0 +1,12 @@
+#!/bin/sh
+
+/usr/bin/invoke_app "$@" -t smiletest \
+ -u wrwroxy-0.1 \
+ -u node-6.11.2 \
+ -u python-3.4 \
+ -w "none" \
+ -c "xview -fullscreen -onroot @tool/www/public/bootstrap/img/logo/NLP/SA.png" \
+ -c "wrwroxy --no-auth --stream-log --logfile /dev/null" \
+ -C "@tool/middleware/bootstrap.sh"
+
+

@@ -51,7 +51,7 @@ app.use('/', require('./routes/sitemap'));
 
 /*--------------------set server----------------------*/
 var debug = require('debug');
-var port = normalizePort(process.env.PORT || '8080');
+var port = normalizePort(process.env.PORT || '8001');
 app.set('port', port);
 var server = http.createServer(app);
 server.listen(port);
