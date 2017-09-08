@@ -1,5 +1,5 @@
 {
-	"form-action": "/networkx",
+	"form-action": "networkx",
 	"containers":[
 		{"container-name":"file-container",
 		"container-label-name":"select from your folder",
