@@ -8,13 +8,13 @@ var path = require('path');
 var appPath = path.resolve('.');
 var readDIR = require(appPath + '/scripts/helper').readDIR;
 
-router.get('/NLP/preprocess',function(req,res,next){
+router.get('/NLP-preprocess',function(req,res,next){
 	files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
 	var formParam = require('./preprocess.json');
 	res.render('analytics/formTemplate',{parent:'/#Pre-processing', title:'Natural Langurage PreProcessing', directory:files, param:formParam});
 });
  
-router.post('/NLP/preprocess',function(req,res,next){
+router.post('/NLP-preprocess',function(req,res,next){
 	
 	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select'){
 		var options = {

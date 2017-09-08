@@ -8,13 +8,13 @@ var path = require('path');
 var appPath = path.resolve('.');
 var readZip = require(appPath  + '/scripts/helper').readZip;
 
-router.get('/NLP/topic',function(req,res,next){
+router.get('/NLP-topic',function(req,res,next){
 	files = readZip(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
 	var formParam = require('./topic.json');
 	res.render('analytics/formTemplate',{parent:'/#Topic Modeling', title:'LDA Topic Modeling', directory:files, param:formParam});
 });
  
-router.post('/NLP/topic',function(req,res,next){
+router.post('/NLP-topic',function(req,res,next){
 	
 	var options = {
 		pythonPath:process.env.PYTHONPATH,

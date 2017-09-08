@@ -8,13 +8,13 @@ var path = require('path');
 var appPath = path.resolve('.');
 var readDIR = require(appPath + '/scripts/helper.js').readDIR;
 
-router.get('/sklearn/cluster',function(req,res,next){
+router.get('/sklearn-cluster',function(req,res,next){
 	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
 	var formParam = require('./cluster.json');
 	res.render('analytics/formTemplate',{parent:'/#Clustering', title:'Unsupervised Learning', directory:files, param:formParam}); 
 });
  
-router.post('/sklearn/cluster',function(req,res,next){
+router.post('/sklearn-cluster',function(req,res,next){
 	//console.log(req.body);
 	
 	var options = {
