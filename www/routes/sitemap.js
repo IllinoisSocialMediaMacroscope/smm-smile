@@ -17,14 +17,14 @@ router.post('/sitemap',function(req,res,next){
 		  path; traversal; tree; triads; vitality; connectivity; python; networkx package; plotly; twitter;
 		  relationship; tweet; user; `,
 		  "text": fs.readFileSync(process.env.ROOTDIR + '/routes/networkx/networkx.json'),
-		  "url":"/networkx"
+		  "url":"networkx"
 		}, 
 		{
 		  "tags": `scikit learn; python; clustering; cluster; unsupervised learning; machine learning; 
 		  learn; train; function; data; algorithm; output; set; regression; variance; features; bias;
 		  minimizationl; examples; space; cluster; vector; linear; penalty; model; dimension;`,
 		  "text": fs.readFileSync(process.env.ROOTDIR + '/routes/scikit-learn/cluster.json'),
-		  "url":"/sklearn/cluster",
+		  "url":"sklearn-cluster",
 		},
 		{
 			"tags":`natural language; preprocess; process; tokenize; lexer; word; tokens; lexical; lemma; lemmatization; 
@@ -33,28 +33,28 @@ router.post('/sitemap',function(req,res,next){
 				analysis; grammar; statement; literal; rule; tokenization; expression; comments; 
 				sequence; semantic; structure; NLTK; python; stanford; syntax; tweet;`,
 			"text": fs.readFileSync(process.env.ROOTDIR + '/routes/NLP/preprocess.json'),
-			"url":"/NLP/preprocess",
+			"url":"NLP-preprocess",
 		},
 		{	
 			"tags": `natural language; process; lexer; sentence; lexical; document; language; 
 			analysis; rule; NLTK; python; stanford; tweet; sentiment; text; proceeding; positive; negative; neutral;
 			compound; reviews; features; system; polarity; language; opinion; recommender; content; 
 			affect; mining; social; linguistics; emotion; emotional; human; semantic; rating; subjective; pyschology;`,
-			"url":"/NLP/sentiment",
+			"url":"NLP-sentiment",
 			"text":fs.readFileSync(process.env.ROOTDIR + '/routes/NLP/sentiment.json'),
 		},
 		{
 			"tags": `search; query; social media; source; platform; authentication; authorization; access tokens; credentials; graphql; data server; elasticsearch;
 			user; twitter; stream; tweet; user; online; information; journal; network; communication; topics; trend; keyword; meme; hashtag; @; retweet; url; image;
 			emoji;`,
-			"url":"/query",
+			"url":"query",
 			"text":fs.readFileSync(process.env.ROOTDIR + '/views/search/searchbox.pug') + 
 			fs.readFileSync(process.env.ROOTDIR + '/views/search/query.pug'),
 		},
 		{
 			"tags": "history; past; id; analytics; data; metrics; chart; graph;",
 			"text":fs.readFileSync(process.env.ROOTDIR + '/views/history.pug'),
-			"url":"/history"
+			"url":"history"
 		}
 	]
 		
@@ -71,12 +71,12 @@ router.post('/sitemap',function(req,res,next){
 	// use hashtable to look up the match URL with name and tags
 	var hashtable = { 
 		"/":"Homepage",
-		"/networkx":"Network visualization and analysis",
-		"/sklearn/cluster":"Unsupervised learning",
-		"/NLP/preprocess":"Natural language preprocessing",
-		"/NLP/sentiment":"Sentiment analysis",
-		"/query":"Social media search",
-		"/history":"Saved data and analytics results"
+		"networkx":"Network visualization and analysis",
+		"sklearn-cluster":"Unsupervised learning",
+		"NLP-preprocess":"Natural language preprocessing",
+		"NLP-sentiment":"Sentiment analysis",
+		"query":"Social media search",
+		"history":"Saved data and analytics results"
 	}		
 		
 	var match = idx.search(req.body.searchTerm);
