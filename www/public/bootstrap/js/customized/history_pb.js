@@ -106,7 +106,7 @@ function deleteModal(formID){
 function deleteHistory(formID){	
 	$.ajax({
 		type:'post',
-		url:'/delete', 
+		url:'delete', 
 		data: $("#"+formID).serialize(),				
 		success:function(data){
 			if(data){
@@ -165,7 +165,7 @@ function appendOverview(container,config, download){
 	// add download files
 	tableContent += `<tr><th>downloadables</th><td>`;
 	$.each(download,function(i,val){
-		tableContent += `<form action='/download' name='download' method='post'><input type="hidden" value=`+val.content+` name="downloadURL" />
+		tableContent += `<form action='download' name='download' method='post'><input type="hidden" value=`+val.content+` name="downloadURL" />
 		<button type="submit" class="link-button-download"><span class="glyphicon glyphicon-download-alt"></span>`
 								+val.name+`</button></form>`;
 	});
