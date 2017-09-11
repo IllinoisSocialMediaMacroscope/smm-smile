@@ -37,7 +37,9 @@ router.post('/NLP-sentiment',function(req,res,next){
 	pythonShell.run('sentiment.py',options,function(err,results){
 		if (err){
 			//throw err;
-			res.send({'ERROR':err});
+           // console.log(err);
+           // throw err;
+		    res.send({'ERROR':err});
 		}else{
 			
 			var div=results[1];

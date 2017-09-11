@@ -154,7 +154,15 @@ if __name__ =='__main__':
     load_dotenv(dotenv_path)
     
     uid = str(uuid.uuid4())
-    DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NLP_SENTIMENT') +'/' + uid
+    # DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NLP_SENTIMENT') +'/' + uid
+    DIR = os.path.join(os.environ.get('ROOTDIR'),os.environ.get('DOWNLOAD_NLP_SENTIMENT'),uid)
+    DIR = os.path.expanduser(
+            os.path.expandvars(
+              os.path.realpath(
+                os.path.normpath(DIR)
+              )
+            )
+          )
     if not os.path.exists(DIR):
         os.makedirs(DIR)
 
