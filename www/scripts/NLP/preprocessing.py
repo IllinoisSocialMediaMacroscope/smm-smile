@@ -1,7 +1,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from nltk.tokenize import sent_tokenize, wordpunct_tokenize,TweetTokenizer
-from tokenizer import tokenizer
+#from tokenizer import tokenizer
 #https://github.com/erikavaris/tokenizer
 from nltk.corpus import stopwords
 from nltk import WordNetLemmatizer
@@ -26,7 +26,7 @@ import re, string
 import json
 import os
 from os.path import join, dirname
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import warnings
 warnings.filterwarnings('ignore')
 
