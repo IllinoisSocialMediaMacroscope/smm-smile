@@ -36,7 +36,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 	}else if (req.body.option === 'URL'){ 
 		var options = {
 			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-			pythonPath:'/opt/python/bin/python3',
+			pythonPath:'/opt/python/bin/python3.4',
             scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',req.body.input, '--process',req.body.model, '--tagger',req.body.tagger]
 		};	
@@ -45,7 +45,8 @@ router.post('/NLP-preprocess',function(req,res,next){
 	pythonShell.run('preprocessing.py',options,function(err,results){
 		if(err){ 
 			//throw err;
-			res.send({ERROR:err});	
+			console.log(err);
+			//res.send({ERROR:err});	
 		}else{
 			var phrases = results[1];
 			var filtered = results[2];
