@@ -1,4 +1,4 @@
-require('dotenv').config();
+//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
@@ -22,76 +22,63 @@ router.get('/history',function(req,res,next){
 						"NW":{"networkx":{}},
 					}
 					
-	if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD)){
-		if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML)) {
-			if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML)){
-				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_CLUSTERING)
+	if (fs.existsSync('./downloads')){
+		
+		if (fs.existsSync('./downloads/ML')) {
+			if (fs.existsSync('./downloads/ML/clustering')){
+				var fileList = fs.readdirSync('./downloads/ML/clustering')
 				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at = fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_CLUSTERING + '/' + fileList[i]).birthtime.toString();
+					var created_at = fs.lstatSync('./downloads/ML/clustering/' + fileList[i]).birthtime.toString();
 					directory['ML']['clustering'][fileList[i]] = created_at;
 				}
 			}
-			/*if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_TRAINING)){
-				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_ML_TRAINING);
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at = fs.lstatSync(process.env.ROOTDIR + + process.env.DOWNLOAD_ML_TRAINING + '/' + fileList[i]).birthtime.toString();
-					directory['ML']['feature'][fileList[i]] = created_at;
-				}
-			}*/
 		}
 		
-		if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP)){
-			if (fs.existsSync(process.env.ROOTDIR +process.env.DOWNLOAD_NLP_PREPROCESSING)){
-				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_PREPROCESSING);
+		if (fs.existsSync('./downloads/NLP')){
+			if (fs.existsSync('./downloads/NLP/preprocessing')){
+				var fileList = fs.readdirSync('./downloads/NLP/preprocessing');
 				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at = fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_PREPROCESSING + '/'+ fileList[i]).birthtime.toString();
+					var created_at = fs.lstatSync('./downloads/NLP/preprocessing/'+ fileList[i]).birthtime.toString();
 					directory['NLP']['preprocessing'][fileList[i]] = created_at;
 				}
 			}
-			if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_SENTIMENT)){
-				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_SENTIMENT);
+			if (fs.existsSync('./downloads/NLP/sentiment')){
+				var fileList = fs.readdirSync('./downloads/NLP/sentiment');
 				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at = fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_SENTIMENT + '/' + fileList[i]).birthtime.toString(); 
+					var created_at = fs.lstatSync('./downloads/NLP/sentiment/' + fileList[i]).birthtime.toString(); 
 					directory['NLP']['sentiment'][fileList[i]] = created_at;
 				}
 			}
-			/*if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC)){
-				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC);
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NLP_TOPIC + '/' + fileList[i]).birthtime.toString();
-					directory['NLP']['topic-modeling'][fileList[i]] = created_at;
-				}
-			}*/
 		}
-		if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW)){
-			if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW_NETWORKX)){
-				var fileList = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW_NETWORKX);
+		if (fs.existsSync('./downloads/NW')){
+			if (fs.existsSync('./downloads/NW/networkx')){
+				var fileList = fs.readdirSync('./downloads/NW/networkx');
 				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_NW_NETWORKX + '/' + fileList[i]).birthtime.toString();
+					var created_at= fs.lstatSync('./downloads/NW/networkx/' + fileList[i]).birthtime.toString();
 					directory['NW']['networkx'][fileList[i]] = created_at;
 				}
 			}
 		}
 		
-		if (fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL)){
-			if (fs.existsSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Tweet')){
-				var fileList = fs.readdirSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Tweet');
+		if (fs.existsSync('./downloads/GraphQL')){
+			if (fs.existsSync('./downloads/GraphQL/twitter-Tweet')){
+				var fileList = fs.readdirSync('./downloads/GraphQL/twitter-Tweet');
 				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/twitter-Tweet/' + fileList[i]).birthtime.toString();
+					var created_at= fs.lstatSync('./downloads/GraphQL/twitter-Tweet/' + fileList[i]).birthtime.toString();
 					directory['GraphQL']['twitter-Tweet'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
 				}
 			}
-			if (fs.existsSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-User')){
-				var fileList = fs.readdirSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-User');
+			if (fs.existsSync('./downloads/GraphQL/twitter-User')){
+				var fileList = fs.readdirSync('./downloads/GraphQL/twitter-User');
 				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/twitter-User/' + fileList[i]).birthtime.toString();
+					var created_at= fs.lstatSync('./downloads/GraphQL/twitter-User/' + fileList[i]).birthtime.toString();
 					directory['GraphQL']['twitter-User'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
 				}
 			}
-			if (fs.existsSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Stream')){
-				var fileList = fs.readdirSync(process.env.ROOTDIR +process.env.DOWNLOAD_GRAPHQL + '/twitter-Stream');
+			if (fs.existsSync('./downloads/GraphQL/twitter-Stream')){
+				var fileList = fs.readdirSync('./downloads/GraphQL/twitter-Stream');
 				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/twitter-Stream/' + fileList[i]).birthtime.toString();
+					var created_at= fs.lstatSync('./downloads/GraphQL/twitter-Stream/' + fileList[i]).birthtime.toString();
 					directory['GraphQL']['twitter-Stream'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
 				}
 			}
@@ -102,29 +89,8 @@ router.get('/history',function(req,res,next){
 
 router.post('/history',function(req,res,next){
 	
-	var DIR = process.env.ROOTDIR + process.env.DOWNLOAD + '/' + req.body.layer1 + '/' + req.body.layer2 +'/' + req.body.historyID;
+	var DIR = './downloads/' + req.body.layer1 + '/' + req.body.layer2 +'/' + req.body.historyID;
 	
-	/*if (req.body.layer2 ==='topic-modeling' 
-			&& fs.readdirSync(DIR).length === 4 
-			&& fs.existsSync(process.env.ROOTDIR + '/public/pyLDAvis/pyLDAvis-' + req.body.historyID + '.html')){
-		var div_features_data = fs.readFileSync(DIR + '/div_features.dat', 'utf8'); 		
-		var preview_string = fs.readFileSync(DIR + '/topic.csv', "utf8");
-		var preview_arr = CSV.parse(preview_string);
-		
-		var config = JSON.parse(fs.readFileSync(DIR + '/config.dat','utf8'));
-		
-		res.send({
-			title:'Latent Dirichlet Allocation topic modeling', 
-			ID:req.body.historyID,
-			img:[{name:'Feature Extraction',content:div_features_data}],
-			download:[{name:'Extracted Features', content:DIR + '/tfidf_features.csv'},
-						{name:'top 100 words in each Topic',content:DIR + '/topic.csv'}],
-			iframe:{name:'pyLDAvis tool',content:'pyLDAvis-' + req.body.historyID + '.html'},
-			preview:{name:'Preview Top words in each Topic',content:preview_arr},
-			config:config
-		});
-		
-	}*/
 	if (req.body.layer2=== 'preprocessing' && fs.readdirSync(DIR).length === 7){
 		
 		var div_data = fs.readFileSync(DIR +'/div.dat', 'utf8'); 
@@ -263,14 +229,14 @@ router.post('/history',function(req,res,next){
 
 router.post('/delete',function(req,res,next){
 	if (req.body.type === 'analytics'){
-		var DIR = process.env.ROOTDIR + process.env.DOWNLOAD + '/' + req.body.layer1 + '/' + req.body.layer2 +'/' + req.body.historyID;
+		var DIR = './downloads/' + req.body.layer1 + '/' + req.body.layer2 +'/' + req.body.historyID;
 		deleteFolderRecursive(DIR);
 		res.send('Successfully deleted!');
 	}
 	
 	else if (req.body.type === 'graphql'){
 		
-		var DIR_GraphQL = process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.historyID;
+		var DIR_GraphQL = './downloads/GraphQL/' + req.body.historyID;
 		if (fs.existsSync(DIR_GraphQL + '.json')){
 			fs.unlinkSync(DIR_GraphQL + '.json');
 		}

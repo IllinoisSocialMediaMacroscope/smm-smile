@@ -1,4 +1,4 @@
-require('dotenv').config();
+//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
@@ -9,7 +9,7 @@ var appPath = path.dirname(path.dirname(__dirname));
 var readDIR = require(path.join(appPath,'scripts','helper.js')).readDIR;
 
 router.get('/sklearn-cluster',function(req,res,next){
-	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
+	var files = readDIR('./downloads/GraphQL');	
 	var formParam = require('./cluster.json');
 	res.render('analytics/formTemplate',{parent:'/#Clustering', title:'Unsupervised Learning', directory:files, param:formParam}); 
 });
@@ -18,9 +18,9 @@ router.post('/sklearn-cluster',function(req,res,next){
 	//console.log(req.body);
 	
 	var options = {
-		pythonPath:process.env.PYTHONPATH,
+		pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 		scriptPath:appPath + '/scripts/ML/',
-		args:['--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, '--estimator',req.body.model,'--n_clusters',req.body.n_clusters,'--fields']
+		args:['--file','./downloads/GraphQL/'+   req.body.filename, '--estimator',req.body.model,'--n_clusters',req.body.n_clusters,'--fields']
 	}; 
 		 
 	//put multiple fields header into args

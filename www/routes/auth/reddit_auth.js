@@ -1,4 +1,4 @@
-require('dotenv').config();
+//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
@@ -10,9 +10,9 @@ router.get('/login/reddit', function(req,res,next){
 		var RANDOM_STRING = buffer.toString('hex');
 		req.session.state = RANDOM_STRING;
 		
-		var CLIENT_ID = process.env.REDDIT_CLIENT_ID;
-		var clientSecret= process.env.REDDIT_CLIENT_SECRET;
-		var URI = process.env.REDDIT_CALLBACK_URI;
+		var CLIENT_ID = "***REMOVED***";
+		var clientSecret= "***REMOVED***";
+		var URI = "http://localhost:8080/login/reddit/callback";
 		
 		var DURATION = 'permanent';
 		var SCOPE_STRING = 'identity edit flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread';
@@ -25,10 +25,10 @@ router.get('/login/reddit', function(req,res,next){
 });
 
 router.get('/login/reddit/callback',function(req,res,next){
-	var user = process.env.REDDIT_CLIENT_ID;
-	var password = process.env.REDDIT_CLIENT_SECRET;
+	var user = "***REMOVED***";
+	var password = "***REMOVED***";
 	var grantType = 'authorization_code';
-	var redirectURI = process.env.REDDIT_CALLBACK_URI;
+	var redirectURI ="http://localhost:8080/login/reddit/callback";
 	var base64encodedData = new Buffer(user + ':' + password).toString('base64');
 	
 	if (req.query.error){

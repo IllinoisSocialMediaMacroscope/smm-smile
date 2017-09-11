@@ -155,7 +155,7 @@ if __name__ =='__main__':
     
     uid = str(uuid.uuid4())
     # DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NLP_SENTIMENT') +'/' + uid
-    DIR = os.path.join(os.environ.get('ROOTDIR'),os.environ.get('DOWNLOAD_NLP_SENTIMENT'),uid)
+    DIR = os.path.join('./downloads/NLP/sentiment',uid)
     DIR = os.path.expanduser(
             os.path.expandvars(
               os.path.realpath(

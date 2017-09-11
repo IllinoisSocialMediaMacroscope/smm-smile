@@ -455,11 +455,12 @@ if __name__ =='__main__':
 
     #save arguments
    
-    dotenv_path = join(dirname(__file__), '../../.env')
-    load_dotenv(dotenv_path)
+    #dotenv_path = join(dirname(__file__), '../../.env')
+    #load_dotenv(dotenv_path)
     
     uid = str(uuid.uuid4())
-    DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NLP_PREPROCESSING') +'/' + uid
+    #DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NLP_PREPROCESSING') +'/' + uid
+    DIR = os.path.join('./downloads/NLP/preprocessing',uid)
     if not os.path.exists(DIR):
         os.makedirs(DIR)
 

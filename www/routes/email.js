@@ -1,4 +1,4 @@
-require('dotenv').config();
+//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 const nodemailer = require('nodemailer');
@@ -7,8 +7,8 @@ var transporter = nodemailer.createTransport({
     port: 465,
     secure: true, // use SSL
     auth: {
-        user: process.env.USER,
-        pass: process.env.PASSWORD
+        user: 'placeholder',
+        pass: 'placeholder'
     }
 });
 

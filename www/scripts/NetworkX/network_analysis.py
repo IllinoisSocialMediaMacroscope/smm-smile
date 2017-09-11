@@ -504,7 +504,8 @@ if __name__ == "__main__":
     load_dotenv(dotenv_path)
     
     uid = str(uuid.uuid4())
-    DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NW_NETWORKX') +'/' + uid
+    #DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NW_NETWORKX') +'/' + uid
+    DIR = os.path.join('./downloads/NW/networkx',uid)
     if not os.path.exists(DIR):
         os.makedirs(DIR)
 

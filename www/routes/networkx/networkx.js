@@ -1,4 +1,4 @@
-require('dotenv').config();
+//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
@@ -9,7 +9,7 @@ var appPath = path.dirname(path.dirname(__dirname));
 var readDIR = require(path.join(appPath,'scripts','helper.js')).readDIR;
 
 router.get('/networkx',function(req,res,next){
-	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
+	var files = readDIR('./downloads/GraphQL');
 	
 	delete files['twitter-User'];
 	var formParam = require('./networkx.json');
@@ -18,9 +18,9 @@ router.get('/networkx',function(req,res,next){
 
 router.post('/networkx',function(req,res,next){
 	var options = {
-		pythonPath:process.env.PYTHONPATH,
+		pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 		scriptPath:appPath + '/scripts/NetworkX/',
-		args:[	'--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.filename, 
+		args:[	'--file','./downloads/GraphQL/'+   req.body.filename, 
 				'--layout',req.body.layout, 
 				'--relations',req.body.relations, 
 				'--prune',req.body.prune
