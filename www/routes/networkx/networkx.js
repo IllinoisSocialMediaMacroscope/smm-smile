@@ -5,8 +5,8 @@ var fs = require('fs');
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
 var path = require('path');
-var appPath = path.resolve('.');
-var readDIR = require(appPath + '/scripts/helper.js').readDIR;
+var appPath = path.dirname(path.dirname(__dirname));
+var readDIR = require(path.join(appPath,'scripts','helper.js')).readDIR;
 
 router.get('/networkx',function(req,res,next){
 	var files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);
