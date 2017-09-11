@@ -36,37 +36,40 @@ router.post('/query',function(req,res,next){
 	//console.log(req.body.prefix);
 	
 	// make directory downloads/GraphQL before save things to it!
-	if (!fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD)){
-		fs.mkdir(process.env.ROOTDIR + process.env.DOWNLOAD, function(err){
+	var dir_downloads = './downloads';
+	var dir_downloads_graphql = './downloads/GraphQL';
+	
+	if (!fs.existsSync(dir_downloads)){
+		fs.mkdir(dir_downloads, function(err){
 			if (err) {
 				res.send({'ERROR':err});
 			}else{
-				console.log("successfully created" + process.env.ROOTDIR + process.env.DOWNLOAD + " folder");
+				console.log("successfully created " + dir_downloads + " folder");
 			}
 		});
 	}	
-	if (!fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL)){
-		fs.mkdir(process.env.ROOTDIR + process.env.DOWNLOAD, function(err){
+	if (!fs.existsSync(dir_downloads_graphql)){
+		fs.mkdir(dir_downloads_graphql, function(err){
 			if (err) {
 				res.send({'ERROR':err});
 			}else{
-				console.log("successfully created" + process.env.ROOTDIR + process.env.DOWNLOAD + " folder");
+				console.log("successfully created " + dir_downloads_graphql + " folder");
 			}
 		});
 	}
-	if (!fs.existsSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.prefix)){
-		fs.mkdir(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.prefix, function(err){
+	if (!fs.existsSync(dir_downloads_graphql + req.body.prefix)){
+		fs.mkdir(dir_downloads_graphql + '/' + req.body.prefix, function(err){
 			if (err) {
 				res.send({'ERROR':err});
 			}else{
-				console.log("successfully created" + process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.prefix + " folder");
+				console.log("successfully created " +dir_downloads_graphql + '/' + req.body.prefix + " folder");
 			}
 		});
 	} 
 	
 	// make sure files that already exist in the directory wont be allowed
 	var p_array = [];
-	var directory = fs.readdirSync(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + req.body.prefix);
+	var directory = fs.readdirSync(dir_downloads_graphql + '/' + req.body.prefix);
 	
 	for (var i=0; i< directory.length; i++){
 		p_array.push(checkExist(directory[i], req.body.filename));
@@ -114,7 +117,7 @@ router.post('/query',function(req,res,next){
 				res.send({ERROR:responseObj['errors'][0]['message']});
 			}else{				
 			
-				var response = saveFile(responseObj, req.body.params,req.body.pages, req.body.prefix, req.body.filename,[key1,key2,key3]);	
+				var response = saveFile(dir_downloads_graphql,responseObj, req.body.params,req.body.pages, req.body.prefix, req.body.filename,[key1,key2,key3]);	
 				res.send(response);
 			}
 			
@@ -131,11 +134,11 @@ router.post('/query',function(req,res,next){
 
 
 /****************************************************************** helper *****************************************************************************************/
-function saveFile(responseObj,params,pages,prefix, filename,keys){
+function saveFile(dir_downloads_graphql, responseObj,params,pages,prefix, filename,keys){
 	// ------------------------------------save csv file---------------------------------------------------------		
 	if (responseObj[keys[0]][keys[1]][keys[2]].length > 0){
 		
-		var directory = process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/' + prefix + '/' + filename +'/';
+		var directory = dir_downloads_graphql + '/' + prefix + '/' + filename +'/';
 		fs.mkdir(directory, function(err){
 			if (err){
 							return {ERROR:err};

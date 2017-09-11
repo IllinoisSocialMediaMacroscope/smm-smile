@@ -1,11 +1,11 @@
-require('dotenv').config();
+//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
 var OAuth1 = require('oauth').OAuth;
 var consumer = new OAuth1(
 	"https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token", 
-	process.env.TWITTER_CLIENT_ID, process.env.TWITTER_CLIENT_SECRET, "1.0", process.env.TWITTER_CALLBACK_URI, "HMAC-SHA1");
+	"***REMOVED***", "***REMOVED***", "1.0", "http://localhost:8001/login/twitter/callback", "HMAC-SHA1");
 
 router.get('/login/twitter', function(req,res,next){
 

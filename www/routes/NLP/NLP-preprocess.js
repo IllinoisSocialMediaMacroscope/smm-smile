@@ -1,4 +1,4 @@
-require('dotenv').config();
+//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
@@ -9,7 +9,7 @@ var appPath = path.dirname(path.dirname(__dirname));
 var readDIR = require(path.join(appPath,'scripts','helper.js')).readDIR;
 
 router.get('/NLP-preprocess',function(req,res,next){
-	files = readDIR(process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL);	
+	files = readDIR('./downloads/GraphQL');	
 	var formParam = require('./preprocess.json');
 	res.render('analytics/formTemplate',{parent:'/#Pre-processing', title:'Natural Langurage PreProcessing', directory:files, param:formParam});
 });
@@ -18,9 +18,9 @@ router.post('/NLP-preprocess',function(req,res,next){
 	
 	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select'){
 		var options = {
-			pythonPath:process.env.PYTHONPATH,
+			pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 			scriptPath:appPath + '/scripts/NLP/',
-			args:['--format',req.body.option, '--content',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+  req.body.filename, '--column', req.body.selectFileColumn,
+			args:['--format',req.body.option, '--content','./downloads/GraphQL/'+  req.body.filename, '--column', req.body.selectFileColumn,
 			'--process',req.body.model, '--tagger',req.body.tagger, '--source','twitter']
 		};
 		
@@ -34,7 +34,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 		
 	}else if (req.body.option === 'URL'){ 
 		var options = {
-			pythonPath:process.env.PYTHONPATH,
+			pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 			scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',req.body.input, '--process',req.body.model, '--tagger',req.body.tagger]
 		};	

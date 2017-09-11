@@ -166,7 +166,8 @@ if __name__ =='__main__':
     load_dotenv(dotenv_path)
     
     uid = str(uuid.uuid4())
-    DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_ML_CLUSTERING') +'/' + uid
+    #DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_ML_CLUSTERING') +'/' + uid
+    DIR = os.path.join('./downloads/ML/clustering',uid)
     if not os.path.exists(DIR):
         os.makedirs(DIR)
 
