@@ -2,5 +2,5 @@ node_modules
 downloads
 graphql/node_modules
 *.DS_Store
-www/nltk_data
+nltk_data
 .env
