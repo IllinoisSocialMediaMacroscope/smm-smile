@@ -5,7 +5,6 @@
  -u node-6.11.2 \
  -u python-3.4 \
  -w "none" \
- -d /apps/smiletest/r3/www \
  -c "xview -fullscreen -onroot @tool/www/public/bootstrap/img/logo/smile-logos/small-logo3.png" \
  -c "wrwroxy --no-auth --stream-log --logfile /dev/null --loglevel DEBUG" \
  -c "node @tool/www/graphql/bin/www" \
