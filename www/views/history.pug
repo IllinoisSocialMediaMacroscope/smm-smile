@@ -80,7 +80,7 @@ html
 										ul(class="nav child_menu" style="display:none;" id=key1)
 											each val2,key2 in val1
 												li 
-													<form action='/history' id=#{key2} name='history' method='post'>
+													<form action='history' id=#{key2} name='history' method='post'>
 														<input type="hidden" value="analytics" name="type" />
 														<input type="hidden" value=#{key} name="layer1" />
 														<input type="hidden" value=#{key1} name="layer2" />													
