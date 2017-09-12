@@ -127,7 +127,7 @@ class Sentiment:
 
 
 
-        # preview 25 lines of data
+        ''' preview 25 lines of data
         for i,item in enumerate(self.result):
             if i <= 25:
                 print(item[0],'\t',
@@ -138,7 +138,7 @@ class Sentiment:
 
         if len(self.result)<25:
             for i in range(25-len(self.result)+1):
-                print('NUll','NULL','NULL','NULL','NULL')
+                print('NUll','NULL','NULL','NULL','NULL')'''
         
                                
 

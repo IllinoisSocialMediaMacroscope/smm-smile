@@ -47,8 +47,8 @@ router.post('/NLP-preprocess',function(req,res,next){
 	pythonShell.run('preprocessing.py',options,function(err,results){
 		if(err){ 
 			//throw err;
-			console.log(err);
-			//res.send({ERROR:err});	
+			//console.log(err);
+			res.send({ERROR:err});	
 		}else{
 			var phrases = results[1];
 			var filtered = results[2];

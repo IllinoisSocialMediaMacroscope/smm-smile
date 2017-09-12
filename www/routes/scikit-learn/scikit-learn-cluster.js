@@ -37,7 +37,7 @@ router.post('/sklearn-cluster',function(req,res,next){
 	
 	pythonShell.run('clustering.py',options,function(err,results){	
 		if(err){ 
-			throw err;
+			//throw err;
 			res.send({ERROR:err});	
 		}else{
 			var cluster_complete = results[1];
