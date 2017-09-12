@@ -9,7 +9,12 @@ router.get('/login/es', function(req,res,next){
 	req.session.es_access_token_secret = 'placeholder';
 	req.session.save();
 	
-	res.redirect('/query');
+	//trick to pass redirect
+	if (req.query.currentURL != '/'){
+		res.redirect(req.query.currentURL + '/query');
+	}else{
+		res.redirect('/query');
+	}
 });
 
 module.exports = router;
