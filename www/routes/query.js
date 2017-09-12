@@ -95,7 +95,6 @@ router.post('/query',function(req,res,next){
 		
 		// if twitter queryUser or elastic search
 		if (req.body.prefix === 'twitter-User' || req.body.prefix === 'twitter-Stream'){
-			console.log("here");
 			for (var i=0; i<req.body.pages; i++){
 				p_array_2.push(gatherMultiPost(req.body.query, headers, i+1));
 			}
@@ -229,9 +228,10 @@ function gatherMultiPost(query,headers,pageNum){
 												headers:headers,
 												body:JSON.stringify({"query":query })
 			}).then(function(response){
+				console.log(response);
 				return response.text();
 			}).then(function(responseBody){
-				console.log(responseObj);
+				//console.log(responseObj);
 				var responseObj = JSON.parse(responseBody);
 				resolve(responseObj);				
 			}).catch((error) => {
