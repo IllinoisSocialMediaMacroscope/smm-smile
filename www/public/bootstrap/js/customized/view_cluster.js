@@ -20,7 +20,7 @@ $(document).ready(function(){
 		$("#selectFileHeader-container").empty();
 		$.ajax({
 			type:'POST',
-			url:'/render', 
+			url:'render', 
 			data: {"foldername":foldername, "directory":directory},				
 			success:function(data){
 				if (data){
