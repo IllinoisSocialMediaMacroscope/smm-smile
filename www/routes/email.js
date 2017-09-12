@@ -3,12 +3,12 @@ var express = require('express');
 var router = express.Router();
 const nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
-    host: 'email-smtp.us-east-1.amazonaws.com',
-    port: 465,
+    host: 'smtp.illinois.edu',
+    port: 587,
     secure: true, // use SSL
     auth: {
-        user: '***REMOVED***',
-        pass: '***REMOVED***'
+        user: 'placeholder',
+        pass: 'placeholder'
     }
 });
 
