@@ -51,7 +51,7 @@ script.
 			
 			$.ajax({
 				type:'POST',
-				url:'/comment', 
+				url:'comment', 
 				data: "comment="+$("#commenter-content")+"&identifier="+ $("#commenter-email"),				
 				success:function(data){
 					console.log(data);
