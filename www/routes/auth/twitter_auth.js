@@ -4,13 +4,14 @@ var router = express.Router();
 var fetch = require('node-fetch');
 var OAuth1 = require('oauth').OAuth;
 var consumer = new OAuth1(
-	"https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token", 
-	"***REMOVED***", "***REMOVED***", "1.0", "http://localhost:8001/login/twitter/callback", "HMAC-SHA1");
+        "https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token", 
+        "***REMOVED***", "***REMOVED***", "1.0", "http://localhost:8001/login/twitter/callback", "HMAC-SHA1");
 
 router.get('/login/twitter', function(req,res,next){
 
-	consumer.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
+	consumer.getOAuthRequestToken({ 'oauth_callback': "https://socialmediamacroscope.org:8000" + req.query.currentURL + "login/twitter/callback?currentURL=" + req.query.currentURL}, function(error, oauthToken, oauthTokenSecret, results){
     if (error) {
+		console.log(error);
 		res.send("Error getting OAuth request token : " + util.inspect(error), 500);
     } else {  
 		
@@ -35,7 +36,7 @@ router.get('/login/twitter/callback',function(req,res,next){
 				req.session.twt_access_token_secret = oauthAccessTokenSecret;
 				req.session.save();
 				
-				res.redirect('/query');
+				res.redirect(req.query.currentURL + 'query');
 			}
 		});
 
