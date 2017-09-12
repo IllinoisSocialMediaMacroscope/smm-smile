@@ -54,8 +54,8 @@ html
 				var pathArray = window.location.pathname.split('/');
 				var newPath = "";
 				for (i=0; i<pathArray.length-1; i++){
-					newPath += "/";
 					newPath += pathArray[i];
+					newPath += "/";
 				}
 				
 				$("#twitter-auth").attr("href","login/twitter?currentURL=" + newPath);
