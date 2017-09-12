@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
 var AWS = require('aws-sdk');
-require('dotenv').config();
+//require('dotenv').config();
 
 function elasticSearchAPI(args){
 	
@@ -8,12 +8,12 @@ function elasticSearchAPI(args){
 
 	// create an elasticsearch client for your Amazon ES
 	var client = require('elasticsearch').Client({
-	  hosts: [ process.env.AWS_ES_HOST],
+	  hosts: [ 'https://search-es-twitter-stream-yugu6rvjulzswrsj2y764qyy5i.us-west-2.es.amazonaws.com' ],
 	  connectionClass: require('http-aws-es')
 	});
 
 	AWS.config.update({
-	  credentials: new AWS.Credentials(process.env.AWS_ACCESS_TOKEN, process.env.AWS_ACCESS_SECRET)
+	  credentials: new AWS.Credentials('***REMOVED***', '***REMOVED***')
 	});	
 	
 	var param = {

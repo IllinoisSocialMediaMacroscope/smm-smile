@@ -33,7 +33,7 @@ router.get('/query',function(req,res,next){
 
 
 router.post('/query',function(req,res,next){
-	//console.log(req.body.prefix);
+	console.log(req.body);
 	
 	// make directory downloads/GraphQL before save things to it!
 	var dir_downloads = './downloads';
@@ -88,7 +88,9 @@ router.post('/query',function(req,res,next){
 						'esaccesstoken':req.session.es_access_token,
 						'esaccesstokensecret':req.session.es_access_token_secret
 					}
-					
+		
+		console.log(headers);
+		
 		p_array_2 = [];
 		
 		// if twitter queryUser or elastic search
@@ -229,6 +231,7 @@ function gatherMultiPost(query,headers,pageNum){
 			}).then(function(response){
 				return response.text();
 			}).then(function(responseBody){
+				console.log(responseObj);
 				var responseObj = JSON.parse(responseBody);
 				resolve(responseObj);				
 			}).catch((error) => {
