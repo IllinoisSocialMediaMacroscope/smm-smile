@@ -42,15 +42,26 @@ html
 		div(id="auth-panel")
 			p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
 			
-			a(href='login/twitter', class="button", id="twitter-auth") 
+			a(class="button", id="twitter-auth") 
 				img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 				| Authorize with your Twitter account
 		
-			a(href='login/es', class="button", id="es-auth")
+			a(class="button", id="es-auth")
 				img(src='bootstrap/img/logo/elasticsearch-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 				| Authorize with your AWS ElasticSearch account
 			
-		
+			script.
+				var pathArray = window.location.pathname.split('/');
+				var newPath = "";
+				for (i=0; i<pathArray.length-1; i++){
+					newPath += "/";
+					newPath += pathArray[i];
+				}
+				
+				$("#twitter-auth").attr("href","login/twitter?currentURL=" + newPath);
+				$("#es-auth").attr("href","login/es?currentURL=" +  newPath);				
+	
+				
 		div(class="searchPage",id="searchPage")
 			<!-- logo -->
 			div(class="row" id="header",style="")
