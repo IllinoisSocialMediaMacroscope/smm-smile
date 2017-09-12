@@ -57,7 +57,7 @@ router.post('/query',function(req,res,next){
 			}
 		});
 	}
-	if (!fs.existsSync(dir_downloads_graphql + req.body.prefix)){
+	if (!fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix)){
 		fs.mkdir(dir_downloads_graphql + '/' + req.body.prefix, function(err){
 			if (err) {
 				res.send({'ERROR':err});
