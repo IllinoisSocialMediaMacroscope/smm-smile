@@ -86,6 +86,8 @@ function elasticSearchAPI(args){
 		
 		client.search(param).then(function (resp) {
 			//console.log(resp.hits.hits);
+			console.log(resp.hits.hits);
+			console.log("GRAPHQL SIDE MESSAGE!!!!!!!!!");
 			resolve(resp.hits.hits);
 		}, function (err) {
 			//console.log(err.message);
