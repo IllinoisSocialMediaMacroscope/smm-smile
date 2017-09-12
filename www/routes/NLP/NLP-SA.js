@@ -19,6 +19,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 		var options = {
 			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 			pythonPath:'/opt/python/bin/python3.4',
+			pythonOptions:['-W ignore'],
             scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content','./downloads/GraphQL/'+  req.body.filename, '--column', req.body.selectFileColumn]
 		};
@@ -26,6 +27,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 		var options = {
 			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 			pythonPath:'/opt/python/bin/python3.4',
+			pythonOptions:['-W ignore'],
             scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',req.body.input]
 		};	

@@ -20,6 +20,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 		var options = {
 			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 			pythonPath:'/opt/python/bin/python3.4',
+			pythonOptions:['-W ignore'],
             scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content','./downloads/GraphQL/'+  req.body.filename, '--column', req.body.selectFileColumn,
 			'--process',req.body.model, '--tagger',req.body.tagger, '--source','twitter']
@@ -37,6 +38,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 		var options = {
 			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 			pythonPath:'/opt/python/bin/python3.4',
+			pythonOptions:['-W ignore'],
             scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',req.body.input, '--process',req.body.model, '--tagger',req.body.tagger]
 		};	
