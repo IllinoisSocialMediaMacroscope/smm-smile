@@ -5,18 +5,17 @@ import os
 from os.path import join, dirname
 import sys
 import uuid
-import json
 from plotly.graph_objs import *
 from plotly import tools
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+from plotly.offline import plot
 import argparse
 import numpy
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import csv
 import warnings
 import pandas
 import json
-warnings.filterwarnings('ignore')
+# warnings.filterwarnings('ignore')
 
 
 class Network:
@@ -500,8 +499,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     #save arguments
-    dotenv_path = join(dirname(__file__), '../../.env')
-    load_dotenv(dotenv_path)
+    #  dotenv_path = join(dirname(__file__), '../../.env')
+    # load_dotenv(dotenv_path)
     
     uid = str(uuid.uuid4())
     #DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NW_NETWORKX') +'/' + uid
