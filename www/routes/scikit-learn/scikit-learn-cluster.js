@@ -20,6 +20,7 @@ router.post('/sklearn-cluster',function(req,res,next){
 	var options = {
 		//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 		pythonPath:'/opt/python/bin/python3.4',
+		pythonOptions:['-W ignore'],
         scriptPath:appPath + '/scripts/ML/',
 		args:['--file','./downloads/GraphQL/'+   req.body.filename, '--estimator',req.body.model,'--n_clusters',req.body.n_clusters,'--fields']
 	}; 
