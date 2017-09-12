@@ -26,7 +26,7 @@ function submitQuery(textareaID,filenameID){
 	}
 	
 	$.ajax({
-		url:"/query",
+		url:"query",
 		type:"post",
 		data:{"query":queryString,
 				"filename":filename,
@@ -242,7 +242,7 @@ function submitSearchbox(searchboxID, filenameID){
 	}
 	
 	$.ajax({
-		url:"/query",
+		url:"query",
 		type:"post",
 		data:{"query":queryString,
 				"filename":filename,
