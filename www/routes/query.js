@@ -33,7 +33,7 @@ router.get('/query',function(req,res,next){
 
 
 router.post('/query',function(req,res,next){
-	console.log(req.body);
+	//console.log(req.body);
 	
 	// make directory downloads/GraphQL before save things to it!
 	var dir_downloads = './downloads';
@@ -89,7 +89,7 @@ router.post('/query',function(req,res,next){
 						'esaccesstokensecret':req.session.es_access_token_secret
 					}
 		
-		console.log(headers);
+		//console.log(headers);
 		
 		p_array_2 = [];
 		
@@ -228,7 +228,6 @@ function gatherMultiPost(query,headers,pageNum){
 												headers:headers,
 												body:JSON.stringify({"query":query })
 			}).then(function(response){
-				console.log(response);
 				return response.text();
 			}).then(function(responseBody){
 				//console.log(responseObj);
