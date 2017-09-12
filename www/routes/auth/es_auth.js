@@ -10,7 +10,7 @@ router.get('/login/es', function(req,res,next){
 	req.session.save();
 	
 	//trick to pass redirect
-    console.log(req.query.currentURL);
+    //console.log(req.query.currentURL);
   
 	if (req.query.currentURL != '/'){
 		res.redirect(req.query.currentURL + 'query');
