@@ -19,7 +19,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select'){
 		var options = {
 			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-			pythonPath:'/opt/python/bin/python3',
+			pythonPath:'/opt/python/bin/python3.4',
             scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content','./downloads/GraphQL/'+  req.body.filename, '--column', req.body.selectFileColumn,
 			'--process',req.body.model, '--tagger',req.body.tagger, '--source','twitter']
