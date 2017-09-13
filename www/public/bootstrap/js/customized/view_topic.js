@@ -10,7 +10,7 @@ $(document).ready(function(){
 		$("#selectFilePreview-container").empty();
 		$.ajax({
 			type:'POST',
-			url:'/render', 
+			url:'render', 
 			data: "filename=" + this.value,				
 			success:function(data){
 				if (data){		

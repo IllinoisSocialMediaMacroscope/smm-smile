@@ -18,7 +18,8 @@ router.post('/NLP-sentiment',function(req,res,next){
 	if (req.body.option === 'file' && req.body.selectFile !== 'Please Select...'){
 		var options = {
 			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-			pythonPath:'/opt/python/bin/python3',
+			pythonPath:'/opt/python/bin/python3.4',
+			pythonOptions:['-W ignore'],
             scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content','./downloads/GraphQL/'+  req.body.filename, '--column', req.body.selectFileColumn]
 		};
@@ -26,6 +27,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 		var options = {
 			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 			pythonPath:'/opt/python/bin/python3.4',
+			pythonOptions:['-W ignore'],
             scriptPath:appPath + '/scripts/NLP/',
 			args:['--format',req.body.option, '--content',req.body.input]
 		};	
@@ -38,8 +40,8 @@ router.post('/NLP-sentiment',function(req,res,next){
 	pythonShell.run('sentiment.py',options,function(err,results){
 		if (err){
 			//throw err;
-			console.log(err);
-            //res.send({'ERROR':err});
+			//console.log(err);
+            res.send({'ERROR':err});
 		}else{
 			
 			var div=results[1];

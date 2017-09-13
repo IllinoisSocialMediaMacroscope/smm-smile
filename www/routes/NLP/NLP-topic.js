@@ -17,7 +17,8 @@ router.get('/NLP-topic',function(req,res,next){
 router.post('/NLP-topic',function(req,res,next){
 	
 	var options = {
-		pythonPath:process.env.PYTHONPATH,
+		pythonPath:'/opt/python/bin/python3.4',
+		pythonOptions:['-W ignore'],
 		scriptPath:appPath +'/NLP/',
 		args:['--file',process.env.ROOTDIR + process.env.DOWNLOAD_GRAPHQL + '/'+   req.body.selectZip, '--vectorizer',req.body.vectorizer, '--n_topics',req.body.n_topics, '--n_features',req.body.n_features]
 	};

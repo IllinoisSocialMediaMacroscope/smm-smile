@@ -20,7 +20,6 @@
     "lunr": "^2.1.2",
     "morgan": "^1.8.1",
     "node-fetch": "^1.7.1",
-    "nodemailer": "^4.0.1",
     "nodemon": "^1.11.0",
     "oauth": "^0.9.15",
     "pug": "^2.0.0-rc.1",
