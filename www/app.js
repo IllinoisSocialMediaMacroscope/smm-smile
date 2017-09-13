@@ -33,7 +33,7 @@ app.use('/',require('./routes/NLP/NLP-SA'));
 app.use('/',require('./routes/query'));
 app.use('/',require('./routes/download'));
 app.use('/',require('./routes/render'));
-app.use('/',require('./routes/email'));
+//app.use('/',require('./routes/email'));
 app.use('/',require('./routes/history'));
 app.use('/',require('./routes/auth/twitter_auth'));
 app.use('/',require('./routes/auth/reddit_auth'));
