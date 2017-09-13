@@ -33,15 +33,11 @@ footer(class="footer-bs")
 					a(href="https://twitter.com/",target="_blank") Twitter
 				
 											
-		div(class="col-md-3 footer-ns")
+		div(class="col-md-2 footer-ns")
 			h4 Comment
-			div(class="form-group")
-				p Your address
-				input(type="email", id="commenter-email", class="form-control",placeholder="myaddress@illinois.edu")
-			div(class="form-group")
-				p Comment
-				input(type="text", id="commenter-content", class="form-control", placeholder="Thank you for helping us make SMILE better!")
-			button(type="submit", class="btn btn-primary pull-right", onclick="submitComment()") Submit
+			p Thank you for helping us make SMILE better! Email us your comment!
+			a(href="mailto:***REMOVED***;jmtroy2@illinois.edu;npvance2@illinois.edu;jtyun@illinois.edu",target="_blank")
+				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px;",id="reportButton") Email
 					
 					
 script.
@@ -51,7 +47,7 @@ script.
 			
 			$.ajax({
 				type:'POST',
-				url:'/comment', 
+				url:'comment', 
 				data: "comment="+$("#commenter-content")+"&identifier="+ $("#commenter-email"),				
 				success:function(data){
 					console.log(data);
