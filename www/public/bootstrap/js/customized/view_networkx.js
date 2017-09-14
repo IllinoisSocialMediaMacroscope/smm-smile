@@ -16,7 +16,7 @@ $(document).ready(function(){
 		var foldername = $(this).children(":selected").attr("id");
 		var directory = $(this).children(":selected").attr("class");
 		$("#selectFilePreview-container").empty();
-		//$("#selectFileHeader-container").empty();
+				
 		$.ajax({
 			type:'POST',
 			url:'render', 
@@ -93,7 +93,15 @@ function formValidation(){
 		$("#selectFile").focus();
 		return false;
 	}
-	console.log($("#relations option:selected").val());
+	
+	if ($("#selectFileTable thead tr").find('th').text() === ''){
+		$("#modal-message").append(`<h4>This dataset you selected is empty, please select another one!</h4>`);
+		$("#alert").modal('show');
+		$("#selectFile").focus();
+		return false;
+	}
+
+	//console.log($("#relations option:selected").val());
 	if ($("#relations option:selected").val() === '' || $("#relations option:selected").val() === undefined){
 		$("#modal-message").append(`<h4>Please select a model to perform!</h4>`);
 		$("#alert").modal('show');
