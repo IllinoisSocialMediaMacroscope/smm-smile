@@ -104,7 +104,12 @@ function formValidation(){
 			$("#selectFile").focus();
 			return false;
 		}
-		
+		if ($("#selectFileTable thead tr").find('th').text() === ''){
+			$("#modal-message").append(`<h4>This dataset you selected is empty, please select another one!</h4>`);
+			$("#alert").modal('show');
+			$("#selectFile").focus();
+			return false;
+		}
 		if ($("#model option:selected").val() === '' || $("#model option:selected").val() === undefined){
 			$("#modal-message").append(`<h4>Please select a preprocess step!</h4>`);
 			$("#alert").modal('show');

@@ -11,6 +11,7 @@ router.post('/render',function(req,res,next){
 		
 		var preview_string = fs.readFileSync('./downloads/GraphQL/' + req.body.directory +
 					'/' + req.body.foldername + '/' + req.body.foldername + '.csv', "utf8");
+		
 		if (preview_string === ''){
 			res.send({ERROR: 'This dataset you selected is empty, please select another one!'});
 		}else{
