@@ -8,7 +8,6 @@
  -c "xview -fullscreen -onroot @tool/www/public/bootstrap/img/logo/smile-logos/small-logo3.png" \
  -c "wrwroxy --no-auth --stream-log --logfile /dev/null --loglevel DEBUG" \
  -c "node @tool/www/graphql/bin/www" \
- -c "node @tool/www/app.js" \
- -C "sleep 1000000000000"
+ -C "node @tool/www/app.js"
 
 
