@@ -63,18 +63,17 @@ router.post('/query',function(req,res,next){
 				res.send({'ERROR':err});
 			}else{
 				console.log("successfully created " +dir_downloads_graphql + '/' + req.body.prefix + " folder");
+				// make sure files that already exist in the directory wont be allowed
+				var p_array = [];
+				var directory = fs.readdirSync(dir_downloads_graphql + '/' + req.body.prefix);
+				
+				for (var i=0; i< directory.length; i++){
+					p_array.push(checkExist(directory[i], req.body.filename));
+				}
 			}
 		});
 	} 
-	
-	// make sure files that already exist in the directory wont be allowed
-	var p_array = [];
-	var directory = fs.readdirSync(dir_downloads_graphql + '/' + req.body.prefix);
-	
-	for (var i=0; i< directory.length; i++){
-		p_array.push(checkExist(directory[i], req.body.filename));
-	}
-	
+		
 	Promise.all(p_array).then(() =>{
 		console.log('this filename hasn\'t been used!');
 		
