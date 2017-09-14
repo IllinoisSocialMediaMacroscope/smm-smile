@@ -14,11 +14,18 @@ $(document).ready(function(){
 			data: "filename=" + this.value,				
 			success:function(data){
 				if (data){		
-					$("#selectFilePreview-container").append(`<div class="form-group">
-					<label class="control-label col-md-2 col-md-2 col-xs-12">files within this .zip</label>
-					<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)	
-					$("#selectFilePreview").append(arrayToTable(data,'#selectFileTable'));
-					//$("#selectFileTable").DataTable();
+					if ('ERROR' in data){
+						$("#loading").hide();
+						$("#background").show();
+						$("#error").val(JSON.stringify(data));
+						$("#warning").modal('show');
+					}else{
+						$("#selectFilePreview-container").append(`<div class="form-group">
+						<label class="control-label col-md-2 col-md-2 col-xs-12">files within this .zip</label>
+						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)	
+						$("#selectFilePreview").append(arrayToTable(data,'#selectFileTable'));
+						//$("#selectFileTable").DataTable();
+					}
 				}
 			},
 			error: function(jqXHR, exception){

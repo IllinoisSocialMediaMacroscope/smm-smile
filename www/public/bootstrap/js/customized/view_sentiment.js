@@ -38,39 +38,46 @@ $(document).ready(function(){
 			data: {"foldername":foldername, "directory":directory},				
 			success:function(data){
 				if (data){
-					/* the text fields are:  text, user.description(tweet), description(twtUser),
-					body(redditComment), selftext,title(redditSearch), 
-					public description, description(redditSearchSubreddit)
-					_source.text, _source.user.description(streaming)*/
-					var allowed_field_list = ['text','user.description','description',
-					'_source.text', '_source.user.description','body','selftext', 'title', 'public_description', 
-						'description'];
-					
-					var index = [];
-					$.each(data.preview[0],function(i,val){
-						if (allowed_field_list.indexOf(val) >=0){
-							index.push(i)
-						}
-					});
-					var text_data = [];
-					$.each(data.preview,function(i,val){
-						var line = [];
-						$.each(index,function(i,indice){
-							line.push(val[indice]);
+					if ('ERROR' in data){
+						$("#loading").hide();
+						$("#background").show();
+						$("#error").val(JSON.stringify(data));
+						$("#warning").modal('show');
+					}else{
+						/* the text fields are:  text, user.description(tweet), description(twtUser),
+						body(redditComment), selftext,title(redditSearch), 
+						public description, description(redditSearchSubreddit)
+						_source.text, _source.user.description(streaming)*/
+						var allowed_field_list = ['text','user.description','description',
+						'_source.text', '_source.user.description','body','selftext', 'title', 'public_description', 
+							'description'];
+						
+						var index = [];
+						$.each(data.preview[0],function(i,val){
+							if (allowed_field_list.indexOf(val) >=0){
+								index.push(i)
+							}
 						});
-						text_data.push(line);
-					});
-					
-					$("#selectFilePreview-container").append(`<div class="form-group">
-					<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
-					<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-					$("#selectFilePreview").append(arrayToTable(text_data ,'#selectFileTable'));
-					//$("#selectFileTable").DataTable();
-					
-					$("#selectFileHeader-container").append(`<div class="form-group">
-					<label class="control-label col-md-2 col-md-2 col-xs-12">Select Column to Analyze</label>
-					<div class="col-md-8 col-md-8 col-xs-12" id="selectFileHeader"></div></div>`);
-					$("#selectFileHeader").append(extractHeader2(text_data));
+						var text_data = [];
+						$.each(data.preview,function(i,val){
+							var line = [];
+							$.each(index,function(i,indice){
+								line.push(val[indice]);
+							});
+							text_data.push(line);
+						});
+						
+						$("#selectFilePreview-container").append(`<div class="form-group">
+						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
+						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
+						$("#selectFilePreview").append(arrayToTable(text_data ,'#selectFileTable'));
+						//$("#selectFileTable").DataTable();
+						
+						$("#selectFileHeader-container").append(`<div class="form-group">
+						<label class="control-label col-md-2 col-md-2 col-xs-12">Select Column to Analyze</label>
+						<div class="col-md-8 col-md-8 col-xs-12" id="selectFileHeader"></div></div>`);
+						$("#selectFileHeader").append(extractHeader2(text_data));
+					}
 				}
 			},
 			error: function(jqXHR, exception){

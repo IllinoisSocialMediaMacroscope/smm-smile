@@ -23,33 +23,39 @@ $(document).ready(function(){
 			data: {"foldername":foldername, "directory":directory},				
 			success:function(data){
 				if (data){
-					var allowed_field_list = [
-						// tweet
-						'text',
-						// stream
-						'_source.text'];
-					
-					var index = [];
-					$.each(data.preview[0],function(i,val){
-						if (allowed_field_list.indexOf(val) >=0){
-							index.push(i)
-						}
-					});
-					var numCat_data = [];
-						$.each(data.preview,function(i,val){
-							var line = [];
-							$.each(index,function(i,indice){
-								line.push(val[indice]);
-							});
-							numCat_data.push(line); 
+					if ('ERROR' in data){
+						$("#loading").hide();
+						$("#background").show();
+						$("#error").val(JSON.stringify(data));
+						$("#warning").modal('show');
+					}else{
+						var allowed_field_list = [
+							// tweet
+							'text',
+							// stream
+							'_source.text'];
+						
+						var index = [];
+						$.each(data.preview[0],function(i,val){
+							if (allowed_field_list.indexOf(val) >=0){
+								index.push(i)
+							}
 						});
-					
-					$("#selectFilePreview-container").append(`<div class="form-group">
-					<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
-					<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-					$("#selectFilePreview").append(arrayToTable(numCat_data,'#selectFileTable'));
-					//$("#selectFileTable").DataTable();
-					
+						var numCat_data = [];
+							$.each(data.preview,function(i,val){
+								var line = [];
+								$.each(index,function(i,indice){
+									line.push(val[indice]);
+								});
+								numCat_data.push(line); 
+							});
+						
+						$("#selectFilePreview-container").append(`<div class="form-group">
+						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
+						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
+						$("#selectFilePreview").append(arrayToTable(numCat_data,'#selectFileTable'));
+						//$("#selectFileTable").DataTable();
+					}
 					
 				}					
 			},
