@@ -141,13 +141,15 @@ router.post('/query',function(req,res,next){
 /****************************************************************** helper *****************************************************************************************/
 function saveFile(dir_downloads_graphql, responseObj,params,pages,prefix, filename,keys){
 	// ------------------------------------save csv file---------------------------------------------------------		
-	if (responseObj[keys[0]][keys[1]][keys[2]].length > 0){
+	if (responseObj[keys[0]][keys[1]][keys[2]].length > 0 
+			&& responseObj[keys[0]][keys[1]][keys[2]] !== 'null'
+			&& responseObj[keys[0]][keys[1]][keys[2]] !== undefined ){
 		
 		var directory = dir_downloads_graphql + '/' + prefix + '/' + filename +'/';
 		fs.mkdir(directory, function(err){
 			if (err){
-							return {ERROR:err};
-						}	
+				return {ERROR:err};
+			}	
 		});
 		
 		// save CSV
