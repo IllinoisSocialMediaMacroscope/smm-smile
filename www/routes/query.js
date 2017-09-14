@@ -67,6 +67,8 @@ router.post('/query',function(req,res,next){
 		});
 	}
 	
+	console.log(fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix));
+	
 	if (fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix)){
 		// make sure files that already exist in the directory wont be allowed
 		var p_array = [];
