@@ -13,7 +13,7 @@ function elasticSearchAPI(args){
 	});
 
 	AWS.config.update({
-	  credentials: new AWS.Credentials('***REMOVED***', '***REMOVED***')
+	  credentials: new AWS.Credentials('***REMOVED***', 'KguLLmR09jrgPjvYaLc6/OnVpogYhrwtnGkrgHVZ')
 	});	
 	
 	var param = {
