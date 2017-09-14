@@ -1,7 +1,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import nltk
-nltk.data.path.append('/apps/smiletest/r3/www/nltk_data/')
+nltk.data.path.append('/apps/smiletest/nltk_data/')
 from nltk.tokenize import sent_tokenize, wordpunct_tokenize,TweetTokenizer
 #from tokenizer import tokenizer
 #https://github.com/erikavaris/tokenizer
