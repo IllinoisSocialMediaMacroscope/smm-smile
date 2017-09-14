@@ -65,7 +65,9 @@ router.post('/query',function(req,res,next){
 				console.log("successfully created " +dir_downloads_graphql + '/' + req.body.prefix + " folder");
 			}
 		});
-	}else{
+	}
+	
+	if (fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix)){
 		// make sure files that already exist in the directory wont be allowed
 		var p_array = [];
 		var directory = fs.readdirSync(dir_downloads_graphql + '/' + req.body.prefix);
