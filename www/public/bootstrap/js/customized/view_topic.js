@@ -14,11 +14,18 @@ $(document).ready(function(){
 			data: "filename=" + this.value,				
 			success:function(data){
 				if (data){		
-					$("#selectFilePreview-container").append(`<div class="form-group">
-					<label class="control-label col-md-2 col-md-2 col-xs-12">files within this .zip</label>
-					<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)	
-					$("#selectFilePreview").append(arrayToTable(data,'#selectFileTable'));
-					//$("#selectFileTable").DataTable();
+					if ('ERROR' in data){
+						$("#loading").hide();
+						$("#background").show();
+						$("#error").val(JSON.stringify(data));
+						$("#warning").modal('show');
+					}else{
+						$("#selectFilePreview-container").append(`<div class="form-group">
+						<label class="control-label col-md-2 col-md-2 col-xs-12">files within this .zip</label>
+						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)	
+						$("#selectFilePreview").append(arrayToTable(data,'#selectFileTable'));
+						//$("#selectFileTable").DataTable();
+					}
 				}
 			},
 			error: function(jqXHR, exception){
@@ -55,7 +62,12 @@ function formValidation(){
 		$("#selectZip").focus();
 		return false;
 	}
-	
+	if ($("#selectFileTable thead tr").find('th').text() === ''){
+		$("#modal-message").append(`<h4>This dataset you selected is empty, please select another one!</h4>`);
+		$("#alert").modal('show');
+		$("#selectFile").focus();
+		return false;
+	}
 	if ($("#vectorizer option:selected").val() === '' || $("#vectorizer option:selected").val() === undefined){
 		$("#modal-message").append(`<h4>Please select a vectorize method!</h4>`);
 		$("#alert").modal('show');

@@ -65,71 +65,75 @@ router.post('/query',function(req,res,next){
 				console.log("successfully created " +dir_downloads_graphql + '/' + req.body.prefix + " folder");
 			}
 		});
-	} 
-	
-	// make sure files that already exist in the directory wont be allowed
-	var p_array = [];
-	var directory = fs.readdirSync(dir_downloads_graphql + '/' + req.body.prefix);
-	
-	for (var i=0; i< directory.length; i++){
-		p_array.push(checkExist(directory[i], req.body.filename));
 	}
 	
-	Promise.all(p_array).then(() =>{
-		console.log('this filename hasn\'t been used!');
+	console.log(fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix));
+	
+	if (fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix)){
+		// make sure files that already exist in the directory wont be allowed
+		var p_array = [];
+		var directory = fs.readdirSync(dir_downloads_graphql + '/' + req.body.prefix);
 		
-		var headers = {
-						'Accept': 'application/json',
-						'Content-Type':'application/json',
-						//'redditaccesstoken':req.session.rd_access_token,
-						//'redditrefreshtoken':req.session.rd_refresh_token,
-						'twtaccesstokenkey':req.session.twt_access_token_key,
-						'twtaccesstokensecret':req.session.twt_access_token_secret,
-						'esaccesstoken':req.session.es_access_token,
-						'esaccesstokensecret':req.session.es_access_token_secret
-					}
-		
-		//console.log(headers);
-		
-		p_array_2 = [];
-		
-		// if twitter queryUser or elastic search
-		if (req.body.prefix === 'twitter-User' || req.body.prefix === 'twitter-Stream'){
-			for (var i=0; i<req.body.pages; i++){
-				p_array_2.push(gatherMultiPost(req.body.query, headers, i+1));
-			}
-		}
-		else if (req.body.prefix === 'twitter-Tweet'){
-			// tweet timeline pagination is different, can't figure out a good way to do pagination here
-			// TODO
-			p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
+		for (var i=0; i< directory.length; i++){
+			p_array.push(checkExist(directory[i], req.body.filename));
 		}
 		
-		Promise.all(p_array_2).then( values => {
+		Promise.all(p_array).then(() =>{
+			console.log('this filename hasn\'t been used!');
 			
-			// piece the json together here
-			var key1 = Object.keys(values[0])[0];
-			var key2 = Object.keys(values[0][key1])[0];
-			var key3 = Object.keys(values[0][key1][key2])[0];
-	
-			responseObj = mergeJSON(values,[key1,key2,key3]);
-						
-			if ("errors" in responseObj){
-				res.send({ERROR:responseObj['errors'][0]['message']});
-			}else{				
+			var headers = {
+							'Accept': 'application/json',
+							'Content-Type':'application/json',
+							//'redditaccesstoken':req.session.rd_access_token,
+							//'redditrefreshtoken':req.session.rd_refresh_token,
+							'twtaccesstokenkey':req.session.twt_access_token_key,
+							'twtaccesstokensecret':req.session.twt_access_token_secret,
+							'esaccesstoken':req.session.es_access_token,
+							'esaccesstokensecret':req.session.es_access_token_secret
+						}
 			
-				var response = saveFile(dir_downloads_graphql,responseObj, req.body.params,req.body.pages, req.body.prefix, req.body.filename,[key1,key2,key3]);	
-				res.send(response);
+			//console.log(headers);
+			
+			p_array_2 = [];
+			
+			// if twitter queryUser or elastic search
+			if (req.body.prefix === 'twitter-User' || req.body.prefix === 'twitter-Stream'){
+				for (var i=0; i<req.body.pages; i++){
+					p_array_2.push(gatherMultiPost(req.body.query, headers, i+1));
+				}
+			}
+			else if (req.body.prefix === 'twitter-Tweet'){
+				// tweet timeline pagination is different, can't figure out a good way to do pagination here
+				// TODO
+				p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
 			}
 			
-		}).catch( (error) =>{
-			res.send({ERROR:error});
-		})
+			Promise.all(p_array_2).then( values => {
+				
+				// piece the json together here
+				var key1 = Object.keys(values[0])[0];
+				var key2 = Object.keys(values[0][key1])[0];
+				var key3 = Object.keys(values[0][key1][key2])[0];
 		
-	}).catch(() => {
-		res.send({ERROR:'This file ' + req.body.filename + ' already exist in your directory! Please rename it to something else'});
-	});
-	
+				responseObj = mergeJSON(values,[key1,key2,key3]);
+							
+				if ("errors" in responseObj){
+					res.send({ERROR:responseObj['errors'][0]['message']});
+				}else{				
+				
+					var response = saveFile(dir_downloads_graphql,responseObj, req.body.params,req.body.pages, req.body.prefix, req.body.filename,[key1,key2,key3]);	
+					res.send(response);
+				}
+				
+			}).catch( (error) =>{
+				res.send({ERROR:error});
+			})
+			
+		}).catch(() => {
+			res.send({ERROR:'This filename ' + req.body.filename + ' already exist in your directory. Please rename it to something else!'});
+		});
+	}
+		
 });
 
 
@@ -137,13 +141,15 @@ router.post('/query',function(req,res,next){
 /****************************************************************** helper *****************************************************************************************/
 function saveFile(dir_downloads_graphql, responseObj,params,pages,prefix, filename,keys){
 	// ------------------------------------save csv file---------------------------------------------------------		
-	if (responseObj[keys[0]][keys[1]][keys[2]].length > 0){
+	if (responseObj[keys[0]][keys[1]][keys[2]].length > 0 
+			&& responseObj[keys[0]][keys[1]][keys[2]] !== 'null'
+			&& responseObj[keys[0]][keys[1]][keys[2]] !== undefined ){
 		
 		var directory = dir_downloads_graphql + '/' + prefix + '/' + filename +'/';
 		fs.mkdir(directory, function(err){
 			if (err){
-							return {ERROR:err};
-						}	
+				return {ERROR:err};
+			}	
 		});
 		
 		// save CSV
@@ -209,7 +215,7 @@ function checkExist(directory_f, filename){
 	
 	return new Promise((resolve,reject) =>{
 		if (directory_f === filename){
-			//console.log(directory_f);
+			console.log('has been used!!');
 			reject();
 		}else{
 			resolve(directory_f);
