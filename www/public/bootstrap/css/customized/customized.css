@@ -408,7 +408,11 @@ marker#arrow {
     fill: #999;
 }
 
-#note{
+.x_title{
+	margin-top:70px;
+}
+
+.note{
 	margin:20px 20px;
 	color:black;
 }
@@ -427,6 +431,7 @@ marker#arrow {
 	border:solid 1.5px;
 	border-radius:5px;
 }
+
 
 
 /**********history page download ****************/

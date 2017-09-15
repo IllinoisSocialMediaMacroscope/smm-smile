@@ -3,7 +3,23 @@ google.charts.load('current', {packages:['wordtree']});
 function drawWordTree(name,table,root){
 	
 	$('#gaudge').empty();
-	$('#gaudge').append(`<div class="x_title"><h2>`+ name +`</h2></div></div><div class="x_content" id="chart_div"></div>`);
+	$('#gaudge').append(`<div class="x_title">
+							<h2>`+ name +`</h2>
+						</div>
+						<div class="x_content"> 
+							<div class="note">
+								<li>word tree reads from <b>left to right</b>, and each branch is a sentence/phrase</li>					
+								<li><b>click</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> on the word will expand or collapse the tree</li>
+								<li>size of the word stands for the <b>weight</b> of the word, which is proportional to their usage</li>
+								<li>details please consult 
+									<a href="https://developers.google.com/chart/interactive/docs/gallery/wordtree" target="_blank">
+										<img src="bootstrap/img/logo/google-sm-logo.png" width="18px"/>Google Chart API
+									</a>
+								</li>
+							</div>
+						</div>
+						<div class="x_content" id="chart_div">
+						</div>`);
 	
 	var data = google.visualization.arrayToDataTable(table);
 	var options = {
