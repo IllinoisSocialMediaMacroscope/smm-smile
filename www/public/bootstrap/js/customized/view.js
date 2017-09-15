@@ -134,8 +134,23 @@ function appendImg(imgID, imgData){
 	$(imgID).empty();
 	if (imgData !== []){
 		$.each(imgData, function(i,val){
-			$(imgID).append(`<div class="x_title"><h2>`+val.name+`</h2></div>` +
-					`<div class="x_content">`+val.content+`</div>`)
+			$(imgID).append(`<div class="x_title">
+								<h2>`+val.name+`</h2>
+							</div>
+							<div class="x_content">
+								<div class="note">
+									<li><b>click, drag, and mouseover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the graph will give you more information</li>
+									<li><b>hover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over top-right corner of the chart will present various operations
+										<br><img src="bootstrap/img/gifs/plotlyDemo.gif"/>
+									</li>
+									<li>details please consult 
+										<a href="https://plot.ly/" target="_blank">
+											<img src="bootstrap/img/logo/plotly.png" width="18px"/>Plotly
+										</a>
+									</li>
+								</div>
+							</div>
+							<div class="x_content">`+val.content+`</div>`)
 		});
 	}
 }
@@ -143,8 +158,23 @@ function appendImg(imgID, imgData){
 function appendPreview(previewID, previewData){
 	$(previewID).empty();
 	if(previewData !== ''){
-		$(previewID).append(`<div class="x_title"><h2>`+ previewData.name + `</h2></div>` +
-			`<div class="x_content">`+arrayToTable(previewData.content, '#previewTopic') + `</div>`)
+		$(previewID).append(`<div class="x_title">
+								<h2>`+ previewData.name + `</h2>
+							</div>
+							<div class="x_content">
+								<div class="note">
+									<li>pagination and search keywords enabled</li>
+									<li><b>Click</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over top-right corner of the chart will present various operations
+										<br><img src="bootstrap/img/gifs/plotlyDemo.gif"/>
+									</li>
+									<li>details please consult 
+										<a href="https://plot.ly/" target="_blank">
+											<img src="bootstrap/img/logo/plotly.png" width="18px"/>Plotly
+										</a>
+									</li>
+								</div>
+							</div>
+							<div class="x_content">`+arrayToTable(previewData.content, '#previewTopic') + `</div>`)
 		$("#previewTopic").DataTable(); // change it to datatable
 	}
 }
