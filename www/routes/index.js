@@ -8,11 +8,11 @@ router.get('/',function(req,res,next){
 						introduction:`placeholder`
 			},*/
 			{
-			name:'Search Social Media', url:'query', imgURL:'bootstrap/img/logo/search-smm.png',
+			name:'Searching Social Media', url:'query', imgURL:'bootstrap/img/logo/search-smm.png',
 			wiki:'https://en.wikipedia.org/wiki/Social_search',
-			introduction: `Our <b>social media search engine</b> enables searching <a href="https://en.wikipedia.org/wiki/User-generated_content">
-							user-generated content</a> such as tweets, user account, comments, and etc from various social meida and network platform. 
-							Both live and cached data is available.`
+			introduction: `SMILE empowers researchers to search content from multiple social media platforms all at once. 
+			Find tweets, individual user accounts, and comments that match specific criteria, 
+			and analyze content with just a few clicks. Both live and historical data are available for search.`
 			},
 			{name:'Pre-processing',url:'NLP-preprocess', imgURL:'bootstrap/img/logo/NLP/NLP-preprocess.png',
 						wiki:'http://pages.cs.wisc.edu/~jerryzhu/cs769/text_preprocessing.pdf',
