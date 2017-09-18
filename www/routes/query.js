@@ -40,31 +40,15 @@ router.post('/query',function(req,res,next){
 	var dir_downloads_graphql = './downloads/GraphQL';
 	
 	if (!fs.existsSync(dir_downloads)){
-		fs.mkdir(dir_downloads, function(err){
-			if (err) {
-				res.send({'ERROR':err});
-			}else{
-				console.log("successfully created " + dir_downloads + " folder");
-			}
-		});
-	}	
-	if (!fs.existsSync(dir_downloads_graphql)){
-		fs.mkdir(dir_downloads_graphql, function(err){
-			if (err) {
-				res.send({'ERROR':err});
-			}else{
-				console.log("successfully created " + dir_downloads_graphql + " folder");
-			}
-		});
+		fs.mkdirSync(dir_downloads);
 	}
+	
+	if (!fs.existsSync(dir_downloads_graphql)){
+		fs.mkdirSync(dir_downloads_graphql);
+	}
+	
 	if (!fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix)){
-		fs.mkdir(dir_downloads_graphql + '/' + req.body.prefix, function(err){
-			if (err) {
-				res.send({'ERROR':err});
-			}else{
-				console.log("successfully created " +dir_downloads_graphql + '/' + req.body.prefix + " folder");
-			}
-		});
+		fs.mkdirSync(dir_downloads_graphql + '/' + req.body.prefix);
 	}
 	
 	console.log(fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix));
