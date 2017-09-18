@@ -33,11 +33,12 @@ html
 			div(class="button-unit")
 				a(class="button" href="query") Get Started
 				a(class="button" href="history") Past Results
-			
-	
+				
 		each page,i in pages
 			if i%2 === 0
 				div(class="even")
+					if i === 0
+						img(src="bootstrap/img/logo/provides.png",id="provides")
 					section(class="even")
 						div(class="prose",id=page.name)
 							h1(class="app-title") #{page.name}

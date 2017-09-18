@@ -4,4 +4,3 @@ graphql/node_modules
 *.DS_Store
 nltk_data
 .env
-middleware/invoke
