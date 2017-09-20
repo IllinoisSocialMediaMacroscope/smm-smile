@@ -45,10 +45,6 @@ html
 			a(class="button", id="twitter-auth") 
 				img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 				| Authorize with your Twitter account
-		
-			a(class="button", id="es-auth")
-				img(src='bootstrap/img/logo/elasticsearch-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-				| Authorize with your AWS ElasticSearch account
 			
 			script.
 				var pathArray = window.location.pathname.split('/');
@@ -59,8 +55,7 @@ html
 				}
 				
 				$("#twitter-auth").attr("href","login/twitter?currentURL=" + newPath);
-				$("#es-auth").attr("href","login/es?currentURL=" +  newPath);				
-	
+				
 				
 		div(class="searchPage",id="searchPage")
 			<!-- logo -->
@@ -70,11 +65,11 @@ html
 			<!-- search --->
 			div(class="row")
 				div(id="tabs")
-					select(class="selectpicker show-tick" id="social-media" title="Choose a Platform..." data-width="220px")
-						optgroup(label="Twitter")
+					select(class="selectpicker show-tick" id="social-media" title="Choose a Data Source..." data-width="220px")
+						optgroup(label="Search Twitter")
 							option(data-icon="glyphicon-envelope" value="queryTweet") Tweets
 							option(data-icon="glyphicon-user" value="queryUser") Twitter Users
-						optgroup(label="Twitter Stream Database")
+						optgroup(label="Partial Historical Database")
 							option(data-icon="glyphicon-envelope" value="streamTweet") Streamed Tweets
 								
 					include searchbox.pug
@@ -140,16 +135,15 @@ html
 				console.log('here');
 				$(".searchPage").hide();
 			}
-			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
+			/*if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
 				$("#twitter-auth").hide();
 				$("#searchPage").hide();
 			}
 			if (!{JSON.stringify(success)}.indexOf('es') >=0){
 				$("#es-auth").hide();
 				$("#searchPage").hide();
-			}
-			if (!{JSON.stringify(success)}.indexOf('es') >=0 && !{JSON.stringify(success)}.indexOf('twitter') >=0){
-				console.log("all done");
+			}*/
+			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
 				$("#auth-panel").hide();
 				$("#searchPage").show();
 			}
