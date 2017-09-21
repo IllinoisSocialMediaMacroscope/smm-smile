@@ -8,26 +8,26 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 				span(class="icon-bar")
 				
 		div(id="navbar",class="navbar-collapse collapse")
-			div(class="dropdown",id="topbar-home")
-				button(type="button",id="topbar-home-btn", class="btn btn-default dropdown-toggle", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true") Analytics Tools &nbsp;
-					span(class="caret")
-				ul(class="dropdown-menu", aria-labelledby="dropdownMenu1")
-					li 
-						a(href="./")
-							span(class="glyphicon glyphicon-home") 
-							| home
-					li(role="separator", class="divider")
-					li 
-						a(href="NLP-preprocess") Text Preprocessing
-					li 
-						a(href="NLP-sentiment") Sentiment Analysis
-					li 
-						a(href="sklearn-cluster") Clustering
-					li 
-						a(href="networkx") Network Analysis
-			  
+			ul(class="nav navbar-nav navbar-left")
+				li
+					a(id="topbar-hub")
+						span(class="glyphicon glyphicon-log-out")
+						| Back to Hub 	
+
+			script.
+				var pathArray = window.location.pathname.split('/');
+				for (i=0; i<pathArray.length-1; i++){
+					if (pathArray[i] === 'weber'){
+						var sessionID = pathArray[i+1];
+						// session ID always is the one after weber
+					}
+				}
+				console.log(sessionID);
+				$("#topbar-hub").attr("href","http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID);
+				
 		
 			ul(class="nav navbar-nav navbar-right")
+					
 				li
 					a(href="history",id="topbar-history")
 						span(class="glyphicon glyphicon-time")
@@ -36,6 +36,24 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 					a(href="query",id="topbar-query")
 						span(class="glyphicon glyphicon-search")
 						| Social Media
+						
+				div(class="dropdown",id="topbar-home")
+					button(type="button",id="topbar-home-btn", class="btn btn-default dropdown-toggle", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true") Analytics Tools &nbsp;
+						span(class="caret")
+					ul(class="dropdown-menu", aria-labelledby="dropdownMenu1")
+						li 
+							a(href="./")
+								span(class="glyphicon glyphicon-home") 
+								| home
+						li(role="separator", class="divider")
+						li 
+							a(href="NLP-preprocess") Text Preprocessing
+						li 
+							a(href="NLP-sentiment") Sentiment Analysis
+						li 
+							a(href="sklearn-cluster") Clustering
+						li 
+							a(href="networkx") Network Analysis		
 					 
 			form(id="sitemap",class="navbar-form navbar-right")
 				input(id="sitemap-input", type="text",class="form-control",placeholder="Search within the tool...")
