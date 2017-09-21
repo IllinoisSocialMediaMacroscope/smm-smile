@@ -29,10 +29,19 @@
 	border-radius:30px;
 	padding:6px 20px;
 }
-
+#topbar-hub{
+	font-size:14px;
+	color:white;
+	background-color:#e2af51;
+	margin:10px 10px;
+	border-radius:30px;
+	padding:6px 20px;
+}
+	
 #topbar-home-btn:hover,
 #topbar-history:hover,
-#topbar-query:hover{
+#topbar-query:hover,
+#topbar-hub:hover{
 	color:black;
 	background-color:#eae8e8;
 }
