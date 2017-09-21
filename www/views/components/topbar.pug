@@ -1,3 +1,16 @@
+div(id="terminate-modal" class="modal fade" role="dialog")
+	div(class="modal-dialog",style="width:600px;")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close" data-dismiss="modal") &times;
+				h2(class="modal-title") Terminate This Session?
+				p(style="font-size:16px") <b>Warning:</b> All data associated with this session will no longer be available!
+			div(class="modal-footer")
+				a(id="terminate")
+					button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px") Yes	
+				a(href="https://socialmediamacroscope.org",target="_blank")
+					button(class="btn btn-primary",style="background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",id="reportButton") No
+					
 nav(class="navbar navbar-inverse navbar-fixed-top")
 	div(class="container-fluid")
 		div(class="navbar-header")
@@ -10,21 +23,9 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 		div(id="navbar",class="navbar-collapse collapse")
 			ul(class="nav navbar-nav navbar-left")
 				li
-					a(id="topbar-hub")
+					a(id="topbar-hub",onclick="terminateWarning();")
 						span(class="glyphicon glyphicon-log-out")
-						| Back to Hub 	
-
-			script.
-				var pathArray = window.location.pathname.split('/');
-				for (i=0; i<pathArray.length-1; i++){
-					if (pathArray[i] === 'weber'){
-						var sessionID = pathArray[i+1];
-						// session ID always is the one after weber
-					}
-				}
-				console.log(sessionID);
-				$("#topbar-hub").attr("href","http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID);
-				
+						| Back to Hub 			
 		
 			ul(class="nav navbar-nav navbar-right")
 					
@@ -58,5 +59,24 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 			form(id="sitemap",class="navbar-form navbar-right")
 				input(id="sitemap-input", type="text",class="form-control",placeholder="Search within the tool...")
 
-
-
+	
+	
+script.
+	var pathArray = window.location.pathname.split('/');
+	for (i=0; i<pathArray.length-1; i++){
+		if (pathArray[i] === 'weber'){
+			var sessionID = pathArray[i+1];
+			// session ID always is the one after weber
+		}
+	}
+	$("#terminate").attr("href","http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID);
+	
+	function terminateWarning(){
+		console.log("clicked")
+		$("#terminate-modal").modal('show');
+	}
+	
+	
+	
+	
+	
