@@ -228,6 +228,8 @@ router.post('/history',function(req,res,next){
 });
 
 router.post('/delete',function(req,res,next){
+	console.log(req.body.type);
+	
 	if (req.body.type === 'analytics'){
 		var DIR = './downloads/' + req.body.layer1 + '/' + req.body.layer2 +'/' + req.body.historyID;
 		deleteFolderRecursive(DIR);
@@ -237,20 +239,14 @@ router.post('/delete',function(req,res,next){
 	else if (req.body.type === 'graphql'){
 		
 		var DIR_GraphQL = './downloads/GraphQL/' + req.body.historyID;
-		if (fs.existsSync(DIR_GraphQL + '.json')){
-			fs.unlinkSync(DIR_GraphQL + '.json');
-		}
-		if (fs.existsSync(DIR_GraphQL + '.csv')){
-			fs.unlinkSync(DIR_GraphQL + '.csv');
-		}
-		if (fs.existsSync(DIR_GraphQL + '.dat')){
-			fs.unlinkSync(DIR_GraphQL + '.dat');
-		}
-		if (fs.existsSync(DIR_GraphQL + '.zip')){
-			fs.unlinkSync(DIR_GraphQL + '.zip');
-		}
+		deleteFolderRecursive(DIR_GraphQL);
 		res.send('Successfully deleted!');
 		
+	}
+	
+	else if(req.body.type === 'purge'){
+		deleteFolderRecursive('./downloads');
+		res.send('Successfully purged!');
 	}
 });
 
