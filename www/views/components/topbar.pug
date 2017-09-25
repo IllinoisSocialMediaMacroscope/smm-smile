@@ -79,47 +79,44 @@ script.
 		var cleanData = function() {
 		  return new Promise(function(resolve, reject) {
 			console.log('first delete that session folder');
-			var x = new XMLHttpRequest();
-			x.onreadystatechange = function(){
-				if( x.status === 200 && x.readyState === 4) {
-				  // Optional callback for when request completes
-				  console.log(x.responseText);
-				  resolve(x.responseText);
-				}
-				else{
-					reject(x.status);
-				}
-			}
-			x.open('GET', 'http://socialmediamacroscope.org/tools/deletefolder', true);
-			//x.send('delFolder=/' + sessionID + '&listdir=data/sessions/&tmpl=component');
-			x.send('delFolder=/437&listdir=data/sessions/&tmpl=component');
-		  });
-		};
-
-		var terminateSession = function() {
-		  return new Promise(function(resolve, reject) {
-			console.log('Then terminate the session');
-			var x = new XMLHttpRequest();
-			x.onreadystatechange = function(){
-				if( x.status === 200 && x.readyState === 4) {
-				  // Optional callback for when request completes
-				  console.log(x.responseText);
-				  resolve(x.responseText);
-				}
-				else{
-					reject(x.status);
-				}
-			}
-			x.open('GET', 'http://socialmediamacroscope.org/tools/smiletest/stop', true);
-			//x.send('sess=' + sessionID);
-			x.send('sess=437');
+			$.ajax({
+				type:'post',
+				url:'delete', 
+				data: {"type":"purge"},				
+				success:function(data){
+					if(data){
+						resolve(data);
+					}
+				},
+				error: function(jqXHR, exception){
+						var msg = '';
+						if (jqXHR.status === 0) {
+							msg = 'Not connect.\n Verify Network.';
+						} else if (jqXHR.status == 404) {
+							msg = 'Requested page not found. [404]';
+						} else if (jqXHR.status == 500) {
+							msg = 'Internal Server Error [500].';
+						} else if (exception === 'parsererror') {
+							msg = 'Requested JSON parse failed.';
+						} else if (exception === 'timeout') {
+							msg = 'Time out error.';
+						} else if (exception === 'abort') {
+							msg = 'Ajax request aborted.';
+						} else {
+							msg = 'Uncaught Error.\n' + jqXHR.responseText;
+						}
+						$("#error").val(msg);
+						$("#warning").modal('show');
+						reject(msg);						
+					} 
+			});
 		  });
 		};
 
 		cleanData().then(function() {
-		  return terminateSession();
+			window.location = "http://socialmediamacroscope.org/tools/smiletest/stop?sess=440"
 		}).catch(function(error) {
-		  console.log('oh no', error);
+			console.log('oh no', error);
 		});
 	
 	}
