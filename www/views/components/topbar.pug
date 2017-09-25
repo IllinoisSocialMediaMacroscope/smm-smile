@@ -114,7 +114,7 @@ script.
 		};
 
 		cleanData().then(function() {
-			window.location = "http://socialmediamacroscope.org/tools/smiletest/stop?sess=440"
+			window.location = "http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID;
 		}).catch(function(error) {
 			console.log('oh no', error);
 		});
