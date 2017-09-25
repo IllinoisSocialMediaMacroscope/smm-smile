@@ -6,8 +6,7 @@ div(id="terminate-modal" class="modal fade" role="dialog")
 				h2(class="modal-title") Terminate This Session?
 				p(style="font-size:16px") <b>Warning:</b> All data associated with this session will no longer be available!
 			div(class="modal-footer")
-				a(id="terminate")
-					button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px") Yes	
+				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="terminate();") Yes	
 				a(href="https://socialmediamacroscope.org",target="_blank")
 					button(class="btn btn-primary",style="background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",id="reportButton") No
 					
@@ -65,18 +64,63 @@ script.
 	var pathArray = window.location.pathname.split('/');
 	for (i=0; i<pathArray.length-1; i++){
 		if (pathArray[i] === 'weber'){
-			var sessionID = pathArray[i+1];
+			sessionID = pathArray[i+1];
 			// session ID always is the one after weber
 		}
 	}
-	$("#terminate").attr("href","http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID);
+	
 	
 	function terminateWarning(){
 		console.log("clicked")
 		$("#terminate-modal").modal('show');
 	}
 	
+	function terminate(){
+		var cleanData = function() {
+		  return new Promise(function(resolve, reject) {
+			console.log('first delete that session folder');
+			var x = new XMLHttpRequest();
+			x.onreadystatechange = function(){
+				if( x.status === 200 && x.readyState === 4) {
+				  // Optional callback for when request completes
+				  console.log(x.responseText);
+				  resolve(x.responseText);
+				}
+				else{
+					reject(x.status);
+				}
+			}
+			x.open('GET', 'http://socialmediamacroscope.org/tools/deletefolder', true);
+			//x.send('delFolder=/' + sessionID + '&listdir=data/sessions/&tmpl=component');
+			x.send('delFolder=/437&listdir=data/sessions/&tmpl=component');
+		  });
+		};
+
+		var terminateSession = function() {
+		  return new Promise(function(resolve, reject) {
+			console.log('Then terminate the session');
+			var x = new XMLHttpRequest();
+			x.onreadystatechange = function(){
+				if( x.status === 200 && x.readyState === 4) {
+				  // Optional callback for when request completes
+				  console.log(x.responseText);
+				  resolve(x.responseText);
+				}
+				else{
+					reject(x.status);
+				}
+			}
+			x.open('GET', 'http://socialmediamacroscope.org/tools/smiletest/stop', true);
+			//x.send('sess=' + sessionID);
+			x.send('sess=437');
+		  });
+		};
+
+		cleanData().then(function() {
+		  return terminateSession();
+		}).catch(function(error) {
+		  console.log('oh no', error);
+		});
 	
-	
-	
+	}
 	
