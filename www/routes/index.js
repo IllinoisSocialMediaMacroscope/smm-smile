@@ -43,10 +43,10 @@ router.get('/',function(req,res,next){
 						"cat" and "meow" will appear in documents about cats, and "the" and "is" will appear equally in both. A document typically concerns multiple topics 
 						in different proportions; thus, in a document that is 10% about cats and 90% about dogs, there would probably be about 9 times more dog words than cat words. 
 						The "topics" produced by topic modeling techniques are clusters of similar words.`},*/
-			{name: 'Clustering', url:'sklearn-cluster', imgURL:'bootstrap/img/logo/sklearn/cluster.png',
+			/*{name: 'Clustering', url:'sklearn-cluster', imgURL:'bootstrap/img/logo/sklearn/cluster.png',
 						wiki:'https://en.wikipedia.org/wiki/Cluster_analysis',
 						introduction:`<b>Cluster analysis</b> Cluster analysis is the task of grouping a set of objects (for example, words or topics) 
-						in such a way that objects in the same group or cluster are more similar to each other than to those in other groups.`},
+						in such a way that objects in the same group or cluster are more similar to each other than to those in other groups.`},*/
 			{name: 'Network Analysis', url:'networkx', imgURL:'bootstrap/img/logo/networkX-logo.png',
 						wiki:"https://en.wikipedia.org/wiki/Social_network_analysis",
 						introduction:`<b>Social network analysis</b> is the process of investigating social 
