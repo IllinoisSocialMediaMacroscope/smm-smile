@@ -10,10 +10,10 @@ router.get('/history',function(req,res,next){
 							{"twitter-Tweet":{},
 							"twitter-User":{},
 							"twitter-Stream":{}},
-						"ML":
-							{
-								//"feature":{},
-							"clustering":{}},
+						//"ML":
+						//	{
+						//	"feature":{},
+						//	"clustering":{}},
 						"NLP":
 							{"preprocessing":{},
 							"sentiment":{}
@@ -24,7 +24,7 @@ router.get('/history',function(req,res,next){
 					
 	if (fs.existsSync('./downloads')){
 		
-		if (fs.existsSync('./downloads/ML')) {
+		/*if (fs.existsSync('./downloads/ML')) {
 			if (fs.existsSync('./downloads/ML/clustering')){
 				var fileList = fs.readdirSync('./downloads/ML/clustering')
 				for (var i = 0, length = fileList.length; i<length; i++){
@@ -32,7 +32,7 @@ router.get('/history',function(req,res,next){
 					directory['ML']['clustering'][fileList[i]] = created_at;
 				}
 			}
-		}
+		}*/
 		
 		if (fs.existsSync('./downloads/NLP')){
 			if (fs.existsSync('./downloads/NLP/preprocessing')){
@@ -148,7 +148,7 @@ router.post('/history',function(req,res,next){
 					config:config
 				});
 	}
-	else if (req.body.layer2 === 'clustering'  && fs.readdirSync(DIR).length === 5){
+	/*else if (req.body.layer2 === 'clustering'  && fs.readdirSync(DIR).length === 5){
 		var div_data = fs.readFileSync(DIR +'/div.dat', 'utf8'); //trailing /r 
 		var div_comp_data = fs.readFileSync(DIR + '/div_comp.dat', 'utf8');
 		var preview_string = fs.readFileSync(DIR +'/clustering-features.csv', "utf8"); 
@@ -164,7 +164,7 @@ router.post('/history',function(req,res,next){
 				preview:{name:'preview some of the clustered data',content:preview_arr},
 				config:config
 			});
-	}
+	}*/
 	else if (req.body.layer2 === 'networkx' && fs.readdirSync(DIR).length >=5){
 		var fnames = fs.readdirSync(DIR);
 		var div_data = fs.readFileSync(DIR + '/div.dat', 'utf8');

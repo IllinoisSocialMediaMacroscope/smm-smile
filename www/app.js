@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/',require('./routes/index'));
 app.use('/',require('./routes/networkx/networkx'));
-app.use('/',require('./routes/scikit-learn/scikit-learn-cluster'));
+//app.use('/',require('./routes/scikit-learn/scikit-learn-cluster'));
 app.use('/',require('./routes/NLP/NLP-preprocess')); 
 app.use('/',require('./routes/NLP/NLP-SA'));
 //app.use('/',require('./routes/NLP/NLP-topic'));
