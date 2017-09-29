@@ -26,7 +26,31 @@ body {
     transform: translate(0, 0);
   }
 }
-
+#citation-notice{
+    position: relative;
+    margin: auto auto;
+    width: calc(75%);
+    padding: 30px 30px;
+    background-color: #17466f;
+    color: white;
+    border-radius: 12px;
+    font-size: 20px;
+    font-style: italic;
+	border: solid 2.5px #ea4a36;
+	animation: slide 0.5s 1s ease-in-out both;
+}
+#citation-notice-btn{
+	background: none;
+	border:none;
+	float:right;
+	color:#ea4a36;
+	font-size:20px;
+	font-weight:600;
+	margin:-20px -15px;
+}
+#citation-notice-btn:hover{
+	color:white;
+}
 /*  drop down menu   */
 .dropdown.dropdown-lg .dropdown-menu {
     margin-top: 2px;

@@ -105,20 +105,34 @@ html
 		
 		<!-- popup modal download-->
 		div(id="success" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
-			div(class="modal-dialog", style="width:1000px;")
+			div(class="modal-dialog", style="width:800px;")
 				div(class="modal-content")
 					div(class="modal-header")
 						button(class="close" data-dismiss="modal") &times;
 						h2(class="modal-title" id="modal-title") Download Your Search Results
 					
 					div(class="modal-body" style="vertical-align:middle;font-size:20px;")
-						div(id="modal-download")
-						p(id="download-note") <b>NOTE</b>: Your search results are saved in your home directory. You can either <b>download</b> here; 
+						div(id="citation-notice")
+							p 
+								| <b>Note:</b><br>If you would like to the social media intelligence and learning environment 
+								| for you research and publication, please cite our platform 
+								| <u>https://socialmediamacroscope.org</u>
+							p Your citation will help our platform greatly! 
+							button(id="citation-notice-btn") click to continue...
+						div(id="modal-download",style="display:none;")
+						p(id="download-note",style="display:none;") <b>NOTE</b>: Your search results are saved in your home directory. You can either <b>download</b> here; 
 							| or go to any of the analytics tools --> <b>select from your folder</b>;
 							| or review, manage and download it in the <b>history</b> page
 							| If you accidentally close this modal window, you can click <b>export</b> button in this page to resume.
-						p(style="margin-left:20px;color:#1e325a;") <b>Example of usage:</b>
-						img(src="bootstrap/img/gifs/gotoAnalytics.gif",id="gotoAnalytics-demo") 
+						p(id="download-note",style="display:none;") <b>Example of usage:</b>
+						img(src="bootstrap/img/gifs/gotoAnalytics.gif",id="gotoAnalytics-demo",style="display:none;") 
+						script.
+							$("#citation-notice-btn").click(function(){
+								$("#citation-notice").hide('slow');
+								$("#modal-download").show('slow');
+								$("#download-note").show('slow');
+								$("#gotoAnalytics-demo").show('slow');								
+							});
 						
 					div(class="modal-footer")
 						a(href="./", class="btn btn-primary",style="background-color:#ea4a36;border-style:hidden") Go To Analytics

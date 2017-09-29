@@ -7,8 +7,7 @@ div(id="terminate-modal" class="modal fade" role="dialog")
 				p(style="font-size:16px") <b>Warning:</b> All data associated with this session will no longer be available!
 			div(class="modal-footer")
 				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="terminate();") Yes	
-				a(href="https://socialmediamacroscope.org",target="_blank")
-					button(class="btn btn-primary",style="background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",id="reportButton") No
+				button(class="btn btn-primary",style="background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",data-dismiss="modal") No
 					
 nav(class="navbar navbar-inverse navbar-fixed-top")
 	div(class="container-fluid")
@@ -22,9 +21,14 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 		div(id="navbar",class="navbar-collapse collapse")
 			ul(class="nav navbar-nav navbar-left")
 				li
+					a(id="topbar-query",href="./")
+						span(class="glyphicon glyphicon-home")
+						| Home 
+				li
 					a(id="topbar-hub",onclick="terminateWarning();")
 						span(class="glyphicon glyphicon-log-out")
-						| Back to Macroscope Hub 			
+						| Terminate 
+						
 		
 			ul(class="nav navbar-nav navbar-right")
 					
@@ -41,11 +45,7 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 					button(type="button",id="topbar-home-btn", class="btn btn-default dropdown-toggle", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true") Analytics Tools &nbsp;
 						span(class="caret")
 					ul(class="dropdown-menu", aria-labelledby="dropdownMenu1")
-						li 
-							a(href="./")
-								span(class="glyphicon glyphicon-home") 
-								| home
-						li(role="separator", class="divider")
+						
 						li 
 							a(href="NLP-preprocess") Text Preprocessing
 						li 
@@ -68,7 +68,6 @@ script.
 			// session ID always is the one after weber
 		}
 	}
-	
 	
 	function terminateWarning(){
 		console.log("clicked")

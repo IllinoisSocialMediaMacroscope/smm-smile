@@ -1,30 +1,8 @@
 {
 	"form-action": "NLP-preprocess",
 	"containers":[
-		{"container-name":"",
-		"container-label-name":"format",
-		"inputs":[
-					{"type":"radio",
-						"name":"option",
-						"id":"file",
-						"value":"file",
-						"sytle":"position: absolute; visibility: hidden;",
-						"class":"customized-radio",
-						"checked":true,
-						"label":"file"
-					},
-					{"type":"radio",
-						"name":"option",
-						"id":"URL",
-						"value":"URL",
-						"sytle":"position: absolute; visibility: hidden;",
-						"class":"customized-radio",
-						"checked":false,
-						"label":"URL"
-					}
-				]},
 		{"container-name":"file-container",
-		"container-label-name":"select from your folder",
+		"container-label-name":"Select from your folder",
 		"inputs":[
 					{"type":"select",
 						"name":"selectFile",
@@ -34,19 +12,8 @@
 						"optgroup": true
 					}
 				]},
-		{"container-name":"url-container",
-		"container-label-name":"URL",
-		"inputs":[
-					{"type":"text",
-						"name":"input",
-						"id":"link",
-						"value":"https://techservices.illinois.edu/news/2015/telling-compelling-stories-social-media-analytics-team",
-						"sytle":"",
-						"class":"form-control col-md-7 col-xs-12"
-					}
-				]},
 		{"container-name":"",
-		"container-label-name":"preprocess step",
+		"container-label-name":"Preprocess step",
 		"inputs":[
 					{"type":"select",
 						"name":"model",
@@ -54,6 +21,9 @@
 						"class":"form-control",
 						"optgroup": false,
 						"options":[
+							{"value":"Please Select...",
+							"label":"Please Select..."},
+							
 							{"value":"lemmatization",
 							"label":"lemmatization"},
 							
@@ -66,14 +36,18 @@
 					}
 				]},
 		{"container-name":"",
-		"container-label-name":"tagging",
+		"container-label-name":"Tagging",
 		"inputs":[
 					{"type":"select",
 						"name":"tagger",
 						"id":"tagger",
 						"class":"form-control",
 						"optgroup": false,
-						"options":[{"value":"posTag",
+						"options":[
+									{"value":"Please Select...",
+									"label":"Please Select..."},
+									
+									{"value":"posTag",
 									"label":"Natural Language Tool Kit Part of Speech Tagger"}]
 					}
 				]}

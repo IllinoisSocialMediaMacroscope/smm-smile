@@ -4,9 +4,9 @@ function init(){
 	
 	$("#file").prop('checked',true);
 	$("#file-container").show();
-	$("#url-container").hide();
+	//$("#url-container").hide();
 	
-	$("input[name='option']").on('change', function(){
+	/*$("input[name='option']").on('change', function(){
 		if($("input[name='option']:checked").val() === 'file'){
 			$("#file-container").show();
 			$("#url-container").hide();
@@ -18,7 +18,7 @@ function init(){
 			$("#selectFilePreview-container").hide();
 			$("#selectFileHeader-container").hide();
 		}
-	});
+	});*/
 	
 }
 

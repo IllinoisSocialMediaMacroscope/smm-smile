@@ -44,7 +44,12 @@ block config-form
 								div(class="range range-node")
 									input(type=input.type, min=input.min, max=input.max, value=input.value, step=input.step, name=input.name, onchange=input.onchange, id=input.id)
 									output(id=input.output_id) #{input.value}
-	
+		div(id="citation-container",style="display:none")
+			div(class="form-group")
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") 
+				div(class="col-md-8 col-md-8 col-xs-12")
+					div(id="citation-notice")
+			
 		
 		
 		div(class="form-group")
