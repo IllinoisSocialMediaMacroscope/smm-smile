@@ -53,11 +53,11 @@ router.post('/networkx',function(req,res,next){
 			}				
 			
 			
-			if (d3js.slice(-1)=== '\r' || d3js.slice(-1) === '\n' || d3js.slice(-1) === '\t' || d3js.slice(-1) === '\0' || d3js.slice(-1) === ' '){
+			/*if (d3js.slice(-1)=== '\r' || d3js.slice(-1) === '\n' || d3js.slice(-1) === '\t' || d3js.slice(-1) === '\0' || d3js.slice(-1) === ' '){
 				var d3js_data = JSON.parse(fs.readFileSync(d3js.slice(0,-1),'utf8'));
 			}else{
 				var d3js_data = JSON.parse(fs.readFileSync(d3js,'utf8'));
-			}
+			}*/
 			
 			
 			if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
@@ -72,7 +72,7 @@ router.post('/networkx',function(req,res,next){
 				download: downloadFiles,
 				metrics:{name:'', content:''}, 
 				preview:{name:'',content:''},
-				d3js_data:d3js_data
+				//d3js_data:d3js_data
 			});
 			
 		}

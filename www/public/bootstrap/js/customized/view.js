@@ -450,9 +450,10 @@ function ajaxSubmit(formID){
 					}else if('table' in data){
 						// draw word tree for preprocessing
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
-					}else if('d3js_data' in data){
+					}
+					/*else if('d3js_data' in data){
 						appendD3JS(data);
-					}					
+					}*/			
 				}
 			},
 			error: function(jqXHR, exception){

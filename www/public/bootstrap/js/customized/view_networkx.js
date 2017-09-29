@@ -102,30 +102,24 @@ function formValidation(){
 	}
 
 	//console.log($("#relations option:selected").val());
-	if ($("#relations option:selected").val() === '' || $("#relations option:selected").val() === undefined){
-		$("#modal-message").append(`<h4>Please select a model to perform!</h4>`);
+	if ($("#relations option:selected").val() === 'Please Select...' || $("#relations option:selected").val() === undefined){
+		$("#modal-message").append(`<h4>Please select a network relation!</h4>`);
 		$("#alert").modal('show');
 		$("#relations").focus();
 		return false;
 	}
-	if ($("#layout option:selected").val() === '' || $("#layout option:selected").val() === undefined){
+	if ($("#layout option:selected").val() === 'Please Select...' || $("#layout option:selected").val() === undefined){
 		$("#modal-message").append(`<h4>Please select a network layout!</h4>`);
 		$("#alert").modal('show');
 		$("#layout").focus();
 		return false;
 	}
-	if ($("#node_size").val()< 5 || $("#node_size").val() > 50){
-		$("#modal-message").append(`<h4>The valid number of node size is between 5 to 50!</h4>`);
-		$("#alert").modal('show');
-		$("#node_size").focus();
-		return false;
-	}
-	if ($("#edge_width").val()< 0.1 || $("#edge_width").val() > 5){
-		$("#modal-message").append(`<h4>The valid number of edge width is between 0.1 to 5!</h4>`);
-		$("#alert").modal('show');
-		$("#edge_width").focus();
-		return false;
-	}
+	if ($("#prune option:selected").val() === 'Please Select...' || $("#prune option:selected").val() === undefined){
+			$("#modal-message").append(`<h4>Please select a way to prune the network!</h4>`);
+			$("#alert").modal('show');
+			$("#prune").focus();
+			return false;
+		}
 	
 	return true;
 	
