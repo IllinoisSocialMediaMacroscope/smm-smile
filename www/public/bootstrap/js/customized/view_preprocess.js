@@ -108,71 +108,73 @@ $(document).ready(function(){
 			} 
 		}); 
 	});
+	
+	$("#tagger").on('change',function(){
+		$("#citation-container").hide();
+		$("#citation-notice").empty();
+		
+		var algorithm = $(this).children(":selected").val();
+		if (algorithm === 'posTag'){
+			$("#citation-notice").append(
+				`<p><b>Note:</b></p>
+				<ul>
+					<li>If you would like to use NLTK python library for your preprocessing, 
+					Please cite this paper:
+					<br>
+					<i>Bird, S. (2006, July). NLTK: the natural language toolkit. 
+					In Proceedings of the COLING/ACL on Interactive presentation sessions 
+					(pp. 69-72). Association for Computational Linguistics.</i>
+					</li>
+					<li>More information about NLTK library can be found at 
+						<a href="http://www.nltk.org/" target="_blank" style="color:#e2af51;">http://www.nltk.org</a>
+					</li>
+					<li>Please also cite our platform <a href="https://socialmediamacroscope.org" target="_blank" style="color:#e2af51;">
+						https://socialmediamacroscope.org</a></li>
+				</ul>`
+			);
+			$("#citation-container").show();
+		}
+		
+	});
+
 });
 
 /*----------------------form validation ----------------------------*/
 function formValidation(){
-	if ($("#file").is(":checked")){
-		
-		if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
-			$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
-			$("#alert").modal('show');
-			$("#selectFile").focus();
-			return false;
-		}
-		if ($("#selectFileTable thead tr").find('th').text() === ''){
-			$("#modal-message").append(`<h4>This dataset you selected is empty, please select another one!</h4>`);
-			$("#alert").modal('show');
-			$("#selectFile").focus();
-			return false;
-		}
-		if ($("#model option:selected").val() === '' || $("#model option:selected").val() === undefined){
-			$("#modal-message").append(`<h4>Please select a preprocess step!</h4>`);
-			$("#alert").modal('show');
-			$("#model").focus();
-			return false;
-		}
-		
-		if ($("#tagger option:selected").val() === '' || $("#tagger option:selected").val() === undefined){
-			$("#modal-message").append(`<h4>Please select a tagging step!</h4>`);
-			$("#alert").modal('show');
-			$("#tagger").focus();
-			return false;
-		}
-		
-		if ($("input[name='selectFileColumn']:checked").val() === '' ||$("input[name='selectFileColumn']:checked").val() === undefined){
-			$("#modal-message").append(`<h4>Please select a column of the text to analyze!</h4>`);
-			$("#alert").modal('show');
-			return false;			
-		}
-		
-	}else if ($("#URL").is(":checked")){
-		if ($("#link").val() === '' || $("#link").val() === undefined){
-			$("#modal-message").append(`<h4>Please input the URL!</h4>`);
-			$("#alert").modal('show');
-			$("#link").focus();
-			return false;
-		}
-		
-		if ($("#model option:selected").val() === '' || $("#model option:selected").val() === undefined){
-			$("#modal-message").append(`<h4>Please select a preprocess step!</h4>`);
-			$("#alert").modal('show');
-			$("#model").focus();
-			return false;
-		}
-		
-		if ($("#tagger option:selected").val() === '' || $("#tagger option:selected").val() === undefined){
-			$("#modal-message").append(`<h4>Please select a tagging step!</h4>`);
-			$("#alert").modal('show');
-			$("#tagger").focus();
-			return false;
-		}
-	}else{
-		$("#modal-message").append(`<h4>Please select the format between File and URL!</h4>`);
+	
+	if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
+		$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
 		$("#alert").modal('show');
+		$("#selectFile").focus();
+		return false;
+	}
+	if ($("#selectFileTable thead tr").find('th').text() === ''){
+		$("#modal-message").append(`<h4>This dataset you selected is empty, please select another one!</h4>`);
+		$("#alert").modal('show');
+		$("#selectFile").focus();
+		return false;
+	}
+	if ($("#model option:selected").val() === 'Please Select...' || $("#model option:selected").val() === undefined){
+		$("#modal-message").append(`<h4>Please select a preprocess step!</h4>`);
+		$("#alert").modal('show');
+		$("#model").focus();
 		return false;
 	}
 	
+	if ($("#tagger option:selected").val() === 'Please Select...' || $("#tagger option:selected").val() === undefined){
+		$("#modal-message").append(`<h4>Please select a tagging step!</h4>`);
+		$("#alert").modal('show');
+		$("#tagger").focus();
+		return false;
+	}
+	
+	if ($("input[name='selectFileColumn']:checked").val() === '' ||$("input[name='selectFileColumn']:checked").val() === undefined){
+		$("#modal-message").append(`<h4>Please select a column of the text to analyze!</h4>`);
+		$("#alert").modal('show');
+		return false;			
+	}
+		
+
 	return true;
 	
 }

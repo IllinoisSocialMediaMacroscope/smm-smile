@@ -26,11 +26,27 @@ html
 		div(class="headers")
 			//img(id="index-banner", src="bootstrap/img/logo/index-banner.png",width="100%")
 			img(id="index-banner", src="bootstrap/img/logo/index-banner.png",width="70%")
-			div(class="fadein")
+			div(class="fadein",style="display:none;")
 				img(id="f1", src="bootstrap/img/logo/1.png",width="240px")
 				img(id="f2", src="bootstrap/img/logo/2.png",width="240px")
 				img(id="f3", src="bootstrap/img/logo/3.png",width="240px")
-			div(class="button-unit")
+			div(id="citation-notice")
+				p 
+					| <b>Note:</b><br>If you would like to the social media intelligence and learning environment 
+					| for you research and publication, please cite our platform 
+					| <u>https://socialmediamacroscope.org</u>
+				p Your citation will help our platform greatly! 
+				button(id="citation-notice-btn") click to continue...
+				
+				script.
+					$("#citation-notice-btn").click(function(){
+						$("#citation-notice").hide('slow');
+						$(".fadein").show('slow');
+						$(".button-unit").show('slow');
+						
+					});
+					
+			div(class="button-unit",style="display:none;")
 				a(class="button" href="query") Get Started
 				a(class="button" href="history") Past Results
 				

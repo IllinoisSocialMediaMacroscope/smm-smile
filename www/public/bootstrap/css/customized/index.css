@@ -101,7 +101,6 @@ body {
     text-align: center;
 	top: calc(83%);
     width: 100%;
-	animation: slide 1s 1.5s ease-in-out both;
 }
 
 #index-banner{
@@ -110,18 +109,43 @@ body {
 	position:relative;
 	display:block;
 }
-
-.button{
-	font-weight: 300;
+#citation-notice{
+    position: relative;
+    top: 100px;
+    margin: auto auto;
+    width: calc(50%);
+    padding: 30px 30px;
+    background-color: #17466f;
     color: white;
+    border-radius: 12px;
     font-size: 20px;
+    font-style: italic;
+	border: solid 2.5px #ea4a36;
+	animation: slide 0.5s 1s ease-in-out both;
+}
+#citation-notice-btn{
+	background: none;
+	border:none;
+	float:right;
+	color:#ea4a36;
+	font-size:25px;
+	font-weight:600;
+	margin:-20px -15px;
+}
+#citation-notice-btn:hover{
+	color:white;
+}
+.button{
+	font-weight: 600;
+    color: white;
+    font-size: 25px;
     line-height: 28.8px;
-    border: solid 1.5px white;
-    border-radius: 6px;
+    border: solid 2.5px white;
+    border-radius: 12px;
     line-height: 1.0;
     padding: 0.6em 1.6em;
-    margin: 0 0.8em;
-	margin-bottom: 30px;
+    margin: 0 1.0em;
+	/* margin-bottom: 30px;*/
     display: inline-block;
     text-decoration: none;
 }

@@ -103,43 +103,61 @@ $(document).ready(function(){
 			} 
 		}); 
 	});
+	
+	$("#algorithm").on('change',function(){
+		$("#citation-container").hide();
+		$("#citation-notice").empty();
+		
+		var algorithm = $(this).children(":selected").val();
+		if (algorithm === 'vader'){
+			$("#citation-notice").append(
+				`<p><b>Note:</b></p>
+				<ul>
+					<li>If you would like to use VADER algorithm for your sentiment analysis, 
+					Please cite this paper:
+					<br>
+					<i>Hutto, C. J., & Gilbert, E. (2014, May). Vader: A parsimonious rule-based 
+					model for sentiment analysis of social media text. In Eighth international AAAI 
+					conference on weblogs and social media.</i>
+					</li>
+					<li>Please also cite our platform 
+					<a href="https://socialmediamacroscope.org" target="_blank" style="color:#e2af51;">
+						https://socialmediamacroscope.org</a></li>
+				</ul>`
+			);
+			$("#citation-container").show();
+		}
+		
+	});
 });
 
 /*----------------------form validation ----------------------------*/
 function formValidation(){
-	if ($("#file").is(":checked")){
-		
-		if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
-			$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
-			$("#alert").modal('show');
-			$("#selectFile").focus();
-			return false;
-		}
-		if ($("#selectFileTable thead tr").find('th').text() === ''){
-			$("#modal-message").append(`<h4>This dataset you selected is empty, please select another one!</h4>`);
-			$("#alert").modal('show');
-			$("#selectFile").focus();
-			return false;
-		}
-		if ($("input[name='selectFileColumn']:checked").val() === '' ||$("input[name='selectFileColumn']:checked").val() === undefined){
-			$("#modal-message").append(`<h4>Please select a column of the text to analyze!</h4>`);
-			$("#alert").modal('show');
-			return false;			
-		}
-		
-	}else if ($("#URL").is(":checked")){
-		if ($("#link").val() === '' || $("#link").val() === undefined){
-			$("#modal-message").append(`<h4>Please input the URL!</h4>`);
-			$("#alert").modal('show');
-			$("#link").focus();
-			return false;
-		}
-		
-	}else{
-		$("#modal-message").append(`<h4>Please select the format between File and URL!</h4>`);
+	
+	if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
+		$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
 		$("#alert").modal('show');
+		$("#selectFile").focus();
 		return false;
 	}
+	if ($("#selectFileTable thead tr").find('th').text() === ''){
+		$("#modal-message").append(`<h4>This dataset you selected is empty, please select another one!</h4>`);
+		$("#alert").modal('show');
+		$("#selectFile").focus();
+		return false;
+	}
+	if ($("input[name='selectFileColumn']:checked").val() === '' ||$("input[name='selectFileColumn']:checked").val() === undefined){
+		$("#modal-message").append(`<h4>Please select a column of the text to analyze!</h4>`);
+		$("#alert").modal('show');
+		return false;			
+	}
+	
+	if ($("#algorithm option:selected").val() === 'Please Select...' || $("#algorithm option:selected").val() === undefined){
+		$("#modal-message").append(`<h4>Please select an algorithm</h4>`);
+		$("#alert").modal('show');
+		$("#algorithm").focus();
+		return false;
+	}	
 	
 	return true;
 	
