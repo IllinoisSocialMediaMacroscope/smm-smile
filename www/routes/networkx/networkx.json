@@ -2,7 +2,7 @@
 	"form-action": "networkx",
 	"containers":[
 		{"container-name":"file-container",
-		"container-label-name":"select from your folder",
+		"container-label-name":"Select from your folder",
 		"inputs":[
 					{"type":"select",
 						"name":"selectFile",
@@ -13,7 +13,7 @@
 					}
 				]},
 		{"container-name":"",
-		"container-label-name":"network relation",
+		"container-label-name":"Network relation",
 		"inputs":[
 					{"type":"select",
 						"name":"relations",
@@ -21,7 +21,9 @@
 						"class":"form-control",
 						"optgroup": false,
 						"options":[
-						
+							{"value":"Please Select...",
+							"label":"Please Select..."},
+
 							{"value":"retweet_from",
 							"label":"retweet from"},
 							
@@ -34,7 +36,7 @@
 					}
 				]},
 		{"container-name":"",
-		"container-label-name":"select graph layout",
+		"container-label-name":"Select graph layout",
 		"inputs":[
 					{"type":"select",
 						"name":"layout",
@@ -42,6 +44,9 @@
 						"class":"form-control",
 						"optgroup": false,
 						"options":[
+							{"value":"Please Select...",
+								"label":"Please Select..."},
+
 							{"value":"random",
 							"label":"random layout"},
 							
@@ -64,7 +69,7 @@
 					}
 				]},
 		{"container-name":"",
-		"container-label-name":"prune the network",
+		"container-label-name":"Prune the network",
 		"inputs":[
 					{"type":"select",
 						"name":"prune",
@@ -72,6 +77,9 @@
 						"class":"form-control",
 						"optgroup": false,
 						"options":[
+							{"value":"Please Select...",
+							"label":"Please Select..."},
+
 							{"value":"isolates",
 							"label":"remove isolate pairs"},
 							
