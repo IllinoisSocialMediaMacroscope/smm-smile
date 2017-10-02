@@ -12,7 +12,7 @@
 						"optgroup": true
 					}
 				]},
-		{"container-name":"",
+		{"container-name":"network-relation-container",
 		"container-label-name":"Network relation",
 		"inputs":[
 					{"type":"select",
@@ -35,6 +35,7 @@
 						]
 					}
 				]},
+
 		{"container-name":"",
 		"container-label-name":"Select graph layout",
 		"inputs":[
@@ -67,34 +68,7 @@
 							
 						]
 					}
-				]},
-		{"container-name":"",
-		"container-label-name":"Prune the network",
-		"inputs":[
-					{"type":"select",
-						"name":"prune",
-						"id":"prune",
-						"class":"form-control",
-						"optgroup": false,
-						"options":[
-							{"value":"Please Select...",
-							"label":"Please Select..."},
-
-							{"value":"isolates",
-							"label":"remove isolate pairs"},
-							
-							{"value":"weakly_connected",
-							"label":"remove weakly connected nodes"},
-							
-							{"value":"influencer",
-							"label":"remove zero in-degree nodes"},
-							
-							{"value":"none",
-							"label":"keep original"}
-							
-						]
-					}
-				]}
+				]}		
 	],
 	"custom-script":"bootstrap/js/customized/view_networkx.js"
 }

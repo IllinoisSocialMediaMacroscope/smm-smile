@@ -20,7 +20,7 @@ import json
 
 class Network:
 
-    def __init__(self, DIR, input_file, relationships,prune):
+    def __init__(self, DIR, input_file, relationships):
 
         self.DIR = DIR
 
@@ -110,31 +110,15 @@ class Network:
             for row in new_df.iterrows():
                 self.graph.add_edge(row[1]['screen_name'], row[1]['mention'], text=row[1]['tweet'])
        
-        # prune the network or not
-        if prune == 'isolates':
-            for n in self.graph.nodes():
-                if self.graph.degree()[n] <= 1:
-                    # check if its neighbour's total degree
-                    for neighbour in self.graph[n].keys():
-                        if self.graph.degree()[neighbour] <= 1:
-                            self.graph.remove_node(n)
-            self.graph.remove_nodes_from(nx.isolates(self.graph))
-        elif prune == 'weakly_connected':
-            weak = nx.weakly_connected_components(self.graph)
-            to_remove = []
-            for n in weak:
-                to_remove.append(list(n)[0])   
-            self.graph.remove_nodes_from(to_remove)
-            self.graph.remove_nodes_from(nx.isolates(self.graph))
-
-        elif prune == 'influencer':
-             for n in self.graph.nodes():
-                if self.graph.in_degree()[n] == 0:
-                     self.graph.remove_node(n)
+    def prune_network(self):
+        d = nx.degree_centrality(self.graph)
+        d = sorted(d.items(), key=lambda x: x[1],reverse=True)
+        if len(d) >= 500:
+            for n in d[500:]:
+                self.graph.remove_node(n[0])
+        self.graph.remove_nodes_from(nx.isolates(self.graph))
             
-        
-                    
-       
+  
     def export_graph(self):
         # JSON format
         d3js_graph = json_graph.node_link_data(self.graph)
@@ -195,7 +179,7 @@ class Network:
                 size=10,
                 colorbar=dict(
                     thickness=15,
-                    title='node connectivity',
+                    title='node in-degree plus out-degree',
                     xanchor='left',
                     titleside='right'
                 ),
@@ -223,7 +207,7 @@ class Network:
                 node_trace['text'].append("@" + node + " is mentioned by " + str(self.graph.in_degree()[node]) + " user(s) and mentions " + str(self.graph.out_degree()[node]) + " user(s)")
                 
         fig = Figure(data=Data([edge_trace, node_trace]), layout=Layout(
-                title= relationships + ' Network Graph',
+                title= relationships + ' Network Graph with top 500 highest degree centrality nodes',
                 titlefont=dict(size=16), showlegend=False,
                 hovermode='closest', margin=dict(b=20,l=5,r=5,t=40),
                 annotations=[ dict(
@@ -241,250 +225,143 @@ class Network:
         print(fname_div)
 
 
-    def approximation(self):
-        result = {}
-        result['all_pairs_node_connectivity'] = nx.all_pairs_node_connectivity(self.graph)
-        result['node_connectivity'] = nx.node_connectivity(self.graph)
-
-        if self.directed == 'undirected':
-            result['k_components'] = nx.k_components(self.graph)
-            result['average_clustering'] = nx.average_clustering(self.graph)
-
-        fname_approx = self.DIR + '/appoximation.json'
-        with open(fname_approx,"w") as f:
-            json.dump(result, f, cls=SetEncoder,indent=2)
-        print(fname_approx)
-
-
-
     def assortativity(self):
         result = {}
-        result['degree_assortativity_coefficient']=nx.degree_assortativity_coefficient(self.graph)
-
-        if self.directed == 'undirected':
-            result['degree_pearson_correlation_coefficient']=nx.degree_pearson_correlation_coefficient(self.graph)
-        
-        result['average_neighbor_degree']=nx.average_neighbor_degree(self.graph)
         result['average_degree_connectivity']=nx.average_degree_connectivity(self.graph)
         result['k_nearest_neighbors']=nx.k_nearest_neighbors(self.graph)
-
-        fname_assort = self.DIR + '/assortativity.json'
-        with open(fname_assort,"w") as f:
-            json.dump(result, f, cls=SetEncoder,indent=2)
+        # k degree distribution
+        k_degree = []
+        for k in result['average_degree_connectivity'].keys():
+            k_degree.append((k, result['average_degree_connectivity'][k],result['k_nearest_neighbors'][k]))
+            
+        fname_assort = self.DIR + '/assortativity.csv'
+        with open(fname_assort,"w",newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(('degree k','average_degree_connectivity','k_nearest_neighbors'))
+            for line in k_degree:
+                try:
+                    writer.writerow(line)
+                except UnicodeEncodeError:
+                    pass
         print(fname_assort)
 
 
 
-    def centrality(self):
+    def attributes(self):
         result = {}
+        
         result['degree_centrality']=nx.degree_centrality(self.graph)
-
-        if self.directed == 'directed':
-            result['in_degree_centrality']=nx.in_degree_centrality(self.graph)
-            result['out_degree_centrality']=nx.out_degree_centrality(self.graph)
-            
+        result['in_degree_centrality']=nx.in_degree_centrality(self.graph)
+        result['out_degree_centrality']=nx.out_degree_centrality(self.graph)
         result['closeness_centrality']=nx.closeness_centrality(self.graph)
         result['betweenness_centrality']=nx.betweenness_centrality(self.graph)
-
-        # fix the tuple cant decode into json problem
-        stringify_temp={}
-        temp = nx.edge_betweenness_centrality(self.graph)
-        for key in temp.keys():
-            stringify_temp[str(key)] = temp[key]
-        result['edge_betweenness_centrality']= stringify_temp
-
-        if self.directed == 'undirected':
-            result['current_flow_closeness_centrality']=nx.current_flow_closeness_centrality(self.graph)
-            result['current_flow_betweenness_centrality']=nx.current_flow_betweenness_centrality(self.graph)
-
-            stringify_temp={}
-            temp = nx.edge_current_flow_betweenness_centrality(self.graph)
-            for key in temp.keys():
-                stringify_temp[str(key)] = temp[key]
-            result['edge_current_flow_betweenness_centrality']=stringify_temp
-            
-            result['approximate_current_flow_betweenness_centrality']=nx.approximate_current_flow_betweenness_centrality(self.graph)
-            result['eigenvector_centrality']=nx.eigenvector_centrality(self.graph)
-            result['eigenvector_centrality_numpy']=nx.eigenvector_centrality_numpy(self.graph)
-            result['katz_centrality']=nx.katz_centrality(self.graph)
-            result['katz_centrality_numpy']=nx.katz_centrality_numpy(self.graph)
-            result['communicability']=nx.communicability(self.graph)
-            result['communicability_exp']=nx.communicability_exp(self.graph)
-            result['communicability_centrality']=nx.communicability_centrality(self.graph)
-            result['communicability_centrality_exp']=nx.communicability_centrality_exp(self.graph)
-            result['communicability_betweenness_centrality']=nx.communicability_betweenness_centrality(self.graph)
-            result['estrada_index']=nx.estrada_index(self.graph)
-            
         result['load_centrality']=nx.load_centrality(self.graph)
-
-        stringify_temp={}
-        temp = nx.edge_load(self.graph)
-        for key in temp.keys():
-            stringify_temp[str(key)] = temp[key]
-        result['edge_load']= stringify_temp
-        result['dispersion']=nx.dispersion(self.graph)
+        result['average_neighbor_degree']=nx.average_neighbor_degree(self.graph)
+        result['square_clustering']=nx.square_clustering(self.graph)
+        result['closeness_vitality']=nx.closeness_vitality(self.graph)
         
-        fname_centra = self.DIR + '/centrality.json'
-        with open(fname_centra,"w") as f:
-            json.dump(result, f, cls=SetEncoder,indent=2)
-        print(fname_centra)
+        # nodes attributes
+        node_attributes = []
+        for node in self.graph.nodes():
+            node_attributes.append((node,
+                                        result['degree_centrality'][node],
+                                         result['in_degree_centrality'][node],
+                                         result['out_degree_centrality'][node],
+                                         result['closeness_centrality'][node],
+                                         result['betweenness_centrality'][node],
+                                         result['load_centrality'][node],
+                                         result['average_neighbor_degree'][node],
+                                         result['square_clustering'][node],
+                                         result['closeness_vitality'][node]))
 
+        # edges attributes     
+        result['edge_betweenness_centrality']=nx.edge_betweenness_centrality(self.graph)
+        result['edge_load']=nx.edge_load(self.graph)
 
-
-
-    def cluster(self):
-        rslt={}
+        edge_attributes = []
+        for edge in self.graph.edges():
+            edge_attributes.append((edge, result['edge_betweenness_centrality'][edge],result['edge_load'][edge]))
         
-        rslt['transitivity']=nx.transitivity(self.graph)
-        rslt['square_clustering']=nx.square_clustering(self.graph)
+        fname_node = self.DIR + '/node_attributes.csv'
+        fname_edge = self.DIR + '/edge_attributes.csv'
+        with open(fname_node,"w",newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(('node',
+                             'degree_centrality',
+                             'in_degree_centrality',
+                             'out_degree_centrality',
+                             'closeness_centrality',
+                             'betweenness_centrality',
+                             'load_centrality',
+                             'average_neighbor_degree',
+                             'square_clustering',
+                             'closeness_vitality'))
+            for line in node_attributes:
+                try:
+                    writer.writerow(line)
+                except UnicodeEncodeError:
+                    pass
+        with open(fname_edge,"w",newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(('edge','edge_betweenness_centrality','edge_load'))
+            for line in edge_attributes:
+                try:
+                    writer.writerow(line)
+                except UnicodeEncodeError:
+                    pass
 
-        if self.directed == 'undirected':
-            rslt['traingles']=nx.triangles(self.graph)
-            rslt['clustering']=nx.clustering(self.graph)
-            rslt['average_clustering']=nx.average_clustering(self.graph)
-
-        fname_cluster = self.DIR + '/cluster.json'
-        with open(fname_cluster,"w") as f:
-            json.dump(rslt, f, cls=SetEncoder,indent=2)
-        print(fname_cluster)
+        print(fname_node)
+        print(fname_edge)
 
 
-    # only directed graph
     def component(self):
-        rslt={}
-        if self.directed == 'directed':
-            rslt['is_strongly_connected']=nx.is_strongly_connected(self.graph)
-
-            strong = nx.strongly_connected_components(self.graph)
-            strong_nodes = []
-            for n in strong:
-                strong_nodes.append(list(n)[0])
-            rslt['strongly_connected'] =  strong_nodes
-
+        strong = nx.strongly_connected_components(self.graph)
+        strong_nodes = []
+        for n in strong:
+            strong_nodes.append(list(n)[0])
             
-            rslt['number_strongly_connected_components']=nx.number_strongly_connected_components(self.graph)
-            rslt['is_semiconnected']=nx.is_semiconnected(self.graph)
-
-            weak = nx.weakly_connected_components(self.graph)
-            weak_nodes = []
-            for n in weak:
-                weak_nodes.append(list(n)[0])
-            rslt['wealy_connected'] =  weak_nodes
-
-            rslt['is_weakly_connected']=nx.is_weakly_connected(self.graph)
-            rslt['number_weakly_connected_components']=nx.number_weakly_connected_components(self.graph)
+        fname_strong = self.DIR + '/strongly_connected_component.csv'
+        with open(fname_strong,"w",newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(['strongly_connected_component'])
+            for line in strong_nodes:
+                try:
+                    writer.writerow([line])
+                except UnicodeEncodeError:
+                    pass   
+        print(fname_strong)
         
-        fname_component = self.DIR + '/component.json'
-        with open(fname_component,"w") as f:
-            json.dump(rslt, f, cls=SetEncoder,indent=2)
-        print(fname_component)
+        weak = nx.weakly_connected_components(self.graph)
+        weak_nodes = []
+        for n in weak:
+            weak_nodes.append(list(n)[0])
+        fname_weak = self.DIR + '/weakly_connected_component.csv'
+        with open(fname_weak,"w",newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(['weakly_connected_component'])
+            for line in weak_nodes:
+                try:
+                    writer.writerow([line])
+                except UnicodeEncodeError:
+                    pass   
+        print(fname_weak)
 
-    # only undirected graph
-    def distance(self):
-        rslt={}
-        if self.directed =='undirected':
-            rslt['center']=nx.center(self.graph)
-            rslt['diameter']=nx.diameter(self.graph)
-            rslt['eccentricity']=nx.eccentricity(self.graph)
-            rslt['periphery']=nx.periphery(self.graph)
-            rslt['radius']=nx.radius(self.graph)
-
-        fname_distance = self.DIR + '/distance.json'
-        with open(fname_distance,"w") as f:
-            json.dump(rslt, f, cls=SetEncoder,indent=2)
-        print(fname_distance)
-
-    # directed
-    def hierarchy(self):
-        rslt={}
-
-        if self.directed == 'directed':
-            rslt['flow_hierarchy']=nx.flow_hierarchy(self.graph)
-        rslt['isolates']=nx.isolates(self.graph)
-
-        fname_hierarchy = self.DIR + '/' + 'hierarchy.json'
-        with open(fname_hierarchy,"w") as f:
-            json.dump(rslt, f, cls=SetEncoder,indent=2)
-        print(fname_hierarchy)
-
-
-    def googleMatrix(self):
-        fname = self.DIR + '/googleMatricx.txt'
-        google_matrix=nx.google_matrix(self.graph)
-        numpy.savetxt(fname,google_matrix)
-        print(fname)
-        
-
-    def path(self):
-        rslt={}
-        rslt['shortest_path']=nx.shortest_path(self.graph)
-        #rslt['average_shortest_path_length']=nx.average_shortest_path_length(self.graph)
-        rslt['all_pairs_shortest_path']=nx.all_pairs_shortest_path(self.graph)
-
-        fname_path = self.DIR + '/path.json'
-        with open(fname_path,"w") as f:
-            json.dump(rslt, f, cls=SetEncoder,indent=2)
-        print(fname_path)
-
-    def tree(self):
-        rslt={}
-        rslt['is_tree']=nx.is_tree(self.graph)
-        rslt['is_forest']=nx.is_forest(self.graph)
-
-        if self.directed == 'directed':
-            rslt['is_arborescence']=nx.is_arborescence(self.graph)
-            rslt['is_branching']=nx.is_branching(self.graph)
-            
-        fname_tree = self.DIR + '/tree.json'
-        with open(fname_tree,"w") as f:
-            json.dump(rslt, f, cls=SetEncoder,indent=2)
-        print(fname_tree)
-
-
-    # directed
     def triads(self):
         rslt={}
-        if self.directed == 'directed':
-            rslt['triadic_census']=nx.triadic_census(self.graph)
-        fname_triads = self.DIR + '/triads.json'
-        with open(fname_triads,"w") as f:
-            json.dump(rslt, f, cls=SetEncoder,indent=2)
+        rslt['triadic_census']=nx.triadic_census(self.graph)
+        fname_triads = self.DIR + '/triads.csv'
+        with open(fname_triads,"w",newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(('triad_names','number_of_occurences'))
+            for k in rslt['triadic_census'].keys():
+                try:
+                    writer.writerow((k,rslt['triadic_census'][k]))
+                except UnicodeEncodeError:
+                    pass
         print(fname_triads)
 
-    def vitality(self):
-        rslt={}
-        rslt['closeness_vitality']=nx.closeness_vitality(self.graph)
-        fname_vitality = self.DIR + '/vitality.json'
-        with open(fname_vitality,"w") as f:
-            json.dump(rslt, f, cls=SetEncoder,indent=2)
-        print(fname_vitality)
-
-    def traversal(self):
-        rslt={}
-        
-        rslt['dfs_predecessors']=nx.dfs_predecessors(self.graph)
-        rslt['dfs_successors']=nx.dfs_successors(self.graph)
-        #rslt['dfs_preorder_nodes']=nx.dfs_preorder_nodes(self.graph)
-        #rslt['dfs_postorder_nodes']=nx.dfs_postorder_nodes(self.graph)
-        #rslt['dfs_labeled_edges']=nx.dfs_labeled_edges(self.graph)
-        #rslt['edge_dfs']=nx.edge_dfs(self.graph)
-        #rslt['dfs_edges']=nx.dfs_edges(self.graph)
-        #rslt['dfs_tree']=nx.dfs_tree(self.graph)
-
-        fname_traversal = self.DIR + '/traversal.json'
-        with open(fname_traversal,"w") as f:
-            json.dump(rslt, f, cls=SetEncoder,indent=2)
-        print(fname_traversal)
 
 
-class SetEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, set):
-            return list(obj)
-        if isinstance(obj, matrix):
-            return str(obj)
-        return json.JSONEncoder.default(self, obj)
-            
 
 if __name__ == "__main__":
 
@@ -492,15 +369,7 @@ if __name__ == "__main__":
     parser.add_argument('--file', required=True)
     parser.add_argument('--layout',required=True)
     parser.add_argument('--relations',required=True)
-    parser.add_argument('--prune',required=True)
-    #parser.add_argument('--node_size',required=True)
-    #parser.add_argument('--edge_width',required=True)
-   
     args = parser.parse_args()
-
-    #save arguments
-    #  dotenv_path = join(dirname(__file__), '../../.env')
-    # load_dotenv(dotenv_path)
     
     uid = str(uuid.uuid4())
     #DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NW_NETWORKX') +'/' + uid
@@ -513,56 +382,13 @@ if __name__ == "__main__":
         json.dump(vars(args),f)
     print(fname)
     
-    network = Network(DIR, args.file, args.relations, args.prune)
-    network.export_graph()
-    network.draw_graph(args.relations, args.layout) #, args.node_size, args.edge_width)
-
+    network = Network(DIR, args.file, args.relations)
+    network.export_graph()    
     
-    #network.approximation()
-    try:
-        network.assortativity()
-    except:
-        pass
+    network.assortativity()
+    network.attributes()
+    network.component()                                
+    network.triads()
 
-    try:
-        network.centrality()
-    except:
-        pass
-
-    try:
-        network.cluster()
-    except:
-        pass
-
-    try:
-        network.component()
-    except:
-        pass
-
-    try:
-        network.hierarchy()
-    except:
-        pass
-
-    try:
-        network.triads()
-    except:
-        pass
-            
-    # network.googleMatrix()
-    try:
-        network.path()
-    except:
-        pass
-    try:
-        network.tree()
-    except:
-        pass
-    try:
-        network.vitality()
-    except:
-        pass
-    try:
-        network.traversal()
-    except:
-        pass
+    network.prune_network()
+    network.draw_graph(args.relations, args.layout) #, args.node_size, args.edge_width)
