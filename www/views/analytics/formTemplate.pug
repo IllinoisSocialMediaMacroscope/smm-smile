@@ -36,7 +36,7 @@ block config-form
 									select(name=input.name id=input.id class=input.class)
 										each opt in input.options
 											option(value=opt.value) #{opt.label}
-									
+																		
 							else if input['type'] == 'text'
 								input(id=input.id type=input.type name=input.name value=input.value class=input.class)
 								
@@ -44,18 +44,23 @@ block config-form
 								div(class="range range-node")
 									input(type=input.type, min=input.min, max=input.max, value=input.value, step=input.step, name=input.name, onchange=input.onchange, id=input.id)
 									output(id=input.output_id) #{input.value}
+		
+			if container['container-name'] == 'network-relation-container'
+				div(id="explanation-container", style="display:none")
+					div(class="form-group")
+						label(class="control-label col-md-2 col-md-2 col-xs-12",for="") 
+						div(class="col-md-8 col-md-8 col-xs-12")
+							div(id="explanation-notice")
+
 		div(id="citation-container",style="display:none")
 			div(class="form-group")
 				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") 
 				div(class="col-md-8 col-md-8 col-xs-12")
 					div(id="citation-notice")
 			
-		
-		
 		div(class="form-group")
 			div(class="col-md-8 col-md-8 col-xs-12 col-md-offset-2")
-				input(type="button", onclick="ajaxSubmit(`#upload`);", class='btn btn-danger',value="Submit") 
-				span 
+				input(type="button", onclick="ajaxSubmit(`#upload`);", class='btn btn-danger',value="Submit")
 				input(type="button", class='btn btn-primary', value="Clear", onclick="customized_reset();") 
 					
 				

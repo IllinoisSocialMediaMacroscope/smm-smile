@@ -23,14 +23,14 @@ router.post('/sitemap',function(req,res,next){
 		  "text":fs.readFileSync(path.join(appPath,'routes','networkx','networkx.js')),
 		  "url":"networkx"
 		}, 
-		{
+		/*{
 		  "tags": `scikit learn; python; clustering; cluster; unsupervised learning; machine learning; 
 		  learn; train; function; data; algorithm; output; set; regression; variance; features; bias;
 		  minimizationl; examples; space; cluster; vector; linear; penalty; model; dimension;`,
 		 //"text": fs.readFileSync(process.env.ROOTDIR + '/routes/scikit-learn/cluster.json'),
 		 "text":fs.readFileSync(path.join(appPath,'routes','scikit-learn','cluster.json')),
 		  "url":"sklearn-cluster",
-		},
+		},*/
 		{
 			"tags":`natural language; preprocess; process; tokenize; lexer; word; tokens; lexical; lemma; lemmatization; 
 				stem; stemming; grammatical; verb; plural; corpus; context; simplified;adjectives; adverbs; nouns;characters;
@@ -82,7 +82,7 @@ router.post('/sitemap',function(req,res,next){
 	var hashtable = { 
 		"./":"Homepage",
 		"networkx":"Network visualization and analysis",
-		"sklearn-cluster":"Unsupervised learning",
+		//"sklearn-cluster":"Unsupervised learning",
 		"NLP-preprocess":"Natural language preprocessing",
 		"NLP-sentiment":"Sentiment analysis",
 		"query":"Social media search",

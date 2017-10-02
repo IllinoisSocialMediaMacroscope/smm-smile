@@ -186,9 +186,9 @@ router.post('/history',function(req,res,next){
 			}else if (fnames[i] === 'network.net'){
 				downloadFiles.push({'name':'graph exported in NET (Pajek) format', 'content':DIR + '/' + fnames[i]}); 
 			}else{
-				var fnameRegex = /(.*).json/g
+				var fnameRegex = /(.*).csv/g
 				var display_name = fnameRegex.exec(fnames[i])[1];
-				downloadFiles.push({'name':display_name + ' metrics', 'content':DIR + '/' + fnames[i]}); 
+				downloadFiles.push({'name':display_name, 'content':DIR + '/' + fnames[i]}); 
 			}
 		}
 		
@@ -205,7 +205,7 @@ router.post('/history',function(req,res,next){
 	else if ((
 				req.body.layer2 === 'twitter-Tweet' ||
 				req.body.layer2 === 'twitter-User' ||
-				req.body.layer2 === 'twitter-Stream' ) && fs.readdirSync(DIR).length ==3){
+				req.body.layer2 === 'twitter-Stream' ) && fs.readdirSync(DIR).length ==2){
 		var config = JSON.parse(fs.readFileSync(DIR  + '/' + req.body.historyID + '.dat','utf8'));
 		var preview_string = fs.readFileSync(DIR + '/' + req.body.historyID + '.csv', "utf8"); 
 		var preview_arr = CSV.parse(preview_string);
@@ -215,7 +215,7 @@ router.post('/history',function(req,res,next){
 				title:'Social Media Past Search Result', 
 				ID:req.body.historyID,
 				download:[
-					{name:'JSON format', content: DIR + '/' + req.body.historyID + '.json'},
+					//{name:'JSON format', content: DIR + '/' + req.body.historyID + '.json'},
 					{name:'CSV format', content: DIR + '/' + req.body.historyID + '.csv'}],
 				preview:{name: "Preview the .csv file", content:preview_arr.slice(0,101)},
 				config:config

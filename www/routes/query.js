@@ -153,12 +153,12 @@ function saveFile(dir_downloads_graphql, responseObj,params,pages,prefix, filena
 		});
 		
 		// save json
-		var raw = filename + '.json';
+		/*var raw = filename + '.json';
 		fs.writeFile(directory +  raw, JSON.stringify(responseObj,null,4),'utf8',function(err){
 			if (err){
 					return {ERROR:err};
 				}
-		});
+		});*/
 		
 		// save query parameters to it so history page can use it!
 		var config = filename + '.dat';
@@ -189,8 +189,8 @@ function saveFile(dir_downloads_graphql, responseObj,params,pages,prefix, filena
 	}
 	
 	return {
-				fname:[raw,processed],
-				URL: [directory + raw, directory + processed],
+				fname:processed,
+				URL: directory + processed,
 				rendering:rendering.slice(0,99)
 	};
 }

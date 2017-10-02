@@ -24,8 +24,8 @@ router.post('/networkx',function(req,res,next){
         scriptPath:appPath + '/scripts/NetworkX/',
 		args:[	'--file','./downloads/GraphQL/'+   req.body.filename, 
 				'--layout',req.body.layout, 
-				'--relations',req.body.relations, 
-				'--prune',req.body.prune
+				'--relations',req.body.relations
+				//'--prune',req.body.prune
 				//'--node_size',req.body.node_size,
 				//'--edge_width',req.body.edge_width 
 			] 
@@ -40,17 +40,17 @@ router.post('/networkx',function(req,res,next){
 			var d3js = results[1];
 			var gephi = results[2];
 			var pajek = results[3];
-			var div= results[4];
 			var downloadFiles = [	{'name':'graph exported in GML (Gephi) format', 'content':gephi},
 									{'name':'graph exported in JSON format', 'content':d3js},
-									{'name':'graph exported in net (Pajek) format', 'content':pajek}
+									{'name':'graph exported in NET (Pajek) format', 'content':pajek}
 									];
 			
-			for (var j=5; j< results.length; j++){
-				var fnameRegex = /\/(?=[^\/]*$)(.*).json/g;
+			for (var j=4; j< results.length-1; j++){
+				var fnameRegex = /\/(?=[^\/]*$)(.*).csv/g;
 				var display_name = fnameRegex.exec(results[j])[1];
-				downloadFiles.push({'name':display_name + ' metrics', 'content':results[j]});
+				downloadFiles.push({'name':display_name, 'content':results[j]});
 			}				
+			var div= results[results.length-1];
 			
 			
 			/*if (d3js.slice(-1)=== '\r' || d3js.slice(-1) === '\n' || d3js.slice(-1) === '\t' || d3js.slice(-1) === '\0' || d3js.slice(-1) === ' '){

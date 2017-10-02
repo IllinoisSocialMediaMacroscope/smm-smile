@@ -151,7 +151,8 @@ cite{
 	.footer-bs .footer-nav, .footer-bs .footer-power, .footer-bs .footer-ns { border-left:solid 1px rgba(255,255,255,0.10); }
 }
 
-#citation-notice{
+#citation-notice,
+#explanation-notice{
     position: relative;
     margin: auto auto;
     width: calc(100%);
