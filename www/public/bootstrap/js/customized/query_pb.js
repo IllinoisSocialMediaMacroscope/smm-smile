@@ -61,8 +61,7 @@ function init(){
 		if (e.keyCode !== 13 || e.keyCode!== 10){
 			$('#display').empty();
 			//console.log($(this).val());
-			$('#display').append(`<p style="text-align:left;">` + $(this).val() + '.csv' 
-							+ `<br>` + $(this).val() + '.json' + `</p>` );
+			$('#display').append(`<p style="text-align:left;">` + $(this).val() + '.csv' + `</p>` );
 		}
 	});
 	
