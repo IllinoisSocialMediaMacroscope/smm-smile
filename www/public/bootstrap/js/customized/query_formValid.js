@@ -38,10 +38,10 @@ function formValid(searchID){
 		$("#social-media").focus();
 		return false
 		
-	}else if (!regx.test($("#searchbox").val()) || $("#searchbox").val()>=72){
+	}else if (!regx.test($("#searchbox").val()) || $("#searchbox").val()>=500){
 		
-		$("#modal-message").append(`<h4>Please type in search keyword in the form of <i>English words, number,
-									and/or combinations</i> of them!<br><b>Length shouldn't exceed 72 characters!</b></h4>`);
+		$("#modal-message").append(`<h4>Please type in search keyword in the form of <i>English words, number, operators, 
+									and/or combinations</i> of them!<br><b>Length shouldn't exceed 500 characters!</b></h4>`);
 		$("#alert").modal('show');
 		$("#searchbox").focus();
 		return false
