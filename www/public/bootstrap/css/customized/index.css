@@ -124,16 +124,19 @@ body {
 	animation: slide 0.5s 1s ease-in-out both;
 }
 #citation-notice-btn{
-	background: none;
+	background-color:#ea4a36;
+	padding:5px 10px;
+	border-radius:6px;
 	border:none;
 	float:right;
-	color:#ea4a36;
-	font-size:25px;
+	color:white;
+	font-size:15px;
 	font-weight:600;
-	margin:-20px -15px;
+	margin:-25px -15px;
 }
 #citation-notice-btn:hover{
-	color:white;
+	color:#ea4a36;
+	background-color:white;
 }
 .button{
 	font-weight: 600;

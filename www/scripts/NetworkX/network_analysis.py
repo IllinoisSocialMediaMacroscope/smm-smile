@@ -207,7 +207,7 @@ class Network:
                 node_trace['text'].append("@" + node + " is mentioned by " + str(self.graph.in_degree()[node]) + " user(s) and mentions " + str(self.graph.out_degree()[node]) + " user(s)")
                 
         fig = Figure(data=Data([edge_trace, node_trace]), layout=Layout(
-                title= relationships + ' Network Graph with top 500 highest degree centrality nodes',
+                title= relationships + ' Network graph of 500 nodes with highest degree centrality',
                 titlefont=dict(size=16), showlegend=False,
                 hovermode='closest', margin=dict(b=20,l=5,r=5,t=40),
                 annotations=[ dict(
