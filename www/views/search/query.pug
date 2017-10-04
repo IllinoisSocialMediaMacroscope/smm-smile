@@ -129,10 +129,11 @@ html
 								$("#citation-notice").hide('slow');
 								$("#modal-download").show('slow');
 								$("#download-note").show('slow');
-								$("#gotoAnalytics-demo").show('slow');								
+								$("#gotoAnalytics-demo").show('slow');
+								$(".modal-footer.download").show('slow');
 							});
 						
-					div(class="modal-footer")
+					div(class="modal-footer download",style="display:none;")
 						a(href="./", class="btn btn-primary",style="background-color:#ea4a36;border-style:hidden") Go To Analytics
 						a(href="history", class="btn btn-primary", style="background-color:#1e325a;border-style:hidden") Review in History
 								
