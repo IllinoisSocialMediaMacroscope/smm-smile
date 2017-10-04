@@ -6,7 +6,7 @@
  -u python-3.4 \
  -w "none" \
  -c "xview -fullscreen -onroot @tool/www/public/bootstrap/img/logo/smile-logos/small-logo3.png" \
- -c "wrwroxy --stream-log --logfile /dev/null --loglevel DEBUG" \
+ -c "wrwroxy --no-auth --stream-log --logfile /dev/null --loglevel DEBUG" \
  -c "node @tool/www/graphql/bin/www" \
  -C "node @tool/www/app.js"
 
