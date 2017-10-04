@@ -116,20 +116,14 @@ $(document).ready(function(){
 		var algorithm = $(this).children(":selected").val();
 		if (algorithm === 'posTag'){
 			$("#citation-notice").append(
-				`<p><b>Note:</b></p>
+				`<p><b>Thank you for using our tool, if you use these results please cite it and the NLTK python library:</b></p>
 				<ul>
-					<li>If you would like to use NLTK python library for your preprocessing, 
-					Please cite this paper:
-					<br>
-					<i>Bird, S. (2006, July). NLTK: the natural language toolkit. 
-					In Proceedings of the COLING/ACL on Interactive presentation sessions 
-					(pp. 69-72). Association for Computational Linguistics.</i>
+					<li>Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, 
+						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <u>http://socialmediamacroscope.org</u>.
 					</li>
-					<li>More information about NLTK library can be found at 
-						<a href="http://www.nltk.org/" target="_blank" style="color:#e2af51;">http://www.nltk.org</a>
+					<li>Bird, S. (2006, July). NLTK: the natural language toolkit. In Proceedings of the COLING/ACL on Interactive 
+						presentation sessions (pp. 69-72). Association for Computational Linguistics.
 					</li>
-					<li>Please also cite our platform <a href="https://socialmediamacroscope.org" target="_blank" style="color:#e2af51;">
-						https://socialmediamacroscope.org</a></li>
 				</ul>`
 			);
 			$("#citation-container").show();

@@ -121,22 +121,17 @@ $(document).ready(function(){
 		var layout = $(this).children(":selected").val();
 		if (layout !== 'Please Select...'){
 			$("#citation-notice").append(
-				`<p><b>Note:</b></p>
+				`<p><b>Thank you for using our tool, if you use these results please cite it and the NetworkX Python library:</b></p>
 				<ul>
-					<li>If you would like to use NetworkX library for your preprocessing, 
-					Please cite this paper:
-					<br>
-					<i>Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, “Exploring network structure, dynamics, 
-						and function using NetworkX”, in Proceedings of the 7th Python in Science 
-						Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), 
-						(Pasadena, CA USA), pp. 11–15, Aug 2008</i>
+					<li>Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, 
+						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <u>http://socialmediamacroscope.org</u>.
 					</li>
-					<li>More information about NetworkX library can be found at 
-						<a href="https://networkx.github.io/documentation/stable/" target="_blank" style="color:#e2af51;">https://networkx.github.io/documentation/stable</a>
+					<li>Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, “Exploring network structure, dynamics, and function 
+						using NetworkX”, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, 
+						Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11–15, Aug 2008
 					</li>
-					<li>Please also cite our platform <a href="https://socialmediamacroscope.org" target="_blank" style="color:#e2af51;">
-						https://socialmediamacroscope.org</a></li>
-				</ul>`
+				</ul>
+				<p><i>Large networks will be pruned to only display the 500 nodes with the highest degree centrality.</i></p>`
 			);
 			$("#citation-container").show();
 		}

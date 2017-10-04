@@ -111,18 +111,14 @@ $(document).ready(function(){
 		var algorithm = $(this).children(":selected").val();
 		if (algorithm === 'vader'){
 			$("#citation-notice").append(
-				`<p><b>Note:</b></p>
+				`<p><b>Thank you for using our tool, if you use these results please cite it and the Vader method:</b></p>
 				<ul>
-					<li>If you would like to use VADER algorithm for your sentiment analysis, 
-					Please cite this paper:
-					<br>
-					<i>Hutto, C. J., & Gilbert, E. (2014, May). Vader: A parsimonious rule-based 
-					model for sentiment analysis of social media text. In Eighth international AAAI 
-					conference on weblogs and social media.</i>
+					<li>Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, 
+						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <u>http://socialmediamacroscope.org</u>.
 					</li>
-					<li>Please also cite our platform 
-					<a href="https://socialmediamacroscope.org" target="_blank" style="color:#e2af51;">
-						https://socialmediamacroscope.org</a></li>
+					<li>Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. 
+						Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.
+					</li>
 				</ul>`
 			);
 			$("#citation-container").show();
