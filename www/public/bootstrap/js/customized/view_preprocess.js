@@ -119,10 +119,14 @@ $(document).ready(function(){
 				`<p><b>Thank you for using our tool, if you use these results please cite it and the NLTK python library:</b></p>
 				<ul>
 					<li>Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, 
-						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <u>http://socialmediamacroscope.org</u>.
+						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <a href="http://socialmediamacroscope.org" target="_blank">
+						http://socialmediamacroscope.org</a>.
 					</li>
-					<li>Bird, S. (2006, July). NLTK: the natural language toolkit. In Proceedings of the COLING/ACL on Interactive 
-						presentation sessions (pp. 69-72). Association for Computational Linguistics.
+					<li><a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=NLTK%3A+the+natural+l
+					anguage+toolkit.+In+Proceedings+of+the+COLING%2FACL+on+Interactive++++++++presentation+sessi
+					ons+%28pp.+69-72%29.+Association+for+Computational+Linguistics&btnG=" target="_blank">
+					Bird, S. (2006, July). NLTK: the natural language toolkit. In Proceedings of the COLING/ACL on Interactive 
+						presentation sessions (pp. 69-72). Association for Computational Linguistics.</a>
 					</li>
 				</ul>`
 			);

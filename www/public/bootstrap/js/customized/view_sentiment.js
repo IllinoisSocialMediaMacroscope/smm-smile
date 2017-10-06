@@ -114,10 +114,15 @@ $(document).ready(function(){
 				`<p><b>Thank you for using our tool, if you use these results please cite it and the Vader method:</b></p>
 				<ul>
 					<li>Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, 
-						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <u>http://socialmediamacroscope.org</u>.
+						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <a href="http://socialmediamacroscope.org" target="_blank">
+						http://socialmediamacroscope.org</a>.
 					</li>
-					<li>Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. 
-						Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.
+					<li><a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&
+					q=Hutto%2C+C.J.+%26+Gilbert%2C+E.E.+%282014%29.+VADER%3A+A+Parsimonious+Rule-based+Model+for+S
+					entiment+Analysis+of+Social+Media+Text.++%09%09%09%09%09%09Eighth+International
+					+Conference+on+Weblogs+and+Social+Media+%28ICWSM-14%29.+Ann+Arbor%2C+MI%2C+June+2014.&btnG=" target="_blank">
+					Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. 
+						Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.</a>
 					</li>
 				</ul>`
 			);

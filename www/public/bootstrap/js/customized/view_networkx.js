@@ -124,11 +124,13 @@ $(document).ready(function(){
 				`<p><b>Thank you for using our tool, if you use these results please cite it and the NetworkX Python library:</b></p>
 				<ul>
 					<li>Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, 
-						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <u>http://socialmediamacroscope.org</u>.
+						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <a href="http://socialmediamacroscope.org" target="_blank">
+						http://socialmediamacroscope.org</a>.
 					</li>
-					<li>Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, “Exploring network structure, dynamics, and function 
-						using NetworkX”, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, 
-						Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11–15, Aug 2008
+					<li><a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=
+					Exploring+network+structure%2C+dynamics%2C+and+function+using+NetworkX&btnG=" target="_blank">
+					Hagberg, A., Swart, P., & S Chult, D. (2008). Exploring network structure, dynamics, 
+					and function using NetworkX (No. LA-UR-08-05495; LA-UR-08-5495). Los Alamos National Laboratory (LANL).</a>
 					</li>
 				</ul>
 				<p><i>Large networks will be pruned to only display the 500 nodes with the highest degree centrality.</i></p>`
