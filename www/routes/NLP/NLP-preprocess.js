@@ -11,7 +11,7 @@ var readDIR = require(path.join(appPath,'scripts','helper.js')).readDIR;
 router.get('/NLP-preprocess',function(req,res,next){
 	files = readDIR('./downloads/GraphQL');	
 	var formParam = require('./preprocess.json');
-	res.render('analytics/formTemplate',{parent:'/#Pre-processing', title:'Natural Langurage PreProcessing', directory:files, param:formParam});
+	res.render('analytics/formTemplate',{parent:'/#Pre-processing', title:'Natural Language PreProcessing', directory:files, param:formParam});
 });
  
 router.post('/NLP-preprocess',function(req,res,next){
