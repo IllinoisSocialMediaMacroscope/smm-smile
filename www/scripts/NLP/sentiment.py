@@ -62,7 +62,7 @@ class Sentiment:
     
     def documentSentiment(self):
         scores = self.sid.polarity_scores(self.text)
-        labels = ['negative', 'neutural', 'positive']
+        labels = ['negative', 'neutral', 'positive']
         values = [scores['neg'], scores['neu'], scores['pos']]
         trace = go.Pie(labels=labels,values=values,textinfo='label+percent')
         # Plot!
