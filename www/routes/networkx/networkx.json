@@ -57,9 +57,6 @@
 							{"value":"fruchterman",
 							"label":" fruchterman layout"},
 							
-							{"value":"spring",
-							"label":" spring layout"},
-							
 							{"value":"shell",
 							"label":" shell layout"},
 							
