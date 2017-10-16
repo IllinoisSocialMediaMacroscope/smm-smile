@@ -33,20 +33,6 @@ router.get('/',function(req,res,next){
 						<a href="https://en.wikipedia.org/wiki/Sentiment_analysis/wiki/Computational_linguistics">computational linguistics</a>, and 
 						<a href="https://en.wikipedia.org/wiki/Sentiment_analysis/wiki/Biometrics">biometrics</a> to systematically identify, extract, 
 						quantify, and study affective states and subjective information.`},
-			/*{name:'Topic Modeling', url:'/NLP/topic', imgURL:'bootstrap/img/logo/NLP/topic-model.png',
-						wiki:'https://en.wikipedia.org/wiki/Topic_model',
-						introduction:`In <a href="https://en.wikipedia.org/wiki/Machine_learning">machine learning</a> and <a href="https://en.wikipedia.org/wiki/Natural_language_processing">natural language processing</a>, 
-						a <b>topic model</b> is a type of <a href="https://en.wikipedia.org/wiki/Statistical_model">statistical model</a> 
-						for discovering the abstract "topics" that occur in a collection of documents. Topic modeling is a frequently used text-mining 
-						tool for discovery of hidden semantic structures in a text body. Intuitively, given that a document is about a particular topic, 
-						one would expect particular words to appear in the document more or less frequently: "dog" and "bone" will appear more often in documents about dogs,
-						"cat" and "meow" will appear in documents about cats, and "the" and "is" will appear equally in both. A document typically concerns multiple topics 
-						in different proportions; thus, in a document that is 10% about cats and 90% about dogs, there would probably be about 9 times more dog words than cat words. 
-						The "topics" produced by topic modeling techniques are clusters of similar words.`},*/
-			/*{name: 'Clustering', url:'sklearn-cluster', imgURL:'bootstrap/img/logo/sklearn/cluster.png',
-						wiki:'https://en.wikipedia.org/wiki/Cluster_analysis',
-						introduction:`<b>Cluster analysis</b> Cluster analysis is the task of grouping a set of objects (for example, words or topics) 
-						in such a way that objects in the same group or cluster are more similar to each other than to those in other groups.`},*/
 			{name: 'Network Analysis', url:'networkx', imgURL:'bootstrap/img/logo/networkX-logo.png',
 						wiki:"https://en.wikipedia.org/wiki/Social_network_analysis",
 						introduction:`<b>Social network analysis</b> is the process of investigating social 

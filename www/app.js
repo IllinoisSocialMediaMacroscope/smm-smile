@@ -33,13 +33,13 @@ app.use('/',require('./routes/NLP/NLP-SA'));
 app.use('/',require('./routes/query'));
 app.use('/',require('./routes/download'));
 app.use('/',require('./routes/render'));
-//app.use('/',require('./routes/email'));
 app.use('/',require('./routes/history'));
+app.use('/',require('./routes/export'));
 app.use('/',require('./routes/auth/twitter_auth'));
-//app.use('/',require('./routes/auth/synthesio_auth'));
+app.use('/', require('./routes/auth/googleDrive_auth'));
 //app.use('/',require('./routes/auth/reddit_auth'));
-//app.use('/',require('./routes/auth/es_auth'));
 app.use('/', require('./routes/sitemap'));
+
 /*app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
