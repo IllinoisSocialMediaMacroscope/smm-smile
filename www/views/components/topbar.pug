@@ -1,3 +1,29 @@
+div(id="export-modal",class="modal fade",role="dialog")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", data-dismiss="modal") &times;
+				h2(class="modal-title") Export to your personal storage
+			div(class="modal-body",style="text-align:left;vertical-align:middle;overflow:hidden;padding:50px 50px;")
+				p Authorize with your own account
+				div(id="googleDrive",style="display:block;")
+					a(href="login/google", style="display:inline-block;margin:15px;") 
+						img(src="bootstrap/img/logo/googledrive-sm-logo.png", width="25px",height="25px")
+						| Google Drive
+					button(class="btn btn-primary", id="googleDrive-export",style="display:none;",onclick="exportFiles(this.id);") export
+				div(id="dropbox",style="display:block;")
+					a(href="login/dropbox",style="display:inline-block;margin:15px;")
+						img(src="bootstrap/img/logo/dropbox-sm-logo.png", width="30px",height="30px")
+						| Dropbox
+					button(class="btn btn-primary", id="dropbox-export",style="display:none;",onclick="exportFiles(this.id);") export
+				div(id="clowder",style="display:block;")
+					a(href="login/clowder",style="display:inline-block;margin:15px;") 
+						img(src="bootstrap/img/logo/clowder-sm-logo.png", width="30px",height="30px")
+						| Clowder
+					button(class="btn btn-primary", id="clowder-export",style="display:none;",onclick="exportFiles(this.id);") export
+			div(class="modal-footer")
+				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="terminate();") Terminate		
+				
 div(id="terminate-modal" class="modal fade" role="dialog")
 	div(class="modal-dialog",style="width:600px;")
 		div(class="modal-content")
@@ -6,9 +32,10 @@ div(id="terminate-modal" class="modal fade" role="dialog")
 				h2(class="modal-title") Terminate This Session?
 				p(style="font-size:16px") <b>Warning:</b> All data associated with this session will no longer be available!
 			div(class="modal-footer")
-				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="terminate();") Yes	
+				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="exportOptions();") Yes	
 				button(class="btn btn-primary",style="background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",data-dismiss="modal") No
-					
+
+				
 nav(class="navbar navbar-inverse navbar-fixed-top")
 	div(class="container-fluid")
 		div(class="navbar-header")
@@ -61,6 +88,7 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 	
 	
 script.
+	
 	var pathArray = window.location.pathname.split('/');
 	for (i=0; i<pathArray.length-1; i++){
 		if (pathArray[i] === 'weber'){
@@ -68,10 +96,28 @@ script.
 			// session ID always is the one after weber
 		}
 	}
+	var params={};location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){params[k]=v})
 	
+	if(params['drive'] === 'googleDrive'){
+		$("#googleDrive-export").show();
+		$("#export-modal").modal('show');
+	}else if(params['drive'] === 'dropbox'){
+		$("#dropbox-export").show();
+		$("#export-modal").modal('show');
+	}else if(params['drive'] === 'clowder'){
+		$("#clowder-export").show();
+		$("#export-modal").modal('show');
+	}
+		
 	function terminateWarning(){
-		console.log("clicked")
+		console.log("clicked");
 		$("#terminate-modal").modal('show');
+	}
+	
+	function exportOptions(){
+		console.log("export");
+		$("#terminate-modal").modal('hide');
+		$("#export-modal").modal('show');		
 	}
 	
 	function terminate(){
@@ -120,3 +166,35 @@ script.
 	
 	}
 	
+	
+	function exportFiles(id){
+		$.ajax({
+			type:'post',
+			url:'export', 
+			data: {"id":id},				
+			success:function(data){
+				console.log(data);
+			},
+			error: function(jqXHR, exception){
+				var msg = '';
+				if (jqXHR.status === 0) {
+					msg = 'Not connect.\n Verify Network.';
+				} else if (jqXHR.status == 404) {
+					msg = 'Requested page not found. [404]';
+				} else if (jqXHR.status == 500) {
+					msg = 'Internal Server Error [500].';
+				} else if (exception === 'parsererror') {
+					msg = 'Requested JSON parse failed.';
+				} else if (exception === 'timeout') {
+					msg = 'Time out error.';
+				} else if (exception === 'abort') {
+					msg = 'Ajax request aborted.';
+				} else {
+					msg = 'Uncaught Error.\n' + jqXHR.responseText;
+				}
+				$("#error").val(msg);
+				$("#warning").modal('show');						
+			} 
+		});
+	
+	}
