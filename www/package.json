@@ -5,7 +5,6 @@
   "main": "app.js",
   "dependencies": {
     "adm-zip": "^0.4.7",
-    "archiver": "^2.1.0",
     "aws-sdk": "^2.94.0",
     "body-parser": "^1.17.1",
     "cookie-parser": "^1.4.3",
@@ -17,7 +16,6 @@
     "express-session": "^1.15.3",
     "form-data": "^2.2.0",
     "google-auth-library": "^0.11.0",
-    "google-drive": "0.0.8",
     "googleapis": "^22.2.0",
     "http-aws-es": "^2.0.5",
     "jsonexport": "^2.0.10",
