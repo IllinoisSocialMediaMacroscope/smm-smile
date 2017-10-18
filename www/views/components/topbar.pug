@@ -8,20 +8,21 @@ div(id="export-modal",class="modal fade",role="dialog")
 				p Authorize with your own online storage account, and we will export a .zip file with <b>ALL</b> of your data associate with this session to your storage.
 				| Make sure you have <b>at least 100MB</b> free space available on your remote drive.
 				div(id="googleDrive",style="display:block;")
-					a(id="google-auth", style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;") 
+					a(href="login/google", id="google-auth", target="_blank", style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;") 
 						img(src="bootstrap/img/logo/googledrive-sm-logo.png", width="25px",height="25px")
 						| Google Drive
 					button(class="btn btn-primary", id="googleDrive-export",style="display:none;",onclick="exportFiles(this.id);") export
 					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading", width="40px" style="display:none;")
 					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-				div(id="dropbox",style="display:block;")
+					textarea(class="auth-code",rows="4",style="display:block;margin-left:15px;margin-bottom:40px;width:calc(90%)",placeholder=`After you grant SMILE access to your google drive, please paste your code as instructed and press enter. You should NEVER share this code with anyone for your own safety.`)
+				div(href="login/dropbox", id="dropbox",target="_blank", style="display:block;")
 					a(id="dropbox-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
 						img(src="bootstrap/img/logo/dropbox-sm-logo.png", width="30px",height="30px")
 						| Dropbox
 					button(class="btn btn-primary", id="dropbox-export",style="display:none;",onclick="exportFiles(this.id);") export
 					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
 					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-				div(id="clowder",style="display:block;")
+				div(href="login/dropbox",id="clowder",target="_blank",style="display:block;")
 					a(id="clowder-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
 						img(src="bootstrap/img/logo/clowder-sm-logo.png", width="30px",height="30px")
 						| Clowder
@@ -104,28 +105,6 @@ script.
 		}
 	}
 	
-	// get currentURL
-	var newPath = "";
-	for (i=0; i<pathArray.length-1; i++){
-		newPath += pathArray[i];
-		newPath += "/";
-	}
-	$("#google-auth").attr("href","login/google?currentURL=" + newPath);
-	
-	// get export button to show up
-	var params={};location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){params[k]=v})
-	
-	if(params['drive'] === 'googleDrive'){
-		$("#googleDrive-export").show();
-		$("#export-modal").modal('show');
-	}else if(params['drive'] === 'dropbox'){
-		$("#dropbox-export").show();
-		$("#export-modal").modal('show');
-	}else if(params['drive'] === 'clowder'){
-		$("#clowder-export").show();
-		$("#export-modal").modal('show');
-	}
-		
 	function terminateWarning(){
 		console.log("clicked");
 		$("#terminate-modal").modal('show');
@@ -191,6 +170,55 @@ script.
 	
 	}
 	
+	//authorize
+	$("#googleDrive #google-auth").on('click', function(){
+		$("#googleDrive .auth-code").val(''); //clear the text area
+		$("#googleDrive .auth-code").show();
+	});
+	
+	$("#googleDrive .auth-code").on("keyup",function(e){
+		if (e.keyCode == 13 || e.keyCode == 10){
+			
+			$.ajax({
+				type:'post',
+				url:'login/google', 
+				data: {"authorizeCode":$("#googleDrive .auth-code").val()},				
+				success:function(data){
+					if (data){
+						if ('ERROR' in data){
+							$("#googleDrive .auth-code").val(''); //clear the text area
+							$("#error").val(JSON.stringify(data));
+							$("#warning").modal('show');
+						}else{
+							// if success, show export button and hide the authorize code session
+							$("#googleDrive .auth-code").hide();
+							$("#googleDrive-export").show();
+						}
+					}
+				},
+				error: function(jqXHR, exception){
+					var msg = '';
+					if (jqXHR.status === 0) {
+						msg = 'Not connect.\n Verify Network.';
+					} else if (jqXHR.status == 404) {
+						msg = 'Requested page not found. [404]';
+					} else if (jqXHR.status == 500) {
+						msg = 'Internal Server Error [500].';
+					} else if (exception === 'parsererror') {
+						msg = 'Requested JSON parse failed.';
+					} else if (exception === 'timeout') {
+						msg = 'Time out error.';
+					} else if (exception === 'abort') {
+						msg = 'Ajax request aborted.';
+					} else {
+						msg = 'Uncaught Error.\n' + jqXHR.responseText;
+					}
+					$("#error").val(msg);
+					$("#warning").modal('show');						
+				} 
+			});
+		}
+	});
 	
 	function exportFiles(id){
 		
