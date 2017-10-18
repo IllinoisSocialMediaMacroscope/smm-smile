@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "archiver": "^2.1.0",
     "aws-sdk": "^2.94.0",
     "body-parser": "^1.17.1",
     "cookie-parser": "^1.4.3",
