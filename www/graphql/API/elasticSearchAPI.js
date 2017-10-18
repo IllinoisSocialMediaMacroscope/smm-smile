@@ -12,10 +12,6 @@ function elasticSearchAPI(args){
 	  connectionClass: require('http-aws-es')
 	});
 
-	AWS.config.update({
-	  credentials: new AWS.Credentials('***REMOVED***', 'KguLLmR09jrgPjvYaLc6/OnVpogYhrwtnGkrgHVZ')
-	});	
-	
 	var param = {
 		  index: 'twitter',
 		  type: 'tweet',
