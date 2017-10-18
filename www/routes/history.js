@@ -199,7 +199,6 @@ router.post('/history',function(req,res,next){
 			img:[{name:'Static Network Visualization',content:div_data}],
 			download: downloadFiles,
 			config: config,
-			//d3js_data:d3js_data
 		});
 	}
 	else if ((
@@ -233,20 +232,20 @@ router.post('/delete',function(req,res,next){
 	if (req.body.type === 'analytics'){
 		var DIR = './downloads/' + req.body.layer1 + '/' + req.body.layer2 +'/' + req.body.historyID;
 		deleteFolderRecursive(DIR);
-		res.send('Successfully deleted!');
+		res.send({'data':'Successfully deleted!'});
 	}
 	
 	else if (req.body.type === 'graphql'){
 		
 		var DIR_GraphQL = './downloads/GraphQL/' + req.body.historyID;
 		deleteFolderRecursive(DIR_GraphQL);
-		res.send('Successfully deleted!');
+		res.send({'data':'Successfully deleted!'});
 		
 	}
 	
 	else if(req.body.type === 'purge'){
 		deleteFolderRecursive('./downloads');
-		res.send('Successfully purged!');
+		res.send({'data':'Successfully purged!'});
 	}
 });
 
