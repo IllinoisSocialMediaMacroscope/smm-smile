@@ -1,5 +1,5 @@
 div(id="export-modal",class="modal fade",role="dialog")
-	div(class="modal-dialog",style="font-size:20px;")
+	div(class="modal-dialog",style="font-size:20px;width:800px")
 		div(class="modal-content")
 			div(class="modal-header")
 				button(class="close", data-dismiss="modal") &times;
@@ -7,30 +7,34 @@ div(id="export-modal",class="modal fade",role="dialog")
 			div(class="modal-body",style="text-align:left;vertical-align:middle;overflow:hidden;padding:20px 50px;")
 				p Authorize with your own online storage account, and we will export a .zip file with <b>ALL</b> of your data associate with this session to your storage.
 				| Make sure you have <b>at least 100MB</b> free space available on your remote drive.
-				div(id="googleDrive",style="display:block;")
+				div(id="googleDrive",style="display:block;margin-bottom:30px;")
 					a(href="login/google", id="google-auth", target="_blank", style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;") 
 						img(src="bootstrap/img/logo/googledrive-sm-logo.png", width="25px",height="25px")
-						| Google Drive
+						|  Authroize Google Drive 
 					button(class="btn btn-primary", id="googleDrive-export",style="display:none;",onclick="exportFiles(this.id);") export
 					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading", width="40px" style="display:none;")
 					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-					textarea(class="auth-code",rows="4",style="display:block;margin-left:15px;margin-bottom:40px;width:calc(90%)",placeholder=`After you grant SMILE access to your google drive, please paste your code as instructed and press enter. You should NEVER share this code with anyone for your own safety.`)
-				div(href="login/dropbox", id="dropbox",target="_blank", style="display:block;")
+					input(class="auth-code", style="display:none;margin:15px;width:calc(90%)",placeholder=` Paste your code as instructed and press enter.`)
+					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
+				div(href="login/dropbox", id="dropbox",target="_blank", style="display:block;margin-bottom:30px;")
 					a(id="dropbox-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
 						img(src="bootstrap/img/logo/dropbox-sm-logo.png", width="30px",height="30px")
-						| Dropbox
+						|  Authroize Dropbox
 					button(class="btn btn-primary", id="dropbox-export",style="display:none;",onclick="exportFiles(this.id);") export
 					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
 					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-				div(href="login/dropbox",id="clowder",target="_blank",style="display:block;")
+					input(class="auth-code", style="display:none;margin:15px;width:calc(90%)",placeholder=` Paste your code as instructed and press enter.`)
+				div(href="login/dropbox",id="clowder",target="_blank",style="display:block;margin-bottom:30px;")
 					a(id="clowder-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
 						img(src="bootstrap/img/logo/clowder-sm-logo.png", width="30px",height="30px")
-						| Clowder
+						|  Authroize Clowder
 					button(class="btn btn-primary", id="clowder-export",style="display:none;",onclick="exportFiles(this.id);") export
 					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
 					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
+					input(class="auth-code", style="display:none;margin:15px;width:calc(90%)",placeholder=` Paste your code as instructed and press enter.`)
 			div(class="modal-footer")
-				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="terminate();") Terminate		
+				button(class="btn btn-primary",id="terminate-btn", style="display:none;background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="terminate();") Terminate		
+				button(class="btn btn-primary",id="cancel-btn", style="display:none;background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",data-dismiss="modal") Cancel
 				
 div(id="terminate-modal" class="modal fade" role="dialog")
 	div(class="modal-dialog",style="width:600px;")
@@ -40,7 +44,7 @@ div(id="terminate-modal" class="modal fade" role="dialog")
 				h2(class="modal-title") Terminate This Session?
 				p(style="font-size:16px") <b>Warning:</b> All data associated with this session will no longer be available!
 			div(class="modal-footer")
-				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="exportOptions();") Yes	
+				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="exportOptions('terminate');") Yes	
 				button(class="btn btn-primary",style="background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",data-dismiss="modal") No
 
 				
@@ -56,7 +60,7 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 		div(id="navbar",class="navbar-collapse collapse")
 			ul(class="nav navbar-nav navbar-left")
 				li
-					a(id="topbar-query",href="./")
+					a(id="topbar-home",href="./")
 						span(class="glyphicon glyphicon-home")
 						| Home 
 				li
@@ -68,16 +72,20 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 			ul(class="nav navbar-nav navbar-right")
 					
 				li
-					a(href="history",id="topbar-history")
+					a(href="history",id="topbar-generic")
 						span(class="glyphicon glyphicon-time")
 						| History
+				li
+					a(id="topbar-export")
+						span(class="glyphicon glyphicon-cloud")
+						| Export
 				li 
-					a(href="query",id="topbar-query")
+					a(href="query",id="topbar-generic")
 						span(class="glyphicon glyphicon-search")
 						| Social Media
 						
-				div(class="dropdown",id="topbar-home")
-					button(type="button",id="topbar-home-btn", class="btn btn-default dropdown-toggle", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true") Analytics Tools &nbsp;
+				div(class="dropdown",id="topbar-analytics")
+					button(type="button",id="topbar-analytics-btn", class="btn btn-default dropdown-toggle", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true") Analytics Tools &nbsp;
 						span(class="caret")
 					ul(class="dropdown-menu", aria-labelledby="dropdownMenu1")
 						
@@ -105,15 +113,32 @@ script.
 		}
 	}
 	
+	// trigger export
+	$("#topbar-export").on('click',function(){
+		exportOptions('export');
+	});
+		
+		
 	function terminateWarning(){
 		console.log("clicked");
 		$("#terminate-modal").modal('show');
 	}
 	
-	function exportOptions(){
-		console.log("export");
-		$("#terminate-modal").modal('hide');
-		$("#export-modal").modal('show');		
+	function exportOptions(whichTrigger){
+	
+		if (whichTrigger === 'terminate'){
+		
+			$("#terminate-modal").modal('hide');
+			
+			//show terminate button at the footer
+			$("#terminate-btn").show();
+			$("#export-modal").modal('show');
+			
+		}else if (whichTrigger === 'export'){
+			//show terminate button at the footer
+			$("#cancel-btn").show();
+			$("#export-modal").modal('show');
+		}
 	}
 	
 	function terminate(){
@@ -172,10 +197,21 @@ script.
 	
 	//authorize
 	$("#googleDrive #google-auth").on('click', function(){
-		$("#googleDrive .auth-code").val(''); //clear the text area
-		$("#googleDrive .auth-code").show();
+		// clear the text area and show input box
+		$("#googleDrive .auth-code").val(''); 
+		$("#googleDrive .auth-code").css('display','block');
+		
+		//hide loading bar
+		$("#googleDrive .export-loading").css('display','none');
+		
+		//hide success bar
+		$("#googleDrive .export-success").css('display','none');
+		
+		//hide the link
+		$("#embedded-link").hide();
 	});
 	
+	//code change to access token	
 	$("#googleDrive .auth-code").on("keyup",function(e){
 		if (e.keyCode == 13 || e.keyCode == 10){
 			
@@ -220,6 +256,7 @@ script.
 		}
 	});
 	
+	
 	function exportFiles(id){
 		
 		$("#googleDrive-export").hide();
@@ -230,20 +267,26 @@ script.
 			url:'export', 
 			data: {"id":id},				
 			success:function(data){
+				$("#googleDrive .export-loading").css('display','none');
 				if (data){
 					if ('ERROR' in data){
-						$("#googleDrive .export-loading").css('display','none');
 						$("#error").val(JSON.stringify(data));
 						$("#warning").modal('show');
 					}else{
-						// if success, hide the loading gif, and put on the success gif
-						$("#googleDrive .export-loading").css('display','none');
+						// if success, and put on the success gif
 						$("#googleDrive .export-success").css('display','inline-block');
 						console.log(data);
+						
+						// also show the link to that file
+							//console.log(data.embedLink);
+							$("#embedded-link").attr("href",data.alternateLink);
+							$("#embedded-link").text(data.alternateLink);
+							$("#embedded-link").css('display','block');
 					}
 				}
 			},
 			error: function(jqXHR, exception){
+				$("#googleDrive .export-loading").css('display','none');
 				var msg = '';
 				if (jqXHR.status === 0) {
 					msg = 'Not connect.\n Verify Network.';

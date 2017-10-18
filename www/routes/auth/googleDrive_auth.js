@@ -10,8 +10,6 @@ var oauth2Client = new auth.OAuth2(clientId, clientSecret,redirectUrl);
 
 router.get('/login/google', function(req,res,next){
 	
-	console.log(req.query.currentURL);
-	
 	var authUrl = oauth2Client.generateAuthUrl({
 		access_type: 'offline',
 		scope: ['https://www.googleapis.com/auth/drive']
@@ -21,7 +19,6 @@ router.get('/login/google', function(req,res,next){
 });
 
 router.post('/login/google',function(req,res,next){
-	console.log(req.body.authorizeCode);
 	
 	oauth2Client.getToken(req.body.authorizeCode, function(err, token) {
 		if (err) {

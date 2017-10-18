@@ -16,17 +16,17 @@ router.post('/export',function(req,res,next){
 		
 		if (req.session.google_access_token !== undefined){
 			if (fs.existsSync('./downloads')){
-				zipDownloads();
+				var filename = zipDownloads();
 			
 				var oauth2Client = new OAuth2('***REMOVED***',
 								'***REMOVED***', 'http://localhost:8001/login/google/callback');
 				oauth2Client.credentials = {'access_token':req.session.google_access_token}
 				var drive = google.drive({version: 'v2', auth: oauth2Client });
-				buffer = fs.readFileSync('./downloads/SMILE.zip');
+				buffer = fs.readFileSync('downloads/' + filename);
 				drive.files.insert(
 				{ resource:
 					{ 
-						title: 'SMILE.zip',
+						title: filename,
 						mimeType: 'application/octet-stream' 
 					},
 						media:
@@ -39,6 +39,7 @@ router.post('/export',function(req,res,next){
 							console.log(err);
 							res.send({'ERROR':err});
 						}else{
+							fs.unlinkSync('./downloads/' + filename)
 							res.send(response);
 						}
 					
@@ -58,19 +59,22 @@ router.post('/export',function(req,res,next){
 function zipDownloads(){
 	// zip it first
 	var zip = new admzip();
-	if (fs.existsSync('./downloads/GraphQL')){
-		zip.addLocalFolder('./downloads/GraphQL','/');
+	if (fs.existsSync('downloads/GraphQL')){
+		zip.addLocalFolder('downloads/GraphQL','/');
 	}
-	if (fs.existsSync('./downloads/NW')){
-		zip.addLocalFolder('./downloads/NW','/');
+	if (fs.existsSync('downloads/NW')){
+		zip.addLocalFolder('downloads/NW','/');
 	}
-	if (fs.existsSync('./downloads/NLP')){
-		zip.addLocalFolder('./downloads/NLP','/');
+	if (fs.existsSync('downloads/NLP')){
+		zip.addLocalFolder('downloads/NLP','/');
 	}
-	if (fs.existsSync('./downloads/NLP')){
-		zip.addLocalFolder('./downloads/NLP','/');
+	if (fs.existsSync('downloads/NLP')){
+		zip.addLocalFolder('downloads/NLP','/');
 	}
-	zip.writeZip('./downloads/SMILE' + '.zip');
+	var outputFilename = 'SMILE-' + Date.now() + '.zip';
+	zip.writeZip('downloads/' + outputFilename);
+	
+	return outputFilename;
 	
 }
 

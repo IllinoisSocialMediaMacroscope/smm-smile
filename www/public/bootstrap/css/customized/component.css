@@ -1,30 +1,19 @@
-#topbar-home{
+#topbar-analytics{
 	font-size:14px;
 	display:inline-block;
 	margin:10px 10px;
 }
-#topbar-home-btn{
-	border-radius:30px;
+#topbar-analytics-btn{
+	border-radius:5px;
 	padding:6px 30px;
 	color:white;
+	background-color:#1e325a;
+	border:solid 1px #888;
+}
+#topbar-home{
+	font-size:14px;
+	color:white;
 	background-color:#ea4a36;
-	border:none;
-}
-
-
-#topbar-history{
-	font-size:14px;
-	color:white;
-	background-color:#7fbb03;
-	margin:10px 10px;
-	border-radius:30px;
-	padding:6px 20px;
-}
-
-#topbar-query{
-	font-size:14px;
-	color:white;
-	background-color:#428bca;
 	margin:10px 10px;
 	border-radius:30px;
 	padding:6px 20px;
@@ -37,10 +26,22 @@
 	border-radius:30px;
 	padding:6px 20px;
 }
+
+#topbar-export,
+#topbar-generic{
+	font-size:14px;
+	color:white;
+	border:solid 1px #888;
+	margin:10px 10px;
+	border-radius:5px;
+	padding:6px 20px;
+}
+
 	
-#topbar-home-btn:hover,
-#topbar-history:hover,
-#topbar-query:hover,
+#topbar-analytics-btn:hover,
+#topbar-export:hover,
+#topbar-generic:hover,
+#topbar-home:hover,
 #topbar-hub:hover{
 	color:black;
 	background-color:#eae8e8;
