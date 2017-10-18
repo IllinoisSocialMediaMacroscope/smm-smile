@@ -4,7 +4,6 @@ var router = express.Router();
 var fetch = require('node-fetch');
 var fs = require('fs');
 var jsonexport = require('jsonexport');
-var zip = require('adm-zip');
 
 router.get('/query',function(req,res,next){
 		

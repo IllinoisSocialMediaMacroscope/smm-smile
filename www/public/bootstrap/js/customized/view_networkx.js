@@ -106,7 +106,7 @@ $(document).ready(function(){
 		}else if (relation == 'mentions'){
 			$("#explanation-notice").append(
 				`<p>A <b>mentions edge</b> is created when one user creates a tweet that contains the name
-						of another user (indicated with a preceeding “@” character, 
+						of another user (indicated with a proceeding “@” character, 
 						ex: <i>"just spoke about social media with @marc_smith"</i> ). </p>`
 			);
 			$("#explanation-container").show();
