@@ -8,6 +8,7 @@ router.get('/login/box', function(req,res,next){
 	//save the current page in session, so later can redirect to the same page after getting accesstoken
 	//TODO write this in cookie so no worry about which page!!!!!
 	req.session.pageURL = req.query.pageURL;
+	req.session.currentURL = req.query.currentURL;
 	req.session.save();
 	
 	var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=***REMOVED***&redirect_uri=https://socialmediamacroscope.org:8000` + req.query.currentURL +`login/box/callback`;
@@ -28,7 +29,7 @@ router.get('/login/box/callback',function(req,res,next){
 			req.session.save();
 			
 			// push this to the front so we know add this export button
-			res.redirect(`/` + req.session.pageURL + `?box=success`);
+			res.redirect(req.session.currentURL + req.session.pageURL + `?box=success`);
 		}
 	});
 });
