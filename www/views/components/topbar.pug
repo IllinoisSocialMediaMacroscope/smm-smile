@@ -7,7 +7,7 @@ div(id="export-modal",class="modal fade",role="dialog")
 			div(class="modal-body",style="text-align:left;vertical-align:middle;overflow:hidden;padding:20px 50px;")
 				p Authorize with your own online storage account, and we will export a .zip file with <b>ALL</b> of your data associate with this session to your storage.
 				| Make sure you have <b>at least 100MB</b> free space available on your remote drive.
-				div(id="googleDrive",style="display:block;margin-bottom:30px;")
+				div(id="googleDrive",style="display:block;margin-bottom:15px;")
 					a(href="login/google", id="google-auth", target="_blank", style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;") 
 						img(src="bootstrap/img/logo/googledrive-sm-logo.png", width="25px",height="25px")
 						|  Authroize Google Drive 
@@ -16,22 +16,26 @@ div(id="export-modal",class="modal fade",role="dialog")
 					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
 					input(class="auth-code", style="display:none;margin:15px;width:calc(90%)",placeholder=` Paste your code as instructed and press enter.`)
 					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
-				div(href="login/dropbox", id="dropbox",target="_blank", style="display:block;margin-bottom:30px;")
-					a(id="dropbox-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
+				
+				div(id="dropbox",style="display:block;margin-bottom:15px;")
+					a(href="login/dropbox", target="_blank", id="dropbox-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
 						img(src="bootstrap/img/logo/dropbox-sm-logo.png", width="30px",height="30px")
 						|  Authroize Dropbox
 					button(class="btn btn-primary", id="dropbox-export",style="display:none;",onclick="exportFiles(this.id);") export
 					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
 					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
 					input(class="auth-code", style="display:none;margin:15px;width:calc(90%)",placeholder=` Paste your code as instructed and press enter.`)
-				div(href="login/dropbox",id="clowder",target="_blank",style="display:block;margin-bottom:30px;")
-					a(id="clowder-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
-						img(src="bootstrap/img/logo/clowder-sm-logo.png", width="30px",height="30px")
-						|  Authroize Clowder
-					button(class="btn btn-primary", id="clowder-export",style="display:none;",onclick="exportFiles(this.id);") export
+					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
+				
+				div(id="box",style="display:block;margin-bottom:15px;")
+					a(id="box-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
+						img(src="bootstrap/img/logo/box-sm-logo.png", width="30px",height="30px")
+						|  Authroize Box
+					button(class="btn btn-primary", id="box-export",style="display:none;",onclick="exportFiles(this.id);") export
 					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
 					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-					input(class="auth-code", style="display:none;margin:15px;width:calc(90%)",placeholder=` Paste your code as instructed and press enter.`)
+					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
+					
 			div(class="modal-footer")
 				button(class="btn btn-primary",id="terminate-btn", style="display:none;background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="terminate();") Terminate		
 				button(class="btn btn-primary",id="cancel-btn", style="display:none;background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",data-dismiss="modal") Cancel
@@ -106,12 +110,37 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 script.
 	// get session id
 	var pathArray = window.location.pathname.split('/');
+	var newPath = "";
 	for (i=0; i<pathArray.length-1; i++){
 		if (pathArray[i] === 'weber'){
 			sessionID = pathArray[i+1];
 			// session ID always is the one after weber
 		}
+		
+		newPath += pathArray[i];
+		newPath += "/";
 	}
+	
+	
+	//get currentPage name for dropbox and read the ?dropbox=success
+	$("#box-auth").on('click',function(){
+		$("#box-auth").attr("href","login/box?pageURL=" + pathArray[pathArray.length-1] + "&currentURL=" + newPath);
+		//console.log(pathArray[pathArray.length-1]);
+	});
+	function getParameterByName(name) {
+		var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+		return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+	}
+	// box authorization success
+	if(getParameterByName('box') === 'success'){
+		$("#box-export").show();
+		$("#export-modal").modal('show');
+	}else{
+		$("#error").val(getParameterByName('box'));
+		$("#warning").modal('show');
+		$("#export-modal").modal('hide');
+	}
+	
 	
 	// trigger export
 	$("#topbar-export").on('click',function(){
@@ -144,7 +173,7 @@ script.
 	function terminate(){
 		var cleanData = function() {
 		  return new Promise(function(resolve, reject) {
-			console.log('first delete that session folder');
+			//console.log('first delete that session folder');
 			$.ajax({
 				type:'post',
 				url:'delete', 
@@ -208,7 +237,33 @@ script.
 		$("#googleDrive .export-success").css('display','none');
 		
 		//hide the link
-		$("#embedded-link").hide();
+		$("#googleDrive #embedded-link").hide();
+	});
+	
+	$("#dropbox #dropbox-auth").on('click', function(){
+		// clear the text area and show input box
+		$("#dropbox .auth-code").val(''); 
+		$("#dropbox .auth-code").css('display','block');
+		
+		//hide loading bar
+		$("#dropbox .export-loading").css('display','none');
+		
+		//hide success bar
+		$("#dropbox .export-success").css('display','none');
+		
+		//hide the link
+		$("#dropbox #embedded-link").hide();
+	});
+	
+	$("#box #box-auth").on('click', function(){
+		//hide loading bar
+		$("#box .export-loading").css('display','none');
+		
+		//hide success bar
+		$("#box .export-success").css('display','none');
+		
+		//hide the link
+		$("#box #embedded-link").hide();
 	});
 	
 	//code change to access token	
@@ -256,37 +311,104 @@ script.
 		}
 	});
 	
+	$("#dropbox .auth-code").on("keyup",function(e){
+		if (e.keyCode == 13 || e.keyCode == 10){
+			
+			$.ajax({
+				type:'post',
+				url:'login/dropbox', 
+				data: {"authorizeCode":$("#dropbox .auth-code").val()},				
+				success:function(data){
+					if (data){
+						if ('ERROR' in data){
+							$("#dropbox .auth-code").val(''); //clear the text area
+							$("#error").val(JSON.stringify(data));
+							$("#warning").modal('show');
+						}else{
+							// if success, show export button and hide the authorize code session
+							$("#dropbox .auth-code").hide();
+							$("#dropbox-export").show();
+						}
+					}
+				},
+				error: function(jqXHR, exception){
+					var msg = '';
+					if (jqXHR.status === 0) {
+						msg = 'Not connect.\n Verify Network.';
+					} else if (jqXHR.status == 404) {
+						msg = 'Requested page not found. [404]';
+					} else if (jqXHR.status == 500) {
+						msg = 'Internal Server Error [500].';
+					} else if (exception === 'parsererror') {
+						msg = 'Requested JSON parse failed.';
+					} else if (exception === 'timeout') {
+						msg = 'Time out error.';
+					} else if (exception === 'abort') {
+						msg = 'Ajax request aborted.';
+					} else {
+						msg = 'Uncaught Error.\n' + jqXHR.responseText;
+					}
+					$("#error").val(msg);
+					$("#warning").modal('show');						
+				} 
+			});
+		}
+	});
+	
 	
 	function exportFiles(id){
-		
-		$("#googleDrive-export").hide();
-		$("#googleDrive .export-loading").css('display','inline-block');
+		if (id ===  'googleDrive-export'){
+			$("#googleDrive-export").hide();
+			$("#googleDrive .export-loading").css('display','inline-block');
+		}else if (id==='dropbox-export'){
+			$("#dropbox-export").hide();
+			$("#dropbox .export-loading").css('display','inline-block');
+		}else if (id==='box-export'){
+			$("#box-export").hide();
+			$("#box .export-loading").css('display','inline-block');
+		}
 		
 		$.ajax({
 			type:'post',
 			url:'export', 
 			data: {"id":id},				
 			success:function(data){
-				$("#googleDrive .export-loading").css('display','none');
+				if (id ===  'googleDrive-export') $("#googleDrive .export-loading").css('display','none');
+				else if(id==='dropbox-export') $("#dropbox .export-loading").css('display','none');
+				else if(id==='box-export') $("#box .export-loading").css('display','none');
+				
 				if (data){
 					if ('ERROR' in data){
 						$("#error").val(JSON.stringify(data));
 						$("#warning").modal('show');
 					}else{
 						// if success, and put on the success gif
-						$("#googleDrive .export-success").css('display','inline-block');
-						console.log(data);
-						
-						// also show the link to that file
-							//console.log(data.embedLink);
-							$("#embedded-link").attr("href",data.alternateLink);
-							$("#embedded-link").text(data.alternateLink);
-							$("#embedded-link").css('display','block');
+						if (id ===  'googleDrive-export'){
+							$("#googleDrive .export-success").css('display','inline-block');
+							$("#googleDrive #embedded-link").attr("href",data.alternateLink);
+							$("#googleDrive #embedded-link").text(data.alternateLink);
+							$("#googleDrive #embedded-link").css('display','block');
+						}
+						else if(id==='dropbox-export'){
+							$("#dropbox .export-success").css('display','inline-block');
+							$("#dropbox #embedded-link").attr("href",'https://www.dropbox.com/personal?preview=' + data.name);
+							$("#dropbox #embedded-link").text('https://www.dropbox.com/personal?preview=' + data.name);
+							$("#dropbox #embedded-link").css('display','block');
+						}
+						else if(id==='box-export'){
+							console.log(data);
+							$("#box .export-success").css('display','inline-block');
+							$("#box #embedded-link").attr("href", 'https://uofi.app.box.com/file/'+ data.entries[0].id);
+							$("#box #embedded-link").text('https://uofi.app.box.com/file/'+ data.entries[0].id);
+							$("#box #embedded-link").css('display','block');
+						}
 					}
 				}
 			},
 			error: function(jqXHR, exception){
 				$("#googleDrive .export-loading").css('display','none');
+				$("#dropbox .export-loading").css('display','none');
+				
 				var msg = '';
 				if (jqXHR.status === 0) {
 					msg = 'Not connect.\n Verify Network.';
