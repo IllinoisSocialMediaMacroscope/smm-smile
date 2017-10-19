@@ -29,6 +29,8 @@ router.get('/login/box/callback',function(req,res,next){
 			req.session.save();
 			
 			// push this to the front so we know add this export button
+			console.log(req.session.currentURL);
+			console.log(req.session.pageURL);
 			res.redirect(req.session.currentURL + req.session.pageURL + `?box=success`);
 		}
 	});
