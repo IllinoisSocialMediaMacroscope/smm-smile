@@ -78,12 +78,13 @@ router.post('/export',function(req,res,next){
 				  clientSecret: '***REMOVED***'
 				});
 				var client = sdk.getBasicClient(req.session.box_access_token);
-				client.files.uploadFile('0', filename, buffer, function(err, file) {
+				client.files.uploadFile('0', filename, buffer, function(err, response) {
 					if (err){
 						console.log(err);
 						res.send({'ERROR':err})
 					}else{
-						res.send(file);
+						fs.unlinkSync('./downloads/' + filename)
+						res.send(response);
 					}
 				});
 					
@@ -102,18 +103,7 @@ router.post('/export',function(req,res,next){
 function zipDownloads(){
 	// zip it first
 	var zip = new admzip();
-	if (fs.existsSync('downloads/GraphQL')){
-		zip.addLocalFolder('downloads/GraphQL','/');
-	}
-	if (fs.existsSync('downloads/NW')){
-		zip.addLocalFolder('downloads/NW','/');
-	}
-	if (fs.existsSync('downloads/NLP')){
-		zip.addLocalFolder('downloads/NLP','/');
-	}
-	if (fs.existsSync('downloads/NLP')){
-		zip.addLocalFolder('downloads/NLP','/');
-	}
+	zip.addLocalFolder('downloads','/');
 	var outputFilename = 'SMILE-' + Date.now() + '.zip';
 	zip.writeZip('downloads/' + outputFilename);
 	
