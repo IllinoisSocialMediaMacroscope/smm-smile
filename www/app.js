@@ -37,6 +37,8 @@ app.use('/',require('./routes/history'));
 app.use('/',require('./routes/export'));
 app.use('/',require('./routes/auth/twitter_auth'));
 app.use('/', require('./routes/auth/googleDrive_auth'));
+app.use('/', require('./routes/auth/dropbox_auth'));
+app.use('/', require('./routes/auth/box_auth'));
 //app.use('/',require('./routes/auth/reddit_auth'));
 app.use('/', require('./routes/sitemap'));
 

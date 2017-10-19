@@ -47,13 +47,7 @@ html
 				| Authorize with your Twitter account
 			
 			script.
-				var pathArray = window.location.pathname.split('/');
-				var newPath = "";
-				for (i=0; i<pathArray.length-1; i++){
-					newPath += pathArray[i];
-					newPath += "/";
-				}
-				
+				// newPath has already been calculated in the topbar.pug
 				$("#twitter-auth").attr("href","login/twitter?currentURL=" + newPath);
 				
 				

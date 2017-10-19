@@ -1,0 +1,34 @@
+var express = require('express');
+var router = express.Router();
+var fetch = require('node-fetch');
+
+router.get('/login/dropbox', function(req,res,next){
+	var authUrl = "https://www.dropbox.com/oauth2/authorize?response_type=code&client_id=***REMOVED***"
+	res.redirect(authUrl);
+});
+
+router.post('/login/dropbox',function(req,res,next){
+	var user = "***REMOVED***";
+	var password = "***REMOVED***";
+	var base64encodedData = new Buffer(user + ':' + password).toString('base64');
+	fetch('https://api.dropboxapi.com/1/oauth2/token', {method:'POST',
+											headers:{
+												'Authorization': 'Basic ' + base64encodedData,
+												'Content-Type': "application/x-www-form-urlencoded",
+												'user-agent': 'cwang138 testing various things v0.1',
+											},
+											body:"grant_type=authorization_code&code=" + req.body.authorizeCode
+							
+		}).then(function(response){
+			return response.json();
+		}).then(function(json){
+			if ('error' in json){
+				res.send({'ERROR':json.error});
+			}
+			req.session.dropbox_access_token = json.access_token;
+			req.session.save();
+			res.send({'data':'success'});
+		});
+});
+
+module.exports = router;
