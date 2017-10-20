@@ -12,6 +12,9 @@ router.post('/export',function(req,res,next){
 	
 	if (fs.existsSync('./downloads')){
 		var filename = zipDownloads();
+		//get zip file size and decide which upload method to take
+		var filesize = fs.statSync('downloads/' + filename).size;
+		
 		var buffer = fs.readFileSync('downloads/' + filename);
 		
 		if (req.body.id == 'googleDrive-export'){		
@@ -31,7 +34,7 @@ router.post('/export',function(req,res,next){
 							{ body: buffer,
 								mimeType: 'application/octet-stream' 
 							},
-						type: 'multipart' 
+						type: 'resumable' 
 				}, function(err,response){
 						if (err) {
 							console.log(err);
@@ -53,24 +56,35 @@ router.post('/export',function(req,res,next){
 						create a new file with the contents provided in the request. 
 						Do not use this to upload a file larger than 150 MB. Instead,
 						create an upload session with upload_session/start.*/
-					var dbx = new Dropbox({ accessToken: req.session.dropbox_access_token });	
-					dbx.filesUpload({contents:buffer,
-										path:'/' + filename,
-										mode:{'.tag':'overwrite'},
-										autorename:true,
-										mute:false})
-						.then(function(response){
-							fs.unlinkSync('./downloads/' + filename)
-							//console.log(response);
-							res.send(response);
-						}).catch(function(err){
-							//console.log(err);
-							res.send({'ERROR':err})
-						})
+					var dbx = new Dropbox({ accessToken: req.session.dropbox_access_token });
+
+					if (filesize <= 140*1024*1024){
+						dbx.filesUpload({contents:buffer,
+											path:'/' + filename,
+											mode:{'.tag':'overwrite'},
+											autorename:true,
+											mute:false})
+							.then(function(response){
+								fs.unlinkSync('./downloads/' + filename)
+								//console.log(response);
+								res.send(response);
+							}).catch(function(err){
+								//console.log(err);
+								res.send({'ERROR':err})
+							})
+					}else{
+						// TODO add resumable/session uploads instead of just tell them to use google drive
+						// haha i'm being sloppy here! :-p
+						res.send({'ERROR':'We apologize that we are currently still working on the large file transfer function ' 
+						+ 'for dropbox. Please switch to Google Drive uploads.'});
+					}
 			}else{
 				console.log('Dropbox token has expired!!');
 				res.send({'ERROR':'Dropbox token has expired. Please authorize again!'});
 			}
+		
+		
+		
 		}else if (req.body.id == 'box-export'){
 			if (req.session.box_access_token !== undefined){
 				var sdk = new BoxSDK({
@@ -78,15 +92,38 @@ router.post('/export',function(req,res,next){
 				  clientSecret: '***REMOVED***'
 				});
 				var client = sdk.getBasicClient(req.session.box_access_token);
-				client.files.uploadFile('0', filename, buffer, function(err, response) {
-					if (err){
-						console.log(err);
-						res.send({'ERROR':err})
-					}else{
-						fs.unlinkSync('./downloads/' + filename)
-						res.send(response);
-					}
-				});
+				
+				if (filesize <= 50*1024*1024){
+					client.files.uploadFile('0', filename, buffer, function(err, response) {
+						if (err){
+							console.log(err);
+							res.send({'ERROR':err})
+						}else{
+							fs.unlinkSync('./downloads/' + filename)
+							res.send(response);
+						}
+					});
+				}else{
+				
+					client.files.getChunkedUploader('0',filesize, filename,buffer, null, function(err,uploader){
+						if (err){
+							console.log(err);
+							res.send({'ERROR':err})
+						}else{
+							uploader.on('error',function(err){
+								res.send({'ERROR':err})
+							});
+							
+							uploader.on('uploadComplete',function(response){
+								fs.unlinkSync('./downloads/' + filename)
+								res.send(response);
+							});
+							
+							uploader.start();
+						}
+					});
+					
+				}
 					
 			}else{
 				console.log('Dropbox token has expired!!');
