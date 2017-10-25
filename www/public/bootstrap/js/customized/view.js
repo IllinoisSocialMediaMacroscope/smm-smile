@@ -419,6 +419,11 @@ function ajaxSubmit(formID){
 	var directory = $("#selectFile").children(":selected").attr("class");
 	var data = $(formID).serialize() + "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv";
 	
+	// if there's upload file involving
+	if ($("#labeled").val()!== undefined && $("#labeled").val()!== ''){
+		console.log($("#labeled").get(0).files);
+	}
+		
 	if (formValidation()){
 		
 		$(".loading").show();
