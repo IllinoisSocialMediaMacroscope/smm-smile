@@ -2,6 +2,7 @@ $(document).ready(function(){
 	$(".train").hide();
 	$(".split").hide();
 	$(".predict").hide();
+	$(".uuid").hide();
 	
 	$("#selectFile").on('change',function(){
 		var foldername = $(this).children(":selected").attr("id");
@@ -76,6 +77,15 @@ $(document).ready(function(){
 		}); 
 	});
 	
+	$("#labeled").on('change',function(){
+		if ($("#labeled").get(0).files[0] === undefined){
+			var fname = '';
+		}else{
+			var fname = $("#labeled").get(0).files[0].name;
+		}
+		$("#labeled-fname").text(fname);
+	});
+	
 	$("#task").on('change',function(){
 		var task = $(this).children(":selected").attr("value");
 		if (task === 'split'){
@@ -83,6 +93,7 @@ $(document).ready(function(){
 			$("#selectFile").prop('disabled',false);
 			$(".split").show();
 			$(".train").hide();
+			$(".uuid").hide();
 			$(".predict").hide();
 		}
 		else if (task === 'train'){
@@ -90,13 +101,41 @@ $(document).ready(function(){
 			$("#selectFile").prop('disabled',true);
 			$(".train").show();
 			$(".split").hide();
+			$(".uuid").show();
 			$(".predict").hide();
+		}
+		else if (task === 'predict'){
+			// disable sselect file and hide "split" and "predict" configuration
+			$("#selectFile").prop('disabled',true);
+			$(".train").hide();
+			$(".split").hide();
+			$(".uuid").show();
+			$(".predict").show();
+		}else{
+			$("#selectFile").prop('disabled',false);
 		}
 			
 	});
 	
 });
 
+function addUUID(uuid){
+	$(".row.announce").empty();
+	$(".loading").after(`<div class="row announce">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+							<div id="announce-container" style="border-radius:10px;padding:50px 50px; margin:50px 100px;">
+								<div id="ID-code" style="text-align:center; margin-bottom:30px; background-color:#428bca; padding:30px 30px; color:white;border-radius:10px;">
+									<h1>Identification code:</h1> 
+									<h3>`+ uuid + `</h3>
+								</div>
+								<p><b>Note:</b>Text classification is a complex process that involves three different steps. 
+									To make sure you want to perform all the steps on the same dataset, please remember this Identification code.
+									When you're done with the current step and move on to the next step, you will be prompt to input this ID code.
+								</p>
+							</div>
+						</div>
+					</div>			`)
+}
 /*-----------------------split --------------------------------------------*/
 function split(){
 	
@@ -119,7 +158,7 @@ function split(){
 					$("#warning").modal('show');
 				}else{
 					$(".loading").hide();
-					console.log(data.uuid);
+					addUUID(data.uuid);
 					appendDownload("#side-download",data.download);
 				}
 			},
@@ -176,6 +215,58 @@ function train(){
 					$("#warning").modal('show');
 				}else{
 					$(".loading").hide();
+					addUUID(data.uuid);
+					appendDownload("#side-download",data.download);
+					appendPreview('#result-container',data.preview);
+				}
+			},
+			error: function(jqXHR, exception){
+				var msg = '';
+				if (jqXHR.status === 0) {
+					msg = 'Not connect.\n Verify Network.';
+				} else if (jqXHR.status == 404) {
+					msg = 'Requested page not found. [404]';
+				} else if (jqXHR.status == 500) {
+					msg = 'Internal Server Error [500].';
+				} else if (exception === 'parsererror') {
+					msg = 'Requested JSON parse failed.';
+				} else if (exception === 'timeout') {
+					msg = 'Time out error.';
+				} else if (exception === 'abort') {
+					msg = 'Ajax request aborted.';
+				} else {
+					msg = 'Uncaught Error.\n' + jqXHR.responseText;
+				}
+				$("#error").val(msg);
+				$("#warning").modal('show');
+				
+			} 
+		}); 
+	}
+			
+} 
+
+/*-----------------------train -------------------------------------------*/
+function predict(){
+	
+	if (formValidation('predict')){
+		
+		var data = "uuid=" + $("#uuid").val();
+		$(".loading").show();
+		$.ajax({
+			type:'POST',
+			url:'text-classification-predict', 
+			data:data,	
+			success:function(data){
+				if ('ERROR' in data){
+					$(".loading").hide();
+					$("#error").val(JSON.stringify(data));
+					$("#warning").modal('show');
+				}else{
+					$(".loading").hide();
+					//addUUID(data.uuid);
+					appendDownload("#side-download",data.download);
+					appendPreview('#result-container',data.preview);
 				}
 			},
 			error: function(jqXHR, exception){
@@ -227,6 +318,13 @@ function formValidation(task){
 			return false;
 		}
 		
+		if ($("#uuid").val() == '' || $("#uuid").val() === undefined){
+			$("#modal-message").append(`<h4>Please input the identification code from Step 1. If you don't have it anymore, please go back to last step and generate a new one.</h4>`);
+			$("#alert").modal('show');
+			return false;
+		}
+	}
+	else if (task === 'predict'){
 		if ($("#uuid").val() == '' || $("#uuid").val() === undefined){
 			$("#modal-message").append(`<h4>Please input the identification code from Step 1. If you don't have it anymore, please go back to last step and generate a new one.</h4>`);
 			$("#alert").modal('show');

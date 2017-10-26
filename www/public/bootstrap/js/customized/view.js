@@ -32,8 +32,8 @@ function customized_reset(){
 	$("#img-container").empty();
 	$("#result-container").empty();
 	$("#side-download").empty();
+	$(".row.announce").empty();
 	$("#side-download-li").hide();
-	$("#d3js-container").hide();
 }
 
 /*----------------------------display uploaded csv --------------------------*/

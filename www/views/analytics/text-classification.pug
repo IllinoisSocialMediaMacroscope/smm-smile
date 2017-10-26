@@ -36,14 +36,16 @@ block config-form
 					div(class="range range-node")
 						input(type="range", min="5", max="95", value="30", step="1", name="ratio", onchange="rangeNode.value=value", id="ratio")
 						output(id="rangeNode") 30
-						
 		div(class="train")
 			div(class="form-group")
-				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Upload the labeled training set
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Labeled training set
 				div(class="col-md-8 col-md-8 col-xs-12")
-					input(id="labeled" type="file" name="labeled")
-					
-		div(class="train")
+					label(class="input-group-btn",style="display:inline;")
+						span(class="btn btn-default btn-file" style="border-radius:5px;color:black;background:#white;border:1px #2a5a84 solid;") Upload ... 
+							input(id="labeled" type="file" name="labeled")
+						p(id="labeled-fname", style="display:inline-block;margin:0px 20px;")
+						
+		div(class="uuid")
 			div(class="form-group")
 				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Identification code
 				div(class="col-md-8 col-md-8 col-xs-12")
@@ -53,10 +55,10 @@ block config-form
 							
 		div(class="form-group")
 			div(class="col-md-8 col-md-8 col-xs-12 col-md-offset-2")
-				input(type="button", onclick="split();", class='split',value="Split",style="margin: auto 5px;")
-				input(type="button", onclick="train();", class='train',value="Train",style="margin: auto 5px;")
-				input(type="button", onclick="predict();", class='predict',value="Predict",style="margin: auto 5px;")
-		
+				input(type="button", onclick="split();", class='btn btn-danger split',value="Split",style="margin: auto 5px;")
+				input(type="button", onclick="train();", class='btn btn-danger train',value="Train",style="margin: auto 5px;")
+				input(type="button", onclick="predict();", class='btn btn-danger predict',value="Predict",style="margin: auto 5px;")
+				input(type="button", class='btn btn-primary', value="Clear", onclick="customized_reset();",style="margin: auto 5px;") 
 		
 					
 				
