@@ -1,70 +1,94 @@
-import numpy as np
-from sklearn import preprocessing
-from sklearn import model_selection
-from sklearn import svm
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.linear_model import SGDClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.neural_network import MLPClassifier
-from sklearn import metrics
-import pandas
-import pickle
-import uuid
-import os
+import csv
 import argparse
-import sys
+import os
+from os.path import join, dirname
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn import metrics
+import pickle
+import numpy as np
+from plotly.offline import plot
+import plotly.graph_objs as go
+from collections import Counter
 
-class Predict:
+class Classification:
 
-    def __init__(self, input_model, predict_file, custom_header=''):
-        self.labeler = preprocessing.LabelEncoder()
-        with open(input_model,'rb') as m:
-            self.clf = pickle.load(m)
-        if custom_header=='':
-            self.df = pandas.read_csv(predict_file,sep=',', header=0)
+    def __init__(self,uuid):
 
-    # transform categorical data into numbers
-    def label_encoding(self,column_heads):
-        # input: column head name [LIST]
-        for CH in column_heads:
-            self.df[CH] = self.labeler.fit_transform(self.df[CH])
+        self.DIR = os.path.join('./downloads/ML/classification',uuid)
+        self.DIR = os.path.expanduser(
+                os.path.expandvars(
+                  os.path.realpath(
+                    os.path.normpath(self.DIR)
+                  )
+                )
+              )
 
-        #print(self.df)
+        print(uuid)
 
-    def perform_predicting(self):
-        target = self.clf.predict(self.df)
-        self.df['target']= target
+    def predict(self):
 
-        if self.df.shape[0] <50:
-            print(self.df)
-        else:
-            print(self.df.head(50))
+        # load classification model
+        pkl_model = os.path.join(self.DIR,'classification_pipeline.pickle')
+        with open(pkl_model,'rb') as f:
+            text_clf = pickle.load(f)
 
-        # save predicted model
-        DIR = os.path.join(os.path.dirname(__file__), '../../downloads/ML-predicting')
-        if not os.path.exists(DIR):
-            os.makedirs(DIR)
-        filename = DIR + '/' + str(uuid.uuid4()) + '.csv'
-        self.df.to_csv(filename,sep=',',encoding='utf-8',index=False)
-        print(filename)
-        
+        # load text set
+        listing = os.listdir(self.DIR)
+        for file in listing:
+            if file[0:8] == 'TESTING_' and file[-4:] == '.csv':
+                filename = file[8:-4]
+                data = []
+                with open(os.path.join(self.DIR, file),'r',encoding='utf-8') as f:
+                    reader = list(csv.reader(f))
+                    for row in reader[1:]:
+                        try:
+                            data.extend(row)
+                        except Exception as e:
+                            pass
+
+        # predict using trained model         
+        self.predicted = text_clf.predict(data)
+
+        # save result
+        fname = os.path.join(self.DIR,'PREDICTED_' + filename + '.csv')
+        with open(fname,'w',encoding="utf-8",newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(['tweet','category'])
+            for i in range(len(data)):
+                try:
+                    writer.writerow([data[i],self.predicted[i]])
+                except UnicodeDecodeError:
+                    pass
+        print(fname)
+
+    def plot(self):
+        y_pred_dict = Counter(self.predicted)
+        labels = []
+        values = []
+        for i in y_pred_dict.keys():
+            labels.append("class: " + str(i))
+            values.append(y_pred_dict[i])
+        trace = go.Pie(labels=labels, values = values, textinfo='label')
+        div_comp = plot([trace], output_type='div',image='png',auto_open=False, image_filename='plot_img')
+        fname_div_comp = self.DIR + '/div_comp.dat'
+        with open(fname_div_comp,"w") as f:
+            f.write(div_comp)
+        print(fname_div_comp)
+
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Processing...")
-    parser.add_argument('--modelfile', help='the filepath of model file',required=True)
-    parser.add_argument('--file', help='the filepath of input file',required=True)
-    parser.add_argument('--encodeHeaders',nargs='+',help='the column head of categorical data that you wish to encode', required=False)
-    
+    parser.add_argument('--uuid',required=True)
     args = parser.parse_args()
-    prediction = Predict(args.modelfile, args.file)
+       
+    
+    classification = Classification(args.uuid)
+    classification.predict()
+    classification.plot()
 
-    if args.encodeHeaders:
-        prediction.label_encoding(args.encodeHeaders)
-
-    prediction.perform_predicting()
-
+    
+        

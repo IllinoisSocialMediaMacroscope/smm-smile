@@ -56,8 +56,7 @@ html
 					div(class="row")
 						div(class="col-md-12 col-sm-12 col-xs-12")
 							h1 #{title}
-					br
-							
+				
 					div(class="row")
 						div(class="col-md-12 col-sm-12 col-xs-12")
 							a(class="anchor" name="config-anchor")
@@ -72,9 +71,8 @@ html
 						
 					div(class="loading",style="display:none;")
 						img(src="bootstrap/img/gifs/loading.gif", width="400", height="400px",style="display:block; margin:auto;")
-			
+							
 					<!-- img -->
-					br
 					div(class="row")
 						div(class="col-md-12 col-sm-12 col-xs-12")
 							a(class="anchor" name="img-anchor")
@@ -83,33 +81,11 @@ html
 							div(id="gaudge")
 										
 					<!-- result -->
-					br
 					div(class="row")
 						div(class="col-md-12 col-sm-12 col-xs-12")
 							a(class="anchor" name="result-anchor")
 							div(id="result-container")
 			
-										
-					<!-- network graph -->
-					br
-					div(class="row")
-						div(class="col-md-12 col-sm-12 col-xs-12")
-							div(id="d3js-container", style="display:none;")
-								div(class="x_title")
-									h2 Interactive Network Visualization (D3JS)
-								div(class="x_content")
-									div(class="note")
-										li mouseover <img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the node will display the user screen name
-										li mouseover <img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over the edge will display the tweet
-										li dragging <img src="bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node enabled
-										li dragging <img src="bootstrap/img/logo/img-materials/drag.png" width="20px"/> the node meanwhile with <kbd>Ctrl</kbd> key pressed will fix the node in your desired location
-										li <kbd>zoom-in</kbd> and <kbd>zoom-out</kbd> available
-										li(id="colorscale") connectivity is reflected by the colorscale in a rolling base:
-									div(style="margin:20px 20px;")
-										img(src="bootstrap/img/logo/img-materials/tweet.png",width="25px",style="display:inline-block;")
-										h4(id='author-display') Auhtor
-										p(id='tweet-display') ...
-									div(id="d3js-network-container",style="background-color:white;overflow:hidden;")
 									
 		block customized-script
 							

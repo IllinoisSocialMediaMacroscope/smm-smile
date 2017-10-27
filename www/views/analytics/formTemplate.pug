@@ -5,7 +5,7 @@ block customized-script
 	script(src=param['custom-script']).	
 	
 block config-form
-	form(action=param['form-action'], name='NLP', method='post',class="form-horizontal",id="upload")
+	form(action=param['form-action'], name='NLP', method='post',class="form-horizontal")
 		each container in param['containers']
 			div(id=container['container-name'])
 				div(class="form-group")
@@ -44,7 +44,10 @@ block config-form
 								div(class="range range-node")
 									input(type=input.type, min=input.min, max=input.max, value=input.value, step=input.step, name=input.name, onchange=input.onchange, id=input.id)
 									output(id=input.output_id) #{input.value}
-		
+							
+							else if input['type'] == 'file'
+								input(id=input.id, type=input.type, name=input.name)
+								
 			if container['container-name'] == 'network-relation-container'
 				div(id="explanation-container", style="display:none")
 					div(class="form-group")

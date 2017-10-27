@@ -1,0 +1,77 @@
+extends layout.pug
+	
+block customized-script
+	<!-- customized script -->
+	script(src="bootstrap/js/customized/view_classification.js").	
+	
+block config-form
+	form(class="form-horizontal")
+		div(id="file-container")
+			div(class="form-group")
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Select from your folder
+				div(class="col-md-8 col-md-8 col-xs-12")
+					select(class="form-control", id="selectFile", name="selectFile")
+						option(val="", class="", id="empty", checked) Please Select...
+						each val,key in directory
+							optgroup(label=key)
+							each item in val
+								option(val=item, class=key, id=item) #{item}
+								script.
+									$(`#file-container`).after(`<div id="selectFilePreview-container">`)
+									$("#selectFilePreview-container").after(`<div id="selectFileHeader-container">`)
+		div(id="select-task")
+			div(class="form-group")
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Select Tasks
+				div(class="col-md-8 col-md-8 col-xs-12")
+					select(name="task", id="task", class="form-control")
+						option(value="Please Select...") Please Select...
+						option(value="split") Step1 -- split the training and testing set
+						option(value="train") Step2 -- train your classification model
+						option(value="predict") Step3 -- predict using your model
+						
+		div(class="split")
+			div(class="form-group")
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Training dataset size (%)
+				div(class="col-md-8 col-md-8 col-xs-12")
+					div(class="range range-node")
+						input(type="range", min="5", max="95", value="30", step="1", name="ratio", onchange="rangeNode.value=value", id="ratio")
+						output(id="rangeNode") 30
+		div(class="train")
+			div(class="form-group")
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Labeled training set
+				div(class="col-md-8 col-md-8 col-xs-12")
+					label(class="input-group-btn",style="display:inline;")
+						span(class="btn btn-default btn-file" style="border-radius:5px;color:black;background:#white;border:1px #2a5a84 solid;") Upload ... 
+							input(id="labeled" type="file" name="labeled")
+						p(id="labeled-fname", style="display:inline-block;margin:0px 20px;")
+		
+		div(class="train")
+			div(class="form-group")
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Select classification model
+				div(class="col-md-8 col-md-8 col-xs-12")
+					select(name="classifier", id="classifier", class="form-control")
+						option(value="Please Select...") Please Select...
+						option(value="NaiveBayes") Naive Bayes classifier for multinomial models
+						option(value="Perceptron") Perceptron
+						option(value="SGD") Linear classifiers with stochastic gradient descent learning
+						option(value="RandomForest") Random forest classifier
+						option(value="KNN") K-nearest neighbors vote
+						option(value="passiveAggressive") Passive Aggressive Classifier
+						
+		div(class="uuid")
+			div(class="form-group")
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Identification code
+				div(class="col-md-8 col-md-8 col-xs-12")
+					input(id="uuid", class="form-control", type="text", name="uuid")
+		
+		
+							
+		div(class="form-group")
+			div(class="col-md-8 col-md-8 col-xs-12 col-md-offset-2")
+				input(type="button", onclick="split();", class='btn btn-danger split',value="Split",style="margin: auto 5px;")
+				input(type="button", onclick="train();", class='btn btn-danger train',value="Train",style="margin: auto 5px;")
+				input(type="button", onclick="predict();", class='btn btn-danger predict',value="Predict",style="margin: auto 5px;")
+				input(type="button", class='btn btn-primary', value="Clear", onclick="customized_reset();",style="margin: auto 5px;") 
+		
+					
+				

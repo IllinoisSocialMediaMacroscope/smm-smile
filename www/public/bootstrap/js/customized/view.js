@@ -32,8 +32,8 @@ function customized_reset(){
 	$("#img-container").empty();
 	$("#result-container").empty();
 	$("#side-download").empty();
+	$(".row.announce").empty();
 	$("#side-download-li").hide();
-	$("#d3js-container").hide();
 }
 
 /*----------------------------display uploaded csv --------------------------*/
@@ -121,7 +121,7 @@ function extractHeader2(array){
 function appendDownload(downloadID, downloadData){
 	$('#side-download-li').show();
 	$(downloadID).empty()
-	if(downloadData !== []){
+	if(downloadData !== [] && downloadData !== ''){
 		$.each(downloadData,function(i,val){
 			$(downloadID).append(`<li><form action='download' name='download' method='post' class="side-form">
 								<input type="hidden" value=`+val.content+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download"></span>`
@@ -132,7 +132,7 @@ function appendDownload(downloadID, downloadData){
 	
 function appendImg(imgID, imgData){
 	$(imgID).empty();
-	if (imgData !== []){
+	if (imgData !== [] && imgData !== ''){
 		$.each(imgData, function(i,val){
 			$(imgID).append(`<div class="x_title">
 								<h2>`+val.name+`</h2>
@@ -419,6 +419,11 @@ function ajaxSubmit(formID){
 	var directory = $("#selectFile").children(":selected").attr("class");
 	var data = $(formID).serialize() + "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv";
 	
+	// if there's upload file involving
+	if ($("#labeled").val()!== undefined && $("#labeled").val()!== ''){
+		console.log($("#labeled").get(0).files);
+	}
+		
 	if (formValidation()){
 		
 		$(".loading").show();
