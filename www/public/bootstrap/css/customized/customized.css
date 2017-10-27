@@ -447,3 +447,18 @@ marker#arrow {
 	color:#ea4a36;
 	border-bottom:1px solid #ea4a36;
 }
+
+/**********text classification page******************/
+#task{
+	background-color:#2a5a84;
+	color:white;
+}
+
+#labeled{
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}

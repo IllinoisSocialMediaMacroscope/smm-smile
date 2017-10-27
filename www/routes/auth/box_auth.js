@@ -12,6 +12,7 @@ router.get('/login/box', function(req,res,next){
 	req.session.save();
 	
 	var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=***REMOVED***&redirect_uri=https://socialmediamacroscope.org:8000` + req.query.currentURL +`login/box/callback`;
+	//var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=***REMOVED***&redirect_uri=http://localhost:8001/login/box/callback`;
 	res.redirect(authUrl);
 });
 
