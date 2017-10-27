@@ -44,6 +44,19 @@ block config-form
 						span(class="btn btn-default btn-file" style="border-radius:5px;color:black;background:#white;border:1px #2a5a84 solid;") Upload ... 
 							input(id="labeled" type="file" name="labeled")
 						p(id="labeled-fname", style="display:inline-block;margin:0px 20px;")
+		
+		div(class="train")
+			div(class="form-group")
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Select classification model
+				div(class="col-md-8 col-md-8 col-xs-12")
+					select(name="classifier", id="classifier", class="form-control")
+						option(value="Please Select...") Please Select...
+						option(value="NaiveBayes") Naive Bayes classifier for multinomial models
+						option(value="Perceptron") Perceptron
+						option(value="SGD") Linear classifiers with stochastic gradient descent learning
+						option(value="RandomForest") Random forest classifier
+						option(value="KNN") K-nearest neighbors vote
+						option(value="passiveAggressive") Passive Aggressive Classifier
 						
 		div(class="uuid")
 			div(class="form-group")

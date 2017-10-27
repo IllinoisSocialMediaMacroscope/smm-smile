@@ -121,7 +121,7 @@ function extractHeader2(array){
 function appendDownload(downloadID, downloadData){
 	$('#side-download-li').show();
 	$(downloadID).empty()
-	if(downloadData !== []){
+	if(downloadData !== [] && downloadData !== ''){
 		$.each(downloadData,function(i,val){
 			$(downloadID).append(`<li><form action='download' name='download' method='post' class="side-form">
 								<input type="hidden" value=`+val.content+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download"></span>`
@@ -132,7 +132,7 @@ function appendDownload(downloadID, downloadData){
 	
 function appendImg(imgID, imgData){
 	$(imgID).empty();
-	if (imgData !== []){
+	if (imgData !== [] && imgData !== ''){
 		$.each(imgData, function(i,val){
 			$(imgID).append(`<div class="x_title">
 								<h2>`+val.name+`</h2>

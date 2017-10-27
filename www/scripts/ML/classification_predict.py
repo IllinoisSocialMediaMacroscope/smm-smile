@@ -9,6 +9,9 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn import metrics
 import pickle
 import numpy as np
+from plotly.offline import plot
+import plotly.graph_objs as go
+from collections import Counter
 
 class Classification:
 
@@ -47,7 +50,7 @@ class Classification:
                             pass
 
         # predict using trained model         
-        predicted = text_clf.predict(data)
+        self.predicted = text_clf.predict(data)
 
         # save result
         fname = os.path.join(self.DIR,'PREDICTED_' + filename + '.csv')
@@ -56,11 +59,24 @@ class Classification:
             writer.writerow(['tweet','category'])
             for i in range(len(data)):
                 try:
-                    writer.writerow([data[i],predicted[i]])
+                    writer.writerow([data[i],self.predicted[i]])
                 except UnicodeDecodeError:
                     pass
         print(fname)
-        
+
+    def plot(self):
+        y_pred_dict = Counter(self.predicted)
+        labels = []
+        values = []
+        for i in y_pred_dict.keys():
+            labels.append("class: " + str(i))
+            values.append(y_pred_dict[i])
+        trace = go.Pie(labels=labels, values = values, textinfo='label')
+        div_comp = plot([trace], output_type='div',image='png',auto_open=False, image_filename='plot_img')
+        fname_div_comp = self.DIR + '/div_comp.dat'
+        with open(fname_div_comp,"w") as f:
+            f.write(div_comp)
+        print(fname_div_comp)
 
 
 if __name__ == '__main__':
@@ -72,6 +88,7 @@ if __name__ == '__main__':
     
     classification = Classification(args.uuid)
     classification.predict()
+    classification.plot()
 
     
         

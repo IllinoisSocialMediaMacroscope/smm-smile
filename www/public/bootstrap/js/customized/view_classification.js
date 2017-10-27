@@ -121,20 +121,23 @@ $(document).ready(function(){
 
 function addUUID(uuid){
 	$(".row.announce").empty();
-	$(".loading").after(`<div class="row announce">
-							<div class="col-md-12 col-sm-12 col-xs-12">
-							<div id="announce-container" style="border-radius:10px;padding:50px 50px; margin:50px 100px;">
-								<div id="ID-code" style="text-align:center; margin-bottom:30px; background-color:#428bca; padding:30px 30px; color:white;border-radius:10px;">
-									<h1>Identification code:</h1> 
-									<h3>`+ uuid + `</h3>
+	
+	if (uuid !== ''){
+		$(".loading").after(`<div class="row announce">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+								<div id="announce-container" style="border-radius:10px;padding:50px 50px; margin:0px 100px;">
+									<div id="ID-code" style="text-align:center; margin-bottom:30px; background-color:#428bca; padding:30px 30px; color:white;border-radius:10px;">
+										<h1>Identification code:</h1> 
+										<h3>`+ uuid + `</h3>
+									</div>
+									<p><b>Note:</b>Text classification is a complex process that involves three different steps. 
+										To make sure you want to perform all the steps on the same dataset, please remember this Identification code.
+										When you're done with the current step and move on to the next step, you will be prompt to input this ID code.
+									</p>
 								</div>
-								<p><b>Note:</b>Text classification is a complex process that involves three different steps. 
-									To make sure you want to perform all the steps on the same dataset, please remember this Identification code.
-									When you're done with the current step and move on to the next step, you will be prompt to input this ID code.
-								</p>
 							</div>
-						</div>
-					</div>			`)
+						</div>			`)
+	}
 }
 /*-----------------------split --------------------------------------------*/
 function split(){
@@ -160,6 +163,8 @@ function split(){
 					$(".loading").hide();
 					addUUID(data.uuid);
 					appendDownload("#side-download",data.download);
+					appendImg("#img-container",'');
+					appendPreview('#result-container','');
 				}
 			},
 			error: function(jqXHR, exception){
@@ -198,6 +203,7 @@ function train(){
 		var formData = new FormData();
 		formData.append('labeled', file, file.name);
 		formData.append('uuid', $("#uuid").val());
+		formData.append('classifier',$("#classifier option:selected").val());
 		
 		$(".loading").show();
 		$.ajax({
@@ -216,6 +222,7 @@ function train(){
 				}else{
 					$(".loading").hide();
 					addUUID(data.uuid);
+					appendImg("#img-container",data.img);
 					appendDownload("#side-download",data.download);
 					appendPreview('#result-container',data.preview);
 				}
@@ -264,7 +271,8 @@ function predict(){
 					$("#warning").modal('show');
 				}else{
 					$(".loading").hide();
-					//addUUID(data.uuid);
+					addUUID(data.uuid);
+					appendImg("#img-container",data.img);
 					appendDownload("#side-download",data.download);
 					appendPreview('#result-container',data.preview);
 				}
@@ -317,12 +325,18 @@ function formValidation(task){
 			$("#alert").modal('show');
 			return false;
 		}
-		
+		if ($("#classifier option:selected").val() === 'Please Select...' || $("#classifier option:selected").val() === undefined){
+			$("#modal-message").append(`<h4>You must select a classification algorithm</h4>`);
+			$("#alert").modal('show');
+			$("#classifier").focus();
+			return false;
+		}
 		if ($("#uuid").val() == '' || $("#uuid").val() === undefined){
 			$("#modal-message").append(`<h4>Please input the identification code from Step 1. If you don't have it anymore, please go back to last step and generate a new one.</h4>`);
 			$("#alert").modal('show');
 			return false;
 		}
+		
 	}
 	else if (task === 'predict'){
 		if ($("#uuid").val() == '' || $("#uuid").val() === undefined){
