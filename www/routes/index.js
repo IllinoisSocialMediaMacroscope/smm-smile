@@ -27,7 +27,10 @@ router.get('/',function(req,res,next){
 						(corpus) as corresponding to a particular 
 						<a href="https://en.wikipedia.org/wiki/Parts_of_speech">part of speech</a>, based on both 
 						its definition and its context.`},
-            {name:'Sentiment Analysis', url:'NLP-sentiment', imgURL:'bootstrap/img/logo/NLP/SA.png',
+            {name: 'Text Classification', url:'text-classification', imgURL:'bootstrap/img/logo/sklearn-logo.png',
+						wiki:"https://nlp.stanford.edu/IR-book/html/htmledition/text-classification-and-naive-bayes-1.html",
+						introduction:``},
+			{name:'Sentiment Analysis', url:'NLP-sentiment', imgURL:'bootstrap/img/logo/NLP/SA.png',
 						wiki:'https://en.wikipedia.org/wiki/Sentiment_analysis',
 						introduction:`<b>Sentiment analysis</b> (sometimes known as opinion mining or emotion AI) refers to the
 						use of <a href="https://en.wikipedia.org/wiki/Sentiment_analysis/wiki/Natural_language_processing">
@@ -41,7 +44,8 @@ router.get('/',function(req,res,next){
 						structures through the use of <a href="https://en.wikipedia.org/wiki/Network_theory">networks</a> and <a href="https://en.wikipedia.org/wiki/Graph_theory">graph theory
 						</a>.It characterizes networked structures in terms of <i>nodes</i> (individual actors, people, or things within the network) and the <i>ties</i>, <i>edges</i>, 
 						or <i>links</i> (relationships or interactions) that connect them.`}]
-                      });
+				}
+			);
 });
 
 module.exports = router;
