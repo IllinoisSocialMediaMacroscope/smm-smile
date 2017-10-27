@@ -33,6 +33,11 @@ router.get('/query',function(req,res,next){
 
 
 router.post('/query',function(req,res,next){
+	var dir_downloads = './downloads';	
+	if (!fs.existsSync(dir_downloads)){
+		fs.mkdirSync(dir_downloads);
+	}
+	
 	getSize('./downloads', function(err, size) {
 		if (err) { res.send({'ERROR':err}); }
 		else{ 
@@ -46,20 +51,11 @@ router.post('/query',function(req,res,next){
 				 + 'and delete some of the historical data. No furthur data ingestion or computation can be performed until your ' +
 				'disk usage is below 500MB. We appreciate your understanding!'
 				});
-			}else{
-				
-					// make directory downloads/GraphQL before save things to it!
-					var dir_downloads = './downloads';
+			}else{					
 					var dir_downloads_graphql = './downloads/GraphQL';
-					
-					if (!fs.existsSync(dir_downloads)){
-						fs.mkdirSync(dir_downloads);
-					}
-					
 					if (!fs.existsSync(dir_downloads_graphql)){
 						fs.mkdirSync(dir_downloads_graphql);
 					}
-					
 					if (!fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix)){
 						fs.mkdirSync(dir_downloads_graphql + '/' + req.body.prefix);
 					}
