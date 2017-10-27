@@ -40,8 +40,8 @@ router.post('/text-classification-split',function(req,res,next){
 				}else{
 					
 					var options = {
-						pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-						//pythonPath:'/opt/python/bin/python3.4',
+						//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+						pythonPath:'/opt/python/bin/python3.4',
 						pythonOptions:['-W ignore'],
 						scriptPath:appPath + '/scripts/ML/',
 						args:['--content','./downloads/GraphQL/'+  req.body.filename, '--ratio', req.body.ratio, '--filename', req.body.foldername ]
@@ -88,19 +88,21 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 			}else{
 				
 				var options = {
-					pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-					//pythonPath:'/opt/python/bin/python3.4',
+					//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+					pythonPath:'/opt/python/bin/python3.4',
 					pythonOptions:['-W ignore'],
 					scriptPath:appPath + '/scripts/ML/',
-					args:['--file',req.file.path,'--uuid',req.body.uuid]
-					};				
+					args:['--file',req.file.path,'--uuid',req.body.uuid, '--model',req.body.classifier]
+					};		
+				console.log(req.body.classifier);
 				pythonShell.run('classification_train.py',options,function(err,results){
 					if (err){
 						res.send({'ERROR':err});
 					}else{
 						var uuid = results[0];
 						var pickle = results[1];
-						var metrics = results[2];
+						var div = results[2]
+						var metrics = results[3];
 						
 						if (metrics.slice(-1) === '\r' || metrics.slice(-1) === '\n' || metrics.slice(-1) === '\t' || metrics.slice(-1) === '\0' || metrics.slice(-1) === ' '){
 							var preview_string = fs.readFileSync(metrics.slice(0,-1),'utf8');
@@ -109,10 +111,18 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 						}
 						var preview_arr = CSV.parse(preview_string);
 						
+						
+						if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
+							var div_data = fs.readFileSync(div.slice(0,-1),'utf8');
+						}else{
+							var div_data = fs.readFileSync(div,'utf8');
+						}
+						
 						fs.unlinkSync(req.file.path);
 						
 						res.send({
 							uuid:uuid,
+							img:[{name:'ROC curves for each class',content:div_data}],
 							download:[{name:'Perserved classification pipeline', content:pickle},
 								{name:'Classification performance evaluation',content:metrics}],
 							preview:{name:'Evaluation of the performance of the classification model ',content:preview_arr}	
@@ -145,8 +155,8 @@ router.post('/text-classification-predict',function(req,res,next){
 			}else{
 				
 				var options = {
-					pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-					//pythonPath:'/opt/python/bin/python3.4',
+					//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+					pythonPath:'/opt/python/bin/python3.4',
 					pythonOptions:['-W ignore'],
 					scriptPath:appPath + '/scripts/ML/',
 					args:['--uuid',req.body.uuid]
@@ -158,6 +168,7 @@ router.post('/text-classification-predict',function(req,res,next){
 					}else{
 						var uuid = results[0];
 						var predict = results[1];
+						var div = results[2]
 						
 						if (predict.slice(-1) === '\r' || predict.slice(-1) === '\n' || predict.slice(-1) === '\t' || predict.slice(-1) === '\0' || predict.slice(-1) === ' '){
 							var preview_string = fs.readFileSync(predict.slice(0,-1),'utf8');
@@ -166,8 +177,15 @@ router.post('/text-classification-predict',function(req,res,next){
 						}
 						var preview_arr = CSV.parse(preview_string);
 						
+						if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
+							var div_data = fs.readFileSync(div.slice(0,-1),'utf8');
+						}else{
+							var div_data = fs.readFileSync(div,'utf8');
+						}
+						
 						res.send({
 							uuid:uuid,
+							img:[{name:'Count of each class',content:div_data}],
 							download:[{name:'Predicted Class using trained model', content:predict}],
 							preview:{name:'Preview of the predicted data ',content:preview_arr}	
 						});
