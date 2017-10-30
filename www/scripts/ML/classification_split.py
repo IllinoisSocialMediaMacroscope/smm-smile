@@ -16,13 +16,22 @@ class Classification:
         self.DIR = DIR
 
         Array = []
-        with open(content,'r',encoding='ISO-8859-1') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                try:
-                    Array.append(row)
-                except Exception as e:
-                    pass
+        try:
+            with open(content,'r',encoding='utf-8') as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    try:
+                        Array.append(row)
+                    except Exception as e:
+                        pass
+        except:
+            with open(content,'r',encoding='ISO-8859-1') as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    try:
+                        Array.append(row)
+                    except Exception as e:
+                        pass
 
         df = pandas.DataFrame(Array[1:], columns=Array[0])
         # find the unique tweet in a corpus
