@@ -63,13 +63,13 @@ class Classification:
 
         # save result
         fname = os.path.join(self.DIR,'PREDICTED_' + filename + '.csv')
-        with open(fname,'w',encoding="ISO-8859-1",newline="") as f:
+        with open(fname,'w',newline="") as f:
             writer = csv.writer(f)
             writer.writerow(['tweet','category'])
             for i in range(len(data)):
                 try:
                     writer.writerow([data[i],self.predicted[i]])
-                except UnicodeDecodeError:
+                except:
                     pass
         print(fname)
 
