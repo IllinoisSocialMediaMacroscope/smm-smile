@@ -231,7 +231,7 @@ class Classification:
 
         # save metrics report
         fname_metrics = os.path.join(self.DIR,'classification_report.csv')
-        with open(fname_metrics,'w',encoding="ISO-8859-1",newline="") as f:
+        with open(fname_metrics,'w',newline="") as f:
             writer = csv.writer(f)
             writer.writerow(['label','precision','recall','f1-score','support'])
             for i in range(len(report)):
