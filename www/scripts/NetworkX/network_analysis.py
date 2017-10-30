@@ -25,13 +25,23 @@ class Network:
         self.DIR = DIR
 
         Array = []
-        with open(input_file,'r',encoding="ISO-8859-1") as f:
-            reader = csv.reader(f)
-            try:
-                for row in reader:
-                    Array.append(row)
-            except Exception as e:
-                print(e)
+        try:
+            with open(input_file,'r',encoding="utf-8") as f:
+                reader = csv.reader(f)
+                try:
+                    for row in reader:
+                        Array.append(row)
+                except Exception as e:
+                    pass
+        except:
+            with open(input_file,'r',encoding="ISO-8859-1") as f:
+                reader = csv.reader(f)
+                try:
+                    for row in reader:
+                        Array.append(row)
+                except Exception as e:
+                    pass
+                
         df = pandas.DataFrame(Array[1:],columns=Array[0])
         #df = pandas.read_csv(input_file, encoding="utf-8")
         

@@ -47,14 +47,23 @@ class Sentiment:
 
             elif format == 'file':
                 Array = []
-                with open(content,'r',encoding="ISO-8859-1") as f:
-                    reader = csv.reader(f)
-                    try:
-                        for row in reader:
-                            Array.append(row)
-                    except Exception as e:
-                        print(e)
-                
+                try:
+                    with open(content,'r',encoding="utf-8") as f:
+                        reader = csv.reader(f)
+                        try:
+                            for row in reader:
+                                Array.append(row)
+                        except Exception as e:
+                            pass
+                except:
+                    with open(content,'r',encoding="ISO-8859-1") as f:
+                        reader = csv.reader(f)
+                        try:
+                            for row in reader:
+                                Array.append(row)
+                        except Exception as e:
+                            pass
+                    
                 df = pd.DataFrame(Array[1:],columns=Array[0])
                 #df = pd.read_csv(content,encoding="utf-8")
                 self.sent = df[column].dropna().astype('str').tolist()
