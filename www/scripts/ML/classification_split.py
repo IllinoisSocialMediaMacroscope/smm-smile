@@ -56,7 +56,7 @@ class Classification:
         print(fname_div_split)
         
         fname1 = self.DIR + '/TRAINING_' + filename  + '.csv'
-        with open(fname1,'w',encoding="ISO-8859-1",newline="") as f:
+        with open(fname1,'w',newline="") as f:
             writer = csv.writer(f)
             writer.writerow(['tweet','category'])
             for row in training_set:
@@ -67,7 +67,7 @@ class Classification:
         print(fname1)
 
         fname2 = self.DIR + '/UNLABELED_' + filename +'.csv'
-        with open(fname2,'w',encoding="ISO-8859-1",newline="") as f:
+        with open(fname2,'w',newline="") as f:
             writer = csv.writer(f)
             writer.writerow(['tweet'])
             for row in testing_set:
