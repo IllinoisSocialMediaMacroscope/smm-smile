@@ -39,13 +39,22 @@ class Classification:
 
         
         Array = []
-        with open(file,'r',encoding="ISO-8859-1") as f:
-            reader = csv.reader(f)
-            for row in reader:
-                try:
-                    Array.append(row)
-                except Exception as e:
-                    print(e)
+        try:
+            with open(file,'r',encoding="utf-8") as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    try:
+                        Array.append(row)
+                    except Exception as e:
+                        pass
+        except:
+            with open(file,'r',encoding="ISO-8859-1") as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    try:
+                        Array.append(row)
+                    except Exception as e:
+                        pass
 
         self.data = []
         self.target = []
