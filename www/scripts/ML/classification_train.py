@@ -20,6 +20,7 @@ import pickle
 import numpy as np
 from plotly.offline import plot
 import plotly.graph_objs as go
+import json
 
 class Classification:
 
@@ -35,6 +36,8 @@ class Classification:
               )
 
         print(uuid)
+
+        
         Array = []
         with open(file,'r',encoding='utf-8') as f:
             reader = csv.reader(f)
@@ -109,66 +112,95 @@ class Classification:
         print(fname_pickle)
 
         # plotting the roc curve
-        self.labels = text_clf.classes_
-
-        
+        self.labels = text_clf.classes_       
         y = label_binarize(self.y_test,classes = self.labels)
+
         
-        fpr = {}
-        tpr = {}
-        roc_auc = {}
-        for i in range(len(self.labels)):
-            fpr[self.labels[i]], tpr[self.labels[i]], _ = roc_curve(y[:, i], y_score[:, i])
-            roc_auc[self.labels[i]] = auc(fpr[self.labels[i]], tpr[self.labels[i]])
-        
-        # Compute micro-average ROC curve and ROC area
-        fpr["micro"], tpr["micro"], _ = roc_curve(y.ravel(), y_score.ravel())
-        roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
-
-        # First aggregate all false positive rates
-        all_fpr = np.unique(np.concatenate([fpr[self.labels[i]] for i in range(len(self.labels))]))
-
-        # Then interpolate all ROC curves at this points
-        mean_tpr = np.zeros_like(all_fpr)
-        for i in range(len(self.labels)):
-            mean_tpr += interp(all_fpr, fpr[self.labels[i]], tpr[self.labels[i]])
-
-        # Finally average it and compute AUC
-        mean_tpr /= len(self.labels)
-
-        fpr["macro"] = all_fpr
-        tpr["macro"] = mean_tpr
-        roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
-
-        # plotting
-        trace0 = go.Scatter(
-            x = fpr['micro'],
-            y = tpr['micro'],
-            name = 'micro-average ROC curve (area =' + str(roc_auc["micro"]) + ' )',
-            line = dict(color=('deeppink'), width = 4)
-        )
-        trace1 = go.Scatter(
-            x = fpr['macro'],
-            y = tpr['macro'],
-             name = 'macro-average ROC curve (area =' + str(roc_auc["macro"]) + ' )',
-            line = dict(
-                color = ('navy'),
-                width = 4,)
-        )
-        data = [trace0, trace1]
-        colors = cycle(['aqua', 'darkorange', 'cornflowerblue'])
-        for i, color in zip(range(len(self.labels)), colors):
+        # binary class
+        if len(self.labels) <= 2:
+            if model == 'Perceptron' or model == 'SGD' or model == 'passiveAggressive':
+                fpr, tpr, _ = roc_curve(y[:, 0], y_score)
+            else:
+                y = []
+                for label in self.y_test:
+                    item = []
+                    for i in range(len(text_clf.classes_)):
+                        if label == text_clf.classes_[i]:
+                            item.append(1)
+                        else:
+                            item.append(0)
+                    y.append(item)
+                y = np.array(y)
+                fpr, tpr, _ = roc_curve(y.ravel(), y_score.ravel())
+            
+            roc_auc = auc(fpr, tpr)
             trace = go.Scatter(
-                x = fpr[self.labels[i]], 
-                y = tpr[self.labels[i]],
-                name = 'ROC curve of class {0} (area = {1:0.2f})'.format(self.labels[i], roc_auc[self.labels[i]]),
-                line = dict(
-                    color = (color),
-                    width = 4, 
-                    dash = 'dash')
+                x = fpr,
+                y = tpr,
+                name = 'ROC curve (area =' + str(roc_auc) + ' )',
+                line = dict(color=('deeppink'), width = 4)
             )
-            data.append(trace)
-        layout = dict(title = 'ROC curve',
+            data = [trace]
+
+        # multiclasses  
+        else:
+            fpr = {}
+            tpr = {}
+            roc_auc = {}
+            for i in range(len(self.labels)):
+                fpr[self.labels[i]], tpr[self.labels[i]], _ = roc_curve(y[:, i], y_score[:, i])
+                roc_auc[self.labels[i]] = auc(fpr[self.labels[i]], tpr[self.labels[i]])
+            
+            # Compute micro-average ROC curve and ROC area
+            fpr["micro"], tpr["micro"], _ = roc_curve(y.ravel(), y_score.ravel())
+            roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+
+            # First aggregate all false positive rates
+            all_fpr = np.unique(np.concatenate([fpr[self.labels[i]] for i in range(len(self.labels))]))
+
+            # Then interpolate all ROC curves at this points
+            mean_tpr = np.zeros_like(all_fpr)
+            for i in range(len(self.labels)):
+                mean_tpr += interp(all_fpr, fpr[self.labels[i]], tpr[self.labels[i]])
+
+            # Finally average it and compute AUC
+            mean_tpr /= len(self.labels)
+
+            fpr["macro"] = all_fpr
+            tpr["macro"] = mean_tpr
+            roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
+
+            # plotting
+            trace0 = go.Scatter(
+                x = fpr['micro'],
+                y = tpr['micro'],
+                name = 'micro-average ROC curve (area =' + str(roc_auc["micro"]) + ' )',
+                line = dict(color=('deeppink'), width = 4)
+            )
+            trace1 = go.Scatter(
+                x = fpr['macro'],
+                y = tpr['macro'],
+                 name = 'macro-average ROC curve (area =' + str(roc_auc["macro"]) + ' )',
+                line = dict(
+                    color = ('navy'),
+                    width = 4,)
+            )
+            data = [trace0, trace1]
+            colors = cycle(['aqua', 'darkorange', 'cornflowerblue'])
+            for i, color in zip(range(len(self.labels)), colors):
+                trace = go.Scatter(
+                    x = fpr[self.labels[i]], 
+                    y = tpr[self.labels[i]],
+                    name = 'ROC curve of class {0} (area = {1:0.2f})'.format(self.labels[i], roc_auc[self.labels[i]]),
+                    line = dict(
+                        color = (color),
+                        width = 4, 
+                        dash = 'dash')
+                )
+                data.append(trace)
+
+                
+        layout = dict(title = model + ' model ROC curve',
               xaxis = dict(title = 'False Positive Rate'),
               yaxis = dict(title = 'True Positive Rate'),
               )
@@ -207,7 +239,15 @@ if __name__ == '__main__':
     parser.add_argument('--uuid',required=True)
     parser.add_argument('--model',required=True)
     args = parser.parse_args()
-       
+
+    # save config.dat file
+    DIR = os.path.join('./downloads/ML/classification',args.uuid)
+    if os.path.exists(DIR + '/config.dat'):
+        with open(DIR + '/config.dat', "r") as fp:
+            data = json.load(fp)
+            data.update(vars(args))
+        with open(DIR + '/config.dat', "w") as f:
+            json.dump(data,f)
     
     classification = Classification(args.file, args.uuid)
     classification.split()

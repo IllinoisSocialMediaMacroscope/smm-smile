@@ -120,24 +120,33 @@ $(document).ready(function(){
 });
 
 function addUUID(uuid){
-	$(".row.announce").empty();
-	
 	if (uuid !== ''){
-		$(".loading").after(`<div class="row announce">
-								<div class="col-md-12 col-sm-12 col-xs-12">
-								<div id="announce-container" style="border-radius:10px;padding:50px 50px; margin:0px 100px;">
-									<div id="ID-code" style="text-align:center; margin-bottom:30px; background-color:#428bca; padding:30px 30px; color:white;border-radius:10px;">
-										<h1>Identification code:</h1> 
-										<h3>`+ uuid + `</h3>
-									</div>
-									<p><b>Note:</b>Text classification is a complex process that involves three different steps. 
-										To make sure you want to perform all the steps on the same dataset, please remember this Identification code.
-										When you're done with the current step and move on to the next step, you will be prompt to input this ID code.
-									</p>
-								</div>
-							</div>
-						</div>			`)
+		$("#ID-code h3").text(uuid);
+		$("#uuid-modal").modal('show');
 	}
+}
+
+function showUUID(){
+	$("#uuid-modal").modal('show');
+}
+
+function appendInstruction(ID, len_training, len_testing){
+	$(ID).empty();
+	$(ID).append(`<h2>Instruction</h2>
+								<div id="split-stats" style="padding:40px 100px;background-color:white;">
+									<p style="font-size:20px;">
+										<b>Please download the training set, labeling your trainig set following the description below, and uploading this labeled file in the next step:</b> <br><br> 
+										We train the text classification model to recognize the category of a certain piece of text by offering them examples, and
+										Labeling the training set is the step to create such examples. Labels can be obtained by asking humans to make judgments 
+										about a given piece of unlabeled data. 
+										<br>
+										<br>For example:<br> 
+										<i>"Does this tweet contain a horse or a cow?" -- You can put <b>"cow"</b> or <b>"horse"</b> in the "category" column in the training set</i><br>
+										<i>"Is this tweet a original tweet, retweet, or mentions someone?" -- You can put <b>"original"</b>,<b>"retweet"</b> or <b>"mentions"</b> in the "category" column in the training set</i>
+									</p>
+									<h2 style="color:black;">labeling in excel:<h2>
+									<img src="bootstrap/img/gifs/labeling.gif" style="display:block; margin:auto;"/>
+								</div>`);
 }
 /*-----------------------split --------------------------------------------*/
 function split(){
@@ -162,9 +171,11 @@ function split(){
 				}else{
 					$(".loading").hide();
 					addUUID(data.uuid);
+					appendInstruction("#gaudge",data.len_training, data.len_testing);
 					appendDownload("#side-download",data.download);
-					appendImg("#img-container",'');
+					appendImg("#img-container",data.img);
 					appendPreview('#result-container','');
+					
 				}
 			},
 			error: function(jqXHR, exception){
