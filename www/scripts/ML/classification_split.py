@@ -4,7 +4,10 @@ import random
 import argparse
 import uuid
 import os
+from plotly.offline import plot
+import plotly.graph_objs as go
 from os.path import join, dirname
+import json
 
 class Classification:
 
@@ -33,6 +36,16 @@ class Classification:
         training_set = list(random.sample(self.corpus, int(len(self.corpus)*ratio/100)))
         testing_set = [item for item in self.corpus if item not in training_set]
 
+        # plot a pie chart of the split
+        labels = ['training set data points','unlabeled data points']
+        values = [len(training_set), len(testing_set)]
+        trace = go.Pie(labels=labels, values = values, textinfo='value')
+        div_split = plot([trace], output_type='div',image='png',auto_open=False, image_filename='plot_img')
+        fname_div_split = self.DIR + '/div_split.dat'
+        with open(fname_div_split,"w") as f:
+            f.write(div_split)
+        print(fname_div_split)
+        
         fname1 = self.DIR + '/TRAINING_' + filename  + '.csv'
         with open(fname1,'w',encoding="utf-8",newline="") as f:
             writer = csv.writer(f)
@@ -44,7 +57,7 @@ class Classification:
                     pass
         print(fname1)
 
-        fname2 = self.DIR + '/TESTING_' + filename +'.csv'
+        fname2 = self.DIR + '/UNLABELED_' + filename +'.csv'
         with open(fname2,'w',encoding="utf-8",newline="") as f:
             writer = csv.writer(f)
             writer.writerow(['tweet'])
@@ -75,9 +88,12 @@ if __name__ == '__main__':
           )
     if not os.path.exists(DIR):
         os.makedirs(DIR)
-
     print(uid)
-    
+
+    # save config.dat file
+    with open(DIR + '/config.dat', "w") as f:
+        json.dump(vars(args),f)
+   
     classification = Classification(DIR, args.content)
     classification.split(int(args.ratio),args.filename)
 

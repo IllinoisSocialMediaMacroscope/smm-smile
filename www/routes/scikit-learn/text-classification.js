@@ -51,13 +51,21 @@ router.post('/text-classification-split',function(req,res,next){
 							res.send({'ERROR':err});
 						}else{
 							var uuid = results[0];
-							var training = results[1];
-							var testing = results[2];
+							var div = results[1];
+							var training = results[2]
+							var testing = results[3];
+							
+							if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
+							var div_data = fs.readFileSync(div.slice(0,-1),'utf8');
+							}else{
+								var div_data = fs.readFileSync(div,'utf8');
+							}
 							res.send({
 								uuid:uuid,
 								title:'Partial data generated for labeling and training', 
+								img:[{name:'Split the corpus',content:div_data}],
 								download:[{name:'Download training dataset', content:training},
-									{name:'Download testing dataset',content:testing}]				
+									{name:'Download unlabeled dataset',content:testing}]
 							});
 						}
 					});
@@ -94,9 +102,10 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 					scriptPath:appPath + '/scripts/ML/',
 					args:['--file',req.file.path,'--uuid',req.body.uuid, '--model',req.body.classifier]
 					};		
-				console.log(req.body.classifier);
+				//console.log(req.body.classifier);
 				pythonShell.run('classification_train.py',options,function(err,results){
 					if (err){
+						//console.log(err);
 						res.send({'ERROR':err});
 					}else{
 						var uuid = results[0];

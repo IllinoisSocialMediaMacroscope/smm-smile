@@ -38,8 +38,8 @@ class Classification:
         # load text set
         listing = os.listdir(self.DIR)
         for file in listing:
-            if file[0:8] == 'TESTING_' and file[-4:] == '.csv':
-                filename = file[8:-4]
+            if file[0:10] == 'UNLABELED_' and file[-4:] == '.csv':
+                filename = file[10:-4]
                 data = []
                 with open(os.path.join(self.DIR, file),'r',encoding='utf-8') as f:
                     reader = list(csv.reader(f))
@@ -84,7 +84,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Processing...")
     parser.add_argument('--uuid',required=True)
     args = parser.parse_args()
-       
     
     classification = Classification(args.uuid)
     classification.predict()
