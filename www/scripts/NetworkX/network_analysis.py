@@ -25,7 +25,7 @@ class Network:
         self.DIR = DIR
 
         Array = []
-        with open(input_file,'r',encoding="utf-8") as f:
+        with open(input_file,'r',encoding="ISO-8859-1") as f:
             reader = csv.reader(f)
             try:
                 for row in reader:
