@@ -16,13 +16,13 @@ class Classification:
         self.DIR = DIR
 
         Array = []
-        with open(content,'r',encoding='utf-8') as f:
+        with open(content,'r',encoding='ISO-8859-1') as f:
             reader = csv.reader(f)
             for row in reader:
                 try:
                     Array.append(row)
                 except Exception as e:
-                    print(e)
+                    pass
 
         df = pandas.DataFrame(Array[1:], columns=Array[0])
         # find the unique tweet in a corpus
@@ -47,7 +47,7 @@ class Classification:
         print(fname_div_split)
         
         fname1 = self.DIR + '/TRAINING_' + filename  + '.csv'
-        with open(fname1,'w',encoding="utf-8",newline="") as f:
+        with open(fname1,'w',encoding="ISO-8859-1",newline="") as f:
             writer = csv.writer(f)
             writer.writerow(['tweet','category'])
             for row in training_set:
@@ -58,7 +58,7 @@ class Classification:
         print(fname1)
 
         fname2 = self.DIR + '/UNLABELED_' + filename +'.csv'
-        with open(fname2,'w',encoding="utf-8",newline="") as f:
+        with open(fname2,'w',encoding="ISO-8859-1",newline="") as f:
             writer = csv.writer(f)
             writer.writerow(['tweet'])
             for row in testing_set:
