@@ -29,7 +29,9 @@ router.get('/',function(req,res,next){
 						its definition and its context.`},
             {name: 'Text Classification', url:'text-classification', imgURL:'bootstrap/img/logo/sklearn-logo.png',
 						wiki:"https://nlp.stanford.edu/IR-book/html/htmledition/text-classification-and-naive-bayes-1.html",
-						introduction:``},
+						introduction:`Text classification is one of the important and typical task in supervised machine learning (ML). 
+						Text Classification assigns one or more classes to a document according to their content. Classes are selected from 
+						a previously established taxonomy (catergories or classes), which are usually established by human hand labeling.`},
 			{name:'Sentiment Analysis', url:'NLP-sentiment', imgURL:'bootstrap/img/logo/NLP/SA.png',
 						wiki:'https://en.wikipedia.org/wiki/Sentiment_analysis',
 						introduction:`<b>Sentiment analysis</b> (sometimes known as opinion mining or emotion AI) refers to the

@@ -10,10 +10,12 @@ router.get('/history',function(req,res,next){
 							{"twitter-Tweet":{},
 							"twitter-User":{},
 							"twitter-Stream":{}},
-						//"ML":
-						//	{
+						"ML":
+						{
 						//	"feature":{},
-						//	"clustering":{}},
+						//	"clustering":{}
+							"classification":{}
+						},
 						"NLP":
 							{"preprocessing":{},
 							"sentiment":{}
@@ -24,15 +26,15 @@ router.get('/history',function(req,res,next){
 					
 	if (fs.existsSync('./downloads')){
 		
-		/*if (fs.existsSync('./downloads/ML')) {
-			if (fs.existsSync('./downloads/ML/clustering')){
-				var fileList = fs.readdirSync('./downloads/ML/clustering')
+		if (fs.existsSync('./downloads/ML')) {
+			if (fs.existsSync('./downloads/ML/classification')){
+				var fileList = fs.readdirSync('./downloads/ML/classification')
 				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at = fs.lstatSync('./downloads/ML/clustering/' + fileList[i]).birthtime.toString();
-					directory['ML']['clustering'][fileList[i]] = created_at;
+					var created_at = fs.lstatSync('./downloads/ML/classification/' + fileList[i]).birthtime.toString();
+					directory['ML']['classification'][fileList[i]] = created_at;
 				}
 			}
-		}*/
+		}
 		
 		if (fs.existsSync('./downloads/NLP')){
 			if (fs.existsSync('./downloads/NLP/preprocessing')){
@@ -148,23 +150,37 @@ router.post('/history',function(req,res,next){
 					config:config
 				});
 	}
-	/*else if (req.body.layer2 === 'clustering'  && fs.readdirSync(DIR).length === 5){
-		var div_data = fs.readFileSync(DIR +'/div.dat', 'utf8'); //trailing /r 
-		var div_comp_data = fs.readFileSync(DIR + '/div_comp.dat', 'utf8');
-		var preview_string = fs.readFileSync(DIR +'/clustering-features.csv', "utf8"); 
+	else if (req.body.layer2 === 'classification'  && fs.readdirSync(DIR).length === 9){
+		var div_data0 = fs.readFileSync(DIR +'/div_split.dat', 'utf8');
+		var div_data1 = fs.readFileSync(DIR +'/div.dat', 'utf8'); //trailing /r 
+		var div_data2 = fs.readFileSync(DIR +'/div_comp.dat', 'utf8'); //trailing /r 
+		var preview_string = fs.readFileSync(DIR +'/classification_report.csv', "utf8"); 
 		var preview_arr = CSV.parse(preview_string);
 		var config = JSON.parse(fs.readFileSync(DIR + '/config.dat','utf8'));
+		
+		var fnames = fs.readdirSync(DIR);
+		fnames = fnames.filter(item => item !== 'div.dat' && item !== 'div_comp.dat' && item !== 'config.dat' && item !== 'div_split.dat');
+		var downloadFiles = [];
+		for (var i=0; i< fnames.length; i++){
+			if (fnames[i] === 'classification_pipeline.pickle'){
+				downloadFiles.push({'name':'classification model', 'content':DIR + '/' + fnames[i]}); 
+			}else{
+				var fnameRegex = /(.*).csv/g	
+				var display_name = fnameRegex.exec(fnames[i])[1];
+				downloadFiles.push({'name':display_name, 'content':DIR + '/' + fnames[i]}); 
+			}
+		}
 		res.send({
-				title:'scikit-learn clustering', 
+				title:'text classification', 
 				ID:req.body.historyID,
-				img:[{name:'Clustering down-grade to 2D',content:div_data},
-						{name:'Composition of predicted clusters', content:div_comp_data}],
-				download:[{name:'Download clustered data', content:DIR + '/clustering-complete.csv'},
-						{name:'Download features and clustered label',content:DIR + '/clustering-features.csv'}],
-				preview:{name:'preview some of the clustered data',content:preview_arr},
+				img:[{name:'Split the Corpus', content:div_data0},
+					{name:'ROC curves for each class',content:div_data1},
+					{name:'Count of each class',content:div_data2}],
+				download:downloadFiles,
+				preview:{name:'Preview training report',content:preview_arr},
 				config:config
 			});
-	}*/
+	}
 	else if (req.body.layer2 === 'networkx' && fs.readdirSync(DIR).length >=5){
 		var fnames = fs.readdirSync(DIR);
 		var div_data = fs.readFileSync(DIR + '/div.dat', 'utf8');
@@ -221,7 +237,8 @@ router.post('/history',function(req,res,next){
 			});
 	}
 	else{
-		res.send({ERROR:`Sorry! We cannot find specific analytic history associated with this ID`});
+		res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double checked
+		if you have fulfilled all the required  process when carrying out this analysis.`});
 	}
 
 });
