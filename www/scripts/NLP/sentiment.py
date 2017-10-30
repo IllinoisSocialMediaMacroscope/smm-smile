@@ -47,7 +47,7 @@ class Sentiment:
 
             elif format == 'file':
                 Array = []
-                with open(content,'r',encoding="utf-8") as f:
+                with open(content,'r',encoding="ISO-8859-1") as f:
                     reader = csv.reader(f)
                     try:
                         for row in reader:
