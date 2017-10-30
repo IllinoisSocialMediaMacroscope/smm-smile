@@ -32,6 +32,14 @@ router.post('/sitemap',function(req,res,next){
 		  "url":"sklearn-cluster",
 		},*/
 		{
+			"tags":`text classification; class; classes; category; categories; scikit learn; python; classification; supervised learning; 
+			training; train; predicting; predict;
+			function; data; algorithm; regression; variance; features; vector; linear; model; Naive Bayes; Perceptron;
+			random forest; KNN; passive agressive;`,
+			"text":fs.readFileSync(path.join(appPath,'views','analytics','text-classification.pug')),
+			"url":"text-classification",
+		},
+		{
 			"tags":`natural language; preprocess; process; tokenize; lexer; word; tokens; lexical; lemma; lemmatization; 
 				stem; stemming; grammatical; verb; plural; corpus; context; simplified;adjectives; adverbs; nouns;characters;
 				phrase; sentence; language; parser; posTag; string; generator; word tree; 
@@ -83,6 +91,7 @@ router.post('/sitemap',function(req,res,next){
 		"./":"Homepage",
 		"networkx":"Network visualization and analysis",
 		//"sklearn-cluster":"Unsupervised learning",
+		"text-classification":"Text Classification",
 		"NLP-preprocess":"Natural language preprocessing",
 		"NLP-sentiment":"Sentiment analysis",
 		"query":"Social media search",
