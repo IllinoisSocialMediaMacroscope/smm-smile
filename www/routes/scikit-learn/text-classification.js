@@ -40,8 +40,8 @@ router.post('/text-classification-split',function(req,res,next){
 				}else{
 					
 					var options = {
-						pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-						//pythonPath:'/opt/python/bin/python3.4',
+						//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+						pythonPath:'/opt/python/bin/python3.4',
 						pythonOptions:['-W ignore'],
 						scriptPath:appPath + '/scripts/ML/',
 						args:['--content','./downloads/GraphQL/'+  req.body.filename, '--ratio', req.body.ratio, '--filename', req.body.foldername ]
@@ -96,8 +96,8 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 			}else{
 				
 				var options = {
-					pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-					//pythonPath:'/opt/python/bin/python3.4',
+					//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+					pythonPath:'/opt/python/bin/python3.4',
 					pythonOptions:['-W ignore'],
 					scriptPath:appPath + '/scripts/ML/',
 					args:['--file',req.file.path,'--uuid',req.body.uuid, '--model',req.body.classifier]
@@ -164,8 +164,8 @@ router.post('/text-classification-predict',function(req,res,next){
 			}else{
 				
 				var options = {
-					pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-					//pythonPath:'/opt/python/bin/python3.4',
+					//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+					pythonPath:'/opt/python/bin/python3.4',
 					pythonOptions:['-W ignore'],
 					scriptPath:appPath + '/scripts/ML/',
 					args:['--uuid',req.body.uuid]
