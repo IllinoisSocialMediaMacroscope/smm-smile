@@ -41,13 +41,22 @@ class Classification:
             if file[0:10] == 'UNLABELED_' and file[-4:] == '.csv':
                 filename = file[10:-4]
                 data = []
-                with open(os.path.join(self.DIR, file),'r',encoding='ISO-8859-1') as f:
-                    reader = list(csv.reader(f))
-                    for row in reader[1:]:
-                        try:
-                            data.extend(row)
-                        except Exception as e:
-                            pass
+                try:
+                    with open(os.path.join(self.DIR, file),'r',encoding='utf-8') as f:
+                        reader = list(csv.reader(f))
+                        for row in reader[1:]:
+                            try:
+                                data.extend(row)
+                            except Exception as e:
+                                pass
+                except:
+                    with open(os.path.join(self.DIR, file),'r',encoding='ISO-8859-1') as f:
+                        reader = list(csv.reader(f))
+                        for row in reader[1:]:
+                            try:
+                                data.extend(row)
+                            except Exception as e:
+                                pass
 
         # predict using trained model         
         self.predicted = text_clf.predict(data)
