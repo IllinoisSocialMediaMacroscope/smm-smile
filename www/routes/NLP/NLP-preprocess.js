@@ -33,8 +33,8 @@ router.post('/NLP-preprocess',function(req,res,next){
 				
 				if (req.body.selectFile !== 'Please Select'){
 					var options = {
-						//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-						pythonPath:'/opt/python/bin/python3.4',
+						pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+						//pythonPath:'/opt/python/bin/python3.4',
 						pythonOptions:['-W ignore'],
 						scriptPath:appPath + '/scripts/NLP/',
 						args:['--format','file', '--content','./downloads/GraphQL/'+  req.body.filename, '--column', req.body.selectFileColumn,
@@ -64,7 +64,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 				pythonShell.run('preprocessing.py',options,function(err,results){
 					if(err){ 
 						//throw err;
-						//console.log(err);
+						console.log(err);
 						res.send({ERROR:err});	
 					}else{
 						var phrases = results[1];

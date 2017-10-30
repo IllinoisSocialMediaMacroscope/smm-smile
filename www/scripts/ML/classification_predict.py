@@ -41,7 +41,7 @@ class Classification:
             if file[0:10] == 'UNLABELED_' and file[-4:] == '.csv':
                 filename = file[10:-4]
                 data = []
-                with open(os.path.join(self.DIR, file),'r',encoding='utf-8') as f:
+                with open(os.path.join(self.DIR, file),'r',encoding='ISO-8859-1') as f:
                     reader = list(csv.reader(f))
                     for row in reader[1:]:
                         try:
@@ -54,7 +54,7 @@ class Classification:
 
         # save result
         fname = os.path.join(self.DIR,'PREDICTED_' + filename + '.csv')
-        with open(fname,'w',encoding="utf-8",newline="") as f:
+        with open(fname,'w',encoding="ISO-8859-1",newline="") as f:
             writer = csv.writer(f)
             writer.writerow(['tweet','category'])
             for i in range(len(data)):
