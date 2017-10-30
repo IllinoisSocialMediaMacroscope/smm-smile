@@ -172,6 +172,7 @@ function split(){
 					$(".loading").hide();
 					addUUID(data.uuid);
 					appendInstruction("#gaudge",data.len_training, data.len_testing);
+					
 					appendDownload("#side-download",data.download);
 					appendImg("#img-container",data.img);
 					appendPreview('#result-container','');
@@ -233,6 +234,8 @@ function train(){
 				}else{
 					$(".loading").hide();
 					addUUID(data.uuid);
+					$("#gaudge").empty();
+					
 					appendImg("#img-container",data.img);
 					appendDownload("#side-download",data.download);
 					appendPreview('#result-container',data.preview);
@@ -282,6 +285,8 @@ function predict(){
 					$("#warning").modal('show');
 				}else{
 					$(".loading").hide();
+					$("#gaudge").empty();
+					
 					addUUID(data.uuid);
 					appendImg("#img-container",data.img);
 					appendDownload("#side-download",data.download);
@@ -356,28 +361,6 @@ function formValidation(task){
 			return false;
 		}
 	}
-	/*if ($("input[name='fields']:checked").val() === '' ||$("input[name='fields']:checked").val() === undefined){
-		$("#modal-message").append(`<h4>Please select a column of the text to analyze!</h4>`);
-		$("#alert").modal('show');
-		return false;			
-	}else if ($("input[name='fields']:checked").length < 2){
-		$("#modal-message").append(`<h4>Must select at least two columns!</h4>`);
-		$("#alert").modal('show');
-		return false;
-	}
-	if ($("#model option:selected").val() === '' || $("#model option:selected").val() === undefined){
-		$("#modal-message").append(`<h4>Please select a model to perform!</h4>`);
-		$("#alert").modal('show');
-		$("#model").focus();
-		return false;
-	}
-	if ($("#n_clusters").val()< 2 || $("#n_clusters").val() > 20){
-		$("#modal-message").append(`<h4>The valid number of cluster is between 0 to 20!</h4>`);
-		$("#alert").modal('show');
-		$("#n_clusters").focus();
-		return false;
-	}*/
-	
 	return true;
 	
 }
