@@ -5,7 +5,7 @@ block customized-script
 	script(src=param['custom-script']).	
 	
 block config-form
-	form(action=param['form-action'], name='NLP', method='post',class="form-horizontal")
+	form(id="upload", action=param['form-action'], name='NLP', method='post',class="form-horizontal")
 		each container in param['containers']
 			div(id=container['container-name'])
 				div(class="form-group")
