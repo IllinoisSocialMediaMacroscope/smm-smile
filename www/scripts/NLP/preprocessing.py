@@ -78,26 +78,35 @@ class Preprocess:
                 
                 df = pd.DataFrame(Array[1:],columns=Array[0])
                 sentences = df[column].dropna().astype('str').tolist()
-                self.text = '\n'.join(df[column].astype('str').tolist())
+                # self.text = '\n'.join(df[column].astype('str').tolist())
 
 
-            # save phrases
-            
-            # tokenize the sentence
+            # remove URL
+            sentences = [ re.sub(r"http\S+","",tweet) for tweet in sentences]
+
+            # get Phrases
             phrases = [] # unofficial way to do that!
-            regex = re.compile('[%s%s]' % (string.punctuation,'|\"\',\t\n’”“'))
+            regex = re.compile('[%s%s]' % (string.punctuation,'|,\t\n'))
             for item in sentences:
                 for i in regex.split(item):
                     if i != '' and i.isdigit() != True and len(i)>20:
                         phrases.append(i.lower())
             phrases.insert(0,'Phrase')
             fname_phrases = self.DIR + '/sentence.csv'
-            with open(fname_phrases, "w", newline='') as f:
-                for item in phrases:
-                    try:
-                        f.write("{}\n".format(item)) 
-                    except UnicodeEncodeError:
-                        pass
+            try:
+                with open(fname_phrases, "w", newline='',encoding='utf-8') as f:
+                    for item in phrases:
+                        try:
+                            f.write("{}\n".format(item)) 
+                        except UnicodeEncodeError:
+                            pass
+            except:
+                with open(fname_phrases, "w", newline='',encoding='ISO-8859-1') as f:
+                    for item in phrases:
+                        try:
+                            f.write("{}\n".format(item)) 
+                        except UnicodeEncodeError:
+                            pass
             print(fname_phrases)
 
 
@@ -135,12 +144,20 @@ class Preprocess:
                                              and (word.lower() not in stopwords3) ])
 
             fname_filtered = self.DIR + '/tokenized.csv'
-            with open(fname_filtered, "w", newline='') as f:
-                writer = csv.writer(f)
-                try:
-                    writer.writerows(self.filtered_tokens_lower)
-                except UnicodeEncodeError:
-                    pass
+            try:
+                with open(fname_filtered, "w", newline='',encoding='utf-8') as f:
+                    writer = csv.writer(f)
+                    try:
+                        writer.writerows(self.filtered_tokens_lower)
+                    except UnicodeEncodeError:
+                        pass
+            except:
+                with open(fname_filtered, "w", newline='',encoding='ISO-8859-1') as f:
+                    writer = csv.writer(f)
+                    try:
+                        writer.writerows(self.filtered_tokens_lower)
+                    except UnicodeEncodeError:
+                        pass
             print(fname_filtered)
             
             
@@ -154,12 +171,20 @@ class Preprocess:
                 self.processed_tokens.append([wnl.lemmatize(t) for t in tk])
 
             fname_processed = self.DIR + '/lemmatized.csv'
-            with open(fname_processed, "w", newline='') as f:
-                writer = csv.writer(f)
-                try:
-                    writer.writerows(self.processed_tokens)
-                except UnicodeEncodeError:
-                    pass
+            try:
+                with open(fname_processed, "w", newline='',encoding='utf-8') as f:
+                    writer = csv.writer(f)
+                    try:
+                        writer.writerows(self.processed_tokens)
+                    except UnicodeEncodeError:
+                        pass
+            except:
+                with open(fname_processed, "w", newline='',encoding='ISO-8859-1') as f:
+                    writer = csv.writer(f)
+                    try:
+                        writer.writerows(self.processed_tokens)
+                    except UnicodeEncodeError:
+                        pass
             print(fname_processed)
 
         elif process == 'stemming':
@@ -169,12 +194,20 @@ class Preprocess:
                 self.processed_tokens.append([porter.stem(t) for t in tk])
                 
             fname_processed = self.DIR + '/stemmed.csv'
-            with open(fname_processed, "w", newline='') as f:
-                writer = csv.writer(f)
-                try:
-                    writer.writerows(self.processed_tokens)
-                except UnicodeEncodeError:
-                    pass
+            try:
+                with open(fname_processed, "w", newline='',encoding='utf-8') as f:
+                    writer = csv.writer(f)
+                    try:
+                        writer.writerows(self.processed_tokens)
+                    except UnicodeEncodeError:
+                        pass
+            except:
+                with open(fname_processed, "w", newline='',encoding='ISO-8859-1') as f:
+                    writer = csv.writer(f)
+                    try:
+                        writer.writerows(self.processed_tokens)
+                    except UnicodeEncodeError:
+                        pass
             print(fname_processed)
 
         elif process == 'both':
@@ -186,12 +219,20 @@ class Preprocess:
                 self.processed_tokens.append([wnl.lemmatize(porter.stem(t)) for t in tk])
 
             fname_processed = self.DIR + '/lemmatized-stemmed.csv'
-            with open(fname_processed, "w", newline='') as f:
-                writer = csv.writer(f)
-                try:
-                    writer.writerows(self.processed_tokens)
-                except UnicodeEncodeError:
-                    pass
+            try:
+                with open(fname_processed, "w", newline='',encoding='utf-8') as f:
+                    writer = csv.writer(f)
+                    try:
+                        writer.writerows(self.processed_tokens)
+                    except UnicodeEncodeError:
+                        pass
+            except:
+                with open(fname_processed, "w", newline='',encoding='ISO-8859-1') as f:
+                    writer = csv.writer(f)
+                    try:
+                        writer.writerows(self.processed_tokens)
+                    except UnicodeEncodeError:
+                        pass
             print(fname_processed)
 
             
@@ -211,12 +252,20 @@ class Preprocess:
             self.standfordNerTagging()
 
         fname_tagged = self.DIR + '/POStagged.csv'
-        with open(fname_tagged, "w", newline='') as f:
-            writer = csv.writer(f)
-            try:
-                writer.writerows(self.tag)
-            except UnicodeEncodeError:
-                pass
+        try:
+            with open(fname_tagged, "w", newline='',encoding='utf-8') as f:
+                writer = csv.writer(f)
+                try:
+                    writer.writerows(self.tag)
+                except UnicodeEncodeError:
+                    pass
+        except:
+            with open(fname_tagged, "w", newline='',encoding='ISO-8859-1') as f:
+                writer = csv.writer(f)
+                try:
+                    writer.writerows(self.tag)
+                except UnicodeEncodeError:
+                    pass
         print(fname_tagged)
             
 
@@ -324,13 +373,22 @@ class Preprocess:
         # use plotly instead
         filtered_most_common = FreqDist(filtered_document).most_common()
         fname_most_common = self.DIR + '/frequent-rank.csv'
-        with open(fname_most_common, "w", newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow(['word','frequency'])
-            try:
-                writer.writerows(filtered_most_common)
-            except UnicodeEncodeError:
-                pass
+        try:
+            with open(fname_most_common, "w", newline='',encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(['word','frequency'])
+                try:
+                    writer.writerows(filtered_most_common)
+                except UnicodeEncodeError:
+                    pass
+        except:
+            with open(fname_most_common, "w", newline='',encoding='ISO-8859-1') as f:
+                writer = csv.writer(f)
+                writer.writerow(['word','frequency'])
+                try:
+                    writer.writerows(filtered_most_common)
+                except UnicodeEncodeError:
+                    pass
         print(fname_most_common)
         
         processed_most_common = FreqDist(processed_document).most_common()

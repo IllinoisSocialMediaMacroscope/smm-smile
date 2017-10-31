@@ -108,48 +108,56 @@ class Sentiment:
         # save to csv for download
         # save 
         fname = self.DIR + '/sentiment.csv'
-        with open(fname, "w", newline='') as f:
-            writer = csv.writer(f)
-            try:
-                writer.writerows(self.result)
-            except UnicodeEncodeError:
-                pass
+        try:
+            with open(fname, "w", newline='',encoding='utf-8') as f:
+                writer = csv.writer(f)
+                try:
+                    writer.writerows(self.result)
+                except UnicodeEncodeError:
+                    pass
+        except:
+            with open(fname, "w", newline='',encoding='ISO-8859-1') as f:
+                writer = csv.writer(f)
+                try:
+                    writer.writerows(self.result)
+                except UnicodeEncodeError:
+                    pass
         print(fname)
 
         fname = self.DIR + '/negation.csv'
-        with open(fname, "w", newline='') as f:
-            writer = csv.writer(f)
-            try:
-                writer.writerows(self.negation_result)
-            except UnicodeEncodeError:
-                pass
+        try:
+            with open(fname, "w", newline='',encoding='utf-8') as f:
+                writer = csv.writer(f)
+                try:
+                    writer.writerows(self.negation_result)
+                except UnicodeEncodeError:
+                    pass
+        except:
+            with open(fname, "w", newline='',encoding='ISO-8859-1') as f:
+                writer = csv.writer(f)
+                try:
+                    writer.writerows(self.negation_result)
+                except UnicodeEncodeError:
+                    pass
         print(fname)
 
         fname = self.DIR + '/allcap.csv'
-        with open(fname, "w", newline='') as f:
-            writer = csv.writer(f)
-            try:
-                writer.writerows(self.allcap_result)
-            except UnicodeEncodeError:
-                pass
+        try:
+            with open(fname, "w", newline='',encoding='utf-8') as f:
+                writer = csv.writer(f)
+                try:
+                    writer.writerows(self.allcap_result)
+                except UnicodeEncodeError:
+                    pass
+        except:
+            with open(fname, "w", newline='',encoding='ISO-8859-1') as f:
+                writer = csv.writer(f)
+                try:
+                    writer.writerows(self.allcap_result)
+                except UnicodeEncodeError:
+                    pass
         print(fname)
 
-
-
-        ''' preview 25 lines of data
-        for i,item in enumerate(self.result):
-            if i <= 25:
-                print(item[0],'\t',
-                      item[1],'\t',
-                      item[2],'\t',
-                      item[3],'\t',
-                      item[4],'\t')
-
-        if len(self.result)<25:
-            for i in range(25-len(self.result)+1):
-                print('NUll','NULL','NULL','NULL','NULL')'''
-        
-                               
 
 if __name__ =='__main__':
 
@@ -160,12 +168,7 @@ if __name__ =='__main__':
 
     args = parser.parse_args()
 
-    #save arguments
-    # dotenv_path = join(dirname(__file__), '../../.env')
-    # load_dotenv(dotenv_path)
-    
     uid = str(uuid.uuid4())
-    # DIR = os.environ.get('ROOTDIR') + os.environ.get('DOWNLOAD_NLP_SENTIMENT') +'/' + uid
     DIR = os.path.join('./downloads/NLP/sentiment',uid)
     DIR = os.path.expanduser(
             os.path.expandvars(
