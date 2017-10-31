@@ -63,14 +63,24 @@ class Classification:
 
         # save result
         fname = os.path.join(self.DIR,'PREDICTED_' + filename + '.csv')
-        with open(fname,'w',newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(['tweet','category'])
-            for i in range(len(data)):
-                try:
-                    writer.writerow([data[i],self.predicted[i]])
-                except:
-                    pass
+        try:
+            with open(fname,'w',newline="",encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(['tweet','category'])
+                for i in range(len(data)):
+                    try:
+                        writer.writerow([data[i],self.predicted[i]])
+                    except:
+                        pass
+        except:
+            with open(fname,'w',newline="",encoding='ISO-8859-1') as f:
+                writer = csv.writer(f)
+                writer.writerow(['tweet','category'])
+                for i in range(len(data)):
+                    try:
+                        writer.writerow([data[i],self.predicted[i]])
+                    except:
+                        pass
         print(fname)
 
     def plot(self):
