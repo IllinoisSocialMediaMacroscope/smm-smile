@@ -9,14 +9,14 @@ var consumer = new OAuth1(
 
 router.get('/login/twitter', function(req,res,next){
 
-	consumer.getOAuthRequestToken({ 'oauth_callback': "https://socialmediamacroscope.org:8000" + req.query.currentURL + "login/twitter/callback?currentURL=" + req.query.currentURL}, function(error, oauthToken, oauthTokenSecret, results){
+	consumer.getOAuthRequestToken({ 'oauth_callback': "https://socialmediamacroscope.org:8000" + req.query.currentURL + "login/twitter/callback"}, function(error, oauthToken, oauthTokenSecret, results){
     if (error) {
-		console.log(error);
 		res.send("Error getting OAuth request token : " + util.inspect(error), 500);
     } else {  
 		
 		req.session.twt_oauthRequestToken = oauthToken;
 		req.session.twt_oauthRequestTokenSecret = oauthTokenSecret; 
+		req.session.currentURL = req.query.currentURL;
 		req.session.save();
 		res.redirect("https://twitter.com/oauth/authorize?oauth_token="+req.session.twt_oauthRequestToken);     
     }
@@ -36,7 +36,7 @@ router.get('/login/twitter/callback',function(req,res,next){
 				req.session.twt_access_token_secret = oauthAccessTokenSecret;
 				req.session.save();
 				
-				res.redirect(req.query.currentURL + 'query');
+				res.redirect(req.session.currentURL + 'query');
 			}
 		});
 
