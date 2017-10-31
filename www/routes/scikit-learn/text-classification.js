@@ -48,6 +48,7 @@ router.post('/text-classification-split',function(req,res,next){
 						};				
 					pythonShell.run('classification_split.py',options,function(err,results){
 						if (err){
+							console.log(err);
 							res.send({'ERROR':err});
 						}else{
 							var uuid = results[0];
@@ -105,7 +106,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 				//console.log(req.body.classifier);
 				pythonShell.run('classification_train.py',options,function(err,results){
 					if (err){
-						//console.log(err);
+						console.log(err);
 						res.send({'ERROR':err});
 					}else{
 						var uuid = results[0];
