@@ -8,6 +8,8 @@ from plotly.offline import plot
 import plotly.graph_objs as go
 from os.path import join, dirname
 import json
+import re
+
 
 class Classification:
 
@@ -39,7 +41,8 @@ class Classification:
             self.corpus = list(set(df['text'].dropna().astype('str').tolist()))
         elif '_source.text' in Array[0]:
             self.corpus = list(set(df['text'].dropna().astype('str').tolist()))
-
+        # strip http in the corpus
+        self.corpus = [ re.sub(r"http\S+","",tweet) for tweet in self.corpus]
 
     def split(self,ratio,filename):
         training_set = list(random.sample(self.corpus, int(len(self.corpus)*ratio/100)))
@@ -56,25 +59,45 @@ class Classification:
         print(fname_div_split)
         
         fname1 = self.DIR + '/TRAINING_' + filename  + '.csv'
-        with open(fname1,'w',newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(['tweet','category'])
-            for row in training_set:
-                try:
-                    writer.writerow([row])
-                except UnicodeDecodeError:
-                    pass
+        try:
+            with open(fname1,'w',newline="",encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(['tweet','category'])
+                for row in training_set:
+                    try:
+                        writer.writerow([row])
+                    except UnicodeDecodeError:
+                        pass
+        except:
+            with open(fname1,'w',newline="",encoding='ISO-8859-1') as f:
+                writer = csv.writer(f)
+                writer.writerow(['tweet','category'])
+                for row in training_set:
+                    try:
+                        writer.writerow([row])
+                    except UnicodeDecodeError:
+                        pass
         print(fname1)
 
         fname2 = self.DIR + '/UNLABELED_' + filename +'.csv'
-        with open(fname2,'w',newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(['tweet'])
-            for row in testing_set:
-                try:
-                    writer.writerow([row])
-                except UnicodeDecodeError:
-                    pass
+        try:
+            with open(fname2,'w',newline="",encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(['tweet'])
+                for row in testing_set:
+                    try:
+                        writer.writerow([row])
+                    except UnicodeDecodeError:
+                        pass
+        except:
+            with open(fname2,'w',newline="",encoding='ISO-8859-1') as f:
+                writer = csv.writer(f)
+                writer.writerow(['tweet'])
+                for row in testing_set:
+                    try:
+                        writer.writerow([row])
+                    except UnicodeDecodeError:
+                        pass
         print(fname2)
 
 
