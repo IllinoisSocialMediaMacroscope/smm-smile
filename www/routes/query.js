@@ -13,9 +13,9 @@ router.get('/query',function(req,res,next){
 		success.push('twitter');
 	}
 	
-	//if (req.session.rd_access_token !== undefined && req.session.rd_refresh_token !== undefined){
-	//	success.push('reddit');
-	//}
+	if (req.session.rd_access_token !== undefined){
+		success.push('reddit');
+	}
 	// add other social media following this context upppp 
 	if (req.session.es_access_token !== undefined && req.session.es_access_token_secret !== undefined){
 		success.push('es');
