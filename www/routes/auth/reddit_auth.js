@@ -4,57 +4,54 @@ var router = express.Router();
 var fetch = require('node-fetch');
 var crypto = require('crypto');
 
-router.get('/login/reddit', function(req,res,next){
-	crypto.randomBytes(24, function(err, buffer) {
-		
-		var RANDOM_STRING = buffer.toString('hex');
-		req.session.state = RANDOM_STRING;
-		
-		var CLIENT_ID = "***REMOVED***";
-		var clientSecret= "***REMOVED***";
-		var URI = "http://localhost:8080/login/reddit/callback";
-		
-		var DURATION = 'permanent';
-		var SCOPE_STRING = 'identity edit flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread';
-		
-		var URL = `https://www.reddit.com/api/v1/authorize?client_id=` + CLIENT_ID + `&response_type=code&state=` 
-		+ RANDOM_STRING +`&redirect_uri=` + URI +`&duration=` + DURATION + `&scope=` + SCOPE_STRING ;
-		
-		res.redirect(URL);     
-	});
+
+router.get('/login/reddit',function(req,res,next){
+	req.session.currentURL = req.query.currentURL;
+	req.session.save();
+	
+	res.render('search/auth',{
+			bannerURL:"../bootstrap/img/logo/reddit-banner.png",
+			endpoint:"/login/reddit",
+			clauses:['Edit wiki pages on my behalf','Save and unsave comments and submissions.',
+			'Read wiki pages through my account','Change editors and visibility of wiki pages in subreddits I moderate.',
+			'Edit and delete my comments and submissions.','Submit and change my votes on comments and submissions.',
+			'Access the list of subreddits I moderate, contribute to, and subscribe to.','Manage my subreddit subscriptions. Manage "friends" - users whose content I follow.',
+			'Access my inbox and send private messages to other users.','Manage the configuration, sidebar, and CSS of subreddits I moderate.',
+			'Access posts and comments through my account.','Access the moderation log in subreddits I moderate.',
+			'Approve, remove, mark nsfw, and distinguish content in subreddits I moderate.','Manage and assign flair in subreddits I moderate.',
+			'Report content for rules violations. Hide &amp; show individual submissions.','Select my subreddit flair. Change link flair on my submissions.',
+			'Access my reddit username and signup date.',
+			'Access my voting history and comments or submissions I\'ve saved or hidden.',
+			' Maintain this access indefinitely (or until manually revoked).']});     
 });
 
-router.get('/login/reddit/callback',function(req,res,next){
+router.post('/login/reddit',function(req,res,next){
+
+	var grantType = 'password';
 	var user = "***REMOVED***";
 	var password = "***REMOVED***";
-	var grantType = 'authorization_code';
-	var redirectURI ="http://localhost:8080/login/reddit/callback";
 	var base64encodedData = new Buffer(user + ':' + password).toString('base64');
 	
-	if (req.query.error){
-		res.redirect('/query?error=' + JSON.stringify(req.query.error));
-	}else if (req.query.state === req.session.state){
-		fetch('https://www.reddit.com/api/v1/access_token', {method:'POST',
+	fetch('https://www.reddit.com/api/v1/access_token', {method:'POST',
 											headers:{
 												'Authorization': 'Basic ' + base64encodedData,
 												'Content-Type': "application/x-www-form-urlencoded",
 												'user-agent': 'cwang138 testing various things v0.1',
 											},
-											body:"grant_type=" + grantType + "&code=" + req.query.code + "&redirect_uri=" + redirectURI
+											body:"grant_type=" + grantType + "&username=" + req.body.reddit_username + "&password=" + req.body.reddit_password
 		}).then(function(response){
 			return response.json();
 		}).then(function(json){
 			if ('error' in json){
-				res.redirect('/query?error=' + json);
+				res.redirect(req.session.currentURL + 'query?error=' + JSON.stringify(json));
 			}else{
+				//console.log(json);
 				req.session.rd_access_token = json.access_token;
-				req.session.rd_refresh_token = json.refresh_token;
+				res.redirect(req.session.currentURL + 'query');
 				req.session.save();
-				
-				res.redirect('/query');
 			}
 		});
-	}
+		
 });
 
 module.exports = router;
