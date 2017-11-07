@@ -101,6 +101,12 @@ router.post('/query',function(req,res,next){
 							else if (req.body.prefix === 'reddit-Search'){
 								p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
 							}
+							else if (req.body.prefix === 'reddit-Post'){
+								p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
+							}
+							else if (req.body.prefix === 'reddit-Comment'){
+								p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
+							}
 							
 							Promise.all(p_array_2).then( values => {
 								

@@ -11,12 +11,11 @@ function init(){
 	parameters = { 	tweet: {},
 					twtUser: {},
 					es: {},
-					rdSearch: {}
-					
-					/*rdComment: {},
-					rdReply: {},
-					rdSub: {}*/
+					rdSearch: {},
+					rdComment:{},
+					rdPost:{}
 				};
+				
 	parameters['tweet']['q:'] = $("#searchbox").val();
 	parameters['tweet']['count:'] = 100;
 	parameters['tweet']['pages:'] = parseInt($("#tweet-count").val())/100;
@@ -35,6 +34,14 @@ function init(){
 	parameters['rdSearch']['time:'] =  'all';
 	parameters['rdSearch']['sort:'] =  'relevance';
 	parameters['rdSearch']['fields'] = '';
+	
+	parameters['rdPost']['subredditName:'] = $("#searchbox").val();
+	parameters['rdPost']['extra:'] = 2000;
+	parameters['rdPost']['fields'] = '';
+	
+	parameters['rdComment']['subredditName:'] = $("#searchbox").val();
+	parameters['rdComment']['extra:'] = 2000;
+	parameters['rdComment']['fields'] = '';
 	
 	// save modal popup
 	$("#adv-search-btn").on('click', function(e){
@@ -133,6 +140,8 @@ function init(){
 		$(".user").hide();
 		$(".es-tweet").hide();
 		$(".reddit-search").hide();
+		$(".reddit-post").hide();
+		$(".reddit-comment").hide();
 		$(".form-group.geocode").hide();
 		$(".form-group.dateRange").hide();
 		$(".form-group.es-geocode").hide();
@@ -154,6 +163,12 @@ function init(){
 		}else if ( queryTerm === 'queryReddit'){
 			$(".reddit-search").show();
 			$("#searchbox").attr("placeholder","Keywords for the Reddit posts that you wish to search...");
+		}else if ( queryTerm === 'redditPost'){
+			$(".reddit-post").show();
+			$("#searchbox").attr("placeholder","The subreddit name you wish to get posts from...");
+		}else if ( queryTerm === 'redditComment'){
+			$(".reddit-comment").show();
+			$("#searchbox").attr("placeholder","The subreddit name you wish to get comments from...");
 		}
 	
 		Query = updateString(queryTerm,parameters);
@@ -179,7 +194,8 @@ function init(){
 		parameters['twtUser']['q:'] = $("#searchbox").val();
 		parameters['es']['q:'] = $("#searchbox").val();
 		parameters['rdSearch']['query:'] = $("#searchbox").val();
-		
+		parameters['rdPost']['subredditName:']= $("#searchbox").val();
+		parameters['rdComment']['subredditName:'] = $("#searchbox").val();
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
@@ -513,6 +529,45 @@ function init(){
 
 	});
 	
+	/*------------------------------Reddit Post-----------------------------------------*/
+	$("#rdPostCount").change(function(){
+		parameters['rdPost']['extra:'] = parseInt($("#rdPostCount").val());
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
+	
+	$("#redditPostFields").change(function(){
+		fields_string = '';
+		
+		fields = {BasicFields:[]};
+		$.each($(this).find(':selected'),function(i,val){
+			fields_string += '\n\t\t\t' + val.value;
+		});		
+		parameters['rdPost']['fields'] = fields_string;
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+
+	});
+	
+	
+	/*------------------------------Reddit Comment-----------------------------------------*/
+	$("#rdCommentCount").change(function(){
+		parameters['rdComment']['extra:'] = parseInt($("#rdCommentCount").val());
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
+	$("#redditCommentFields").change(function(){
+		fields_string = '';
+		
+		fields = {BasicFields:[]};
+		$.each($(this).find(':selected'),function(i,val){
+			fields_string += '\n\t\t\t' + val.value;
+		});		
+		parameters['rdComment']['fields'] = fields_string;
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+
+	});
 }
 
 function constructQuery(parameterObj){
@@ -557,6 +612,10 @@ function updateString(queryTerm,parameters){
 		query =  `\telasticSearch{\n\t\t`+ queryTerm + `(`+  constructQuery(parameters.es) +  `\n\t\t}\n\t}`;  
 	}else if (queryTerm === 'queryReddit'){
 		query =  `\treddit{\n\t\tsearch(`+  constructQuery(parameters.rdSearch) +  `\n\t\t}\n\t}`;  
+	}else if (queryTerm === 'redditPost'){
+		query =  `\treddit{\n\t\tgetNew(`+  constructQuery(parameters.rdPost) +  `\n\t\t}\n\t}`;  
+	}else if (queryTerm === 'redditComment'){
+		query =  `\treddit{\n\t\tgetNewComments(`+  constructQuery(parameters.rdComment) +  `\n\t\t}\n\t}`;  
 	}
 	
 	return query;

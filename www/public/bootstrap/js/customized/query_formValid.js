@@ -140,6 +140,22 @@ function formValid(searchID){
 			}
 			
 		}
+		else if ($("#social-media option:selected").val() === 'redditPost'){
+			if ($("#redditPostFields option:selected").val()===undefined){
+				$("#modal-message").append(`<h4>Please select at least one Field of the post!</h4>`);
+				$("#alert").modal('show');
+				$("#redditPostFields").focus();
+				return false
+			}
+		}
+		else if ($("#social-media option:selected").val() === 'redditComment'){
+			if ($("#redditCommentFields option:selected").val()===undefined){
+				$("#modal-message").append(`<h4>Please select at least one Field of the comment!</h4>`);
+				$("#alert").modal('show');
+				$("#redditCommentFields").focus();
+				return false
+			}
+		}
 	}
 	
 	return true
