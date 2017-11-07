@@ -45,6 +45,7 @@ router.post('/login/reddit',function(req,res,next){
 			if ('error' in json){
 				res.redirect(req.session.currentURL + 'query?error=' + JSON.stringify(json));
 			}else{
+				console.log(json.access_token);
 				req.session.rd_access_token = json.access_token;
 				res.redirect(req.session.currentURL + 'query');
 				req.session.save();

@@ -334,8 +334,90 @@ div(class="input-group-addon-btn")
 								option(value="url") url			
 								option(value="ups") ups			
 								option(value="visited") visited								
-								
 					
+					div(class="reddit-comment")
+						div(class="form-group")
+							<label class="label-control warning">maximum number of comments
+							div(class="range range-node")
+								input(type="range" min="100" max="10000" value="2000" step="100" id="rdCommentCount" onchange="rdCommentCount_rangeNode.value=value")
+								<output id="rdCommentCount_rangeNode">2000</output>
+						div(class="form-group")
+							<label class="label-control">Select Fields</label>
+							br
+							select(multiple,id="redditCommentFields",class="fields")
+								option(value="comment_author_name") comment author name
+								option(value="archived") archived
+								option(value="body") body
+								option(value="body_html") body html
+								option(value="subreddit_display_name") subreddit display name
+								option(value="created_utc") created utc
+								option(value="comment_created") comment created
+								option(value="controversiality") controversiality
+								option(value="comment_downs") comment downs
+								option(value="edited") edited
+								option(value="gilded") gilded
+								option(value="comment_id") comment_id
+								option(value="link_id") link_id
+								option(value="link_author") link author
+								option(value="link_title") link title
+								option(value="link_permalink") link permalink
+								option(value="link_url") link url
+								option(value="comment_over_18") comment over 18
+								option(value="parent_id") parent id
+								option(value="quarantine") quarantine
+								option(value="saved") saved
+								option(value="comment_score") comment score
+								option(value="subreddit_id") subreddit id						
+								option(value="subreddit_display_name") subreddit display name						
+								option(value="subreddit_name_prefixed") subreddit name prefixed
+								option(value="score_hidden") score hidden 					
+								option(value="stickied") stickied				
+								option(value="subreddit_type") subreddit type					
+								option(value="comment_ups") comment ups										
+					
+					div(class="reddit-post")
+						div(class="form-group")
+							<label class="label-control warning">maximum number of posts
+							div(class="range range-node")
+								input(type="range" min="100" max="10000" value="2000" step="100" id="rdPostCount" onchange="rdPostCount_rangeNode.value=value")
+								<output id="rdPostCount_rangeNode">2000</output>
+						div(class="form-group")
+							<label class="label-control">Select Fields</label>
+							br
+							select(multiple,id="redditPostFields",class="fields")
+								option(value="archived") archived
+								option(value="author_name") author name
+								option(value="brand_safe") brand safe
+								option(value="contest_mode") contest mode
+								option(value="clicked") clicked
+								option(value="created") created
+								option(value="created_utc") created utc
+								option(value="domain") domain
+								option(value="downs") downs
+								option(value="edited") edited
+								option(value="gilded") gilded
+								option(value="hidden") hidden
+								option(value="hide_score") hide score
+								option(value="id") id
+								option(value="is_self") is self
+								option(value="locked") locked
+								option(value="name") name
+								option(value="over_18") over 18
+								option(value="permalink") permalink
+								option(value="quarantine") quarantine
+								option(value="saved") saved
+								option(value="score") score
+								option(value="stickied") stickied						
+								option(value="spoiler") spoiler						
+								option(value="subreddit_display_name") subreddit display name						
+								option(value="subreddit_id") subreddit id						
+								option(value="subreddit_type") subreddit type						
+								option(value="subreddit_name_prefixed") subreddit name prefixed						
+								option(value="title") title			
+								option(value="url") url			
+								option(value="ups") ups			
+								option(value="visited") visited			
+								
 					div(class="col-md-12")
 						textarea(class="form-control", id="input", rows="15",placeholder="If you know GraphQL, try typing your own string! :-D",disabled) 
 					div(class="col-md-12")

@@ -152,7 +152,6 @@ const redditQueryType = module.exports = new GraphQLObjectType({
 			description:'Gets a Listing of new posts. Return A Listing containing the retrieved submissions.',
 			args:{
 					subredditName:	{type:GraphQLString},
-					options:		{type:GraphQLInt, defaultValue:0},
 					extra:			{type:GraphQLInt,
 										defaultValue:0,
 										description:'for fetchMore'

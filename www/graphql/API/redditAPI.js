@@ -56,8 +56,9 @@ function redditAPI(tokens,resolveName, id, args){
 				if (args['subredditName'] === 'ALL'){
 					args['subredditName'] = '';
 				}
-				r.getSubreddit(args['subredditName']).getNewComments({limit:1000}).then((listing) =>  {
+				r.getSubreddit(args['subredditName']).getNewComments({limit:1}).then((listing) =>  {
 					listing.fetchMore({amount:args['extra'],skipReplies:false,append:true}).then((data) => {
+						console.log(data.length);
 						resolve(data);
 					})
 					.catch((err) =>{
@@ -68,6 +69,24 @@ function redditAPI(tokens,resolveName, id, args){
 					reject(err);
 				});
 				break;	
+			
+			case 'getNew':
+				if (args['subredditName'] === 'ALL'){
+					args['subredditName'] = '';
+				}
+				r.getSubreddit(args['subredditName']).getNew({limit:1}).then((listing) =>  {
+					listing.fetchMore({amount:args['extra'],skipReplies:false,append:true}).then((data) => {
+						console.log(data.length);
+						resolve(data);
+					})
+					.catch((err) =>{
+						reject(err)
+					})
+				})
+				.catch((err) =>{
+					reject(err);
+				});
+				break;
 				
 			case 'searchSubredditNames':
 				r.searchSubredditNames(args).then((data) =>{
@@ -158,20 +177,7 @@ function redditAPI(tokens,resolveName, id, args){
 				});
 				break;
 			
-			case 'getNew':
-				r.getNew(args).then((listing) =>  {
-					listing.fetchMore({amount:args['extra']}).then((data) => {
-						resolve(data);
-					})
-					.catch((err) =>{
-						reject(err)
-					})
-				})
-				.catch((err) =>{
-					reject(err);
-				});
-				break;
-			
+						
 			case 'getTop':
 				r.getTop(args).then((listing) =>  {
 					listing.fetchMore({amount:args['extra']}).then((data) => {

@@ -25,6 +25,14 @@ function submitQuery(textareaID,filenameID){
 		var prefix = 'reddit-Search';
 		var params = parameters.rdSearch ;	
 		var pages = 10;		
+	}else if (queryTerm === 'redditPost'){
+		var prefix = 'reddit-Post';
+		var params = parameters.rdPost ;	
+		var pages = -999;		
+	}else if (queryTerm === 'redditComment'){
+		var prefix = 'reddit-Comment';
+		var params = parameters.rdComment ;	
+		var pages = -999;		
 	}
 	
 	$.ajax({
@@ -283,6 +291,89 @@ function submitSearchbox(searchboxID, filenameID){
 		var prefix = 'reddit-Search';
 		var pages = 10;
 		var params = parameters.rdSearch;
+	}else if (queryTerm === 'redditPost'){
+		var queryString = `{
+							  reddit {
+								getNew(subredditName:"`+ keyword + `", extra: 2000) {
+								  archived
+								  author_name
+								  brand_safe
+								  contest_mode
+								  clicked
+								  created
+								  created_utc
+								  domain
+								  downs
+								  edited
+								  gilded
+								  hidden
+								  hide_score
+								  id
+								  is_self
+								  locked
+								  name
+								  over_18
+								  permalink
+								  quarantine
+								  saved
+								  score
+								  stickied
+								  spoiler
+								  subreddit_display_name
+								  subreddit_id
+								  subreddit_type
+								  subreddit_name_prefixed
+								  title
+								  url
+								  ups
+								  visited
+								}
+							  }
+							}`;
+		var filename = $(filenameID).val();
+		var prefix = 'reddit-Post';
+		var pages = -999;
+		var params = parameters.rdPost;
+	}else if (queryTerm === 'redditComment'){
+		var queryString = `{
+							reddit{
+							getNewComments(subredditName:"`+keyword + `",extra:2000){
+							  comment_author_name
+							  archived
+							  body
+							  body_html
+							  subreddit_display_name
+							  created_utc
+							  comment_created
+							  controversiality
+							  comment_downs
+							  edited
+							  gilded
+							  comment_id
+							  link_id
+							  link_author
+							  link_title
+							  link_permalink
+							  link_url
+							  comment_over_18
+							  parent_id
+							  quarantine
+							  saved
+							  comment_score
+							  subreddit_id
+							  subreddit_display_name
+							  subreddit_name_prefixed
+							  score_hidden
+							  stickied
+							  subreddit_type
+							  comment_ups
+							}
+						  }
+						}`;
+		var filename = $(filenameID).val();
+		var prefix = 'reddit-Comment';
+		var pages = -999;
+		var params = parameters.rdComment;
 	}
 	
 	$.ajax({
