@@ -12,10 +12,14 @@ function redditAPI(tokens,resolveName, id, args){
 	return new Promise((resolve,reject) =>{
 		switch(resolveName){
 			case 'search':
-				args['limit'] = args['count'];
+				//args['limit'] = args['count'];
 				r.search(args).then((listing) =>  {
-						//console.log(listing);
-						resolve(listing);
+						
+						//console.log(listing.length);
+						listing.fetchAll().then(extendedListing => {
+							resolve(extendedListing);					
+						});
+						
 					})
 					.catch((err) =>{
 						console.log(err);

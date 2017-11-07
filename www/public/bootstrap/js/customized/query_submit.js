@@ -4,25 +4,27 @@ function submitQuery(textareaID,filenameID){
 	$(".loading").show();
 	
 	var queryString = $(textareaID).val();
-	
 	var queryTerm = $("#social-media").find(':selected').val();
+	var filename = $(filenameID).val();
+	
 	if (queryTerm === 'queryTweet'){
-		var filename =  $(filenameID).val();
 		var prefix = 'twitter-Tweet';
 		var params = parameters.tweet;
 		var pages = -999;
 	}else if (queryTerm === 'queryUser'){
-		var filename = $(filenameID).val();
 		var prefix = 'twitter-User' ;
 		var params = parameters.twtUser;
 		var pages = parseInt($("#twtUser-count").val())/20;
 		//var pages = parameters['twtUser']['pageNum:'] 	
 	}else if (queryTerm === 'streamTweet'){
-		var filename = $(filenameID).val();
 		var prefix = 'twitter-Stream'
 		var params = parameters.es;
 		var pages = parseInt($("#perPage").val())/1000;
 		//var pages = parameters['es']['pageNum:'];	
+	}else if (queryTerm === 'queryReddit'){
+		var prefix = 'reddit-Search';
+		var params = parameters.rdSearch ;	
+		var pages = 10;		
 	}
 	
 	$.ajax({
@@ -39,7 +41,6 @@ function submitQuery(textareaID,filenameID){
 			if ('ERROR' in data){				
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
-					
 					$(".loading").hide();
 			}else{
 				renderPreview(data, prefix);
@@ -239,6 +240,49 @@ function submitSearchbox(searchboxID, filenameID){
 		// params['es']['pageNum:'] = pages;
 		var params = parameters.es;
 		
+	}else if (queryTerm === 'queryReddit'){
+		var queryString = `{
+								reddit{
+								search(query:"` + keyword +`",time:"all",sort:"relevance"){
+								  archived
+								  author_name
+								  brand_safe
+								  contest_mode
+								  clicked
+								  created
+								  created_utc
+								  domain
+								  downs
+								  edited
+								  gilded
+								  hidden
+								  hide_score
+								  id
+								  is_self
+								  locked
+								  name
+								  over_18
+								  permalink
+								  quarantine
+								  saved
+								  score
+								  stickied
+								  spoiler
+								  subreddit_display_name
+								  subreddit_id
+								  subreddit_type
+								  subreddit_name_prefixed
+								  title
+								  url
+								  ups
+								  visited
+								}
+							  }
+							}`;
+		var filename = $(filenameID).val();
+		var prefix = 'reddit-Search';
+		var pages = 10;
+		var params = parameters.rdSearch;
 	}
 	
 	$.ajax({
@@ -255,8 +299,8 @@ function submitSearchbox(searchboxID, filenameID){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 					$(".loading").hide();
-			}else{				
-				renderPreview(data,prefix);					
+			}else{
+				renderPreview(data, prefix);			
 			}
 		},
 		error: function(jqXHR, exception){

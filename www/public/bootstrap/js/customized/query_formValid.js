@@ -112,6 +112,34 @@ function formValid(searchID){
 			}
 			
 		}
+		else if ($("#social-media option:selected").val() === 'queryReddit'){
+			if (!$("input[name='time']").is(':checked')){
+				$("#modal-message").append(`<h4>Please select a timespan for reddit search!</h4>`);
+				$("#alert").modal('show');
+				$("input[name='time']").focus();
+				return false
+			}
+			if (!$("input[name='sort']").is(':checked')){
+				$("#modal-message").append(`<h4>Please select a sorting method!</h4>`);
+				$("#alert").modal('show');
+				$("input[name='sort']").focus();
+				return false
+			}
+			if ($("#rd-subreddit").is(':checked') && ($("#subreddit").val() === '')){
+				$("#modal-message").append(`<h4>Please sepecify which subreddit!</h4>`);
+				$("#alert").modal('show');
+				$("#subreddit").focus();
+				return false
+			} 
+			
+			if ($("#redditSearchFields option:selected").val()===undefined){
+				$("#modal-message").append(`<h4>Please select at least one Field of the search result!</h4>`);
+				$("#alert").modal('show');
+				$("#redditSearchFields").focus();
+				return false
+			}
+			
+		}
 	}
 	
 	return true

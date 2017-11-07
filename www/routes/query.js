@@ -33,6 +33,7 @@ router.get('/query',function(req,res,next){
 
 
 router.post('/query',function(req,res,next){
+	
 	var dir_downloads = './downloads';	
 	if (!fs.existsSync(dir_downloads)){
 		fs.mkdirSync(dir_downloads);
@@ -77,15 +78,12 @@ router.post('/query',function(req,res,next){
 							var headers = {
 											'Accept': 'application/json',
 											'Content-Type':'application/json',
-											//'redditaccesstoken':req.session.rd_access_token,
-											//'redditrefreshtoken':req.session.rd_refresh_token,
+											'redditaccesstoken':req.session.rd_access_token,
 											'twtaccesstokenkey':req.session.twt_access_token_key,
 											'twtaccesstokensecret':req.session.twt_access_token_secret,
 											'esaccesstoken':req.session.es_access_token,
 											'esaccesstokensecret':req.session.es_access_token_secret
 										}
-							
-							//console.log(headers);
 							
 							p_array_2 = [];
 							
@@ -98,6 +96,9 @@ router.post('/query',function(req,res,next){
 							else if (req.body.prefix === 'twitter-Tweet'){
 								// tweet timeline pagination is different, can't figure out a good way to do pagination here
 								// TODO
+								p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
+							}
+							else if (req.body.prefix === 'reddit-Search'){
 								p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
 							}
 							
@@ -167,14 +168,6 @@ function saveFile(dir_downloads_graphql, responseObj,params,pages,prefix, filena
 			}
 		});
 		
-		// save json
-		/*var raw = filename + '.json';
-		fs.writeFile(directory +  raw, JSON.stringify(responseObj,null,4),'utf8',function(err){
-			if (err){
-					return {ERROR:err};
-				}
-		});*/
-		
 		// save query parameters to it so history page can use it!
 		var config = filename + '.dat';
 		
@@ -235,7 +228,6 @@ function gatherMultiPost(query,headers,pageNum){
 			}).then(function(response){
 				return response.text();
 			}).then(function(responseBody){
-				//console.log(responseObj);
 				var responseObj = JSON.parse(responseBody);
 				resolve(responseObj);				
 			}).catch((error) => {

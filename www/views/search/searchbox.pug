@@ -13,6 +13,7 @@ div(class="input-group-addon-btn")
 			div(class="dropdown-menu dropdown-menu-right")
 				br
 				form(class="form-horizontal")
+					
 					<!-- tweet -->
 					div(class="tweet")
 						div(class="form-group")
@@ -270,6 +271,69 @@ div(class="input-group-addon-btn")
 									option(value="contributors_enabled") contributors enabled
 									option(value="geo_enabled") geo enabled
 									option(value="lang") lang				
+								
+					
+					<!-- Reddit -->
+					div(class="reddit-search")
+						div(class="form-group")
+							<label class="label-control" style="display:block;">Timespan</label>
+							<label class="radio-inline"><input type="radio" name="time" value="all" checked>all</label>
+							<label class="radio-inline"><input type="radio" name="time" value="hour">hour</label>
+							<label class="radio-inline"><input type="radio" name="time" value="day">day</label>
+							<label class="radio-inline"><input type="radio" name="time" value="week">week</label>
+							<label class="radio-inline"><input type="radio" name="time" value="month">month</label>
+							<label class="radio-inline"><input type="radio" name="time" value="year">year</label>
+						div(class="form-group")
+							<label class="label-control" style="display:block;">Sort</label>
+							<label class="radio-inline"><input type="radio" name="sort" value="relevance" checked>relevance</label>
+							<label class="radio-inline"><input type="radio" name="sort" value="hot">hot</label>
+							<label class="radio-inline"><input type="radio" name="sort" value="top">top</label>
+							<label class="radio-inline"><input type="radio" name="sort" value="new">new</label>
+							<label class="radio-inline"><input type="radio" name="sort" value="comments">comments</label>
+						div(class="form-group")
+							<label class="label-control">Restrict to Subreddit
+								<input type="checkbox" id="rd-subreddit" value="rd-subreddit">
+							</label>
+						div(class="form-group rd-subreddit")
+							label(for="") Subreddit name
+							input(type="text" class="form-control" id="subreddit" placeholder="subreddit name e.g. news")
+							
+						div(class="form-group")
+							<label class="label-control">Select Fields</label>
+							br
+							select(multiple,id="redditSearchFields",class="fields")
+								option(value="archived") archived
+								option(value="author_name") author name
+								option(value="brand_safe") brand safe
+								option(value="contest_mode") contest mode
+								option(value="clicked") clicked
+								option(value="created") created
+								option(value="created_utc") created utc
+								option(value="domain") domain
+								option(value="downs") downs
+								option(value="edited") edited
+								option(value="gilded") gilded
+								option(value="hidden") hidden
+								option(value="hide_score") hide score
+								option(value="id") id
+								option(value="is_self") is self
+								option(value="locked") locked
+								option(value="name") name
+								option(value="over_18") over 18
+								option(value="permalink") permalink
+								option(value="quarantine") quarantine
+								option(value="saved") saved
+								option(value="score") score
+								option(value="stickied") stickied						
+								option(value="spoiler") spoiler						
+								option(value="subreddit_display_name") subreddit display name						
+								option(value="subreddit_id") subreddit id						
+								option(value="subreddit_type") subreddit type						
+								option(value="subreddit_name_prefixed") subreddit name prefixed						
+								option(value="title") title			
+								option(value="url") url			
+								option(value="ups") ups			
+								option(value="visited") visited								
 								
 					
 					div(class="col-md-12")
