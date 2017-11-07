@@ -11,8 +11,9 @@ function init(){
 	parameters = { 	tweet: {},
 					twtUser: {},
 					es: {},
+					rdSearch: {}
+					
 					/*rdComment: {},
-					rdSearch: {},
 					rdReply: {},
 					rdSub: {}*/
 				};
@@ -23,14 +24,17 @@ function init(){
 	
 	parameters['twtUser']['q:'] = $("#searchbox").val();
 	parameters['twtUser']['count:'] = 20;
-	//parameters['twtUser']['pageNum:'] = parseInt($("#twtUser-count").val())/20;
 	parameters['twtUser']['fields'] = '';
 	
 	
 	parameters['es']['q:'] = $("#searchbox").val();
 	parameters['es']['perPage:'] =  1000;
-	//parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
 	parameters['es']['fields'] = '';
+	
+	parameters['rdSearch']['query:'] = $("#searchbox").val();
+	parameters['rdSearch']['time:'] =  'all';
+	parameters['rdSearch']['sort:'] =  'relevance';
+	parameters['rdSearch']['fields'] = '';
 	
 	// save modal popup
 	$("#adv-search-btn").on('click', function(e){
@@ -128,11 +132,13 @@ function init(){
 		$(".tweet").hide();
 		$(".user").hide();
 		$(".es-tweet").hide();
+		$(".reddit-search").hide();
 		$(".form-group.geocode").hide();
 		$(".form-group.dateRange").hide();
 		$(".form-group.es-geocode").hide();
 		$(".form-group.es-dateRange").hide();
 		$(".form-group.es-popularity").hide();
+		$(".form-group.rd-subreddit").hide();
 		
 		
 		queryTerm = $(this).find(':selected').val();
@@ -145,6 +151,9 @@ function init(){
 		}else if ( queryTerm === 'streamTweet'){
 			$(".es-tweet").show();
 			$("#searchbox").attr("placeholder","Tweet keywords that you wish to search...");
+		}else if ( queryTerm === 'queryReddit'){
+			$(".reddit-search").show();
+			$("#searchbox").attr("placeholder","Keywords for the Reddit posts that you wish to search...");
 		}
 	
 		Query = updateString(queryTerm,parameters);
@@ -156,7 +165,6 @@ function init(){
 		$("#documentation").toggleClass("expand");
 		$("#docIframe").height($(window).height());
 		$("#searchPage").toggleClass("shrink");
-		
 	});
 	
 	/* everything related to date!!!!!!!!! */
@@ -170,6 +178,7 @@ function init(){
 		parameters['tweet']['q:'] = $("#searchbox").val();
 		parameters['twtUser']['q:'] = $("#searchbox").val();
 		parameters['es']['q:'] = $("#searchbox").val();
+		parameters['rdSearch']['query:'] = $("#searchbox").val();
 		
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
@@ -453,8 +462,55 @@ function init(){
 		parameters['twtUser']['fields'] = fields_string;
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
+
+	});
+	
+	
+	/*----------------------------------------------------- Reddit Search-------------------------------------------------------*/
+	$("input[name='time']").change(function(){
+		parameters['rdSearch']['time:'] = $(this).val();
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
+	
+	$("input[name='sort']").change(function(){
+		parameters['rdSearch']['sort:'] = $(this).val();
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
+	
+	//toggle restrict to subreddit checkbox
+	$("#rd-subreddit").change(function(){
+		if ($("#rd-subreddit").is(':checked')){
+			$(".form-group.rd-subreddit").show();
+			parameters['rdSearch']['restrictSr:'] = true;
+			$("#subreddit").change(function(){
+				parameters['rdSearch']['subreddit:'] = $(this).val();
+				Query =updateString(queryTerm,parameters);
+				$("#input").val(`{\n\n` + Query +`\n\n}`);
+			});
+		}else{
+			$("#subreddit").val("");
+			parameters['rdSearch']['restrictSr:'] = '';
+			parameters['rdSearch']['subreddit:'] =  '';
+			$(".form-group.rd-subreddit").hide();
+		}
 		
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});	
+	
+	$("#redditSearchFields").change(function(){
+		fields_string = '';
 		
+		fields = {BasicFields:[]};
+		$.each($(this).find(':selected'),function(i,val){
+			fields_string += '\n\t\t\t' + val.value;
+		});		
+		parameters['rdSearch']['fields'] = fields_string;
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+
 	});
 	
 }
@@ -498,9 +554,9 @@ function updateString(queryTerm,parameters){
 		query =  `\ttwitter{\n\t\t`	+ queryTerm + `(`+ constructQuery(parameters.tweet)	+ `\n\t\t}\n\t}`;  
 		
 	}else if (queryTerm === 'streamTweet'){
-		
 		query =  `\telasticSearch{\n\t\t`+ queryTerm + `(`+  constructQuery(parameters.es) +  `\n\t\t}\n\t}`;  
-			
+	}else if (queryTerm === 'queryReddit'){
+		query =  `\treddit{\n\t\tsearch(`+  constructQuery(parameters.rdSearch) +  `\n\t\t}\n\t}`;  
 	}
 	
 	return query;
