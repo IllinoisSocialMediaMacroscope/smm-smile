@@ -40,9 +40,13 @@ class Classification:
         if 'text' in Array[0]:
             self.corpus = list(set(df['text'].dropna().astype('str').tolist()))
         elif '_source.text' in Array[0]:
-            self.corpus = list(set(df['text'].dropna().astype('str').tolist()))
+            self.corpus = list(set(df['_source.text'].dropna().astype('str').tolist()))
+        # find the unique title in reddit
+        elif 'title' in Array[0]:
+            self.corpus = list(set(df['title'].dropna().astype('str').tolist()))
+            
         # strip http in the corpus
-        self.corpus = [ re.sub(r"http\S+","",tweet) for tweet in self.corpus]
+        self.corpus = [ re.sub(r"http\S+","",text) for text in self.corpus]
 
     def split(self,ratio,filename):
         training_set = list(random.sample(self.corpus, int(len(self.corpus)*ratio/100)))
@@ -62,7 +66,7 @@ class Classification:
         try:
             with open(fname1,'w',newline="",encoding='utf-8') as f:
                 writer = csv.writer(f)
-                writer.writerow(['tweet','category'])
+                writer.writerow(['text','category'])
                 for row in training_set:
                     try:
                         writer.writerow([row])
@@ -71,7 +75,7 @@ class Classification:
         except:
             with open(fname1,'w',newline="",encoding='ISO-8859-1') as f:
                 writer = csv.writer(f)
-                writer.writerow(['tweet','category'])
+                writer.writerow(['text','category'])
                 for row in training_set:
                     try:
                         writer.writerow([row])
@@ -83,7 +87,7 @@ class Classification:
         try:
             with open(fname2,'w',newline="",encoding='utf-8') as f:
                 writer = csv.writer(f)
-                writer.writerow(['tweet'])
+                writer.writerow(['text'])
                 for row in testing_set:
                     try:
                         writer.writerow([row])
@@ -92,7 +96,7 @@ class Classification:
         except:
             with open(fname2,'w',newline="",encoding='ISO-8859-1') as f:
                 writer = csv.writer(f)
-                writer.writerow(['tweet'])
+                writer.writerow(['text'])
                 for row in testing_set:
                     try:
                         writer.writerow([row])
