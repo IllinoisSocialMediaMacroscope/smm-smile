@@ -66,7 +66,7 @@ class Classification:
         try:
             with open(fname,'w',newline="",encoding='utf-8') as f:
                 writer = csv.writer(f)
-                writer.writerow(['tweet','category'])
+                writer.writerow(['text','category'])
                 for i in range(len(data)):
                     try:
                         writer.writerow([data[i],self.predicted[i]])
@@ -75,7 +75,7 @@ class Classification:
         except:
             with open(fname,'w',newline="",encoding='ISO-8859-1') as f:
                 writer = csv.writer(f)
-                writer.writerow(['tweet','category'])
+                writer.writerow(['text','category'])
                 for i in range(len(data)):
                     try:
                         writer.writerow([data[i],self.predicted[i]])

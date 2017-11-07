@@ -9,7 +9,9 @@ router.get('/history',function(req,res,next){
 						"GraphQL":
 							{"twitter-Tweet":{},
 							"twitter-User":{},
-							"twitter-Stream":{}},
+							"twitter-Stream":{},
+							"reddit-Search":{}
+						},
 						"ML":
 						{
 						//	"feature":{},
@@ -82,6 +84,13 @@ router.get('/history',function(req,res,next){
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at= fs.lstatSync('./downloads/GraphQL/twitter-Stream/' + fileList[i]).birthtime.toString();
 					directory['GraphQL']['twitter-Stream'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
+				}
+			}
+			if (fs.existsSync('./downloads/GraphQL/reddit-Search')){
+				var fileList = fs.readdirSync('./downloads/GraphQL/reddit-Search');
+				for (var i = 0, length = fileList.length; i<length; i++){
+					var created_at= fs.lstatSync('./downloads/GraphQL/reddit-Search/' + fileList[i]).birthtime.toString();
+					directory['GraphQL']['reddit-Search'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
 				}
 			}
 		}
@@ -220,7 +229,8 @@ router.post('/history',function(req,res,next){
 	else if ((
 				req.body.layer2 === 'twitter-Tweet' ||
 				req.body.layer2 === 'twitter-User' ||
-				req.body.layer2 === 'twitter-Stream' ) && fs.readdirSync(DIR).length ==2){
+				req.body.layer2 === 'twitter-Stream' ||
+				req.body.layer2 === 'reddit-Search' ) && fs.readdirSync(DIR).length ==2){
 		var config = JSON.parse(fs.readFileSync(DIR  + '/' + req.body.historyID + '.dat','utf8'));
 		var preview_string = fs.readFileSync(DIR + '/' + req.body.historyID + '.csv', "utf8"); 
 		var preview_arr = CSV.parse(preview_string);
