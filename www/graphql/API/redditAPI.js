@@ -1,7 +1,8 @@
 var Promise = require('bluebird');
+var fetch = require('node-fetch');
+var appendQuery = require('append-query')
 
 function redditAPI(tokens,resolveName, id, args){
-	//console.log(tokens);
 	
 	const snoowrap = require('snoowrap');
 	const r = new snoowrap({
@@ -12,10 +13,14 @@ function redditAPI(tokens,resolveName, id, args){
 	return new Promise((resolve,reject) =>{
 		switch(resolveName){
 			case 'search':
-				args['limit'] = args['count'];
+				//args['limit'] = args['count'];
 				r.search(args).then((listing) =>  {
-						//console.log(listing);
-						resolve(listing);
+						
+						//console.log(listing.length);
+						listing.fetchAll().then(extendedListing => {
+							resolve(extendedListing);					
+						});
+						
 					})
 					.catch((err) =>{
 						console.log(err);
@@ -52,8 +57,9 @@ function redditAPI(tokens,resolveName, id, args){
 				if (args['subredditName'] === 'ALL'){
 					args['subredditName'] = '';
 				}
-				r.getSubreddit(args['subredditName']).getNewComments({limit:1000}).then((listing) =>  {
+				r.getSubreddit(args['subredditName']).getNewComments({limit:1}).then((listing) =>  {
 					listing.fetchMore({amount:args['extra'],skipReplies:false,append:true}).then((data) => {
+						console.log(data.length);
 						resolve(data);
 					})
 					.catch((err) =>{
@@ -64,7 +70,50 @@ function redditAPI(tokens,resolveName, id, args){
 					reject(err);
 				});
 				break;	
+			
+			case 'getNew':
+				if (args['subredditName'] === 'ALL'){
+					args['subredditName'] = '';
+				}
+				r.getSubreddit(args['subredditName']).getNew({limit:1}).then((listing) =>  {
+					listing.fetchMore({amount:args['extra'],skipReplies:false,append:true}).then((data) => {
+						console.log(data.length);
+						resolve(data);
+					})
+					.catch((err) =>{
+						reject(err)
+					})
+				})
+				.catch((err) =>{
+					reject(err);
+				});
+				break;
+			
+			case 'pushshiftComment': 
+				var endpoint = appendQuery('https://api.pushshift.io/reddit/search/comment/',args);
+				fetch(endpoint).then((res) =>{
+					return res.json();
+				}).then(function(json){
+					resolve(json.data);
+				}).catch((err) =>{
+					console.log(err);
+					reject(err);
+				});
+				break;
 				
+			case 'pushshiftPost': 
+				var endpoint = appendQuery('https://api.pushshift.io/reddit/search/submission/',args);
+				fetch(endpoint).then((res) =>{
+					return res.json();
+				}).then(function(json){
+					resolve(json.data);
+				}).catch((err) =>{
+					console.log(err);
+					reject(err);
+				});
+				break;
+				
+			//---------------------------------------------------------------------
 			case 'searchSubredditNames':
 				r.searchSubredditNames(args).then((data) =>{
 					resolve(data);
@@ -154,20 +203,7 @@ function redditAPI(tokens,resolveName, id, args){
 				});
 				break;
 			
-			case 'getNew':
-				r.getNew(args).then((listing) =>  {
-					listing.fetchMore({amount:args['extra']}).then((data) => {
-						resolve(data);
-					})
-					.catch((err) =>{
-						reject(err)
-					})
-				})
-				.catch((err) =>{
-					reject(err);
-				});
-				break;
-			
+						
 			case 'getTop':
 				r.getTop(args).then((listing) =>  {
 					listing.fetchMore({amount:args['extra']}).then((data) => {

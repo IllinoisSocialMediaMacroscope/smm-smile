@@ -70,6 +70,19 @@ const redditQueryType = module.exports = new GraphQLObjectType({
 			},
 			resolve: (_,args,context) => redditAPI(context, resolveName = 'getNewComments', id='', args = args)
 		},
+		
+		getNew:{
+			type:new GraphQLList(redditLinkType),
+			description:'Gets a Listing of new posts. Return A Listing containing the retrieved submissions.',
+			args:{
+					subredditName:	{type:GraphQLString},
+					extra:			{type:GraphQLInt,
+										defaultValue:0,
+										description:'for fetchMore'
+									},
+			},
+			resolve: (_,args,context) => redditAPI(context, resolveName = 'getNew', id='', args = args)
+		},
 		searchSubredditNames:{
 			type:new GraphQLList(GraphQLString),
 			args:{
@@ -147,19 +160,7 @@ const redditQueryType = module.exports = new GraphQLObjectType({
 			},
 			resolve: (_,args,context) => redditAPI(context, resolveName = 'getHot', id='', args = args)
 		},
-		getNew:{
-			type:new GraphQLList(redditLinkType),
-			description:'Gets a Listing of new posts. Return A Listing containing the retrieved submissions.',
-			args:{
-					subredditName:	{type:GraphQLString},
-					options:		{type:GraphQLInt, defaultValue:0},
-					extra:			{type:GraphQLInt,
-										defaultValue:0,
-										description:'for fetchMore'
-									},
-			},
-			resolve: (_,args,context) => redditAPI(context, resolveName = 'getNew', id='', args = args)
-		},
+		
 		getTop:{
 			type:new GraphQLList(redditLinkType),
 			description:'Gets a Listing of top posts. Return A Listing containing the retrieved submissions.',
@@ -199,10 +200,54 @@ const redditQueryType = module.exports = new GraphQLObjectType({
 			},
 			resolve: (_,args,context) => redditAPI(context, resolveName = 'getRising', id='', args = args)
 		},
-		
+		pushshiftComment:{
+			type: new GraphQLList(pushshiftCommentType),
+			description:'partial historical database at https://github.com/pushshift/api',
+			args:{
+				q: 			{type:GraphQLString},
+				size:		{type:GraphQLInt,
+								defaultValue:500},
+				sort:		{type:GraphQLString,
+					defaultValue:'desc'},
+				sort_type:	{type:GraphQLString,
+					defaultValue:'created_utc'},
+				subreddit:	{type:GraphQLString},
+				author:		{type:GraphQLString},
+				after:		{type:GraphQLString},
+				before:		{type:GraphQLString}
+			},
+			resolve: (_,args,context) => redditAPI(context, resolveName = 'pushshiftComment', id='', args = args)
+		},
+		pushshiftPost:{
+			type: new GraphQLList(pushshiftPostType),
+			description:'partial historical database at https://github.com/pushshift/api',
+			args:{
+				q: 			{type:GraphQLString},
+				size:		{type:GraphQLInt,
+								defaultValue:500},
+				sort:		{type:GraphQLString,
+					defaultValue:'desc'},
+				sort_type:	{type:GraphQLString,
+					defaultValue:'created_utc'},
+				subreddit:	{type:GraphQLString},
+				author:		{type:GraphQLString},
+				after:		{type:GraphQLString},
+				before:		{type:GraphQLString},
+				score:		{type:GraphQLInt},
+				num_comments:	{type:GraphQLInt},
+				over_18: 	{type:GraphQLBoolean},
+				is_video:	{type:GraphQLBoolean},
+				locked:		{type:GraphQLBoolean},
+				stickied:	{type:GraphQLBoolean},
+				spoiler:	{type:GraphQLBoolean},
+			},
+			resolve: (_,args,context) => redditAPI(context, resolveName = 'pushshiftPost', id='', args = args)
+		},
 	})
 });
 
 const subreddditType = require('./reddit-type/subredditType');
 const redditLinkType = require('./reddit-type/redditLinkType');
 const redditCommentType = require('./reddit-type/redditCommentType');
+const pushshiftCommentType = require('./reddit-type/pushshiftCommentType');
+const pushshiftPostType = require('./reddit-type/pushshiftPostType');

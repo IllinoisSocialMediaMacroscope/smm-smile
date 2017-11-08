@@ -28,7 +28,9 @@ $(document).ready(function(){
 							// stream
 							'_source.text',
 							// twtUser
-							'description'];
+							'description', 
+							// reddit
+							'title','body'];
 						
 						var index = [];
 						$.each(data.preview[0],function(i,val){

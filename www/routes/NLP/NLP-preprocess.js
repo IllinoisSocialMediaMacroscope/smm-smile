@@ -43,23 +43,6 @@ router.post('/NLP-preprocess',function(req,res,next){
 				}else{
 					res.end('no file selected!');
 				}	
-					// different tokenizer for different social media
-					/*if (req.body.selectFile.substr(0,7) === 'twitter'){
-						options.args.push('twitter');
-					
-					}else if (req.body.selectFile.substr(0,6) === 'reddit'){
-						options.args.push('reddit');
-					}*/
-					
-				/*}else if (req.body.option === 'URL'){ 
-					var options = {
-						//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-						pythonPath:'/opt/python/bin/python3.4',
-						pythonOptions:['-W ignore'],
-						scriptPath:appPath + '/scripts/NLP/',
-						args:['--format',req.body.option, '--content',req.body.input, '--process',req.body.model, '--tagger',req.body.tagger]
-					};	
-				}*/
 				
 				pythonShell.run('preprocessing.py',options,function(err,results){
 					if(err){ 
@@ -104,14 +87,12 @@ router.post('/NLP-preprocess',function(req,res,next){
 						res.send({
 									title:'Natural Language PreProcessing', 
 									img:[{name:'Word Distribution',content:div_data}],
-										//{name:'Name Entity Recognition (top30)', content:div_NE_data}],
 									download:[
 										{name:'phrases', content:phrases},
 										{name:'words', content:filtered},
 										{name:'most common words by order', content:most_common},
 										{name:req.body.model + ' text', content:processed},
 										{name:req.body.tagger + ' text', content:tagged}],
-										//{name:'name entity recognition' + 'text', content:NE}],
 									table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
 									preview:'',						
 								});		
