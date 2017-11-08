@@ -13,7 +13,11 @@ router.get('/networkx',function(req,res,next){
 	var files = readDIR('./downloads/GraphQL');
 	
 	delete files['twitter-User'];
-	var formParam = require('./networkx.json');
+	delete files['reddit-Search'];
+	delete files['reddit-Post'];
+	delete files['reddit-Comment'];
+	
+	var formParam = require('./networkx.json');		
 	res.render('analytics/formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:files, param:formParam}); 
 });
 

@@ -45,13 +45,17 @@ html
 			a(class="button", id="twitter-auth") 
 				img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 				| Authorize with your Twitter account
+			a(class="button", id="reddit-auth") 
+				img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+				| Authorize with your Reddit account
 			
 			script.
 				// newPath has already been calculated in the topbar.pug
 				$("#twitter-auth").attr("href","login/twitter?currentURL=" + newPath);
+				$("#reddit-auth").attr("href","login/reddit?currentURL=" + newPath);
 				
 				
-		div(class="searchPage",id="searchPage")
+		div(class="searchPage",id="searchPage",style="display:none;")
 			<!-- logo -->
 			div(class="row" id="header",style="")
 				img(src="bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
@@ -61,15 +65,20 @@ html
 				div(id="tabs")
 					select(class="selectpicker show-tick" id="social-media" title="Choose a Data Source..." data-width="220px")
 						optgroup(label="Search Twitter")
-							option(data-icon="glyphicon-envelope" value="queryTweet") Tweets
+							option(data-icon="glyphicon-search" value="queryTweet") Tweets
 							option(data-icon="glyphicon-user" value="queryUser") Twitter Users
 						optgroup(label="Partial Historical Database")
 							option(data-icon="glyphicon-envelope" value="streamTweet") Streamed Tweets
-								
+						optgroup(label="Search Reddit")
+							option(data-icon="glyphicon-search" value="queryReddit") Search Reddit Posts
+							option(data-icon="glyphicon-file" value="redditPost") Posts in Subreddit
+							option(data-icon="glyphicon-comment" value="redditComment") Comments in Subreddit
+					
 					include searchbox.pug
 						
 			<!-- rendering -->
 			div(id="grid")
+				
 								
 		<!-- popup modal save -->
 		div(id="save" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
@@ -138,19 +147,13 @@ html
 					
 		
 		script.
-			if ( !{JSON.stringify(success.length)} === 0 ){
-				console.log('here');
-				$(".searchPage").hide();
-			}
-			/*if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
-				$("#twitter-auth").hide();
-				$("#searchPage").hide();
-			}
-			if (!{JSON.stringify(success)}.indexOf('es') >=0){
-				$("#es-auth").hide();
-				$("#searchPage").hide();
-			}*/
 			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
+				$("#twitter-auth").hide();
+			}
+			if (!{JSON.stringify(success)}.indexOf('reddit') >=0){
+				$("#reddit-auth").hide();
+			}
+			if (!{JSON.stringify(success.length)} == 2){
 				$("#auth-panel").hide();
 				$("#searchPage").show();
 			}

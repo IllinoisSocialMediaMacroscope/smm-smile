@@ -4,25 +4,35 @@ function submitQuery(textareaID,filenameID){
 	$(".loading").show();
 	
 	var queryString = $(textareaID).val();
-	
 	var queryTerm = $("#social-media").find(':selected').val();
+	var filename = $(filenameID).val();
+	
 	if (queryTerm === 'queryTweet'){
-		var filename =  $(filenameID).val();
 		var prefix = 'twitter-Tweet';
 		var params = parameters.tweet;
 		var pages = -999;
 	}else if (queryTerm === 'queryUser'){
-		var filename = $(filenameID).val();
 		var prefix = 'twitter-User' ;
 		var params = parameters.twtUser;
 		var pages = parseInt($("#twtUser-count").val())/20;
 		//var pages = parameters['twtUser']['pageNum:'] 	
 	}else if (queryTerm === 'streamTweet'){
-		var filename = $(filenameID).val();
 		var prefix = 'twitter-Stream'
 		var params = parameters.es;
 		var pages = parseInt($("#perPage").val())/1000;
 		//var pages = parameters['es']['pageNum:'];	
+	}else if (queryTerm === 'queryReddit'){
+		var prefix = 'reddit-Search';
+		var params = parameters.rdSearch ;	
+		var pages = 10;		
+	}else if (queryTerm === 'redditPost'){
+		var prefix = 'reddit-Post';
+		var params = parameters.rdPost ;	
+		var pages = -999;		
+	}else if (queryTerm === 'redditComment'){
+		var prefix = 'reddit-Comment';
+		var params = parameters.rdComment ;	
+		var pages = -999;		
 	}
 	
 	$.ajax({
@@ -39,7 +49,6 @@ function submitQuery(textareaID,filenameID){
 			if ('ERROR' in data){				
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
-					
 					$(".loading").hide();
 			}else{
 				renderPreview(data, prefix);
@@ -239,6 +248,132 @@ function submitSearchbox(searchboxID, filenameID){
 		// params['es']['pageNum:'] = pages;
 		var params = parameters.es;
 		
+	}else if (queryTerm === 'queryReddit'){
+		var queryString = `{
+								reddit{
+								search(query:"` + keyword +`",time:"all",sort:"relevance"){
+								  archived
+								  author_name
+								  brand_safe
+								  contest_mode
+								  clicked
+								  created
+								  created_utc
+								  domain
+								  downs
+								  edited
+								  gilded
+								  hidden
+								  hide_score
+								  id
+								  is_self
+								  locked
+								  name
+								  over_18
+								  permalink
+								  quarantine
+								  saved
+								  score
+								  stickied
+								  spoiler
+								  subreddit_display_name
+								  subreddit_id
+								  subreddit_type
+								  subreddit_name_prefixed
+								  title
+								  url
+								  ups
+								  visited
+								}
+							  }
+							}`;
+		var filename = $(filenameID).val();
+		var prefix = 'reddit-Search';
+		var pages = 10;
+		var params = parameters.rdSearch;
+	}else if (queryTerm === 'redditPost'){
+		var queryString = `{
+							  reddit {
+								getNew(subredditName:"`+ keyword + `", extra: 2000) {
+								  archived
+								  author_name
+								  brand_safe
+								  contest_mode
+								  clicked
+								  created
+								  created_utc
+								  domain
+								  downs
+								  edited
+								  gilded
+								  hidden
+								  hide_score
+								  id
+								  is_self
+								  locked
+								  name
+								  over_18
+								  permalink
+								  quarantine
+								  saved
+								  score
+								  stickied
+								  spoiler
+								  subreddit_display_name
+								  subreddit_id
+								  subreddit_type
+								  subreddit_name_prefixed
+								  title
+								  url
+								  ups
+								  visited
+								}
+							  }
+							}`;
+		var filename = $(filenameID).val();
+		var prefix = 'reddit-Post';
+		var pages = -999;
+		var params = parameters.rdPost;
+	}else if (queryTerm === 'redditComment'){
+		var queryString = `{
+							reddit{
+							getNewComments(subredditName:"`+keyword + `",extra:2000){
+							  comment_author_name
+							  archived
+							  body
+							  body_html
+							  subreddit_display_name
+							  created_utc
+							  comment_created
+							  controversiality
+							  comment_downs
+							  edited
+							  gilded
+							  comment_id
+							  link_id
+							  link_author
+							  link_title
+							  link_permalink
+							  link_url
+							  comment_over_18
+							  parent_id
+							  quarantine
+							  saved
+							  comment_score
+							  subreddit_id
+							  subreddit_display_name
+							  subreddit_name_prefixed
+							  score_hidden
+							  stickied
+							  subreddit_type
+							  comment_ups
+							}
+						  }
+						}`;
+		var filename = $(filenameID).val();
+		var prefix = 'reddit-Comment';
+		var pages = -999;
+		var params = parameters.rdComment;
 	}
 	
 	$.ajax({
@@ -255,8 +390,8 @@ function submitSearchbox(searchboxID, filenameID){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 					$(".loading").hide();
-			}else{				
-				renderPreview(data,prefix);					
+			}else{
+				renderPreview(data, prefix);			
 			}
 		},
 		error: function(jqXHR, exception){
@@ -411,8 +546,79 @@ function renderPreview(data,prefix){
 									<p style="margin-top:10px;">`+ description + `<br><a href="` + url + `">`+ url + `</a></p>
 							</div>`);
 		});
+	}else if (prefix === 'reddit-Search' || prefix === 'reddit-Post'){
+		$.each(data.rendering, function(i,val){
+			var author_name = val.author_name || 'Not Provided';
+			var subreddit_name_prefixed = val.subreddit_name_prefixed || 'NotProvided';
+			var url = val.url || 'Not Provided';
+			var title = val.title || 'Not Provided';
+			var permalink = val.permalink || 'Not Provided';
+			var score = val.score || 'Not Provided';
+			if (val.created_utc !== undefined){
+				var created_utc = timeConverter(val.created_utc);
+			}else{
+				var created_utc = 'Not Provided';
+			}
+			
+			$("#grid").append(`<div class="grid-element">
+					<div style="margin-top:10px;">
+						<p style="display:inline;font-size:15px;"><b>` + author_name + `‏</b></p> 
+						<p style="display:inline;color:green;">&nbsp;&bull;`+ subreddit_name_prefixed + `</p>
+						<p style="display:inline;color:grey;">&nbsp;&bull;` + created_utc + `</p>
+					</div>
+					<a target="_blank" href="` + url + `" style="margin-top:10px;display:block;">`+ title + `</a>
+					<a target="_blank" href="https://www.reddit.com` + permalink + `" style="margin-top:20px;margin-bottom:20px;display:block;color:black;">Go to this Reddit Thread
+						<span class="glyphicon glyphicon-share-alt" style="position:inherit;"></span></a>
+					<p style="margin-top:10px;"><span class="glyphicon glyphicon-heart" style="position:inherit;"></span>`+score +`</p>
+				</div>`);
+				
+		});
+	}else if (prefix === 'reddit-Comment'){
+		$.each(data.rendering, function(i,val){
+			var author_name = val.comment_author_name || 'Not Provided';
+			var subreddit_name_prefixed = val.subreddit_name_prefixed || 'NotProvided';
+			var body = val.body || 'Not Provided';
+			if (body.length >= 300){
+				body = body.slice(0,300) + '...';
+			}
+			var permalink = val.link_permalink || 'Not Provided';
+			var score = val.comment_score || 'Not Provided';
+			if (val.comment_created !== undefined){
+				var created_utc = timeConverter(val.comment_created);
+			}else{
+				var created_utc = 'Not Provided';
+			}
+			
+			$("#grid").append(`<div class="grid-element">
+					<div style="margin-top:10px;">
+						<p style="display:inline;font-size:15px;"><b>` + author_name + `‏</b></p> 
+						<p style="display:inline;color:green;">&nbsp;&bull;`+ subreddit_name_prefixed + `</p>
+						<p style="display:inline;color:grey;">&nbsp;&bull;` + created_utc + `</p>
+					</div>
+					<p style="margin-top:10px;display:block;color:#428bca;">`+ body + `</p>
+					<a target="_blank" href="` + permalink + `" style="margin-top:20px;margin-bottom:20px;display:block;color:black;">Go to this Reddit Thread
+						<span class="glyphicon glyphicon-share-alt" style="position:inherit;"></span></a>
+					<p style="margin-top:10px;"><span class="glyphicon glyphicon-heart" style="position:inherit;"></span>`+score +`</p>
+				</div>`);
+				
+		});
 	}
+		
 	
 	$("#grid").show();
 
+}
+
+	
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
 }

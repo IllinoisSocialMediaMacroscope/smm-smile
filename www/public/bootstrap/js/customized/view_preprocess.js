@@ -54,8 +54,8 @@ $(document).ready(function(){
 						/* the text fields are:  text, user.description(tweet), description(twtUser),
 						body(redditComment), selftext,title(redditSearch), 
 						public description, description(redditSearchSubreddit)*/
-						var allowed_field_list = ['text','user.description','_source.text', '_source.user.description','description','body','selftext', 'title', 'public_description', 
-							'description'];
+						var allowed_field_list = ['text','user.description','_source.text', '_source.user.description','description',
+						'body','title'];
 						
 						var index = [];
 						$.each(data.preview[0],function(i,val){

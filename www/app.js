@@ -40,7 +40,7 @@ app.use('/',require('./routes/auth/twitter_auth'));
 app.use('/', require('./routes/auth/googleDrive_auth'));
 app.use('/', require('./routes/auth/dropbox_auth'));
 app.use('/', require('./routes/auth/box_auth'));
-//app.use('/',require('./routes/auth/reddit_auth'));
+app.use('/',require('./routes/auth/reddit_auth'));
 app.use('/', require('./routes/sitemap'));
 
 /*app.use(function(err, req, res, next) {
