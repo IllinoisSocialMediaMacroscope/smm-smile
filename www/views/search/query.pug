@@ -1,0 +1,167 @@
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		
+		<!-- this is for bootstrap 3! -->
+		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		<!-- this is the customized search box style -->
+		link(href="bootstrap/css/customized/search.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/component.css",rel="stylesheet")
+		
+		<!-- font family -->
+		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+		
+		<!-- JQUERY -->
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="bootstrap/js/bootstrap.min.js")
+		
+		<!-- Include the plugin's CSS and JS: -->
+		<script src="bootstrap/js/bootstrap-multiselect.js"></script>
+		<link rel="stylesheet" href="bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
+		
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+	
+		script(src="bootstrap/js/customized/query_pb.js")
+		script(src="bootstrap/js/customized/query_formValid.js")
+		script(src="bootstrap/js/customized/query_submit.js")
+		
+	body(onload="init()")
+		<!-- top bar -->
+		include ../components/topbar.pug
+		include ../components/warning.pug
+		include ../components/clientside-warning.pug
+		include ../components/sitemap.pug
+		
+		<!-- auth -->
+		div(id="auth-panel")
+			p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
+			
+			a(class="button", id="twitter-auth") 
+				img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+				| Authorize with your Twitter account
+			a(class="button", id="reddit-auth") 
+				img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+				| Authorize with your Reddit account
+			
+			script.
+				// newPath has already been calculated in the topbar.pug
+				$("#twitter-auth").attr("href","login/twitter?currentURL=" + newPath);
+				$("#reddit-auth").attr("href","login/reddit?currentURL=" + newPath);
+				
+				
+		div(class="searchPage",id="searchPage",style="display:none;")
+			<!-- logo -->
+			div(class="row" id="header",style="")
+				img(src="bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
+			
+			<!-- search --->
+			div(class="row")
+				div(id="tabs")
+					select(class="selectpicker show-tick" id="social-media" title="Choose a Data Source..." data-width="220px")
+						optgroup(label="Search Twitter")
+							option(data-icon="glyphicon-search" value="queryTweet") Tweets
+							option(data-icon="glyphicon-user" value="queryUser") Twitter Users
+						optgroup(label="Search Reddit")
+							option(data-icon="glyphicon-search" value="queryReddit") Search Reddit Posts
+							option(data-icon="glyphicon-file" value="redditPost") Posts in Subreddit
+							option(data-icon="glyphicon-comment" value="redditComment") Comments in Subreddit
+						optgroup(label="Partial Historical Database")
+							option(data-icon="glyphicon-envelope" value="streamTweet") Streamed Tweets
+							option(data-icon="glyphicon-envelope" value="pushshiftPost") Historical Reddit Posts
+							option(data-icon="glyphicon-comment" value="pushshiftComment") Historical Reddit Comments
+					
+					include searchbox.pug
+						
+			<!-- rendering -->
+			div(id="grid")
+				
+								
+		<!-- popup modal save -->
+		div(id="save" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+			div(class="modal-dialog")
+				div(class="modal-content")
+					div(class="modal-header")
+						button(class="close" data-dismiss="modal") &times;
+						h2(class="modal-title")
+							span(class="glyphicon glyphicon-floppy-save" style="font-size:20px;margin-left:5px") 
+							| Save the result 
+					
+					div(class="modal-body" style="text-align:center;vertical-aligcd :middle;")
+						form(class="form-horizontal")
+							div(class="form-group")
+								label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Filename
+								div(class="col-md-7 col-md-7 col-xs-12")
+									input(class="form-control" id="filename" placeholder="filename")
+							div(class="form-group")
+								label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Downloadable Files
+								div(class="col-md-7 col-md-7 col-xs-12")
+									div(id="display")
+						div(class="loading" style="display:none")
+							img(src="bootstrap/img/gifs/loading2.gif", width="15%", height="15%", style="display:block; margin-left:auto; margin-right:auto; margin-top:10px")
+					div(class="modal-footer")
+						button(class="btn btn-default", id="saveButton", style="background-color:#ea4a36;color:white;border-style:hidden") Save
+						button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden", data-dismiss="modal") Close
+		
+		<!-- popup modal download-->
+		div(id="success" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+			div(class="modal-dialog", style="width:800px;")
+				div(class="modal-content")
+					div(class="modal-header")
+						button(class="close" data-dismiss="modal") &times;
+						h2(class="modal-title" id="modal-title") Download Your Search Results
+					
+					div(class="modal-body" style="vertical-align:middle;font-size:20px;")
+						div(id="citation-notice")
+							p <b>Thank you for using our tool, if you use these results please cite it:</b><br>
+							p Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, A., & Hodgkins, H. 
+								|(September, 2017) – Social Media Macroscope, <u>http://socialmediamacroscope.org</u>
+							button(id="citation-notice-btn") click to continue
+						div(id="modal-download",style="display:none;")
+						p(id="download-note",style="display:none;") <b>NOTE</b>: Your search results are saved in your home directory. You can either <b>download</b> here; 
+							| or go to any of the analytics tools --> <b>select from your folder</b>;
+							| or review, manage and download it in the <b>history</b> page
+							| If you accidentally close this modal window, you can click <b>export</b> button in this page to resume.
+						p(id="download-note",style="display:none;") <b>Example of usage:</b>
+						img(src="bootstrap/img/gifs/gotoAnalytics.gif",id="gotoAnalytics-demo",style="display:none;") 
+						script.
+							$("#citation-notice-btn").click(function(){
+								$("#citation-notice").hide('slow');
+								$("#modal-download").show('slow');
+								$("#download-note").show('slow');
+								$("#gotoAnalytics-demo").show('slow');
+								$(".modal-footer.download").show('slow');
+							});
+						
+					div(class="modal-footer download",style="display:none;")
+						a(href="./", class="btn btn-primary",style="background-color:#ea4a36;border-style:hidden") Go To Analytics
+						a(href="history", class="btn btn-primary", style="background-color:#1e325a;border-style:hidden") Review in History
+								
+		<!-- side bar HELP-->
+		div(class="documentation",id="documentation")
+			iframe(id="docIframe", src="graphql-doc/schema/index.html",width="100%",scrolling="yes",style="padding-top: 40px;margin:0 0;")
+							
+					
+		
+		script.
+			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
+				$("#twitter-auth").hide();
+			}
+			if (!{JSON.stringify(success)}.indexOf('reddit') >=0){
+				$("#reddit-auth").hide();
+			}
+			if (!{JSON.stringify(success.length)} == 2){
+				$("#auth-panel").hide();
+				$("#searchPage").show();
+			}
+		
+							
+							
+							
+							
+							

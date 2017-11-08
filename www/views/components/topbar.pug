@@ -1,0 +1,432 @@
+div(id="export-modal",class="modal fade",role="dialog")
+	div(class="modal-dialog",style="font-size:20px;width:800px")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", data-dismiss="modal") &times;
+				h2(class="modal-title") Export 
+			div(class="modal-body",style="text-align:left;vertical-align:middle;overflow:hidden;padding:20px 50px;")
+				p Authorize with your own online storage account, and we will export a .zip file with <b>ALL</b> of your data associate with this session to your storage.
+				| Make sure you have <b>at least 100MB</b> free space available on your remote drive.
+				div(id="googleDrive",style="display:block;margin-bottom:15px;")
+					a(href="login/google", id="google-auth", target="_blank", style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;") 
+						img(src="bootstrap/img/logo/googledrive-sm-logo.png", width="25px",height="25px")
+						|  Authroize Google Drive 
+					button(class="btn btn-primary", id="googleDrive-export",style="display:none;",onclick="exportFiles(this.id);") export
+					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading", width="40px" style="display:none;")
+					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
+					input(class="auth-code", style="display:none;margin:15px;width:calc(90%)",placeholder=` Paste your code as instructed and press enter.`)
+					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
+				
+				div(id="dropbox",style="display:block;margin-bottom:15px;")
+					a(href="login/dropbox", target="_blank", id="dropbox-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
+						img(src="bootstrap/img/logo/dropbox-sm-logo.png", width="30px",height="30px")
+						|  Authroize Dropbox
+					button(class="btn btn-primary", id="dropbox-export",style="display:none;",onclick="exportFiles(this.id);") export
+					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
+					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
+					input(class="auth-code", style="display:none;margin:15px;width:calc(90%)",placeholder=` Paste your code as instructed and press enter.`)
+					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
+				
+				div(id="box",style="display:block;margin-bottom:15px;")
+					a(id="box-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
+						img(src="bootstrap/img/logo/box-sm-logo.png", width="30px",height="30px")
+						|  Authroize Box
+					button(class="btn btn-primary", id="box-export",style="display:none;",onclick="exportFiles(this.id);") export
+					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
+					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
+					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
+					
+			div(class="modal-footer")
+				button(class="btn btn-primary",id="terminate-btn", style="display:none;background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="terminate();") Terminate		
+				button(class="btn btn-primary",id="cancel-btn", style="display:none;background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",data-dismiss="modal") Cancel
+				
+div(id="terminate-modal" class="modal fade" role="dialog")
+	div(class="modal-dialog",style="width:600px;")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close" data-dismiss="modal") &times;
+				h2(class="modal-title") Terminate This Session?
+				p(style="font-size:16px") <b>Warning:</b> All data associated with this session will no longer be available!
+			div(class="modal-footer")
+				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="exportOptions('terminate');") Yes	
+				button(class="btn btn-primary",style="background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",data-dismiss="modal") No
+
+				
+nav(class="navbar navbar-inverse navbar-fixed-top")
+	div(class="container-fluid")
+		div(class="navbar-header")
+			button(type="button",class="navbar-toggle collapsed", data-toggle="collapse", data-target="#navbar", aria-expanded="true", aria-controls="navbar")
+				span(class="sr-only") Toggle navigation
+				span(class="icon-bar")
+				span(class="icon-bar")
+				span(class="icon-bar")
+				
+		div(id="navbar",class="navbar-collapse collapse")
+			ul(class="nav navbar-nav navbar-left")
+				li
+					a(id="topbar-home",href="./")
+						span(class="glyphicon glyphicon-home")
+						| Home 
+				li
+					a(id="topbar-hub",onclick="terminateWarning();")
+						span(class="glyphicon glyphicon-log-out")
+						| Terminate 
+						
+		
+			ul(class="nav navbar-nav navbar-right")
+					
+				li
+					a(href="history",id="topbar-generic")
+						span(class="glyphicon glyphicon-time")
+						| History
+				li
+					a(id="topbar-export")
+						span(class="glyphicon glyphicon-cloud")
+						| Export
+				li 
+					a(href="query",id="topbar-generic")
+						span(class="glyphicon glyphicon-search")
+						| Social Media
+						
+				div(class="dropdown",id="topbar-analytics")
+					button(type="button",id="topbar-analytics-btn", class="btn btn-default dropdown-toggle", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true") Analytics Tools &nbsp;
+						span(class="caret")
+					ul(class="dropdown-menu", aria-labelledby="dropdownMenu1")
+						
+						li 
+							a(href="NLP-preprocess") Text Preprocessing
+						li 
+							a(href="text-classification") Text Classification	
+						li 
+							a(href="NLP-sentiment") Sentiment Analysis
+						li 
+							a(href="networkx") Network Analysis		
+					 
+			form(id="sitemap",class="navbar-form navbar-right")
+				input(id="sitemap-input", type="text",class="form-control",placeholder="Search within the tool...")
+
+	
+	
+script.
+	// get session id
+	var pathArray = window.location.pathname.split('/');
+	var newPath = "";
+	for (i=0; i<pathArray.length-1; i++){
+		if (pathArray[i] === 'weber'){
+			sessionID = pathArray[i+1];
+			// session ID always is the one after weber
+		}
+		
+		newPath += pathArray[i];
+		newPath += "/";
+	}
+	
+	//get currentPage name for dropbox and read the ?dropbox=success
+	$("#box-auth").on('click',function(){
+		$("#box-auth").attr("href","login/box?pageURL=" + pathArray[pathArray.length-1] + "&currentURL=" + newPath);
+		//console.log(pathArray[pathArray.length-1]);
+	});
+	function getParameterByName(name) {
+		var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+		return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+	}
+	// box authorization success
+	if(getParameterByName('box') === 'success'){
+		$("#box-export").show();
+		$("#export-modal").modal('show');
+	}else{
+		$("#error").val(getParameterByName('box'));
+		$("#warning").modal('show');
+		$("#export-modal").modal('hide');
+	}
+	
+	
+	// trigger export
+	$("#topbar-export").on('click',function(){
+		exportOptions('export');
+	});
+		
+		
+	function terminateWarning(){
+		console.log("clicked");
+		$("#terminate-modal").modal('show');
+	}
+	
+	function exportOptions(whichTrigger){
+	
+		if (whichTrigger === 'terminate'){
+		
+			$("#terminate-modal").modal('hide');
+			
+			//show terminate button at the footer
+			$("#terminate-btn").show();
+			$("#export-modal").modal('show');
+			
+		}else if (whichTrigger === 'export'){
+			//show terminate button at the footer
+			$("#cancel-btn").show();
+			$("#export-modal").modal('show');
+		}
+	}
+	
+	function terminate(){
+		var cleanData = function() {
+		  return new Promise(function(resolve, reject) {
+			//console.log('first delete that session folder');
+			$.ajax({
+				type:'post',
+				url:'delete', 
+				data: {"type":"purge"},				
+				success:function(data){
+					console.log(data);
+					if (data){
+						if ('ERROR' in data){
+							$("#loading").hide();
+							$("#background").show();
+							$("#error").val(JSON.stringify(data));
+							$("#warning").modal('show');
+							reject(data);
+						}
+						resolve(data);
+					}
+				},
+				error: function(jqXHR, exception){
+						var msg = '';
+						if (jqXHR.status === 0) {
+							msg = 'Not connect.\n Verify Network.';
+						} else if (jqXHR.status == 404) {
+							msg = 'Requested page not found. [404]';
+						} else if (jqXHR.status == 500) {
+							msg = 'Internal Server Error [500].';
+						} else if (exception === 'parsererror') {
+							msg = 'Requested JSON parse failed.';
+						} else if (exception === 'timeout') {
+							msg = 'Time out error.';
+						} else if (exception === 'abort') {
+							msg = 'Ajax request aborted.';
+						} else {
+							msg = 'Uncaught Error.\n' + jqXHR.responseText;
+						}
+						$("#error").val(msg);
+						$("#warning").modal('show');
+						reject(msg);						
+					} 
+			});
+		  });
+		};
+
+		cleanData().then(function() {
+			window.location = "http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID;
+		}).catch(function(error) {
+			console.log('oh no', error);
+		});
+	
+	}
+	
+	//authorize
+	$("#googleDrive #google-auth").on('click', function(){
+		// clear the text area and show input box
+		$("#googleDrive .auth-code").val(''); 
+		$("#googleDrive .auth-code").css('display','block');
+		
+		//hide loading bar
+		$("#googleDrive .export-loading").css('display','none');
+		
+		//hide success bar
+		$("#googleDrive .export-success").css('display','none');
+		
+		//hide the link
+		$("#googleDrive #embedded-link").hide();
+	});
+	
+	$("#dropbox #dropbox-auth").on('click', function(){
+		// clear the text area and show input box
+		$("#dropbox .auth-code").val(''); 
+		$("#dropbox .auth-code").css('display','block');
+		
+		//hide loading bar
+		$("#dropbox .export-loading").css('display','none');
+		
+		//hide success bar
+		$("#dropbox .export-success").css('display','none');
+		
+		//hide the link
+		$("#dropbox #embedded-link").hide();
+	});
+	
+	$("#box #box-auth").on('click', function(){
+		//hide loading bar
+		$("#box .export-loading").css('display','none');
+		
+		//hide success bar
+		$("#box .export-success").css('display','none');
+		
+		//hide the link
+		$("#box #embedded-link").hide();
+	});
+	
+	//code change to access token	
+	$("#googleDrive .auth-code").on("keyup",function(e){
+		if (e.keyCode == 13 || e.keyCode == 10){
+			
+			$.ajax({
+				type:'post',
+				url:'login/google', 
+				data: {"authorizeCode":$("#googleDrive .auth-code").val()},				
+				success:function(data){
+					if (data){
+						if ('ERROR' in data){
+							$("#googleDrive .auth-code").val(''); //clear the text area
+							$("#error").val(JSON.stringify(data));
+							$("#warning").modal('show');
+						}else{
+							// if success, show export button and hide the authorize code session
+							$("#googleDrive .auth-code").hide();
+							$("#googleDrive-export").show();
+						}
+					}
+				},
+				error: function(jqXHR, exception){
+					var msg = '';
+					if (jqXHR.status === 0) {
+						msg = 'Not connect.\n Verify Network.';
+					} else if (jqXHR.status == 404) {
+						msg = 'Requested page not found. [404]';
+					} else if (jqXHR.status == 500) {
+						msg = 'Internal Server Error [500].';
+					} else if (exception === 'parsererror') {
+						msg = 'Requested JSON parse failed.';
+					} else if (exception === 'timeout') {
+						msg = 'Time out error.';
+					} else if (exception === 'abort') {
+						msg = 'Ajax request aborted.';
+					} else {
+						msg = 'Uncaught Error.\n' + jqXHR.responseText;
+					}
+					$("#error").val(msg);
+					$("#warning").modal('show');						
+				} 
+			});
+		}
+	});
+	
+	$("#dropbox .auth-code").on("keyup",function(e){
+		if (e.keyCode == 13 || e.keyCode == 10){
+			
+			$.ajax({
+				type:'post',
+				url:'login/dropbox', 
+				data: {"authorizeCode":$("#dropbox .auth-code").val()},				
+				success:function(data){
+					if (data){
+						if ('ERROR' in data){
+							$("#dropbox .auth-code").val(''); //clear the text area
+							$("#error").val(JSON.stringify(data));
+							$("#warning").modal('show');
+						}else{
+							// if success, show export button and hide the authorize code session
+							$("#dropbox .auth-code").hide();
+							$("#dropbox-export").show();
+						}
+					}
+				},
+				error: function(jqXHR, exception){
+					var msg = '';
+					if (jqXHR.status === 0) {
+						msg = 'Not connect.\n Verify Network.';
+					} else if (jqXHR.status == 404) {
+						msg = 'Requested page not found. [404]';
+					} else if (jqXHR.status == 500) {
+						msg = 'Internal Server Error [500].';
+					} else if (exception === 'parsererror') {
+						msg = 'Requested JSON parse failed.';
+					} else if (exception === 'timeout') {
+						msg = 'Time out error.';
+					} else if (exception === 'abort') {
+						msg = 'Ajax request aborted.';
+					} else {
+						msg = 'Uncaught Error.\n' + jqXHR.responseText;
+					}
+					$("#error").val(msg);
+					$("#warning").modal('show');						
+				} 
+			});
+		}
+	});
+	
+	
+	function exportFiles(id){
+		if (id ===  'googleDrive-export'){
+			$("#googleDrive-export").hide();
+			$("#googleDrive .export-loading").css('display','inline-block');
+		}else if (id==='dropbox-export'){
+			$("#dropbox-export").hide();
+			$("#dropbox .export-loading").css('display','inline-block');
+		}else if (id==='box-export'){
+			$("#box-export").hide();
+			$("#box .export-loading").css('display','inline-block');
+		}
+		
+		$.ajax({
+			type:'post',
+			url:'export', 
+			data: {"id":id},				
+			success:function(data){
+				if (id ===  'googleDrive-export') $("#googleDrive .export-loading").css('display','none');
+				else if(id==='dropbox-export') $("#dropbox .export-loading").css('display','none');
+				else if(id==='box-export') $("#box .export-loading").css('display','none');
+				
+				if (data){
+					if ('ERROR' in data){
+						$("#error").val(JSON.stringify(data));
+						$("#warning").modal('show');
+					}else{
+						// if success, and put on the success gif
+						if (id ===  'googleDrive-export'){
+							$("#googleDrive .export-success").css('display','inline-block');
+							$("#googleDrive #embedded-link").attr("href",data.alternateLink);
+							$("#googleDrive #embedded-link").text(data.alternateLink);
+							$("#googleDrive #embedded-link").css('display','block');
+						}
+						else if(id==='dropbox-export'){
+							$("#dropbox .export-success").css('display','inline-block');
+							$("#dropbox #embedded-link").attr("href",'https://www.dropbox.com/personal?preview=' + data.name);
+							$("#dropbox #embedded-link").text('https://www.dropbox.com/personal?preview=' + data.name);
+							$("#dropbox #embedded-link").css('display','block');
+						}
+						else if(id==='box-export'){
+							console.log(data);
+							$("#box .export-success").css('display','inline-block');
+							$("#box #embedded-link").attr("href", 'https://uofi.app.box.com/file/'+ data.entries[0].id);
+							$("#box #embedded-link").text('https://uofi.app.box.com/file/'+ data.entries[0].id);
+							$("#box #embedded-link").css('display','block');
+						}
+					}
+				}
+			},
+			error: function(jqXHR, exception){
+				$("#googleDrive .export-loading").css('display','none');
+				$("#dropbox .export-loading").css('display','none');
+				
+				var msg = '';
+				if (jqXHR.status === 0) {
+					msg = 'Not connect.\n Verify Network.';
+				} else if (jqXHR.status == 404) {
+					msg = 'Requested page not found. [404]';
+				} else if (jqXHR.status == 500) {
+					msg = 'Internal Server Error [500].';
+				} else if (exception === 'parsererror') {
+					msg = 'Requested JSON parse failed.';
+				} else if (exception === 'timeout') {
+					msg = 'Time out error.';
+				} else if (exception === 'abort') {
+					msg = 'Ajax request aborted.';
+				} else {
+					msg = 'Uncaught Error.\n' + jqXHR.responseText;
+				}
+				$("#error").val(msg);
+				$("#warning").modal('show');						
+			} 
+		});
+	
+	}

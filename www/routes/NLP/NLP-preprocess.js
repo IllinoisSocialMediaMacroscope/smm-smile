@@ -1,0 +1,110 @@
+//require('dotenv').config();
+var express = require('express');
+var router = express.Router();
+var fs = require('fs');
+var pythonShell = require('python-shell');
+var CSV = require('csv-string');
+var path = require('path');
+var appPath = path.dirname(path.dirname(__dirname));
+var readDIR = require(path.join(appPath,'scripts','helper.js')).readDIR;
+const getSize = require('get-folder-size');
+
+router.get('/NLP-preprocess',function(req,res,next){
+	files = readDIR('./downloads/GraphQL');	
+	var formParam = require('./preprocess.json');
+	res.render('analytics/formTemplate',{parent:'/#Pre-processing', title:'Natural Language PreProcessing', directory:files, param:formParam});
+});
+ 
+router.post('/NLP-preprocess',function(req,res,next){
+	getSize('./downloads', function(err, size) {
+		if (err) { res.send({'ERROR':err}); }
+		else{ 
+			var sizeMB = size / 1024 / 1024;
+			console.log( sizeMB.toFixed(2) + ' Mb');
+			
+			//threshhold of 50MB for each user maybe?
+			if (sizeMB >= 500){
+				res.send({'ERROR':`You have accumulated a total ` + sizeMB.toFixed(2) + 'MB of data in your directory, which ' 
+				 + 'reached the alarm of 500MB for each individual. Please go free up the space by visiting the HISTORY page '
+				 + 'and delete some of the historical data. No furthur data ingestion or computation can be performed until your ' +
+				'disk usage is below 500MB. We appreciate your understanding!'
+				});
+			}else{
+				
+				if (req.body.selectFile !== 'Please Select'){
+					var options = {
+						//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+						pythonPath:'/opt/python/bin/python3.4',
+						pythonOptions:['-W ignore'],
+						scriptPath:appPath + '/scripts/NLP/',
+						args:['--format','file', '--content','./downloads/GraphQL/'+  req.body.filename, '--column', req.body.selectFileColumn,
+						'--process',req.body.model, '--tagger',req.body.tagger, '--source','twitter']
+					};
+				}else{
+					res.end('no file selected!');
+				}	
+				
+				pythonShell.run('preprocessing.py',options,function(err,results){
+					if(err){ 
+						//throw err;
+						console.log(err);
+						res.send({ERROR:err});	
+					}else{
+						var phrases = results[1];
+						var filtered = results[2];
+						var processed = results[3];
+						var most_common = results[4];
+						var div = results[5];
+						var tagged = results[6];
+						
+						if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
+							var div_data = fs.readFileSync(div.slice(0,-1),'utf8');
+						}else{
+							var div_data = fs.readFileSync(div,'utf8');
+						}
+						
+						if (phrases.slice(-1) === '\r' || phrases.slice(-1) === '\n' || phrases.slice(-1) === '\t' || phrases.slice(-1) === '\0' || phrases.slice(-1) === ' '){
+							var sentence_array =  fs.readFileSync(phrases.slice(0,-1),'utf8').toString().split("\n");
+						}else{
+							var sentence_array =  fs.readFileSync(phrases,'utf8').toString().split("\n");
+						}
+						
+						//console.log(sentence_array);
+						
+						var new_sentence_array = [];
+						for (var i = 0, length= sentence_array.length; i<length; i++){
+							new_sentence_array.push([sentence_array[i]]) //add [] to make it comply with google word tree requirement
+						}
+						
+						if (most_common.slice(-1) === '\r' || most_common.slice(-1) === '\n' || most_common.slice(-1) === '\t' || most_common.slice(-1) === '\0' || most_common.slice(-1) === ' '){
+							var most_common_array = fs.readFileSync(most_common.slice(0,-1),'utf8').toString().split("\n")[1];
+						}else{
+							var most_common_array = fs.readFileSync(most_common,'utf8').toString().split("\n")[1];
+						}
+						
+						var most_freq_word = most_common_array.split(",")[0]
+						
+						res.send({
+									title:'Natural Language PreProcessing', 
+									img:[{name:'Word Distribution',content:div_data}],
+									download:[
+										{name:'phrases', content:phrases},
+										{name:'words', content:filtered},
+										{name:'most common words by order', content:most_common},
+										{name:req.body.model + ' text', content:processed},
+										{name:req.body.tagger + ' text', content:tagged}],
+									table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
+									preview:'',						
+								});		
+					}
+						
+				});
+			}
+				
+		}
+	});
+		
+	
+}); 
+
+module.exports = router;
