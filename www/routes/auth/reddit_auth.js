@@ -11,7 +11,7 @@ router.get('/login/reddit',function(req,res,next){
 	
 	res.render('search/auth',{
 			bannerURL:"../bootstrap/img/logo/reddit-banner.png",
-			endpoint:"login/reddit",
+			endpoint:"../login/reddit",
 			clauses:['Edit wiki pages on my behalf','Save and unsave comments and submissions.',
 			'Read wiki pages through my account','Change editors and visibility of wiki pages in subreddits I moderate.',
 			'Edit and delete my comments and submissions.','Submit and change my votes on comments and submissions.',
