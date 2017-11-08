@@ -7,6 +7,7 @@
     "test": "nodemon ./bin/www"
   },
   "dependencies": {
+    "append-query": "^2.0.1",
     "aws-es": "^1.5.3",
     "aws-sdk": "^2.93.0",
     "bluebird": "^3.5.0",

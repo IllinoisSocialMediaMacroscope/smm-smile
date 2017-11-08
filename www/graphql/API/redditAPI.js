@@ -1,7 +1,8 @@
 var Promise = require('bluebird');
+var fetch = require('node-fetch');
+var appendQuery = require('append-query')
 
 function redditAPI(tokens,resolveName, id, args){
-	//console.log(tokens);
 	
 	const snoowrap = require('snoowrap');
 	const r = new snoowrap({
@@ -87,7 +88,32 @@ function redditAPI(tokens,resolveName, id, args){
 					reject(err);
 				});
 				break;
+			
+			case 'pushshiftComment': 
+				var endpoint = appendQuery('https://api.pushshift.io/reddit/search/comment/',args);
+				fetch(endpoint).then((res) =>{
+					return res.json();
+				}).then(function(json){
+					resolve(json.data);
+				}).catch((err) =>{
+					console.log(err);
+					reject(err);
+				});
+				break;
 				
+			case 'pushshiftPost': 
+				var endpoint = appendQuery('https://api.pushshift.io/reddit/search/submission/',args);
+				fetch(endpoint).then((res) =>{
+					return res.json();
+				}).then(function(json){
+					resolve(json.data);
+				}).catch((err) =>{
+					console.log(err);
+					reject(err);
+				});
+				break;
+				
+			//---------------------------------------------------------------------
 			case 'searchSubredditNames':
 				r.searchSubredditNames(args).then((data) =>{
 					resolve(data);
