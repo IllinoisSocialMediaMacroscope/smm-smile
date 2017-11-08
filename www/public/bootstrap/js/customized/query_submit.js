@@ -546,8 +546,79 @@ function renderPreview(data,prefix){
 									<p style="margin-top:10px;">`+ description + `<br><a href="` + url + `">`+ url + `</a></p>
 							</div>`);
 		});
+	}else if (prefix === 'reddit-Search' || prefix === 'reddit-Post'){
+		$.each(data.rendering, function(i,val){
+			var author_name = val.author_name || 'Not Provided';
+			var subreddit_name_prefixed = val.subreddit_name_prefixed || 'NotProvided';
+			var url = val.url || 'Not Provided';
+			var title = val.title || 'Not Provided';
+			var permalink = val.permalink || 'Not Provided';
+			var score = val.score || 'Not Provided';
+			if (val.created_utc !== undefined){
+				var created_utc = timeConverter(val.created_utc);
+			}else{
+				var created_utc = 'Not Provided';
+			}
+			
+			$("#grid").append(`<div class="grid-element">
+					<div style="margin-top:10px;">
+						<p style="display:inline;font-size:15px;"><b>` + author_name + `‏</b></p> 
+						<p style="display:inline;color:green;">&nbsp;&bull;`+ subreddit_name_prefixed + `</p>
+						<p style="display:inline;color:grey;">&nbsp;&bull;` + created_utc + `</p>
+					</div>
+					<a target="_blank" href="` + url + `" style="margin-top:10px;display:block;">`+ title + `</a>
+					<a target="_blank" href="https://www.reddit.com` + permalink + `" style="margin-top:20px;margin-bottom:20px;display:block;color:black;">Go to this Reddit Thread
+						<span class="glyphicon glyphicon-share-alt" style="position:inherit;"></span></a>
+					<p style="margin-top:10px;"><span class="glyphicon glyphicon-heart" style="position:inherit;"></span>`+score +`</p>
+				</div>`);
+				
+		});
+	}else if (prefix === 'reddit-Comment'){
+		$.each(data.rendering, function(i,val){
+			var author_name = val.comment_author_name || 'Not Provided';
+			var subreddit_name_prefixed = val.subreddit_name_prefixed || 'NotProvided';
+			var body = val.body || 'Not Provided';
+			if (body.length >= 300){
+				body = body.slice(0,300) + '...';
+			}
+			var permalink = val.link_permalink || 'Not Provided';
+			var score = val.comment_score || 'Not Provided';
+			if (val.comment_created !== undefined){
+				var created_utc = timeConverter(val.comment_created);
+			}else{
+				var created_utc = 'Not Provided';
+			}
+			
+			$("#grid").append(`<div class="grid-element">
+					<div style="margin-top:10px;">
+						<p style="display:inline;font-size:15px;"><b>` + author_name + `‏</b></p> 
+						<p style="display:inline;color:green;">&nbsp;&bull;`+ subreddit_name_prefixed + `</p>
+						<p style="display:inline;color:grey;">&nbsp;&bull;` + created_utc + `</p>
+					</div>
+					<p style="margin-top:10px;display:block;color:#428bca;">`+ body + `</p>
+					<a target="_blank" href="` + permalink + `" style="margin-top:20px;margin-bottom:20px;display:block;color:black;">Go to this Reddit Thread
+						<span class="glyphicon glyphicon-share-alt" style="position:inherit;"></span></a>
+					<p style="margin-top:10px;"><span class="glyphicon glyphicon-heart" style="position:inherit;"></span>`+score +`</p>
+				</div>`);
+				
+		});
 	}
+		
 	
 	$("#grid").show();
 
+}
+
+	
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
 }
