@@ -179,6 +179,27 @@ function formValid(searchID){
 				$("#psPostFields").focus();
 				return false
 			}
+		}else if ($("#social-media option:selected").val() === 'pushshiftComment'){
+			if ($("#ps-cm-subreddit").is(':checked') && ($("#ps-cm-subreddit-name").val() === '')){
+				$("#modal-message").append(`<h4>Please sepecify which subreddit!</h4>`);
+				$("#alert").modal('show');
+				return false
+			} 
+			if ($("#ps-cm-author").is(':checked') && ($("#ps-cm-author-name").val() === '')){
+				$("#modal-message").append(`<h4>Please sepecify which author!</h4>`);
+				$("#alert").modal('show');
+				return false
+			} 
+			if ($("#ps-cm-dateRange").is(':checked') && ($("#ps-cm-start").val() === '' || $("#ps-cm-end").val() === '')){
+				$("#modal-message").append(`<h4>Please sepecify a date range!</h4>`);
+				$("#alert").modal('show');
+				return false
+			} 
+			if ($("#psCommentFields option:selected").val()===undefined){
+				$("#modal-message").append(`<h4>Please select at least one Field of the post!</h4>`);
+				$("#alert").modal('show');
+				return false
+			}
 		}
 	}
 	

@@ -210,11 +210,11 @@ const redditQueryType = module.exports = new GraphQLObjectType({
 				sort:		{type:GraphQLString,
 					defaultValue:'desc'},
 				sort_type:	{type:GraphQLString,
-					defaultValue:'created_utc'},
+					defaultValue:'score'},
 				subreddit:	{type:GraphQLString},
 				author:		{type:GraphQLString},
-				after:		{type:GraphQLString},
-				before:		{type:GraphQLString}
+				after:		{type:GraphQLInt},
+				before:		{type:GraphQLInt}
 			},
 			resolve: (_,args,context) => redditAPI(context, resolveName = 'pushshiftComment', id='', args = args)
 		},
@@ -228,7 +228,7 @@ const redditQueryType = module.exports = new GraphQLObjectType({
 				sort:		{type:GraphQLString,
 					defaultValue:'desc'},
 				sort_type:	{type:GraphQLString,
-					defaultValue:'created_utc'},
+					defaultValue:'score'},
 				subreddit:	{type:GraphQLString},
 				author:		{type:GraphQLString},
 				after:		{type:GraphQLInt},
