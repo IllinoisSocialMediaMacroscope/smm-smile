@@ -13,7 +13,8 @@ router.get('/history',function(req,res,next){
 							"reddit-Search":{},
 							"reddit-Comment":{},
 							"reddit-Post":{},
-							"reddit-Historical-Post":{}
+							"reddit-Historical-Post":{},
+							"reddit-Historical-Comment":{}
 						},
 						"ML":
 						{
@@ -114,6 +115,12 @@ router.get('/history',function(req,res,next){
 				for (var i = 0, length = fileList.length; i<length; i++){
 					var created_at= fs.lstatSync('./downloads/GraphQL/reddit-Historical-Post/' + fileList[i]).birthtime.toString();
 					directory['GraphQL']['reddit-Historical-Post'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
+				}
+			}if (fs.existsSync('./downloads/GraphQL/reddit-Historical-Comment')){
+				var fileList = fs.readdirSync('./downloads/GraphQL/reddit-Historical-Comment');
+				for (var i = 0, length = fileList.length; i<length; i++){
+					var created_at= fs.lstatSync('./downloads/GraphQL/reddit-Historical-Comment/' + fileList[i]).birthtime.toString();
+					directory['GraphQL']['reddit-Historical-Comment'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
 				}
 			}
 		}
@@ -256,7 +263,8 @@ router.post('/history',function(req,res,next){
 				req.body.layer2 === 'reddit-Search' ||
 				req.body.layer2 === 'reddit-Post' ||
 				req.body.layer2 === 'reddit-Comment' ||
-				req.body.layer2 === 'reddit-Historical-Post') && fs.readdirSync(DIR).length ==2){
+				req.body.layer2 === 'reddit-Historical-Post' ||
+				req.body.layer2 === 'reddit-Historical-Comment') && fs.readdirSync(DIR).length ==2){
 		var config = JSON.parse(fs.readFileSync(DIR  + '/' + req.body.historyID + '.dat','utf8'));
 		var preview_string = fs.readFileSync(DIR + '/' + req.body.historyID + '.csv', "utf8"); 
 		var preview_arr = CSV.parse(preview_string);

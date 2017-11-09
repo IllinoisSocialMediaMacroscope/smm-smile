@@ -37,6 +37,10 @@ function submitQuery(textareaID,filenameID){
 		var prefix = 'reddit-Historical-Post';
 		var params = parameters.psPost ;	
 		var pages = -999;		
+	}else if (queryTerm === 'pushshiftComment'){
+		var prefix = 'reddit-Historical-Comment';
+		var params = parameters.psComment ;	
+		var pages = -999;		
 	}
 	
 	$.ajax({
@@ -409,6 +413,29 @@ function submitSearchbox(searchboxID, filenameID){
 		var prefix = 'reddit-Comment';
 		var pages = -999;
 		var params = parameters.rdComment;
+	}else if (queryTerm === 'pushshiftComment'){
+		var queryString = `{
+							  reddit {
+								pushshiftComment(q: "`+ keyword + `") {
+								  comment_author_name
+								  author_flair_text
+								  author_flair_css_class
+								  body
+								  comment_created
+								  id
+								  link_id
+								  parent_id
+								  comment_score
+								  subreddit_display_name
+								  subreddit_name_prefixed
+								  subreddit_id
+								}
+							  }
+							}`;
+		var filename = $(filenameID).val();
+		var prefix = 'reddit-Historical-Comment';
+		var pages = -999;
+		var params = parameters.psComment;
 	}
 	
 	$.ajax({
@@ -608,7 +635,7 @@ function renderPreview(data,prefix){
 				</div>`);
 				
 		});
-	}else if (prefix === 'reddit-Comment'){
+	}else if (prefix === 'reddit-Comment' || prefix === 'reddit-Historical-Comment'){
 		$.each(data.rendering, function(i,val){
 			var author_name = val.comment_author_name || 'Not Provided';
 			var subreddit_name_prefixed = val.subreddit_name_prefixed || 'NotProvided';
