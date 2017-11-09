@@ -4,11 +4,11 @@ var appendQuery = require('append-query')
 
 function redditAPI(tokens,resolveName, id, args){
 	
-	/*const snoowrap = require('snoowrap');
+	const snoowrap = require('snoowrap');
 	const r = new snoowrap({
 			userAgent: 	'social monitoring research',
 			accessToken: tokens.redditaccesstoken
-	});*/
+	});
 	
 	return new Promise((resolve,reject) =>{
 		switch(resolveName){
