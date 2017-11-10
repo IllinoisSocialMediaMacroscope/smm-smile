@@ -26,10 +26,15 @@ html
 
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+		
+		<!-- jquery cookie plugin -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 	
 		script(src="bootstrap/js/customized/query_pb.js")
 		script(src="bootstrap/js/customized/query_formValid.js")
 		script(src="bootstrap/js/customized/query_submit.js")
+		
+		
 		
 	body(onload="init()")
 		<!-- top bar -->
@@ -42,35 +47,46 @@ html
 		div(id="auth-panel")
 			p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
 			
-			a(class="button", id="twitter-auth") 
-				img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-				| Authorize with your Twitter account
-			a(class="button", id="reddit-auth") 
-				img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-				| Authorize with your Reddit account
+			div(class="twitter-auth" id="twitter-auth")
+				a(class="button") 
+					img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+					| Authorize with your Twitter account
+				button(class="button-later") later
+			div(class="reddit-auth" id="reddit-auth")
+				a(class="button") 
+					img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+					| Authorize with your Reddit account
+				button(class="button-later") later
 			
-			script.
-				// newPath has already been calculated in the topbar.pug
-				$("#twitter-auth").attr("href","login/twitter?currentURL=" + newPath);
-				$("#reddit-auth").attr("href","login/reddit?currentURL=" + newPath);
-				
-				
 		div(class="searchPage",id="searchPage",style="display:none;")
 			<!-- logo -->
 			div(class="row" id="header",style="")
 				img(src="bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
-			
+			<!-- secondary auth panel -->
+			div(class="row",id="second-auth",style="display:block;margin:auto auto;margin-top:50px;text-align:center;color:#333;")
+				div(id="authorized", style="display:inline-block;")
+					p(style="display:inline-block;margin:10px 10px;") Click the icon to authorize:
+					div(class="twitter-auth",style="display:inline-block;")
+						a 
+							img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+					div(class="reddit-auth",style="display:inline-block;")
+						a 
+							img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+				div(id="unauthorized",style="display:inline-block;")
+					p(style="display:inline-block;margin:10px 10px;") You have already authorized:
+					img(id="twitter-authorized", src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
+					img(id="reddit-authorized",src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
 			<!-- search --->
 			div(class="row")
 				div(id="tabs")
 					select(class="selectpicker show-tick" id="social-media" title="Choose a Data Source..." data-width="220px")
 						optgroup(label="Search Twitter")
-							option(data-icon="glyphicon-search" value="queryTweet") Tweets
-							option(data-icon="glyphicon-user" value="queryUser") Twitter Users
+							option(data-icon="glyphicon-search" value="queryTweet" disabled) Tweets
+							option(data-icon="glyphicon-user" value="queryUser" disabled) Twitter Users
 						optgroup(label="Search Reddit")
-							option(data-icon="glyphicon-search" value="queryReddit") Search Reddit Posts
-							option(data-icon="glyphicon-file" value="redditPost") Posts in Subreddit
-							option(data-icon="glyphicon-comment" value="redditComment") Comments in Subreddit
+							option(data-icon="glyphicon-search" value="queryReddit" disabled) Search Reddit Posts
+							option(data-icon="glyphicon-file" value="redditPost" disabled) Posts in Subreddit
+							option(data-icon="glyphicon-comment" value="redditComment" disabled) Comments in Subreddit
 						optgroup(label="Partial Historical Database")
 							option(data-icon="glyphicon-envelope" value="streamTweet") Streamed Tweets
 							option(data-icon="glyphicon-envelope" value="pushshiftPost") Historical Reddit Posts
@@ -147,24 +163,77 @@ html
 			iframe(id="docIframe", src="graphql-doc/schema/index.html",width="100%",scrolling="yes",style="padding-top: 40px;margin:0 0;")
 							
 					
-		
 		script.
-			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
-				$("#twitter-auth").hide();
+			// every time refresh a page or redirect from callback url
+			// check the cookie if there's later saved
+			// hide that button
+			// eventually i want to move everything to cookie..instead of having backend pushing data to front all the time
+			
+			var platforms = ['twitter', 'reddit'];
+			function expireDate(minute){
+				var date = new Date();
+				date.setTime(date.getTime() + (minute * 60 * 1000));
+				return date;
+			}			
+			
+			if($.cookie("reddit-later") === "true" && $.cookie("twitter-later") === "true"){
+					$("#auth-panel").hide();
+					$("#searchPage").show();
 			}
-			if (!{JSON.stringify(success)}.indexOf('reddit') >=0){
-				$("#reddit-auth").hide();
-			}
-			if (!{JSON.stringify(success.length)} == 2){
+			
+			$.each(platforms,function(i,val){
+				clickEffect(val);
+			});
+			if (!{JSON.stringify(success.length)} == platforms.length ){
 				$("#auth-panel").hide();
 				$("#searchPage").show();
 			}
-			/*if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
-				$("#auth-panel").hide();
-				$("#searchPage").show();
-			}*/
-							
-							
+				
+				
+			
+			
+			function clickEffect(platform){
+				if ($.cookie(platform + "-later") === "true"){
+					$("#" + platform + "-auth").hide();
+				}
+				
+				// newPath has already been calculated in the topbar.pug
+				$("." + platform + "-auth").find('a').attr("href","login/"+ platform + "?currentURL=" + newPath);
+	
+				// two ways to hide an authorization button
+				// 1. actually authorize it. this will show the search and also enable the dropdown in the search
+				// 2. click later button which shows the search page but without opening that specific search
+				if (!{JSON.stringify(success)}.indexOf(platform) >=0){
+					$("." + platform + "-auth").hide();
+					if($('#auth-panel').children(':visible').length == 1) {
+						$("#auth-panel").hide();
+						$("#searchPage").show();
+					}
+					$("#" + platform + "-authorized").show();
+				
+					if (platform === 'twitter'){
+						$("#social-media option[value='queryTweet']").removeAttr('disabled');
+						$("#social-media option[value='queryUser']").removeAttr('disabled');
+					}else if (platform === 'reddit'){
+						$("#social-media option[value='queryReddit']").removeAttr('disabled');
+						$("#social-media option[value='redditPost']").removeAttr('disabled');
+						$("#social-media option[value='redditComment']").removeAttr('disabled');
+					}
+				}				
+				$("." +platform+ "-auth").find("button").on("click",function(){
+					$.cookie(platform + '-later',true, { expires: expireDate(0.1)});
+					$("#" + platform + "-auth").hide();
+					if($('#auth-panel').children(':visible').length == 1) {
+						$("#auth-panel").hide();
+						$("#searchPage").show();
+					}
+				});
+			}
+			
+			
+			
+			
+		
 							
 							
 							
