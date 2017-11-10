@@ -5,7 +5,7 @@ var fetch = require('node-fetch');
 var crypto = require('crypto');
 
 
-router.get('/login/reddit',function(req,res,next){
+/*router.get('/login/reddit',function(req,res,next){
 	req.session.currentURL = req.query.currentURL;
 	req.session.save();
 	
@@ -23,34 +23,39 @@ router.get('/login/reddit',function(req,res,next){
 			'Access my reddit username and signup date.',
 			'Access my voting history and comments or submissions I\'ve saved or hidden.',
 			' Maintain this access indefinitely (or until manually revoked).']});     
-});
+});*/
 
-router.post('/login/reddit',function(req,res,next){
+router.get('/login/reddit',function(req,res,next){
 
-	var grantType = 'password';
+	//var grantType = 'https://oauth.reddit.com/grants/installed_client&';
+	
 	var user = "***REMOVED***";
 	var password = "***REMOVED***";
 	var base64encodedData = new Buffer(user + ':' + password).toString('base64');
 	
-	fetch('https://www.reddit.com/api/v1/access_token', {method:'POST',
-											headers:{
-												'Authorization': 'Basic ' + base64encodedData,
-												'Content-Type': "application/x-www-form-urlencoded",
-												'user-agent': 'cwang138 testing various things v0.1',
-											},
-											body:"grant_type=" + grantType + "&username=" + req.body.reddit_username + "&password=" + req.body.reddit_password
-		}).then(function(response){
-			return response.json();
-		}).then(function(json){
-			if ('error' in json){
-				res.redirect(req.session.currentURL + 'query?error=' + JSON.stringify(json));
-			}else{
-				console.log(json.access_token);
-				req.session.rd_access_token = json.access_token;
-				res.redirect(req.session.currentURL + 'query');
-				req.session.save();
-			}
-		});
+	crypto.randomBytes(24, function(err, buffer) {
+		var RANDOM_STRING = buffer.toString('hex');
+		
+		fetch('https://www.reddit.com/api/v1/access_token', {method:'POST',
+												headers:{
+													'Authorization': 'Basic ' + base64encodedData,
+													'Content-Type': "application/x-www-form-urlencoded",
+													'user-agent': 'cwang138 testing various things v0.1',
+												},
+												body:"grant_type=https://oauth.reddit.com/grants/installed_client&device_id=" + RANDOM_STRING
+			}).then(function(response){
+				return response.json();
+			}).then(function(json){
+				if ('error' in json){
+					res.redirect(req.session.currentURL + 'query?error=' + JSON.stringify(json));
+				}else{
+					//console.log(json.access_token);
+					req.session.rd_access_token = json.access_token;
+					res.redirect(req.query.currentURL + 'query');
+					req.session.save();
+				}
+			});
+	});
 		
 });
 
