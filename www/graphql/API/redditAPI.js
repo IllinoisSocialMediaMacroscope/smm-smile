@@ -90,6 +90,9 @@ function redditAPI(tokens,resolveName, id, args){
 				break;
 			
 			case 'pushshiftComment': 
+				if (args['q'] === 'ALL'){
+						args['q'] = '';
+					}
 				var endpoint = appendQuery('https://api.pushshift.io/reddit/search/comment/',args);
 				fetch(endpoint).then((res) =>{
 					return res.json();
@@ -102,6 +105,9 @@ function redditAPI(tokens,resolveName, id, args){
 				break;
 				
 			case 'pushshiftPost': 
+				if (args['q'] === 'ALL'){
+						args['q'] = '';
+					}
 				var endpoint = appendQuery('https://api.pushshift.io/reddit/search/submission/',args);
 				fetch(endpoint).then((res) =>{
 					return res.json();

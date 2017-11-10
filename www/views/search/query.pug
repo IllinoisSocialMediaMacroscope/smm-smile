@@ -67,12 +67,14 @@ html
 						optgroup(label="Search Twitter")
 							option(data-icon="glyphicon-search" value="queryTweet") Tweets
 							option(data-icon="glyphicon-user" value="queryUser") Twitter Users
-						optgroup(label="Partial Historical Database")
-							option(data-icon="glyphicon-envelope" value="streamTweet") Streamed Tweets
 						optgroup(label="Search Reddit")
 							option(data-icon="glyphicon-search" value="queryReddit") Search Reddit Posts
 							option(data-icon="glyphicon-file" value="redditPost") Posts in Subreddit
 							option(data-icon="glyphicon-comment" value="redditComment") Comments in Subreddit
+						optgroup(label="Partial Historical Database")
+							option(data-icon="glyphicon-envelope" value="streamTweet") Streamed Tweets
+							option(data-icon="glyphicon-envelope" value="pushshiftPost") Historical Reddit Posts
+							option(data-icon="glyphicon-comment" value="pushshiftComment") Historical Reddit Comments
 					
 					include searchbox.pug
 						

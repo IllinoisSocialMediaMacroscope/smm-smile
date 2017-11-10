@@ -16,6 +16,8 @@ router.get('/networkx',function(req,res,next){
 	delete files['reddit-Search'];
 	delete files['reddit-Post'];
 	delete files['reddit-Comment'];
+	delete files['reddit-Historical-Post'];
+	delete files['reddit-Historical-Comment'];
 	
 	var formParam = require('./networkx.json');		
 	res.render('analytics/formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:files, param:formParam}); 

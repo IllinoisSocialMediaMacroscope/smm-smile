@@ -81,8 +81,6 @@ router.post('/query',function(req,res,next){
 											'redditaccesstoken':req.session.rd_access_token,
 											'twtaccesstokenkey':req.session.twt_access_token_key,
 											'twtaccesstokensecret':req.session.twt_access_token_secret,
-											'esaccesstoken':req.session.es_access_token,
-											'esaccesstokensecret':req.session.es_access_token_secret
 										}
 							
 							p_array_2 = [];
@@ -106,7 +104,12 @@ router.post('/query',function(req,res,next){
 							}
 							else if (req.body.prefix === 'reddit-Comment'){
 								p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
+							}else if (req.body.prefix === 'reddit-Historical-Post'){
+								p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
+							}else if (req.body.prefix === 'reddit-Historical-Comment'){
+								p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
 							}
+							
 							
 							Promise.all(p_array_2).then( values => {
 								
