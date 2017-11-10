@@ -45,7 +45,7 @@ html
 			a(class="button", id="twitter-auth") 
 				img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 				| Authorize with your Twitter account
-			a(class="button", id="reddit-auth") 
+			//a(class="button", id="reddit-auth") 
 				img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 				| Authorize with your Reddit account
 			
@@ -147,17 +147,20 @@ html
 					
 		
 		script.
-			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
+			/*if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
 				$("#twitter-auth").hide();
 			}
 			if (!{JSON.stringify(success)}.indexOf('reddit') >=0){
 				$("#reddit-auth").hide();
 			}
-			if (!{JSON.stringify(success.length)} == 1){
+			if (!{JSON.stringify(success.length)} == 2){
+				$("#auth-panel").hide();
+				$("#searchPage").show();
+			}*/
+			if (!{JSON.stringify(success)}.indexOf('twitter') >=0){
 				$("#auth-panel").hide();
 				$("#searchPage").show();
 			}
-		
 							
 							
 							
