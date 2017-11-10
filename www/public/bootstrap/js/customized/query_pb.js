@@ -13,7 +13,9 @@ function init(){
 					es: {},
 					rdSearch: {},
 					rdComment:{},
-					rdPost:{}
+					rdPost:{},
+					psPost:{},
+					psComment:{}	
 				};
 				
 	parameters['tweet']['q:'] = $("#searchbox").val();
@@ -42,6 +44,12 @@ function init(){
 	parameters['rdComment']['subredditName:'] = $("#searchbox").val();
 	parameters['rdComment']['extra:'] = 2000;
 	parameters['rdComment']['fields'] = '';
+	
+	parameters['psPost']['q:'] = $("#searchbox").val();
+	parameters['psPost']['fields']='';
+		
+	parameters['psComment']['q:'] = $("#searchbox").val();
+	parameters['psComment']['fields']='';
 	
 	// save modal popup
 	$("#adv-search-btn").on('click', function(e){
@@ -123,7 +131,7 @@ function init(){
 			enableFiltering: true,
 			filterBehavior: 'value',
 			dropUp:true,
-			maxHeight:400,
+			maxHeight:600,
 			buttonWidth:'600px',
 			includeSelectAllOption: true,		
 			enableCollapsibleOptGroups: true,			
@@ -142,13 +150,21 @@ function init(){
 		$(".reddit-search").hide();
 		$(".reddit-post").hide();
 		$(".reddit-comment").hide();
+		$(".pushshift-post").hide();
+		$(".pushshift-comment").hide();
+		
 		$(".form-group.geocode").hide();
 		$(".form-group.dateRange").hide();
 		$(".form-group.es-geocode").hide();
 		$(".form-group.es-dateRange").hide();
 		$(".form-group.es-popularity").hide();
 		$(".form-group.rd-subreddit").hide();
-		
+		$(".form-group.ps-subreddit").hide();
+		$(".form-group.ps-author").hide();
+		$(".form-group.ps-dateRange").hide();
+		$(".form-group.ps-cm-subreddit").hide();
+		$(".form-group.ps-cm-author").hide();
+		$(".form-group.ps-cm-dateRange").hide();
 		
 		queryTerm = $(this).find(':selected').val();
 		if ( queryTerm === 'queryTweet'){
@@ -169,6 +185,12 @@ function init(){
 		}else if ( queryTerm === 'redditComment'){
 			$(".reddit-comment").show();
 			$("#searchbox").attr("placeholder","The subreddit name you wish to get comments from...");
+		}else if ( queryTerm === 'pushshiftPost'){
+			$(".pushshift-post").show();
+			$("#searchbox").attr("placeholder","Keyword that you wish to search...");
+		}else if ( queryTerm === 'pushshiftComment'){
+			$(".pushshift-comment").show();
+			$("#searchbox").attr("placeholder","Keyword that you wish to search...");
 		}
 	
 		Query = updateString(queryTerm,parameters);
@@ -196,6 +218,8 @@ function init(){
 		parameters['rdSearch']['query:'] = $("#searchbox").val();
 		parameters['rdPost']['subredditName:']= $("#searchbox").val();
 		parameters['rdComment']['subredditName:'] = $("#searchbox").val();
+		parameters['psPost']['q:'] = $("#searchbox").val();
+		parameters['psComment']['q:'] = $("#searchbox").val();
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
@@ -528,7 +552,145 @@ function init(){
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 
 	});
+	/*------------------------------pushshift Post ------------------------------------*/
+	$("#ps-subreddit").change(function(){
+		if ($("#ps-subreddit").is(':checked')){
+			$(".form-group.ps-subreddit").show();
+			$("#ps-subreddit-name").change(function(){
+				parameters['psPost']['subreddit:'] = $(this).val();
+				Query =updateString(queryTerm,parameters);
+				$("#input").val(`{\n\n` + Query +`\n\n}`);
+			});
+		}else{
+			$("#ps-subreddit-name").val("");
+			parameters['psPost']['subreddit:'] =  '';
+			$(".form-group.ps-subreddit").hide();
+		}
+		
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});	
+	$("#ps-author").change(function(){
+		if ($("#ps-author").is(':checked')){
+			$(".form-group.ps-author").show();
+			$("#ps-author-name").change(function(){
+				parameters['psPost']['author:'] = $(this).val();
+				Query =updateString(queryTerm,parameters);
+				$("#input").val(`{\n\n` + Query +`\n\n}`);
+			});
+		}else{
+			$("#ps-author-name").val("");
+			parameters['psPost']['author:'] =  '';
+			$(".form-group.ps-author").hide();
+		}
+		
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
+	$("#ps-dateRange").change(function(){
+		if ($("#ps-dateRange").is(':checked')){
+			$(".form-group.ps-dateRange").show();
+			$("#ps-start").change(function(){
+				parameters['psPost']['after:'] = epochTime($("#ps-start").val());
+				Query =updateString(queryTerm,parameters);
+				$("#input").val(`{\n\n` + Query +`\n\n}`);
+			});
+			$("#ps-end").change(function(){
+				parameters['psPost']['before:'] = epochTime($("#ps-end").val());
+				Query =updateString(queryTerm,parameters);
+				$("#input").val(`{\n\n` + Query +`\n\n}`);
+			});
+		}else{
+			parameters['psPost']['before:'] =  '';
+			parameters['psPost']['after:'] =  '';
+			$(".form-group.ps-dateRange").hide();
+		}
+		
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
+	$("#psPostFields").change(function(){
+		fields_string = '';
+		
+		fields = {BasicFields:[]};
+		$.each($(this).find(':selected'),function(i,val){
+			fields_string += '\n\t\t\t' + val.value;
+		});		
+		parameters['psPost']['fields'] = fields_string;
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+
+	});
 	
+		/*------------------------------pushshift Comment ------------------------------------*/
+	$("#ps-cm-subreddit").change(function(){
+		if ($("#ps-cm-subreddit").is(':checked')){
+			$(".form-group.ps-cm-subreddit").show();
+			$("#ps-cm-subreddit-name").change(function(){
+				parameters['psComment']['subreddit:'] = $(this).val();
+				Query =updateString(queryTerm,parameters);
+				$("#input").val(`{\n\n` + Query +`\n\n}`);
+			});
+		}else{
+			$("#ps-cm-subreddit-name").val("");
+			parameters['psComment']['subreddit:'] =  '';
+			$(".form-group.ps-cm-subreddit").hide();
+		}
+		
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});	
+	$("#ps-cm-author").change(function(){
+		if ($("#ps-cm-author").is(':checked')){
+			$(".form-group.ps-cm-author").show();
+			$("#ps-cm-author-name").change(function(){
+				parameters['psComment']['author:'] = $(this).val();
+				Query =updateString(queryTerm,parameters);
+				$("#input").val(`{\n\n` + Query +`\n\n}`);
+			});
+		}else{
+			$("#ps-author-name").val("");
+			parameters['psComment']['author:'] =  '';
+			$(".form-group.ps-cm-author").hide();
+		}
+		
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
+	$("#ps-cm-dateRange").change(function(){
+		if ($("#ps-cm-dateRange").is(':checked')){
+			$(".form-group.ps-cm-dateRange").show();
+			$("#ps-cm-start").change(function(){
+				parameters['psComment']['after:'] = epochTime($("#ps-cm-start").val());
+				Query =updateString(queryTerm,parameters);
+				$("#input").val(`{\n\n` + Query +`\n\n}`);
+			});
+			$("#ps-cm-end").change(function(){
+				parameters['psComment']['before:'] = epochTime($("#ps-cm-end").val());
+				Query =updateString(queryTerm,parameters);
+				$("#input").val(`{\n\n` + Query +`\n\n}`);
+			});
+		}else{
+			parameters['psComment']['before:'] =  '';
+			parameters['psComment']['after:'] =  '';
+			$(".form-group.ps-cm-dateRange").hide();
+		}
+		
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
+	$("#psCommentFields").change(function(){
+		fields_string = '';
+		
+		fields = {BasicFields:[]};
+		$.each($(this).find(':selected'),function(i,val){
+			fields_string += '\n\t\t\t' + val.value;
+		});		
+		parameters['psComment']['fields'] = fields_string;
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+
+	});
 	/*------------------------------Reddit Post-----------------------------------------*/
 	$("#rdPostCount").change(function(){
 		parameters['rdPost']['extra:'] = parseInt($("#rdPostCount").val());
@@ -568,6 +730,11 @@ function init(){
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 
 	});
+	
+}
+
+function epochTime(datestring){
+	return new Date(datestring).getTime() / 1000
 }
 
 function constructQuery(parameterObj){
@@ -616,6 +783,10 @@ function updateString(queryTerm,parameters){
 		query =  `\treddit{\n\t\tgetNew(`+  constructQuery(parameters.rdPost) +  `\n\t\t}\n\t}`;  
 	}else if (queryTerm === 'redditComment'){
 		query =  `\treddit{\n\t\tgetNewComments(`+  constructQuery(parameters.rdComment) +  `\n\t\t}\n\t}`;  
+	}else if (queryTerm === 'pushshiftPost'){
+		query =  `\treddit{\n\t\tpushshiftPost(`+  constructQuery(parameters.psPost) +  `\n\t\t}\n\t}`;  
+	}else if (queryTerm === 'pushshiftComment'){
+		query =  `\treddit{\n\t\tpushshiftComment(`+  constructQuery(parameters.psComment) +  `\n\t\t}\n\t}`;  
 	}
 	
 	return query;
