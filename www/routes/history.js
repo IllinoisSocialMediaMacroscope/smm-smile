@@ -185,16 +185,18 @@ router.post('/history',function(req,res,next){
 					download:[{name:'sentence-level sentiment scores',content:DIR +'/sentiment.csv'},
 							{name:'Has negation words?',content:DIR +'/negation.csv'},
 							{name:'Has some capital letter?',content:DIR +'/allcap.csv'}],
-					preview:{name:'Preview the sentiment scores for each sentence',content:preview_arr},
+					preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}],
 					config:config
 				});
 	}
-	else if (req.body.layer2 === 'classification'  && fs.readdirSync(DIR).length === 9){
+	else if (req.body.layer2 === 'classification'  && fs.readdirSync(DIR).length === 10){
 		var div_data0 = fs.readFileSync(DIR +'/div_split.dat', 'utf8');
 		var div_data1 = fs.readFileSync(DIR +'/div.dat', 'utf8'); //trailing /r 
 		var div_data2 = fs.readFileSync(DIR +'/div_comp.dat', 'utf8'); //trailing /r 
-		var preview_string = fs.readFileSync(DIR +'/classification_report.csv', "utf8"); 
-		var preview_arr = CSV.parse(preview_string);
+		var preview_string1 = fs.readFileSync(DIR +'/accuracy_score.csv', "utf8"); 
+		var preview_arr1 = CSV.parse(preview_string1);
+		var preview_string2 = fs.readFileSync(DIR +'/classification_report.csv', "utf8"); 
+		var preview_arr2 = CSV.parse(preview_string2);
 		var config = JSON.parse(fs.readFileSync(DIR + '/config.dat','utf8'));
 		
 		var fnames = fs.readdirSync(DIR);
@@ -206,6 +208,11 @@ router.post('/history',function(req,res,next){
 			}else{
 				var fnameRegex = /(.*).csv/g	
 				var display_name = fnameRegex.exec(fnames[i])[1];
+				
+				if (display_name.slice(0,10) === 'PREDICTED_'){
+					var preview_string3 = fs.readFileSync(DIR +'/' + display_name +'.csv', "utf8"); 
+					var preview_arr3 = CSV.parse(preview_string3);
+				}
 				downloadFiles.push({'name':display_name, 'content':DIR + '/' + fnames[i]}); 
 			}
 		}
@@ -216,7 +223,9 @@ router.post('/history',function(req,res,next){
 					{name:'ROC curves for each class',content:div_data1},
 					{name:'Count of each class',content:div_data2}],
 				download:downloadFiles,
-				preview:{name:'Preview training report',content:preview_arr},
+				preview:[{name:'Accuracy score for each fold',content:preview_arr1,dataTable:false},
+						{name:'Preview training report',content:preview_arr2,dataTable:false},
+							{name:'Predicted results',content:preview_arr3,dataTable:true}],
 				config:config
 			});
 	}
@@ -276,7 +285,7 @@ router.post('/history',function(req,res,next){
 				download:[
 					//{name:'JSON format', content: DIR + '/' + req.body.historyID + '.json'},
 					{name:'CSV format', content: DIR + '/' + req.body.historyID + '.csv'}],
-				preview:{name: "Preview the .csv file", content:preview_arr.slice(0,101)},
+				preview:[{name: "Preview the .csv file", content:preview_arr.slice(0,101),dataTable:true}],
 				config:config
 			});
 	}
