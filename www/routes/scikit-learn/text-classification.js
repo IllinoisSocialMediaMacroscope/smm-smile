@@ -110,9 +110,17 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 						res.send({'ERROR':err});
 					}else{
 						var uuid = results[0];
-						var pickle = results[1];
-						var div = results[2]
-						var metrics = results[3];
+						var accuracy = results[1];
+						var pickle = results[2];
+						var div = results[3]
+						var metrics = results[4];
+						
+						if (accuracy.slice(-1) === '\r' || accuracy.slice(-1) === '\n' || accuracy.slice(-1) === '\t' || accuracy.slice(-1) === '\0' || accuracy.slice(-1) === ' '){
+							var accuracy_string = fs.readFileSync(accuracy.slice(0,-1),'utf8');
+						}else{
+							var accuracy_string = fs.readFileSync(accuracy,'utf8');
+						}
+						var accuracy_array = CSV.parse(accuracy_string);
 						
 						if (metrics.slice(-1) === '\r' || metrics.slice(-1) === '\n' || metrics.slice(-1) === '\t' || metrics.slice(-1) === '\0' || metrics.slice(-1) === ' '){
 							var preview_string = fs.readFileSync(metrics.slice(0,-1),'utf8');
@@ -132,10 +140,12 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 						
 						res.send({
 							uuid:uuid,
-							img:[{name:'ROC curves for each class',content:div_data}],
+							img:[{name:'10 fold cross validation ROC curves for each class',content:div_data}],
 							download:[{name:'Perserved classification pipeline', content:pickle},
-								{name:'Classification performance evaluation',content:metrics}],
-							preview:{name:'Evaluation of the performance of the classification model ',content:preview_arr}	
+								{name:'Classification performance evaluation',content:metrics},
+									{name:'Accuracy score for each fold', content:accuracy}],
+							preview:[{name:'10 fold Cross validation accuracy score for each fold', content:accuracy_array,dataTable:false},
+										{name:'10 fold Cross validation Evaluation of the performance',content:preview_arr,dataTable:false}]	
 						});
 					}
 				});
@@ -197,7 +207,7 @@ router.post('/text-classification-predict',function(req,res,next){
 							uuid:uuid,
 							img:[{name:'Count of each class',content:div_data}],
 							download:[{name:'Predicted Class using trained model', content:predict}],
-							preview:{name:'Preview of the predicted data ',content:preview_arr}	
+							preview:[{name:'Preview of the predicted data ',content:preview_arr,dataTable:true}]	
 						});
 					}
 				});

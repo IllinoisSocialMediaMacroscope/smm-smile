@@ -83,7 +83,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 									download:[{name:'sentence-level sentiment scores',content:sentiment},
 											{name:'Has negation words?',content:negation},
 											{name:'Has some capital letter?',content:allcap}],
-									preview:{name:'Preview the sentiment scores for each sentence',content:preview_arr}
+									preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}]
 								});
 					}
 				});

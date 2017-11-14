@@ -157,9 +157,11 @@ function appendImg(imgID, imgData){
 
 function appendPreview(previewID, previewData){
 	$(previewID).empty();
-	if(previewData !== ''){
-		$(previewID).append(`<div class="x_title">
-								<h2>`+ previewData.name + `</h2>
+	if(previewData !== [] && previewData !== ''){
+		$.each(previewData, function(i,val){
+			if (val.dataTable === true){
+				$(previewID).append(`<div class="x_title">
+								<h2>`+ val.name + `</h2>
 							</div>
 							<div class="x_content">
 								<div class="note">
@@ -170,8 +172,14 @@ function appendPreview(previewID, previewData){
 									</li>
 								</div>
 							</div>
-							<div class="x_content">`+arrayToTable(previewData.content, '#previewTopic') + `</div>`)
-		$("#previewTopic").DataTable(); // change it to datatable
+							<div class="x_content">`+arrayToTable(val.content, '#previewTopic') + `</div>`);
+				$("#previewTopic").DataTable(); // change it to datatable
+			}else{
+				$(previewID).append(`<div class="x_title">
+								<h2>`+ val.name + `</h2>
+							<div class="x_content">`+arrayToTable(val.content, '#previewTopic') + `</div>`);
+			}
+		});
 	}
 }
 
