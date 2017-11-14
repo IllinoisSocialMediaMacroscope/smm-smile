@@ -33,7 +33,7 @@ html
 		script(src="bootstrap/js/customized/query_pb.js")
 		script(src="bootstrap/js/customized/query_formValid.js")
 		script(src="bootstrap/js/customized/query_submit.js")
-		
+		script(src="bootstrap/js/customized/warning_trigger.js")
 		
 		
 	body(onload="init()")
@@ -135,8 +135,12 @@ html
 					div(class="modal-body" style="vertical-align:middle;font-size:20px;")
 						div(id="citation-notice")
 							p <b>Thank you for using our tool, if you use these results please cite it:</b><br>
-							p Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, A., & Hodgkins, H. 
-								|(September, 2017) – Social Media Macroscope, <u>http://socialmediamacroscope.org</u>
+							ul
+								li Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, A., & Hodgkins, H. 
+									|(September, 2017) – Social Media Macroscope, <u>http://socialmediamacroscope.org</u>
+							p <b>If you are using Historical Reddit data, please also cite this:</b><br>
+							ul
+								li Jason Baumgartner, PUSHSHIFT.IO, <u>https://pushshift.io</u>
 							button(id="citation-notice-btn") click to continue
 						div(id="modal-download",style="display:none;")
 						p(id="download-note",style="display:none;") <b>NOTE</b>: Your search results are saved in your home directory. You can either <b>download</b> here; 
@@ -163,74 +167,7 @@ html
 			iframe(id="docIframe", src="graphql-doc/schema/index.html",width="100%",scrolling="yes",style="padding-top: 40px;margin:0 0;")
 							
 					
-		script.
-			// every time refresh a page or redirect from callback url
-			// check the cookie if there's later saved
-			// hide that button
-			// eventually i want to move everything to cookie..instead of having backend pushing data to front all the time
-			
-			var platforms = ['twitter', 'reddit'];
-			function expireDate(minute){
-				var date = new Date();
-				date.setTime(date.getTime() + (minute * 60 * 1000));
-				return date;
-			}			
-			
-			if($.cookie("reddit-later") === "true" && $.cookie("twitter-later") === "true"){
-					$("#auth-panel").hide();
-					$("#searchPage").show();
-			}
-			
-			$.each(platforms,function(i,val){
-				clickEffect(val);
-			});
-			if (!{JSON.stringify(success.length)} == platforms.length ){
-				$("#auth-panel").hide();
-				$("#searchPage").show();
-			}
-				
-				
-			
-			
-			function clickEffect(platform){
-				if ($.cookie(platform + "-later") === "true"){
-					$("#" + platform + "-auth").hide();
-				}
-				
-				// newPath has already been calculated in the topbar.pug
-				$("." + platform + "-auth").find('a').attr("href","login/"+ platform + "?currentURL=" + newPath);
-	
-				// two ways to hide an authorization button
-				// 1. actually authorize it. this will show the search and also enable the dropdown in the search
-				// 2. click later button which shows the search page but without opening that specific search
-				if (!{JSON.stringify(success)}.indexOf(platform) >=0){
-					$("." + platform + "-auth").hide();
-					if($('#auth-panel').children(':visible').length == 1) {
-						$("#auth-panel").hide();
-						$("#searchPage").show();
-					}
-					$("#" + platform + "-authorized").show();
-				
-					if (platform === 'twitter'){
-						$("#social-media option[value='queryTweet']").removeAttr('disabled');
-						$("#social-media option[value='queryUser']").removeAttr('disabled');
-					}else if (platform === 'reddit'){
-						$("#social-media option[value='queryReddit']").removeAttr('disabled');
-						$("#social-media option[value='redditPost']").removeAttr('disabled');
-						$("#social-media option[value='redditComment']").removeAttr('disabled');
-					}
-				}				
-				$("." +platform+ "-auth").find("button").on("click",function(){
-					$.cookie(platform + '-later',true, { expires: expireDate(0.1)});
-					$("#" + platform + "-auth").hide();
-					if($('#auth-panel').children(':visible').length == 1) {
-						$("#auth-panel").hide();
-						$("#searchPage").show();
-					}
-				});
-			}
-			
-			
+		script(src="../bootstrap/js/customized/query_auth.js")
 			
 			
 		

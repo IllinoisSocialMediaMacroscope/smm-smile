@@ -140,7 +140,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 						
 						res.send({
 							uuid:uuid,
-							img:[{name:'10 fold cross validation ROC curves for each class',content:div_data}],
+							img:[{name:'ROC curves for each class',content:div_data}],
 							download:[{name:'Perserved classification pipeline', content:pickle},
 								{name:'Classification performance evaluation',content:metrics},
 									{name:'Accuracy score for each fold', content:accuracy}],

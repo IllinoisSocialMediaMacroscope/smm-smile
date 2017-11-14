@@ -15,7 +15,7 @@ footer(class="footer-bs")
 			h4 Navigation 
 			ul(class="list")
 				li 
-					a(href="https://techservices.illinois.edu/news/2015/telling-compelling-stories-social-media-analytics-team",target="_blank") About Us
+					a(href="http://researchit.illinois.edu/initiatives/social-media-macroscope/",target="_blank") About Us
 				li 
 					a(href="#") Terms & Condition
 		div(class="col-md-2 footer-power")
@@ -39,60 +39,3 @@ footer(class="footer-bs")
 			a(href="mailto:***REMOVED***;jmtroy2@illinois.edu;npvance2@illinois.edu;jtyun@illinois.edu",target="_blank")
 				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px;",id="reportButton") Email
 					
-					
-script.
-	/*------------------------submit error emails ---------------------------*/
-	function submitComment(){
-		if (commentValidation()){
-			
-			$.ajax({
-				type:'POST',
-				url:'comment', 
-				data: "comment="+$("#commenter-content")+"&identifier="+ $("#commenter-email"),				
-				success:function(data){
-					console.log(data);
-				},
-				error: function(jqXHR, exception){
-					var msg = '';
-					if (jqXHR.status === 0) {
-						msg = 'Not connect.\n Verify Network.';
-					} else if (jqXHR.status == 404) {
-						msg = 'Requested page not found. [404]';
-					} else if (jqXHR.status == 500) {
-						msg = 'Internal Server Error [500].';
-					} else if (exception === 'parsererror') {
-						msg = 'Requested JSON parse failed.';
-					} else if (exception === 'timeout') {
-						msg = 'Time out error.';
-					} else if (exception === 'abort') {
-						msg = 'Ajax request aborted.';
-					} else {
-						msg = 'Uncaught Error.\n' + jqXHR.responseText;
-					}
-					$("#error").val(msg);
-					$("#warning").modal('show');
-				
-				} 
-			}); 
-		}
-	}
-
-	function commentValidation(){
-		if ($("#commenter-email").val() === '' || $("#commenter-email").val().indexOf('@')<0){
-			$("#modal-message").append(`<h4>Please Fill in Valid Email Address!</h4>`);
-			$("#alert").modal('show');
-			$("#commenter-email").focus();
-			return false;
-		}
-		
-		
-		if ($("#commenter-content").val() === ''){
-			$("#modal-message").append(`<h4>Please Provide Some Comments!</h4>`);
-			$("#alert").modal('show');
-			$("#commenter-content").focus();
-			return false;
-		}
-		
-		return true;
-
-	}
