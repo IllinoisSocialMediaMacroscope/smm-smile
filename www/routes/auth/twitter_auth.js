@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
 var OAuth1 = require('oauth').OAuth;
+
 var consumer = new OAuth1(
         "https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token", 
         "***REMOVED***", "***REMOVED***", "1.0", "http://localhost:8001/login/twitter/callback", "HMAC-SHA1");
@@ -36,6 +37,9 @@ router.get('/login/twitter/callback',function(req,res,next){
 				req.session.twt_access_token_secret = oauthAccessTokenSecret;
 				req.session.save();
 				
+				// set the cookie as true for 29 minutes maybe?
+				res.cookie('twitter-success','true',{maxAge:1000*60*29, httpOnly:false});	
+				res.cookie('twitter-later','false',{maxAge:1000*60*29, httpOnly:false});
 				res.redirect(req.session.currentURL + 'query');
 			}
 		});

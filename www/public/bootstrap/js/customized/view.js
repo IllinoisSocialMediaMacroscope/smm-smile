@@ -177,7 +177,7 @@ function appendPreview(previewID, previewData){
 			}else{
 				$(previewID).append(`<div class="x_title">
 								<h2>`+ val.name + `</h2>
-							<div class="x_content">`+arrayToTable(val.content, '#previewTopic') + `</div>`);
+							<div class="x_content">`+arrayToTable(val.content, '#') + `</div>`);
 			}
 		});
 	}

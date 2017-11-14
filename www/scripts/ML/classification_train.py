@@ -164,7 +164,7 @@ class Classification:
             trace = go.Scatter(
                 x = fpr,
                 y = tpr,
-                name = 'Mean ROC curve (area =' + str(roc_auc) + ' )',
+                name = 'ROC curve (area =' + str(roc_auc) + ' )',
                 line = dict(color=('deeppink'), width = 4)
             )
             data = [trace]
