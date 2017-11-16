@@ -9,7 +9,7 @@ div(id="warning" class="modal fade" role="dialog")
 			div(class="modal-body" style="text-align:center;vertical-align:middle;overflow:hidden;")
 				div(class="form-group")
 					div(class="col-md-2 col-md-2 col-xs-12") 
-						button(class="btn btn-primary",style="background-color:#7fbb03;color:white;border-style:hidden;",id="copyError",onclick="copyToClipboard();") copy
+						button(class="btn btn-primary",style="background-color:#7fbb03;color:white;border-style:hidden;",id="copyError",onclick="copyToClipboard(`#error`);") copy
 					div(class="col-md-10 col-md-10 col-xs-12")
 						textarea(class="form-control", id="error", name="error", rows="20")
 			div(class="modal-footer")
@@ -19,12 +19,10 @@ div(id="warning" class="modal fade" role="dialog")
 				
 script.
 	/*------------------------copy the error ---------------------------*/
-	function copyToClipboard() {
-		$("#error").select();
+	function copyToClipboard(textID) {
+		$(textID).select();
+		//console.log($(textID).select());
 		document.execCommand('copy');
-	
-		$("#copyError").text('copied!');
-	 
 	}
 	
 
