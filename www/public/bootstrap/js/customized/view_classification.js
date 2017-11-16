@@ -30,7 +30,7 @@ $(document).ready(function(){
 							// twtUser
 							'description', 
 							// reddit
-							'title','body'];
+							'title','body','_source.body','_source.title'];
 						
 						var index = [];
 						$.each(data.preview[0],function(i,val){
