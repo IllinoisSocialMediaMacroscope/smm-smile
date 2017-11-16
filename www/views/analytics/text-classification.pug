@@ -28,6 +28,11 @@ block config-form
 						option(value="split") Step1 -- derive your training set from the corpus
 						option(value="train") Step2 -- train your classification model
 						option(value="predict") Step3 -- predict using your model
+		div(id="citation-container",style="display:none")
+			div(class="form-group")
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") 
+				div(class="col-md-8 col-md-8 col-xs-12")
+					div(id="citation-notice")
 						
 		div(class="split")
 			div(class="form-group")
@@ -58,11 +63,7 @@ block config-form
 						option(value="KNN") K-nearest neighbors vote
 						option(value="passiveAggressive") Passive Aggressive Classifier
 		
-		div(id="citation-container",style="display:none")
-			div(class="form-group")
-				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") 
-				div(class="col-md-8 col-md-8 col-xs-12")
-					div(id="citation-notice")
+		
 					
 		div(class="uuid")
 			div(class="form-group")

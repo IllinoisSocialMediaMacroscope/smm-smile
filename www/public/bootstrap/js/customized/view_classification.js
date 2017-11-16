@@ -119,23 +119,25 @@ $(document).ready(function(){
 			
 	});
 	
-	$("#classifier").on('change',function(){
+	$("#task").on('change',function(){
 		$("#citation-container").hide();
 		$("#citation-notice").empty();
-		$("#citation-notice").append(
-			`<p><b>Thank you for using our tool, if you use these results please cite it and the Python Scikit Library:</b></p>
-			<ul>
-				<li>Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, 
-					A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <a href="http://socialmediamacroscope.org" target="_blank">
-					http://socialmediamacroscope.org</a>.
-				</li>
-				<li><a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Scikit-learn%3A+Machine+learning+in+Python&btnG=" target="_blank">
-				Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Vanderplas, J. (2011). Scikit-learn: 
-				Machine learning in Python. Journal of Machine Learning Research, 12(Oct), 2825-2830.</a>
-				</li>
-			</ul>`
-		);
-		$("#citation-container").show();
+		if ($("#task option:selected").val() !== 'Please Select...'){
+			$("#citation-notice").append(
+				`<p><b>Thank you for using our tool, if you use these results please cite it and the Python Scikit Library:</b></p>
+				<ul>
+					<li>Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, 
+						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <a href="http://socialmediamacroscope.org" target="_blank">
+						http://socialmediamacroscope.org</a>.
+					</li>
+					<li><a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Scikit-learn%3A+Machine+learning+in+Python&btnG=" target="_blank">
+					Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Vanderplas, J. (2011). Scikit-learn: 
+					Machine learning in Python. Journal of Machine Learning Research, 12(Oct), 2825-2830.</a>
+					</li>
+				</ul>`
+			);
+			$("#citation-container").show();
+		}
 	});
 	
 });
