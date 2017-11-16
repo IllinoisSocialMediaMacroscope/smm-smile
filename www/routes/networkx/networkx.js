@@ -97,7 +97,7 @@ router.post('/networkx',function(req,res,next){
 							img:[{name:'Static Network Visualization',content:div_data}],
 							download: downloadFiles,
 							metrics:{name:'', content:''}, 
-							preview:{name:'',content:''},
+							preview:[],
 							//d3js_data:d3js_data
 						});
 						

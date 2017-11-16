@@ -262,6 +262,7 @@ router.post('/history',function(req,res,next){
 			ID:req.body.historyID,
 			img:[{name:'Static Network Visualization',content:div_data}],
 			download: downloadFiles,
+			preview:[],
 			config: config,
 		});
 	}
