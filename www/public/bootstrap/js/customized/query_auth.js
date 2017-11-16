@@ -10,14 +10,20 @@ function clickEffect(platform){
 	// two ways to hide an authorization button
 	// 1. actually authorize it. this will show the search and also enable the dropdown in the search success cookie
 	// 2. click later button which shows the search page but without opening that specific search later cookie
-	
+   /* weird bug!!!
+   console.log($.cookie("twitter-later"));
+    console.log($.cookie("twitter-later"));
+    console.log($.cookie());*/
 	if ($.cookie(platform + "-later") === "true"){
 		$("#" + platform + "-auth").hide();
-	}else if ($.cookie(platform+ "-success") === "true"){
+	}
+    
+    if ($.cookie(platform+ "-success") === "true"){
 		// click the icon to authorize hide
 		$("." + platform + "-auth").hide();
 		$("#" + platform + "-authorized").show();
-		
+		//console.log("#" + platform + "-authorized");
+
 		if (platform === 'twitter'){
 			$("#social-media option[value='queryTweet']").removeAttr('disabled');
 			$("#social-media option[value='queryUser']").removeAttr('disabled');
