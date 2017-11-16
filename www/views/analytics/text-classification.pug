@@ -93,6 +93,8 @@ block config-form
 					div(id="announce-container" style="border-radius:10px;padding:10px 10px; margin:0px 10px;")
 						div(id="ID-code" style="text-align:center; margin-bottom:30px; background-color:#428bca; padding:30px 30px; color:white;border-radius:10px;")
 							h1 Identification code:
+							//button(class="btn btn-default",style="display:inline-block;margin:0 10px;",onclick="copyToClipboard(`#generated-uuid`);") copy
+							//textarea(id="generated-uuid" style="display:none;")
 							h3 No UUID has been generated in the current task yet 
 						p <b>Note:</b>
 						| Text classification is a complex process that involves three different tasks. 
