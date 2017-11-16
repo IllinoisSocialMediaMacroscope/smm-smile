@@ -1,5 +1,12 @@
 div(class="pushshift-post")
 	div(class="form-group")
+		<label class="label-control warning">maximum number of reddit submissions
+			<span class="warningText">Careful, Large number will cause internet traffic jam! </span></label>
+		div(class="range range-node")
+			input(type="range" min="1000" max="10000" value="1000" step="1000" id="ps-size" onchange="psPost_rangeNode.value=value")
+			<output id="psPost_rangeNode">1000</output>
+	
+	div(class="form-group")
 		<label class="label-control">Restrict to a specific Subreddit
 			<input type="checkbox" id="ps-subreddit" value="ps-subreddit">
 		</label>
@@ -32,24 +39,30 @@ div(class="pushshift-post")
 		<label class="label-control">Select Fields</label>
 		br
 		select(multiple,id="psPostFields",class="fields")
-			option(value="author_name") author name
-			option(value="created_utc") created utc
-			option(value="domain") domain
-			option(value="id") id
-			option(value="is_self") is self
-			option(value="locked") locked
-			option(value="num_comments") num comments
-			option(value="over_18") over 18
-			option(value="permalink") permalink
-			option(value="full_link") full_link
-			option(value="pinned") pinned
-			option(value="retrieved_on") retrieved on
-			option(value="score") score
-			option(value="stickied") stickied						
-			option(value="spoiler") spoiler						
-			option(value="subreddit_display_name") subreddit display name						
-			option(value="subreddit_id") subreddit id						
-			option(value="subreddit_name_prefixed") subreddit name prefixed						
-			option(value="title") title			
-			option(value="url") url			
+			optgroup(label="psMetadata")
+				option(value="_index") _index 
+				option(value="_id") _id
+				option(value="_type") _type
+				option(value="_score") _score 
+			optgroup(label="BasicFields")
+				option(value="author_name") author name
+				option(value="created_utc") created utc
+				option(value="domain") domain
+				option(value="id") id
+				option(value="is_self") is self
+				option(value="locked") locked
+				option(value="num_comments") num comments
+				option(value="over_18") over 18
+				option(value="permalink") permalink
+				option(value="full_link") full_link
+				option(value="pinned") pinned
+				option(value="retrieved_on") retrieved on
+				option(value="score") score
+				option(value="stickied") stickied						
+				option(value="spoiler") spoiler						
+				option(value="subreddit_display_name") subreddit display name						
+				option(value="subreddit_id") subreddit id						
+				option(value="subreddit_name_prefixed") subreddit name prefixed						
+				//option(value="title") title			
+				option(value="url") url			
 		

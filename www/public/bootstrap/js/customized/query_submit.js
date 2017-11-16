@@ -345,27 +345,33 @@ function submitSearchbox(searchboxID, filenameID){
 	}else if (queryTerm === 'pushshiftPost'){
 		var queryString = `{
 								reddit{
-									pushshiftPost(q:"abc"){
-										author_name
-										created_utc
-										domain
-										id
-										is_self
-										locked
-										num_comments
-										over_18
-										permalink
-										full_link
-										pinned
-										retrieved_on
-										score
-										stickied
-										spoiler
-										subreddit_display_name
-										subreddit_id
-										subreddit_name_prefixed
-										title
-										url
+									pushshiftPost(q:"`+ keyword + `"){
+										_id
+										_type
+										_index
+										_score
+										_source{
+											author_name
+											created_utc
+											domain
+											id
+											is_self
+											locked
+											num_comments
+											over_18
+											permalink
+											full_link
+											pinned
+											retrieved_on
+											score
+											stickied
+											spoiler
+											subreddit_display_name
+											subreddit_id
+											subreddit_name_prefixed
+											title
+											url
+										}
 									}
 								}
 							}`;
@@ -518,60 +524,37 @@ function renderPreview(data,prefix){
 									
 								</div>
 								<div id="grid"></div>`)
-	if (prefix === 'twitter-Stream'){
+	if (prefix === 'twitter-Tweet' || prefix === 'twitter-StreamStream'){
 		$.each(data.rendering, function(i,val){
 			
-			var img_url =  val._source.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
-			var user_name =  val._source.user.name || 'Not Provided';
-			var screen_name = val._source.user.screen_name || 'NotProvided';
-			var created_at =  val._source.created_at || 'Not Provided';
-			
-			if (val._source.retweet_count !== undefined){
-				var retweet_count = val._source.retweet_count;
-			}else{
-				var retweet_count = 'Not Provided';
-			}
-			
-			if (val._source.favorite_count !== undefined){
-				var favorite_count = val._source.favorite_count;
-			}else{
-				var favorite_count = 'Not Provided';
-			}
-			
-			$("#grid").append(`<div class="grid-element">
-									<img src="` + img_url + `" class="user-img"/>
-									<div style="margin-top:10px;">
-										<p style="display:inline;font-size:15px;"><b>` + user_name + `‏</b></p> 
-										<p style="display:inline;color:green;"><i>&nbsp;&bull;@`+ screen_name + `</i></p>
-										<p style="display:inline;color:grey;">&nbsp;&bull;`+ created_at +`</p>
-									</div>
-									<p style="margin-top:10px;">`+ val._source.text + `</p>
-									<p style="margin-top:10px;"><span class="glyphicon glyphicon-retweet" style="position:inherit;"></span>`+ retweet_count + 
-									`&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-heart" style="position:inherit;"></span>` +favorite_count +`</p>
-							</div>`);
-		});
-	}else if (prefix === 'twitter-Tweet'){
-		$.each(data.rendering, function(i,val){
-			
-			if (val.user === undefined){
+			if (val.user !== undefined){
+				var img_url = val.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
+				var user_name = val.user.name || 'Not Provided';
+				var screen_name =  val.user.screen_name || 'Not Provided';
+			}else if (val._source.user !== undefined){
+				var img_url = val._source.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
+				var user_name = val._source_user.name || 'Not Provided';
+				var screen_name =  val._source.user.screen_name || 'Not Provided';
+			}else{	
 				var img_url = 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
 				var user_name = 'Not Provided';
 				var screen_name = 'NotProvided';
-			}else{
-				var img_url = val.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
-				var user_name = val.user.name || 'Not Provided';
-				var screen_name =  val.user.screen_name || 'NotProvided';
 			}
-			var created_at = val.created_at || 'Not Provided' ;
+			
+			var created_at = val.created_at || val._source.created_at || 'Not Provided' ;
 			
 			if (val.retweet_count !== undefined){
-				var retweet_count = val.retweet_count;
+				var retweet_count = val.retweet_count || 'Not Provided';
+			}else if (val._source.retweet_count !== undefined ){
+				var retweet_count = val._source.retweet_count || 'Not Provided';
 			}else{
 				var retweet_count = 'Not Provided';
 			}
 			
 			if (val.favorite_count !== undefined){
-				var favorite_count = val.favorite_count;
+				var favorite_count = val.favorite_count ||'Not Provided';
+			}else if (val._source.favorite_count !== undefined){
+				var favorite_count = val._source.favorite_count || 'Not Provided';
 			}else{	
 				var favorite_count = 'Not Provided';
 			}
@@ -610,14 +593,16 @@ function renderPreview(data,prefix){
 		});
 	}else if (prefix === 'reddit-Search' || prefix === 'reddit-Post' || prefix === 'reddit-Historical-Post'){
 		$.each(data.rendering, function(i,val){
-			var author_name = val.author_name || 'Not Provided';
-			var subreddit_name_prefixed = val.subreddit_name_prefixed || 'NotProvided';
-			var url = val.url || 'Not Provided';
-			var title = val.title || 'Not Provided';
-			var permalink = val.permalink || 'Not Provided';
-			var score = val.score || 'Not Provided';
+			var author_name = val.author_name || val._source.author_name || 'Not Provided';
+			var subreddit_name_prefixed = val.subreddit_name_prefixed || val._source.subreddit_name_prefixed || 'NotProvided';
+			var url = val.url || val._source.url || 'Not Provided';
+			var title = val.title || val._source.title || 'Not Provided';
+			var permalink = val.permalink || val._source.permalink || 'Not Provided';
+			var score = val.score || val._source.score || 'Not Provided';
 			if (val.created_utc !== undefined){
 				var created_utc = timeConverter(val.created_utc);
+			}else if (val._source.created_utc !== undefined){
+				var created_utc = timeConverter(val._source.created_utc);
 			}else{
 				var created_utc = 'Not Provided';
 			}

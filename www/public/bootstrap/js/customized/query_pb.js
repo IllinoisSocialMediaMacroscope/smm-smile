@@ -46,6 +46,7 @@ function init(){
 	parameters['rdComment']['fields'] = '';
 	
 	parameters['psPost']['q:'] = $("#searchbox").val();
+	parameters['psPost']['size:'] = 1000;
 	parameters['psPost']['fields']='';
 		
 	parameters['psComment']['q:'] = $("#searchbox").val();
@@ -553,6 +554,11 @@ function init(){
 
 	});
 	/*------------------------------pushshift Post ------------------------------------*/
+	$("#ps-size").change(function(){
+		parameters['psPost']['size:'] = parseInt($("#ps-size").val());
+		Query =updateString(queryTerm,parameters);
+		$("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
 	$("#ps-subreddit").change(function(){
 		if ($("#ps-subreddit").is(':checked')){
 			$(".form-group.ps-subreddit").show();
@@ -609,13 +615,32 @@ function init(){
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
+	
+
 	$("#psPostFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[]};
+		fields = {BasicFields:['title'],psMetadata:[]};
 		$.each($(this).find(':selected'),function(i,val){
-			fields_string += '\n\t\t\t' + val.value;
-		});		
+			var label = $(val.parentNode)[0].label;
+			fields[label].push(val.value);
+			//fields_string += '\n\t\t\t' + val.value;
+		});
+
+		if (fields['psMetadata'].length !== 0){
+			$.each(fields['psMetadata'],function(i,val){
+				fields_string += '\n\t\t\t' + val;
+			});
+		}
+
+		if(fields['BasicFields'].length !== 0){
+			fields_string += '\n\t\t\t_source{' ;
+			$.each(fields['BasicFields'],function(i,val){
+				fields_string += '\n\t\t\t\t' + val;
+			});	
+			fields_string += '\n\t\t\t}' ;	
+		}
+		
 		parameters['psPost']['fields'] = fields_string;
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);

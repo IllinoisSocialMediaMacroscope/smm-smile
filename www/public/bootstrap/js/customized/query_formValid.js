@@ -168,8 +168,9 @@ function formValid(searchID){
 				$("#ps-author-name").focus();
 				return false
 			} 
-			if ($("#ps-dateRange").is(':checked') && ($("#ps-start").val() === '' || $("#ps-end").val() === '')){
-				$("#modal-message").append(`<h4>Please sepecify a date range!</h4>`);
+			if ($("#ps-dateRange").is(':checked') && 
+					($("#ps-start").val() === '' || $("#ps-end").val() === '' || $("#ps-start").val()>$("#ps-end").val())){
+				$("#modal-message").append(`<h4>Please sepecify a date range, and the start date cannot be later than the end date!</h4>`);
 				$("#alert").modal('show');
 				return false
 			} 
@@ -190,8 +191,9 @@ function formValid(searchID){
 				$("#alert").modal('show');
 				return false
 			} 
-			if ($("#ps-cm-dateRange").is(':checked') && ($("#ps-cm-start").val() === '' || $("#ps-cm-end").val() === '')){
-				$("#modal-message").append(`<h4>Please sepecify a date range!</h4>`);
+			if ($("#ps-cm-dateRange").is(':checked') && 
+					($("#ps-cm-start").val() === '' || $("#ps-cm-end").val() === '' || $("#ps-cm-start").val()>$("#ps-cm-end").val())){
+				$("#modal-message").append(`<h4>Please sepecify a date range, and the start date cannot be later than the end date!</h4>`);
 				$("#alert").modal('show');
 				return false
 			} 
