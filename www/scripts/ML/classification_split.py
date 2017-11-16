@@ -44,8 +44,12 @@ class Classification:
         # find the unique title in reddit
         elif 'title' in Array[0]:
             self.corpus = list(set(df['title'].dropna().astype('str').tolist()))
+        elif '_source.title' in Array[0]:
+            self.corpus = list(set(df['_source.title'].dropna().astype('str').tolist()))
         elif 'body' in Array[0]:
             self.corpus = list(set(df['body'].dropna().astype('str').tolist()))
+        elif '_source.body' in Array[0]:
+            self.corpus = list(set(df['_source.body'].dropna().astype('str').tolist()))
             
         # strip http in the corpus
         self.corpus = [ re.sub(r"http\S+","",text) for text in self.corpus]

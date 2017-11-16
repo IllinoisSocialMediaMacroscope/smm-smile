@@ -49,7 +49,7 @@ $(document).ready(function(){
 						public description, description(redditSearchSubreddit)
 						_source.text, _source.user.description(streaming)*/
 						var allowed_field_list = ['text','user.description','description',
-						'_source.text', '_source.user.description','body','title'];
+						'_source.text', '_source.user.description','body','title','_source.body','_source.title'];
 						
 						var index = [];
 						$.each(data.preview[0],function(i,val){
