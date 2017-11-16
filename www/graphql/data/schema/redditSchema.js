@@ -8,6 +8,7 @@ var {
 	GraphQLBoolean
 } = require('graphql');
 var redditAPI = require('./../../API/redditAPI');
+var pushshiftAPI = require('./../../API/pushshiftAPI');
 
 const redditQueryType = module.exports = new GraphQLObjectType({
 	name:'redditQuery',
@@ -216,7 +217,7 @@ const redditQueryType = module.exports = new GraphQLObjectType({
 				after:		{type:GraphQLInt},
 				before:		{type:GraphQLInt}
 			},
-			resolve: (_,args,context) => redditAPI(context, resolveName = 'pushshiftComment', id='', args = args)
+			resolve: (_,args,context) => pushshiftAPI(context, resolveName = 'pushshiftComment', id='', args = args)
 		},
 		pushshiftPost:{
 			type: new GraphQLList(pushshiftPostType),
@@ -241,7 +242,7 @@ const redditQueryType = module.exports = new GraphQLObjectType({
 				stickied:	{type:GraphQLBoolean},
 				spoiler:	{type:GraphQLBoolean},
 			},
-			resolve: (_,args,context) => redditAPI(context, resolveName = 'pushshiftPost', id='', args = args)
+			resolve: (_,args,context) => pushshiftAPI(context, resolveName = 'pushshiftPost', id='', args = args)
 		},
 	})
 });

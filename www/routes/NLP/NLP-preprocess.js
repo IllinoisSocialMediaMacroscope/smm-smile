@@ -94,7 +94,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 										{name:req.body.model + ' text', content:processed},
 										{name:req.body.tagger + ' text', content:tagged}],
 									table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
-									preview:'',						
+									preview:[],						
 								});		
 					}
 						
