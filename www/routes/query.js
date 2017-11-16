@@ -7,27 +7,17 @@ var jsonexport = require('jsonexport');
 const getSize = require('get-folder-size');
 
 router.get('/query',function(req,res,next){
-		
-	var success = [];
-	if (req.session.twt_access_token_key !== undefined && req.session.twt_access_token_secret !== undefined){
-		success.push('twitter');
+
+	// check if all the sessions have token, in case the server stops in the middle
+	if (req.session.twt_access_token_key === undefined || req.session.twt_access_token_secret === undefined){
+		res.cookie('twitter-success','false',{maxAge:365 * 24 * 60 * 60 * 1000, httpOnly:false});	
 	}
 	
-	if (req.session.rd_access_token !== undefined){
-		success.push('reddit');
-	}
-	// add other social media following this context upppp 
-	if (req.session.es_access_token !== undefined && req.session.es_access_token_secret !== undefined){
-		success.push('es');
+	if (req.session.rd_access_token === undefined){
+		res.cookie('reddit-success','false',{maxAge:365 * 24 * 60 * 60 * 1000, httpOnly:false});	
 	}
 	
-	if (req.query !== undefined && 'error' in req.query){
-		res.render('search/query',{error:req.query.error,success:success,parent:'/'});
-	}else{
-		res.render('search/query',{success:success,
-										parent:'/',
-										error:req.query.error});
-	}
+	res.render('search/query',{	parent:'/',	error:req.query.error});
 	
 });
 

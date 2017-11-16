@@ -2,7 +2,6 @@ import csv
 import argparse
 import os
 from os.path import join, dirname
-from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
@@ -14,6 +13,8 @@ from sklearn.linear_model import PassiveAggressiveClassifier
 from sklearn import metrics
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
+from sklearn.model_selection import cross_val_predict
+from sklearn.model_selection import cross_val_score
 from scipy import interp
 from itertools import cycle
 import pickle
@@ -64,56 +65,73 @@ class Classification:
                 self.target.append(a[1])
     
 
-    def split(self):
-        # 2/8 save some for evaluating the performance
-        self.X_train,self.X_test,self.y_train, self.y_test = train_test_split(self.data, self.target, test_size=0.2, random_state=42)
-
     def classify(self, model):
 
         if model == 'NaiveBayes':
             text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
                                  ('tfidf', TfidfTransformer()),
                                  ('clf',MultinomialNB())])
-            text_clf.fit(self.X_train, self.y_train)
-            self.predicted = text_clf.predict(self.X_test)
-            y_score = text_clf.predict_proba(self.X_test)
+            # 10 fold cross validation 
+            self.predicted = cross_val_predict(text_clf, self.data, self.target, cv=10)
+            # fit the model
+            text_clf.fit(self.data, self.target)
+            y_score = text_clf.predict_proba(self.data)
         elif model == 'Perceptron':
             text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
                                  ('tfidf', TfidfTransformer()),
                                  ('clf',Perceptron())])
-            text_clf.fit(self.X_train, self.y_train)
-            self.predicted = text_clf.predict(self.X_test)
-            y_score = text_clf.decision_function(self.X_test)
+            # 10 fold cross validation 
+            self.predicted = cross_val_predict(text_clf, self.data, self.target, cv=10)
+            # fit the model
+            text_clf.fit(self.data, self.target)
+            y_score = text_clf.decision_function(self.data)
         elif model == 'SGD':
             text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
                                  ('tfidf', TfidfTransformer()),
                                  ('clf',SGDClassifier())])
-            text_clf.fit(self.X_train, self.y_train)
-            self.predicted = text_clf.predict(self.X_test)
-            y_score = text_clf.decision_function(self.X_test)
+            # 10 fold cross validation 
+            self.predicted = cross_val_predict(text_clf, self.data, self.target, cv=10)
+            # fit the model
+            text_clf.fit(self.data, self.target)
+            y_score = text_clf.decision_function(self.data)
         elif model == 'RandomForest':
             text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
                                  ('tfidf', TfidfTransformer()),
                                  ('clf',RandomForestClassifier(n_estimators=100))])
-            text_clf.fit(self.X_train, self.y_train)
-            self.predicted = text_clf.predict(self.X_test)
-            y_score = text_clf.predict_proba(self.X_test)
+            # 10 fold cross validation 
+            self.predicted = cross_val_predict(text_clf, self.data, self.target, cv=10)
+            # fit the model
+            text_clf.fit(self.data, self.target)
+            y_score = text_clf.predict_proba(self.data)
         elif model == 'KNN':
             text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
                                  ('tfidf', TfidfTransformer()),
                                  ('clf',KNeighborsClassifier(n_neighbors=10))])
-            text_clf.fit(self.X_train, self.y_train)
-            self.predicted = text_clf.predict(self.X_test)
-            y_score = text_clf.predict_proba(self.X_test)
+            # 10 fold cross validation 
+            self.predicted = cross_val_predict(text_clf, self.data, self.target, cv=10)
+            # fit the model
+            text_clf.fit(self.data, self.target)
+            y_score = text_clf.predict_proba(self.data)
         elif model == 'passiveAggressive':
             text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
                                  ('tfidf', TfidfTransformer()),
                                  ('clf',PassiveAggressiveClassifier(n_iter=50))])
-            text_clf.fit(self.X_train, self.y_train)
-            self.predicted = text_clf.predict(self.X_test)
-            y_score = text_clf.decision_function(self.X_test)           
+            # 10 fold cross validation 
+            self.predicted = cross_val_predict(text_clf, self.data, self.target, cv=10)
+            # fit the model
+            text_clf.fit(self.data, self.target)
+            y_score = text_clf.decision_function(self.data)           
             
-            
+        # get 10 fold cross validation accuracy score
+        fold_scores = cross_val_score(text_clf, self.data, self.target, cv=10)
+        fname_folds = os.path.join(self.DIR,'accuracy_score.csv')
+        with open(fname_folds,'w',newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(['fold_1','fold_2','fold_3','fold_4','fold_5',
+                             'fold_6','fold_7','fold_8','fold_9','fold_10'])
+            writer.writerow([ '%.4f' % elem for elem in fold_scores ])
+        print(fname_folds)
+        
         # pickle the Pipeline for future use
         fname_pickle = os.path.join(self.DIR,'classification_pipeline.pickle')
         with open(fname_pickle,'wb') as f:
@@ -122,7 +140,7 @@ class Classification:
 
         # plotting the roc curve
         self.labels = text_clf.classes_       
-        y = label_binarize(self.y_test,classes = self.labels)
+        y = label_binarize(self.target,classes = self.labels)
 
         
         # binary class
@@ -131,7 +149,7 @@ class Classification:
                 fpr, tpr, _ = roc_curve(y[:, 0], y_score)
             else:
                 y = []
-                for label in self.y_test:
+                for label in self.target:
                     item = []
                     for i in range(len(text_clf.classes_)):
                         if label == text_clf.classes_[i]:
@@ -224,9 +242,8 @@ class Classification:
         print(fname_div)
 
     def metrics(self):
-        
-        report = np.array(metrics.precision_recall_fscore_support(self.y_test,self.predicted,labels=self.labels)).T
-        avg_report = list(metrics.precision_recall_fscore_support(self.y_test,self.predicted,average='weighted'))
+        report = np.array(metrics.precision_recall_fscore_support(self.target,self.predicted,labels=self.labels)).T
+        avg_report = list(metrics.precision_recall_fscore_support(self.target,self.predicted,average='weighted'))
         avg_report.insert(0,'AVG')
 
         # save metrics report
@@ -235,10 +252,15 @@ class Classification:
             writer = csv.writer(f)
             writer.writerow(['label','precision','recall','f1-score','support'])
             for i in range(len(report)):
-                writer.writerow([self.labels[i],report[i][0],report[i][1],report[i][2],report[i][3]])
+                writer.writerow([self.labels[i],
+                                    round(report[i][0],4),
+                                    round(report[i][1],4),
+                                    round(report[i][2],4),
+                                    round(report[i][3],4)])
             writer.writerow(avg_report)
         print(fname_metrics)
 
+        
         
 
 if __name__ == '__main__':
@@ -259,7 +281,6 @@ if __name__ == '__main__':
             json.dump(data,f)
     
     classification = Classification(args.file, args.uuid)
-    classification.split()
     classification.classify(args.model)
     classification.metrics()
 

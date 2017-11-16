@@ -11,8 +11,8 @@ router.get('/login/box', function(req,res,next){
 	req.session.currentURL = req.query.currentURL;
 	req.session.save();
 	
-	var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=***REMOVED***&redirect_uri=https://socialmediamacroscope.org:8000` + req.query.currentURL +`login/box/callback`;
-	//var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=***REMOVED***&redirect_uri=http://localhost:8001/login/box/callback`;
+	//var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=***REMOVED***&redirect_uri=https://socialmediamacroscope.org:8000` + req.query.currentURL +`login/box/callback`;
+	var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=***REMOVED***&redirect_uri=http://localhost:8001/login/box/callback`;
 	res.redirect(authUrl);
 });
 
@@ -22,19 +22,22 @@ router.get('/login/box/callback',function(req,res,next){
 		clientSecret: '***REMOVED***' 
 	});
 	
-	box.getTokensAuthorizationCodeGrant(req.query.code, null, function(err, tokenInfo) {
-		if (err){
-			res.redirect(`/` + req.session.pageURL + `?box=` + JSON.stringify({'ERROR':err}))
-		}else{
-			req.session.box_access_token = tokenInfo.accessToken;
-			req.session.save();
-			
-			// push this to the front so we know add this export button
-			console.log(req.session.currentURL);
-			console.log(req.session.pageURL);
-			res.redirect(req.session.currentURL + req.session.pageURL + `?box=success`);
-		}
-	});
+	if (req.query.error !== undefined){
+		res.redirect(req.session.currentURL + req.session.pageURL + '?error=' + req.query.error);
+	}else{
+		box.getTokensAuthorizationCodeGrant(req.query.code, null, function(err, tokenInfo) {
+			if (err){
+				res.cookie('box-success','false',{maxAge:1000*60*60*24*365, httpOnly:false});	
+				res.redirect(req.session.currentURL + req.session.pageURL + '?error=' + err);
+			}else{
+				req.session.box_access_token = tokenInfo.accessToken;
+				req.session.save();
+				
+				// put this in the cookie so we know add this export button
+				res.redirect(req.session.currentURL + req.session.pageURL + '?box=success');
+			}
+		});
+	}
 });
 
 module.exports = router;
