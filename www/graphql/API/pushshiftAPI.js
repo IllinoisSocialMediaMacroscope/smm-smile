@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
 var fetch = require('node-fetch');
-var appendQuery = require('append-query')
+var appendQuery = require('append-query');
 
 function pushshiftAPI(tokens,resolveName, id, args){
 	
