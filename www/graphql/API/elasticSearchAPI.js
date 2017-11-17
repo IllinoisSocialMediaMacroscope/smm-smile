@@ -110,7 +110,7 @@ function elasticSearchAPI(args){
 		fetch(endpoint,{ method:'POST', headers:headers, body:JSON.stringify(param)}).then((res) =>{
 			return res.json();
 		}).then(function(json){
-			//console.log(JSON.stringify(json));
+			console.log(JSON.stringify(json));
 			resolve(json.hits.hits);
 		}).catch((err) =>{
 			//console.log(err);
