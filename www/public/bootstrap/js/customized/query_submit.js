@@ -533,7 +533,7 @@ function renderPreview(data,prefix){
 				var screen_name =  val.user.screen_name || 'Not Provided';
 			}else if (val._source.user !== undefined){
 				var img_url = val._source.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
-				var user_name = val._source_user.name || 'Not Provided';
+				var user_name = val._source.user.name || 'Not Provided';
 				var screen_name =  val._source.user.screen_name || 'Not Provided';
 			}else{	
 				var img_url = 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
@@ -558,6 +558,8 @@ function renderPreview(data,prefix){
 			}else{	
 				var favorite_count = 'Not Provided';
 			}
+
+            var text = val.text || val._source.text || 'Not Provided';
 			
 			$("#grid").append(`<div class="grid-element">
 									<img src="` + img_url + `" class="user-img"/>
@@ -566,7 +568,7 @@ function renderPreview(data,prefix){
 										<p style="display:inline;color:green;"><i>&nbsp;&bull;@`+ screen_name + `</i></p>
 										<p style="display:inline;color:grey;">&nbsp;&bull;`+ created_at +`</p>
 									</div>
-									<p style="margin-top:10px;">`+ val.text + `</p>
+									<p style="margin-top:10px;">`+ text + `</p>
 									<p style="margin-top:10px;"><span class="glyphicon glyphicon-retweet" style="position:inherit;"></span>&nbsp;`+ retweet_count + 
 									`&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-heart" style="position:inherit;"></span>&nbsp;` +favorite_count +`</p>
 							</div>`);
