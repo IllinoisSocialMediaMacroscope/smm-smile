@@ -101,7 +101,7 @@ function elasticSearchAPI(args){
 	}
 	
 	return new Promise((resolve,reject) =>{
-		console.log(param);
+		//console.log(param);
 		var endpoint = appendQuery('https://search-es-twitter-stream-yugu6rvjulzswrsj2y764qyy5i.us-west-2.es.amazonaws.com/twitter/tweet/_search/');
 		var headers = {
 			'Accept': 'application/json',
@@ -110,7 +110,7 @@ function elasticSearchAPI(args){
 		fetch(endpoint,{ method:'POST', headers:headers, body:JSON.stringify(param)}).then((res) =>{
 			return res.json();
 		}).then(function(json){
-			console.log(JSON.stringify(json));
+			//console.log(JSON.stringify(json));
 			resolve(json.hits.hits);
 		}).catch((err) =>{
 			//console.log(err);
