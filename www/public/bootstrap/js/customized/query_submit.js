@@ -524,7 +524,7 @@ function renderPreview(data,prefix){
 									
 								</div>
 								<div id="grid"></div>`)
-	if (prefix === 'twitter-Tweet' || prefix === 'twitter-StreamStream'){
+	if (prefix === 'twitter-Tweet' || prefix === 'twitter-Stream'){
 		$.each(data.rendering, function(i,val){
 			
 			if (val.user !== undefined){
