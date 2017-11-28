@@ -135,7 +135,7 @@ function submitSearchbox(searchboxID, filenameID){
 									is_translator
 									contributors_enabled
 									geo_enabled
-									lang
+									author_lang
 								  }
 								}
 							  }
@@ -173,7 +173,7 @@ function submitSearchbox(searchboxID, filenameID){
 								  is_translator
 								  contributors_enabled
 								  geo_enabled
-								  lang
+								  author_lang
 								}
 							  }
 							}`
@@ -243,7 +243,7 @@ function submitSearchbox(searchboxID, filenameID){
 									  is_translator
 									  contributors_enabled
 									  geo_enabled
-									  lang
+									  author_lang
 									}
 								  }
 								}
