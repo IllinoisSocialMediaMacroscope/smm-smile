@@ -40,7 +40,7 @@ const twtUserType = module.exports = new GraphQLObjectType({
 		is_translator:			{ type: GraphQLBoolean },
 		contributors_enabled:	{ type: GraphQLBoolean },
 		geo_enabled:			{ type: GraphQLBoolean },
-		lang:					{ type: GraphQLString },
+		author_lang:					{ type: GraphQLString },
 		/*--------------------------nested------------------------*/
 		timeline:	{
 						type: new GraphQLList(tweetType),
