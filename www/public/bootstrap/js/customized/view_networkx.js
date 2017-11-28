@@ -31,8 +31,10 @@ $(document).ready(function(){
 					}else{
 						var allowed_field_list = [
 							// tweet
+							'user.screen_name',
 							'text',
 							// stream
+							'_source.user.screen_name',
 							'_source.text'];
 						
 						var index = [];
@@ -161,6 +163,18 @@ function formValidation(){
 		$("#selectFile").focus();
 		return false;
 	}
+	
+	// detect if both the text and the author is in the data
+	var count = 0;
+	$("#selectFileTable thead tr > th").each(function(){
+		count += 1;
+	});
+	if (count !== 2){
+		$("#modal-message").append(`<h4>This dataset you selected is not in comply with Network Analysis Requirement. Please select a dataset that has both text and author name!</h4>`);
+		$("#alert").modal('show');
+		$("#selectFile").focus();
+		return false;
+	}
 
 	//console.log($("#relations option:selected").val());
 	if ($("#relations option:selected").val() === 'Please Select...' || $("#relations option:selected").val() === undefined){
@@ -175,13 +189,7 @@ function formValidation(){
 		$("#layout").focus();
 		return false;
 	}
-	/*if ($("#prune option:selected").val() === 'Please Select...' || $("#prune option:selected").val() === undefined){
-			$("#modal-message").append(`<h4>Please select a way to prune the network!</h4>`);
-			$("#alert").modal('show');
-			$("#prune").focus();
-			return false;
-		}*/
-	
+		
 	return true;
 	
 }
