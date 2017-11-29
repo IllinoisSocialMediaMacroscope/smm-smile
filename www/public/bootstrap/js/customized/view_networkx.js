@@ -170,7 +170,8 @@ function formValidation(){
 		count += 1;
 	});
 	if (count !== 2){
-		$("#modal-message").append(`<h4>This dataset you selected is not in comply with Network Analysis Requirement. Please select a dataset that has both text and author name!</h4>`);
+		$("#modal-message").append(`<h4>This dataset you selected is not in compliance with Network Analysis Requirement. `+
+		`Please select a dataset that has both "text" and "screen_name"!</h4>`);
 		$("#alert").modal('show');
 		$("#selectFile").focus();
 		return false;

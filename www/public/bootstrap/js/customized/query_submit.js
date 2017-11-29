@@ -531,7 +531,7 @@ function renderPreview(data,prefix){
 				var img_url = val.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
 				var user_name = val.user.name || 'Not Provided';
 				var screen_name =  val.user.screen_name || 'Not Provided';
-			}else if (val._source.user !== undefined){
+			}else if (val._source !== undefined && val._source.user !== undefined){
 				var img_url = val._source.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
 				var user_name = val._source.user.name || 'Not Provided';
 				var screen_name =  val._source.user.screen_name || 'Not Provided';
