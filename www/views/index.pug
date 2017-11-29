@@ -26,7 +26,8 @@ html
 		include components/topbar.pug
 		include components/warning.pug
 		include components/sitemap.pug	
-		include components/clientside-warning.pug			
+		include components/clientside-warning.pug
+		include components/cookie.pug		
 								
 		div(class="headers")
 			//img(id="index-banner", src="bootstrap/img/logo/index-banner.png",width="100%")
@@ -81,5 +82,5 @@ html
 							a(class="prose-button",href=page.url) Start		
 			
 		include components/footer.pug								
-		
+		script(src="bootstrap/js/customized/detect_cookie.js")
 		

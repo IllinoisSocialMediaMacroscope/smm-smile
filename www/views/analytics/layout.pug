@@ -34,6 +34,7 @@ html
 		include ../components/warning.pug
 		include ../components/clientside-warning.pug
 		include ../components/sitemap.pug
+		include ../components/cookie.pug
 		
 		
 		div(id="container-fluid")
@@ -75,7 +76,10 @@ html
 						
 					div(class="loading",style="display:none;")
 						img(src="bootstrap/img/gifs/loading.gif", width="400", height="400px",style="display:block; margin:auto;")
+						h4(style="text-align:center;")
+							<i>For large dataset, the computation might take a few minutes. Thank you for your patience.</i>
 							
+						
 					<!-- img -->
 					div(class="row")
 						div(class="col-md-12 col-sm-12 col-xs-12")
@@ -92,7 +96,7 @@ html
 			
 									
 		block customized-script
-							
+		script(src="bootstrap/js/customized/detect_cookie.js").					
 		
 		
 							
