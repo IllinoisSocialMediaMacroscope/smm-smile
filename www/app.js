@@ -42,6 +42,7 @@ app.use('/', require('./routes/auth/dropbox_auth'));
 app.use('/', require('./routes/auth/box_auth'));
 app.use('/',require('./routes/auth/reddit_auth'));
 app.use('/', require('./routes/sitemap'));
+app.use('/',require('./routes/RedditExpand'));
 
 /*app.use(function(err, req, res, next) {
   // set locals, only providing error in development

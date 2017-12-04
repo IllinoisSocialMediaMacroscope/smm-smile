@@ -531,7 +531,7 @@ function renderPreview(data,prefix){
 				var img_url = val.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
 				var user_name = val.user.name || 'Not Provided';
 				var screen_name =  val.user.screen_name || 'Not Provided';
-			}else if (val._source.user !== undefined){
+			}else if (val._source !== undefined && val._source.user !== undefined){
 				var img_url = val._source.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
 				var user_name = val._source.user.name || 'Not Provided';
 				var screen_name =  val._source.user.screen_name || 'Not Provided';
@@ -545,7 +545,7 @@ function renderPreview(data,prefix){
 			
 			if (val.retweet_count !== undefined){
 				var retweet_count = val.retweet_count || 'Not Provided';
-			}else if (val._source.retweet_count !== undefined ){
+			}else if (val._source !== undefined && val._source.retweet_count !== undefined ){
 				var retweet_count = val._source.retweet_count || 'Not Provided';
 			}else{
 				var retweet_count = 'Not Provided';
@@ -553,7 +553,7 @@ function renderPreview(data,prefix){
 			
 			if (val.favorite_count !== undefined){
 				var favorite_count = val.favorite_count ||'Not Provided';
-			}else if (val._source.favorite_count !== undefined){
+			}else if (val._source !== undefined && val._source.favorite_count !== undefined){
 				var favorite_count = val._source.favorite_count || 'Not Provided';
 			}else{	
 				var favorite_count = 'Not Provided';
@@ -603,7 +603,7 @@ function renderPreview(data,prefix){
 			var score = val.score || val._source.score || 'Not Provided';
 			if (val.created_utc !== undefined){
 				var created_utc = timeConverter(val.created_utc);
-			}else if (val._source.created_utc !== undefined){
+			}else if (val._source !== undefined && val._source.created_utc !== undefined){
 				var created_utc = timeConverter(val._source.created_utc);
 			}else{
 				var created_utc = 'Not Provided';

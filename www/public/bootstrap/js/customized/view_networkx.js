@@ -55,7 +55,7 @@ $(document).ready(function(){
 						$("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-						$("#selectFilePreview").append(arrayToTable(numCat_data,'#selectFileTable'));
+						$("#selectFilePreview").append(arrayToTable(numCat_data.slice(0,11),'#selectFileTable'));
 						//$("#selectFileTable").DataTable();
 					}
 					
@@ -170,7 +170,8 @@ function formValidation(){
 		count += 1;
 	});
 	if (count !== 2){
-		$("#modal-message").append(`<h4>This dataset you selected is not in comply with Network Analysis Requirement. Please select a dataset that has both text and author name!</h4>`);
+		$("#modal-message").append(`<h4>This dataset you selected is not in compliance with Network Analysis Requirement. `+
+		`Please select a dataset that has both "text" and "screen_name"!</h4>`);
 		$("#alert").modal('show');
 		$("#selectFile").focus();
 		return false;

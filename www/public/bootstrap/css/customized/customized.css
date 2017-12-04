@@ -167,6 +167,7 @@ h3 {
 
 /* upload form */
 .form-group{
+	overflow:auto;
 	margin-right:0;
 	margin-left:0;
 	margin-bottom:15px;
