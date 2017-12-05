@@ -20,7 +20,7 @@ def zipdir(path, ziph):
     # ziph is zipfile handle
     for root, dirs, files in os.walk(path):
         for file in files:
-            ziph.write(os.path.join(root, file))
+            ziph.write(os.path.join(root, file),file)
 
 def deletedir(path):
     for root, dirs, files in os.walk(path, topdown=False):
@@ -28,6 +28,7 @@ def deletedir(path):
             os.remove(os.path.join(root, name))
         for name in dirs:
             os.rmdir(os.path.join(root, name))
+    os.rmdir(path)
             
 def bfs(submission,id,directory):
     # check size of the current folder
@@ -112,23 +113,27 @@ if __name__ == '__main__':
     # loop through the id and store their comments
     for url,id in zip(urls,ids):
         url = "https://www.reddit.com" + url
-        submission = reddit.submission(url=url)
-        if not bfs(submission,id,DIR):
-            # zip goes here
-            zipf = zipfile.ZipFile(DIR + '.zip', 'w', zipfile.ZIP_DEFLATED)
-            zipdir(DIR + '/', zipf)
-            zipf.close()
-            
-            # delete the files
-            deletedir(DIR)
-            
-            # send out email notification
-            n.notification(args.email,case=1,filename=args.filename)
-            exit(code='Lack of disk space')
+        try:
+            submission = reddit.submission(url=url)
+            if not bfs(submission,id,DIR):
+                # zip goes here
+                zipf = zipfile.ZipFile(DIR + '.zip', 'w', zipfile.ZIP_DEFLATED)
+                zipdir(DIR + '/', zipf)
+                zipf.close()
+                
+                # delete the files
+                deletedir(DIR)
+                
+                # send out email notification
+                n.notification(args.email,case=1,filename=args.filename)
+                exit(code='Lack of disk space')
+        except:
+            # escape those can't be found in url
+            pass
 
     # success and send email notification
     # zip goes here
-    zipf = zipfile.ZipFile(DIR + '.zip', 'w', zipfile.ZIP_DEFLATED)
+    zipf = zipfile.ZipFile(DIR + '.zip', 'w')
     zipdir(DIR + '/', zipf)
     zipf.close()
             
