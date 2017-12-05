@@ -41,7 +41,7 @@ function arrayToTable(array,tableID){
 	
 	// set table head
 	
-	var tableContent = `<div class="table-responsive"><table class="table table-striped table-bordered" id=`+tableID.slice(1,) + `><thead><tr>`;
+	var tableContent = `<div class="table-responsive"><table class="table table-striped table-bordered" id=`+tableID.slice(1) + `><thead><tr>`;
 	$.each(array[0],function(i,val){
 	/* the text fields are:  text(tweet), description(twtUser),
 			body(redditComment), selftext,title(redditSearch), 
@@ -203,7 +203,7 @@ function appendD3JS(data){
 }
 
 /*************************************************************d3js***************************************/
-function draw_d3js(d_nodes,d_links){
+/*function draw_d3js(d_nodes,d_links){
 	var width = 1200;
 	var height = 1000;
 	
@@ -211,7 +211,7 @@ function draw_d3js(d_nodes,d_links){
 	var color = d3.scale.category20();
 	var output = document.getElementById('colorscale');
 	d3.select(output).selectAll('p').remove();
-	for(let i = 0; i < 20; i++) {
+	for(var i = 0; i < 20; i++) {
 		d3.select(output)
 			.append('p')
 			.text(`ccc`)
@@ -418,7 +418,7 @@ function draw_d3js(d_nodes,d_links){
 	}
 
 	d3.selectAll(".zoom").on('click', zoomClick);
-}
+}*/
 
 /*----------------------submit to analysis--------------------------------------------*/
 function ajaxSubmit(formID){
