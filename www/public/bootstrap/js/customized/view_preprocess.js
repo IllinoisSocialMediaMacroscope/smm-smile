@@ -86,8 +86,10 @@ $(document).ready(function(){
 						// offer crawling for reddit comments modal
 						if(directory === 'reddit-Post' || directory === 'reddit-Historical-Post' || directory === 'reddit-Search'){
 							$("#dataset").val(directory + "/" + foldername + "/" + foldername + ".csv");
-							$("#reddit-expand").modal('show');
-						};
+							$("#getComment").show();
+						}else{
+							$("#getComment").hide();
+						}
 					}
 				}
 			},
