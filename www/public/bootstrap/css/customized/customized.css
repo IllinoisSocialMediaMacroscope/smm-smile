@@ -74,8 +74,9 @@ body {
 	background-color:#5cb85c;
 }
 #side-download-head{
-	animation:blink-animation 1500ms infinite;
+	animation:blink-animation 10ms infinite;
 }
+
 
 @-webkit-keyframes blink-animation{
   0% { background-color: #73879c; -webkit-box-shadow: 0 0 3px #428bca; }
@@ -167,6 +168,7 @@ h3 {
 
 /* upload form */
 .form-group{
+	overflow:auto;
 	margin-right:0;
 	margin-left:0;
 	margin-bottom:15px;
@@ -438,14 +440,14 @@ marker#arrow {
 .link-button-download{
 	background:none;
 	border:none;
-	color:#73879c;
-	border-bottom:1px solid;
+	color:#ea4a36;
+	border-bottom:1px solid #ea4a36;
 }
 .link-button-download:hover{
 	background:none;
 	border:none;
-	color:#ea4a36;
-	border-bottom:1px solid #ea4a36;
+	color:#2a5a84;
+	border-bottom:1px solid #2a5a84;
 }
 
 /**********text classification page******************/
@@ -461,4 +463,11 @@ marker#arrow {
 	overflow: hidden;
 	position: absolute;
 	z-index: -1;
+}
+
+#getComment{
+	background-color:#ea4a36;
+	color:white;
+	display:none;
+	/*animation:blink-animation 1500ms infinite;*/
 }
