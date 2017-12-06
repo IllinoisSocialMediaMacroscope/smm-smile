@@ -75,13 +75,21 @@ $(document).ready(function(){
 						$("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-						$("#selectFilePreview").append(arrayToTable(text_data ,'#selectFileTable'));
+						$("#selectFilePreview").append(arrayToTable(text_data.slice(0,11) ,'#selectFileTable'));
 						//$("#selectFileTable").DataTable();
 						
 						$("#selectFileHeader-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">Select Column to Analyze</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFileHeader"></div></div>`);
 						$("#selectFileHeader").append(extractHeader2(text_data));
+						
+						// offer crawling for reddit comments modal
+						if(directory === 'reddit-Post' || directory === 'reddit-Historical-Post' || directory === 'reddit-Search'){
+							$("#dataset").val(directory + "/" + foldername + "/" + foldername + ".csv");
+							$("#getComment").show();
+						}else{
+							$("#getComment").hide();
+						}
 					}
 				}
 			},
@@ -107,6 +115,7 @@ $(document).ready(function(){
 				
 			} 
 		}); 
+		
 	});
 	
 	$("#tagger").on('change',function(){

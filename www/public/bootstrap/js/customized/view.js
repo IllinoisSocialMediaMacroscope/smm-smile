@@ -4,21 +4,10 @@ function init(){
 	
 	$("#file").prop('checked',true);
 	$("#file-container").show();
-	//$("#url-container").hide();
-	
-	/*$("input[name='option']").on('change', function(){
-		if($("input[name='option']:checked").val() === 'file'){
-			$("#file-container").show();
-			$("#url-container").hide();
-			$("#selectFilePreview-container").show();
-			$("#selectFileHeader-container").show();
-		}else{
-			$("#file-container").hide();
-			$("#url-container").show();
-			$("#selectFilePreview-container").hide();
-			$("#selectFileHeader-container").hide();
-		}
-	});*/
+	$("#getComment").on('click',function(e){
+		e.preventDefault();
+		$("#reddit-expand").modal('show');
+	});
 	
 }
 

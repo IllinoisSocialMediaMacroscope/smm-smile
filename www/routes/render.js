@@ -15,7 +15,8 @@ router.post('/render',function(req,res,next){
 			res.send({ERROR: 'This dataset you selected is empty, please select another one!'});
 		}else{
 			var preview_arr = CSV.parse(preview_string);
-			res.send({preview:preview_arr.slice(0,10)}); // preview the top 25 line?
+			//res.send({preview:preview_arr.slice(0,10)}); // preview the top 25 line? shift the top10 to front end
+			res.send({preview:preview_arr}); 
 		}
 	}else{
 		res.send();
