@@ -7,8 +7,8 @@ var spawn = require("child_process").spawn;
 router.post('/reddit-expand',function(req,res,next){
 	
 	var myPythonScript = appPath + '/scripts/RedditComment.py';
-	var pythonExecutable = "C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe";
-	//var pythonExecutable = "/opt/python/bin/python3.4";
+	//var pythonExecutable = "C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe";
+	var pythonExecutable = "/opt/python/bin/python3.4";
 	
 	var p = spawn(pythonExecutable, [myPythonScript,"--email",req.body.email,"--filename",'./downloads/GraphQL/'+req.body.filename], 
 				{detached: true});
