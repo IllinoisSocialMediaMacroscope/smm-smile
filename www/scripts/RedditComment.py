@@ -41,7 +41,7 @@ def bfs(submission,id,directory):
                 print('encoding error')
 
     MB = getFolderSize(DIR)
-    if MB >= 400*1024*1024: # 400 MB
+    if MB >= 4*1024*1024: # 400 MB
         # email alert with extra information
         # zip them or not? in the future you need to decide!
         return False
