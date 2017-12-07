@@ -3,6 +3,8 @@ import csv
 import argparse
 import pandas as pd
 import os
+import zipfile
+import notification as n
 
 def getFolderSize(folder):
     total_size = os.path.getsize(folder)
@@ -14,6 +16,20 @@ def getFolderSize(folder):
             total_size += getFolderSize(itempath)
     return total_size
 
+def zipdir(path, ziph):
+    # ziph is zipfile handle
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            ziph.write(os.path.join(root, file),file)
+
+def deletedir(path):
+    for root, dirs, files in os.walk(path, topdown=False):
+        for name in files:
+            os.remove(os.path.join(root, name))
+        for name in dirs:
+            os.rmdir(os.path.join(root, name))
+    os.rmdir(path)
+            
 def bfs(submission,id,directory):
     # check size of the current folder
 
@@ -41,9 +57,7 @@ def bfs(submission,id,directory):
                 print('encoding error')
 
     MB = getFolderSize(DIR)
-    if MB >= 4*1024*1024: # 400 MB
-        # email alert with extra information
-        # zip them or not? in the future you need to decide!
+    if MB >= 400*1024*1024: # 400 MB
         return False
     else:
         return True
@@ -84,6 +98,7 @@ if __name__ == '__main__':
         urls = df['_source.permalink'].dropna().astype('str').tolist()
         ids = df['_source.id'].dropna().astype('str').tolist()
     else:
+        n.notification(args.email,case=0,filename='')
         exit(code='Incomplete information')
 
     # praw construct submission           
@@ -98,12 +113,33 @@ if __name__ == '__main__':
     # loop through the id and store their comments
     for url,id in zip(urls,ids):
         url = "https://www.reddit.com" + url
+        try:
+            submission = reddit.submission(url=url)
+            if not bfs(submission,id,DIR):
+                # zip goes here
+                zipf = zipfile.ZipFile(DIR + '.zip', 'w', zipfile.ZIP_DEFLATED)
+                zipdir(DIR + '/', zipf)
+                zipf.close()
+                
+                # delete the files
+                deletedir(DIR)
+                
+                # send out email notification
+                n.notification(args.email,case=1,filename=args.filename)
+                exit(code='Lack of disk space')
+        except:
+            # escape those can't be found in url
+            pass
 
-        print(url, id)
-        
-        submission = reddit.submission(url=url)
-
-        if not bfs(submission,id,DIR):
-            exit()
-
-
+    # success and send email notification
+    # zip goes here
+    zipf = zipfile.ZipFile(DIR + '.zip', 'w')
+    zipdir(DIR + '/', zipf)
+    zipf.close()
+            
+    # delete the files
+    deletedir(DIR)
+    
+    n.notification(args.email,case=2,filename=args.filename)
+    
+   

@@ -55,9 +55,14 @@ function submitHistory(formID){
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
 					}
 					
-					if('d3js_data' in data){
-						appendD3JS(data);
-					}					
+
+					if ('expandable' in data && data.expandable != undefined){
+						$("#dataset").val(data.expandable);
+						$("#length").val(data.preview[0].content.length-1);
+						$("#getComment").show();
+					}else{
+						$("#getComment").hide();
+					}
 				}
 			}
 		},
@@ -85,6 +90,7 @@ function submitHistory(formID){
 	}); 
 	
 } 
+
 
 /* delete job modal */
 function deleteModal(formID){
@@ -149,7 +155,14 @@ function deleteHistory(formID){
 } 
 
 function appendTitle(container, title,ID, config){
-	$(container).append(`<h1>`+ title+ `</h1><h4>ID: ` + ID +`</h4>`);
+	$(container).append(`<h1>`+ title+ `</h1>
+						<h4>ID: ` + ID +`</h4>
+						<button class="btn btn-default" id="getComment">get comments</button>`);
+	
+	$("#getComment").on('click',function(e){
+		e.preventDefault();
+		$("#reddit-expand").modal('show');
+	});
 }
 
 
