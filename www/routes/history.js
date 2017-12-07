@@ -270,11 +270,8 @@ router.post('/history',function(req,res,next){
 				req.body.layer2 === 'twitter-Tweet' ||
 				req.body.layer2 === 'twitter-User' ||
 				req.body.layer2 === 'twitter-Stream' ||
-				req.body.layer2 === 'reddit-Search' ||
-				req.body.layer2 === 'reddit-Post' ||
 				req.body.layer2 === 'reddit-Comment' ||
-				req.body.layer2 === 'reddit-Historical-Post' ||
-				req.body.layer2 === 'reddit-Historical-Comment') && fs.readdirSync(DIR).length >=2){
+				req.body.layer2 === 'reddit-Historical-Comment') && fs.readdirSync(DIR).length ==2){
 		var config = JSON.parse(fs.readFileSync(DIR  + '/' + req.body.historyID + '.dat','utf8'));
 		var preview_string = fs.readFileSync(DIR + '/' + req.body.historyID + '.csv', "utf8"); 
 		var preview_arr = CSV.parse(preview_string);
@@ -290,6 +287,28 @@ router.post('/history',function(req,res,next){
 				config:config
 			});
 	}
+	else if ((req.body.layer2 === 'reddit-Search' ||
+				req.body.layer2 === 'reddit-Post' ||
+				req.body.layer2 === 'reddit-Historical-Post') && fs.readdirSync(DIR).length >=2){
+		var config = JSON.parse(fs.readFileSync(DIR  + '/' + req.body.historyID + '.dat','utf8'));
+		var preview_string = fs.readFileSync(DIR + '/' + req.body.historyID + '.csv', "utf8"); 
+		var preview_arr = CSV.parse(preview_string);
+		config.fields = preview_arr[0];
+		
+		download = [{name:'CSV format', content: DIR + '/' + req.body.historyID + '.csv'}]
+		if (fs.existsSync(DIR + '/' + req.body.historyID + '-comments.zip')){
+			download.push({name:req.body.historyID + '-comments.zip', content: DIR + '/' + req.body.historyID + '-comments.zip'})
+		}
+		
+		res.send({
+				title:'Social Media Past Search Result', 
+				expandable:req.body.layer2 + '/' + req.body.historyID + '/' + req.body.historyID +'.csv',
+				ID:req.body.historyID,
+				download:download,
+				preview:[{name: "Preview the .csv file", content:preview_arr.slice(0,101),dataTable:true}],
+				config:config
+			});
+	}			
 	else{
 		res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double checked
 		if you have fulfilled all the required  process when carrying out this analysis.`});
