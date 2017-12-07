@@ -544,22 +544,28 @@ function renderPreview(data,prefix){
 			var created_at = val.created_at || val._source.created_at || 'Not Provided' ;
 			
 			if (val.retweet_count !== undefined){
-				var retweet_count = val.retweet_count || 'Not Provided';
-			}else if (val._source !== undefined && val._source.retweet_count !== undefined ){
+				var retweet_count = val.retweet_count;
+			}else if (val._source !== undefined){
 				var retweet_count = val._source.retweet_count || 'Not Provided';
 			}else{
 				var retweet_count = 'Not Provided';
 			}
 			
 			if (val.favorite_count !== undefined){
-				var favorite_count = val.favorite_count ||'Not Provided';
-			}else if (val._source !== undefined && val._source.favorite_count !== undefined){
+				var favorite_count = val.favorite_count;
+			}else if (val._source !== undefined){
 				var favorite_count = val._source.favorite_count || 'Not Provided';
-			}else{	
+			}else{
 				var favorite_count = 'Not Provided';
 			}
-
-            var text = val.text || val._source.text || 'Not Provided';
+			
+			if (val.text !== undefined){
+				var text = val.text;
+			}else if (val._source !== undefined){
+				var text = val._source.text || 'Not Provided';
+			}else{
+				var text = 'Not Provided';
+			}
 			
 			$("#grid").append(`<div class="grid-element">
 									<img src="` + img_url + `" class="user-img"/>
@@ -595,12 +601,55 @@ function renderPreview(data,prefix){
 		});
 	}else if (prefix === 'reddit-Search' || prefix === 'reddit-Post' || prefix === 'reddit-Historical-Post'){
 		$.each(data.rendering, function(i,val){
-			var author_name = val.author_name || val._source.author_name || 'Not Provided';
-			var subreddit_name_prefixed = val.subreddit_name_prefixed || val._source.subreddit_name_prefixed || 'NotProvided';
-			var url = val.url || val._source.url || 'Not Provided';
-			var title = val.title || val._source.title || 'Not Provided';
-			var permalink = val.permalink || val._source.permalink || 'Not Provided';
-			var score = val.score || val._source.score || 'Not Provided';
+			
+			if (val.author_name !== undefined){
+				var author_name = val.author_name;
+			}else if (val._source !== undefined){
+				var author_name = val._source.author_name || 'Not Provided';
+			}else{
+				var author_name = 'Not Provided';
+			}
+			
+			if (val.subreddit_name_prefixed !== undefined){
+				var subreddit_name_prefixed = val.subreddit_name_prefixed;
+			}else if (val._source !== undefined){
+				var subreddit_name_prefixed = val._source.subreddit_name_prefixed || 'Not Provided';
+			}else{
+				var subreddit_name_prefixed = 'Not Provided';
+			}
+			
+			if (val.url !== undefined){
+				var url = val.url;
+			}else if (val._source !== undefined){
+				var url = val._source.url || 'Not Provided';
+			}else{
+				var url = 'Not Provided';
+			}
+			
+			if (val.title !== undefined){
+				var title = val.title;
+			}else if (val._source !== undefined){
+				var title = val._source.title || 'Not Provided';
+			}else{
+				var title = 'Not Provided';
+			}
+			
+			if (val.permalink !== undefined){
+				var permalink = val.permalink;
+			}else if (val._source !== undefined){
+				var permalink = val._source.permalink || 'Not Provided';
+			}else{
+				var permalink = 'Not Provided';
+			}
+			
+			if (val.score !== undefined){
+				var score = val.score;
+			}else if (val._source !== undefined){
+				var score = val._source.score || 'Not Provided';
+			}else{
+				var score = 'Not Provided';
+			}
+			
 			if (val.created_utc !== undefined){
 				var created_utc = timeConverter(val.created_utc);
 			}else if (val._source !== undefined && val._source.created_utc !== undefined){
