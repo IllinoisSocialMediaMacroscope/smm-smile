@@ -74,7 +74,7 @@ body {
 	background-color:#5cb85c;
 }
 #side-download-head{
-	animation:blink-animation 10ms infinite;
+	animation:blink-animation 1500ms infinite;
 }
 
 
