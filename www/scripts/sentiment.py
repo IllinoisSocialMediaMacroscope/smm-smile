@@ -1,10 +1,7 @@
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
 import nltk
 nltk.data.path.append('/apps/smiletest/nltk_data/')
 from nltk.tokenize import sent_tokenize, wordpunct_tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer,allcap_differential,negated
-# import numpy as np
 import uuid
 import argparse
 import csv
@@ -15,77 +12,60 @@ import pandas as pd
 import json
 import os
 from os.path import join, dirname
-# from dotenv import load_dotenv
-# import warnings
-# warnings.filterwarnings('ignore')
+from helper_func import writeToS3 as s3
+from helper_func import deleteDir
 
 class Sentiment:
     sid = SentimentIntensityAnalyzer()
     
-    def __init__(self,DIR,format,content,column=''):
+    def __init__(self, awsPath, localSavePath, localReadPath, column=''):
 
-            self.DIR = DIR
+            self.localSavePath = localSavePath
+            self.bucketName = 'socialmediamacroscope-smile'
+            self.awsPath = awsPath
             
-            if format == 'URL':
-                html = urlopen(content).read()
-                soup = BeautifulSoup(html, 'html.parser')
-
-                # kill all script, and style elements
-                for script in soup(["script", "style","h1","h2","h3",
-                                    "h4","h5","a","span","label","button"]):
-                    script.extract()    # rip it out
-
-                # get text
-                text = soup.get_text()
-                # break into lines and remove leading and trailing space on each
-                lines = (line.strip() for line in text.splitlines())
-                # break multi-headlines into a line each
-                chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-                # drop blank lines
-                self.text = '\n'.join(chunk for chunk in chunks if chunk)
-                self.sent = sent_tokenize(self.text)
-
-            elif format == 'file':
-                Array = []
-                try:
-                    with open(content,'r',encoding="utf-8") as f:
-                        reader = csv.reader(f)
-                        try:
-                            for row in reader:
-                                Array.append(row)
-                        except Exception as e:
-                            pass
-                except:
-                    with open(content,'r',encoding="ISO-8859-1") as f:
-                        reader = csv.reader(f)
-                        try:
-                            for row in reader:
-                                Array.append(row)
-                        except Exception as e:
-                            pass
+           
+            Array = []
+            try:
+                with open(localReadPath,'r',encoding="utf-8") as f:
+                    reader = csv.reader(f)
+                    try:
+                        for row in reader:
+                            Array.append(row)
+                    except Exception as e:
+                        pass
+            except:
+                with open(localReadPath,'r',encoding="ISO-8859-1") as f:
+                    reader = csv.reader(f)
+                    try:
+                        for row in reader:
+                            Array.append(row)
+                    except Exception as e:
+                        pass
                     
-                df = pd.DataFrame(Array[1:],columns=Array[0])
-                #df = pd.read_csv(content,encoding="utf-8")
-                self.sent = df[column].dropna().astype('str').tolist()
-                self.text = ''.join(self.sent)
+            df = pd.DataFrame(Array[1:],columns=Array[0])
+            self.sent = df[column].dropna().astype('str').tolist()
+            self.text = ''.join(self.sent)
     
     def documentSentiment(self):
         scores = self.sid.polarity_scores(self.text)
         labels = ['negative', 'neutral', 'positive']
         values = [scores['neg'], scores['neu'], scores['pos']]
         trace = go.Pie(labels=labels,values=values,textinfo='label+percent')
-        # Plot!
+        
         div_sent = plot([trace], output_type='div',image='png',auto_open=False, image_filename='plot_img')
-        fname_div_sent = self.DIR + '/div_sent.dat'
-        with open(fname_div_sent,"w") as f:
+        fname_div_sent = 'div_sent.dat'
+        with open(self.localSavePath + fname_div_sent,"w") as f:
             f.write(div_sent)
-        print(fname_div_sent)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div_sent)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname_div_sent)
         
 	# Save scores into json
-        fname_doc = self.DIR + '/document.json'
-        with open(fname_doc,"w") as f:
+        fname_doc = 'document.json'
+        with open(self.localSavePath + fname_doc,"w") as f:
             json.dump(scores,f);
-        print(fname_doc)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_doc)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname_doc)
 		
 		
     def sentenceSentiment(self):
@@ -107,89 +87,91 @@ class Sentiment:
     def overview(self):
         # save to csv for download
         # save 
-        fname = self.DIR + '/sentiment.csv'
+        fname = 'sentiment.csv'
         try:
-            with open(fname, "w", newline='',encoding='utf-8') as f:
+            with open(self.localSavePath + fname, "w", newline='',encoding='utf-8') as f:
                 writer = csv.writer(f)
                 try:
                     writer.writerows(self.result)
                 except UnicodeEncodeError:
                     pass
         except:
-            with open(fname, "w", newline='',encoding='ISO-8859-1') as f:
+            with open(self.localSavePath + fname, "w", newline='',encoding='ISO-8859-1') as f:
                 writer = csv.writer(f)
                 try:
                     writer.writerows(self.result)
                 except UnicodeEncodeError:
                     pass
-        print(fname)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname)
 
-        fname = self.DIR + '/negation.csv'
+
+        fname_negation = 'negation.csv'
         try:
-            with open(fname, "w", newline='',encoding='utf-8') as f:
+            with open(self.localSavePath + fname_negation, "w", newline='',encoding='utf-8') as f:
                 writer = csv.writer(f)
                 try:
                     writer.writerows(self.negation_result)
                 except UnicodeEncodeError:
                     pass
         except:
-            with open(fname, "w", newline='',encoding='ISO-8859-1') as f:
+            with open(self.localSavePath + fname_negation, "w", newline='',encoding='ISO-8859-1') as f:
                 writer = csv.writer(f)
                 try:
                     writer.writerows(self.negation_result)
                 except UnicodeEncodeError:
                     pass
-        print(fname)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_negation)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname_negation)
 
-        fname = self.DIR + '/allcap.csv'
+
+        fname_allcap = 'allcap.csv'
         try:
-            with open(fname, "w", newline='',encoding='utf-8') as f:
+            with open(self.localSavePath + fname_allcap, "w", newline='',encoding='utf-8') as f:
                 writer = csv.writer(f)
                 try:
                     writer.writerows(self.allcap_result)
                 except UnicodeEncodeError:
                     pass
         except:
-            with open(fname, "w", newline='',encoding='ISO-8859-1') as f:
+            with open(self.localSavePath + fname_allcap, "w", newline='',encoding='ISO-8859-1') as f:
                 writer = csv.writer(f)
                 try:
                     writer.writerows(self.allcap_result)
                 except UnicodeEncodeError:
                     pass
-        print(fname)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_allcap)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname_allcap)
+
+        
 
 
 if __name__ =='__main__':
 
     parser = argparse.ArgumentParser(description="Processing...")
-    parser.add_argument('--format', required=True)
-    parser.add_argument('--content',required=True)
+    parser.add_argument('--appPath', required=True)
+    parser.add_argument('--localReadPath',required=True)
     parser.add_argument('--column', required=False)
-
+    parser.add_argument('--sessionID', required=False)
     args = parser.parse_args()
 
     uid = str(uuid.uuid4())
-    DIR = os.path.join('./downloads/NLP/sentiment',uid)
-    DIR = os.path.expanduser(
-            os.path.expandvars(
-              os.path.realpath(
-                os.path.normpath(DIR)
-              )
-            )
-          )
-    if not os.path.exists(DIR):
-        os.makedirs(DIR)
-
-    fname = DIR + '/config.dat'
+    awsPath = args.sessionID + '/NLP/sentiment/' + uid +'/'
+    localSavePath = args.appPath + '/downloads/NLP/sentiment/' + uid + '/'
+       
+    if not os.path.exists(localSavePath):
+        os.makedirs(localSavePath)
+    fname = localSavePath + '/config.dat'
     with open(fname,"w") as f:
         json.dump(vars(args),f)
     print(fname)
 
-    sentiment = Sentiment(DIR, args.format,args.content,args.column)
+    sentiment = Sentiment(awsPath, localSavePath, args.localReadPath, args.column)
     sentiment.documentSentiment()
     sentiment.sentenceSentiment()
     sentiment.negated()
     sentiment.allcap()
     sentiment.overview()
     
-
+    # clean up local folders
+    deleteDir.deletedir(localSavePath)
