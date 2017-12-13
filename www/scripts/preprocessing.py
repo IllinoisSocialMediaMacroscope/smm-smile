@@ -1,5 +1,3 @@
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
 import nltk
 nltk.data.path.append('/apps/smiletest/nltk_data/')
 from nltk.tokenize import sent_tokenize, wordpunct_tokenize,TweetTokenizer
@@ -21,11 +19,9 @@ from helper_func import writeToS3 as s3
 from helper_func import deleteDir
 
 class Preprocess:
-    def __init__(self, awsPath, localSavePath, localReadPath, column,source='unspecified'):
+    def __init__(self, awsPath, localSavePath, localReadPath, column, source='unspecified'):
 
-            # local storage
             self.localSavePath = localSavePath
-            # aws
             self.bucketName = 'socialmediamacroscope-smile'
             self.awsPath = awsPath
               
