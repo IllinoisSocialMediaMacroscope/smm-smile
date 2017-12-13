@@ -6,7 +6,7 @@ var pythonShell = require('python-shell');
 var CSV = require('csv-string');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var readDIR = require(path.join(appPath,'scripts','helper.js')).readDIR;
+var readDIR = require(path.join(appPath,'scripts','helper_func','helper.js')).readDIR;
 const getSize = require('get-folder-size');
 
 router.get('/networkx',function(req,res,next){
@@ -44,7 +44,7 @@ router.post('/networkx',function(req,res,next){
 						//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 						pythonPath:'/opt/python/bin/python3.4',
 						pythonOptions:['-W ignore'],
-						scriptPath:appPath + '/scripts/NetworkX/',
+						scriptPath:appPath + '/scripts/',
 						args:[	'--file','./downloads/GraphQL/'+   req.body.filename, 
 								'--layout',req.body.layout, 
 								'--relations',req.body.relations

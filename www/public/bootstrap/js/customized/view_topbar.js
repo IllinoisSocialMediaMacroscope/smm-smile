@@ -3,7 +3,7 @@ var pathArray = window.location.pathname.split('/');
 var newPath = "";
 for (i=0; i<pathArray.length-1; i++){
 	if (pathArray[i] === 'weber'){
-		sessionID = pathArray[i+1];
+		var sessionID = pathArray[i+1];
 		// session ID always is the one after weber
 	}
 	

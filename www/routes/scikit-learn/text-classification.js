@@ -8,7 +8,7 @@ var path = require('path');
 var multer = require('multer');
 var upload = multer({dest:'uploads/'});
 var appPath = path.dirname(path.dirname(__dirname));
-var readDIR = require(path.join(appPath,'scripts','helper.js')).readDIR;
+var readDIR = require(path.join(appPath,'scripts','helper_func','helper.js')).readDIR;
 const getSize = require('get-folder-size');
 
 router.get('/text-classification',function(req,res,next){
@@ -43,7 +43,7 @@ router.post('/text-classification-split',function(req,res,next){
 						pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 						//pythonPath:'/opt/python/bin/python3.4',
 						pythonOptions:['-W ignore'],
-						scriptPath:appPath + '/scripts/ML/',
+						scriptPath:appPath + '/scripts/',
 						args:['--content','./downloads/GraphQL/'+  req.body.filename, '--ratio', req.body.ratio, '--filename', req.body.foldername ]
 						};				
 					pythonShell.run('classification_split.py',options,function(err,results){
@@ -100,7 +100,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 					pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 					//pythonPath:'/opt/python/bin/python3.4',
 					pythonOptions:['-W ignore'],
-					scriptPath:appPath + '/scripts/ML/',
+					scriptPath:appPath + '/scripts/',
 					args:['--file',req.file.path,'--uuid',req.body.uuid, '--model',req.body.classifier]
 					};		
 				//console.log(req.body.classifier);
@@ -178,7 +178,7 @@ router.post('/text-classification-predict',function(req,res,next){
 					pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 					//pythonPath:'/opt/python/bin/python3.4',
 					pythonOptions:['-W ignore'],
-					scriptPath:appPath + '/scripts/ML/',
+					scriptPath:appPath + '/scripts/',
 					args:['--uuid',req.body.uuid]
 					};		
 				pythonShell.run('classification_predict.py',options,function(err,results){

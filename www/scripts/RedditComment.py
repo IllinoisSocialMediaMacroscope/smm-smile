@@ -4,7 +4,8 @@ import argparse
 import pandas as pd
 import os
 import zipfile
-import notification as n
+from helper_func import notification as n
+from helper_func import deleteDir
 
 def getFolderSize(folder):
     total_size = os.path.getsize(folder)
@@ -22,14 +23,6 @@ def zipdir(path, ziph):
         for file in files:
             ziph.write(os.path.join(root, file),file)
 
-def deletedir(path):
-    for root, dirs, files in os.walk(path, topdown=False):
-        for name in files:
-            os.remove(os.path.join(root, name))
-        for name in dirs:
-            os.rmdir(os.path.join(root, name))
-    os.rmdir(path)
-            
 def bfs(submission,id,directory):
     # check size of the current folder
 
@@ -122,7 +115,7 @@ if __name__ == '__main__':
                 zipf.close()
                 
                 # delete the files
-                deletedir(DIR)
+                deleteDir.deletedir(DIR)
                 
                 # send out email notification
                 n.notification(args.email,case=1,filename=args.filename)
@@ -138,7 +131,7 @@ if __name__ == '__main__':
     zipf.close()
             
     # delete the files
-    deletedir(DIR)
+    deleteDir.deletedir(DIR)
     
     n.notification(args.email,case=2,filename=args.filename)
     
