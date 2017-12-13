@@ -112,9 +112,12 @@ function appendDownload(downloadID, downloadData){
 	$(downloadID).empty()
 	if(downloadData !== [] && downloadData !== ''){
 		$.each(downloadData,function(i,val){
-			$(downloadID).append(`<li><form action='download' name='download' method='post' class="side-form">
-								<input type="hidden" value=`+val.content+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download"></span>`
-								+val.name+`</button></form></li>`)
+			//$(downloadID).append(`<li><form action='download' name='download' method='post' class="side-form">
+			//					<input type="hidden" value=`+val.content+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download"></span>`
+			//					+val.name+`</button></form></li>`)
+			$(downloadID).append(`<li>
+									<a href="` + val.content + `"><span class="glyphicon glyphicon-download"></span>` + val.name + `</a>
+								</li>`);
 		});
 	}
 }
@@ -414,7 +417,11 @@ function ajaxSubmit(formID){
 	
 	var foldername = $("#selectFile").children(":selected").attr("id");
 	var directory = $("#selectFile").children(":selected").attr("class");
-	var data = $(formID).serialize() + "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv";
+	
+	// session ID already calculated in topbar.pug
+	if (sessionID == undefined) sessionID = 'local'
+	var data = $(formID).serialize() + "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv"
+				+ "&sessionID=" + sessionID;
 	
 	// if there's upload file involving
 	if ($("#labeled").val()!== undefined && $("#labeled").val()!== ''){

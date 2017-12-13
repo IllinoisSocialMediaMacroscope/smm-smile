@@ -1,4 +1,3 @@
-//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
@@ -6,8 +5,10 @@ var pythonShell = require('python-shell');
 var CSV = require('csv-string');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var readDIR = require(path.join(appPath,'scripts','helper.js')).readDIR;
+var readDIR = require(path.join(appPath,'scripts','helper_func','helper.js')).readDIR;
+var request = require('request');
 const getSize = require('get-folder-size');
+
 
 router.get('/NLP-preprocess',function(req,res,next){
 	files = readDIR('./downloads/GraphQL');	
@@ -16,6 +17,7 @@ router.get('/NLP-preprocess',function(req,res,next){
 });
  
 router.post('/NLP-preprocess',function(req,res,next){
+		
 	getSize('./downloads', function(err, size) {
 		if (err) { res.send({'ERROR':err}); }
 		else{ 
@@ -33,12 +35,17 @@ router.post('/NLP-preprocess',function(req,res,next){
 				
 				if (req.body.selectFile !== 'Please Select'){
 					var options = {
-						//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-						pythonPath:'/opt/python/bin/python3.4',
+						pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+						//pythonPath:'/opt/python/bin/python3.4',
 						pythonOptions:['-W ignore'],
-						scriptPath:appPath + '/scripts/NLP/',
-						args:['--format','file', '--content','./downloads/GraphQL/'+  req.body.filename, '--column', req.body.selectFileColumn,
-						'--process',req.body.model, '--tagger',req.body.tagger, '--source','twitter']
+						scriptPath:appPath + '/scripts/',
+						args:['--appPath', appPath, 
+						'--localReadPath', appPath + '/downloads/GraphQL/' + req.body.filename, 
+						'--column', req.body.selectFileColumn,
+						'--process',req.body.model, 
+						'--tagger',req.body.tagger, 
+						'--source','twitter',
+						'--sessionID',req.body.sessionID ]
 					};
 				}else{
 					res.end('no file selected!');
@@ -46,7 +53,6 @@ router.post('/NLP-preprocess',function(req,res,next){
 				
 				pythonShell.run('preprocessing.py',options,function(err,results){
 					if(err){ 
-						//throw err;
 						console.log(err);
 						res.send({ERROR:err});	
 					}else{
@@ -57,34 +63,25 @@ router.post('/NLP-preprocess',function(req,res,next){
 						var div = results[5];
 						var tagged = results[6];
 						
-						if (div.slice(-1) === '\r' || div.slice(-1) === '\n' || div.slice(-1) === '\t' || div.slice(-1) === '\0' || div.slice(-1) === ' '){
-							var div_data = fs.readFileSync(div.slice(0,-1),'utf8');
-						}else{
-							var div_data = fs.readFileSync(div,'utf8');
-						}
 						
-						if (phrases.slice(-1) === '\r' || phrases.slice(-1) === '\n' || phrases.slice(-1) === '\t' || phrases.slice(-1) === '\0' || phrases.slice(-1) === ' '){
-							var sentence_array =  fs.readFileSync(phrases.slice(0,-1),'utf8').toString().split("\n");
-						}else{
-							var sentence_array =  fs.readFileSync(phrases,'utf8').toString().split("\n");
-						}
-						
-						//console.log(sentence_array);
-						
-						var new_sentence_array = [];
-						for (var i = 0, length= sentence_array.length; i<length; i++){
-							new_sentence_array.push([sentence_array[i]]) //add [] to make it comply with google word tree requirement
-						}
-						
-						if (most_common.slice(-1) === '\r' || most_common.slice(-1) === '\n' || most_common.slice(-1) === '\t' || most_common.slice(-1) === '\0' || most_common.slice(-1) === ' '){
-							var most_common_array = fs.readFileSync(most_common.slice(0,-1),'utf8').toString().split("\n")[1];
-						}else{
-							var most_common_array = fs.readFileSync(most_common,'utf8').toString().split("\n")[1];
-						}
-						
-						var most_freq_word = most_common_array.split(",")[0]
-						
-						res.send({
+						promise_array = [];
+						promise_array.push(getMultiRemote(div));
+						promise_array.push(getMultiRemote(phrases));
+						promise_array.push(getMultiRemote(most_common));
+						Promise.all(promise_array).then( values => {
+							
+							var div_data = values[0];
+							
+							var sentence_array = values[1].toString().split("\n");
+							var new_sentence_array = [];
+							for (var i = 0, length= sentence_array.length; i<length; i++){
+								new_sentence_array.push([sentence_array[i]]) //add [] to make it comply with google word tree requirement
+							}
+							
+							var most_common_array = values[2].toString().split("\n")[1];
+							var most_freq_word = most_common_array.split(",")[0]
+							
+							res.send({
 									title:'Natural Language PreProcessing', 
 									img:[{name:'Word Distribution',content:div_data}],
 									download:[
@@ -95,7 +92,13 @@ router.post('/NLP-preprocess',function(req,res,next){
 										{name:req.body.tagger + ' text', content:tagged}],
 									table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
 									preview:[],						
-								});		
+								});
+							
+						}).catch( (error) =>{
+							console.log(error);
+						})
+						
+						
 					}
 						
 				});
@@ -106,5 +109,24 @@ router.post('/NLP-preprocess',function(req,res,next){
 		
 	
 }); 
+
+function getMultiRemote(endpoint){
+	
+	if (endpoint.slice(-1) === '\r'){
+		endpoint = endpoint.slice(0,-1)
+	}						
+	
+	return new Promise((resolve,reject) =>{
+		request.get(endpoint, function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				var data = body;
+				resolve(data);
+			}else{
+				reject('error');
+			}
+		});
+	});
+		
+};
 
 module.exports = router;
