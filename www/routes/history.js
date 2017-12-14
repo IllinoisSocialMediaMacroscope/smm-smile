@@ -3,6 +3,9 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var CSV = require('csv-string');
+var path = require('path');
+var appPath = path.dirname(__dirname);
+var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 
 router.get('/history',function(req,res,next){
 	var directory = {
@@ -338,19 +341,5 @@ router.post('/delete',function(req,res,next){
 		res.send({'data':'Successfully purged!'});
 	}
 });
-
-var deleteFolderRecursive = function(path) {
-  if( fs.existsSync(path) ) {
-    fs.readdirSync(path).forEach(function(file,index){
-      var curPath = path + "/" + file;
-      if(fs.lstatSync(curPath).isDirectory()) { // recurse
-        deleteFolderRecursive(curPath);
-      } else { // delete file
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(path);
-  }
-};
 
 module.exports = router;

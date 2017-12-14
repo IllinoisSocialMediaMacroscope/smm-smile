@@ -70,7 +70,8 @@ class Classification:
         with open(self.localSavePath + fname_div_split,"w") as f:
             f.write(div_split)
         s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div_split)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_div_split)
+        # s3.generate_downloads(self.bucketName, self.awsPath, fname_div_split)
+        print(self.localSavePath + fname_div_split)
 
         
         fname1 = 'TRAINING_' + filename  + '.csv'
@@ -139,14 +140,19 @@ if __name__ == '__main__':
     
     if not os.path.exists(localSavePath):
         os.makedirs(localSavePath)
-    fname = localSavePath + '/config.dat'
-    with open(fname,"w") as f:
+    fname = 'config.dat'
+    with open(localSavePath + fname,"w") as f:
         json.dump(vars(args),f)
+    s3.upload(localSavePath,'socialmediamacroscope-smile' , awsPath, fname)
+
+    print(localSavePath)
     print(uid)
+
+
    
     classification = Classification(awsPath, localSavePath, args.localReadPath)
     classification.split(int(args.ratio),args.filename)
 
     # clean up local folders
-    deleteDir.deletedir(localSavePath)
+    # deleteDir.deletedir(localSavePath)
         

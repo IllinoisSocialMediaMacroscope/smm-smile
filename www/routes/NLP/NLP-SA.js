@@ -1,13 +1,13 @@
-//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var pythonShell = require('python-shell');
 var CSV = require('csv-string'); 
+var fs = require('fs');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var readDIR = require(path.join(appPath,'scripts','helper_func','helper.js')).readDIR;
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
-
+var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 
 router.get('/NLP-sentiment',function(req,res,next){
 	var files = readDIR('./downloads/GraphQL');
@@ -37,6 +37,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 			res.send({'ERROR':err});
 		}else{
 			
+			var localSavePath = results[0];
 			var div=results[1];
 			var doc_sentiment=results[2];
 			var sentiment = results[3];
@@ -44,17 +45,21 @@ router.post('/NLP-sentiment',function(req,res,next){
 			var allcap = results[5];
 			
 			var promise_array = [];
-			promise_array.push(getMultiRemote(div));
+			// promise_array.push(getMultiRemote(div)); render from local disk make more sense
 			promise_array.push(getMultiRemote(sentiment));
 			promise_array.push(getMultiRemote(doc_sentiment));
-			
 			Promise.all(promise_array).then( values => {
-				var div_data = values[0];
 				
-				var preview_string = values[1];
+				if (div.slice(-1) === '\r') div = div.slice(0,-1);
+				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
+				
+				var preview_string = values[0];
 				var preview_arr = CSV.parse(preview_string);
 				
-				var compound = values[2]['compound']
+				var compound = values[1]['compound']
+				
+				// delete local path
+				deleteFolderRecursive(localSavePath.slice(0,-1)); // no "/' in the end of the string
 				
 				res.send({
 					title:'Sentiment Analysis',

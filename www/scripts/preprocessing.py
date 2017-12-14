@@ -368,7 +368,8 @@ class Preprocess:
         with open(self.localSavePath + fname_div,"w") as f:
             f.write(div)
         s3.upload(self.localSavePath, self.bucketName, self.awsPath,fname_div)
-        s3.generate_downloads(self.bucketName,self.awsPath,fname_div)
+        # s3.generate_downloads(self.bucketName,self.awsPath,fname_div)
+        print(self.localSavePath + fname_div)
 
 
 if __name__ =='__main__':
@@ -383,17 +384,20 @@ if __name__ =='__main__':
     parser.add_argument('--sessionID', required=False)
     args = parser.parse_args()
 
-    # save local configuration
+    
     uid = str(uuid.uuid4())
     awsPath = args.sessionID + '/NLP/preprocessing/' + uid +'/'
     localSavePath = args.appPath + '/downloads/NLP/preprocessing/' + uid + '/'
 
+    # save local configuration
     if not os.path.exists(localSavePath):
         os.makedirs(localSavePath)
-    fname = localSavePath + '/config.dat'
-    with open(fname,"w") as f:
+    fname = 'config.dat'
+    with open(localSavePath + fname,"w") as f:
         json.dump(vars(args),f)
-    print(fname)
+    s3.upload(localSavePath, 'socialmediamacroscope-smile', awsPath, fname)
+    #s3.generate_downloads('socialmediamacroscope-smile', awsPath, fname)
+    print(localSavePath)
 
     preprocessing = Preprocess(awsPath, localSavePath, args.localReadPath, args.column, args.source)
     preprocessing.stem_lematize(args.process)
@@ -401,4 +405,4 @@ if __name__ =='__main__':
     preprocessing.tagging(args.tagger)
 
     # clean up local folders
-    deleteDir.deletedir(localSavePath)
+    # deleteDir.deletedir(localSavePath)
