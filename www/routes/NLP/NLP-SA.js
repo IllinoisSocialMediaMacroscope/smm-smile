@@ -43,7 +43,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 			var negation = results[4];
 			var allcap = results[5];
 			
-			promise_array = [];
+			var promise_array = [];
 			promise_array.push(getMultiRemote(div));
 			promise_array.push(getMultiRemote(sentiment));
 			promise_array.push(getMultiRemote(doc_sentiment));

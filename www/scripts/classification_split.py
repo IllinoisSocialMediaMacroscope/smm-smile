@@ -9,17 +9,20 @@ import plotly.graph_objs as go
 from os.path import join, dirname
 import json
 import re
-
+from helper_func import writeToS3 as s3
+from helper_func import deleteDir
 
 class Classification:
 
-    def __init__(self,DIR, content):
+    def __init__(self,awsPath, localSavePath, localReadPath):
 
-        self.DIR = DIR
+        self.localSavePath = localSavePath
+        self.bucketName = 'socialmediamacroscope-smile'
+        self.awsPath = awsPath
 
         Array = []
         try:
-            with open(content,'r',encoding='utf-8') as f:
+            with open(localReadPath,'r',encoding='utf-8') as f:
                 reader = csv.reader(f)
                 for row in reader:
                     try:
@@ -27,7 +30,7 @@ class Classification:
                     except Exception as e:
                         pass
         except:
-            with open(content,'r',encoding='ISO-8859-1') as f:
+            with open(localReadPath,'r',encoding='ISO-8859-1') as f:
                 reader = csv.reader(f)
                 for row in reader:
                     try:
@@ -63,35 +66,40 @@ class Classification:
         values = [len(training_set), len(testing_set)]
         trace = go.Pie(labels=labels, values = values, textinfo='value')
         div_split = plot([trace], output_type='div',image='png',auto_open=False, image_filename='plot_img')
-        fname_div_split = self.DIR + '/div_split.dat'
-        with open(fname_div_split,"w") as f:
+        fname_div_split = 'div_split.dat'
+        with open(self.localSavePath + fname_div_split,"w") as f:
             f.write(div_split)
-        print(fname_div_split)
-        
-        fname1 = self.DIR + '/TRAINING_' + filename  + '.csv'
-        try:
-            with open(fname1,'w',newline="",encoding='utf-8') as f:
-                writer = csv.writer(f)
-                writer.writerow(['text','category'])
-                for row in training_set:
-                    try:
-                        writer.writerow([row])
-                    except UnicodeDecodeError:
-                        pass
-        except:
-            with open(fname1,'w',newline="",encoding='ISO-8859-1') as f:
-                writer = csv.writer(f)
-                writer.writerow(['text','category'])
-                for row in training_set:
-                    try:
-                        writer.writerow([row])
-                    except UnicodeDecodeError:
-                        pass
-        print(fname1)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div_split)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname_div_split)
 
-        fname2 = self.DIR + '/UNLABELED_' + filename +'.csv'
+        
+        fname1 = 'TRAINING_' + filename  + '.csv'
         try:
-            with open(fname2,'w',newline="",encoding='utf-8') as f:
+            with open(self.localSavePath + fname1,'w',newline="",encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(['text','category'])
+                for row in training_set:
+                    try:
+                        writer.writerow([row])
+                    except UnicodeDecodeError:
+                        pass
+        except:
+            with open(self.localSavePath + fname1,'w',newline="",encoding='ISO-8859-1') as f:
+                writer = csv.writer(f)
+                writer.writerow(['text','category'])
+                for row in training_set:
+                    try:
+                        writer.writerow([row])
+                    except UnicodeDecodeError:
+                        pass
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname1)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname1)
+
+
+
+        fname2 = 'UNLABELED_' + filename +'.csv'
+        try:
+            with open(self.localSavePath + fname2,'w',newline="",encoding='utf-8') as f:
                 writer = csv.writer(f)
                 writer.writerow(['text'])
                 for row in testing_set:
@@ -100,7 +108,7 @@ class Classification:
                     except UnicodeDecodeError:
                         pass
         except:
-            with open(fname2,'w',newline="",encoding='ISO-8859-1') as f:
+            with open(self.localSavePath + fname2,'w',newline="",encoding='ISO-8859-1') as f:
                 writer = csv.writer(f)
                 writer.writerow(['text'])
                 for row in testing_set:
@@ -108,36 +116,37 @@ class Classification:
                         writer.writerow([row])
                     except UnicodeDecodeError:
                         pass
-        print(fname2)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname2)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname2)
+
+
+        
 
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Processing...")
-    parser.add_argument('--content',required=True)
+    parser.add_argument('--appPath', required=True)
+    parser.add_argument('--localReadPath', required=True)
     parser.add_argument('--ratio',required=True)
     parser.add_argument('--filename',required=True)
+    parser.add_argument('--sessionID', required=False)
     args = parser.parse_args()
        
     uid = str(uuid.uuid4())
-    DIR = os.path.join('./downloads/ML/classification',uid)
-    DIR = os.path.expanduser(
-            os.path.expandvars(
-              os.path.realpath(
-                os.path.normpath(DIR)
-              )
-            )
-          )
-    if not os.path.exists(DIR):
-        os.makedirs(DIR)
-    print(uid)
-
-    # save config.dat file
-    with open(DIR + '/config.dat', "w") as f:
+    awsPath = args.sessionID + '/ML/classification/' + uid +'/'
+    localSavePath = args.appPath + '/downloads/ML/classification/' + uid + '/'
+    
+    if not os.path.exists(localSavePath):
+        os.makedirs(localSavePath)
+    fname = localSavePath + '/config.dat'
+    with open(fname,"w") as f:
         json.dump(vars(args),f)
+    print(uid)
    
-    classification = Classification(DIR, args.content)
+    classification = Classification(awsPath, localSavePath, args.localReadPath)
     classification.split(int(args.ratio),args.filename)
 
-    
+    # clean up local folders
+    deleteDir.deletedir(localSavePath)
         

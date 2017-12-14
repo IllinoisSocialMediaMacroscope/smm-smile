@@ -22,22 +22,18 @@ import numpy as np
 from plotly.offline import plot
 import plotly.graph_objs as go
 import json
+from helper_func import writeToS3 as s3
+from helper_func import deleteDir
+
+
 
 class Classification:
 
-    def __init__(self,file,uuid):
+    def __init__(self, awsPath, localSavePath, file):
 
-        self.DIR = os.path.join('./downloads/ML/classification',uuid)
-        self.DIR = os.path.expanduser(
-                os.path.expandvars(
-                  os.path.realpath(
-                    os.path.normpath(self.DIR)
-                  )
-                )
-              )
-
-        print(uuid)
-
+        self.localSavePath = localSavePath
+        self.bucketName = 'socialmediamacroscope-smile'
+        self.awsPath = awsPath
         
         Array = []
         try:
@@ -124,19 +120,21 @@ class Classification:
             
         # get 10 fold cross validation accuracy score
         fold_scores = cross_val_score(text_clf, self.data, self.target, cv=10)
-        fname_folds = os.path.join(self.DIR,'accuracy_score.csv')
-        with open(fname_folds,'w',newline="") as f:
+        fname_folds = 'accuracy_score.csv'
+        with open(self.localSavePath + fname_folds,'w',newline="") as f:
             writer = csv.writer(f)
             writer.writerow(['fold_1','fold_2','fold_3','fold_4','fold_5',
                              'fold_6','fold_7','fold_8','fold_9','fold_10'])
             writer.writerow([ '%.4f' % elem for elem in fold_scores ])
-        print(fname_folds)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_folds)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname_folds)
         
         # pickle the Pipeline for future use
-        fname_pickle = os.path.join(self.DIR,'classification_pipeline.pickle')
-        with open(fname_pickle,'wb') as f:
+        fname_pickle = 'classification_pipeline.pickle'
+        with open(self.localSavePath + fname_pickle,'wb') as f:
             pickle.dump(text_clf,f)
-        print(fname_pickle)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_pickle)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname_pickle)
 
         # plotting the roc curve
         self.labels = text_clf.classes_       
@@ -236,10 +234,11 @@ class Classification:
         div = plot(fig, output_type='div',image='png',auto_open=False, image_filename='plot_img')
         
         # print the graph file
-        fname_div = os.path.join(self.DIR,'div.dat')
-        with open(fname_div,'w') as f:
+        fname_div ='div.dat'
+        with open(self.localSavePath + fname_div,'w') as f:
             f.write(div)
-        print(fname_div)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname_div)
 
     def metrics(self):
         report = np.array(metrics.precision_recall_fscore_support(self.target,self.predicted,labels=self.labels)).T
@@ -247,8 +246,8 @@ class Classification:
         avg_report.insert(0,'AVG')
 
         # save metrics report
-        fname_metrics = os.path.join(self.DIR,'classification_report.csv')
-        with open(fname_metrics,'w',newline="") as f:
+        fname_metrics = 'classification_report.csv'
+        with open(self.localSavePath + fname_metrics,'w',newline="") as f:
             writer = csv.writer(f)
             writer.writerow(['label','precision','recall','f1-score','support'])
             for i in range(len(report)):
@@ -258,7 +257,8 @@ class Classification:
                                     round(report[i][2],4),
                                     round(report[i][3],4)])
             writer.writerow(avg_report)
-        print(fname_metrics)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_metrics)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname_metrics)
 
         
         
@@ -266,23 +266,38 @@ class Classification:
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Processing...")
+    parser.add_argument('--appPath', required=True)
     parser.add_argument('--file',required=True)
     parser.add_argument('--uuid',required=True)
     parser.add_argument('--model',required=True)
+    parser.add_argument('--sessionID', required=False)
     args = parser.parse_args()
 
-    # save config.dat file
-    DIR = os.path.join('./downloads/ML/classification',args.uuid)
-    if os.path.exists(DIR + '/config.dat'):
-        with open(DIR + '/config.dat', "r") as fp:
+    uid = args.uuid
+    print(uid)
+    
+    awsPath = args.sessionID + '/ML/classification/' + uid +'/'
+    localSavePath = args.appPath + '/downloads/ML/classification/' + uid + '/'
+
+    if not os.path.exists(localSavePath):
+        os.makedirs(localSavePath)
+
+    # download config to that folder
+    s3.downloadToDisk('socialmediamacroscope-smile', 'config.dat', localSavePath, awsPath)
+    
+    # append config.dat file
+    if os.path.exists(localSavePath + 'config.dat'):
+        with open(localSavePath + 'config.dat', "r") as fp:
             data = json.load(fp)
             data.update(vars(args))
-        with open(DIR + '/config.dat', "w") as f:
+        with open(localSavePath + 'config.dat', "w") as f:
             json.dump(data,f)
     
-    classification = Classification(args.file, args.uuid)
+    classification = Classification(awsPath, localSavePath, args.file)
     classification.classify(args.model)
     classification.metrics()
 
+    # clean up local folders
+    deleteDir.deletedir(localSavePath)
     
         
