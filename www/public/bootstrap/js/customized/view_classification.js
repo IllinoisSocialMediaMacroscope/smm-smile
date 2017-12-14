@@ -171,7 +171,7 @@ function showUUID(){
 function appendInstruction(ID, len_training, len_testing){
 	$(ID).empty();
 	$(ID).append(`<h2>Instruction</h2>
-								<div id="split-stats" style="padding:40px 100px;background-color:white;">
+								<div id="split-stats" style="padding:40px 100px;background-color:white;overflow:auto;">
 									<p style="font-size:20px;">
 										<b>Please download the training set, labeling your trainig set following the description below, and uploading this labeled file in the next step:</b> <br><br> 
 										We train the text classification model to recognize the category of a certain piece of text by offering them examples, and
@@ -192,7 +192,12 @@ function split(){
 	var foldername = $("#selectFile").children(":selected").attr("id");
 	var directory = $("#selectFile").children(":selected").attr("class");
 	var ratio = $("#ratio").val();
-	var data = "ratio=" + ratio + "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv&foldername=" + foldername;
+	if (sessionID == undefined) sessionID = 'local'
+	
+	var data = "ratio=" + ratio 
+	+ "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv" 
+	+ "&foldername=" + foldername 
+	+ "&sessionID=" + sessionID;
 	
 	if (formValidation('split')){
 		
@@ -251,10 +256,12 @@ function train(){
 		
 		
 		var file = $("#labeled").get(0).files[0];
+		if (sessionID == undefined) sessionID = 'local'
 		var formData = new FormData();
 		formData.append('labeled', file, file.name);
 		formData.append('uuid', $("#uuid").val());
 		formData.append('classifier',$("#classifier option:selected").val());
+		formData.append('sessionID',sessionID);
 		
 		$(".loading").show();
 		$.ajax({

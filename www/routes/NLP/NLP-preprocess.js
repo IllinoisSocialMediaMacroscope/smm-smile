@@ -47,7 +47,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 			var tagged = results[6];
 			
 			
-			promise_array = [];
+			var promise_array = [];
 			promise_array.push(getMultiRemote(div));
 			promise_array.push(getMultiRemote(phrases));
 			promise_array.push(getMultiRemote(most_common));

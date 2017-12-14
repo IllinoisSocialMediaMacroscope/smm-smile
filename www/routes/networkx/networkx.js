@@ -63,7 +63,7 @@ router.post('/networkx',function(req,res,next){
 			}				
 			var div= results[results.length-1];
 			
-			promise_array = [];
+			var promise_array = [];
 			promise_array.push(getMultiRemote(div));
 			Promise.all(promise_array).then( values => {
 				var div_data = values[0];

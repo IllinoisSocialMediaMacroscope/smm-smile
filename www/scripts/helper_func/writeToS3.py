@@ -35,6 +35,14 @@ def generate_downloads(bucketName, remotepath, filename):
 
     return response
 
+def downloadToDisk(bucketName, filename, localpath, remotepath):
+    try:
+        with open(localpath + filename, 'wb') as f:
+            client.download_fileobj(bucketName, remotepath + filename, f)
+        return True
+    except:
+        return False
+    
 '''def checkExist():
     pass'''
 
