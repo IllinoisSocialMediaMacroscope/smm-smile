@@ -58,7 +58,11 @@ class Sentiment:
         with open(self.localSavePath + fname_div_sent,"w") as f:
             f.write(div_sent)
         s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div_sent)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_div_sent)
+        # s3.generate_downloads(self.bucketName, self.awsPath, fname_div_sent)
+        # upload and then download then render takes too long
+        # should render this from local directory
+        print(self.localSavePath + fname_div_sent)
+        
         
 	# Save scores into json
         fname_doc = 'document.json'
@@ -161,10 +165,12 @@ if __name__ =='__main__':
        
     if not os.path.exists(localSavePath):
         os.makedirs(localSavePath)
-    fname = localSavePath + '/config.dat'
-    with open(fname,"w") as f:
+    fname = 'config.dat'
+    with open(localSavePath + fname,"w") as f:
         json.dump(vars(args),f)
-    print(fname)
+    s3.upload(localSavePath,'socialmediamacroscope-smile', awsPath, fname)
+    # s3.generate_downloads('socialmediamacroscope-smile', awsPath, fname)
+    print(localSavePath)
 
     sentiment = Sentiment(awsPath, localSavePath, args.localReadPath, args.column)
     sentiment.documentSentiment()
@@ -174,4 +180,4 @@ if __name__ =='__main__':
     sentiment.overview()
     
     # clean up local folders
-    deleteDir.deletedir(localSavePath)
+    # deleteDir.deletedir(localSavePath)

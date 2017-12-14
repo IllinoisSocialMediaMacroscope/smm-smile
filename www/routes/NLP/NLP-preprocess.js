@@ -2,11 +2,12 @@ var express = require('express');
 var router = express.Router();
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
+var fs = require('fs');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var readDIR = require(path.join(appPath,'scripts','helper_func','helper.js')).readDIR;
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
-//const getSize = require('get-folder-size');
+var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 
 router.get('/NLP-preprocess',function(req,res,next){
 	files = readDIR('./downloads/GraphQL');	
@@ -39,6 +40,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 			console.log(err);
 			res.send({ERROR:err});	
 		}else{
+			var localSavePath = results[0];
 			var phrases = results[1];
 			var filtered = results[2];
 			var processed = results[3];
@@ -48,21 +50,25 @@ router.post('/NLP-preprocess',function(req,res,next){
 			
 			
 			var promise_array = [];
-			promise_array.push(getMultiRemote(div));
+			// promise_array.push(getMultiRemote(div));
 			promise_array.push(getMultiRemote(phrases));
 			promise_array.push(getMultiRemote(most_common));
 			Promise.all(promise_array).then( values => {
 				
-				var div_data = values[0];
+				if (div.slice(-1) === '\r') div = div.slice(0,-1);
+				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
 				
-				var sentence_array = values[1].toString().split("\n");
+				var sentence_array = values[0].toString().split("\n");
 				var new_sentence_array = [];
 				for (var i = 0, length= sentence_array.length; i<length; i++){
 					new_sentence_array.push([sentence_array[i]]) //add [] to make it comply with google word tree requirement
 				}
 				
-				var most_common_array = values[2].toString().split("\n")[1];
+				var most_common_array = values[1].toString().split("\n")[1];
 				var most_freq_word = most_common_array.split(",")[0]
+				
+				// delete local path
+				deleteFolderRecursive(localSavePath.slice(0,-1)); // no "/' in the end of the string
 				
 				res.send({
 						title:'Natural Language PreProcessing', 

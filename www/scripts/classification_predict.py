@@ -12,59 +12,52 @@ import numpy as np
 from plotly.offline import plot
 import plotly.graph_objs as go
 from collections import Counter
+import json
+from helper_func import writeToS3 as s3
+from helper_func import deleteDir
 
 class Classification:
 
-    def __init__(self,uuid):
+    def __init__(self, awsPath, localSavePath, unlabeled):
 
-        self.DIR = os.path.join('./downloads/ML/classification',uuid)
-        self.DIR = os.path.expanduser(
-                os.path.expandvars(
-                  os.path.realpath(
-                    os.path.normpath(self.DIR)
-                  )
-                )
-              )
-
-        print(uuid)
+        self.localSavePath = localSavePath
+        self.bucketName = 'socialmediamacroscope-smile'
+        self.awsPath = awsPath
+        self.unlabeled = unlabeled
 
     def predict(self):
 
         # load classification model
-        pkl_model = os.path.join(self.DIR,'classification_pipeline.pickle')
+        pkl_model = os.path.join(self.localSavePath,'classification_pipeline.pickle')
         with open(pkl_model,'rb') as f:
             text_clf = pickle.load(f)
 
         # load text set
-        listing = os.listdir(self.DIR)
-        for file in listing:
-            if file[0:10] == 'UNLABELED_' and file[-4:] == '.csv':
-                filename = file[10:-4]
-                data = []
-                try:
-                    with open(os.path.join(self.DIR, file),'r',encoding='utf-8') as f:
-                        reader = list(csv.reader(f))
-                        for row in reader[1:]:
-                            try:
-                                data.extend(row)
-                            except Exception as e:
-                                pass
-                except:
-                    with open(os.path.join(self.DIR, file),'r',encoding='ISO-8859-1') as f:
-                        reader = list(csv.reader(f))
-                        for row in reader[1:]:
-                            try:
-                                data.extend(row)
-                            except Exception as e:
-                                pass
+        data = []
+        try:
+            with open(self.localSavePath + self.unlabeled,'r',encoding='utf-8') as f:
+                reader = list(csv.reader(f))
+                for row in reader[1:]:
+                    try:
+                        data.extend(row)
+                    except Exception as e:
+                        pass
+        except:
+            with open(self.localSavePath + self.unlabeled,'r',encoding='ISO-8859-1') as f:
+                reader = list(csv.reader(f))
+                for row in reader[1:]:
+                    try:
+                        data.extend(row)
+                    except Exception as e:
+                        pass
 
         # predict using trained model         
         self.predicted = text_clf.predict(data)
 
         # save result
-        fname = os.path.join(self.DIR,'PREDICTED_' + filename + '.csv')
+        fname = 'PREDICTED_' + filename + '.csv'
         try:
-            with open(fname,'w',newline="",encoding='utf-8') as f:
+            with open(self.localSavePath + fname,'w',newline="",encoding='utf-8') as f:
                 writer = csv.writer(f)
                 writer.writerow(['text','category'])
                 for i in range(len(data)):
@@ -73,7 +66,7 @@ class Classification:
                     except:
                         pass
         except:
-            with open(fname,'w',newline="",encoding='ISO-8859-1') as f:
+            with open(self.localSavePath + fname,'w',newline="",encoding='ISO-8859-1') as f:
                 writer = csv.writer(f)
                 writer.writerow(['text','category'])
                 for i in range(len(data)):
@@ -81,7 +74,9 @@ class Classification:
                         writer.writerow([data[i],self.predicted[i]])
                     except:
                         pass
-        print(fname)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname)
+        s3.generate_downloads(self.bucketName, self.awsPath, fname)
+        
 
     def plot(self):
         y_pred_dict = Counter(self.predicted)
@@ -92,21 +87,45 @@ class Classification:
             values.append(y_pred_dict[i])
         trace = go.Pie(labels=labels, values = values, textinfo='label')
         div_comp = plot([trace], output_type='div',image='png',auto_open=False, image_filename='plot_img')
-        fname_div_comp = self.DIR + '/div_comp.dat'
-        with open(fname_div_comp,"w") as f:
-            f.write(div_comp)
-        print(fname_div_comp)
 
+        fname_div_comp = 'div_comp.dat'
+        with open(self.localSavePath + fname_div_comp,"w") as f:
+            f.write(div_comp)
+        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div_comp)
+        # s3.generate_downloads(self.bucketName, self.awsPath, fname_div_comp)
+        print(self.localSavePath + fname_div_comp)
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Processing...")
     parser.add_argument('--uuid',required=True)
+    parser.add_argument('--appPath', required=True)
+    parser.add_argument('--sessionID', required=False)
     args = parser.parse_args()
-    
-    classification = Classification(args.uuid)
+
+    uid = args.uuid
+    awsPath = args.sessionID + '/ML/classification/' + uid +'/'
+    localSavePath = args.appPath + '/downloads/ML/classification/' + uid + '/'
+    print(localSavePath)
+    print(uid)
+
+    if not os.path.exists(localSavePath):
+        os.makedirs(localSavePath)
+
+    # download pickle model and unlabeled data to that folder
+    # download config to that folder
+    fname_config = 'config.dat'
+    s3.downloadToDisk('socialmediamacroscope-smile', fname_config, localSavePath, awsPath)
+    with open(localSavePath + 'config.dat', 'r') as f:
+        data = json.load(f)
+        filename = data['filename']
+    s3.downloadToDisk('socialmediamacroscope-smile', 'UNLABELED_' + filename +'.csv', localSavePath, awsPath)    
+    s3.downloadToDisk('socialmediamacroscope-smile', 'classification_pipeline.pickle', localSavePath, awsPath)
+        
+    classification = Classification(awsPath, localSavePath, 'UNLABELED_' + filename +'.csv')
     classification.predict()
     classification.plot()
 
-    
+    # clean up local folders
+    # deleteDir.deletedir(localSavePath)
         

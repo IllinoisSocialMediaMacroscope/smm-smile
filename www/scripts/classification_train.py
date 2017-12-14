@@ -238,7 +238,8 @@ class Classification:
         with open(self.localSavePath + fname_div,'w') as f:
             f.write(div)
         s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_div)
+        # s3.generate_downloads(self.bucketName, self.awsPath, fname_div)
+        print(self.localSavePath + fname_div)
 
     def metrics(self):
         report = np.array(metrics.precision_recall_fscore_support(self.target,self.predicted,labels=self.labels)).T
@@ -273,31 +274,35 @@ if __name__ == '__main__':
     parser.add_argument('--sessionID', required=False)
     args = parser.parse_args()
 
+    # instead of generate new uuid, inherit it from user specification
     uid = args.uuid
-    print(uid)
-    
     awsPath = args.sessionID + '/ML/classification/' + uid +'/'
     localSavePath = args.appPath + '/downloads/ML/classification/' + uid + '/'
-
+    print(localSavePath)
+    print(uid)
+    
     if not os.path.exists(localSavePath):
         os.makedirs(localSavePath)
 
     # download config to that folder
-    s3.downloadToDisk('socialmediamacroscope-smile', 'config.dat', localSavePath, awsPath)
-    
+    fname_config = 'config.dat'
+    s3.downloadToDisk('socialmediamacroscope-smile', fname_config, localSavePath, awsPath)
     # append config.dat file
-    if os.path.exists(localSavePath + 'config.dat'):
-        with open(localSavePath + 'config.dat', "r") as fp:
+    if os.path.exists(localSavePath + fname_config):
+        with open(localSavePath + fname_config, "r") as fp:
             data = json.load(fp)
             data.update(vars(args))
-        with open(localSavePath + 'config.dat', "w") as f:
+        with open(localSavePath + fname_config, "w") as f:
             json.dump(data,f)
+    s3.upload(localSavePath,'socialmediamacroscope-smile' , awsPath, fname_config)
+
+    
     
     classification = Classification(awsPath, localSavePath, args.file)
     classification.classify(args.model)
     classification.metrics()
 
     # clean up local folders
-    deleteDir.deletedir(localSavePath)
+    # deleteDir.deletedir(localSavePath)
     
         

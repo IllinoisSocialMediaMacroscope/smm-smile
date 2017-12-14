@@ -319,7 +319,9 @@ function predict(){
 	
 	if (formValidation('predict')){
 		
-		var data = "uuid=" + $("#uuid").val();
+		if (sessionID == undefined) sessionID = 'local'
+		var data = "uuid=" + $("#uuid").val() + "&sessionID=" + sessionID ;
+		
 		$(".loading").show();
 		$.ajax({
 			type:'POST',

@@ -235,7 +235,8 @@ class Network:
         with open(self.localSavePath + fname_div,"w") as f:
             f.write(div)
         s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_div)
+        # s3.generate_downloads(self.bucketName, self.awsPath, fname_div)
+        print(self.localSavePath + fname_div)
 
 
     def assortativity(self):
@@ -402,12 +403,13 @@ if __name__ == "__main__":
     
     if not os.path.exists(localSavePath):
         os.makedirs(localSavePath)
-    fname = localSavePath + '/config.dat'
-    with open(fname,"w") as f:
+    fname = 'config.dat'
+    with open(localSavePath + fname,"w") as f:
         json.dump(vars(args),f)
-    print(fname)
+    s3.upload(localSavePath,'socialmediamacroscope-smile' , awsPath, fname)
+    # s3.generate_downloads('socialmediamacroscope-smile', awsPath, fname)
 
-    
+    print(localSavePath)    
     network = Network(awsPath, localSavePath, args.localReadPath, args.relations)
     network.export_graph()    
     
@@ -420,4 +422,4 @@ if __name__ == "__main__":
     network.draw_graph(args.relations, args.layout)
 
     # clean up local folders
-    deleteDir.deletedir(localSavePath)
+    # deleteDir.deletedir(localSavePath)

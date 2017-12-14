@@ -1,12 +1,12 @@
-//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var pythonShell = require('python-shell');
 var CSV = require('csv-string');
+var fs = require('fs');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var readDIR = require(path.join(appPath,'scripts','helper_func','helper.js')).readDIR;
-var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
+var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 
 router.get('/networkx',function(req,res,next){
 	var files = readDIR('./downloads/GraphQL');
@@ -47,9 +47,12 @@ router.post('/networkx',function(req,res,next){
 			res.send({'ERROR':err});
 		}else{
 			
+			var localSavePath = results[0];
 			var d3js = results[1];
 			var gephi = results[2];
 			var pajek = results[3];
+			var div= results[results.length-1];
+			
 			var downloadFiles = [	
 				{'name':'graph exported in GML (Gephi) format', 'content':gephi},
 				{'name':'graph exported in JSON format', 'content':d3js},
@@ -60,23 +63,20 @@ router.post('/networkx',function(req,res,next){
 				var fnameRegex = /\/(?=[^\/]*$)(.*).csv/g;
 				var display_name = fnameRegex.exec(results[j])[1];
 				downloadFiles.push({'name':display_name, 'content':results[j]});
-			}				
-			var div= results[results.length-1];
+			}		
 			
-			var promise_array = [];
-			promise_array.push(getMultiRemote(div));
-			Promise.all(promise_array).then( values => {
-				var div_data = values[0];
-				
-				res.send({
-					title:'Network Analysis', 
-					img:[{name:'Static Network Visualization',content:div_data}],
-					download: downloadFiles,
-					metrics:{name:'', content:''}, 
-					preview:[],
-				});
-			}).catch( (error) =>{
-				console.log(error);
+			if (div.slice(-1) === '\r') div = div.slice(0,-1);
+			var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
+			
+			// delete local path
+			deleteFolderRecursive(localSavePath.slice(0,-1)); // no "/' in the end of the string
+						
+			res.send({
+				title:'Network Analysis', 
+				img:[{name:'Static Network Visualization',content:div_data}],
+				download: downloadFiles,
+				metrics:{name:'', content:''}, 
+				preview:[],
 			});
 			
 		}
