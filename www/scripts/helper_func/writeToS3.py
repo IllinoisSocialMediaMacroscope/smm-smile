@@ -51,7 +51,22 @@ def checkExist(bucketName, remotepath, filename):
     except:
         return False
     
+def listDir(bucketName, remoteClass):
+    objects = client.list_objects(Bucket=bucketName, Prefix=remoteClass, Delimiter='/')
+    foldernames = []
+    for o in objects.get('CommonPrefixes'):
+        foldernames.append(o.get('Prefix'))
 
+    # only return the list of foldernames
+    return foldernames
+
+
+def listFiles(bucketName, foldernames):
+    objects = client.list_objects(Bucket=bucketName, Prefix=foldernames)
+
+    # return rich information about the files
+    return objects.get('Contents')
+    
 
 if __name__ == '__main__':
     '''
@@ -66,8 +81,11 @@ if __name__ == '__main__':
     
     print(generate_downloads('socialmediamacroscope-smile',
                              'local/NLP/preprocessing/d4d651fd-13e2-4b29-aa5a-47829162095e/',
-                             'config.dat'))'''
+                             'config.dat'))
 
     print(checkExist('socialmediamacroscope-smile', 'local/ML/classification/0abb811f-2a27-4ce6-8881-7028eaec9b95/', 'classification_pipeline.pickle'))
 
+    print(listDir('socialmediamacroscope-smile','local/NLP/preprocessing/'))'''
+
+    listFiles('socialmediamacroscope-smile','local/NLP/preprocessing/1127a434-5db4-44f9-9da2-6c60ffe59ba3/')
 

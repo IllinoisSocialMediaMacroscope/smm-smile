@@ -1,4 +1,3 @@
-//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
@@ -6,6 +5,12 @@ var CSV = require('csv-string');
 var path = require('path');
 var appPath = path.dirname(__dirname);
 var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
+
+var AWS = require('aws-sdk');
+AWS.config.update({
+	accessKeyId: '***REMOVED***', 
+	secretAccessKey: '***REMOVED***' });
+var s3 = new AWS.S3();
 
 router.get('/history',function(req,res,next){
 	var directory = {
@@ -32,103 +37,42 @@ router.get('/history',function(req,res,next){
 							},
 						"NW":{"networkx":{}},
 					}
-					
-	if (fs.existsSync('./downloads')){
+	
+	var promise_array = []
+	promise_array.push(list_folders('local/ML/classification/'));
+	promise_array.push(list_folders('local/NLP/preprocessing/'));
+	promise_array.push(list_folders('local/NLP/sentiment/'));
+	promise_array.push(list_folders('local/NW/networkx/'));
+	promise_array.push(list_folders('local/GraphQL/twitter-Tweet'));
+	promise_array.push(list_folders('local/GraphQL/twitter-User'));
+	promise_array.push(list_folders('local/GraphQL/twitter-Stream'));
+	promise_array.push(list_folders('local/GraphQL/reddit-Search'));
+	promise_array.push(list_folders('local/GraphQL/reddit-Post'));
+	promise_array.push(list_folders('local/GraphQL/reddit-Comment'));
+	promise_array.push(list_folders('local/GraphQL/reddit-Historical-Post'));
+	promise_array.push(list_folders('local/GraphQL/reddit-Historical-Comment'));
+	
+	Promise.all(promise_array).then( values => {
+		directory['ML']['classification'] = values[0];
+		directory['NLP']['preprocessing'] = values[1];
+		directory['NLP']['sentiment'] = values[2];
+		directory['NW']['networkx'] = values[3];
+		directory['GraphQL']['twitter-Tweet'] = values[4];
+		directory['GraphQL']['twitter-User'] = values[5];
+		directory['GraphQL']['twitter-Stream'] = values[6];
+		directory['GraphQL']['reddit-Search'] = values[7];
+		directory['GraphQL']['reddit-Post'] = values[8];
+		directory['GraphQL']['reddit-Comment'] = values[9];
+		directory['GraphQL']['reddit-Historical-Post'] = values[10];
+		directory['GraphQL']['reddit-Historical-Comment'] = values[11];
 		
-		if (fs.existsSync('./downloads/ML')) {
-			if (fs.existsSync('./downloads/ML/classification')){
-				var fileList = fs.readdirSync('./downloads/ML/classification')
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at = fs.lstatSync('./downloads/ML/classification/' + fileList[i]).birthtime.toString();
-					directory['ML']['classification'][fileList[i]] = created_at;
-				}
-			}
-		}
+		res.render('history',{parent:'/', directory: directory});
 		
-		if (fs.existsSync('./downloads/NLP')){
-			if (fs.existsSync('./downloads/NLP/preprocessing')){
-				var fileList = fs.readdirSync('./downloads/NLP/preprocessing');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at = fs.lstatSync('./downloads/NLP/preprocessing/'+ fileList[i]).birthtime.toString();
-					directory['NLP']['preprocessing'][fileList[i]] = created_at;
-				}
-			}
-			if (fs.existsSync('./downloads/NLP/sentiment')){
-				var fileList = fs.readdirSync('./downloads/NLP/sentiment');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at = fs.lstatSync('./downloads/NLP/sentiment/' + fileList[i]).birthtime.toString(); 
-					directory['NLP']['sentiment'][fileList[i]] = created_at;
-				}
-			}
-		}
-		if (fs.existsSync('./downloads/NW')){
-			if (fs.existsSync('./downloads/NW/networkx')){
-				var fileList = fs.readdirSync('./downloads/NW/networkx');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync('./downloads/NW/networkx/' + fileList[i]).birthtime.toString();
-					directory['NW']['networkx'][fileList[i]] = created_at;
-				}
-			}
-		}
+	}).catch( (err) => { 
+		res.send({"ERROR":err}); 
+	});
 		
-		if (fs.existsSync('./downloads/GraphQL')){
-			if (fs.existsSync('./downloads/GraphQL/twitter-Tweet')){
-				var fileList = fs.readdirSync('./downloads/GraphQL/twitter-Tweet');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync('./downloads/GraphQL/twitter-Tweet/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['twitter-Tweet'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
-				}
-			}
-			if (fs.existsSync('./downloads/GraphQL/twitter-User')){
-				var fileList = fs.readdirSync('./downloads/GraphQL/twitter-User');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync('./downloads/GraphQL/twitter-User/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['twitter-User'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
-				}
-			}
-			if (fs.existsSync('./downloads/GraphQL/twitter-Stream')){
-				var fileList = fs.readdirSync('./downloads/GraphQL/twitter-Stream');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync('./downloads/GraphQL/twitter-Stream/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['twitter-Stream'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
-				}
-			}
-			if (fs.existsSync('./downloads/GraphQL/reddit-Search')){
-				var fileList = fs.readdirSync('./downloads/GraphQL/reddit-Search');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync('./downloads/GraphQL/reddit-Search/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['reddit-Search'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
-				}
-			}
-			if (fs.existsSync('./downloads/GraphQL/reddit-Post')){
-				var fileList = fs.readdirSync('./downloads/GraphQL/reddit-Post');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync('./downloads/GraphQL/reddit-Post/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['reddit-Post'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
-				}
-			}
-			if (fs.existsSync('./downloads/GraphQL/reddit-Comment')){
-				var fileList = fs.readdirSync('./downloads/GraphQL/reddit-Comment');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync('./downloads/GraphQL/reddit-Comment/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['reddit-Comment'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
-				}
-			}if (fs.existsSync('./downloads/GraphQL/reddit-Historical-Post')){
-				var fileList = fs.readdirSync('./downloads/GraphQL/reddit-Historical-Post');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync('./downloads/GraphQL/reddit-Historical-Post/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['reddit-Historical-Post'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
-				}
-			}if (fs.existsSync('./downloads/GraphQL/reddit-Historical-Comment')){
-				var fileList = fs.readdirSync('./downloads/GraphQL/reddit-Historical-Comment');
-				for (var i = 0, length = fileList.length; i<length; i++){
-					var created_at= fs.lstatSync('./downloads/GraphQL/reddit-Historical-Comment/' + fileList[i]).birthtime.toString();
-					directory['GraphQL']['reddit-Historical-Comment'][fileList[i]] = fileList[i] + ' (' + created_at + ')';
-				}
-			}
-		}
-	}
-	res.render('history',{parent:'/', directory: directory});
+			
 });
 
 router.post('/history',function(req,res,next){
@@ -341,5 +285,28 @@ router.post('/delete',function(req,res,next){
 		res.send({'data':'Successfully purged!'});
 	}
 });
+
+
+
+function list_folders(prefix){
+		
+	return new Promise((resolve,reject) =>{
+		s3.listObjects({Bucket:'socialmediamacroscope-smile',Prefix:prefix, Delimiter:'/'},function(err,data){
+			if (err) reject(err);
+			
+			folderObj = {};
+			
+			var fileList = data.CommonPrefixes;
+			if (fileList !== []){
+				for (var i=0, length=fileList.length; i< length; i++){
+					var folderID = fileList[i].Prefix.split('/')[3];
+					folderObj[folderID] = fileList[i].Prefix;
+				}
+			}
+			resolve(folderObj);
+		});
+	});
+		
+};
 
 module.exports = router;
