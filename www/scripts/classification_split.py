@@ -148,8 +148,7 @@ if __name__ == '__main__':
     print(localSavePath)
     print(uid)
 
-
-   
+  
     classification = Classification(awsPath, localSavePath, args.localReadPath)
     classification.split(int(args.ratio),args.filename)
 

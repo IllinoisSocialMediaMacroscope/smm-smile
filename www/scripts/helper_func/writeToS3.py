@@ -43,11 +43,18 @@ def downloadToDisk(bucketName, filename, localpath, remotepath):
     except:
         return False
     
-'''def checkExist():
-    pass'''
+def checkExist(bucketName, remotepath, filename):
+    try:
+        t = client.head_object(Bucket=bucketName, Key=remotepath+filename)
+        return True
+        # print(t)
+    except:
+        return False
+    
 
 
 if __name__ == '__main__':
+    '''
     #createDirectory('socialmediamacroscope-smile','GraphQL/')
     #createDirectory('socialmediamacroscope-smile','GraphQL/Twitter-Tweet/')
     
@@ -59,6 +66,8 @@ if __name__ == '__main__':
     
     print(generate_downloads('socialmediamacroscope-smile',
                              'local/NLP/preprocessing/d4d651fd-13e2-4b29-aa5a-47829162095e/',
-                             'config.dat'))
+                             'config.dat'))'''
+
+    print(checkExist('socialmediamacroscope-smile', 'local/ML/classification/0abb811f-2a27-4ce6-8881-7028eaec9b95/', 'classification_pipeline.pickle'))
 
 

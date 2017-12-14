@@ -112,20 +112,34 @@ if __name__ == '__main__':
     if not os.path.exists(localSavePath):
         os.makedirs(localSavePath)
 
-    # download pickle model and unlabeled data to that folder
     # download config to that folder
     fname_config = 'config.dat'
-    s3.downloadToDisk('socialmediamacroscope-smile', fname_config, localSavePath, awsPath)
+    if s3.checkExist('socialmediamacroscope-smile', awsPath, fname_config): 
+        s3.downloadToDisk('socialmediamacroscope-smile', fname_config, localSavePath, awsPath)
+    else:
+        deleteDir.deletedir(localSavePath)
+        raise ValueError('You\'re requesting ' + fname_config + ' file, and it\'s not found in your remote directory!')
+
+    # download unlabeled data to that folder
     with open(localSavePath + 'config.dat', 'r') as f:
         data = json.load(f)
         filename = data['filename']
-    s3.downloadToDisk('socialmediamacroscope-smile', 'UNLABELED_' + filename +'.csv', localSavePath, awsPath)    
-    s3.downloadToDisk('socialmediamacroscope-smile', 'classification_pipeline.pickle', localSavePath, awsPath)
-        
+    fname_unlabeled = 'UNLABELED_' + filename +'.csv'
+    if s3.checkExist('socialmediamacroscope-smile', awsPath, fname_unlabeled): 
+        s3.downloadToDisk('socialmediamacroscope-smile', fname_unlabeled, localSavePath, awsPath)
+    else:
+        deleteDir.deletedir(localSavePath)
+        raise ValueError('You\'re requesting ' + fname_unlabeled + ' file, and it\'s not found in your remote directory!')
+
+    #download pickle model
+    fname_pickle = 'classification_pipeline.pickle'
+    if s3.checkExist('socialmediamacroscope-smile', awsPath, fname_pickle): 
+        s3.downloadToDisk('socialmediamacroscope-smile', fname_pickle, localSavePath, awsPath)
+    else:
+        deleteDir.deletedir(localSavePath)
+        raise ValueError('You\'re requesting ' + fname_pickle + ' file, and it\'s not found in your remote directory!')
+
+    
     classification = Classification(awsPath, localSavePath, 'UNLABELED_' + filename +'.csv')
     classification.predict()
     classification.plot()
-
-    # clean up local folders
-    # deleteDir.deletedir(localSavePath)
-        

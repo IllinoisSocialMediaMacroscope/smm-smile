@@ -286,7 +286,13 @@ if __name__ == '__main__':
 
     # download config to that folder
     fname_config = 'config.dat'
-    s3.downloadToDisk('socialmediamacroscope-smile', fname_config, localSavePath, awsPath)
+    if s3.checkExist('socialmediamacroscope-smile', awsPath, fname_config): 
+        s3.downloadToDisk('socialmediamacroscope-smile', fname_config, localSavePath, awsPath)
+    else:
+        # throw file not found error
+        deleteDir.deletedir(localSavePath)
+        raise ValueError('You\'re requesting ' + fname_config + ' file, and it\'s not found in your remote directory!')
+
     # append config.dat file
     if os.path.exists(localSavePath + fname_config):
         with open(localSavePath + fname_config, "r") as fp:
@@ -302,7 +308,5 @@ if __name__ == '__main__':
     classification.classify(args.model)
     classification.metrics()
 
-    # clean up local folders
-    # deleteDir.deletedir(localSavePath)
     
         
