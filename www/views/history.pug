@@ -105,10 +105,10 @@ html
 														<input type="hidden" value=#{key1} name="layer2" />													
 														<input type="hidden" value=#{key2} name="historyID" />
 													</form>
-													p(class="historyTabs") #{val2}
+													p(class="historyTabs") #{key2}
 													div(class="button-unit")
-														<button class="historyButtons" onclick="submitHistory(`#{key1}-#{key2}`);">view</button>
-														<button class="historyButtons" onclick="deleteModal(`#{key1}-#{key2}`);">delete</button>
+														<button class="historyButtons" onclick="submitHistory(`#{val2}`);">view</button>
+														<button class="historyButtons" onclick="deleteModal(`#{val2}`);">delete</button>
 					
 												
 		div(class="container-fluid")
