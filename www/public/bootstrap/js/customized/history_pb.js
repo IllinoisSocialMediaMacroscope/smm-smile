@@ -1,4 +1,4 @@
-function submitHistory(formID){	
+function submitHistory(folderURL){	
 	$("#title-container").empty();
 	$("#overview-container").empty();
 	$("#img-container").empty();
@@ -11,8 +11,8 @@ function submitHistory(formID){
 	
 	$.ajax({
 		type:'post',
-		url:$("#"+formID).attr('action'), 
-		data: $("#"+formID).serialize(),				
+		url:'history', 
+		data: {'folderURL': folderURL },				
 		success:function(data){
 			if(data){
 				if ('ERROR' in data){
@@ -93,29 +93,30 @@ function submitHistory(formID){
 
 
 /* delete job modal */
-function deleteModal(formID){
+function deleteModal(folderURL,tab){
 	
 	$("#delete").modal('show');
-		
 	$("#deleteButton").click(function(){
-		deleteHistory(formID);
+		deleteHistory(folderURL,tab);
 	});
 
 	$("#deleteButton").keypress(function(e){
 		if (e.which == 13){
-			deleteHistory(formID);
+			deleteHistory(folderURL,tab);
 		}
 	});
 	
 }
 
-function deleteHistory(formID){	
+function deleteHistory(folderURL,tab){	
 	$.ajax({
 		type:'post',
 		url:'delete', 
-		data: $("#"+formID).serialize(),				
+		data: {'folderURL':folderURL,
+				'type':'history'},				
 		success:function(data){
 			if(data){
+				console.log(data);
 				$("#title-container").empty();
 				$("#overview-container").empty();
 				$("#img-container").empty();
@@ -124,7 +125,7 @@ function deleteHistory(formID){
 				$("#title").empty();
 				$("#d3js-network-container").empty();
 				$("#d3js-container").hide();
-				$("#" + formID).parent().css( "display", "none" );
+				$("#" + tab).css( "display", "none" );
 				$("#delete").modal('hide');
 				$("#background").show();
 			}
@@ -178,9 +179,7 @@ function appendOverview(container,config, download){
 	// add download files
 	tableContent += `<tr><th>downloadables</th><td>`;
 	$.each(download,function(i,val){
-		tableContent += `<form action='download' name='download' method='post'><input type="hidden" value=`+val.content+` name="downloadURL" />
-		<button type="submit" class="link-button-download"><span class="glyphicon glyphicon-download-alt"></span>`
-								+val.name+`</button></form>`;
+		tableContent += `<a style="display:block;color:red;" href="` + val.content+ `">` +val.name+`</a>`;
 	});
 	tableContent += `</td></tr></tbody></table></div>`;
 	
