@@ -28,7 +28,8 @@
 }
 
 #topbar-export,
-#topbar-generic{
+#topbar-history,
+#topbar-query{
 	font-size:14px;
 	color:white;
 	border:solid 1px #888;

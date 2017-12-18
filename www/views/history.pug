@@ -98,17 +98,11 @@ html
 										
 										ul(class="nav child_menu" style="display:none;" id=key1)
 											each val2,key2 in val1
-												li 
-													<form action='history' id=#{key1}-#{key2} name='history' method='post'>
-														<input type="hidden" value="analytics" name="type" />
-														<input type="hidden" value=#{key} name="layer1" />
-														<input type="hidden" value=#{key1} name="layer2" />													
-														<input type="hidden" value=#{key2} name="historyID" />
-													</form>
+												li(id=key1+"-"+key2)
 													p(class="historyTabs") #{key2}
 													div(class="button-unit")
 														<button class="historyButtons" onclick="submitHistory(`#{val2}`);">view</button>
-														<button class="historyButtons" onclick="deleteModal(`#{val2}`);">delete</button>
+														<button class="historyButtons" onclick="deleteModal(`#{val2}`,`#{key1}-#{key2}`);">delete</button>
 					
 												
 		div(class="container-fluid")

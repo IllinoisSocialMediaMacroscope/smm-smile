@@ -11,6 +11,13 @@ for (i=0; i<pathArray.length-1; i++){
 	newPath += "/";
 }
 
+//pass sessionID to history page (get method)
+if (sessionID !== undefined){
+	$("#topbar-history").attr('href', "history?sessionID=" + sessionID);
+}else{
+	$("#topbar-history").attr('href', "history?sessionID=local");
+}
+
 //get currentPage name for dropbox and read the ?dropbox=success
 $("#box-auth").on('click',function(){
 	$("#box-auth").attr("href","login/box?pageURL=" + pathArray[pathArray.length-1] + "&currentURL=" + newPath);
