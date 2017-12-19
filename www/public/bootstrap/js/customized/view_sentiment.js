@@ -27,15 +27,15 @@ function drawGauge(name,compound) {
 
 $(document).ready(function(){
 	$("#selectFile").on('change',function(){
-		var foldername = $(this).children(":selected").attr("id");
+		var prefix = $(this).children(":selected").val();
 		var directory = $(this).children(":selected").attr("class");
-				
 		$("#selectFilePreview-container").empty();
 		$("#selectFileHeader-container").empty();
+		
 		$.ajax({
 			type:'POST',
 			url:'render', 
-			data: {"foldername":foldername, "directory":directory},				
+			data: {"prefix":prefix},				
 			success:function(data){
 				if (data){
 					if ('ERROR' in data){
@@ -44,10 +44,10 @@ $(document).ready(function(){
 						$("#error").val(JSON.stringify(data));
 						$("#warning").modal('show');
 					}else{
-						/* the text fields are:  text, user.description(tweet), description(twtUser),
-						body(redditComment), selftext,title(redditSearch), 
-						public description, description(redditSearchSubreddit)
-						_source.text, _source.user.description(streaming)*/
+						// the text fields are:  text, user.description(tweet), description(twtUser),
+						// body(redditComment), selftext,title(redditSearch), 
+						// public description, description(redditSearchSubreddit)
+						// _source.text, _source.user.description(streaming)
 						var allowed_field_list = ['text','user.description','description',
 						'_source.text', '_source.user.description','body','title','_source.body','_source.title'];
 						
@@ -69,7 +69,7 @@ $(document).ready(function(){
 						$("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-						$("#selectFilePreview").append(arrayToTable(text_data.slice(0,11) ,'#selectFileTable'));
+						$("#selectFilePreview").append(arrayToTable(text_data ,'#selectFileTable'));
 						//$("#selectFileTable").DataTable();
 						
 						$("#selectFileHeader-container").append(`<div class="form-group">
@@ -79,8 +79,8 @@ $(document).ready(function(){
 						
 						// offer crawling for reddit comments modal
 						if(directory === 'reddit-Post' || directory === 'reddit-Historical-Post' || directory === 'reddit-Search'){
-							$("#dataset").val(directory + "/" + foldername + "/" + foldername + ".csv");
-							$("#length").val(text_data.length-1);
+							//$("#dataset").val(directory + "/" + foldername + "/" + foldername + ".csv");
+							//$("#length").val(text_data.length-1);
 							$("#getComment").show();
 						}else{
 							$("#getComment").hide();

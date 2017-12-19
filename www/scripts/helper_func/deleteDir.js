@@ -1,6 +1,12 @@
 var fs = require('fs');
+var AWS = require('aws-sdk');
+AWS.config.update({
+	accessKeyId: '***REMOVED***', 
+	secretAccessKey: '***REMOVED***' });
+var s3 = new AWS.S3();
 
 var deleteFolderRecursive = function(path) {
+  
   if( fs.existsSync(path) ) {
 	
     fs.readdirSync(path).forEach(function(file,index){
@@ -14,5 +20,6 @@ var deleteFolderRecursive = function(path) {
     fs.rmdirSync(path);
   }
 };
+
 
 module.exports = deleteFolderRecursive;

@@ -13,14 +13,14 @@ $(document).ready(function(){
 	
 	
 	$("#selectFile").on('change',function(){
-		var foldername = $(this).children(":selected").attr("id");
+		var prefix = $(this).children(":selected").val();
 		var directory = $(this).children(":selected").attr("class");
 		$("#selectFilePreview-container").empty();
 				
 		$.ajax({
 			type:'POST',
 			url:'render', 
-			data: {"foldername":foldername, "directory":directory},				
+			data: {"prefix":prefix},				
 			success:function(data){
 				if (data){
 					if ('ERROR' in data){
@@ -55,7 +55,7 @@ $(document).ready(function(){
 						$("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-						$("#selectFilePreview").append(arrayToTable(numCat_data.slice(0,11),'#selectFileTable'));
+						$("#selectFilePreview").append(arrayToTable(numCat_data,'#selectFileTable'));
 						//$("#selectFileTable").DataTable();
 					}
 					

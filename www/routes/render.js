@@ -3,21 +3,40 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var CSV = require('csv-string');
+var path = require('path');
+var appPath = path.dirname(__dirname);
+var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
+var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
+
 
 router.post('/render',function(req,res,next){
 
-	if (req.body.foldername !== 'empty'){
+	if (req.body.prefix !== '' && req.body.prefix !== undefined){
 		
-		var preview_string = fs.readFileSync('./downloads/GraphQL/' + req.body.directory +
-					'/' + req.body.foldername + '/' + req.body.foldername + '.csv', "utf8");
-		
-		if (preview_string === ''){
-			res.send({ERROR: 'This dataset you selected is empty, please select another one!'});
-		}else{
-			var preview_arr = CSV.parse(preview_string);
-			//res.send({preview:preview_arr.slice(0,10)}); // preview the top 25 line? shift the top10 to front end
-			res.send({preview:preview_arr}); 
-		}
+		var p = list_files(req.body.prefix);
+		p.then((folderObj) =>{
+			// folderObj[filename] = fileURL;
+			var fileList = Object.keys(folderObj);
+			for (var i=0, length=fileList.length; i< length; i++){
+				if (fileList[i].slice(-4) === '.csv'){
+					var fileURL = folderObj[fileList[i]];
+					
+					var p2 = getMultiRemote(fileURL);
+					p2.then((preview_string) => {
+						if (preview_string === ''){
+						res.send({ERROR: 'This dataset you selected is empty, please select another one!'});
+						}else{
+							var preview_arr = CSV.parse(preview_string);
+							res.send({preview:preview_arr.slice(0,11)}); 
+						}
+					});
+					
+				}
+			}
+			
+		}).catch( (err) => {
+			res.send({ERROR:err});
+		});
 	}else{
 		res.send();
 	}

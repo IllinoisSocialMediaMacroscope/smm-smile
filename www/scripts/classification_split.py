@@ -17,7 +17,7 @@ class Classification:
     def __init__(self,awsPath, localSavePath, localReadPath):
 
         self.localSavePath = localSavePath
-        self.bucketName = 'socialmediamacroscope-smile'
+        self.bucketName = 'macroscope-smile'
         self.awsPath = awsPath
 
         Array = []
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     fname = 'config.dat'
     with open(localSavePath + fname,"w") as f:
         json.dump(vars(args),f)
-    s3.upload(localSavePath,'socialmediamacroscope-smile' , awsPath, fname)
+    s3.upload(localSavePath,'macroscope-smile' , awsPath, fname)
 
     print(localSavePath)
     print(uid)

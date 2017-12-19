@@ -21,7 +21,7 @@ class Classification:
     def __init__(self, awsPath, localSavePath, unlabeled):
 
         self.localSavePath = localSavePath
-        self.bucketName = 'socialmediamacroscope-smile'
+        self.bucketName = 'macroscope-smile'
         self.awsPath = awsPath
         self.unlabeled = unlabeled
 
@@ -114,8 +114,8 @@ if __name__ == '__main__':
 
     # download config to that folder
     fname_config = 'config.dat'
-    if s3.checkExist('socialmediamacroscope-smile', awsPath, fname_config): 
-        s3.downloadToDisk('socialmediamacroscope-smile', fname_config, localSavePath, awsPath)
+    if s3.checkExist('macroscope-smile', awsPath, fname_config): 
+        s3.downloadToDisk('macroscope-smile', fname_config, localSavePath, awsPath)
     else:
         deleteDir.deletedir(localSavePath)
         raise ValueError('You\'re requesting ' + fname_config + ' file, and it\'s not found in your remote directory!')
@@ -125,16 +125,16 @@ if __name__ == '__main__':
         data = json.load(f)
         filename = data['filename']
     fname_unlabeled = 'UNLABELED_' + filename +'.csv'
-    if s3.checkExist('socialmediamacroscope-smile', awsPath, fname_unlabeled): 
-        s3.downloadToDisk('socialmediamacroscope-smile', fname_unlabeled, localSavePath, awsPath)
+    if s3.checkExist('macroscope-smile', awsPath, fname_unlabeled): 
+        s3.downloadToDisk('macroscope-smile', fname_unlabeled, localSavePath, awsPath)
     else:
         deleteDir.deletedir(localSavePath)
         raise ValueError('You\'re requesting ' + fname_unlabeled + ' file, and it\'s not found in your remote directory!')
 
     #download pickle model
     fname_pickle = 'classification_pipeline.pickle'
-    if s3.checkExist('socialmediamacroscope-smile', awsPath, fname_pickle): 
-        s3.downloadToDisk('socialmediamacroscope-smile', fname_pickle, localSavePath, awsPath)
+    if s3.checkExist('macroscope-smile', awsPath, fname_pickle): 
+        s3.downloadToDisk('macroscope-smile', fname_pickle, localSavePath, awsPath)
     else:
         deleteDir.deletedir(localSavePath)
         raise ValueError('You\'re requesting ' + fname_pickle + ' file, and it\'s not found in your remote directory!')

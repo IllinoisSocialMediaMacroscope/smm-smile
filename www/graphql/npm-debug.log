@@ -1,0 +1,39 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'test' ]
+2 info using npm@3.10.10
+3 info using node@v6.10.3
+4 verbose run-script [ 'pretest', 'test', 'posttest' ]
+5 info lifecycle socialmonitorgraphql@0.0.0~pretest: socialmonitorgraphql@0.0.0
+6 silly lifecycle socialmonitorgraphql@0.0.0~pretest: no script for pretest, continuing
+7 info lifecycle socialmonitorgraphql@0.0.0~test: socialmonitorgraphql@0.0.0
+8 verbose lifecycle socialmonitorgraphql@0.0.0~test: unsafe-perm in lifecycle true
+9 verbose lifecycle socialmonitorgraphql@0.0.0~test: PATH: C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;C:\Users\cwang138\Documents\scripts\apisUtilization-master\hubzero-app\www\graphql\node_modules\.bin;C:\Users\cwang138\AppData\Roaming\npm;C:\Program Files\nodejs\;C:\ProgramData\Oracle\Java\javapath;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\HashiCorp\Vagrant\bin;C:\Program Files\TortoiseSVN\bin;C:\Program Files\Redis\;C:\Program Files\MySQL\MySQL Utilities 1.6\;C:\Program Files\MySQL\MySQL Server 5.7\bin\;C:\Users\cwang138\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\cwang138\AppData\Local\Programs\Python\Python36-32\;C:\Users\cwang138\AppData\Local\Programs\Python\Launcher\;C:\Users\cwang138\nodjs\;C:\Users\cwang138\notepad\;C:\Users\cwang138\AppData\Roaming\npm;C:\Program Files\Docker Toolbox
+10 verbose lifecycle socialmonitorgraphql@0.0.0~test: CWD: C:\Users\cwang138\Documents\scripts\apisUtilization-master\hubzero-app\www\graphql
+11 silly lifecycle socialmonitorgraphql@0.0.0~test: Args: [ '/d /s /c', 'nodemon ./bin/www' ]
+12 silly lifecycle socialmonitorgraphql@0.0.0~test: Returned: code: 3221225786  signal: null
+13 info lifecycle socialmonitorgraphql@0.0.0~test: Failed to exec test script
+14 error Test failed.  See above for more details.
+15 verbose exit [ 1, true ]
+16 verbose stack Error: kill ENOSYS
+16 verbose stack     at exports._errnoException (util.js:1018:11)
+16 verbose stack     at process.kill (internal/process.js:190:13)
+16 verbose stack     at process.listener (C:\Program Files\nodejs\node_modules\npm\node_modules\npmlog\node_modules\gauge\node_modules\signal-exit\index.js:86:15)
+16 verbose stack     at emitNone (events.js:91:20)
+16 verbose stack     at process.emit (events.js:185:7)
+16 verbose stack     at processEmit (C:\Program Files\nodejs\node_modules\npm\node_modules\npmlog\node_modules\gauge\node_modules\signal-exit\index.js:146:32)
+16 verbose stack     at processEmit (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\node_modules\npmlog\node_modules\gauge\node_modules\signal-exit\index.js:146:32)
+16 verbose stack     at Signal.wrap.onsignal (internal/process.js:217:44)
+17 verbose cwd C:\Users\cwang138\Documents\scripts\apisUtilization-master\hubzero-app\www\graphql
+18 error Windows_NT 6.1.7601
+19 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "test"
+20 error node v6.10.3
+21 error npm  v3.10.10
+22 error code ENOSYS
+23 error errno ENOSYS
+24 error syscall kill
+25 error kill ENOSYS
+26 error If you need help, you may report this error at:
+26 error     <https://github.com/npm/npm/issues>
+27 verbose exit [ 1, true ]
