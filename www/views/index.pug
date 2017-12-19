@@ -42,15 +42,7 @@ html
 					|(September, 2017) – Social Media Macroscope, http://socialmediamacroscope.org
 				p Your citation will help us continue to provide and improve this platform! 
 				button(id="citation-notice-btn") click to continue
-				
-				script.
-					$("#citation-notice-btn").click(function(){
-						$("#citation-notice").hide('slow');
-						$(".fadein").show('slow');
-						$(".button-unit").show('slow');
-						
-					});
-					
+								
 			div(class="button-unit",style="display:none;")
 				a(class="button" href="query") Get Started
 				a(class="button" href="history") Past Results
@@ -84,3 +76,20 @@ html
 		include components/footer.pug								
 		script(src="bootstrap/js/customized/detect_cookie.js")
 		
+		script.
+			$("#citation-notice-btn").click(function(){
+				$("#citation-notice").hide('slow');
+				$(".fadein").show('slow');
+				$(".button-unit").show('slow');
+				
+			});
+			/*$(".prose-button").on('click',function(){
+				if (sessionID !== undefined && $(this).text() === 'Start'){
+					var original_href = $(this).attr('href');
+					$(location).attr('href', original_href + "?sessionID=" + sessionID)
+				
+				}else if (sessionID === undefined && $(this).text() === 'Start'){
+					var original_href = $(this).attr('href');
+					$(location).attr('href', original_href + "?sessionID=local")
+				}
+			})*/

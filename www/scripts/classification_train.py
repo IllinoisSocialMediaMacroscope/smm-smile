@@ -32,7 +32,7 @@ class Classification:
     def __init__(self, awsPath, localSavePath, file):
 
         self.localSavePath = localSavePath
-        self.bucketName = 'socialmediamacroscope-smile'
+        self.bucketName = 'macroscope-smile'
         self.awsPath = awsPath
         
         Array = []
@@ -286,8 +286,8 @@ if __name__ == '__main__':
 
     # download config to that folder
     fname_config = 'config.dat'
-    if s3.checkExist('socialmediamacroscope-smile', awsPath, fname_config): 
-        s3.downloadToDisk('socialmediamacroscope-smile', fname_config, localSavePath, awsPath)
+    if s3.checkExist('macroscope-smile', awsPath, fname_config): 
+        s3.downloadToDisk('macroscope-smile', fname_config, localSavePath, awsPath)
     else:
         # throw file not found error
         deleteDir.deletedir(localSavePath)
@@ -300,7 +300,7 @@ if __name__ == '__main__':
             data.update(vars(args))
         with open(localSavePath + fname_config, "w") as f:
             json.dump(data,f)
-    s3.upload(localSavePath,'socialmediamacroscope-smile' , awsPath, fname_config)
+    s3.upload(localSavePath,'macroscope-smile' , awsPath, fname_config)
 
     
     

@@ -10,7 +10,7 @@ client = boto3.client(
 
 def upload(localpath, bucketName, remotepath, filename):
     '''client.upload_file('C:\\Users\\cwang138\\Documents\\work\\analytic-standalone\\www\\public\\bootstrap\\img\\logo\\' +filename,
-                   'socialmediamacroscope-smile',
+                   'macroscope-smile',
                    '/'+filename)'''
     try:
         client.upload_file(localpath + filename, bucketName, remotepath + filename)
@@ -70,22 +70,22 @@ def listFiles(bucketName, foldernames):
 
 if __name__ == '__main__':
     '''
-    #createDirectory('socialmediamacroscope-smile','GraphQL/')
-    #createDirectory('socialmediamacroscope-smile','GraphQL/Twitter-Tweet/')
+    #createDirectory('macroscope-smile','GraphQL/')
+    #createDirectory('macroscope-smile','GraphQL/Twitter-Tweet/')
     
     # ohh sweet no need to create directory at all
     upload('C:/Users/cwang138/Documents/scripts/apisUtilization-master/hubzero-app/www/downloads/NLP/preprocessing/d4d651fd-13e2-4b29-aa5a-47829162095e/',
-           'socialmediamacroscope-smile',
+           'macroscope-smile',
            'local/NLP/preprocessing/d4d651fd-13e2-4b29-aa5a-47829162095e/',
            'config.dat')
     
-    print(generate_downloads('socialmediamacroscope-smile',
+    print(generate_downloads('macroscope-smile',
                              'local/NLP/preprocessing/d4d651fd-13e2-4b29-aa5a-47829162095e/',
                              'config.dat'))
 
-    print(checkExist('socialmediamacroscope-smile', 'local/ML/classification/0abb811f-2a27-4ce6-8881-7028eaec9b95/', 'classification_pipeline.pickle'))
+    print(checkExist('macroscope-smile', 'local/ML/classification/0abb811f-2a27-4ce6-8881-7028eaec9b95/', 'classification_pipeline.pickle'))
 
-    print(listDir('socialmediamacroscope-smile','local/NLP/preprocessing/'))'''
+    print(listDir('macroscope-smile','local/NLP/preprocessing/'))'''
 
-    listFiles('socialmediamacroscope-smile','local/NLP/preprocessing/1127a434-5db4-44f9-9da2-6c60ffe59ba3/')
+    listFiles('macroscope-smile','local/NLP/preprocessing/1127a434-5db4-44f9-9da2-6c60ffe59ba3/')
 

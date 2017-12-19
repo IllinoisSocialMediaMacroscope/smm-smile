@@ -43,6 +43,7 @@ function submitQuery(textareaID,filenameID){
 		var pages = -999;		
 	}
 	
+	if (sessionID == undefined) sessionID = 'local';
 	$.ajax({
 		url:"query",
 		type:"post",
@@ -50,7 +51,8 @@ function submitQuery(textareaID,filenameID){
 				"filename":filename,
 				"params":JSON.stringify(params),
 				"pages":pages,
-				"prefix":prefix
+				"prefix":prefix,
+				"sessionID":sessionID
 			},
 		success:function(data){
 			// if error then prompt user to rename
@@ -444,6 +446,7 @@ function submitSearchbox(searchboxID, filenameID){
 		var params = parameters.psComment;
 	}
 	
+	if (sessionID == undefined) sessionID = 'local';
 	$.ajax({
 		url:"query",
 		type:"post",
@@ -451,9 +454,11 @@ function submitSearchbox(searchboxID, filenameID){
 				"filename":filename,
 				"params":JSON.stringify(params),
 				"pages":pages,
-				"prefix":prefix
+				"prefix":prefix,
+				"sessionID":sessionID
 			},
 		success:function(data){
+			//console.log(data);
 			if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
@@ -511,9 +516,9 @@ function renderPreview(data,prefix){
 	
 	// append modal-download in the background								
 	$("#modal-download").empty();
-	$("#modal-download").append(`<ul style="margin:5px 5px;"><form action='download' name='download' method='post'>
-						<input type="hidden" value=`+data.URL+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download-alt"></span> `
-						+'DOWNLOAD ' + data.fname+`</button></form></ul>`);
+	$("#modal-download").append(`<ul style="margin:5px 5px;">
+									<a href="` + data.URL + `" style="color:red;"><span class="glyphicon glyphicon-download-alt"></span>`+ `DONWLOAD ` +  data.fname + `</a>
+								</ul>`);
 	$("#success").modal('show');
 	
 	// construct previews

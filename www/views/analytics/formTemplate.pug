@@ -23,11 +23,11 @@ block config-form
 							if input['optgroup']
 								div(class="col-md-8 col-md-8 col-xs-12")
 									select(class=input.class id=input.id name=input.name)
-										option(val="", class="", id="empty", checked) Please Select...
+										option(value="", class="", id="empty", checked) Please Select...
 										each val,key in directory
 											optgroup(label=key)
-											each item in val
-												option(val=item, class=key, id=item) #{item}
+											each val1,key1 in val
+												option(value=val1, class=key, id=key1) #{key1}
 								div(class="col-md-2 col-md-2 col-xs-12")
 									button(class="btn btn-default",id="getComment") get comments
 								script.

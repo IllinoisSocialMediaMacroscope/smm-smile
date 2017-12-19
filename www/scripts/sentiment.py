@@ -21,7 +21,7 @@ class Sentiment:
     def __init__(self, awsPath, localSavePath, localReadPath, column=''):
 
             self.localSavePath = localSavePath
-            self.bucketName = 'socialmediamacroscope-smile'
+            self.bucketName = 'macroscope-smile'
             self.awsPath = awsPath
             
            
@@ -168,8 +168,8 @@ if __name__ =='__main__':
     fname = 'config.dat'
     with open(localSavePath + fname,"w") as f:
         json.dump(vars(args),f)
-    s3.upload(localSavePath,'socialmediamacroscope-smile', awsPath, fname)
-    # s3.generate_downloads('socialmediamacroscope-smile', awsPath, fname)
+    s3.upload(localSavePath,'macroscope-smile', awsPath, fname)
+    # s3.generate_downloads('macroscope-smile', awsPath, fname)
     print(localSavePath)
 
     sentiment = Sentiment(awsPath, localSavePath, args.localReadPath, args.column)

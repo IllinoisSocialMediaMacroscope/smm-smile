@@ -5,21 +5,23 @@ var CSV = require('csv-string');
 var fs = require('fs');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var readDIR = require(path.join(appPath,'scripts','helper_func','helper.js')).readDIR;
 var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
+var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 
 router.get('/networkx',function(req,res,next){
-	var files = readDIR('./downloads/GraphQL');
+	var directory = {};
+							
+	var promise_array = [];
+	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/twitter-Tweet/'));
+	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/twitter-Stream/'));
+	Promise.all(promise_array).then( values => {
+		directory['twitter-Tweet'] = values[0];
+		directory['twitter-Stream'] = values[1];
+		var formParam = require('./networkx.json');	
+		res.render('analytics/formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:directory, param:formParam});
+	});
 	
-	delete files['twitter-User'];
-	delete files['reddit-Search'];
-	delete files['reddit-Post'];
-	delete files['reddit-Comment'];
-	delete files['reddit-Historical-Post'];
-	delete files['reddit-Historical-Comment'];
-	
-	var formParam = require('./networkx.json');		
-	res.render('analytics/formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:files, param:formParam}); 
+	 
 });
 
 router.post('/networkx',function(req,res,next){
