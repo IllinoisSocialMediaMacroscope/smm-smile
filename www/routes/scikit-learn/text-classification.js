@@ -15,14 +15,14 @@ router.get('/text-classification',function(req,res,next){
 	var directory = {};
 							
 	var promise_array = [];
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/twitter-Tweet/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/twitter-User/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/twitter-Stream/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/reddit-Search/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/reddit-Post/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/reddit-Comment/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/reddit-Historical-Post/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/reddit-Historical-Comment/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Tweet/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-User/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Stream/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Search/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Post/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Comment/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Historical-Post/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
 	Promise.all(promise_array).then( values => {
 		
 		directory['twitter-Tweet'] = values[0];
@@ -54,7 +54,7 @@ router.post('/text-classification-split',function(req,res,next){
 				'--remoteReadPath', req.body.prefix, 
 				'--ratio', req.body.ratio, 
 				'--filename', req.body.foldername,
-				'--sessionID',req.body.sessionID				]
+				'--s3FolderName',req.body.s3FolderName				]
 			};
 		
 		pythonShell.run('classification_split.py',options,function(err,results){
@@ -101,7 +101,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 				'--file',req.file.path,
 				'--uuid',req.body.uuid, 
 				'--model',req.body.classifier,
-				'--sessionID', req.body.sessionID ]
+				'--s3FolderName', req.body.s3FolderName ]
 		};		
 
 	pythonShell.run('classification_train.py',options,function(err,results){
@@ -160,7 +160,7 @@ router.post('/text-classification-predict',function(req,res,next){
 		args:[
 			'--uuid',req.body.uuid,
 			'--appPath', appPath,
-			'--sessionID', req.body.sessionID ]
+			'--s3FolderName', req.body.s3FolderName ]
 		};		
 	pythonShell.run('classification_predict.py',options,function(err,results){
 		if (err){

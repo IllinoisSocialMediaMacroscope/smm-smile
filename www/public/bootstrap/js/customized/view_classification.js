@@ -192,11 +192,11 @@ function split(){
 	var foldername = $("#selectFile").children(":selected").attr("id");
 	var directory = $("#selectFile").children(":selected").attr("class");
 	var ratio = $("#ratio").val();
-	if (sessionID == undefined) sessionID = 'local'
+	if (s3FolderName == undefined) s3FolderName = 'local'
 	var data = "ratio=" + ratio 
 	+ "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv" 
 	+ "&foldername=" + foldername 
-	+ "&sessionID=" + sessionID
+	+ "&s3FolderName=" + s3FolderName
 	+ "&prefix="+ prefix;
 	
 	if (formValidation('split')){
@@ -256,12 +256,12 @@ function train(){
 		
 		
 		var file = $("#labeled").get(0).files[0];
-		if (sessionID == undefined) sessionID = 'local'
+		if (s3FolderName == undefined) s3FolderName = 'local'
 		var formData = new FormData();
 		formData.append('labeled', file, file.name);
 		formData.append('uuid', $("#uuid").val());
 		formData.append('classifier',$("#classifier option:selected").val());
-		formData.append('sessionID',sessionID);
+		formData.append('s3FolderName',s3FolderName);
 		
 		$(".loading").show();
 		$.ajax({
@@ -319,8 +319,8 @@ function predict(){
 	
 	if (formValidation('predict')){
 		
-		if (sessionID == undefined) sessionID = 'local'
-		var data = "uuid=" + $("#uuid").val() + "&sessionID=" + sessionID ;
+		if (s3FolderName == undefined) s3FolderName = 'local'
+		var data = "uuid=" + $("#uuid").val() + "&s3FolderName=" + s3FolderName ;
 		
 		$(".loading").show();
 		$.ajax({

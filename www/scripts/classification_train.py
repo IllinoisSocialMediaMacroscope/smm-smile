@@ -269,12 +269,12 @@ if __name__ == '__main__':
     parser.add_argument('--file',required=True)
     parser.add_argument('--uuid',required=True)
     parser.add_argument('--model',required=True)
-    parser.add_argument('--sessionID', required=False)
+    parser.add_argument('--s3FolderName', required=False)
     args = parser.parse_args()
 
     # instead of generate new uuid, inherit it from user specification
     uid = args.uuid
-    awsPath = args.sessionID + '/ML/classification/' + uid +'/'
+    awsPath = args.s3FolderName + '/ML/classification/' + uid +'/'
     localSavePath = args.appPath + '/downloads/ML/classification/' + uid + '/'
     print(localSavePath)
     print(uid)

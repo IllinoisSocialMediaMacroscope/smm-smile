@@ -142,11 +142,11 @@ if __name__ == '__main__':
     parser.add_argument('--remoteReadPath', required=True)
     parser.add_argument('--ratio',required=True)
     parser.add_argument('--filename',required=True)
-    parser.add_argument('--sessionID', required=False)
+    parser.add_argument('--s3FolderName', required=False)
     args = parser.parse_args()
        
     uid = str(uuid.uuid4())
-    awsPath = args.sessionID + '/ML/classification/' + uid +'/'
+    awsPath = args.s3FolderName + '/ML/classification/' + uid +'/'
     localSavePath = args.appPath + '/downloads/ML/classification/' + uid + '/'
     
     if not os.path.exists(localSavePath):

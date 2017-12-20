@@ -393,12 +393,12 @@ if __name__ =='__main__':
     parser.add_argument('--process',required=True)
     parser.add_argument('--tagger', required=True)
     parser.add_argument('--column', required=False)
-    parser.add_argument('--sessionID', required=False)
+    parser.add_argument('--s3FolderName', required=False)
     args = parser.parse_args()
 
     
     uid = str(uuid.uuid4())
-    awsPath = args.sessionID + '/NLP/preprocessing/' + uid +'/'
+    awsPath = args.s3FolderName + '/NLP/preprocessing/' + uid +'/'
     localSavePath = args.appPath + '/downloads/NLP/preprocessing/' + uid + '/'
 
     # save local configuration

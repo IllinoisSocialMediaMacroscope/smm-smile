@@ -3,26 +3,27 @@ var pathArray = window.location.pathname.split('/');
 var newPath = "";
 for (i=0; i<pathArray.length-1; i++){
 	if (pathArray[i] === 'weber'){
-		var sessionID = pathArray[i+1];
 		// session ID always is the one after weber
+		var sessionID = pathArray[i+1];
+		var s3FolderName = pathArray[i+2];
 	}
 	
 	newPath += pathArray[i];
 	newPath += "/";
 }
-//pass sessionID to history page (get method)
-if (sessionID !== undefined){
-	$("#topbar-history").attr('href', "history?sessionID=" + sessionID);
-	$("#topbar-preprocessing").attr('href', "NLP-preprocess?sessionID=" + sessionID);
-	$("#topbar-classification").attr('href', "text-classification?sessionID=" + sessionID);
-	$("#topbar-sentiment").attr('href', "NLP-sentiment?sessionID=" + sessionID);
-	$("#topbar-networkx").attr('href', "networkx?sessionID=" + sessionID);
+//pass s3FolderName to history page (get method)
+if (s3FolderName !== undefined){
+	$("#topbar-history").attr('href', "history?s3FolderName=" + s3FolderName);
+	$("#topbar-preprocessing").attr('href', "NLP-preprocess?s3FolderName=" + s3FolderName);
+	$("#topbar-classification").attr('href', "text-classification?s3FolderName=" + s3FolderName);
+	$("#topbar-sentiment").attr('href', "NLP-sentiment?s3FolderName=" + s3FolderName);
+	$("#topbar-networkx").attr('href', "networkx?s3FolderName=" + s3FolderName);
 }else{
-	$("#topbar-history").attr('href', "history?sessionID=local");
-	$("#topbar-preprocessing").attr('href', "NLP-preprocess?sessionID=local");
-	$("#topbar-classification").attr('href', "text-classification?sessionID=local");
-	$("#topbar-sentiment").attr('href', "NLP-sentiment?sessionID=local");
-	$("#topbar-networkx").attr('href', "networkx?sessionID=local");
+	$("#topbar-history").attr('href', "history?s3FolderName=local");
+	$("#topbar-preprocessing").attr('href', "NLP-preprocess?s3FolderName=local");
+	$("#topbar-classification").attr('href', "text-classification?s3FolderName=local");
+	$("#topbar-sentiment").attr('href', "NLP-sentiment?s3FolderName=local");
+	$("#topbar-networkx").attr('href', "networkx?s3FolderName=local");
 }
 
 //get currentPage name for dropbox and read the ?dropbox=success

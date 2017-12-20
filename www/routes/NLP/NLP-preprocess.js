@@ -13,14 +13,14 @@ router.get('/NLP-preprocess',function(req,res,next){
 	var directory = {};
 							
 	var promise_array = [];
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/twitter-Tweet/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/twitter-User/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/twitter-Stream/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/reddit-Search/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/reddit-Post/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/reddit-Comment/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/reddit-Historical-Post/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/reddit-Historical-Comment/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Tweet/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-User/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Stream/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Search/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Post/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Comment/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Historical-Post/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
 	Promise.all(promise_array).then( values => {
 		
 		directory['twitter-Tweet'] = values[0];
@@ -51,7 +51,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 			'--process',req.body.model, 
 			'--tagger',req.body.tagger, 
 			'--source','twitter',
-			'--sessionID',req.body.sessionID ]
+			'--s3FolderName',req.body.s3FolderName ]
 		};
 	}else{
 		res.end('no file selected!');

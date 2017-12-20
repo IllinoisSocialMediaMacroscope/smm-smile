@@ -404,11 +404,11 @@ if __name__ == "__main__":
     parser.add_argument('--remoteReadPath', required=True)
     parser.add_argument('--layout',required=True)
     parser.add_argument('--relations',required=True)
-    parser.add_argument('--sessionID', required=False)
+    parser.add_argument('--s3FolderName', required=False)
     args = parser.parse_args()
     
     uid = str(uuid.uuid4())
-    awsPath = args.sessionID + '/NW/networkx/' + uid +'/'
+    awsPath = args.s3FolderName + '/NW/networkx/' + uid +'/'
     localSavePath = args.appPath + '/downloads/NW/networkx/' + uid + '/'
     
     if not os.path.exists(localSavePath):
