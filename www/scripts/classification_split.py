@@ -138,7 +138,6 @@ class Classification:
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Processing...")
-    parser.add_argument('--appPath', required=True)
     parser.add_argument('--remoteReadPath', required=True)
     parser.add_argument('--ratio',required=True)
     parser.add_argument('--filename',required=True)
@@ -147,7 +146,7 @@ if __name__ == '__main__':
        
     uid = str(uuid.uuid4())
     awsPath = args.s3FolderName + '/ML/classification/' + uid +'/'
-    localSavePath = args.appPath + '/downloads/ML/classification/' + uid + '/'
+    localSavePath = './downloads/ML/classification/' + uid + '/'
     
     if not os.path.exists(localSavePath):
         os.makedirs(localSavePath)

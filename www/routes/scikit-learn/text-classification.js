@@ -50,7 +50,7 @@ router.post('/text-classification-split',function(req,res,next){
 			pythonPath:'/opt/python/bin/python3.4',
 			pythonOptions:['-W ignore'],
 			scriptPath:appPath + '/scripts/',
-			args:['--appPath', appPath, 
+			args:[//'--appPath', appPath, 
 				'--remoteReadPath', req.body.prefix, 
 				'--ratio', req.body.ratio, 
 				'--filename', req.body.foldername,
@@ -97,7 +97,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 		pythonPath:'/opt/python/bin/python3.4',
 		pythonOptions:['-W ignore'],
 		scriptPath:appPath + '/scripts/',
-		args:[	'--appPath', appPath, 
+		args:[	//'--appPath', appPath, 
 				'--file',req.file.path,
 				'--uuid',req.body.uuid, 
 				'--model',req.body.classifier,
@@ -159,7 +159,7 @@ router.post('/text-classification-predict',function(req,res,next){
 		scriptPath:appPath + '/scripts/',
 		args:[
 			'--uuid',req.body.uuid,
-			'--appPath', appPath,
+			//'--appPath', appPath,
 			'--s3FolderName', req.body.s3FolderName ]
 		};		
 	pythonShell.run('classification_predict.py',options,function(err,results){

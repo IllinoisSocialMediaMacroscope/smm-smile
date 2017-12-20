@@ -400,7 +400,6 @@ class Network:
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Processing...")
-    parser.add_argument('--appPath', required=True)
     parser.add_argument('--remoteReadPath', required=True)
     parser.add_argument('--layout',required=True)
     parser.add_argument('--relations',required=True)
@@ -409,7 +408,7 @@ if __name__ == "__main__":
     
     uid = str(uuid.uuid4())
     awsPath = args.s3FolderName + '/NW/networkx/' + uid +'/'
-    localSavePath = args.appPath + '/downloads/NW/networkx/' + uid + '/'
+    localSavePath = './downloads/NW/networkx/' + uid + '/'
     
     if not os.path.exists(localSavePath):
         os.makedirs(localSavePath)

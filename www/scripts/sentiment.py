@@ -162,7 +162,6 @@ class Sentiment:
 if __name__ =='__main__':
 
     parser = argparse.ArgumentParser(description="Processing...")
-    parser.add_argument('--appPath', required=True)
     parser.add_argument('--remoteReadPath',required=True)
     parser.add_argument('--column', required=False)
     parser.add_argument('--s3FolderName', required=False)
@@ -170,7 +169,7 @@ if __name__ =='__main__':
 
     uid = str(uuid.uuid4())
     awsPath = args.s3FolderName + '/NLP/sentiment/' + uid +'/'
-    localSavePath = args.appPath + '/downloads/NLP/sentiment/' + uid + '/'
+    localSavePath = './downloads/NLP/sentiment/' + uid + '/'
        
     if not os.path.exists(localSavePath):
         os.makedirs(localSavePath)

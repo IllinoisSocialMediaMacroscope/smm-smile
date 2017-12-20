@@ -45,7 +45,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 			pythonPath:'/opt/python/bin/python3.4',
 			pythonOptions:['-W ignore'],
 			scriptPath:appPath + '/scripts/',
-			args:['--appPath', appPath, 
+			args:[ //'--appPath', appPath, 
 				'--remoteReadPath', req.body.prefix,  
 				'--column', req.body.selectFileColumn,
 				'--s3FolderName',req.body.s3FolderName 

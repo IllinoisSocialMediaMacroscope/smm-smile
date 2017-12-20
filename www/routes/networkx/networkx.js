@@ -32,7 +32,7 @@ router.post('/networkx',function(req,res,next){
 			pythonPath:'/opt/python/bin/python3.4',
 			pythonOptions:['-W ignore'],
 			scriptPath:appPath + '/scripts/',
-			args:[	'--appPath', appPath, 
+			args:[	// '--appPath', appPath, 
 					'--remoteReadPath', req.body.prefix, 
 					'--layout',req.body.layout, 
 					'--relations',req.body.relations,
