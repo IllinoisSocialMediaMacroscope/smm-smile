@@ -12,8 +12,8 @@ router.get('/networkx',function(req,res,next){
 	var directory = {};
 							
 	var promise_array = [];
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/twitter-Tweet/'));
-	promise_array.push(list_folders(req.query.sessionID + '/GraphQL/twitter-Stream/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Tweet/'));
+	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Stream/'));
 	Promise.all(promise_array).then( values => {
 		directory['twitter-Tweet'] = values[0];
 		directory['twitter-Stream'] = values[1];
@@ -36,7 +36,7 @@ router.post('/networkx',function(req,res,next){
 					'--remoteReadPath', req.body.prefix, 
 					'--layout',req.body.layout, 
 					'--relations',req.body.relations,
-					'--sessionID',req.body.sessionID
+					'--s3FolderName',req.body.s3FolderName
 				] 
 		};
 	}else{

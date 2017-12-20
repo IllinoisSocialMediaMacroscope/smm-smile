@@ -44,7 +44,7 @@ router.post('/query',function(req,res,next){
 	if (fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix)){
 		var directory = fs.readdirSync(dir_downloads_graphql + '/' + req.body.prefix);
 		
-		checkExist(req.body.sessionID + '/GraphQL/'+req.body.prefix +'/', req.body.filename).then((value) =>{
+		checkExist(req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/', req.body.filename).then((value) =>{
 			if (value){
 					
 				var headers = {
@@ -136,8 +136,8 @@ router.post('/query',function(req,res,next){
 							promise_csv.then(() =>{
 								
 								var promise_arr = [];
-								promise_arr.push(uploadToS3(directory+processed, req.body.sessionID + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+processed));
-								promise_arr.push(uploadToS3(directory+config, req.body.sessionID + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+config));
+								promise_arr.push(uploadToS3(directory+processed, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+processed));
+								promise_arr.push(uploadToS3(directory+config, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+config));
 								Promise.all(promise_arr).then((URLs) => {
 									// success!!
 									var rendering = responseObj[key1][key2][key3].slice(0,99);
