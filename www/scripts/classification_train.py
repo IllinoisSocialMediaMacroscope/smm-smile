@@ -265,7 +265,6 @@ class Classification:
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Processing...")
-    parser.add_argument('--appPath', required=True)
     parser.add_argument('--file',required=True)
     parser.add_argument('--uuid',required=True)
     parser.add_argument('--model',required=True)
@@ -275,7 +274,7 @@ if __name__ == '__main__':
     # instead of generate new uuid, inherit it from user specification
     uid = args.uuid
     awsPath = args.s3FolderName + '/ML/classification/' + uid +'/'
-    localSavePath = args.appPath + '/downloads/ML/classification/' + uid + '/'
+    localSavePath = './downloads/ML/classification/' + uid + '/'
     print(localSavePath)
     print(uid)
     

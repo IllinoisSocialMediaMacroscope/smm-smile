@@ -388,7 +388,6 @@ if __name__ =='__main__':
 
     parser = argparse.ArgumentParser(description="Processing...")
     parser.add_argument('--source', required=False)
-    parser.add_argument('--appPath', required=True)
     parser.add_argument('--remoteReadPath',required=True)
     parser.add_argument('--process',required=True)
     parser.add_argument('--tagger', required=True)
@@ -399,7 +398,7 @@ if __name__ =='__main__':
     
     uid = str(uuid.uuid4())
     awsPath = args.s3FolderName + '/NLP/preprocessing/' + uid +'/'
-    localSavePath = args.appPath + '/downloads/NLP/preprocessing/' + uid + '/'
+    localSavePath = './downloads/NLP/preprocessing/' + uid + '/'
 
     # save local configuration
     if not os.path.exists(localSavePath):
