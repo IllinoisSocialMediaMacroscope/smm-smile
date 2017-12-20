@@ -44,8 +44,8 @@ html
 				button(id="citation-notice-btn") click to continue
 								
 			div(class="button-unit",style="display:none;")
-				a(class="button" href="query") Get Started
-				a(class="button" href="history") Past Results
+				a(class="button" href="query" id="get-started") Get Started
+				a(class="button" href="history" id="past-results") Past Results
 				
 		each page,i in pages
 			if i%2 === 0
@@ -96,3 +96,17 @@ html
 					$("#" + linkID).attr('href', key['url'] + '?s3FolderName=local');
 				}
 			});
+			
+			var curr_URL = $("#get-started").attr('href');
+			if (s3FolderName !== undefined){
+				$("#get-started").attr('href', curr_URL + '?s3FolderName=' + s3FolderName );
+			}else{
+				$("#get-started").attr('href', curr_URL + '?s3FolderName=local' );
+			}
+			
+			var curr_URL = $("#past-results").attr('href');
+			if (s3FolderName !== undefined){
+				$("#past-results").attr('href', curr_URL + '?s3FolderName=' + s3FolderName );
+			}else{
+				$("#past-results").attr('href', curr_URL + '?s3FolderName=local' );
+			}
