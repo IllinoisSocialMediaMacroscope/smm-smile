@@ -41,12 +41,12 @@ router.post('/NLP-preprocess',function(req,res,next){
 		
 	if (req.body.selectFile !== 'Please Select'){
 		var options = {
-			pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-			//pythonPath:'/opt/python/bin/python3.4',
+			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+			pythonPath:'/opt/python/bin/python3.4',
 			pythonOptions:['-W ignore'],
 			scriptPath:appPath + '/scripts/',
 			args:['--appPath', appPath, 
-			'--localReadPath', appPath + '/downloads/GraphQL/' + req.body.filename, 
+			'--remoteReadPath', req.body.prefix, 
 			'--column', req.body.selectFileColumn,
 			'--process',req.body.model, 
 			'--tagger',req.body.tagger, 
@@ -56,7 +56,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 	}else{
 		res.end('no file selected!');
 	}	
-				
+	
 	pythonShell.run('preprocessing.py',options,function(err,results){
 		if(err){ 
 			console.log(err);
@@ -69,7 +69,6 @@ router.post('/NLP-preprocess',function(req,res,next){
 			var most_common = results[4];
 			var div = results[5];
 			var tagged = results[6];
-			
 			
 			var promise_array = [];
 			// promise_array.push(getMultiRemote(div));

@@ -32,7 +32,6 @@ class Classification:
     def __init__(self, awsPath, localSavePath, file):
 
         self.localSavePath = localSavePath
-        self.bucketName = 'macroscope-smile'
         self.awsPath = awsPath
         
         Array = []
@@ -126,15 +125,15 @@ class Classification:
             writer.writerow(['fold_1','fold_2','fold_3','fold_4','fold_5',
                              'fold_6','fold_7','fold_8','fold_9','fold_10'])
             writer.writerow([ '%.4f' % elem for elem in fold_scores ])
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_folds)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_folds)
+        s3.upload(self.localSavePath, self.awsPath, fname_folds)
+        s3.generate_downloads(self.awsPath, fname_folds)
         
         # pickle the Pipeline for future use
         fname_pickle = 'classification_pipeline.pickle'
         with open(self.localSavePath + fname_pickle,'wb') as f:
             pickle.dump(text_clf,f)
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_pickle)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_pickle)
+        s3.upload(self.localSavePath, self.awsPath, fname_pickle)
+        s3.generate_downloads(self.awsPath, fname_pickle)
 
         # plotting the roc curve
         self.labels = text_clf.classes_       
@@ -237,8 +236,7 @@ class Classification:
         fname_div ='div.dat'
         with open(self.localSavePath + fname_div,'w') as f:
             f.write(div)
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div)
-        # s3.generate_downloads(self.bucketName, self.awsPath, fname_div)
+        s3.upload(self.localSavePath, self.awsPath, fname_div)
         print(self.localSavePath + fname_div)
 
     def metrics(self):
@@ -258,8 +256,8 @@ class Classification:
                                     round(report[i][2],4),
                                     round(report[i][3],4)])
             writer.writerow(avg_report)
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_metrics)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_metrics)
+        s3.upload(self.localSavePath, self.awsPath, fname_metrics)
+        s3.generate_downloads(self.awsPath, fname_metrics)
 
         
         
@@ -286,8 +284,8 @@ if __name__ == '__main__':
 
     # download config to that folder
     fname_config = 'config.dat'
-    if s3.checkExist('macroscope-smile', awsPath, fname_config): 
-        s3.downloadToDisk('macroscope-smile', fname_config, localSavePath, awsPath)
+    if s3.checkExist(awsPath, fname_config): 
+        s3.downloadToDisk(fname_config, localSavePath, awsPath)
     else:
         # throw file not found error
         deleteDir.deletedir(localSavePath)
@@ -300,7 +298,7 @@ if __name__ == '__main__':
             data.update(vars(args))
         with open(localSavePath + fname_config, "w") as f:
             json.dump(data,f)
-    s3.upload(localSavePath,'macroscope-smile' , awsPath, fname_config)
+    s3.upload(localSavePath, awsPath, fname_config)
 
     
     

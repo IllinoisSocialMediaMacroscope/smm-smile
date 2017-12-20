@@ -56,8 +56,8 @@ $(document).ready(function(){
 						
 						// offer crawling for reddit comments modal
 						if(directory === 'reddit-Post' || directory === 'reddit-Historical-Post' || directory === 'reddit-Search'){
-							$("#dataset").val(directory + "/" + foldername + "/" + foldername + ".csv");
-							$("#length").val(numCat_data.length-1);
+							//$("#dataset").val(directory + "/" + foldername + "/" + foldername + ".csv");
+							//$("#length").val(numCat_data.length-1);
 							$("#getComment").show();
 						}else{
 							$("#getComment").hide();
@@ -188,16 +188,16 @@ function appendInstruction(ID, len_training, len_testing){
 }
 /*-----------------------split --------------------------------------------*/
 function split(){
-	
+	var prefix = $("#selectFile").children(":selected").val();
 	var foldername = $("#selectFile").children(":selected").attr("id");
 	var directory = $("#selectFile").children(":selected").attr("class");
 	var ratio = $("#ratio").val();
 	if (sessionID == undefined) sessionID = 'local'
-	
 	var data = "ratio=" + ratio 
 	+ "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv" 
 	+ "&foldername=" + foldername 
-	+ "&sessionID=" + sessionID;
+	+ "&sessionID=" + sessionID
+	+ "&prefix="+ prefix;
 	
 	if (formValidation('split')){
 		

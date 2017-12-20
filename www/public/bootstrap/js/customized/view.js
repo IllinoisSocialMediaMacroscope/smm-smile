@@ -415,12 +415,11 @@ function appendD3JS(data){
 /*----------------------submit to analysis--------------------------------------------*/
 function ajaxSubmit(formID){
 	
-	var foldername = $("#selectFile").children(":selected").attr("id");
-	var directory = $("#selectFile").children(":selected").attr("class");
-	
+	var prefix = $("#selectFile").children(":selected").val();
+		
 	// session ID already calculated in topbar.pug
 	if (sessionID == undefined) sessionID = 'local'
-	var data = $(formID).serialize() + "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv"
+	var data = $(formID).serialize() + "&prefix="+ prefix
 				+ "&sessionID=" + sessionID;
 	
 	// if there's upload file involving

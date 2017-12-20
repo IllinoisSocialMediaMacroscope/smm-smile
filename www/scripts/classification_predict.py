@@ -21,7 +21,6 @@ class Classification:
     def __init__(self, awsPath, localSavePath, unlabeled):
 
         self.localSavePath = localSavePath
-        self.bucketName = 'macroscope-smile'
         self.awsPath = awsPath
         self.unlabeled = unlabeled
 
@@ -74,8 +73,8 @@ class Classification:
                         writer.writerow([data[i],self.predicted[i]])
                     except:
                         pass
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname)
+        s3.upload(self.localSavePath, self.awsPath, fname)
+        s3.generate_downloads(self.awsPath, fname)
         
 
     def plot(self):
@@ -91,8 +90,7 @@ class Classification:
         fname_div_comp = 'div_comp.dat'
         with open(self.localSavePath + fname_div_comp,"w") as f:
             f.write(div_comp)
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div_comp)
-        # s3.generate_downloads(self.bucketName, self.awsPath, fname_div_comp)
+        s3.upload(self.localSavePath, self.awsPath, fname_div_comp)
         print(self.localSavePath + fname_div_comp)
 
 if __name__ == '__main__':
@@ -114,8 +112,8 @@ if __name__ == '__main__':
 
     # download config to that folder
     fname_config = 'config.dat'
-    if s3.checkExist('macroscope-smile', awsPath, fname_config): 
-        s3.downloadToDisk('macroscope-smile', fname_config, localSavePath, awsPath)
+    if s3.checkExist(awsPath, fname_config): 
+        s3.downloadToDisk(fname_config, localSavePath, awsPath)
     else:
         deleteDir.deletedir(localSavePath)
         raise ValueError('You\'re requesting ' + fname_config + ' file, and it\'s not found in your remote directory!')
@@ -125,16 +123,16 @@ if __name__ == '__main__':
         data = json.load(f)
         filename = data['filename']
     fname_unlabeled = 'UNLABELED_' + filename +'.csv'
-    if s3.checkExist('macroscope-smile', awsPath, fname_unlabeled): 
-        s3.downloadToDisk('macroscope-smile', fname_unlabeled, localSavePath, awsPath)
+    if s3.checkExist(awsPath, fname_unlabeled): 
+        s3.downloadToDisk(fname_unlabeled, localSavePath, awsPath)
     else:
         deleteDir.deletedir(localSavePath)
         raise ValueError('You\'re requesting ' + fname_unlabeled + ' file, and it\'s not found in your remote directory!')
 
     #download pickle model
     fname_pickle = 'classification_pipeline.pickle'
-    if s3.checkExist('macroscope-smile', awsPath, fname_pickle): 
-        s3.downloadToDisk('macroscope-smile', fname_pickle, localSavePath, awsPath)
+    if s3.checkExist(awsPath, fname_pickle): 
+        s3.downloadToDisk(fname_pickle, localSavePath, awsPath)
     else:
         deleteDir.deletedir(localSavePath)
         raise ValueError('You\'re requesting ' + fname_pickle + ' file, and it\'s not found in your remote directory!')

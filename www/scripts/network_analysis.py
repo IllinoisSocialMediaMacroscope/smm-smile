@@ -18,15 +18,22 @@ from helper_func import deleteDir
 
 class Network:
 
-    def __init__(self, awsPath, localSavePath, localReadPath, relationships):
+    def __init__(self, awsPath, localSavePath, remoteReadPath, relationships):
 
         self.localSavePath = localSavePath
-        self.bucketName = 'macroscope-smile'
         self.awsPath = awsPath
 
+        # download remote socialmedia data into a temp folder
+        # load it into csv
+        temp_dir = 'downloads/temp/'
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+        filename = remoteReadPath.split('/')[-2] + '.csv'
+        s3.downloadToDisk(filename=filename,localpath=temp_dir, remotepath=remoteReadPath)
+        
         Array = []
         try:
-            with open(localReadPath,'r',encoding="utf-8") as f:
+            with open(temp_dir + filename,'r',encoding="utf-8") as f:
                 reader = csv.reader(f)
                 try:
                     for row in reader:
@@ -34,7 +41,7 @@ class Network:
                 except Exception as e:
                     pass
         except:
-            with open(localReadPath,'r',encoding="ISO-8859-1") as f:
+            with open(temp_dir + filename,'r',encoding="ISO-8859-1") as f:
                 reader = csv.reader(f)
                 try:
                     for row in reader:
@@ -43,9 +50,13 @@ class Network:
                     pass
                 
         df = pandas.DataFrame(Array[1:],columns=Array[0])
+
+        # remove the file in temp
+        if os.path.isfile('downloads/temp/' + filename):
+            os.remove('downloads/temp/' + filename)
         
         if relationships == 'reply_to':
-            if localReadPath.find('twitter-Tweet') != -1:
+            if remoteReadPath.find('twitter-Tweet') != -1:
                 df = df[['text','user.screen_name']].dropna()
                 df['reply_to'] = df['text'].str.extract('^@([A-Za-z0-9-_]+)',expand=True)
                 new_df = df[['reply_to','user.screen_name','text']].dropna()
@@ -54,7 +65,7 @@ class Network:
                 for row in new_df.iterrows():
                    self.graph.add_edge(row[1]['user.screen_name'], row[1]['reply_to'], text=row[1]['text'])
 
-            elif localReadPath.find('twitter-Stream') != -1:
+            elif remoteReadPath.find('twitter-Stream') != -1:
                 df = df[['_source.text','_source.user.screen_name']].dropna()
                 df['reply_to'] = df['_source.text'].str.extract('^@([A-Za-z0-9-_]+)',expand=True)
                 new_df = df[['reply_to','_source.user.screen_name','_source.text']].dropna()
@@ -64,7 +75,7 @@ class Network:
                    self.graph.add_edge(row[1]['_source.user.screen_name'], row[1]['reply_to'], text=row[1]['_source.text'])
 
         elif relationships == 'retweet_from':
-            if localReadPath.find('twitter-Tweet') != -1:
+            if remoteReadPath.find('twitter-Tweet') != -1:
                 df = df[['text','user.screen_name']].dropna()
                 df['retweet_from'] = df['text'].str.extract('RT @([A-Za-z0-9-_]+):',expand=True)
                 new_df = df[['retweet_from','user.screen_name','text']].dropna()
@@ -73,7 +84,7 @@ class Network:
                 for row in new_df.iterrows():
                    self.graph.add_edge(row[1]['user.screen_name'],row[1]['retweet_from'],  text=row[1]['text'])
 
-            elif localReadPath.find('twitter-Stream') != -1:
+            elif remoteReadPath.find('twitter-Stream') != -1:
                 df = df[['_source.text','_source.user.screen_name']].dropna()
                 df['retweet_from'] = df['_source.text'].str.extract('RT @([A-Za-z0-9-_]+):',expand=True)
                 new_df = df[['retweet_from','_source.user.screen_name','_source.text']].dropna()
@@ -84,7 +95,7 @@ class Network:
                 
         elif relationships == 'mentions':
             
-            if localReadPath.find('twitter-Tweet') != -1:
+            if remoteReadPath.find('twitter-Tweet') != -1:
                 df = df[['text','user.screen_name']].dropna()
                 df['mentions'] = df['text'].str.findall('@([A-Za-z0-9-_]+)')
                 tmp = []
@@ -99,7 +110,7 @@ class Network:
                 df.apply(backend,axis=1)
                 new_df = pandas.DataFrame(tmp).dropna()
                     
-            elif localReadPath.find('twitter-Stream') != -1:
+            elif remoteReadPath.find('twitter-Stream') != -1:
                 df = df[['_source.text','_source.user.screen_name']].dropna()
                 df['mentions'] = df['_source.text'].str.findall('@([A-Za-z0-9-_]+)')
                 tmp = []
@@ -141,20 +152,20 @@ class Network:
         fname_d3js = 'd3js.json'
         with open(self.localSavePath + fname_d3js,"w") as f:
             json.dump(d3js_graph,f)
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_d3js)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_d3js)
+        s3.upload(self.localSavePath, self.awsPath, fname_d3js)
+        s3.generate_downloads(self.awsPath, fname_d3js)
 
         # Gehpi readable format
         fname_gephi = 'network.gml'
         nx.write_gml(self.graph,self.localSavePath + fname_gephi)
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_gephi)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_gephi)
+        s3.upload(self.localSavePath, self.awsPath, fname_gephi)
+        s3.generate_downloads(self.awsPath, fname_gephi)
 
         # Pajek format
         fname_pajek = 'network.net'
         nx.write_pajek(self.graph,self.localSavePath + fname_pajek)
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_pajek)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_pajek)
+        s3.upload(self.localSavePath, self.awsPath, fname_pajek)
+        s3.generate_downloads(self.awsPath, fname_pajek)
         
 
     def draw_graph(self,relationships,layout):
@@ -234,8 +245,7 @@ class Network:
         fname_div = 'div.dat'
         with open(self.localSavePath + fname_div,"w") as f:
             f.write(div)
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div)
-        # s3.generate_downloads(self.bucketName, self.awsPath, fname_div)
+        s3.upload(self.localSavePath, self.awsPath, fname_div)
         print(self.localSavePath + fname_div)
 
 
@@ -257,8 +267,8 @@ class Network:
                     writer.writerow(line)
                 except UnicodeEncodeError:
                     pass
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_assort)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_assort)
+        s3.upload(self.localSavePath, self.awsPath, fname_assort)
+        s3.generate_downloads(self.awsPath, fname_assort)
 
 
 
@@ -325,11 +335,11 @@ class Network:
                 except UnicodeEncodeError:
                     pass
 
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_node)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_node)
+        s3.upload(self.localSavePath, self.awsPath, fname_node)
+        s3.generate_downloads(self.awsPath, fname_node)
 
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_edge)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_edge)
+        s3.upload(self.localSavePath, self.awsPath, fname_edge)
+        s3.generate_downloads(self.awsPath, fname_edge)
         
 
     def component(self):
@@ -347,8 +357,8 @@ class Network:
                     writer.writerow([line])
                 except UnicodeEncodeError:
                     pass   
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_strong)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_strong)
+        s3.upload(self.localSavePath, self.awsPath, fname_strong)
+        s3.generate_downloads(self.awsPath, fname_strong)
         
         
         weak = nx.weakly_connected_components(self.graph)
@@ -364,8 +374,8 @@ class Network:
                     writer.writerow([line])
                 except UnicodeEncodeError:
                     pass   
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_weak)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_weak)
+        s3.upload(self.localSavePath, self.awsPath, fname_weak)
+        s3.generate_downloads(self.awsPath, fname_weak)
 
 
 
@@ -381,8 +391,8 @@ class Network:
                     writer.writerow((k,rslt['triadic_census'][k]))
                 except UnicodeEncodeError:
                     pass
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_triads)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname_triads)
+        s3.upload(self.localSavePath, self.awsPath, fname_triads)
+        s3.generate_downloads(self.awsPath, fname_triads)
 
 
 
@@ -391,7 +401,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Processing...")
     parser.add_argument('--appPath', required=True)
-    parser.add_argument('--localReadPath', required=True)
+    parser.add_argument('--remoteReadPath', required=True)
     parser.add_argument('--layout',required=True)
     parser.add_argument('--relations',required=True)
     parser.add_argument('--sessionID', required=False)
@@ -406,11 +416,10 @@ if __name__ == "__main__":
     fname = 'config.dat'
     with open(localSavePath + fname,"w") as f:
         json.dump(vars(args),f)
-    s3.upload(localSavePath,'macroscope-smile' , awsPath, fname)
-    # s3.generate_downloads('macroscope-smile', awsPath, fname)
-
+    s3.upload(localSavePath, awsPath, fname)
+    
     print(localSavePath)    
-    network = Network(awsPath, localSavePath, args.localReadPath, args.relations)
+    network = Network(awsPath, localSavePath, args.remoteReadPath, args.relations)
     network.export_graph()    
     
     network.assortativity()

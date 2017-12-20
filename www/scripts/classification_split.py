@@ -14,15 +14,22 @@ from helper_func import deleteDir
 
 class Classification:
 
-    def __init__(self,awsPath, localSavePath, localReadPath):
+    def __init__(self,awsPath, localSavePath, remoteReadPath):
 
         self.localSavePath = localSavePath
-        self.bucketName = 'macroscope-smile'
         self.awsPath = awsPath
 
+        # download remote socialmedia data into a temp folder
+        # load it into csv
+        temp_dir = 'downloads/temp/'
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+        filename = remoteReadPath.split('/')[-2] + '.csv'
+        s3.downloadToDisk(filename=filename,localpath=temp_dir, remotepath=remoteReadPath)
+        
         Array = []
         try:
-            with open(localReadPath,'r',encoding='utf-8') as f:
+            with open(temp_dir + filename,'r',encoding='utf-8') as f:
                 reader = csv.reader(f)
                 for row in reader:
                     try:
@@ -30,7 +37,7 @@ class Classification:
                     except Exception as e:
                         pass
         except:
-            with open(localReadPath,'r',encoding='ISO-8859-1') as f:
+            with open(temp_dir + filename,'r',encoding='ISO-8859-1') as f:
                 reader = csv.reader(f)
                 for row in reader:
                     try:
@@ -39,6 +46,11 @@ class Classification:
                         pass
 
         df = pandas.DataFrame(Array[1:], columns=Array[0])
+
+        # remove the file in temp
+        if os.path.isfile('downloads/temp/' + filename):
+            os.remove('downloads/temp/' + filename)
+
         # find the unique tweet in a corpus
         if 'text' in Array[0]:
             self.corpus = list(set(df['text'].dropna().astype('str').tolist()))
@@ -69,8 +81,7 @@ class Classification:
         fname_div_split = 'div_split.dat'
         with open(self.localSavePath + fname_div_split,"w") as f:
             f.write(div_split)
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_div_split)
-        # s3.generate_downloads(self.bucketName, self.awsPath, fname_div_split)
+        s3.upload(self.localSavePath, self.awsPath, fname_div_split)
         print(self.localSavePath + fname_div_split)
 
         
@@ -93,8 +104,8 @@ class Classification:
                         writer.writerow([row])
                     except UnicodeDecodeError:
                         pass
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname1)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname1)
+        s3.upload(self.localSavePath, self.awsPath, fname1)
+        s3.generate_downloads(self.awsPath, fname1)
 
 
 
@@ -117,8 +128,8 @@ class Classification:
                         writer.writerow([row])
                     except UnicodeDecodeError:
                         pass
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname2)
-        s3.generate_downloads(self.bucketName, self.awsPath, fname2)
+        s3.upload(self.localSavePath, self.awsPath, fname2)
+        s3.generate_downloads(self.awsPath, fname2)
 
 
         
@@ -128,7 +139,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Processing...")
     parser.add_argument('--appPath', required=True)
-    parser.add_argument('--localReadPath', required=True)
+    parser.add_argument('--remoteReadPath', required=True)
     parser.add_argument('--ratio',required=True)
     parser.add_argument('--filename',required=True)
     parser.add_argument('--sessionID', required=False)
@@ -143,13 +154,13 @@ if __name__ == '__main__':
     fname = 'config.dat'
     with open(localSavePath + fname,"w") as f:
         json.dump(vars(args),f)
-    s3.upload(localSavePath,'macroscope-smile' , awsPath, fname)
+    s3.upload(localSavePath, awsPath, fname)
 
     print(localSavePath)
     print(uid)
 
   
-    classification = Classification(awsPath, localSavePath, args.localReadPath)
+    classification = Classification(awsPath, localSavePath, args.remoteReadPath)
     classification.split(int(args.ratio),args.filename)
 
     # clean up local folders

@@ -239,7 +239,7 @@ function drawGauge(name,compound) {
 function toggle(self,id){
 	
 	$(id).toggle();
-	
+		
 	if ($(id).is(':visible')){
 		$(self).children('span').attr('class','glyphicon glyphicon-minus');
 	}else{

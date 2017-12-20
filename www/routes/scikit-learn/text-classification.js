@@ -46,17 +46,17 @@ router.post('/text-classification-split',function(req,res,next){
 	}else{
 		
 		var options = {
-			pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-			//pythonPath:'/opt/python/bin/python3.4',
+			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+			pythonPath:'/opt/python/bin/python3.4',
 			pythonOptions:['-W ignore'],
 			scriptPath:appPath + '/scripts/',
 			args:['--appPath', appPath, 
-				'--localReadPath', appPath + '/downloads/GraphQL/' + req.body.filename, 
+				'--remoteReadPath', req.body.prefix, 
 				'--ratio', req.body.ratio, 
 				'--filename', req.body.foldername,
 				'--sessionID',req.body.sessionID				]
 			};
-			
+		
 		pythonShell.run('classification_split.py',options,function(err,results){
 			if (err){
 				console.log(err);
@@ -93,8 +93,8 @@ router.post('/text-classification-split',function(req,res,next){
 router.post('/text-classification-train',upload.single('labeled'),function(req,res,next){
 		
 	var options = {
-		pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-		//pythonPath:'/opt/python/bin/python3.4',
+		//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+		pythonPath:'/opt/python/bin/python3.4',
 		pythonOptions:['-W ignore'],
 		scriptPath:appPath + '/scripts/',
 		args:[	'--appPath', appPath, 
@@ -153,8 +153,8 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 
 router.post('/text-classification-predict',function(req,res,next){
 	var options = {
-		pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-		//pythonPath:'/opt/python/bin/python3.4',
+		//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+		pythonPath:'/opt/python/bin/python3.4',
 		pythonOptions:['-W ignore'],
 		scriptPath:appPath + '/scripts/',
 		args:[
