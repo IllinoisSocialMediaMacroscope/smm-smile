@@ -19,15 +19,24 @@ from helper_func import writeToS3 as s3
 from helper_func import deleteDir
 
 class Preprocess:
-    def __init__(self, awsPath, localSavePath, localReadPath, column, source='unspecified'):
+
+    def __init__(self, awsPath, localSavePath, remoteReadPath, column, source='unspecified'):
 
             self.localSavePath = localSavePath
-            self.bucketName = 'macroscope-smile'
             self.awsPath = awsPath
-              
+
+
+            # download remote socialmedia data into a temp folder
+            # load it into csv
+            temp_dir = 'downloads/temp/'
+            if not os.path.exists(temp_dir):
+                os.makedirs(temp_dir)
+            filename = remoteReadPath.split('/')[-2] + '.csv'
+            s3.downloadToDisk(filename=filename,localpath=temp_dir, remotepath=remoteReadPath)
+            
             Array = []
             try:
-                with open(localReadPath,'r',encoding="utf-8") as f:
+                with open(temp_dir + filename,'r',encoding="utf-8") as f:
                     reader = csv.reader(f)
                     try:
                         for row in reader:
@@ -35,14 +44,18 @@ class Preprocess:
                     except Exception as e:
                         pass
             except:
-                with open(localReadPath,'r',encoding="ISO-8859-1") as f:
+                with open(temp_dir + filename,'r',encoding="ISO-8859-1") as f:
                     reader = csv.reader(f)
                     try:
                         for row in reader:
                             Array.append(row)
                     except Exception as e:
                         pass
-
+                    
+            # remove the file in temp
+            if os.path.isfile('downloads/temp/' + filename):
+                os.remove('downloads/temp/' + filename)
+                
             # remove URL
             df = pd.DataFrame(Array[1:],columns=Array[0])
             sentences = df[column].dropna().astype('str').tolist()
@@ -72,8 +85,8 @@ class Preprocess:
                             f.write("{}\n".format(item)) 
                         except UnicodeEncodeError:
                             pass
-            s3.upload(self.localSavePath, self.bucketName, self.awsPath, fname_phrases)
-            s3.generate_downloads(self.bucketName, self.awsPath, fname_phrases)
+            s3.upload(self.localSavePath, self.awsPath, fname_phrases)
+            s3.generate_downloads(self.awsPath, fname_phrases)
 
             # tokenize the word
             if source == 'twitter':
@@ -120,8 +133,8 @@ class Preprocess:
                         writer.writerows(self.filtered_tokens_lower)
                     except UnicodeEncodeError:
                         pass
-            s3.upload(self.localSavePath, self.bucketName, self.awsPath,fname_filtered)
-            s3.generate_downloads(self.bucketName,self.awsPath,fname_filtered)
+            s3.upload(self.localSavePath, self.awsPath,fname_filtered)
+            s3.generate_downloads(self.awsPath,fname_filtered)
           
     def stem_lematize(self,process):
 
@@ -146,8 +159,8 @@ class Preprocess:
                         writer.writerows(self.processed_tokens)
                     except UnicodeEncodeError:
                         pass
-            s3.upload(self.localSavePath, self.bucketName, self.awsPath,fname_processed)
-            s3.generate_downloads(self.bucketName,self.awsPath,fname_processed)
+            s3.upload(self.localSavePath, self.awsPath,fname_processed)
+            s3.generate_downloads(self.awsPath,fname_processed)
 
         elif process == 'stemming':
             porter = PorterStemmer()
@@ -170,8 +183,8 @@ class Preprocess:
                         writer.writerows(self.processed_tokens)
                     except UnicodeEncodeError:
                         pass
-            s3.upload(self.localSavePath, self.bucketName, self.awsPath,fname_processed)
-            s3.generate_downloads(self.bucketName,self.awsPath,fname_processed)
+            s3.upload(self.localSavePath, self.awsPath,fname_processed)
+            s3.generate_downloads(self.awsPath,fname_processed)
 
         elif process == 'both':
             wnl = WordNetLemmatizer()
@@ -196,8 +209,8 @@ class Preprocess:
                         writer.writerows(self.processed_tokens)
                     except UnicodeEncodeError:
                         pass
-            s3.upload(self.localSavePath, self.bucketName, self.awsPath,fname_processed)
-            s3.generate_downloads(self.bucketName,self.awsPath,fname_processed)
+            s3.upload(self.localSavePath, self.awsPath,fname_processed)
+            s3.generate_downloads(self.awsPath,fname_processed)
             
 
     def tagging(self,tagger):
@@ -219,8 +232,8 @@ class Preprocess:
                     writer.writerows(self.tag)
                 except UnicodeEncodeError:
                     pass
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath,fname_tagged)
-        s3.generate_downloads(self.bucketName,self.awsPath,fname_tagged)
+        s3.upload(self.localSavePath, self.awsPath,fname_tagged)
+        s3.generate_downloads(self.awsPath,fname_tagged)
 
     def pos_tagging(self):
         self.tag = []
@@ -254,8 +267,8 @@ class Preprocess:
                     writer.writerows(filtered_most_common)
                 except UnicodeEncodeError:
                     pass
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath,fname_most_common)
-        s3.generate_downloads(self.bucketName,self.awsPath,fname_most_common)
+        s3.upload(self.localSavePath, self.awsPath,fname_most_common)
+        s3.generate_downloads(self.awsPath,fname_most_common)
               
         processed_most_common = FreqDist(processed_document).most_common()
         # word frequency figure
@@ -367,8 +380,7 @@ class Preprocess:
         fname_div = 'div.dat'
         with open(self.localSavePath + fname_div,"w") as f:
             f.write(div)
-        s3.upload(self.localSavePath, self.bucketName, self.awsPath,fname_div)
-        # s3.generate_downloads(self.bucketName,self.awsPath,fname_div)
+        s3.upload(self.localSavePath, self.awsPath,fname_div)
         print(self.localSavePath + fname_div)
 
 
@@ -377,7 +389,7 @@ if __name__ =='__main__':
     parser = argparse.ArgumentParser(description="Processing...")
     parser.add_argument('--source', required=False)
     parser.add_argument('--appPath', required=True)
-    parser.add_argument('--localReadPath',required=True)
+    parser.add_argument('--remoteReadPath',required=True)
     parser.add_argument('--process',required=True)
     parser.add_argument('--tagger', required=True)
     parser.add_argument('--column', required=False)
@@ -395,11 +407,10 @@ if __name__ =='__main__':
     fname = 'config.dat'
     with open(localSavePath + fname,"w") as f:
         json.dump(vars(args),f)
-    s3.upload(localSavePath, 'macroscope-smile', awsPath, fname)
-    #s3.generate_downloads('macroscope-smile', awsPath, fname)
+    s3.upload(localSavePath, awsPath, fname)
     print(localSavePath)
 
-    preprocessing = Preprocess(awsPath, localSavePath, args.localReadPath, args.column, args.source)
+    preprocessing = Preprocess(awsPath, localSavePath, args.remoteReadPath, args.column, args.source)
     preprocessing.stem_lematize(args.process)
     preprocessing.plotFreq()
     preprocessing.tagging(args.tagger)

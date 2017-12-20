@@ -8,24 +8,21 @@ client = boto3.client(
     aws_secret_access_key='***REMOVED***'
 )
 
-def upload(localpath, bucketName, remotepath, filename):
-    '''client.upload_file('C:\\Users\\cwang138\\Documents\\work\\analytic-standalone\\www\\public\\bootstrap\\img\\logo\\' +filename,
-                   'macroscope-smile',
-                   '/'+filename)'''
+def upload(localpath, remotepath, filename):
     try:
-        client.upload_file(localpath + filename, bucketName, remotepath + filename)
+        client.upload_file(localpath + filename, 'macroscope-smile', remotepath + filename)
         return True
     except:
         return False
 
-def createDirectory(bucketName, DirectoryName):
-    client.put_object(Bucket=bucketName, Key=DirectoryName) # must end with a slash
+def createDirectory(DirectoryName):
+    client.put_object(Bucket='macroscope-smile', Key=DirectoryName) # must end with a slash
 
-def generate_downloads(bucketName, remotepath, filename):
+def generate_downloads(remotepath, filename):
     url = client.generate_presigned_url(
                 ClientMethod='get_object',
                 Params={
-                    'Bucket': bucketName,
+                    'Bucket': 'macroscope-smile',
                     'Key': remotepath + filename
                 },
                 ExpiresIn=604800 # one week
@@ -35,24 +32,28 @@ def generate_downloads(bucketName, remotepath, filename):
 
     return response
 
-def downloadToDisk(bucketName, filename, localpath, remotepath):
+def downloadToDisk(filename, localpath, remotepath):
     try:
         with open(localpath + filename, 'wb') as f:
-            client.download_fileobj(bucketName, remotepath + filename, f)
+            client.download_fileobj('macroscope-smile', remotepath + filename, f)
         return True
     except:
         return False
-    
-def checkExist(bucketName, remotepath, filename):
+
+def getObject(remoteKey):
+    obj = client.get_object(Bucket='macroscope-smile', Key=remoteKey)
+    print(obj['Body'].read())
+
+def checkExist(remotepath, filename):
     try:
-        t = client.head_object(Bucket=bucketName, Key=remotepath+filename)
+        t = client.head_object(Bucket='macroscope-smile', Key=remotepath+filename)
         return True
         # print(t)
     except:
         return False
     
-def listDir(bucketName, remoteClass):
-    objects = client.list_objects(Bucket=bucketName, Prefix=remoteClass, Delimiter='/')
+def listDir(remoteClass):
+    objects = client.list_objects(Bucket='macroscope-smile', Prefix=remoteClass, Delimiter='/')
     foldernames = []
     for o in objects.get('CommonPrefixes'):
         foldernames.append(o.get('Prefix'))
@@ -61,8 +62,8 @@ def listDir(bucketName, remoteClass):
     return foldernames
 
 
-def listFiles(bucketName, foldernames):
-    objects = client.list_objects(Bucket=bucketName, Prefix=foldernames)
+def listFiles(foldernames):
+    objects = client.list_objects(Bucket='macroscope-smile', Prefix=foldernames)
 
     # return rich information about the files
     return objects.get('Contents')
@@ -85,7 +86,7 @@ if __name__ == '__main__':
 
     print(checkExist('macroscope-smile', 'local/ML/classification/0abb811f-2a27-4ce6-8881-7028eaec9b95/', 'classification_pipeline.pickle'))
 
-    print(listDir('macroscope-smile','local/NLP/preprocessing/'))'''
+    print(listDir('macroscope-smile','local/NLP/preprocessing/'))
 
     listFiles('macroscope-smile','local/NLP/preprocessing/1127a434-5db4-44f9-9da2-6c60ffe59ba3/')
-
+    downloadToDisk('macroscope-smile', 'amtrak.csv','temp/', 'local/GraphQL/reddit-Search/amtrak/')'''

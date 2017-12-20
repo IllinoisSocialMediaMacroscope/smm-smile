@@ -41,12 +41,12 @@ router.get('/NLP-sentiment',function(req,res,next){
 router.post('/NLP-sentiment',function(req,res,next){
 	if (req.body.selectFile !== 'Please Select...'){
 		var options = {
-			pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-			//pythonPath:'/opt/python/bin/python3.4',
+			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+			pythonPath:'/opt/python/bin/python3.4',
 			pythonOptions:['-W ignore'],
 			scriptPath:appPath + '/scripts/',
 			args:['--appPath', appPath, 
-				'--localReadPath', appPath + '/downloads/GraphQL/' + req.body.filename, 
+				'--remoteReadPath', req.body.prefix,  
 				'--column', req.body.selectFileColumn,
 				'--sessionID',req.body.sessionID 
 			]

@@ -16,13 +16,13 @@ if (sessionID !== undefined){
 	$("#topbar-preprocessing").attr('href', "NLP-preprocess?sessionID=" + sessionID);
 	$("#topbar-classification").attr('href', "text-classification?sessionID=" + sessionID);
 	$("#topbar-sentiment").attr('href', "NLP-sentiment?sessionID=" + sessionID);
-	$("#networkx").attr('href', "networkx?sessionID=" + sessionID);
+	$("#topbar-networkx").attr('href', "networkx?sessionID=" + sessionID);
 }else{
 	$("#topbar-history").attr('href', "history?sessionID=local");
 	$("#topbar-preprocessing").attr('href', "NLP-preprocess?sessionID=local");
 	$("#topbar-classification").attr('href', "text-classification?sessionID=local");
 	$("#topbar-sentiment").attr('href', "NLP-sentiment?sessionID=local");
-	$("#networkx").attr('href', "networkx?sessionID=local");
+	$("#topbar-networkx").attr('href', "networkx?sessionID=local");
 }
 
 //get currentPage name for dropbox and read the ?dropbox=success

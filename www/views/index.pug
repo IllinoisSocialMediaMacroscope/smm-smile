@@ -57,7 +57,7 @@ html
 							h1(class="app-title") #{page.name}
 							p(class="intro",id=page.name) !{page.introduction}
 							a(class="prose-button",href=page.wiki,target="_blank") Read More
-							a(class="prose-button",href=page.url) Start
+							a(class="prose-button",href=page.url,id=page.url) Start
 						div(class="app")
 							a(href=page.url)
 								img(src=page.imgURL, width="400px", class="logos")
@@ -71,8 +71,8 @@ html
 							h1(class="app-title") #{page.name}
 							p(class="intro") !{page.introduction}
 							a(class="prose-button",href=page.wiki,target="_blank") Read More
-							a(class="prose-button",href=page.url) Start		
-			
+							a(class="prose-button",href=page.url,id=page.url) Start
+										
 		include components/footer.pug								
 		script(src="bootstrap/js/customized/detect_cookie.js")
 		
@@ -83,13 +83,16 @@ html
 				$(".button-unit").show('slow');
 				
 			});
-			/*$(".prose-button").on('click',function(){
-				if (sessionID !== undefined && $(this).text() === 'Start'){
-					var original_href = $(this).attr('href');
-					$(location).attr('href', original_href + "?sessionID=" + sessionID)
-				
-				}else if (sessionID === undefined && $(this).text() === 'Start'){
-					var original_href = $(this).attr('href');
-					$(location).attr('href', original_href + "?sessionID=local")
+			
+			// append which session to analytics, this is important due to 
+			// analytics need to select files from s3
+			// s3 bucket folder is named after the sessionID
+			var pages =!{JSON.stringify(pages)}
+			$.each(pages,function(val,key){
+				var linkID = key['url'];
+				if (sessionID !== undefined){
+					$("#" + linkID).attr('href', key['url'] + '?sessionID=' + sessionID );
+				}else{
+					$("#" + linkID).attr('href', key['url'] + '?sessionID=local');
 				}
-			})*/
+			});

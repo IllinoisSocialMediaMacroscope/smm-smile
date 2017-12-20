@@ -34,7 +34,7 @@ function drawWordTree(name,table,root){
 
 $(document).ready(function(){
 	$("#selectFile").on('change',function(){
-		var prefix = $(this).children(":selected").val();
+		var prefix = $(this).children(":selected").val();	
 		var directory = $(this).children(":selected").attr("class");
 		$("#selectFilePreview-container").empty();
 		$("#selectFileHeader-container").empty();
@@ -84,8 +84,8 @@ $(document).ready(function(){
 						
 						// offer crawling for reddit comments modal
 						if(directory === 'reddit-Post' || directory === 'reddit-Historical-Post' || directory === 'reddit-Search'){
-							$("#dataset").val(directory + "/" + foldername + "/" + foldername + ".csv");
-							$("#length").val(text_data.length-1);
+							//$("#dataset").val(directory + "/" + foldername + "/" + foldername + ".csv");
+							//$("#length").val(text_data.length-1);
 							$("#getComment").show();
 						}else{
 							$("#getComment").hide();
