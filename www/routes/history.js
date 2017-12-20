@@ -305,7 +305,7 @@ router.post('/history',function(req,res,next){
 						var pajek = folderObj[filename];
 					}else if (filename === 'assortativity.csv'){
 						var assort = folderObj[filename];
-					}else if (filename === 'edge_attirbutes.csv'){
+					}else if (filename === 'edge_attributes.csv'){
 						var edge = folderObj[filename];
 					}else if (filename === 'node_attributes.csv'){
 						var node = folderObj[filename];
