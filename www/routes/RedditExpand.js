@@ -7,8 +7,8 @@ var pythonShell = require('python-shell');
 router.post('/reddit-expand',function(req,res,next){
 	
 	var options = {
-			pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-			//pythonPath:'/opt/python/bin/python3.4',
+			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
+			pythonPath:'/opt/python/bin/python3.4',
 			pythonOptions:['-W ignore'],
 			scriptPath:appPath + '/scripts/',
 			args:['--email',req.body.email, 
