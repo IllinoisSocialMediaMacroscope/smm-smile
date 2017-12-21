@@ -3,7 +3,7 @@ $("#rdCommentReq").on('click',function(){
 		$.ajax({
 			type:'post',
 			url:'reddit-expand', 
-			data: {"filename":$("#dataset").val(), 
+			data: {"prefix":$("#dataset").val(), 
 					"email":$("#email-alert").val()},				
 			success:function(data){
 				$("#reddit-expand").modal('hide');

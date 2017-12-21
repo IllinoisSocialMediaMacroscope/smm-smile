@@ -27,7 +27,7 @@ router.post('/render',function(req,res,next){
 						res.send({ERROR: 'This dataset you selected is empty, please select another one!'});
 						}else{
 							var preview_arr = CSV.parse(preview_string);
-							res.send({preview:preview_arr.slice(0,11)}); 
+							res.send({preview:preview_arr}); 
 						}
 					});
 					

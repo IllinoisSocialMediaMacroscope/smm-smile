@@ -55,7 +55,7 @@ $(document).ready(function(){
 						$("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-						$("#selectFilePreview").append(arrayToTable(numCat_data,'#selectFileTable'));
+						$("#selectFilePreview").append(arrayToTable(numCat_data.slice(0,11),'#selectFileTable'));
 						//$("#selectFileTable").DataTable();
 					}
 					
