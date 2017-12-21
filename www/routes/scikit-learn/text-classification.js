@@ -8,7 +8,7 @@ var multer = require('multer');
 var upload = multer({dest:'uploads/'});
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
-var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
+var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 
 router.get('/text-classification',function(req,res,next){
@@ -71,15 +71,16 @@ router.post('/text-classification-split',function(req,res,next){
 				if (div.slice(-1) === '\r') div = div.slice(0,-1);
 				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
 				
-				// delete local path
-				deleteFolderRecursive(localSavePath.slice(0,-1)); // no "/' in the end of the string
+				// delete local path, no "/' in the end of the string
+				deleteLocalFolders(localSavePath.slice(0,-1)).then(() =>{
 				
-				res.send({
-					uuid:uuid,
-					title:'Partial data generated for labeling and training', 
-					img:[{name:'Split the corpus',content:div_data}],
-					download:[{name:'Download training dataset', content:training},
-						{name:'Download unlabeled dataset',content:testing}]
+					res.send({
+						uuid:uuid,
+						title:'Partial data generated for labeling and training', 
+						img:[{name:'Split the corpus',content:div_data}],
+						download:[{name:'Download training dataset', content:training},
+							{name:'Download unlabeled dataset',content:testing}]
+					});
 				});
 			
 			}
@@ -130,18 +131,20 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
 				
 				// delete local path
-				deleteFolderRecursive(localSavePath.slice(0,-1)); // no "/' in the end of the string
-				fs.unlinkSync(req.file.path);
-				
-				res.send({
-					uuid:uuid,
-					img:[{name:'ROC curves for each class',content:div_data}],
-					download:[{name:'Perserved classification pipeline', content:pickle},
-						{name:'Classification performance evaluation',content:metrics},
-							{name:'Accuracy score for each fold', content:accuracy}],
-					preview:[{name:'10 fold Cross validation accuracy score for each fold', content:accuracy_array,dataTable:false},
-								{name:'10 fold Cross validation Evaluation of the performance',content:preview_arr,dataTable:false}]	
+				deleteLocalFolders(localSavePath.slice(0,-1)).then(() =>{
+					fs.unlinkSync(req.file.path);
+					
+					res.send({
+						uuid:uuid,
+						img:[{name:'ROC curves for each class',content:div_data}],
+						download:[{name:'Perserved classification pipeline', content:pickle},
+							{name:'Classification performance evaluation',content:metrics},
+								{name:'Accuracy score for each fold', content:accuracy}],
+						preview:[{name:'10 fold Cross validation accuracy score for each fold', content:accuracy_array,dataTable:false},
+									{name:'10 fold Cross validation Evaluation of the performance',content:preview_arr,dataTable:false}]	
+					});
 				});
+				
 			}).catch( (error) =>{
 				console.log(error);
 			});
@@ -182,14 +185,17 @@ router.post('/text-classification-predict',function(req,res,next){
 				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
 				
 				// delete local path
-				deleteFolderRecursive(localSavePath.slice(0,-1)); // no "/' in the end of the string
+				deleteLocalFolders(localSavePath.slice(0,-1)).then(() =>{
 				
-				res.send({
-					uuid:uuid,
-					img:[{name:'Count of each class',content:div_data}],
-					download:[{name:'Predicted Class using trained model', content:predict}],
-					preview:[{name:'Preview of the predicted data ',content:preview_arr,dataTable:true}]	
+					res.send({
+						uuid:uuid,
+						img:[{name:'Count of each class',content:div_data}],
+						download:[{name:'Predicted Class using trained model', content:predict}],
+						preview:[{name:'Preview of the predicted data ',content:preview_arr,dataTable:true}]	
+					});
+				
 				});
+				
 			}).catch( (error) =>{
 				console.log(error);
 			});

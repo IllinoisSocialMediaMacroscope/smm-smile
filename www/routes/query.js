@@ -6,7 +6,7 @@ var fs = require('fs');
 var jsonexport = require('jsonexport');
 var path = require('path');
 var appPath = path.dirname(__dirname);
-var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
+var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 
@@ -141,8 +141,12 @@ router.post('/query',function(req,res,next){
 								Promise.all(promise_arr).then((URLs) => {
 									// success!!
 									var rendering = responseObj[key1][key2][key3].slice(0,99);
-									deleteFolderRecursive(directory.slice(0,-1)); // no "/' in the end of the string
-									res.send({fname:processed,URL: URLs[0] ,rendering:rendering});
+									deleteLocalFolders(directory.slice(0,-1)).then(() =>{
+										res.send({fname:processed,URL: URLs[0] ,rendering:rendering});
+									}).catch(err =>{
+										console.log(err);
+										res.send({ERROR:err});
+									});
 								
 								}).catch(err =>{ 
 									console.log(err);

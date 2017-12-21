@@ -5,7 +5,7 @@ var CSV = require('csv-string');
 var path = require('path');
 var appPath = path.dirname(__dirname);
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
-var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
+var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var deleteRemoteFolder = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).deleteRemoteFolder;
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
@@ -456,8 +456,19 @@ router.post('/history',function(req,res,next){
 router.post('/delete',function(req,res,next){
 	
 	if(req.body.type === 'purge'){
-		// wipe out local directory
-		deleteFolderRecursive('./downloads');
+		// wipe out local directory and remote folders
+		deleteLocalFolders('./downloads').then(() =>{
+			deleteRemoteFolder(req.body.s3FolderName).then( () =>{
+				res.send({'data':'Successfully purged!'});
+			}).catch( err=>{
+				console.log(err);
+				res.send({ERROR:err});
+			});
+		})
+		.catch( err=>{
+			console.log(err);
+			res.send({ERROR:err});
+		});
 	}
 	
 	else if (req.body.type === 'history'){

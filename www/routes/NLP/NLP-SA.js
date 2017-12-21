@@ -6,7 +6,7 @@ var fs = require('fs');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
-var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
+var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 
 router.get('/NLP-sentiment',function(req,res,next){
@@ -82,17 +82,20 @@ router.post('/NLP-sentiment',function(req,res,next){
 				var compound = values[1]['compound']
 				
 				// delete local path
-				deleteFolderRecursive(localSavePath.slice(0,-1)); // no "/' in the end of the string
+				deleteLocalFolders(localSavePath.slice(0,-1)).then(() =>{
 				
-				res.send({
-					title:'Sentiment Analysis',
-					img:[{name:'Document Sentiment Composition',content:div_data}],
-					compound:compound,
-					download:[{name:'sentence-level sentiment scores',content:sentiment},
-							{name:'Has negation words?',content:negation},
-							{name:'Has some capital letter?',content:allcap}],
-					preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}]
+					res.send({
+						title:'Sentiment Analysis',
+						img:[{name:'Document Sentiment Composition',content:div_data}],
+						compound:compound,
+						download:[{name:'sentence-level sentiment scores',content:sentiment},
+								{name:'Has negation words?',content:negation},
+								{name:'Has some capital letter?',content:allcap}],
+						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}]
+					});
+					
 				});
+				
 			}).catch( (error) =>{
 				console.log(error);
 			});
