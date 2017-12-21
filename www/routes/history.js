@@ -433,7 +433,7 @@ router.post('/history',function(req,res,next){
 
 					res.send({
 						title:'Social Media Past Search Result', 
-						expandable:'',
+						expandable:req.body.folderURL,
 						ID:req.body.folderURL,
 						download:download,
 						preview:[{name: "Preview the .csv file", content:preview_arr.slice(0,101),dataTable:true}],
