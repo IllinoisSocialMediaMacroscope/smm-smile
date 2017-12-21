@@ -199,15 +199,17 @@ function exportOptions(whichTrigger){
 }
 	
 function terminate(){
+	if (s3FolderName === undefined) s3FolderName='local';
+	
 	var cleanData = function() {
 	  return new Promise(function(resolve, reject) {
 		//console.log('first delete that session folder');
 		$.ajax({
 			type:'post',
 			url:'delete', 
-			data: {"type":"purge"},				
+			data: {"type":"purge",
+					"s3FolderName":s3FolderName},				
 			success:function(data){
-				console.log(data);
 				if (data){
 					if ('ERROR' in data){
 						$("#loading").hide();
@@ -216,6 +218,7 @@ function terminate(){
 						$("#warning").modal('show');
 						reject(data);
 					}
+					console.log(data);
 					resolve(data);
 				}
 			},
@@ -247,7 +250,6 @@ function terminate(){
 	cleanData().then(function() {
 		window.location = "http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID;
 	}).catch(function(error) {
-		alert('error');
 		console.log('oh no', error);
 	});
 

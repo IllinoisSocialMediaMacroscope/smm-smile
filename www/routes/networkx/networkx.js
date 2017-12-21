@@ -5,7 +5,7 @@ var CSV = require('csv-string');
 var fs = require('fs');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
+var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 
 router.get('/networkx',function(req,res,next){
@@ -71,14 +71,14 @@ router.post('/networkx',function(req,res,next){
 			var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
 			
 			// delete local path
-			deleteFolderRecursive(localSavePath.slice(0,-1)); // no "/' in the end of the string
-						
-			res.send({
-				title:'Network Analysis', 
-				img:[{name:'Static Network Visualization',content:div_data}],
-				download: downloadFiles,
-				metrics:{name:'', content:''}, 
-				preview:[],
+			deleteLocalFolders(localSavePath.slice(0,-1)).then(()=>{
+				res.send({
+					title:'Network Analysis', 
+					img:[{name:'Static Network Visualization',content:div_data}],
+					download: downloadFiles,
+					metrics:{name:'', content:''}, 
+					preview:[],
+				});
 			});
 			
 		}

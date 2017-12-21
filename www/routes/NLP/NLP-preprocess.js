@@ -6,7 +6,7 @@ var fs = require('fs');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
-var deleteFolderRecursive = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
+var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 
 router.get('/NLP-preprocess',function(req,res,next){
@@ -89,20 +89,20 @@ router.post('/NLP-preprocess',function(req,res,next){
 				var most_freq_word = most_common_array.split(",")[0]
 				
 				// delete local path
-				deleteFolderRecursive(localSavePath.slice(0,-1)); // no "/' in the end of the string
-				
-				res.send({
-						title:'Natural Language PreProcessing', 
-						img:[{name:'Word Distribution',content:div_data}],
-						download:[
-							{name:'phrases', content:phrases},
-							{name:'words', content:filtered},
-							{name:'most common words by order', content:most_common},
-							{name:req.body.model + ' text', content:processed},
-							{name:req.body.tagger + ' text', content:tagged}],
-						table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
-						preview:[],						
-					});
+				deleteLocalFolders(localSavePath.slice(0,-1)).then(() =>{
+					res.send({
+							title:'Natural Language PreProcessing', 
+							img:[{name:'Word Distribution',content:div_data}],
+							download:[
+								{name:'phrases', content:phrases},
+								{name:'words', content:filtered},
+								{name:'most common words by order', content:most_common},
+								{name:req.body.model + ' text', content:processed},
+								{name:req.body.tagger + ' text', content:tagged}],
+							table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
+							preview:[],						
+						});
+				});
 				
 			}).catch( (error) =>{
 				console.log(error);
