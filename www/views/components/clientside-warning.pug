@@ -10,7 +10,7 @@ div(id="alert" class="modal fade" role="dialog" data-backdrop="static" data-keyb
 				
 			div(class="modal-footer")
 				button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden",onclick=`clearModalMessage("#alert","#modal-message")`) Close
-
+				//a(href="#", data-dismiss="modal", class="btn") Close
 script.
 	// close this modal and clear the message part
 	function clearModalMessage(modalID,modalMessageID){
