@@ -457,12 +457,26 @@ router.post('/delete',function(req,res,next){
 	
 	if(req.body.type === 'purge'){
 		// wipe out local directory and remote folders
+		
+		var p = [];
+		
 		deleteLocalFolders('./downloads').then(() =>{
-			deleteRemoteFolder(req.body.s3FolderName).then( () =>{
-				res.send({'data':'Successfully purged!'});
-			}).catch( err=>{
-				console.log(err);
-				res.send({ERROR:err});
+			
+			// in case there're too many file, delete files one folder by folder
+			list_folders(req.body.s3FolderName + '/').then( values => {
+				var folderList = Object.keys(values);
+				
+				if ('GraphQL' in folderList) p.push(deleteRemoteFolder(req.body.s3FolderName + '/GraphQL/'));
+				if ('NLP' in folderList) p.push(deleteRemoteFolder(req.body.s3FolderName + '/NLP/'));
+				if ('NW' in folderList)	p.push(deleteRemoteFolder(req.body.s3FolderName + '/NW/'));
+				if ('ML' in folderList) p.push(deleteRemoteFolder(req.body.s3FolderName + '/ML/'));
+				
+				Promise.all(p).then( values => {
+					res.send({'data':'Successfully purged!'});
+				}).catch( err =>{
+					console.log(err);
+					res.send({ERROR:err});
+				});
 			});
 		})
 		.catch( err=>{
