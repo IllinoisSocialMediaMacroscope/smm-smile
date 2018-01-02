@@ -58,7 +58,7 @@ function submitHistory(folderURL){
 
 					if ('expandable' in data && data.expandable != undefined){
 						$("#dataset").val(data.expandable);
-						$("#length").val(data.preview[0].content.length-1);
+						$("#length").val(data.length);
 						$("#getComment").show();
 					}else{
 						$("#getComment").hide();

@@ -1,4 +1,3 @@
-// client side warning
 div(id="reddit-expand" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
 	div(class="modal-dialog")
 		div(class="modal-content")
@@ -27,7 +26,18 @@ div(id="reddit-expand" class="modal fade" role="dialog" data-backdrop="static" d
 			div(class="modal-footer")
 				button(class="btn btn-primary",id="rdCommentReq",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px") Request comments for each Post
 
-				
+
+div(id="reddit-expand-confirmation", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			//div(class="modal-header")
+			div(class="modal-body",style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
+				div(id="modal-message")
+					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="80px")
+					p(style="font-size:30px;") Your request for the Reddit comments has been sent. You will receive an email from us once it's done!
+			div(class="modal-footer")
+				button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden",data-dismiss="modal") Close	
+			
 				
 script(src="bootstrap/js/customized/view_reddit_expand.js")
 	
