@@ -45,7 +45,7 @@ function list_folders(prefix){
 				}
 				resolve(folderObj);
 			}else{
-				reject('More than 1000 items!!');
+				reject('You have more than 1000 items in your folders, we cannot delete that much files. Please contact the administrator: ***REMOVED***');
 			}
 		});
 	});

@@ -461,7 +461,7 @@ router.post('/delete',function(req,res,next){
 		var p = [];
 		
 		deleteLocalFolders('./downloads').then(() =>{
-			
+		
 			// in case there're too many file, delete files one folder by folder
 			list_folders(req.body.s3FolderName + '/').then( values => {
 				var folderList = Object.keys(values);

@@ -6,9 +6,8 @@ function init(){
 	$("#file-container").show();
 	$("#getComment").on('click',function(e){
 		e.preventDefault();
-		$("#reddit-expand").modal('show');
+		$("#reddit-expand").modal({show:true});	
 	});
-	
 }
 
 function checkbox_onclick(){

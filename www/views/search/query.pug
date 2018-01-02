@@ -4,37 +4,27 @@ html
 		meta(charset="utf-8")
 		meta(name="viewport", content="width=device-width, initial-scale=1")
 		
-		<!-- this is for bootstrap 3! -->
+		<!-- Style sheets! -->
 		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
-		<!-- this is the customized search box style -->
 		link(href="bootstrap/css/customized/search.css",rel="stylesheet")
 		link(href="bootstrap/css/customized/component.css",rel="stylesheet")
-		
-		<!-- font family -->
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+		link(rel="stylesheet", href="bootstrap/css/bootstrap-multiselect.css", type="text/css")
+		link(rel="stylesheet",href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css")
 		
 		<!-- JQUERY -->
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
 		script(src="bootstrap/js/bootstrap.min.js")
+		script(src="bootstrap/js/bootstrap-multiselect.js")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
 		
-		<!-- Include the plugin's CSS and JS: -->
-		<script src="bootstrap/js/bootstrap-multiselect.js"></script>
-		<link rel="stylesheet" href="bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
-		
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
-		
-		<!-- jquery cookie plugin -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-	
+		<!-- customized -->
 		script(src="bootstrap/js/customized/query_pb.js")
 		script(src="bootstrap/js/customized/query_formValid.js")
 		script(src="bootstrap/js/customized/query_submit.js")
 		script(src="bootstrap/js/customized/warning_trigger.js")
-		
+		script(src="bootstrap/js/customized/modal_overlay.js")
 		
 	body(onload="init()")
 		<!-- top bar -->
