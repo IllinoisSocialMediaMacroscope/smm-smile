@@ -437,6 +437,7 @@ router.post('/history',function(req,res,next){
 						ID:req.body.folderURL,
 						download:download,
 						preview:[{name: "Preview the .csv file", content:preview_arr.slice(0,101),dataTable:true}],
+						length:preview_arr.length-1, // display in the expand comments modal
 						config:config
 					});						
 					

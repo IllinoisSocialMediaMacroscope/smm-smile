@@ -7,6 +7,7 @@ $("#rdCommentReq").on('click',function(){
 					"email":$("#email-alert").val()},				
 			success:function(data){
 				$("#reddit-expand").modal('hide');
+				$("#reddit-expand-confirmation").modal('show');
 			},
 			error: function(jqXHR, exception){
 					var msg = '';
@@ -40,10 +41,11 @@ $("#email-alert").on('keypress',function(e){
 				$.ajax({
 					type:'post',
 					url:'reddit-expand', 
-					data: {"filename":$("#dataset").val(), 
+					data: {"prefix":$("#dataset").val(), 
 							"email":$("#email-alert").val()},				
 					success:function(data){
 						$("#reddit-expand").modal('hide');
+						$("#reddit-expand-confirmation").modal('show');
 					},
 					error: function(jqXHR, exception){
 							var msg = '';
