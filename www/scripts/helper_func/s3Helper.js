@@ -142,7 +142,8 @@ var deleteRemoteFolder = function(prefix){
 	return new Promise((resolve,reject) =>{
 		// check if that folder exist or not. If not exist, problem solved, already deleted!
 		list_folders('').then( files =>{
-			if (Object.keys(files).indexOf(prefix)){
+			if (Object.keys(files).indexOf(prefix) !== -1){
+				console.log(files);
 				s3.listObjectsV2({Bucket:'macroscope-smile',Prefix:prefix},function(err,data){
 					if (err){
 						console.log(err);

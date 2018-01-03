@@ -38,30 +38,29 @@ router.post('/export',function(req,res,next){
 								oauth2Client.credentials = {'access_token':req.session.google_access_token}
 								var drive = google.drive({version: 'v2', auth: oauth2Client });
 								drive.files.insert(
-								{ resource:
-									{ 
-										title: filename,
-										mimeType: 'application/octet-stream' 
-									},
-										media:
-											{ body: buffer,
-												mimeType: 'application/octet-stream' 
-											},
-										type: 'resumable' 
-								}, function(err,response){
-										if (err) {
-											console.log(err);
-											res.send({'ERROR':err});
-										}else{
-											fs.unlinkSync(filename);
-											deleteLocalFolders('./downloads').then(() =>{
-												res.send(response);
-											}).catch(err =>{
+									{ resource:
+										{ 
+											title: filename,
+											mimeType: 'application/octet-stream' 
+										},
+											media:
+												{ body: buffer,
+													mimeType: 'application/octet-stream' 
+												},
+											type: 'resumable' 
+									}, function(err,response){
+										fs.unlinkSync(filename);
+										deleteLocalFolders('./downloads').then(() =>{
+											if (err){
 												console.log(err);
-												res.send({ERROR:err});
-											});
-										}
-									
+												res.send({'ERROR':err});
+											}else{
+												res.send(response);
+											}
+										}).catch(err =>{
+											console.log(err);
+											res.send({ERROR:err});
+										});
 								});			
 							}else{
 								console.log('Goolge Drive token has expired!!');
@@ -82,10 +81,15 @@ router.post('/export',function(req,res,next){
 															mode:{'.tag':'overwrite'},
 															autorename:true,
 															mute:false})
-											.then(function(response){
-												fs.unlinkSync(filename)
+											.then(function(err,response){
+												fs.unlinkSync(filename);
 												deleteLocalFolders('./downloads').then(() =>{
-													res.send(response);
+													if (err){
+														console.log(err);
+														res.send({'ERROR':err});
+													}else{
+														res.send(response);
+													}
 												}).catch(err =>{
 													console.log(err);
 													res.send({ERROR:err});
@@ -114,29 +118,50 @@ router.post('/export',function(req,res,next){
 								  clientSecret: '***REMOVED***'
 								});
 								var client = sdk.getBasicClient(req.session.box_access_token);
-								client.files.getChunkedUploader('0',filesize, filename,buffer, null, function(err,uploader){
-									if (err){
-										console.log(err);
-										res.send({'ERROR':err})
-									}else{
-										uploader.on('error',function(err){
-											res.send({'ERROR':err})
-										});
-										
-										uploader.on('uploadComplete',function(response){
-											fs.unlinkSync(filename)
-											deleteLocalFolders('./downloads').then(() =>{
-												res.send(response);
-											}).catch(err =>{
-												// delete local folder error
+								
+								if (filesize <= 50*1024*1024){
+									client.files.uploadFile('0', filename, buffer, function(err, response) {
+										fs.unlinkSync(filename);
+										deleteLocalFolders('./downloads').then(() =>{
+											if (err){
 												console.log(err);
-												res.send({ERROR:err});
-											});
+												res.send({'ERROR':err});
+											}else{
+												res.send(response);
+											}
 										});
-										
-										uploader.start();
-									}
-								});	
+									});
+								}else{
+								
+									client.files.getChunkedUploader('0',filesize, filename,buffer, null, function(err,uploader){
+										if (err){
+											console.log(err);
+											res.send({'ERROR':err})
+										}else{
+											uploader.on('error',function(err){
+												fs.unlinkSync(filename);
+												deleteLocalFolders('./downloads').then(() =>{
+													console.log(err);
+													res.send({'ERROR':err})
+													
+												});
+											});
+											
+											uploader.on('uploadComplete',function(response){
+												fs.unlinkSync(filename)
+												deleteLocalFolders('./downloads').then(() =>{
+													res.send(response);
+												}).catch(err =>{
+													// delete local folder error
+													console.log(err);
+													res.send({ERROR:err});
+												});
+											});
+											
+											uploader.start();
+										}
+									});	
+								}
 							}else{
 								console.log('Dropbox token has expired!!');
 								res.send({'ERROR':'Dropbox token has expired. Please authorize again!'});
