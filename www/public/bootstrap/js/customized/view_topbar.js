@@ -248,7 +248,7 @@ function terminate(){
 	};
 
 	cleanData().then(function() {
-		window.location = "http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID;
+		//window.location = "http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID;
 	}).catch(function(error) {
 		console.log('oh no', error);
 	});
@@ -266,11 +266,12 @@ function exportFiles(id){
 		$("#box-export").hide();
 		$("#box .export-loading").css('display','inline-block');
 	}
-	
+	if (s3FolderName === undefined) s3FolderName='local';
+	//console.log(s3FolderName);
 	$.ajax({
 		type:'post',
 		url:'export', 
-		data: {"id":id},				
+		data: {"id":id, "s3FolderName":s3FolderName},				
 		success:function(data){
 			if (id ===  'googleDrive-export') $("#googleDrive .export-loading").css('display','none');
 			else if(id==='dropbox-export') $("#dropbox .export-loading").css('display','none');

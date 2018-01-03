@@ -60,6 +60,7 @@ function list_files(prefix){
 				reject(err);
 				
 			}else{
+				
 				if (!data.IsTruncated){
 					
 					var folderObj = {};
@@ -81,38 +82,105 @@ function list_files(prefix){
 	});					
 }
 
+function download_folder(prefix){
+	
+	return new Promise((resolve,reject) =>{
+		s3.listObjectsV2({Bucket:'macroscope-smile',Prefix:prefix}, function(err,data){
+			if(err){
+				console.log(err);
+				reject(err);
+			}else{
+				if (!data.IsTruncated){
+					// create a place to hold the the downloaded files
+					if (!fs.existsSync('./downloads')) fs.mkdirSync('./downloads');
+					
+					// create a promise array to hold all the downloads since it's async
+					var p_arr = [];
+					
+					data.Contents.forEach(function(val,index,array){						
+						// making the path
+						var path = val.Key.split('/');
+						var currPath = './downloads';
+						for (var i=1, length=path.length-1; i< length; i++){
+							currPath += '/' + path[i];
+							if (!fs.existsSync(currPath)) fs.mkdirSync(currPath);
+						}					
+						p_arr.push(new Promise((resolve,reject) =>{
+							s3.getObject({ Bucket:'macroscope-smile', Key:val.Key},function(err,data){
+								if (err){
+									console.log(err,err.stack);
+									reject(err);
+								}else {
+									fs.writeFile(currPath+'/'+path.slice(-1), data.Body, function(err){
+										if (err) console.log(err);
+										console.log('finished: ' + val.Key);
+										resolve(val.Key);
+									});
+								}
+							});
+						}));
+							
+					});		
+					
+					Promise.all(p_arr).then( values => {
+						resolve(values);
+					}).catch( err =>{
+						console.log(err);
+						reject(err);
+					});
+				}else{
+					reject('More than 1000 items!!');
+				}	
+			}				
+		});
+	});
+	
+}
+
 var deleteRemoteFolder = function(prefix){
 	
 	return new Promise((resolve,reject) =>{
-		s3.listObjectsV2({Bucket:'macroscope-smile',Prefix:prefix},function(err,data){
-				if (err){
-					console.log(err);
-					reject(err);
-				}else{
-					if (!data.IsTruncated){
-						params = { Bucket: 'macroscope-smile',
-							Delete:{ Objects:[] }
-						};
-						data.Contents.forEach(function(content) {
-							params.Delete.Objects.push({Key: content.Key});
-						});
-						
-						s3.deleteObjects(params, function(err, data) {
-							if(err){
-								console.log(err);
-								reject(err);
-							}else{
-							  resolve();
-							}
-						});
+		// check if that folder exist or not. If not exist, problem solved, already deleted!
+		list_folders('').then( files =>{
+			if (Object.keys(files).indexOf(prefix)){
+				s3.listObjectsV2({Bucket:'macroscope-smile',Prefix:prefix},function(err,data){
+					if (err){
+						console.log(err);
+						reject(err);
 					}else{
-						reject('More than 1000 items!!');
+						if (!data.IsTruncated){
+							params = { Bucket: 'macroscope-smile',
+								Delete:{ Objects:[] }
+							};
+							data.Contents.forEach(function(content) {
+								params.Delete.Objects.push({Key: content.Key});
+							});
+							
+							s3.deleteObjects(params, function(err, data) {
+								if(err){
+									console.log(err);
+									reject(err);
+								}else{
+								  resolve();
+								}
+							});
+						}else{
+							reject('More than 1000 items!!');
+						}
 					}
-				}
-			});
+				});
+			}else{
+				console.log('Not exisit already! No need to delete.');
+				resolve();
+			}
+		}).catch(err =>{
+			console.log(err);
+			reject(err);
+		});
 	});
 
 };
 
 
-module.exports = {uploadToS3, list_folders, list_files, deleteRemoteFolder};
+
+module.exports = {uploadToS3, list_folders, list_files, deleteRemoteFolder, download_folder};
