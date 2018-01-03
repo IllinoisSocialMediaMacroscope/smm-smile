@@ -38,6 +38,10 @@ $(document).ready(function(){
 		var directory = $(this).children(":selected").attr("class");
 		$("#selectFilePreview-container").empty();
 		$("#selectFileHeader-container").empty();
+		
+		// add loading bar here for preview
+		$("#preview-loading").show();
+		
 		$.ajax({
 			type:'POST',
 			url:'render', 
@@ -71,11 +75,13 @@ $(document).ready(function(){
 							text_data.push(line);
 						});
 						
+						// hide loading bar
+						$("#preview-loading").hide();
+						
 						$("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
 						$("#selectFilePreview").append(arrayToTable(text_data.slice(0,11) ,'#selectFileTable'));
-						//$("#selectFileTable").DataTable();
 						
 						$("#selectFileHeader-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">Select Column to Analyze</label>

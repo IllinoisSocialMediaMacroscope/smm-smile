@@ -31,8 +31,16 @@ block config-form
 								div(class="col-md-2 col-md-2 col-xs-12")
 									button(class="btn btn-default",id="getComment") get comments
 								script.
-									$(`##{container['container-name']}`).after(`<div id="selectFilePreview-container">`)
-									$("#selectFilePreview-container").after(`<div id="selectFileHeader-container">`)
+									$(`##{container['container-name']}`).after(`<div id="selectFilePreview-container"></div>`)
+									$(`##{container['container-name']}`).after(`<div id="preview-loading" style="display:none;text-align:center;">
+																					<div class="form-group">
+																						<label class="control-label col-md-2 col-md-2 col-xs-12"></label>
+																						<div class="col-md-8 col-md-8 col-xs-12">
+																							<img src="bootstrap/img/gifs/loading3.gif" width="250px"/>
+																						</div>
+																					</div>
+																				</div>`)
+									$("#selectFilePreview-container").after(`<div id="selectFileHeader-container"></div>`)
 								
 							else
 								div(class="col-md-8 col-md-8 col-xs-12")
