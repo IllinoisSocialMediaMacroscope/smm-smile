@@ -32,6 +32,9 @@ $(document).ready(function(){
 		$("#selectFilePreview-container").empty();
 		$("#selectFileHeader-container").empty();
 		
+		// add loading bar here for preview
+		$("#preview-loading").show();
+		
 		$.ajax({
 			type:'POST',
 			url:'render', 
@@ -65,6 +68,9 @@ $(document).ready(function(){
 							});
 							text_data.push(line);
 						});
+						
+						// hide loading bar
+						$("#preview-loading").hide();
 						
 						$("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
