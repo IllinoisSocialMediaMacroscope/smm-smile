@@ -248,7 +248,7 @@ function terminate(){
 	};
 
 	cleanData().then(function() {
-		//window.location = "http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID;
+		window.location = "http://socialmediamacroscope.org/tools/smiletest/stop?sess=" + sessionID;
 	}).catch(function(error) {
 		console.log('oh no', error);
 	});

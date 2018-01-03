@@ -68,7 +68,7 @@ router.get('/history',function(req,res,next){
 		res.render('history',{parent:'/', directory: directory});
 		
 	}).catch( (err) => { 
-		res.send({"ERROR":err}); 
+		res.render('history',{parent:'/',directory: directory}); 
 	});
 		
 			

@@ -33,7 +33,7 @@ function list_folders(prefix){
 				reject(err);
 			}			
 			
-			if (!data.IsTruncated){
+			//if (!data.IsTruncated){
 				folderObj = {};
 				
 				var fileList = data.CommonPrefixes;
@@ -44,9 +44,9 @@ function list_folders(prefix){
 					}
 				}
 				resolve(folderObj);
-			}else{
-				reject('You have more than 1000 items in your folders, we cannot delete that much files. Please contact the administrator: ***REMOVED***');
-			}
+			//}else{
+			//	reject('You have more than 1000 items in your folders, we cannot render, download or delete that many files. Please contact the administrator: ***REMOVED***');
+			//}
 		});
 	});
 		
@@ -61,7 +61,7 @@ function list_files(prefix){
 				
 			}else{
 				
-				if (!data.IsTruncated){
+				//if (!data.IsTruncated){
 					
 					var folderObj = {};
 					var fileList = data.Contents;
@@ -74,9 +74,9 @@ function list_files(prefix){
 					}
 
 					resolve(folderObj);	
-				}else{
-					reject('More than 1000 items!!');
-				}
+				//}else{
+				//	reject('You have more than 1000 items in your folders, we cannot render, download or delete that many files. Please contact the administrator: ***REMOVED***');
+				//}
 			}
 		});
 	});					
@@ -129,7 +129,7 @@ function download_folder(prefix){
 						reject(err);
 					});
 				}else{
-					reject('More than 1000 items!!');
+					reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: ***REMOVED*** with your sessionID.');
 				}	
 			}				
 		});
@@ -165,7 +165,7 @@ var deleteRemoteFolder = function(prefix){
 								}
 							});
 						}else{
-							reject('More than 1000 items!!');
+							reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: ***REMOVED*** with your sessionID.');
 						}
 					}
 				});
