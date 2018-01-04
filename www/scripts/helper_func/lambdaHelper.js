@@ -6,11 +6,12 @@ AWS.config.update({
 var lambda = new AWS.Lambda({region: 'us-west-2', apiVersion: '2015-03-31'});
 
 var params = {
-	FunctionName: 'hello_world',
+	FunctionName: 'test_lambda_write2S3',
 	//ClientContext: 'local',
 	InvocationType: 'RequestResponse',
 	LogType: 'Tail',
-	Payload: ''
+	Payload: JSON.stringify({'remoteReadPath':'local/GraphQL/twitter-Tweet/Iran/',
+		's3FolderName':'local'})
 };
 
 lambda.invoke(params, function(err, data) {

@@ -44,7 +44,6 @@ router.post('/text-classification-split',function(req,res,next){
 		res.end('no file selected!');
 		
 	}else{
-		
 		var options = {
 			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
 			pythonPath:'/opt/python/bin/python3.4',
