@@ -42,6 +42,11 @@ def downloadToDisk(filename, localpath, remotepath):
 
 def getObject(remoteKey):
     obj = client.get_object(Bucket='macroscope-smile', Key=remoteKey)
+    # print(obj['Body'].read())
+
+def putObject(body,remoteKey):
+    # bytes or seekable file-like object
+    obj = client.put_object(Bucket='macroscope-smile',Body=body, Key=remoteKey)
     print(obj['Body'].read())
 
 def checkExist(remotepath, filename):

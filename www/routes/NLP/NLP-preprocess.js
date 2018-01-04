@@ -38,6 +38,7 @@ router.get('/NLP-preprocess',function(req,res,next){
 });
  
 router.post('/NLP-preprocess',function(req,res,next){
+	console.log(req.body.prefix);
 		
 	if (req.body.selectFile !== 'Please Select'){
 		var options = {
