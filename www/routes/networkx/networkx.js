@@ -1,12 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var pythonShell = require('python-shell');
 var CSV = require('csv-string');
-var fs = require('fs');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
+var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
+var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 
 router.get('/networkx',function(req,res,next){
 	var directory = {};
@@ -19,59 +18,44 @@ router.get('/networkx',function(req,res,next){
 		directory['twitter-Stream'] = values[1];
 		var formParam = require('./networkx.json');	
 		res.render('analytics/formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:directory, param:formParam});
-	});
-	
-	 
+	});	 
 });
 
 router.post('/networkx',function(req,res,next){
 	
 	if (req.body.selectFile !== 'Please Select...'){
-		var options = {
-			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-			pythonPath:'/opt/python/bin/python3.4',
-			pythonOptions:['-W ignore'],
-			scriptPath:appPath + '/scripts/',
-			args:[	// '--appPath', appPath, 
-					'--remoteReadPath', req.body.prefix, 
-					'--layout',req.body.layout, 
-					'--relations',req.body.relations,
-					'--s3FolderName',req.body.s3FolderName
-				] 
-		};
-	}else{
-		res.end('no file selected!');
-	}
-	
-	pythonShell.run('network_analysis.py',options,function(err,results){
-		if (err){
-			console.log(err);
-			res.send({'ERROR':err});
-		}else{
+		args = {'remoteReadPath':req.body.prefix, 
+				'layout':req.body.layout, 
+				'relations':req.body.relations,
+				's3FolderName':req.body.s3FolderName
+		}
+		
+		lambda_invoke('lambda_network_analysis', args).then( results =>{
 			
-			var localSavePath = results[0];
-			var d3js = results[1];
-			var gephi = results[2];
-			var pajek = results[3];
-			var div= results[results.length-1];
-			
+			var d3js = results['d3js'];
+			var gephi = results['gephi'];
+			var pajek = results['pajek'];			
+			var div= results['div'];		
+			var assortativity = results['assortativity'];
+			var node_attri = results['node_attributes'];
+			var edge_attri = results['edge_attributes'];
+			var strong_components = results['strong_components'];
+			var weak_components = results['weak_components'];
+			var triads = results['triads'];
+   
 			var downloadFiles = [	
 				{'name':'graph exported in GML (Gephi) format', 'content':gephi},
 				{'name':'graph exported in JSON format', 'content':d3js},
-				{'name':'graph exported in NET (Pajek) format', 'content':pajek}
+				{'name':'graph exported in NET (Pajek) format', 'content':pajek},
+				{'name':'assortativity', 'content':assortativity},
+				{'name':'node attributes', 'content':node_attri},
+				{'name':'edge attributes', 'content':edge_attri},
+				{'name':'strongly connected components', 'content':strong_components},
+				{'name':'weakly connected components', 'content':weak_components},
+				{'name':'triads', 'content':triads},
 			];
 			
-			for (var j=4; j< results.length-1; j++){
-				var fnameRegex = /\/(?=[^\/]*$)(.*).csv/g;
-				var display_name = fnameRegex.exec(results[j])[1];
-				downloadFiles.push({'name':display_name, 'content':results[j]});
-			}		
-			
-			if (div.slice(-1) === '\r') div = div.slice(0,-1);
-			var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
-			
-			// delete local path
-			deleteLocalFolders(localSavePath.slice(0,-1)).then(()=>{
+			getMultiRemote(div).then(div_data => {	
 				res.send({
 					title:'Network Analysis', 
 					img:[{name:'Static Network Visualization',content:div_data}],
@@ -79,11 +63,22 @@ router.post('/networkx',function(req,res,next){
 					metrics:{name:'', content:''}, 
 					preview:[],
 				});
+			}).catch( err =>{
+				// retreive remote div data error
+				console.log(err);
+				res.send({'ERROR':err});
 			});
 			
-		}
-	});
-
+		}).catch( err =>{
+			//lambda invoke error
+			console.log(err);
+			res.send({'ERROR':err});
+		});
+		
+	}else{
+		res.end('no file selected!');
+	}
+			
 	
 });
       

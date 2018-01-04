@@ -13,7 +13,6 @@ import csv
 import pandas
 import json
 from helper_func import writeToS3 as s3
-from helper_func import deleteDir
 
 
 class Network:
@@ -135,6 +134,7 @@ class Network:
   
     def export_graph(self):
         # JSON format
+
         d3js_graph = json_graph.node_link_data(self.graph)
         d3js_graph['nodes'] = [
             {
@@ -147,20 +147,23 @@ class Network:
         with open(self.localSavePath + fname_d3js,"w") as f:
             json.dump(d3js_graph,f)
         s3.upload(self.localSavePath, self.awsPath, fname_d3js)
-        s3.generate_downloads(self.awsPath, fname_d3js)
+        url_json = s3.generate_downloads(self.awsPath, fname_d3js)
 
         # Gehpi readable format
         fname_gephi = 'network.gml'
         nx.write_gml(self.graph,self.localSavePath + fname_gephi)
         s3.upload(self.localSavePath, self.awsPath, fname_gephi)
-        s3.generate_downloads(self.awsPath, fname_gephi)
+        url_gephi = s3.generate_downloads(self.awsPath, fname_gephi)
 
         # Pajek format
         fname_pajek = 'network.net'
         nx.write_pajek(self.graph,self.localSavePath + fname_pajek)
         s3.upload(self.localSavePath, self.awsPath, fname_pajek)
-        s3.generate_downloads(self.awsPath, fname_pajek)
-        
+        url_pajek = s3.generate_downloads(self.awsPath, fname_pajek)
+
+        return [url_json, url_gephi, url_pajek]
+
+    
 
     def draw_graph(self,relationships,layout):
 
@@ -240,7 +243,7 @@ class Network:
         with open(self.localSavePath + fname_div,"w") as f:
             f.write(div)
         s3.upload(self.localSavePath, self.awsPath, fname_div)
-        print(self.localSavePath + fname_div)
+        return s3.generate_downloads(self.awsPath, fname_div)
 
 
     def assortativity(self):
@@ -262,7 +265,9 @@ class Network:
                 except UnicodeEncodeError:
                     pass
         s3.upload(self.localSavePath, self.awsPath, fname_assort)
-        s3.generate_downloads(self.awsPath, fname_assort)
+
+
+        return s3.generate_downloads(self.awsPath, fname_assort)
 
 
 
@@ -330,10 +335,15 @@ class Network:
                     pass
 
         s3.upload(self.localSavePath, self.awsPath, fname_node)
-        s3.generate_downloads(self.awsPath, fname_node)
+        url_node = s3.generate_downloads(self.awsPath, fname_node)
 
         s3.upload(self.localSavePath, self.awsPath, fname_edge)
-        s3.generate_downloads(self.awsPath, fname_edge)
+        url_edge = s3.generate_downloads(self.awsPath, fname_edge)
+
+        return [url_node, url_edge]
+
+
+    
         
 
     def component(self):
@@ -352,7 +362,7 @@ class Network:
                 except UnicodeEncodeError:
                     pass   
         s3.upload(self.localSavePath, self.awsPath, fname_strong)
-        s3.generate_downloads(self.awsPath, fname_strong)
+        url_strong = s3.generate_downloads(self.awsPath, fname_strong)
         
         
         weak = nx.weakly_connected_components(self.graph)
@@ -369,9 +379,10 @@ class Network:
                 except UnicodeEncodeError:
                     pass   
         s3.upload(self.localSavePath, self.awsPath, fname_weak)
-        s3.generate_downloads(self.awsPath, fname_weak)
+        url_weak = s3.generate_downloads(self.awsPath, fname_weak)
 
-
+        return [url_strong, url_weak]
+        
 
     def triads(self):
         rslt={}
@@ -386,47 +397,36 @@ class Network:
                 except UnicodeEncodeError:
                     pass
         s3.upload(self.localSavePath, self.awsPath, fname_triads)
-        s3.generate_downloads(self.awsPath, fname_triads)
 
+        return s3.generate_downloads(self.awsPath, fname_triads)
 
-
-
-if __name__ == "__main__":
-
+    
+def lambda_handler(event, context):
     output = []
     
-    parser = argparse.ArgumentParser(description="Processing...")
-    parser.add_argument('--remoteReadPath', required=True)
-    parser.add_argument('--layout',required=True)
-    parser.add_argument('--relations',required=True)
-    parser.add_argument('--s3FolderName', required=False)
-    args = parser.parse_args()
-
     # arranging the paths
     uid = str(uuid.uuid4())
-    awsPath = args.s3FolderName + '/NW/networkx/' + uid +'/'
-    localSavePath = '/tmp/' + args.s3FolderName + '/NW/networkx/' + uid + '/'
-    localReadPath = '/tmp/' + args.s3FolderName + '/'
+    awsPath = event['s3FolderName'] + '/NW/networkx/' + uid +'/'
+    localSavePath = '/tmp/' + event['s3FolderName'] + '/NW/networkx/' + uid + '/'
+    localReadPath = '/tmp/' + event['s3FolderName'] + '/'
     if not os.path.exists(localSavePath):
         os.makedirs(localSavePath)
-    if not os.path.exists(lcoalReadPath):
+    if not os.path.exists(localReadPath):
         os.makedirs(localReadPath)
         
     fname = 'config.dat'
-    with open(localSavePath + fname,"w") as f:
-        json.dump(vars(args),f)
     s3.upload(localSavePath, awsPath, fname)
-    output.append('success')
+    output.append('succesfully upload config.dat')
     
-    network = Network(awsPath, localSavePath, localReadPath, args.remoteReadPath, args.relations)
-    network.export_graph()    
+    network = Network(awsPath, localSavePath, localReadPath, event['remoteReadPath'], event['relations'])
+    output.extend(network.export_graph())    
     
-    network.assortativity()
-    network.attributes()
-    network.component()                                
-    network.triads()
-
+    output.append(network.assortativity())
+    output.extend(network.attributes())
+    output.extend(network.component())                            
+    output.append(network.triads())
     network.prune_network()
-    network.draw_graph(args.relations, args.layout)
-
-    # return output
+    output.append(network.draw_graph(args.relations, args.layout))
+        
+        
+    return output

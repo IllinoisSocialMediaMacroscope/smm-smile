@@ -9,11 +9,8 @@ client = boto3.client(
 )
 
 def upload(localpath, remotepath, filename):
-    try:
-        client.upload_file(localpath + filename, 'macroscope-smile', remotepath + filename)
-        return True
-    except:
-        return False
+    client.upload_file(localpath + filename, 'macroscope-smile', remotepath + filename)
+
 
 def createDirectory(DirectoryName):
     client.put_object(Bucket='macroscope-smile', Key=DirectoryName) # must end with a slash
@@ -27,10 +24,10 @@ def generate_downloads(remotepath, filename):
                 },
                 ExpiresIn=604800 # one week
     )
-    print(url)
-    response = requests.get(url)
+    # print(url)
+    # response = requests.get(url)
 
-    return response
+    return url
 
 def downloadToDisk(filename, localpath, remotepath):
     try:
