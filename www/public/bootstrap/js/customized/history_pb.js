@@ -94,20 +94,24 @@ function submitHistory(folderURL){
 
 /* delete job modal */
 function deleteModal(folderURL,tab){
-	
+	$("#folderURL").val(folderURL);
+	$("#tab").val(tab);
 	$("#delete").modal('show');
-	$("#deleteButton").click(function(){
-		deleteHistory(folderURL,tab);
-	});
-
-	$("#deleteButton").keypress(function(e){
-		if (e.which == 13){
-			deleteHistory(folderURL,tab);
-		}
-	});
-	
 }
+$("#deleteButton").click(function(e){
+	var folderURL = $("#folderURL").val();
+	var tab = $("#tab").val();
+	deleteHistory(folderURL,tab);
+});
 
+$("#deleteButton").keypress(function(e){
+	if (e.which == 13){
+		var folderURL = $("#folderURL").val();
+		var tab = $("#tab").val();
+		deleteHistory(folderURL,tab);
+	}
+});
+	
 function deleteHistory(folderURL,tab){	
 	$.ajax({
 		type:'post',
