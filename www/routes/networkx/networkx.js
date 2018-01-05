@@ -24,7 +24,7 @@ router.get('/networkx',function(req,res,next){
 router.post('/networkx',function(req,res,next){
 	
 	if (req.body.selectFile !== 'Please Select...'){
-		args = {'remoteReadPath':req.body.prefix, 
+		var args = {'remoteReadPath':req.body.prefix, 
 				'layout':req.body.layout, 
 				'relations':req.body.relations,
 				's3FolderName':req.body.s3FolderName

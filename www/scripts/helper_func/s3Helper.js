@@ -140,44 +140,38 @@ function download_folder(prefix){
 var deleteRemoteFolder = function(prefix){
 	
 	return new Promise((resolve,reject) =>{
-		// check if that folder exist or not. If not exist, problem solved, already deleted!
-		list_folders('').then( files =>{
-			if (Object.keys(files).indexOf(prefix) !== -1){
-				console.log(files);
-				s3.listObjectsV2({Bucket:'macroscope-smile',Prefix:prefix},function(err,data){
-					if (err){
-						console.log(err);
-						reject(err);
-					}else{
-						if (!data.IsTruncated){
-							params = { Bucket: 'macroscope-smile',
-								Delete:{ Objects:[] }
-							};
-							data.Contents.forEach(function(content) {
-								params.Delete.Objects.push({Key: content.Key});
-							});
-							
-							s3.deleteObjects(params, function(err, data) {
-								if(err){
-									console.log(err);
-									reject(err);
-								}else{
-								  resolve();
-								}
-							});
-						}else{
-							reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: ***REMOVED*** with your sessionID.');
-						}
-					}
-				});
+		s3.listObjectsV2({Bucket:'macroscope-smile',Prefix:prefix},function(err,data){
+			if (err){
+				// if not exist
+				console.log('cannot list error' + err);
+				resolve(err);
 			}else{
-				console.log('Not exisit already! No need to delete.');
-				resolve();
+				if (data.KeyCount === 0){
+					console.log('There is no data in the folder you specified!');
+					resolve();
+				}else{
+					if (!data.IsTruncated){
+						params = { Bucket: 'macroscope-smile',
+							Delete:{ Objects:[] }
+						};
+						data.Contents.forEach(function(content) {
+							params.Delete.Objects.push({Key: content.Key});
+						});
+						
+						s3.deleteObjects(params, function(err, data) {
+							if(err){
+								console.log('cannot delete err');
+								reject(err);
+							}else{
+							  resolve();
+							}
+						});
+					}else{
+						reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: ***REMOVED*** with your sessionID.');
+					}
+				}
 			}
-		}).catch(err =>{
-			console.log(err);
-			reject(err);
-		});
+		})
 	});
 
 };

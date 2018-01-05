@@ -8,6 +8,7 @@
     "aws-sdk": "^2.170.0",
     "body-parser": "^1.17.1",
     "box-node-sdk": "^1.9.0",
+    "connect-timeout": "^1.9.0",
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
     "csv-string": "^2.3.2",

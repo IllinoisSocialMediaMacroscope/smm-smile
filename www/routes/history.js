@@ -475,7 +475,8 @@ router.post('/delete',function(req,res,next){
 	
 	else if (req.body.type === 'history'){
 		var p = deleteRemoteFolder(req.body.folderURL);
-		p.then( () =>{
+		console.log(req.body.folderURL);
+		p.then(() =>{
 			res.send({'data':'Successfully deleted!'});
 		}).catch(err =>{
 			res.send({ERROR:err});
