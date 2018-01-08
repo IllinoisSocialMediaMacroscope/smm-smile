@@ -196,13 +196,9 @@ function appendInstruction(ID, len_training, len_testing){
 /*-----------------------split --------------------------------------------*/
 function split(){
 	var prefix = $("#selectFile").children(":selected").val();
-	var foldername = $("#selectFile").children(":selected").attr("id");
-	var directory = $("#selectFile").children(":selected").attr("class");
 	var ratio = $("#ratio").val();
 	if (s3FolderName == undefined) s3FolderName = 'local'
 	var data = "ratio=" + ratio 
-	+ "&filename="+ directory + "/" + foldername + "/" + foldername + ".csv" 
-	+ "&foldername=" + foldername 
 	+ "&s3FolderName=" + s3FolderName
 	+ "&prefix="+ prefix;
 	
