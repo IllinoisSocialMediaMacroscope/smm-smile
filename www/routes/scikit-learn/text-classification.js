@@ -10,6 +10,7 @@ var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
+var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
 
 router.get('/text-classification',function(req,res,next){
 	var directory = {};
@@ -44,35 +45,19 @@ router.post('/text-classification-split',function(req,res,next){
 		res.end('no file selected!');
 		
 	}else{
-		var options = {
-			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-			pythonPath:'/opt/python/bin/python3.4',
-			pythonOptions:['-W ignore'],
-			scriptPath:appPath + '/scripts/',
-			args:[//'--appPath', appPath, 
-				'--remoteReadPath', req.body.prefix, 
-				'--ratio', req.body.ratio, 
-				'--filename', req.body.foldername,
-				'--s3FolderName',req.body.s3FolderName				]
-			};
 		
-		pythonShell.run('classification_split.py',options,function(err,results){
-			if (err){
-				console.log(err);
-				res.send({'ERROR':err});
-			}else{
-				var localSavePath = results[0];
-				var uuid = results[1];
-				var div = results[2];
-				var training = results[3]
-				var testing = results[4];
+		lambda_invoke('lambda_classification_split',
+			{'remoteReadPath':req.body.prefix, 
+			'ratio':req.body.ratio,
+			's3FolderName':req.body.s3FolderName})
+		.then(results =>{
+			var uuid = results['uid'];
+			var div = results['div'];
+			var training = results['training']
+			var testing = results['testing'];
 				
-				if (div.slice(-1) === '\r') div = div.slice(0,-1);
-				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
-				
-				// delete local path, no "/' in the end of the string
-				deleteLocalFolders(localSavePath.slice(0,-1)).then(() =>{
-				
+				getMultiRemote(div).then(value =>{
+					div_data = value;			
 					res.send({
 						uuid:uuid,
 						title:'Partial data generated for labeling and training', 
@@ -80,12 +65,17 @@ router.post('/text-classification-split',function(req,res,next){
 						download:[{name:'Download training dataset', content:training},
 							{name:'Download unlabeled dataset',content:testing}]
 					});
+				}).catch(err =>{
+					console.log(err);
+					res.send({ERROR:err});
 				});
 			
-			}
+		}).catch(err => {
+			console.log(err);
+			res.send({ERROR:err});
 		});
 		
-	
+		
 	}
 		
 });
