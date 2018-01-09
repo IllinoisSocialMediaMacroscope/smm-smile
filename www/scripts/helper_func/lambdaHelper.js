@@ -1,5 +1,8 @@
 var AWS = require('aws-sdk');
-var lambda = new AWS.Lambda({region: 'us-west-2', apiVersion: '2015-03-31'});
+var lambda = new AWS.Lambda({region: 'us-west-2', 
+								apiVersion: '2015-03-31',
+								maxRetries: 0
+							});
 
 function lambda_invoke(function_name, args){
 	
