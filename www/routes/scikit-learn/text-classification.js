@@ -87,7 +87,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 	uploadToS3(req.file.path, req.body.s3FolderName + '/ML/classification/' + req.body.uuid + '/labeld-' + req.file.originalname).then(url => {
 		
 		var remoteReadPath = req.body.s3FolderName + '/ML/classification/' + req.body.uuid + '/';
-		var filename = 'labeld-' + req.file.originalname;
+		var filename = 'LABELED_' + req.file.originalname;
 		fs.unlinkSync(req.file.path);
 		
 		lambda_invoke('lambda_classification_train',
@@ -150,54 +150,40 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 });
 
 router.post('/text-classification-predict',function(req,res,next){
-	var options = {
-		//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-		pythonPath:'/opt/python/bin/python3.4',
-		pythonOptions:['-W ignore'],
-		scriptPath:appPath + '/scripts/',
-		args:[
-			'--uuid',req.body.uuid,
-			//'--appPath', appPath,
-			'--s3FolderName', req.body.s3FolderName ]
-		};		
-	pythonShell.run('classification_predict.py',options,function(err,results){
-		if (err){
-			console.log(err);
-			res.send({'ERROR':err});
-		}else{
-			var localSavePath = results[0];
-			var uuid = results[1];
-			var predict = results[2];
-			var div = results[3]
+	lambda_invoke('lambda_classification_predict',
+		{'remoteReadPath':req.body.prefix, 
+			'uuid':req.body.uuid,
+			's3FolderName':req.body.s3FolderName})
+		.then(results =>{
+					
+			var uuid = results['uuid'];
+			var predict = results['predict'];
+			var div = results['div'];
 			
 			var promise_array = [];
+			promise_array.push(getMultiRemote(div));
 			promise_array.push(getMultiRemote(predict));
 			Promise.all(promise_array).then( values => {
-				var preview_string = values[0];
+				var div_data = values[0]
+				var preview_string = values[1];
 				var preview_arr = CSV.parse(preview_string);
 				
-				if (div.slice(-1) === '\r') div = div.slice(0,-1);
-				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
-				
-				// delete local path
-				deleteLocalFolders(localSavePath.slice(0,-1)).then(() =>{
-				
-					res.send({
-						uuid:uuid,
-						img:[{name:'Count of each class',content:div_data}],
-						download:[{name:'Predicted Class using trained model', content:predict}],
-						preview:[{name:'Preview of the predicted data ',content:preview_arr,dataTable:true}]	
-					});
-				
+				res.send({
+					uuid:uuid,
+					img:[{name:'Count of each class',content:div_data}],
+					download:[{name:'Predicted Class using trained model', content:predict}],
+					preview:[{name:'Preview of the predicted data ',content:preview_arr,dataTable:true}]	
 				});
-				
+			
 			}).catch( (error) =>{
 				console.log(error);
+				res.send({ERROR:error});
 			});
-			
-		}
-	});
-						
+		}).catch( err =>{
+			console.log(err);
+			res.send({ERROR:err});
+		});
+		
 });
 
 module.exports = router;

@@ -11,7 +11,7 @@ block config-form
 				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") Select from your folder
 				div(class="col-md-8 col-md-8 col-xs-12")
 					select(class="form-control", id="selectFile", name="selectFile")
-						option(value="", class="", id="empty", checked) Please Select...
+						option(value="Please Select...", class="", id="empty", checked) Please Select...
 						each val,key in directory
 							optgroup(label=key)
 							each val1,key1 in val

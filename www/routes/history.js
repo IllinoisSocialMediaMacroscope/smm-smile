@@ -209,7 +209,7 @@ router.post('/history',function(req,res,next){
 			var promise_array = [];	
 			var fileList = Object.keys(folderObj);
 			
-			if(fileList.length === 10){
+			if(fileList.length === 11){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
 					if (filename === 'div_split.dat'){
@@ -232,6 +232,8 @@ router.post('/history',function(req,res,next){
 						var training = folderObj[filename];
 					}else if (filename.slice(0,10) === 'UNLABELED_'){
 						var testing = folderObj[filename];
+					}else if (filename.slice(0,10) === 'LABELED_'){
+						var labeled = folderObj[filename];
 					}
 				}	
 		
@@ -263,6 +265,7 @@ router.post('/history',function(req,res,next){
 							{name:'ROC curves for each class',content:div_data1},
 							{name:'Count of each class',content:div_data2}],
 						download:[{name:'Download training dataset', content:training},
+									{name:'Download labeled training dataset', content:labeled},
 									{name:'Download unlabeled dataset',content:testing},
 									{name:'Perserved classification pipeline', content:pickle},
 									{name:'Classification performance evaluation',content:metrics},
