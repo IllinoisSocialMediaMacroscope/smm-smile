@@ -46,7 +46,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 				's3FolderName':req.body.s3FolderName
 		}
 		
-		lambda_invoke('lambda_sentiment_analysis', args).then( results =>{
+		lambda_invoke('lambda_sentiment_analysis', args).then(results =>{
 			var div=results['div'];
 			var doc_sentiment=results['doc'];
 			var sentiment = results['sentiment'];
@@ -78,8 +78,8 @@ router.post('/NLP-sentiment',function(req,res,next){
 			});
 		}).catch( error =>{
 			//invoke lambda function error
-			console.log(error);
-			res.send({'ERROR':error});
+			console.log('lambda error:' + error);
+			res.send({'ERROR':JSON.stringify(error)});
 		});
 		
 	}else{
