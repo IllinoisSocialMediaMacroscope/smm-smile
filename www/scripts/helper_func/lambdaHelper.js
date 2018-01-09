@@ -1,7 +1,4 @@
 var AWS = require('aws-sdk');
-/*AWS.config.update({
-	accessKeyId: '***REMOVED***', 
-	secretAccessKey: '***REMOVED***' });*/
 var lambda = new AWS.Lambda({region: 'us-west-2', apiVersion: '2015-03-31'});
 
 function lambda_invoke(function_name, args){

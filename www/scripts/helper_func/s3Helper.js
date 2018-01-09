@@ -1,7 +1,4 @@
 var AWS = require('aws-sdk');
-/*AWS.config.update({
-	accessKeyId: '***REMOVED***', 
-	secretAccessKey: '***REMOVED***' });*/
 var s3 = new AWS.S3();
 var fs = require('fs');
 
@@ -33,20 +30,15 @@ function list_folders(prefix){
 				reject(err);
 			}			
 			
-			//if (!data.IsTruncated){
-				folderObj = {};
-				
-				var fileList = data.CommonPrefixes;
-				if (fileList !== []){
-					for (var i=0, length=fileList.length; i< length; i++){			
-						var folderID = fileList[i].Prefix.split('/').slice(-2)[0];
-						folderObj[folderID] = fileList[i].Prefix;
-					}
+			folderObj = {};
+			var fileList = data.CommonPrefixes;
+			if (fileList !== []){
+				for (var i=0, length=fileList.length; i< length; i++){			
+					var folderID = fileList[i].Prefix.split('/').slice(-2)[0];
+					folderObj[folderID] = fileList[i].Prefix;
 				}
-				resolve(folderObj);
-			//}else{
-			//	reject('You have more than 1000 items in your folders, we cannot render, download or delete that many files. Please contact the administrator: ***REMOVED***');
-			//}
+			}
+			resolve(folderObj);
 		});
 	});
 		

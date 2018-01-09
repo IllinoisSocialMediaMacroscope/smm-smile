@@ -9,6 +9,7 @@ var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.j
 var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
 var CSV = require('csv-string');
+var fs = require('fs');
 
 router.get('/text-classification',function(req,res,next){
 	var directory = {};
