@@ -1,7 +1,12 @@
 var AWS = require('aws-sdk');
+AWS.config.update({
+	accessKeyId: '***REMOVED***', 
+	secretAccessKey: '***REMOVED***' })
 var lambda = new AWS.Lambda({region: 'us-west-2', 
 								apiVersion: '2015-03-31',
-								maxRetries: 0
+								maxRetries: 0,
+								maxRedirects: 0, 
+								httpOptions:{timeout:300000}
 							});
 
 function lambda_invoke(function_name, args){
@@ -16,7 +21,7 @@ function lambda_invoke(function_name, args){
 	return new Promise((resolve,reject) =>{
 		lambda.invoke(params, function(err, data) {
 			if (err){
-				console.log(err, err.stack); // an error occurred
+				console.log("there is an lambda error happening");
 				reject(err);
 			}else{
 				response = JSON.parse(data.Payload);

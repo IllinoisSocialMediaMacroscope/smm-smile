@@ -19,11 +19,11 @@ app.use(session({ secret: 'keyboard cat',
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(express.static(path.join(__dirname, '/public')));
 
-// set timeout to 6 minutes
+// set timeout to 6 minutes to avoid retry!
 app.use(timeout(360000));
 app.use(haltOnTimedout);
 function haltOnTimedout(req, res, next){
-  if (!req.timedout) next();
+ if (!req.timedout) next();
 }
 
 app.set('views',path.join(__dirname,'views'));

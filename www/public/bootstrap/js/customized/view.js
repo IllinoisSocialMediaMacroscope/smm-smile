@@ -483,7 +483,8 @@ function ajaxSubmit(formID){
 				$("#error").val(msg);
 				$("#warning").modal('show');
 				
-			} 
+			},
+			timeout: 360000
 		}); 
 	}
 			
