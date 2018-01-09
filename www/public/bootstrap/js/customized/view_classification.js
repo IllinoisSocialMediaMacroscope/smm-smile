@@ -323,7 +323,8 @@ function predict(){
 	if (formValidation('predict')){
 		
 		if (s3FolderName == undefined) s3FolderName = 'local'
-		var data = "uuid=" + $("#uuid").val() + "&s3FolderName=" + s3FolderName ;
+		var prefix = $("#selectFile").children(":selected").val();
+		var data = "uuid=" + $("#uuid").val() + "&s3FolderName=" + s3FolderName  + "&prefix=" + prefix;
 		
 		$(".loading").show();
 		$.ajax({
@@ -373,22 +374,22 @@ function predict(){
 } 
 /*----------------------form validation ----------------------------*/
 function formValidation(task){
-	
-	if (task === 'split'){
-		if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
-			$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
-			$("#alert").modal('show');
-			$("#selectFile").focus();
-			return false;
-		}
+	if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
 		
-		if ($("#selectFileTable thead tr").find('th').text() === ''){
+		$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
+		$("#alert").modal('show');
+		$("#selectFile").focus();
+		return false;
+	}
+	
+	if ($("#selectFileTable thead tr").find('th').text() === ''){
 			$("#modal-message").append(`<h4>This dataset you selected is empty, please select another one!</h4>`);
 			$("#alert").modal('show');
 			$("#selectFile").focus();
 			return false;
 		}
-	}else if (task === 'train'){
+		
+	if (task === 'train'){
 		if	($("#labeled").val() == '' || $("#labeled").val()=== undefined){
 			$("#modal-message").append(`<h4>Please upload a LABELED csv file!</h4>`);
 			$("#alert").modal('show');

@@ -23,7 +23,7 @@ block config-form
 							if input['optgroup']
 								div(class="col-md-8 col-md-8 col-xs-12")
 									select(class=input.class id=input.id name=input.name)
-										option(value="", class="", id="empty", checked) Please Select...
+										option(value="Please Select...", class="", id="empty", checked) Please Select...
 										each val,key in directory
 											optgroup(label=key)
 											each val1,key1 in val
