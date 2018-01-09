@@ -1,9 +1,6 @@
 var fs = require('fs');
 var rmdir = require('rimraf');
 var AWS = require('aws-sdk');
-AWS.config.update({
-	accessKeyId: '***REMOVED***', 
-	secretAccessKey: '***REMOVED***' });
 var s3 = new AWS.S3();
 
 var deleteLocalFolders = function(path) {

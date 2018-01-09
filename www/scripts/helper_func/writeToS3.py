@@ -1,12 +1,7 @@
 import boto3
 import requests
 
-client = boto3.client(
-    's3',
-    # Hard coded strings as credentials, not recommended.
-    aws_access_key_id='***REMOVED***',
-    aws_secret_access_key='***REMOVED***'
-)
+client = boto3.client('s3')
 
 def upload(localpath, remotepath, filename):
     client.upload_file(localpath + filename, 'macroscope-smile', remotepath + filename)
