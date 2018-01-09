@@ -1,14 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var pythonShell = require('python-shell');
-var CSV = require('csv-string');
-var fs = require('fs');
 var path = require('path');
 var multer = require('multer');
 var upload = multer({dest:'uploads/'});
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
-var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
@@ -84,10 +80,11 @@ router.post('/text-classification-split',function(req,res,next){
 
 router.post('/text-classification-train',upload.single('labeled'),function(req,res,next){
 	
-	uploadToS3(req.file.path, req.body.s3FolderName + '/ML/classification/' + req.body.uuid + '/labeld-' + req.file.originalname).then(url => {
+	var filename = 'LABELED_' + req.file.originalname;
+	
+	uploadToS3(req.file.path, req.body.s3FolderName + '/ML/classification/' + req.body.uuid + '/' + filename).then(url => {
 		
 		var remoteReadPath = req.body.s3FolderName + '/ML/classification/' + req.body.uuid + '/';
-		var filename = 'LABELED_' + req.file.originalname;
 		fs.unlinkSync(req.file.path);
 		
 		lambda_invoke('lambda_classification_train',

@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var CSV = require('csv-string');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;

@@ -232,7 +232,7 @@ router.post('/history',function(req,res,next){
 						var training = folderObj[filename];
 					}else if (filename.slice(0,10) === 'UNLABELED_'){
 						var testing = folderObj[filename];
-					}else if (filename.slice(0,10) === 'LABELED_'){
+					}else if (filename.slice(0,8) === 'LABELED_'){
 						var labeled = folderObj[filename];
 					}
 				}	
