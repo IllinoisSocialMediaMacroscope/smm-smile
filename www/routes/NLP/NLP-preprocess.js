@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var CSV = require('csv-string');
-var fs = require('fs');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
