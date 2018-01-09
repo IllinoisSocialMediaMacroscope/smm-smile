@@ -10,6 +10,7 @@ var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
+var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
 
 router.get('/text-classification',function(req,res,next){
@@ -51,7 +52,8 @@ router.post('/text-classification-split',function(req,res,next){
 			'ratio':req.body.ratio,
 			's3FolderName':req.body.s3FolderName})
 		.then(results =>{
-			var uuid = results['uid'];
+			//console.log(results);
+			var uuid = results['uuid'];
 			var div = results['div'];
 			var training = results['training']
 			var testing = results['testing'];
@@ -81,66 +83,70 @@ router.post('/text-classification-split',function(req,res,next){
 });
 
 router.post('/text-classification-train',upload.single('labeled'),function(req,res,next){
+	
+	uploadToS3(req.file.path, req.body.s3FolderName + '/ML/classification/' + req.body.uuid + '/labeld-' + req.file.originalname).then(url => {
 		
-	var options = {
-		//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-		pythonPath:'/opt/python/bin/python3.4',
-		pythonOptions:['-W ignore'],
-		scriptPath:appPath + '/scripts/',
-		args:[	//'--appPath', appPath, 
-				'--file',req.file.path,
-				'--uuid',req.body.uuid, 
-				'--model',req.body.classifier,
-				'--s3FolderName', req.body.s3FolderName ]
-		};		
-
-	pythonShell.run('classification_train.py',options,function(err,results){
-		if (err){
-			console.log(err);
-			res.send({'ERROR':err});
-		}else{
-			var localSavePath = results[0];
-			var uuid = results[1];
-			var accuracy = results[2];
-			var pickle = results[3];
-			var div = results[4]
-			var metrics = results[5];
+		var remoteReadPath = req.body.s3FolderName + '/ML/classification/' + req.body.uuid + '/';
+		var filename = 'labeld-' + req.file.originalname;
+		fs.unlinkSync(req.file.path);
+		
+		lambda_invoke('lambda_classification_train',
+			{'remoteReadPath':remoteReadPath, 
+			'labeledFilename':filename,
+			'uuid':req.body.uuid,
+			'model':req.body.classifier,
+			's3FolderName':req.body.s3FolderName})
+		.then(results =>{
+			var uuid = results['uuid'];
+			var accuracy = results['accuracy'];
+			var pickle = results['pickle'];
+			var div = results['div']
+			var metrics = results['metrics'];
 			
 			var promise_array = [];
+			promise_array.push(getMultiRemote(div));
 			promise_array.push(getMultiRemote(accuracy));
 			promise_array.push(getMultiRemote(metrics));
 			Promise.all(promise_array).then( values => {
-				var accuracy_string = values[0];	
+				var div_data = values[0];
+				
+				var accuracy_string = values[1];	
 				var accuracy_array = CSV.parse(accuracy_string);
 				
-				var preview_string = values[1];
+				var preview_string = values[2];
 				var preview_arr = CSV.parse(preview_string);
 			
-				if (div.slice(-1) === '\r') div = div.slice(0,-1);
-				var div_data = fs.readFileSync(div, 'utf8'); //trailing /r
-				
-				// delete local path
-				deleteLocalFolders(localSavePath.slice(0,-1)).then(() =>{
-					fs.unlinkSync(req.file.path);
-					
-					res.send({
-						uuid:uuid,
-						img:[{name:'ROC curves for each class',content:div_data}],
-						download:[{name:'Perserved classification pipeline', content:pickle},
-							{name:'Classification performance evaluation',content:metrics},
-								{name:'Accuracy score for each fold', content:accuracy}],
-						preview:[{name:'10 fold Cross validation accuracy score for each fold', content:accuracy_array,dataTable:false},
-									{name:'10 fold Cross validation Evaluation of the performance',content:preview_arr,dataTable:false}]	
-					});
+				res.send({
+					uuid:uuid,
+					img:[{name:'ROC curves for each class',content:div_data}],
+					download:[{name:'Perserved classification pipeline', content:pickle},
+						{name:'Classification performance evaluation',content:metrics},
+							{name:'Accuracy score for each fold', content:accuracy}],
+					preview:[{name:'10 fold Cross validation accuracy score for each fold', content:accuracy_array,dataTable:false},
+								{name:'10 fold Cross validation Evaluation of the performance',content:preview_arr,dataTable:false}]	
 				});
-				
+
 			}).catch( (error) =>{
+				// getmultiremote error
 				console.log(error);
+				res.send({ERROR:error});
 			});
+		
+		}).catch(err =>{
+			// lambda function error
+			console.log(err);
+			res.send({ERROR: err});
+		});
 			
-		}
+		
+	}).catch(err =>{
+		//upload labeled data error
+		fs.unlinkSync(req.file.path);
+		console.log(err);
+		res.send({ERROR: err});
 	});
-						
+		
+	
 });
 
 router.post('/text-classification-predict',function(req,res,next){
