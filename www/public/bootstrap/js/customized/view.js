@@ -419,7 +419,8 @@ function ajaxSubmit(formID){
 	// session ID already calculated in topbar.pug
 	if (s3FolderName == undefined) s3FolderName = 'local'
 	var data = $(formID).serialize() + "&prefix="+ prefix
-				+ "&s3FolderName=" + s3FolderName;
+				+ "&s3FolderName=" + s3FolderName 
+				+ "&randomID=" + Math.random();
 	
 	// if there's upload file involving
 	if ($("#labeled").val()!== undefined && $("#labeled").val()!== ''){

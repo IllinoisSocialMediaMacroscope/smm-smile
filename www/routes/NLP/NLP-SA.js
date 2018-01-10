@@ -39,6 +39,9 @@ router.get('/NLP-sentiment',function(req,res,next){
 
 
 router.post('/NLP-sentiment',function(req,res,next){
+	
+	console.log(req.body);
+	
 	if (req.body.selectFile !== 'Please Select...'){
 		
 		var args = {'remoteReadPath':req.body.prefix, 
@@ -77,14 +80,16 @@ router.post('/NLP-sentiment',function(req,res,next){
 				res.send({'ERROR':error});
 			});
 		}).catch( error =>{
-			//invoke lambda function error
-			console.log('lambda error:' + error);
+			//lambda error then clear the s3 bucket
+			console.log(error);
 			res.send({'ERROR':JSON.stringify(error)});
 		});
 		
 	}else{
 		res.end('no file selected!');
-	}				
+	}		
+
+
 }); 
 
 module.exports = router;

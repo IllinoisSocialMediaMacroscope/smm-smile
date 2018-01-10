@@ -6,7 +6,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var timeout = require('connect-timeout');
 //var favicon = require('express-favicon');
 var app = express();
 
@@ -18,14 +17,6 @@ app.use(session({ secret: 'keyboard cat',
 }));
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(express.static(path.join(__dirname, '/public')));
-
-// set timeout to 6 minutes to avoid retry!
-app.use(timeout(360000));
-app.use(haltOnTimedout);
-function haltOnTimedout(req, res, next){
- if (!req.timedout) next();
-}
-
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine', 'pug');
 app.use(logger('dev'));
@@ -67,6 +58,8 @@ var debug = require('debug');
 var port = normalizePort('8001');
 app.set('port', port);
 var server = http.createServer(app);
+server.timeout = 1000*60*10; //10 minutes
+
 server.listen(port);
 console.log("App listening on \n\tlocalhost:" + port)
 server.on('error', onError);
