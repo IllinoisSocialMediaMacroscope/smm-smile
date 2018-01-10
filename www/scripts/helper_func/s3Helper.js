@@ -1,7 +1,4 @@
 var AWS = require('aws-sdk');
-AWS.config.update({
-	accessKeyId: '***REMOVED***', 
-	secretAccessKey: '***REMOVED***' })
 var s3 = new AWS.S3();
 var fs = require('fs');
 
