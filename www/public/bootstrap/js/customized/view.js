@@ -18,6 +18,7 @@ function checkbox_onclick(){
 
 function customized_reset(){
 	$("#img-container").empty();
+	$("#gaudge").empty();
 	$("#result-container").empty();
 	$("#side-download").empty();
 	$(".row.announce").empty();
@@ -425,7 +426,9 @@ function ajaxSubmit(formID,aws_identifier){
 				+ "&s3FolderName=" + s3FolderName 
 				+ "&aws_identifier=" + aws_identifier
 				+ "&email=" + email;
-		
+	
+	console.log(data);
+	
 	if (formValidation(aws_identifier)){
 		
 		customized_reset();
@@ -442,6 +445,7 @@ function ajaxSubmit(formID,aws_identifier){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else if ('jobName' in data && 'jobId' in data){
+					$("#aws-batch").modal('hide');
 					$("#aws-batch-confirmation").modal('show');
 				}else{
 						
