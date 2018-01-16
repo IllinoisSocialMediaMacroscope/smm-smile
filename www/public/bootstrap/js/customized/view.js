@@ -412,35 +412,39 @@ function appendD3JS(data){
 }*/
 
 /*----------------------submit to analysis--------------------------------------------*/
-function ajaxSubmit(formID){
+function ajaxSubmit(formID,aws_identifier){
 	
 	var prefix = $("#selectFile").children(":selected").val();
-		
+	var length = $("#length").val();
+	var email = $("#batch-email-alert").val() || '***REMOVED***';
+	
 	// session ID already calculated in topbar.pug
 	if (s3FolderName == undefined) s3FolderName = 'local'
+
 	var data = $(formID).serialize() + "&prefix="+ prefix
 				+ "&s3FolderName=" + s3FolderName 
-				+ "&randomID=" + Math.random();
-	
-	// if there's upload file involving
-	if ($("#labeled").val()!== undefined && $("#labeled").val()!== ''){
-		console.log($("#labeled").get(0).files);
-	}
+				+ "&aws_identifier=" + aws_identifier
+				+ "&email=" + email;
 		
-	if (formValidation()){
+	if (formValidation(aws_identifier)){
 		
+		customized_reset();
 		$(".loading").show();
+
 		$.ajax({
 			type:'POST',
 			url:$(formID).attr('action'), 
 			data:data,				
 			success:function(data){
+				$(".loading").hide();
+				
 				if ('ERROR' in data){
-					$(".loading").hide();
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
+				}else if ('jobName' in data && 'jobId' in data){
+					$("#aws-batch-confirmation").modal('show');
 				}else{
-					$(".loading").hide();
+						
 					appendDownload("#side-download",data.download);
 					appendImg("#img-container",data.img);
 					
@@ -462,6 +466,7 @@ function ajaxSubmit(formID){
 					/*else if('d3js_data' in data){
 						appendD3JS(data);
 					}*/			
+					
 				}
 			},
 			error: function(jqXHR, exception){

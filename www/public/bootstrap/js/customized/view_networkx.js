@@ -62,6 +62,9 @@ $(document).ready(function(){
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
 						$("#selectFilePreview").append(arrayToTable(numCat_data.slice(0,11),'#selectFileTable'));
 						//$("#selectFileTable").DataTable();
+						
+						$(".dataset").val(prefix);
+						$(".length").val(numCat_data.length-1);
 					}
 					
 				}					
@@ -147,13 +150,25 @@ $(document).ready(function(){
 		
 	});
 	
-
+	// lambda vs batch
+	$("#submit").on('click',function(){
+			console.log($(".length").val() );
+			if($(".length").val() === undefined){
+				// pop error
+				$("#modal-message").val("Cannot perform analysis on this dataset. Check if it exists!");
+				$("#alert").modal('show');
+			}else if ( $(".length").val() <= 5000 ){
+				ajaxSubmit(`#analytics-config`,'lambda');
+			}else{
+				$("#aws-batch").modal('show');
+			}
+	});
 
 	
 });
 
 /*----------------------form validation ----------------------------*/
-function formValidation(){
+function formValidation(aws_identifier){
 	
 	if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
 		$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
@@ -194,6 +209,30 @@ function formValidation(){
 		$("#alert").modal('show');
 		$("#layout").focus();
 		return false;
+	}
+	
+	if (aws_identifier === 'batch'){
+		if($(".dataset").val() === '' || $(".dataset").val() === undefined){
+			$("#modal-message").append(`<h4>This dataset you select is invalid.</h4>`);
+			$("#alert").modal('show');
+			return false
+		}
+	
+		if($(".length").val() === '' 
+			|| $(".length").val() === undefined
+			|| $(".length").val() === 0){
+				$("#modal-message").append(`<h4>This dataset you select has no data!</h4>`);
+				$("#alert").modal('show');
+				return false
+		}
+	
+		if($("#batch-email-alert").val() === '' 
+			|| $("#batch-email-alert").val() === undefined 
+			|| $("#batch-email-alert").val().indexOf('@')<= -1){
+				$("#modal-message").append(`<h4>Please provide a valid email address so we can reach to you once your collection has completed!</h4>`);
+				$("#alert").modal('show');
+				return false
+		}
 	}
 		
 	return true;
