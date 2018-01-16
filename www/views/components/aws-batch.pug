@@ -1,16 +1,16 @@
-div(id="reddit-expand" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+div(id="aws-batch" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
 	div(class="modal-dialog")
 		div(class="modal-content")
 			div(class="modal-header")
 				button(class="close", data-dismiss="modal") &times;
-				h3(class="modal-title", id="modal-title", style="text-align:left;") Gather the replies for each Reddit Post?
+				h3(class="modal-title", id="modal-title", style="text-align:left;") Non-realtime Computation
 			
 			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
 				div(id="modal-message")
 					p 
-						Your selected dataset contains hundreds/thousands Reddit post, and for each reddit post, it might have thousands of comments and replies. 
-						| Hence, this process is very time consuming. Once you submit the request, we will start gathering the data in the background.
-						| Once the collection of comments is complete, we will shoot you an email.
+						Your selected dataset size exceed the limit for real-time process. We will have to place this on a job queue.
+						| Once your computation job has succeeded, we will email you with instructions to review your results.
+						
 					img(src="bootstrap/img/gifs/warning.gif",style="width:10px;margin:20px 10px;") 
 					p(style="display:inline;color:red;") DO NOT TERMINATE THIS SESSION WHILE COMPUTING!
 					div(class="form-group")
@@ -24,22 +24,17 @@ div(id="reddit-expand" class="modal fade" role="dialog" data-backdrop="static" d
 					div(class="form-group")
 						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Email Address:
 						div(class="col-md-8 col-md-8 col-xs-12")
-							input(id="email-alert", class="form-control", type="email", name="email-alert")
+							input(id="batch-email-alert", class="form-control", type="email", name="email-alert")
 			div(class="modal-footer")
-				button(class="btn btn-primary",id="rdCommentReq",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px") Request comments for each Post
+				button(class="btn btn-primary",id="",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px" onclick="ajaxSubmit(`#analytics-config`,`batch`)") Submit
 
-
-div(id="reddit-expand-confirmation", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
+div(id="aws-batch-confirmation", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
 	div(class="modal-dialog")
 		div(class="modal-content")
-			//div(class="modal-header")
 			div(class="modal-body",style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
 				div(id="modal-message")
 					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="80px")
-					p(style="font-size:30px;") Your request for the Reddit comments has been sent. You will receive an email from us once it's done!
+					p(style="font-size:30px;") Your request has been submitted. You will receive an email and further instruction from us once it's done!
 			div(class="modal-footer")
 				button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden",data-dismiss="modal") Close	
 			
-				
-script(src="bootstrap/js/customized/view_reddit_expand.js")
-	

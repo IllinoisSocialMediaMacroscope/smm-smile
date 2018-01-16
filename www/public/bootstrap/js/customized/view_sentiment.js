@@ -25,7 +25,9 @@ function drawGauge(name,compound) {
 	
 }
 
+
 $(document).ready(function(){
+	// preview
 	$("#selectFile").on('change',function(){
 		var prefix = $(this).children(":selected").val();
 		var directory = $(this).children(":selected").attr("class");
@@ -83,11 +85,13 @@ $(document).ready(function(){
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFileHeader"></div></div>`);
 						$("#selectFileHeader").append(extractHeader2(text_data));
 						
+						// hidden field here to divide using aws lambda or batch
+						$(".length").val(text_data.length-1);
+						$(".dataset").val(prefix);
+						
 						// offer crawling for reddit comments modal
 						if(directory === 'reddit-Post' || directory === 'reddit-Historical-Post' || directory === 'reddit-Search'){
-							$("#dataset").val(prefix);
-							$("#length").val(text_data.length-1);
-							$("#getComment").show();
+							$("#getComment").show(); //button
 						}else{
 							$("#getComment").hide();
 						}
@@ -120,6 +124,7 @@ $(document).ready(function(){
 		
 	});
 	
+	// citation
 	$("#algorithm").on('change',function(){
 		$("#citation-container").hide();
 		$("#citation-notice").empty();
@@ -146,10 +151,24 @@ $(document).ready(function(){
 		}
 		
 	});
+	
+	// lambda vs batch
+	$("#submit").on('click',function(){
+		
+			if($(".length").val() === undefined){
+				// pop error
+				$("#modal-message").val("Cannot perform analysis on this dataset. Check if it exists!");
+				$("#alert").modal('show');
+			}else if ( $(".length").val() <= 10000 ){
+				ajaxSubmit(`#analytics-config`,'lambda');
+			}else{
+				$("#aws-batch").modal('show');
+			}
+	});
 });
 
 /*----------------------form validation ----------------------------*/
-function formValidation(){
+function formValidation(aws_identifier){
 	
 	if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
 		$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
@@ -175,6 +194,30 @@ function formValidation(){
 		$("#algorithm").focus();
 		return false;
 	}	
+	
+	if (aws_identifier === 'batch'){
+		if($(".dataset").val() === '' || $(".dataset").val() === undefined){
+			$("#modal-message").append(`<h4>This dataset you select is invalid.</h4>`);
+			$("#alert").modal('show');
+			return false
+		}
+	
+		if($(".length").val() === '' 
+			|| $(".length").val() === undefined
+			|| $(".length").val() === 0){
+				$("#modal-message").append(`<h4>This dataset you select has no data!</h4>`);
+				$("#alert").modal('show');
+				return false
+		}
+	
+		if($("#batch-email-alert").val() === '' 
+			|| $("#batch-email-alert").val() === undefined 
+			|| $("#batch-email-alert").val().indexOf('@')<= -1){
+				$("#modal-message").append(`<h4>Please provide a valid email address so we can reach to you once your collection has completed!</h4>`);
+				$("#alert").modal('show');
+				return false
+		}
+	}
 	
 	return true;
 	
