@@ -5,6 +5,7 @@ var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
+var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
 var CSV = require('csv-string');
 
 router.get('/NLP-sentiment',function(req,res,next){
@@ -40,11 +41,9 @@ router.get('/NLP-sentiment',function(req,res,next){
 
 router.post('/NLP-sentiment',function(req,res,next){
 	
-	console.log(req.body);
-	
 	if (req.body.selectFile !== 'Please Select...'){
 		
-		var args = {'remoteReadPath':req.body.prefix, 
+		/*var args = {'remoteReadPath':req.body.prefix, 
 				'column':req.body.selectFileColumn,
 				's3FolderName':req.body.s3FolderName
 		}
@@ -83,7 +82,20 @@ router.post('/NLP-sentiment',function(req,res,next){
 			//lambda error then clear the s3 bucket
 			console.log(error);
 			res.send({'ERROR':JSON.stringify(error)});
-		});
+		});*/
+		
+		var jobName = req.body.s3FolderName + '_SA_sdk';
+		var command = [ "python3.6", "/scripts/batch_sentiment_analysis.py",
+				"--remoteReadPath", req.body.prefix,
+				"--column", req.body.selectFileColumn,
+				"--s3FolderName", req.body.s3FolderName,
+				"--email", '***REMOVED***']
+		
+		submit_Batchjob(jobName,command).then(results =>{
+			res.send(results);
+		}).catch(err =>{
+			res.send({ERROR:err});
+		});		
 		
 	}else{
 		res.end('no file selected!');
