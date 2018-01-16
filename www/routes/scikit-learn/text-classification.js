@@ -8,7 +8,6 @@ var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemot
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
-var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
 var CSV = require('csv-string');
 var fs = require('fs');
 
@@ -46,7 +45,7 @@ router.post('/text-classification-split',function(req,res,next){
 		
 	}else{
 		
-		/*lambda_invoke('lambda_classification_split',
+		lambda_invoke('lambda_classification_split',
 			{'remoteReadPath':req.body.prefix, 
 			'ratio':req.body.ratio,
 			's3FolderName':req.body.s3FolderName})
@@ -74,20 +73,8 @@ router.post('/text-classification-split',function(req,res,next){
 		}).catch(err => {
 			console.log(err);
 			res.send({ERROR:err});
-		});*/
-		
-		var jobName = req.body.s3FolderName + '_split_sdk';
-		var command = [ "python3.6", "/scripts/batch_classification_split.py",
-				"--remoteReadPath", req.body.prefix,
-				"--ratio", req.body.ratio,
-				"--s3FolderName", req.body.s3FolderName ]
-		
-		submit_Batchjob(jobName,command).then(results =>{
-			res.send(results);
-		}).catch(err =>{
-			res.send({ERROR:err});
-		});		
-		
+		});
+				
 	}
 			
 });
@@ -125,7 +112,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 				var accuracy_array = CSV.parse(accuracy_string);
 				
 				var preview_string = values[2];
-				var preview_arr = CSV.parse(preview_string);
+				var preview_arr = CSV.parse(preview_string).slice(0,1001);
 			
 				res.send({
 					uuid:uuid,
@@ -177,7 +164,7 @@ router.post('/text-classification-predict',function(req,res,next){
 			Promise.all(promise_array).then( values => {
 				var div_data = values[0]
 				var preview_string = values[1];
-				var preview_arr = CSV.parse(preview_string);
+				var preview_arr = CSV.parse(preview_string).slice(0,1001);
 				
 				res.send({
 					uuid:uuid,

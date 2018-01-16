@@ -177,7 +177,7 @@ router.post('/history',function(req,res,next){
 				Promise.all(promise_array).then( values => {
 					var div_data = values[0];
 					var preview_string = values[1];
-					var preview_arr = CSV.parse(preview_string);
+					var preview_arr = CSV.parse(preview_string).slice(0,1001);
 					var compound = values[2]['compound']
 					var config = JSON.parse(values[3]);
 										
@@ -250,11 +250,11 @@ router.post('/history',function(req,res,next){
 					var div_data2 = values[2];
 					
 					var preview_string1 = values[3];
-					var preview_arr1 = CSV.parse(preview_string1);
+					var preview_arr1 = CSV.parse(preview_string1).slice(0,1001);
 					var preview_string2 = values[4];
-					var preview_arr2 = CSV.parse(preview_string2);
+					var preview_arr2 = CSV.parse(preview_string2).slice(0,1001);
 					var preview_string3 = values[5];
-					var preview_arr3 = CSV.parse(preview_string3);
+					var preview_arr3 = CSV.parse(preview_string3).slice(0,1001);
 					
 					var config = JSON.parse(values[6]);
 										
@@ -382,14 +382,14 @@ router.post('/history',function(req,res,next){
 				Promise.all(promise_array).then( values => {
 					var config = JSON.parse(values[0]);
 					var preview_string = values[1];
-					var preview_arr = CSV.parse(preview_string);
+					var preview_arr = CSV.parse(preview_string).slice(0,1001);
 					config.fields = preview_arr[0];
 
 					res.send({
 						title:'Social Media Past Search Result', 
 						ID:req.body.folderURL,
 						download:[{name:'CSV format', content:preview}],
-						preview:[{name: "Preview the .csv file", content:preview_arr.slice(0,101),dataTable:true}],
+						preview:[{name: "Preview the .csv file", content:preview_arr,dataTable:true}],
 						config:config
 					});								
 					
@@ -431,7 +431,7 @@ router.post('/history',function(req,res,next){
 				Promise.all(promise_array).then( values => {
 					var config = JSON.parse(values[0]);
 					var preview_string = values[1];
-					var preview_arr = CSV.parse(preview_string);
+					var preview_arr = CSV.parse(preview_string).slice(0,1001);
 					config.fields = preview_arr[0];
 
 					res.send({
@@ -439,7 +439,7 @@ router.post('/history',function(req,res,next){
 						expandable:req.body.folderURL,
 						ID:req.body.folderURL,
 						download:download,
-						preview:[{name: "Preview the .csv file", content:preview_arr.slice(0,101),dataTable:true}],
+						preview:[{name: "Preview the .csv file", content:preview_arr,dataTable:true}],
 						length:preview_arr.length-1, // display in the expand comments modal
 						config:config
 					});						

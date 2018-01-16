@@ -5,6 +5,7 @@ var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
+var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
 
 router.get('/NLP-preprocess',function(req,res,next){
 	var directory = {};
@@ -38,64 +39,83 @@ router.get('/NLP-preprocess',function(req,res,next){
 router.post('/NLP-preprocess',function(req,res,next){
 			
 	if (req.body.selectFile !== 'Please Select'){
-		
-		var args = {'remoteReadPath':req.body.prefix, 
-				'column':req.body.selectFileColumn,
-				's3FolderName':req.body.s3FolderName,
-				'source':'twitter', // bug here!
-				'process':req.body.model,
-				'tagger':req.body.tagger
-		}
-		
-		lambda_invoke('lambda_preprocessing',args).then( results =>{
+		if(req.body.aws_identifier === 'lambda'){
+			var args = {'remoteReadPath':req.body.prefix, 
+					'column':req.body.selectFileColumn,
+					's3FolderName':req.body.s3FolderName,
+					'source':'twitter', // bug here!
+					'process':req.body.model,
+					'tagger':req.body.tagger
+			}
 			
-			var phrases = results['phrases'];
-			var filtered = results['filtered'];
-			var processed = results['processed'];
-			var most_common = results['most_common'];
-			var div = results['div'];
-			var tagged = results['tagged'];
-			
-			var promise_array = [];
-			promise_array.push(getMultiRemote(div));
-			promise_array.push(getMultiRemote(phrases));
-			promise_array.push(getMultiRemote(most_common));
-			Promise.all(promise_array).then( values => {
-			
-				var div_data = values[0]; //trailing /r
+			lambda_invoke('lambda_preprocessing',args).then( results =>{
 				
-				var sentence_array = values[1].toString().split("\n");
-				var new_sentence_array = [];
-				for (var i = 0, length= sentence_array.length; i<length; i++){
-					new_sentence_array.push([sentence_array[i]]); //add [] to make it comply with google word tree requirement
-				}
+				var phrases = results['phrases'];
+				var filtered = results['filtered'];
+				var processed = results['processed'];
+				var most_common = results['most_common'];
+				var div = results['div'];
+				var tagged = results['tagged'];
 				
-				var most_common_array = values[2].toString().split("\n")[1];
-				var most_freq_word = most_common_array.split(",")[0];
+				var promise_array = [];
+				promise_array.push(getMultiRemote(div));
+				promise_array.push(getMultiRemote(phrases));
+				promise_array.push(getMultiRemote(most_common));
+				Promise.all(promise_array).then( values => {
 				
-				res.send({
-					title:'Natural Language PreProcessing', 
-					img:[{name:'Word Distribution',content:div_data}],
-					download:[
-						{name:'phrases', content:phrases},
-						{name:'words', content:filtered},
-						{name:'most common words by order', content:most_common},
-						{name:req.body.model + ' text', content:processed},
-						{name:req.body.tagger + ' text', content:tagged}],
-					table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
-					preview:[],						
+					var div_data = values[0]; //trailing /r
+					
+					var sentence_array = values[1].toString().split("\n");
+					var new_sentence_array = [];
+					for (var i = 0, length= sentence_array.length; i<length; i++){
+						new_sentence_array.push([sentence_array[i]]); //add [] to make it comply with google word tree requirement
+					}
+					
+					var most_common_array = values[2].toString().split("\n")[1];
+					var most_freq_word = most_common_array.split(",")[0];
+					
+					res.send({
+						title:'Natural Language PreProcessing', 
+						img:[{name:'Word Distribution',content:div_data}],
+						download:[
+							{name:'phrases', content:phrases},
+							{name:'words', content:filtered},
+							{name:'most common words by order', content:most_common},
+							{name:req.body.model + ' text', content:processed},
+							{name:req.body.tagger + ' text', content:tagged}],
+						table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
+						preview:[],						
+					});
+				}).catch( (error) =>{
+					//fetch s3 data error
+					console.log(error);
+					res.send({'ERROR':error});
 				});
-			}).catch( (error) =>{
-				//fetch s3 data error
+			}).catch( error =>{
+				//invoke lambda function error
 				console.log(error);
 				res.send({'ERROR':error});
 			});
-		}).catch( error =>{
-			//invoke lambda function error
-			console.log(error);
-			res.send({'ERROR':error});
-		});
 		
+		}else if(req.body.aws_identifier === 'batch'){
+			
+			var jobName = req.body.s3FolderName + '_Preprocess_sdk';
+			var command = [ "python3.6", "/scripts/batch_preprocessing.py",
+					"--remoteReadPath", req.body.prefix,
+					"--column", req.body.selectFileColumn,
+					"--s3FolderName", req.body.s3FolderName,
+					"--source","twitter",
+					'--process',req.body.model,
+					'--tagger',req.body.tagger,
+					"--email", req.body.email]
+			
+			submit_Batchjob(jobName,command).then(results =>{
+				res.send(results);
+			}).catch(err =>{
+				res.send({ERROR:err});
+			});
+		}		
+			
 	}else{
 		res.end('no file selected!');
 	}	

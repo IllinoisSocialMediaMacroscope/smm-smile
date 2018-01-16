@@ -44,6 +44,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 	// according to report, under 10000 can be finished using lambda function, above 10000 should use batch
 	
 	if (req.body.selectFile !== 'Please Select...'){
+		
 		if(req.body.aws_identifier === 'lambda'){
 			var args = {'remoteReadPath':req.body.prefix, 
 					'column':req.body.selectFileColumn,
@@ -64,7 +65,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 				Promise.all(promise_array).then( values => {
 					var div_data = values[0]; 
 					var preview_string = values[1];
-					var preview_arr = CSV.parse(preview_string);
+					var preview_arr = CSV.parse(preview_string).slice(0,1001);
 					var compound = values[2]['compound']
 					res.send({
 						title:'Sentiment Analysis',
@@ -91,7 +92,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 					"--remoteReadPath", req.body.prefix,
 					"--column", req.body.selectFileColumn,
 					"--s3FolderName", req.body.s3FolderName,
-					"--email", '***REMOVED***']
+					"--email", req.body.email]
 			
 			submit_Batchjob(jobName,command).then(results =>{
 				res.send(results);
