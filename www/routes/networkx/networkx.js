@@ -8,17 +8,8 @@ var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemot
 var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
 
 router.get('/networkx',function(req,res,next){
-	var directory = {};
-							
-	var promise_array = [];
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Tweet/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Stream/'));
-	Promise.all(promise_array).then( values => {
-		directory['twitter-Tweet'] = values[0];
-		directory['twitter-Stream'] = values[1];
-		var formParam = require('./networkx.json');	
-		res.render('analytics/formTemplate',{parent:'/#Network Analysis', title:'NetworkX', directory:directory, param:formParam});
-	});	 
+	var formParam = require('./networkx.json');	
+	res.render('analytics/formTemplate',{parent:'/#Network Analysis', title:'NetworkX', param:formParam});
 });
 
 router.post('/networkx',function(req,res,next){

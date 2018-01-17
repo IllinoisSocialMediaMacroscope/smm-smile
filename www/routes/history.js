@@ -11,67 +11,7 @@ var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.j
 var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
 
 router.get('/history',function(req,res,next){
-	var directory = {
-						"GraphQL":
-							{"twitter-Tweet":{},
-							"twitter-User":{},
-							"twitter-Stream":{},
-							"reddit-Search":{},
-							"reddit-Comment":{},
-							"reddit-Post":{},
-							"reddit-Historical-Post":{},
-							"reddit-Historical-Comment":{}
-						},
-						"ML":
-						{
-						//	"feature":{},
-						//	"clustering":{}
-							"classification":{}
-						},
-						"NLP":
-							{"preprocessing":{},
-							"sentiment":{}
-							//"topic-modeling":{}
-							},
-						"NW":{"networkx":{}},
-					}
-	
-	var promise_array = [];
-	// session id instead of local here!!
-	promise_array.push(list_folders(req.query.s3FolderName + '/ML/classification/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/NLP/preprocessing/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/NLP/sentiment/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/NW/networkx/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Tweet/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-User/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Stream/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Search/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Post/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Comment/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Historical-Post/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
-	
-	Promise.all(promise_array).then( values => {
-		directory['ML']['classification'] = values[0];
-		directory['NLP']['preprocessing'] = values[1];
-		directory['NLP']['sentiment'] = values[2];
-		directory['NW']['networkx'] = values[3];
-		directory['GraphQL']['twitter-Tweet'] = values[4];
-		directory['GraphQL']['twitter-User'] = values[5];
-		directory['GraphQL']['twitter-Stream'] = values[6];
-		directory['GraphQL']['reddit-Search'] = values[7];
-		directory['GraphQL']['reddit-Post'] = values[8];
-		directory['GraphQL']['reddit-Comment'] = values[9];
-		directory['GraphQL']['reddit-Historical-Post'] = values[10];
-		directory['GraphQL']['reddit-Historical-Comment'] = values[11];
-		
-		res.render('history',{parent:'/', directory: directory});
-		
-	}).catch( (err) => { 
-		res.render('history',{parent:'/',directory: directory}); 
-	});
-		
-			
+	res.render('history',{parent:'/'});		
 });
 
 router.post('/history',function(req,res,next){

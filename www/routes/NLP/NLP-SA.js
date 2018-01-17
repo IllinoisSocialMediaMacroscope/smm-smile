@@ -9,32 +9,8 @@ var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHe
 var CSV = require('csv-string');
 
 router.get('/NLP-sentiment',function(req,res,next){
-	var directory = {};
-							
-	var promise_array = [];
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Tweet/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-User/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Stream/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Search/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Post/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Comment/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Historical-Post/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
-	Promise.all(promise_array).then( values => {
-		
-		directory['twitter-Tweet'] = values[0];
-		directory['twitter-User'] = values[1];
-		directory['twitter-Stream'] = values[2];
-		directory['reddit-Search'] = values[3];
-		directory['reddit-Post'] = values[4];
-		directory['reddit-Comment'] = values[5];
-		directory['reddit-Historical-Post'] = values[6];
-		directory['reddit-Historical-Comment'] = values[7];
-	
 		var formParam = require('./sentiment.json');
-		res.render('analytics/formTemplate',{parent:'/#Sentiment Analysis', title:'Sentiment Analysis', directory:directory, param:formParam});
-	
-	});
+		res.render('analytics/formTemplate',{parent:'/#Sentiment Analysis', title:'Sentiment Analysis', param:formParam});
 });
  
 
