@@ -12,30 +12,7 @@ var CSV = require('csv-string');
 var fs = require('fs');
 
 router.get('/text-classification',function(req,res,next){
-	var directory = {};
-							
-	var promise_array = [];
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Tweet/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-User/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/twitter-Stream/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Search/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Post/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Comment/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Historical-Post/'));
-	promise_array.push(list_folders(req.query.s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
-	Promise.all(promise_array).then( values => {
-		
-		directory['twitter-Tweet'] = values[0];
-		directory['twitter-User'] = values[1];
-		directory['twitter-Stream'] = values[2];
-		directory['reddit-Search'] = values[3];
-		directory['reddit-Post'] = values[4];
-		directory['reddit-Comment'] = values[5];
-		directory['reddit-Historical-Post'] = values[6];
-		directory['reddit-Historical-Comment'] = values[7];
-		
-		res.render('analytics/text-classification',{parent:'/#Clustering', title:'Text Classification', directory:directory}); 
-	});
+	res.render('analytics/text-classification',{parent:'/#Clustering', title:'Text Classification'}); 
 });
  
 router.post('/text-classification-split',function(req,res,next){

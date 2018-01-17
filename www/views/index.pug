@@ -85,29 +85,3 @@ html
 				
 			});
 			
-			// append which session to analytics, this is important due to 
-			// analytics need to select files from s3
-			// s3 bucket folder is named after the s3FolderName
-			var pages =!{JSON.stringify(pages)}
-			$.each(pages,function(val,key){
-				var linkID = key['url'];
-				if (s3FolderName !== undefined){
-					$("#" + linkID).attr('href', key['url'] + '?s3FolderName=' + s3FolderName );
-				}else{
-					$("#" + linkID).attr('href', key['url'] + '?s3FolderName=local');
-				}
-			});
-			
-			var curr_URL = $("#get-started").attr('href');
-			if (s3FolderName !== undefined){
-				$("#get-started").attr('href', curr_URL + '?s3FolderName=' + s3FolderName );
-			}else{
-				$("#get-started").attr('href', curr_URL + '?s3FolderName=local' );
-			}
-			
-			var curr_URL = $("#past-results").attr('href');
-			if (s3FolderName !== undefined){
-				$("#past-results").attr('href', curr_URL + '?s3FolderName=' + s3FolderName );
-			}else{
-				$("#past-results").attr('href', curr_URL + '?s3FolderName=local' );
-			}

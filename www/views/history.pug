@@ -39,69 +39,10 @@ html
 			div(class="row")
 				div(class="col-sm-3 col-md-3 sidebar")
 					h2(style="color:#ffffff;text-align:center;") History 
-						img(src="bootstrap/img/logo/history-logo.png" width="50px")
+						img(src="bootstrap/img/logo/history-logo.png" width="50px", id="historyLogo", style="display:none;")
+						img(src="bootstrap/img/gifs/loading5.gif",width="50px",id="historyListLoading")
 					ul(class="nav nav-sidebar")
-						each val,key in directory
-							li <a onclick="toggle(this,`##{key}`);" id=#{key}-btn>
-								<span class="glyphicon glyphicon-minus"></span>
-								if key === 'ML'
-									| Machine Learning 
-								if key === 'NLP'
-									| Nature Language Processing
-								else if key === 'NW'
-									| Network Visualization and Analysis
-								else if key === 'GraphQL'
-									| Social Media Data
-								else
-									| #{key}
-								</a>
-							
-							ul(class="nav child_menu" style="display:block;" id=key)
-								each val1,key1 in val
-									li <a onclick="toggle(this,`##{key1}`);" id=#{key1}-btn>
-										<span class="glyphicon glyphicon-plus"></span>
-										if key1 === 'feature'
-											| Feature Selection
-										else if key1 === 'clustering'
-											| Unsupervised Learning (clustering)
-										else if key1 === 'preprocessing'
-											| NLP Preprocessing
-										else if key1 === 'sentiment'
-											| Sentiment Analysis
-										else if key1 === 'topic-modeling'
-											| LDA Topic Modeling
-										else if key1 === 'twitter-Tweet'
-											| Twitter Tweet
-										else if key1 === 'twitter-User'
-											| Twitter User
-										else if key1 === 'twitter-Stream'
-											| Twitter Streaming Data
-										else if key1 === 'reddit-Search'
-											| Reddit Search Posts Title
-										else if key1 === 'reddit-Post'
-											| Subreddit Posts Title 
-										else if key1 === 'reddit-Comment'
-											| Subreddit Comment
-										else if key1 === 'reddit-Historical-Post'
-											| Reddit Historical Post
-										else if key1 === 'reddit-Historical-Comment'
-											| Reddit Historical Comment
-										else if key1 === 'networkx'
-											| Python NetworkX
-										else if key1 === 'classification'
-											| Text Classification
-										else
-											| #{key1}
-										</a>
 										
-										ul(class="nav child_menu" style="display:none;" id=key1)
-											each val2,key2 in val1
-												li(id=key1+"-"+key2)
-													p(class="historyTabs") #{key2}
-													div(class="button-unit")
-														<button class="historyButtons" onclick="submitHistory(`#{val2}`);">view</button>
-														<button class="historyButtons" onclick="deleteModal(`#{val2}`,`#{key1}-#{key2}`);">delete</button>
-					
 												
 		div(class="container-fluid")
 			div(class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main")

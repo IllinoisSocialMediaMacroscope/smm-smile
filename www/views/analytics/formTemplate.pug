@@ -1,4 +1,4 @@
-extends layout.pug
+extends layout.pug 
 	
 block customized-script
 	<!-- customized script -->
@@ -22,26 +22,11 @@ block config-form
 						else if input['type'] == 'select'
 							if input['optgroup']
 								div(class="col-md-8 col-md-8 col-xs-12")
-									select(class=input.class id=input.id name=input.name)
+									img(src="bootstrap/img/gifs/loading4.gif",width="100px",id="selectLoading")
+									select(class=input.class,id=input.id,name=input.name,style="display:none;")
 										option(value="Please Select...", class="", id="empty", checked) Please Select...
-										each val,key in directory
-											optgroup(label=key)
-											each val1,key1 in val
-												option(value=val1, class=key, id=key1) #{key1}
 								div(class="col-md-2 col-md-2 col-xs-12")
-									button(class="btn btn-default",id="getComment") get comments
-								script.
-									$(`##{container['container-name']}`).after(`<div id="selectFilePreview-container"></div>`)
-									$(`##{container['container-name']}`).after(`<div id="preview-loading" style="display:none;text-align:center;">
-																					<div class="form-group">
-																						<label class="control-label col-md-2 col-md-2 col-xs-12"></label>
-																						<div class="col-md-8 col-md-8 col-xs-12">
-																							<img src="bootstrap/img/gifs/loading3.gif" width="250px"/>
-																						</div>
-																					</div>
-																				</div>`)
-									$("#selectFilePreview-container").after(`<div id="selectFileHeader-container"></div>`)
-								
+									button(class="btn btn-default",id="getComment") get comments								
 							else
 								div(class="col-md-8 col-md-8 col-xs-12")
 									select(name=input.name id=input.id class=input.class)

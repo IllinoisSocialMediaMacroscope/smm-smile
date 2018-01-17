@@ -11,25 +11,10 @@ for (i=0; i<pathArray.length-1; i++){
 	newPath += pathArray[i];
 	newPath += "/";
 }
-//pass s3FolderName to history page (get method)
-if (s3FolderName !== undefined){
-	$("#topbar-history").attr('href', "history?s3FolderName=" + s3FolderName);
-	$("#topbar-preprocessing").attr('href', "NLP-preprocess?s3FolderName=" + s3FolderName);
-	$("#topbar-classification").attr('href', "text-classification?s3FolderName=" + s3FolderName);
-	$("#topbar-sentiment").attr('href', "NLP-sentiment?s3FolderName=" + s3FolderName);
-	$("#topbar-networkx").attr('href', "networkx?s3FolderName=" + s3FolderName);
-}else{
-	$("#topbar-history").attr('href', "history?s3FolderName=local");
-	$("#topbar-preprocessing").attr('href', "NLP-preprocess?s3FolderName=local");
-	$("#topbar-classification").attr('href', "text-classification?s3FolderName=local");
-	$("#topbar-sentiment").attr('href', "NLP-sentiment?s3FolderName=local");
-	$("#topbar-networkx").attr('href', "networkx?s3FolderName=local");
-}
 
 //get currentPage name for dropbox and read the ?dropbox=success
 $("#box-auth").on('click',function(){
 	$("#box-auth").attr("href","login/box?pageURL=" + pathArray[pathArray.length-1] + "&currentURL=" + newPath);
-	//console.log(pathArray[pathArray.length-1]);
 });
 
 // box authorization success

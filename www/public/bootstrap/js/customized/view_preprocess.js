@@ -33,6 +33,62 @@ function drawWordTree(name,table,root){
 }
 
 $(document).ready(function(){
+	
+	// session ID already calculated in topbar.pug
+	if (s3FolderName == undefined) s3FolderName = 'local';
+	$.ajax({
+		type:'POST',
+		url:'list', 
+		data: {"s3FolderName":s3FolderName},			
+		success:function(data){
+			if (data){
+				if ('ERROR' in data){
+					$("#loading").hide();
+					$("#background").show();
+					$("#error").val(JSON.stringify(data));
+					$("#warning").modal('show');
+				}else{
+					$.each(data, function(key,val){
+						$("#selectFile").append($("<optgroup></optgroup>")
+							.attr("label",key));
+						$.each(val, function(key2,val2){
+							$("#selectFile").find(`optgroup[label='` +key +`']`).after($("<option></option>")
+								.attr("value", val2)
+								.attr("class", key)
+								.attr("id", key2)
+								.text(key2));
+						});
+					});	
+					// show select and hide loading bar 4
+					$("#selectFile").show();
+					$("#selectLoading").hide();
+				}
+			}
+		},
+		error: function(jqXHR, exception){
+			var msg = '';
+			if (jqXHR.status === 0) {
+				msg = 'Not connect.\n Verify Network.';
+			} else if (jqXHR.status == 404) {
+				msg = 'Requested page not found. [404]';
+			} else if (jqXHR.status == 500) {
+				msg = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msg = 'Requested JSON parse failed.';
+			} else if (exception === 'timeout') {
+				msg = 'Time out error.';
+			} else if (exception === 'abort') {
+				msg = 'Ajax request aborted.';
+			} else {
+				msg = 'Uncaught Error.\n' + jqXHR.responseText;
+			}
+			$("#error").val(msg);
+			$("#warning").modal('show');
+			
+		} 
+	}); 
+				
+	
 	$("#selectFile").on('change',function(){
 		var prefix = $(this).children(":selected").val();	
 		var directory = $(this).children(":selected").attr("class");
