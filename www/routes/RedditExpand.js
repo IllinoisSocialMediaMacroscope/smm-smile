@@ -2,27 +2,21 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(__dirname);
-var pythonShell = require('python-shell');
+var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
 
 router.post('/reddit-expand',function(req,res,next){
-	console.log(req.body.prefix);
-	
-	var options = {
-			//pythonPath:'C:/Users/cwang138/AppData/Local/Programs/Python/Python36-32/python.exe',
-			pythonPath:'/opt/python/bin/python3.4',
-			pythonOptions:['-W ignore'],
-			scriptPath:appPath + '/scripts/',
-			args:['--email',req.body.email, 
-					'--remoteReadPath', req.body.prefix ]
-		};
-	pythonShell.run('RedditComment.py',options,function(err,results){
-		if (err){
-			console.log(err);
-		}
-	});
-	
-	res.end('done');		
+	var jobName = req.body.s3FolderName + '_RedditComment_sdk';
+	var command = [ "python3.6", "/scripts/RedditComment.py",
+			"--remoteReadPath", req.body.prefix,
+			"--s3FolderName", req.body.s3FolderName,
+			"--email", req.body.email]
 			
+	submit_Batchjob(jobName,command).then(results =>{
+		console.log(results);
+		res.end('done');
+	}).catch(err =>{
+		res.send({ERROR:err});
+	});			
 });
 
 

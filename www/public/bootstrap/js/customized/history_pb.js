@@ -55,10 +55,9 @@ function submitHistory(folderURL){
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
 					}
 					
-
 					if ('expandable' in data && data.expandable != undefined){
-						$("#dataset").val(data.expandable);
-						$("#length").val(data.length);
+						$(".dataset").val(data.expandable);
+						$(".length").val(data.length);
 						$("#getComment").show();
 					}else{
 						$("#getComment").hide();
