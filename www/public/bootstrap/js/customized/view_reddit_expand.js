@@ -7,7 +7,7 @@ $("#rdCommentReq").on('click',function(){
 		$.ajax({
 			type:'post',
 			url:'reddit-expand', 
-			data: {"prefix":$("#dataset").val(), 
+			data: {"prefix":$(".dataset").val(), 
 					"email":$("#email-alert").val(),
 					"s3FolderName":s3FolderName},				
 			success:function(data){
@@ -50,7 +50,7 @@ $("#email-alert").on('keypress',function(e){
 				$.ajax({
 					type:'post',
 					url:'reddit-expand', 
-					data: {"prefix":$("#dataset").val(), 
+					data: {"prefix":$(".dataset").val(), 
 							"email":$("#email-alert").val(),
 							"s3FolderName":s3FolderName},				
 					success:function(data){
@@ -85,15 +85,15 @@ $("#email-alert").on('keypress',function(e){
 	
 	
 function checkRedditReq(){
-	if($("#dataset").val() === '' || $("#dataset").val() === undefined){
+	if($(".dataset").val() === '' || $(".dataset").val() === undefined){
 		$("#modal-message").append(`<h4>This Reddit Post you select is invalid.</h4>`);
 		$("#alert").modal('show');
 		return false
 	}
 	
-	if($("#length").val() === '' 
-		|| $("#length").val() === undefined
-		|| $("#length").val() === 0){
+	if($(".length").val() === '' 
+		|| $(".length").val() === undefined
+		|| $(".length").val() === 0){
 			$("#modal-message").append(`<h4>This Reddit Post you select has no data!</h4>`);
 			$("#alert").modal('show');
 			return false

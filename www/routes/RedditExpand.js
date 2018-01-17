@@ -12,7 +12,6 @@ router.post('/reddit-expand',function(req,res,next){
 			"--email", req.body.email]
 			
 	submit_Batchjob(jobName,command).then(results =>{
-		console.log(results);
 		res.end('done');
 	}).catch(err =>{
 		res.send({ERROR:err});
