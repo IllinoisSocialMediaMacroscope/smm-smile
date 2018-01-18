@@ -7,22 +7,25 @@ div(id="reddit-expand" class="modal fade" role="dialog" data-backdrop="static" d
 			
 			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
 				div(id="modal-message")
-					p 
-						Your selected dataset contains hundreds/thousands Reddit post, and for each reddit post, it might have thousands of comments and replies. 
-						| Hence, this process is very time consuming. Once you submit the request, we will start gathering the data in the background.
-						| Once the collection of comments is complete, we will shoot you an email.
-					img(src="bootstrap/img/gifs/warning.gif",style="width:10px;margin:20px 10px;") 
-					p(style="display:inline;color:red;") DO NOT TERMINATE THIS SESSION WHILE COMPUTING!
+					p Your selected dataset contains hundreds/thousands Reddit post, and for each reddit post, it might have thousands of comments and replies. 
+						| This process is very time consuming. Once you submit the request, we will have to place this on a job queue.
+						| We will email you with further instruction when the collection is completed.
 					div(class="form-group")
-						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Dataset:
+						div(class="col-md-4 col-md-4 col-xs-12")
+							img(src="bootstrap/img/logo/no-termination.png",style="width:150px; margin-top:5px;") 
+						div(class="col-md-8 col-md-8 col-xs-12")
+							img(src="bootstrap/img/gifs/warning.gif",style="width:10px;") 
+							p(style="display:inline;color:red;") You may feel free to leave this page or close your browser. BUT DO NOT TERMINATE THIS SESSION AFTER SUBMITTING THIS JOB!
+					div(class="form-group")
+						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Dataset
 						div(class="col-md-8 col-md-8 col-xs-12")
 							input(class="form-control dataset",disabled)
 					div(class="form-group")
-						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") # of posts
+						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Number of posts
 						div(class="col-md-8 col-md-8 col-xs-12")
 							input(class="form-control length",disabled)
 					div(class="form-group")
-						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Email Address:
+						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Email Address
 						div(class="col-md-8 col-md-8 col-xs-12")
 							input(id="email-alert", class="form-control", type="email", name="email-alert")
 			div(class="modal-footer")
