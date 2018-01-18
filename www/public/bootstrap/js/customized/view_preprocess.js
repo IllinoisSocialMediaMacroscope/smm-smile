@@ -209,7 +209,7 @@ $(document).ready(function(){
 	
 	// lambda vs batch
 	$("#submit").on('click',function(){
-			console.log($(".length").val());
+			//console.log($(".length").val());
 			if($(".length").val() === undefined){
 				// pop error
 				$("#modal-message").val("Cannot perform analysis on this dataset. Check if it exists!");

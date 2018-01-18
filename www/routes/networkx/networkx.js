@@ -6,6 +6,7 @@ var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.j
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
+var uuidv4 = require(path.join(appPath,'scripts','helper_func','uuidv4.js'));
 
 router.get('/networkx',function(req,res,next){
 	var formParam = require('./networkx.json');	
@@ -14,13 +15,16 @@ router.get('/networkx',function(req,res,next){
 
 router.post('/networkx',function(req,res,next){
 	
+	var uid = uuidv4();
+	
 	if (req.body.selectFile !== 'Please Select...'){
 		
 		if(req.body.aws_identifier === 'lambda'){
 			var args = {'remoteReadPath':req.body.prefix, 
 					'layout':req.body.layout, 
 					'relations':req.body.relations,
-					's3FolderName':req.body.s3FolderName
+					's3FolderName':req.body.s3FolderName,
+					'uid':uid
 			}
 			
 			lambda_invoke('lambda_network_analysis', args).then( results =>{
@@ -55,6 +59,7 @@ router.post('/networkx',function(req,res,next){
 						download: downloadFiles,
 						metrics:{name:'', content:''}, 
 						preview:[],
+						uid:uid
 					});
 				}).catch( err =>{
 					// retreive remote div data error
@@ -75,7 +80,8 @@ router.post('/networkx',function(req,res,next){
 					"--layout", req.body.layout,
 					"--relations", req.body.relations,
 					"--s3FolderName", req.body.s3FolderName,
-					"--email", req.body.email]
+					"--email", req.body.email,
+					"--uid", uid]
 			
 			submit_Batchjob(jobName,command).then(results =>{
 				res.send(results);

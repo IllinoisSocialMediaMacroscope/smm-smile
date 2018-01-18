@@ -19,7 +19,16 @@ function init(){
 									</div>
 								</div>`)
 	$("#selectFilePreview-container").after(`<div id="selectFileHeader-container"></div>`)
-}
+	
+	// hot key to bring up tag modal
+	document.addEventListener ("keydown", function (e) {
+		e.preventDefault();
+		if (e.ctrlKey  &&  e.altKey  &&  e.code === "KeyT") {
+			$("#tag-modal").modal('show');
+		}
+	});
+};
+
 
 function checkbox_onclick(){
 	$(document).on('change',':checkbox',function(){
@@ -259,10 +268,9 @@ function ajaxSubmit(formID,aws_identifier){
 						// draw word tree for preprocessing
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
 					}
-					/*else if('d3js_data' in data){
-						appendD3JS(data);
-					}*/			
 					
+					$("#jobId").val(data.uid);	
+					$("#tag-modal").modal('show');	
 				}
 			},
 			error: function(jqXHR, exception){
@@ -291,5 +299,3 @@ function ajaxSubmit(formID,aws_identifier){
 	}
 			
 } 
-
-
