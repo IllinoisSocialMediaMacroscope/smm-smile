@@ -11,8 +11,12 @@ $("#rdCommentReq").on('click',function(){
 					"email":$("#email-alert").val(),
 					"s3FolderName":s3FolderName},				
 			success:function(data){
-				$("#reddit-expand").modal('hide');
-				$("#reddit-expand-confirmation").modal('show');
+				if (data === 'done'){
+					$("#reddit-expand").modal('hide');
+					$("#reddit-expand-confirmation").modal('show');
+				}else if (data === 'pop alert'){
+					$("#reddit-expand-exist").modal('show');
+				}
 			},
 			error: function(jqXHR, exception){
 					var msg = '';
@@ -39,6 +43,58 @@ $("#rdCommentReq").on('click',function(){
 	}
 });
 
+$("#rdCommentYes").on('click',function(){
+	console.log('click');
+	// session ID already calculated in topbar.pug
+	if (s3FolderName == undefined) s3FolderName = 'local'
+	
+	if (checkRedditReq()){
+		$.ajax({
+			type:'post',
+			url:'reddit-expand', 
+			data: {"prefix":$(".dataset").val(), 
+					"email":$("#email-alert").val(),
+					"s3FolderName":s3FolderName,
+					"consent":true},				
+			success:function(data){
+				if (data === 'done'){
+					$("#reddit-expand").modal('hide');
+					$("#reddit-expand-exist").modal('hide');
+					$("#reddit-expand-confirmation").modal('show');
+				}else{
+					console.log(data);
+				}
+			},
+			error: function(jqXHR, exception){
+					var msg = '';
+					if (jqXHR.status === 0) {
+						msg = 'Not connect.\n Verify Network.';
+					} else if (jqXHR.status == 404) {
+						msg = 'Requested page not found. [404]';
+					} else if (jqXHR.status == 500) {
+						msg = 'Internal Server Error [500].';
+					} else if (exception === 'parsererror') {
+						msg = 'Requested JSON parse failed.';
+					} else if (exception === 'timeout') {
+						msg = 'Time out error.';
+					} else if (exception === 'abort') {
+						msg = 'Ajax request aborted.';
+					} else {
+						msg = 'Uncaught Error.\n' + jqXHR.responseText;
+					}
+					$("#error").val(msg);
+					$("#warning").modal('show');
+					
+				} 
+			});
+	}
+});
+
+$("#rdCommentNo").on('click',function(){
+	$("#reddit-expand").modal('hide');
+	$("#reddit-expand-exist").modal('hide');
+});
+
 $("#email-alert").on('keypress',function(e){
 	if (e.keyCode === 13 || e.keycode == 10){
 		e.preventDefault(); 
@@ -54,8 +110,12 @@ $("#email-alert").on('keypress',function(e){
 						"email":$("#email-alert").val(),
 						"s3FolderName":s3FolderName},				
 				success:function(data){
-					$("#reddit-expand").modal('hide');
-					$("#reddit-expand-confirmation").modal('show');
+					if (data === 'done'){
+						$("#reddit-expand").modal('hide');
+						$("#reddit-expand-confirmation").modal('show');
+					}else if (data === 'pop alert'){
+						$("#reddit-expand-exist").modal('show');
+					}
 				},
 				error: function(jqXHR, exception){
 						var msg = '';

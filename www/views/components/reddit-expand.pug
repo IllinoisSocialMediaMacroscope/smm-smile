@@ -42,6 +42,17 @@ div(id="reddit-expand-confirmation", class="modal fade", role="dialog", data-bac
 					p(style="font-size:30px;") Your request for the Reddit comments has been sent. You will receive an email from us once it's done!
 			div(class="modal-footer")
 				button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden",data-dismiss="modal") Close	
+				
+div(id="reddit-expand-exist", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-body",style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
+				div(id="modal-message")
+					img(src="bootstrap/img/gifs/warning.gif", class="export-success", width="80px")
+					p(style="font-size:30px;") You have already collected comments for this dataset. Do you still want to proceed?
+			div(class="modal-footer")
+				button(class="btn btn-default",style="background-color:#ea4a36;color:white;border-style:hidden",id="rdCommentYes") Yes	
+				button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden",id="rdCommentNo") No	
 			
 				
 script(src="bootstrap/js/customized/view_reddit_expand.js")
