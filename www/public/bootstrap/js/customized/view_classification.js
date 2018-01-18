@@ -396,11 +396,14 @@ function predict(){
 					$(".loading").hide();
 					$("#gaudge").empty();
 					
-					addUUID(data.uuid);
-					$("#uuid-modal").modal('show');
+					// addUUID(data.uuid);
+					// $("#uuid-modal").modal('show');
 					appendImg("#img-container",data.img);
 					appendDownload("#side-download",data.download);
 					appendPreview('#result-container',data.preview);
+					
+					$("#jobId").val(data.uuid);	
+					$("#tag-modal").modal('show');	
 				}
 			},
 			error: function(jqXHR, exception){

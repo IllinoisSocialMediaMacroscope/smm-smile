@@ -1,0 +1,26 @@
+div(id="tag-modal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", data-dismiss="modal") &times;
+				img(src="bootstrap/img/logo/tag.png",width="20px")
+				h3(class="modal-title", id="modal-title", style="text-align:left;vertical-align:middle;display:inline;margin-left:10px;") Give it a name 
+			
+			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
+				div(id="modal-message")
+					p(style="font-size:15px;") Tag a personalized name to this job so that you can locate it faster in the history page. Otherwise the default ID will be displayed.
+					p (Hot keys: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>t</kbd> )
+					div(class="form-group")
+						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") ID
+						div(class="col-md-8 col-md-8 col-xs-12")
+							input(class="form-control" id="jobId", placeholder="Nothing to name yet" disabled)
+					div(class="form-group")
+						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Rename
+						div(class="col-md-8 col-md-8 col-xs-12")
+							input(id="tagName", class="form-control")
+			div(class="modal-footer")
+				button(class="btn btn-primary",id="tag",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px") Tag
+				button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden",data-dismiss="modal") No	
+
+script(src="bootstrap/js/customized/view_tag.js")
+	

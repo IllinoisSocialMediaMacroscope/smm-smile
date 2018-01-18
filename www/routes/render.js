@@ -8,6 +8,7 @@ var appPath = path.dirname(__dirname);
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
+var fs = require('fs');
 
 router.post('/render',function(req,res,next){
 
@@ -138,5 +139,27 @@ router.post('/list-all',function(req,res,next){
 	});
 	
 });
+
+router.post('/tag',function(req,res,next){
+	
+	// update the map
+	if (req.body.tagName !== '' || req.body.tagName !== undefined){
+		if (fs.existsSync('./map.json')){
+			var tagIdMap = JSON.parse(fs.readFileSync('./map.json'));
+			tagIdMap[req.body.jobId] = req.body.tagName;
+		}else{
+			tagIdMap = {};
+			tagIdMap[req.body.jobId] = req.body.tagName;
+		}
+	
+		// save it to file
+		fs.writeFileSync('./map.json',JSON.stringify(tagIdMap));
+		
+	}
+	
+	res.send('done!');
+	
+});
+
 
 module.exports = router;

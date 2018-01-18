@@ -6,6 +6,7 @@ var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemot
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
 var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
+var uuidv4 = require(path.join(appPath,'scripts','helper_func','uuidv4.js'));
 var CSV = require('csv-string');
 
 router.get('/NLP-sentiment',function(req,res,next){
@@ -18,13 +19,15 @@ router.get('/NLP-sentiment',function(req,res,next){
 router.post('/NLP-sentiment',function(req,res,next){
 	
 	// according to report, under 10000 can be finished using lambda function, above 10000 should use batch
+	var uid = uuidv4();
 	
 	if (req.body.selectFile !== 'Please Select...'){
 		
 		if(req.body.aws_identifier === 'lambda'){
 			var args = {'remoteReadPath':req.body.prefix, 
 					'column':req.body.selectFileColumn,
-					's3FolderName':req.body.s3FolderName
+					's3FolderName':req.body.s3FolderName,
+					'uid':uid
 			}
 			
 			lambda_invoke('lambda_sentiment_analysis', args).then(results =>{
@@ -50,7 +53,8 @@ router.post('/NLP-sentiment',function(req,res,next){
 						download:[{name:'sentence-level sentiment scores',content:sentiment},
 								{name:'Has negation words?',content:negation},
 								{name:'Has some capital letter?',content:allcap}],
-						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}]
+						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}],
+						uid:uid
 					});				
 				}).catch( (error) =>{
 					//fetch s3 data error
@@ -68,7 +72,8 @@ router.post('/NLP-sentiment',function(req,res,next){
 					"--remoteReadPath", req.body.prefix,
 					"--column", req.body.selectFileColumn,
 					"--s3FolderName", req.body.s3FolderName,
-					"--email", req.body.email]
+					"--email", req.body.email,
+					"--uid", uid ] 
 			
 			submit_Batchjob(jobName,command).then(results =>{
 				res.send(results);
@@ -79,7 +84,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 		
 	}else{
 		res.end('no file selected!');
-	}		
+	}	
 
 
 }); 

@@ -6,6 +6,7 @@ var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemot
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
 var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
+var uuidv4 = require(path.join(appPath,'scripts','helper_func','uuidv4.js'));
 
 router.get('/NLP-preprocess',function(req,res,next){	
 	var formParam = require('./preprocess.json');
@@ -15,7 +16,9 @@ router.get('/NLP-preprocess',function(req,res,next){
 
 
 router.post('/NLP-preprocess',function(req,res,next){
-			
+	
+	var uid = uuidv4();
+	
 	if (req.body.selectFile !== 'Please Select'){
 		if(req.body.aws_identifier === 'lambda'){
 			var args = {'remoteReadPath':req.body.prefix, 
@@ -23,7 +26,8 @@ router.post('/NLP-preprocess',function(req,res,next){
 					's3FolderName':req.body.s3FolderName,
 					'source':'twitter', // bug here!
 					'process':req.body.model,
-					'tagger':req.body.tagger
+					'tagger':req.body.tagger,
+					'uid':uid
 			}
 			
 			lambda_invoke('lambda_preprocessing',args).then( results =>{
@@ -62,7 +66,8 @@ router.post('/NLP-preprocess',function(req,res,next){
 							{name:req.body.model + ' text', content:processed},
 							{name:req.body.tagger + ' text', content:tagged}],
 						table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
-						preview:[],						
+						preview:[],
+						uid:uid
 					});
 				}).catch( (error) =>{
 					//fetch s3 data error
@@ -83,9 +88,10 @@ router.post('/NLP-preprocess',function(req,res,next){
 					"--column", req.body.selectFileColumn,
 					"--s3FolderName", req.body.s3FolderName,
 					"--source","twitter",
-					'--process',req.body.model,
-					'--tagger',req.body.tagger,
-					"--email", req.body.email]
+					"--process",req.body.model,
+					"--tagger",req.body.tagger,
+					"--email", req.body.email,
+					"--uid", uid ]
 			
 			submit_Batchjob(jobName,command).then(results =>{
 				res.send(results);

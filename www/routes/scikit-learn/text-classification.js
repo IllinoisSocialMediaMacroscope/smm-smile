@@ -8,6 +8,7 @@ var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemot
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
+var uuidv4 = require(path.join(appPath,'scripts','helper_func','uuidv4.js'));
 var CSV = require('csv-string');
 var fs = require('fs');
 
@@ -22,10 +23,13 @@ router.post('/text-classification-split',function(req,res,next){
 		
 	}else{
 		
+		var uid = uuidv4();
+		
 		lambda_invoke('lambda_classification_split',
 			{'remoteReadPath':req.body.prefix, 
 			'ratio':req.body.ratio,
-			's3FolderName':req.body.s3FolderName})
+			's3FolderName':req.body.s3FolderName,
+			'uid':uid })
 		.then(results =>{
 			//console.log(results);
 			var uuid = results['uuid'];
