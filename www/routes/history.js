@@ -413,7 +413,7 @@ router.post('/delete',function(req,res,next){
 	
 	if(req.body.type === 'purge'){
 		// wipe out local directory and remote folders
-		deleteLocalFolders('./').then(() =>{
+		deleteLocalFolders('.').then(() =>{
 			deleteRemoteFolder(req.body.s3FolderName).then( values => {
 				res.send({'data':'Successfully purged!'});
 			}).catch( err =>{
