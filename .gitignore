@@ -5,3 +5,4 @@ graphql/node_modules
 nltk_data
 *.env
 uploads
+public/map.json
