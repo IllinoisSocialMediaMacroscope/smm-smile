@@ -164,7 +164,6 @@ $("#dropbox .auth-code").on("keyup",function(e){
 });
 
 function terminateWarning(){
-	console.log("clicked");
 	$("#terminate-modal").modal('show');
 }
 
