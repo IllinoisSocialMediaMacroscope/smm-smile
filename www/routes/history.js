@@ -11,7 +11,13 @@ var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.j
 var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
 
 router.get('/history',function(req,res,next){
-	res.render('history',{parent:'/'});		
+	if (fs.existsSync('./map.json')){
+		var tagIdMap = JSON.parse(fs.readFileSync('./map.json'));
+	}else{
+		tagIdMap = {};
+	}
+	
+	res.render('history',{parent:'/',tagIdMap:tagIdMap});		
 });
 
 router.post('/history',function(req,res,next){
@@ -407,10 +413,7 @@ router.post('/delete',function(req,res,next){
 	
 	if(req.body.type === 'purge'){
 		// wipe out local directory and remote folders
-		var p = [];
-		p.push(deleteLocalFolders('./downloads'));
-		p.push(deleteLocalFolders('./uploads'));
-		Promise.all(p).then(() =>{
+		deleteLocalFolders('./').then(() =>{
 			deleteRemoteFolder(req.body.s3FolderName).then( values => {
 				res.send({'data':'Successfully purged!'});
 			}).catch( err =>{
