@@ -17,7 +17,7 @@ router.get('/history',function(req,res,next){
 router.post('/history',function(req,res,next){
 	
 	var arrURL = req.body.folderURL.split('/');
-	
+		
 	if (arrURL[1] === 'NLP' && arrURL[2] === 'preprocessing'){
 		
 		var p = list_files(req.body.folderURL);
@@ -75,7 +75,8 @@ router.post('/history',function(req,res,next){
 							{name:'lemmatized/stemmed text', content:processed},
 							{name:'POS tagged text', content:tagged}],
 						table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
-						config:config				
+						config:config,
+						
 					});
 					
 				});
@@ -130,7 +131,8 @@ router.post('/history',function(req,res,next){
 								{name:'Has negation words?',content:negation},
 								{name:'Has some capital letter?',content:allcap}],
 						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}],
-						config:config
+						config:config,
+						
 					});
 					
 				});
@@ -214,7 +216,8 @@ router.post('/history',function(req,res,next){
 						preview:[{name:'Accuracy score for each fold',content:preview_arr1,dataTable:false},
 								{name:'Preview training report',content:preview_arr2,dataTable:false},
 									{name:'Predicted results',content:preview_arr3,dataTable:true}],
-						config:config
+						config:config,
+						
 					});
 					
 				});
@@ -284,6 +287,7 @@ router.post('/history',function(req,res,next){
 						],
 						preview:[],
 						config: config,
+						uid:arrURL[-2]
 					});
 					
 				});
@@ -330,7 +334,8 @@ router.post('/history',function(req,res,next){
 						ID:req.body.folderURL,
 						download:[{name:'CSV format', content:preview}],
 						preview:[{name: "Preview the .csv file", content:preview_arr,dataTable:true}],
-						config:config
+						config:config,
+						uid:arrURL[-2]
 					});								
 					
 				});
@@ -381,7 +386,8 @@ router.post('/history',function(req,res,next){
 						download:download,
 						preview:[{name: "Preview the .csv file", content:preview_arr,dataTable:true}],
 						length:preview_arr.length-1, // display in the expand comments modal
-						config:config
+						config:config,
+						uid:arrURL[-2]
 					});						
 					
 				});

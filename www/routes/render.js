@@ -141,11 +141,10 @@ router.post('/list-all',function(req,res,next){
 });
 
 router.post('/tag',function(req,res,next){
-	
 	// update the map
-	if (req.body.tagName !== '' || req.body.tagName !== undefined){
-		if (fs.existsSync('./map.json')){
-			var tagIdMap = JSON.parse(fs.readFileSync('./map.json'));
+	if (req.body.tagName !== '' && req.body.tagName !== undefined){
+		if (fs.existsSync('./public/map.json')){
+			var tagIdMap = JSON.parse(fs.readFileSync('./public/map.json'));
 			tagIdMap[req.body.jobId] = req.body.tagName;
 		}else{
 			tagIdMap = {};
@@ -153,7 +152,7 @@ router.post('/tag',function(req,res,next){
 		}
 	
 		// save it to file
-		fs.writeFileSync('./map.json',JSON.stringify(tagIdMap));
+		fs.writeFileSync('./public/map.json',JSON.stringify(tagIdMap));
 		
 	}
 	
