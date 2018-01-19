@@ -30,7 +30,7 @@ function submit_Batchjob(jobName, command){
 				console.log(err,err.stack);
 				reject(err);
 			}else{
-				console.log(data);
+				//console.log(data);
 				resolve(data);
 			}
 		});

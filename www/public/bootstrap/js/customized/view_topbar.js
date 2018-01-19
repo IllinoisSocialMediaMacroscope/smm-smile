@@ -172,13 +172,10 @@ function exportOptions(whichTrigger){
 	if (whichTrigger === 'terminate'){
 	
 		$("#terminate-modal").modal('hide');
-		
-		//show terminate button at the footer
-		$("#terminate-btn").show();
 		$("#export-modal").modal('show');
 		
 	}else if (whichTrigger === 'export'){
-		//show terminate button at the footer
+		$("#export-modal").find(".modal-footer").hide();
 		$("#export-modal").modal('show');
 	}
 }

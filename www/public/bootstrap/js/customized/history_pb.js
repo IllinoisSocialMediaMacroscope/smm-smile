@@ -1,7 +1,6 @@
 $(document).ready(function(){
 	$.getJSON('map.json', function(data) {
 		var tags = data;
-		console.log(tags);
 		// session ID already calculated in topbar.pug
 		if (s3FolderName == undefined) s3FolderName = 'local';
 		$.ajax({
