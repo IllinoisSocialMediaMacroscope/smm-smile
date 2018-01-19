@@ -11,10 +11,11 @@ for (i=0; i<pathArray.length-1; i++){
 	newPath += pathArray[i];
 	newPath += "/";
 }
+var currPage = pathArray[pathArray.length-1];
 
 //get currentPage name for dropbox and read the ?dropbox=success
 $("#box-auth").on('click',function(){
-	$("#box-auth").attr("href","login/box?pageURL=" + pathArray[pathArray.length-1] + "&currentURL=" + newPath);
+	$("#box-auth").attr("href","login/box?pageURL=" + currPage + "&currentURL=" + newPath);
 });
 
 // box authorization success

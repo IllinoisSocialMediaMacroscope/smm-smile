@@ -19,14 +19,6 @@ function init(){
 									</div>
 								</div>`)
 	$("#selectFilePreview-container").after(`<div id="selectFileHeader-container"></div>`)
-	
-	// hot key to bring up tag modal
-	document.addEventListener ("keydown", function (e) {
-		e.preventDefault();
-		if (e.ctrlKey  &&  e.altKey  &&  e.code === "KeyT") {
-			$("#tag-modal").modal('show');
-		}
-	});
 };
 
 

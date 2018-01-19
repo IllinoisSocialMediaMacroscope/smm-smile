@@ -7,8 +7,19 @@ $("#tag").on('click',function(){
 				"tagName":$("#tagName").val(),
 			},				
 		success:function(data){
-			console.log(data);
-			$("#tag-modal").modal('hide');
+			if(currPage !== 'history'){
+				$("#tag-modal").modal('hide');
+			}else{
+				$("#tag-modal").modal('hide');
+				//also immediately update the tag bar in the frontend
+				//fake update
+				var tagID = $("#jobId").val();
+				var tagName = $("#tagName").val();
+				if (tagName !== '' && tagName !== undefined){
+					$("#" + tagID).empty()
+					$("#" + tagID).append(`<kbd>tag: ` + tagName + `</kbd>`);
+				}
+			}
 		},
 		error: function(jqXHR, exception){
 				var msg = '';
@@ -34,6 +45,8 @@ $("#tag").on('click',function(){
 		});
 });
 
+
+
 $("#tagName").on('keypress',function(e){
 	if (e.keyCode === 13 || e.keycode == 10){
 		e.preventDefault(); 
@@ -44,8 +57,19 @@ $("#tagName").on('keypress',function(e){
 				"tagName":$("#tagName").val(),
 			},				
 		success:function(data){
-			console.log(data);
-			$("#tag-modal").modal('hide');
+			if(currPage !== 'history'){
+				$("#tag-modal").modal('hide');
+			}else{
+				$("#tag-modal").modal('hide');
+				//also immediately update the tag bar in the frontend
+				//fake update
+				var tagID = $("#jobId").val();
+				var tagName = $("#tagName").val();
+				if (tagName !== '' && tagName !== undefined){
+					$("#" + tagID).empty()
+					$("#" + tagID).append(`<kbd>tag: ` + tagName + `</kbd>`);
+				}
+			}
 		},
 		error: function(jqXHR, exception){
 				var msg = '';

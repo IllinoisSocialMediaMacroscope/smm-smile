@@ -20,8 +20,8 @@ html
 		script(src="bootstrap/js/customized/warning_trigger.js")
 		
 		<!-- jquery cookie plugin -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-	
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+		script(src="bootstrap/js/customized/detect_cookie.js")
 	
 	body
 		include components/topbar.pug
@@ -75,8 +75,7 @@ html
 							a(class="prose-button",href=page.url,id=page.url) Start
 										
 		include components/footer.pug								
-		script(src="bootstrap/js/customized/detect_cookie.js")
-		
+				
 		script.
 			$("#citation-notice-btn").click(function(){
 				$("#citation-notice").hide('slow');
