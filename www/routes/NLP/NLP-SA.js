@@ -76,7 +76,9 @@ router.post('/NLP-sentiment',function(req,res,next){
 					"--uid", uid ] 
 			
 			submit_Batchjob(jobName,command).then(results =>{
+				results['uid'] = uid;
 				res.send(results);
+				
 			}).catch(err =>{
 				res.send({ERROR:err});
 			});

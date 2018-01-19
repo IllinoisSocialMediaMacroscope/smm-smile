@@ -492,22 +492,6 @@ function submitSearchbox(searchboxID, filenameID){
 	});
 }
 
-	
-// export button click revoke download modal
-function showSuccess(){
-	$("#success").modal('show');
-}
-
-function togglepreview(){
-	if ($(".grid-element").css('display') !== 'none'){
-		$(".grid-element").hide('slow');
-		$("#togggleIcon").attr('class', 'glyphicon glyphicon-plus');
-	}else{
-		$(".grid-element").show('slow');
-		$("#togggleIcon").attr('class', 'glyphicon glyphicon-minus');
-	}
-}
-
 function renderPreview(data,prefix){
 	
 	// hide the saving modal
@@ -523,12 +507,7 @@ function renderPreview(data,prefix){
 	
 	// construct previews
 	$("#grid").empty();
-	$("#grid").append(`<div style="align-item:left;margin-top:100px;">
-									<button class="btn btn-default" id="togglePreview" onclick="togglepreview();"><span id="togggleIcon" class="glyphicon glyphicon-minus style="position:inherit;"></span>Preview</button>
-									<button class="btn btn-primary" id="export" onclick="showSuccess();"><span class="glyphicon glyphicon-export" style="position:inherit;"></span>Export</button>
-									
-								</div>
-								<div id="grid"></div>`)
+	$("#grid").append(`<div id="grid"></div>`)
 	if (prefix === 'twitter-Tweet' || prefix === 'twitter-Stream'){
 		$.each(data.rendering, function(i,val){
 			

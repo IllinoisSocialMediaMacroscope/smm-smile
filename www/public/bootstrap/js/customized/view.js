@@ -232,6 +232,7 @@ function ajaxSubmit(formID,aws_identifier){
 			url:$(formID).attr('action'), 
 			data:data,				
 			success:function(data){
+				
 				$(".loading").hide();
 				
 				if ('ERROR' in data){
@@ -239,6 +240,9 @@ function ajaxSubmit(formID,aws_identifier){
 					$("#warning").modal('show');
 				}else if ('jobName' in data && 'jobId' in data){
 					$("#aws-batch").modal('hide');
+					
+					$("#jobId").val(data.uid);	
+					$("#tag-modal").modal('show');
 					$("#aws-batch-confirmation").modal('show');
 				}else{
 						

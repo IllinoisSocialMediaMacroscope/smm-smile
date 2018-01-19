@@ -81,7 +81,6 @@ router.post('/NLP-preprocess',function(req,res,next){
 			});
 		
 		}else if(req.body.aws_identifier === 'batch'){
-			
 			var jobName = req.body.s3FolderName + '_Preprocess_sdk';
 			var command = [ "python3.6", "/scripts/batch_preprocessing.py",
 					"--remoteReadPath", req.body.prefix,
@@ -94,6 +93,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 					"--uid", uid ]
 			
 			submit_Batchjob(jobName,command).then(results =>{
+				results['uid'] = uid;
 				res.send(results);
 			}).catch(err =>{
 				res.send({ERROR:err});
