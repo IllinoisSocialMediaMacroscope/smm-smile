@@ -81,15 +81,10 @@ router.post('/export',function(req,res,next){
 															mode:{'.tag':'overwrite'},
 															autorename:true,
 															mute:false})
-											.then(function(err,response){
+											.then(function(response){
 												fs.unlinkSync(filename);
 												deleteLocalFolders('./downloads').then(() =>{
-													if (err){
-														console.log(err);
-														res.send({'ERROR':err});
-													}else{
-														res.send(response);
-													}
+													res.send(response);
 												}).catch(err =>{
 													console.log(err);
 													res.send({ERROR:err});
