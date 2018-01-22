@@ -416,7 +416,10 @@ router.post('/delete',function(req,res,next){
 		var p = [];
 		p.push(deleteLocalFolders('./downloads'));
 		p.push(deleteLocalFolders('./uploads'));
-		fs.unlinkSync('./map.json');
+		if (fs.existsSync('./uploads')){
+			fs.unlinkSync('./map.json');
+		}
+		
 		Promise.all(p).then(() =>{
 			deleteRemoteFolder(req.body.s3FolderName).then( values => {
 				res.send({'data':'Successfully purged!'});
