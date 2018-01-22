@@ -20,11 +20,11 @@ var port = normalizePort(process.env.PORT || '5050');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTP server. timeout after 20 minutes.
  */
 
 var server = http.createServer(app);
-
+server.timeout = 1000*60*20; //10 minutes
 /**
  * Listen on provided port, on all network interfaces.
  */

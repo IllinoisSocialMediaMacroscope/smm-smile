@@ -172,6 +172,7 @@ function exportOptions(whichTrigger){
 	if (whichTrigger === 'terminate'){
 	
 		$("#terminate-modal").modal('hide');
+		$("#export-modal").find(".modal-footer").show();
 		$("#export-modal").modal('show');
 		
 	}else if (whichTrigger === 'export'){
