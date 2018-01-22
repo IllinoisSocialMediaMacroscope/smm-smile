@@ -89,12 +89,10 @@ router.post('/query',function(req,res,next){
 					var key1 = Object.keys(values[0])[0];
 					var key2 = Object.keys(values[0][key1])[0];
 					var key3 = Object.keys(values[0][key1][key2])[0];
-			
-					responseObj = mergeJSON(values,[key1,key2,key3]);
-					
-					if ("errors" in responseObj){
-						res.send({ERROR:responseObj['errors'][0]['message']});
+					if ("errors" in values[0]){
+						res.send({ERROR:values[0]['errors'][0]['message']});
 					}else{		
+						responseObj = mergeJSON(values,[key1,key2,key3]);
 						// ------------------------------------save csv file---------------------------------------------------------		
 						if (responseObj[key1][key2][key3].length > 0 
 								&& responseObj[key1][key2][key3] !== 'null'
