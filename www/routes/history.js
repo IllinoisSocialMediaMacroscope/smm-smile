@@ -416,7 +416,7 @@ router.post('/delete',function(req,res,next){
 		var p = [];
 		p.push(deleteLocalFolders('./downloads'));
 		p.push(deleteLocalFolders('./uploads'));
-		if (fs.existsSync('./uploads')){
+		if (fs.existsSync('./map.json')){
 			fs.unlinkSync('./map.json');
 		}
 		
