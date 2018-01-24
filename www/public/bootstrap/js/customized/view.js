@@ -19,6 +19,8 @@ function init(){
 									</div>
 								</div>`)
 	$("#selectFilePreview-container").after(`<div id="selectFileHeader-container"></div>`)
+	
+	$("#clowder-modal").modal('show');
 };
 
 

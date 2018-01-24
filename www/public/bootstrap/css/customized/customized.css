@@ -465,3 +465,8 @@ marker#arrow {
 	display:none;
 	/*animation:blink-animation 1500ms infinite;*/
 }
+
+/*******************clowder modal***********************/
+.control-group{
+	margin:20px auto;
+}

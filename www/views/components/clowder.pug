@@ -1,0 +1,85 @@
+div(id="clowder-login-modal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", data-dismiss="modal") &times;
+				img(src="bootstrap/img/logo/clowder-bg-logo.png",width="40%", style="display:block;margin:auto auto;")
+			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
+				div(id="modal-message")
+					div(id="clowder-login-block")
+						div(class="control-group")
+							label(class="control-label") Username
+							input(type="email", class="form-control", placeholder="Use your registered Email address")
+						div(class="control-group")
+							label(class="control-label") Password
+							input(type="text", class="form-control", placeholder="Password")
+			div(class="modal-footer")
+				button(class="btn btn-primary",id="clowder-login",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px")
+					span(class="glyphicon glyphicon-log-in")
+					| Login
+					
+					
+div(id="clowder-modal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", data-dismiss="modal") &times;
+				img(src="bootstrap/img/logo/clowder-bg-logo.png",width="40%", style="display:block;margin:auto auto;")
+			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
+				div(id="modal-message")
+					div(id="clowder-login-block")
+						div(class="control-group")
+							label(class="control-label") Select a dataset
+							select(class="form-control")
+								option(value="Please Select...") Please Select... 
+								option(value="newDataset") Create a new dataset
+								option(value="dataset1") dataset1
+								option(value="dataset2") dataset2
+								option(value="dataset3") dataset3
+								option(value="dataset4") dataset4
+						div(class="control-group")
+							label(class="control-label") Dataset Title (*)
+							input(type="text", class="form-control", placeholder="A short name")
+						div(class="control-group")
+							label(class="control-label") Descriptions
+							textarea(class="form-control", rows="5", style="resize:none;", placeholder="A longer description")
+						div(class="control-group")
+							label(class="control-label") Add Metadata
+							select(class="form-control")
+								option(value="Please Select...") Please Select... 
+								option(value="custMeta") Custom metadata key-value pair
+								option(value="CSDMS Standard Name") CSDMS Standard Name
+								option(value="Date and Time") Date and Time
+								option(value="Funding Institution") Funding Institution
+								option(value="GeoJSON") GeoJSON								
+								option(value="Grant Number") ODM2 Variable Name								
+								option(value="Primary/Initial Publication") Primary/Initial Publication							
+								option(value="Principal Investigator(s)") Principal Investigator(s)							
+								option(value="References") References								
+								option(value="Related Publications") Related Publications							
+								option(value="SAS Spatial Geocode") SAS Spatial Geocode							
+								option(value="SAS Variable Name") SAS Variable Name							
+								option(value="Time Periods") Time Periods						
+								option(value="Unit") Unit
+						div(class="form-group")
+							div(class="col-md-4 col-md-4 col-xs-12")
+								input(type="text", class="form-control" disabled)
+							div(class="col-md-4 col-md-4 col-xs-12")
+								input(type="text", class="form-control")
+							div(class="col-md-4 col-md-4 col-xs-12")
+								button(class="btn btn-primary", style="margin:auto 5px;")
+									| Save
+								button(class="btn btn-warning")
+									| remove
+						div(class="control-group")
+							label(class="control-label") Add Tags
+							input(type="text", class="form-control", id="dataset-tags", data-role="tagsinput", placeholder="Type, Enter, Backspace, L/R")
+							script.
+								$('#dataset-tags').tagsinput({
+									freeInput: true
+								});
+			div(class="modal-footer")
+				button(class="btn btn-primary",id="clowder-login",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px")
+					span(class="glyphicon glyphicon-chevron-right")
+					| Next
+					
