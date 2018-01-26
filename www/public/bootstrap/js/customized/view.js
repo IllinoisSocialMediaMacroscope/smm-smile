@@ -266,8 +266,18 @@ function ajaxSubmit(formID,aws_identifier){
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
 					}
 					
+					// ADD TO TAG MODAL
 					$("#jobId").val(data.uid);	
 					$("#tag-modal").modal('show');	
+					
+					// ADD TO CLOWDER MODAL
+					$("#clowder-files-list").empty();
+					$.each(data.download, function(i,val){
+						$("#clowder-files-list").append(`<div class="form-control" style="margin:15px auto;height:100%;">
+															<input type="checkbox" class="form-check-input" value="`+ val.content + `"/>
+															<label class="form-check-label"> &nbsp; ` + val.name + `</label>
+														</div>`);
+					});
 				}
 			},
 			error: function(jqXHR, exception){

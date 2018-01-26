@@ -211,7 +211,7 @@ a.anchor{
 	font-size: 20px;
 } */
 
-/* checkbox */
+/* checkbox 
 .checkbox-flat, .checkbox-flat-checked{
     display: inline-block;
     vertical-align: middle;
@@ -234,7 +234,7 @@ a.anchor{
 
 .checkbox-flat:hover{
     background:#428bca; 
-}
+}*/
 
 /* radio button */
 .customized-radio:after {

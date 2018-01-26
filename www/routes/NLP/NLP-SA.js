@@ -31,6 +31,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 			}
 			
 			lambda_invoke('lambda_sentiment_analysis', args).then(results =>{
+				var config=results['config'];
 				var div=results['div'];
 				var doc_sentiment=results['doc'];
 				var sentiment = results['sentiment'];
@@ -46,13 +47,17 @@ router.post('/NLP-sentiment',function(req,res,next){
 					var preview_string = values[1];
 					var preview_arr = CSV.parse(preview_string).slice(0,1001);
 					var compound = values[2]['compound']
+					
+					var download = [{name:'sentence-level sentiment scores',content:sentiment},
+								{name:'negation words',content:negation},
+								{name:'capital letter',content:allcap},
+								{name:'configuration', content:config},
+								{name:'visualization', content:div}]
 					res.send({
 						title:'Sentiment Analysis',
 						img:[{name:'Document Sentiment Composition',content:div_data}],
 						compound:compound,
-						download:[{name:'sentence-level sentiment scores',content:sentiment},
-								{name:'Has negation words?',content:negation},
-								{name:'Has some capital letter?',content:allcap}],
+						download:download,
 						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}],
 						uid:uid
 					});				
