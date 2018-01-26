@@ -6,15 +6,14 @@ div(id="clowder-login-modal" class="modal fade" role="dialog" data-backdrop="sta
 				img(src="bootstrap/img/logo/clowder-bg-logo.png",width="40%", style="display:block;margin:auto auto;")
 			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
 				div(id="modal-message")
-					div(id="clowder-login-block")
 						div(class="control-group")
 							label(class="control-label") Username
-							input(type="email", class="form-control", placeholder="Use your registered Email address")
+							input(type="email", class="form-control", id="clowderEmail", placeholder="Use your registered Email address")
 						div(class="control-group")
 							label(class="control-label") Password
-							input(type="text", class="form-control", placeholder="Password")
+							input(type="password", class="form-control", id="clowderPassword", placeholder="Password")
 			div(class="modal-footer")
-				button(class="btn btn-primary",id="clowder-login",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px")
+				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px", onclick="submit_clowder_login();")
 					span(class="glyphicon glyphicon-log-in")
 					| Login
 					
@@ -27,47 +26,68 @@ div(id="clowder-modal" class="modal fade" role="dialog" data-backdrop="static" d
 				img(src="bootstrap/img/logo/clowder-bg-logo.png",width="40%", style="display:block;margin:auto auto;")
 			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
 				div(id="modal-message")
-					div(id="clowder-login-block")
+				
+					div(id="clowder-dataset-block")
 						div(class="control-group")
 							label(class="control-label") Select a dataset
 							select(class="form-control" id="selectDataset")
-								option(value="Please Select...") Please Select... 
-								option(value="newDataset") Create a new dataset
-								option(value="dataset1") dataset1
-								option(value="dataset2") dataset2
-								option(value="dataset3") dataset3
-								option(value="dataset4") dataset4
 						div(id="newDataset-block" style="display:none;")
 							div(class="control-group")
 								label(class="control-label") Dataset Title (*)
-								input(type="text", class="form-control", placeholder="A short name")
+								input(type="text", class="form-control", id="datasetTitle", placeholder="A short name")
 							div(class="control-group")
 								label(class="control-label") Descriptions
-								textarea(class="form-control", rows="5", style="resize:none;", placeholder="A longer description")
+								textarea(class="form-control", rows="5", style="resize:none;", id="datasetDesc", placeholder="A longer description")
 							div(class="control-group", id="datasetMeta")
 								label(class="control-label") Add Metadata
 								select(class="form-control")
-									option(value="Please Select...") Please Select... 
+									option(value="Please Select...") Please Select...
 									option(value="CSDMSStandardName") CSDMS Standard Name
 									option(value="DateandTime") Date and Time
 									option(value="FundingInstitution") Funding Institution
-									option(value="GeoJSON") GeoJSON								
-									option(value="GrantNumber") ODM2 Variable Name								
-									option(value="PrimaryInitialPublication") Primary/Initial Publication							
-									option(value="PrincipalInvestigator") Principal Investigator(s)							
-									option(value="References") References								
-									option(value="RelatedPublications") Related Publications							
-									option(value="SASSpatialGeocode") SAS Spatial Geocode							
-									option(value="SASVariableName") SAS Variable Name							
-									option(value="TimePeriods") Time Periods						
+									option(value="GeoJSON") GeoJSON
+									option(value="GrantNumber") ODM2 Variable Name
+									option(value="PrimaryInitialPublication") Primary/Initial Publication
+									option(value="PrincipalInvestigator") Principal Investigator(s)
+									option(value="References") References
+									option(value="RelatedPublications") Related Publications
+									option(value="SASSpatialGeocode") SAS Spatial Geocode
+									option(value="SASVariableName") SAS Variable Name
+									option(value="TimePeriods") Time Periods
 									option(value="Unit") Unit
+							div(id="datasetMeta-block")
+							
 							div(class="control-group")
 								label(class="control-label") Add Tags
 								input(type="text", class="form-control", id="datasetTags", data-role="tagsinput", placeholder="Type, Enter, Backspace, L/R")
 								
+					div(id="clowder-files-block" style="display:none;")
+						div(class="control-group")
+							label(class="control-label") Dataset ID (*)
+							input(type="text", class="form-control", id="datasetID", disabled)
+						div(class="control-group")
+							label(class="control-label") Select files to upload
+							div(class="checkbox")
+								label 
+									input(type="checkbox" value="") 
+									| file1
+							div(class="checkbox")
+								label 
+									input(type="checkbox" value="") 
+									| file2
+							div(class="checkbox")
+								label 
+									input(type="checkbox" value="") 
+									| file3
+							div(class="checkbox")
+								label 
+									input(type="checkbox" value="") 
+									| file4
+							
+								
 			div(class="modal-footer")
-				button(class="btn btn-primary",id="clowder-login",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px")
+				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="submit_clowder_dataset();")
 					span(class="glyphicon glyphicon-chevron-right")
 					| Next
 					
-script(src="bootstrap/js/customized/view_clowder.js").					
+script(src="bootstrap/js/customized/view_clowder.js")
