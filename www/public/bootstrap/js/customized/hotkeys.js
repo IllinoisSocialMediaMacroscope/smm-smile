@@ -28,4 +28,9 @@ document.addEventListener ("keydown", function (e) {
 			$("#success").modal('show');
 		}
 	}
+	
+	// clowder hotkey ctrl + at + C
+	if (e.ctrlKey  &&  e.altKey  &&  e.code === "KeyC"){
+		invoke_clowder();
+	}
 });
