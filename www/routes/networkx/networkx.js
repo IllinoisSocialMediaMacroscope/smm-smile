@@ -29,6 +29,7 @@ router.post('/networkx',function(req,res,next){
 			
 			lambda_invoke('lambda_network_analysis', args).then( results =>{
 				
+				var config=results['config'];
 				var d3js = results['d3js'];
 				var gephi = results['gephi'];
 				var pajek = results['pajek'];			
@@ -50,6 +51,8 @@ router.post('/networkx',function(req,res,next){
 					{'name':'strongly connected components', 'content':strong_components},
 					{'name':'weakly connected components', 'content':weak_components},
 					{'name':'triads', 'content':triads},
+					{'name':'configuration', 'content':config},
+					{'name':'visualization', 'content':div}
 				];
 				
 				getMultiRemote(div).then(div_data => {	

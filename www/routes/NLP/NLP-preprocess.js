@@ -31,7 +31,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 			}
 			
 			lambda_invoke('lambda_preprocessing',args).then( results =>{
-				
+				var config = results['config'];
 				var phrases = results['phrases'];
 				var filtered = results['filtered'];
 				var processed = results['processed'];
@@ -55,16 +55,20 @@ router.post('/NLP-preprocess',function(req,res,next){
 					
 					var most_common_array = values[2].toString().split("\n")[1];
 					var most_freq_word = most_common_array.split(",")[0];
-					
-					res.send({
-						title:'Natural Language PreProcessing', 
-						img:[{name:'Word Distribution',content:div_data}],
-						download:[
+					var download = [
 							{name:'phrases', content:phrases},
 							{name:'words', content:filtered},
 							{name:'most common words by order', content:most_common},
 							{name:req.body.model + ' text', content:processed},
-							{name:req.body.tagger + ' text', content:tagged}],
+							{name:req.body.tagger + ' text', content:tagged},
+							{name: 'visualization', content:div},
+							{name: 'configuration', content:config} 
+						];
+							
+					res.send({
+						title:'Natural Language PreProcessing', 
+						img:[{name:'Word Distribution',content:div_data}],
+						download: download,
 						table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
 						preview:[],
 						uid:uid
