@@ -1,5 +1,5 @@
 //corresponding to query.pug and searchbox.pug
-function init(){
+$(document).ready(function() {
 	
 	// initialization
 	$("#searchbox").prop('disabled',true);
@@ -142,17 +142,15 @@ function init(){
 	$('.selectpicker').selectpicker({ style: 'btn-info', size: 10 });
 
 	// customize multiselectbox
-    $(document).ready(function() {
-        $('.fields').multiselect({
-			enableFiltering: true,
-			filterBehavior: 'value',
-			dropUp:true,
-			maxHeight:600,
-			buttonWidth:'600px',
-			includeSelectAllOption: true,		
-			enableCollapsibleOptGroups: true,			
-			});
-    });
+	$('.fields').multiselect({
+		enableFiltering: true,
+		filterBehavior: 'value',
+		dropUp:true,
+		maxHeight:600,
+		buttonWidth:'600px',
+		includeSelectAllOption: true,		
+		enableCollapsibleOptGroups: true,			
+		});
 	
 	// select box enable search
 	$("#social-media").change(function(){
@@ -771,7 +769,7 @@ function init(){
 
 	});
 	
-}
+});
 
 function epochTime(datestring){
 	return new Date(datestring).getTime() / 1000
