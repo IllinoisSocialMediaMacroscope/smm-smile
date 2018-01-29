@@ -20,6 +20,7 @@ html
 		script(src="https://d3js.org/d3-interpolate.v1.min.js")
 		script(src="https://d3js.org/d3-scale-chromatic.v1.min.js")
 		script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js")
 		
 		<!-- customized -->
 		script(src="bootstrap/js/customized/view.js")
@@ -34,7 +35,8 @@ html
 		include components/clientside-warning.pug
 		include components/cookie.pug
 		include components/reddit-expand.pug
-		include components/tag.pug
+		include components/tag.pug		
+		include components/clowder.pug
 								
 		div(class="container-fluid")
 			div(class="row")
@@ -58,8 +60,9 @@ html
 				
 				<!-- title -->
 				div(class="row")
-					div(class="col-md-12 col-sm-12 col-xs-12")
+						div(class="col-md-12 col-sm-12 col-xs-12")
 						div(id="title-container")
+							
 				br
 				<!-- overview -->
 				div(class="row")
@@ -171,7 +174,7 @@ html
 														<div class="button-unit">
 															<button class="historyButtons" onclick="submitHistory('` + val2 + `');">view</button>
 															<button class="historyButtons" onclick="deleteModal('` + val2 + "','" + key1 + "-" + key2 +`');">delete</button>
-															<button class="historyButtons" onclick="tag('` + key2 + `');">tag</button>
+															<!-- button class="historyButtons" onclick="tag('` + key2 + `');">tag</button -->
 														</div>
 													</li>`);
 											}else{
@@ -182,7 +185,7 @@ html
 														<div class="button-unit">
 															<button class="historyButtons" onclick="submitHistory('` + val2 + `');">view</button>
 															<button class="historyButtons" onclick="deleteModal('` + val2 + "','" + key1 + "-" + key2 +`');">delete</button>
-															<button class="historyButtons" onclick="tag('` + key2 + `');">tag</button>
+															<!-- button class="historyButtons" onclick="tag('` + key2 + `');">tag</button -->
 														</div>
 													</li>`);
 											}

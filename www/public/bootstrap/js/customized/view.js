@@ -1,6 +1,7 @@
 $(document).ready(function(){
-	checkbox_onclick();
+	// checkbox_onclick();
 	
+	//tweek file container
 	$("#file").prop('checked',true);
 	$("#file-container").show();
 	$("#getComment").on('click',function(e){
@@ -18,14 +19,26 @@ $(document).ready(function(){
 									</div>
 								</div>`);
 	$("#selectFilePreview-container").after(`<div id="selectFileHeader-container"></div>`);
+	
+	//clowder onclick
+	$("#clowder-left-panel").on('click',function(e){
+		e.preventDefault();
+		invoke_clowder();
+	});
+	
+	//tag onclick
+	$("#tag-left-panel").on('click',function(e){
+		e.preventDefault();
+		$("#tag-modal").modal('show');			
+	});
 });
 
 
-function checkbox_onclick(){
+/*function checkbox_onclick(){
 	$(document).on('change',':checkbox',function(){
 		$(this).parent().toggleClass('checkbox-flat checkbox-flat-checked');
 	});
-}
+}*/
 
 function customized_reset(){
 	$("#img-container").empty();
@@ -123,9 +136,6 @@ function appendDownload(downloadID, downloadData){
 	$(downloadID).empty()
 	if(downloadData !== [] && downloadData !== ''){
 		$.each(downloadData,function(i,val){
-			//$(downloadID).append(`<li><form action='download' name='download' method='post' class="side-form">
-			//					<input type="hidden" value=`+val.content+` name="downloadURL" /><button type="submit" class="link-button"><span class="glyphicon glyphicon-download"></span>`
-			//					+val.name+`</button></form></li>`)
 			$(downloadID).append(`<li>
 									<a href="` + val.content + `"><span class="glyphicon glyphicon-download"></span>` + val.name + `</a>
 								</li>`);
@@ -267,8 +277,7 @@ function ajaxSubmit(formID,aws_identifier){
 					
 					// ADD TO TAG MODAL
 					$("#jobId").val(data.uid);	
-					$("#tag-modal").modal('show');	
-					
+										
 					// ADD TO CLOWDER MODAL
 					$("#clowder-files-list").empty();
 					$.each(data.download, function(i,val){

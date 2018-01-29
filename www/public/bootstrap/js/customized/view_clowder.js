@@ -27,6 +27,7 @@ $('#clowder-modal').on('shown.bs.modal', function (e) {
 })
 
 function generate_data_list(){
+		
 		$.ajax({
 			type:'POST',
 			url:'list-dataset', 
@@ -54,7 +55,7 @@ function generate_data_list(){
 	}
 
 /*--------------------------------login---------------------------------------------*/
-function submit_clowder_login(){
+function login_request(){
 	if (clowder_form_validation('login')){
 		var data = {'clowder_username':$("#clowderEmail").val(), 
 					'clowder_password':$("#clowderPassword").val()};
@@ -79,8 +80,19 @@ function submit_clowder_login(){
 			} 
 		}); 
 	}
-	
 }
+
+function submit_clowder_login(){
+	login_request();
+}
+
+$("#clowderPassword").on('keypress',function(e){
+	if (e.keyCode === 13 || e.keycode == 10){
+		e.preventDefault(); 
+		login_request();
+	}
+});
+
 
 /*-------------------------------create new dataset---------------------------------*/
 $("#selectDataset").on('change',function(){
@@ -304,6 +316,8 @@ function submit_clowder_files(){
 		});
 		var dataset_id = $("#datasetID").val();
 		
+		//console.log(dataset_id);
+		//console.log(urls);
 		$.ajax({
 			type:'POST',
 			url:'clowder-files', 
