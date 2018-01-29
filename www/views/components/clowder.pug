@@ -90,5 +90,15 @@ div(id="clowder-modal" class="modal fade" role="dialog" data-keyboard="false")
 					button(class="btn btn-danger", onclick="submit_clowder_files();")
 						span(class="glyphicon glyphicon-upload")
 						| Upload
+						
+div(id="clowder-confirmation", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content",style="width:650px;")
+			div(class="modal-body",style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
+				div(id="modal-message")
+					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="80px")
+					p(style="font-size:30px;", id="clowder-message")
+			div(class="modal-footer")
+				button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden",data-dismiss="modal") Close	
 										
 script(src="bootstrap/js/customized/view_clowder.js")

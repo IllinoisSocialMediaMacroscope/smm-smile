@@ -1,5 +1,4 @@
-/*-------------------------html tricks--------------------------------------*/
-function init(){
+$(document).ready(function(){
 	checkbox_onclick();
 	
 	$("#file").prop('checked',true);
@@ -9,7 +8,7 @@ function init(){
 		$("#reddit-expand").modal({show:true});	
 	});
 
-	$('#file-container').after(`<div id="selectFilePreview-container"></div>`)
+	$('#file-container').after(`<div id="selectFilePreview-container"></div>`);
 	$('#file-container').after(`<div id="preview-loading" style="display:none;text-align:center;">
 									<div class="form-group">
 										<label class="control-label col-md-2 col-md-2 col-xs-12"></label>
@@ -17,9 +16,9 @@ function init(){
 											<img src="bootstrap/img/gifs/loading3.gif" width="250px"/>
 										</div>
 									</div>
-								</div>`)
-	$("#selectFilePreview-container").after(`<div id="selectFileHeader-container"></div>`)
-};
+								</div>`);
+	$("#selectFilePreview-container").after(`<div id="selectFileHeader-container"></div>`);
+});
 
 
 function checkbox_onclick(){

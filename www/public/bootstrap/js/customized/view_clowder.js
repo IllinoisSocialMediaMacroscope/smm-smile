@@ -162,7 +162,7 @@ function clowder_form_validation(caseID){
 			}else{
 				var flag = false;
 				$("#clowder-files-list .form-control .form-check-input").each(function(i,cbox){
-					if ($(cbox).attr('checked')){
+					if ($(cbox).is(':checked')){
 						flag = true;
 					}
 				});
@@ -236,23 +236,26 @@ function create_clowder_dataset(){
 	}
 	
 	if (clowder_form_validation('dataset')){
-		
-		var urls = [];
-		$("#clowder-files-list .form-control .form-check-input").each(function(i,cbox){
-			urls.push($(cbox).val());
-		});
-		
 		$.ajax({
 			type:'POST',
 			url:'clowder-dataset', 
-			data: JSON.stringify({'urls': urls}),	
+			data: JSON.stringify(data),	
 			contentType: "application/json",			
 			success:function(data){
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
-					console.log(data);
+					//close this new modal 
+					$("#clowder-new-dataset").modal('hide')
+					
+					//put id in the files block
+					var datasetID = data.id;
+					$("#datasetID").val(datasetID);
+					
+					//switch to files block
+					$(".clowder-dataset-block").hide();
+					$(".clowder-files-block").show();
 				}
 			},
 			error: function(jqXHR, exception){
@@ -292,27 +295,34 @@ function prev_clowder_dataset(){
 // UPLOAD button
 function submit_clowder_files(){
 	if (clowder_form_validation('files')){
+		
+		var urls = [];
+		$("#clowder-files-list .form-control .form-check-input").each(function(i,cbox){
+			if ($(cbox).is(':checked')){
+				urls.push($(cbox).val());
+			}
+		});
+		var dataset_id = $("#datasetID").val();
+		
 		$.ajax({
 			type:'POST',
 			url:'clowder-files', 
-			data: JSON.stringify(urls),	
+			data: JSON.stringify({'urls': urls, 'dataset_id': dataset_id}),	
 			contentType: "application/json",			
 			success:function(data){
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
-					//close this new modal 
-					$("#clowder-new-dataset").modal('hide')
-					
-					//put id in the files block
-					var datasetID = data.id;
-					$("#datasetID").val(datasetID);
-					
-					//switch to files block
-					$(".clowder-dataset-block").hide();
-					$(".clowder-files-block").show();
-					
+					$("#clowder-message").text(data.info);
+					$.each(data.ids, function(i,id){
+						$("#clowder-message").after(`<a style="display:block;" href="https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/`
+						+ id +`">https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/` + id + `</a>`);
+					});
+					// hide upoad modal, show confirmation modal
+					$("#clowder-modal").modal('hide').on('hidden.bs.modal',function(){
+						$("#clowder-confirmation").modal('show');
+					});
 				}
 			},
 			error: function(jqXHR, exception){
