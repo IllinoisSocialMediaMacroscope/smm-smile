@@ -1,5 +1,5 @@
 //corresponding to query.pug and searchbox.pug
-$(document).ready(function() {
+$(window).load(function() {
 	
 	// initialization
 	$("#searchbox").prop('disabled',true);
