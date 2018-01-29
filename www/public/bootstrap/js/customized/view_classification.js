@@ -280,6 +280,15 @@ function split(){
 					appendImg("#img-container",data.img);
 					appendPreview('#result-container','');
 					
+					// ADD TO CLOWDER MODAL
+					$("#clowder-files-list").empty();
+					$.each(data.download, function(i,val){
+						$("#clowder-files-list").append(`<div class="form-control" style="margin:15px auto;height:100%;">
+															<input type="checkbox" class="form-check-input" value="`+ val.content + `"/>
+															<label class="form-check-label"> &nbsp; ` + val.name + `</label>
+														</div>`);
+					});
+					
 				}
 			},
 			error: function(jqXHR, exception){
@@ -345,6 +354,15 @@ function train(){
 					appendImg("#img-container",data.img);
 					appendDownload("#side-download",data.download);
 					appendPreview('#result-container',data.preview);
+					
+					// ADD TO CLOWDER MODAL
+					$("#clowder-files-list").empty();
+					$.each(data.download, function(i,val){
+						$("#clowder-files-list").append(`<div class="form-control" style="margin:15px auto;height:100%;">
+															<input type="checkbox" class="form-check-input" value="`+ val.content + `"/>
+															<label class="form-check-label"> &nbsp; ` + val.name + `</label>
+														</div>`);
+					});
 				}
 			},
 			error: function(jqXHR, exception){
@@ -404,6 +422,15 @@ function predict(){
 					
 					$("#jobId").val(data.uuid);	
 					$("#tag-modal").modal('show');	
+					
+					// ADD TO CLOWDER MODAL
+					$("#clowder-files-list").empty();
+					$.each(data.download, function(i,val){
+						$("#clowder-files-list").append(`<div class="form-control" style="margin:15px auto;height:100%;">
+															<input type="checkbox" class="form-check-input" value="`+ val.content + `"/>
+															<label class="form-check-label"> &nbsp; ` + val.name + `</label>
+														</div>`);
+					});
 				}
 			},
 			error: function(jqXHR, exception){

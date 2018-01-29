@@ -315,8 +315,9 @@ function submit_clowder_files(){
 					$("#warning").modal('show');
 				}else{
 					$("#clowder-message").text(data.info);
+					$("#file-links").empty();
 					$.each(data.ids, function(i,id){
-						$("#clowder-message").after(`<a style="display:block;" href="https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/`
+						$("#file-links").append(`<a style="display:block;" href="https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/`
 						+ id +`">https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/` + id + `</a>`);
 					});
 					// hide upoad modal, show confirmation modal
