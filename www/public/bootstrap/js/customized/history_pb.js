@@ -27,7 +27,6 @@ function submitHistory(folderURL){
 					}
 					
 					if('config' in data || 'donwload' in data){
-						
 						appendOverview("#overview-container",data.config,data.download);
 					}
 					
@@ -61,6 +60,20 @@ function submitHistory(folderURL){
 						$("#getComment").show();
 					}else{
 						$("#getComment").hide();
+					}
+					
+					// ADD TO TAG MODAL
+					$("#jobId").val(data.uid);
+					
+					// ADD TO CLOWDER MODAL
+					$("#clowder-files-list").empty();
+					if (data.title != 'Social Media Past Search Result'){
+						$.each(data.download, function(i,val){
+							$("#clowder-files-list").append(`<div class="form-control" style="margin:15px auto;height:100%;">
+																<input type="checkbox" class="form-check-input" value="`+ val.content + `"/>
+																<label class="form-check-label"> &nbsp; ` + val.name + `</label>
+															</div>`);
+						});
 					}
 				}
 			}
@@ -158,19 +171,36 @@ function deleteHistory(folderURL,tab){
 	
 } 
 
-function tag(uuid){
+/*function tag(uuid){
 	$("#jobId").val(uuid);	
 	$("#tag-modal").modal('show');	
-}
+}*/
 
-function appendTitle(container, title,ID, config){
-	$(container).append(`<h1>`+ title+ `</h1>
+function appendTitle(container, title,ID){
+	$(container).append(`<h1 style="display:inline;vertical-align:middle">`+ title+ `</h1>
+						<div style="display:inline;">
+							<a href="" style="padding:10px 10px;" id="tag-history-panel">
+								<img src="bootstrap/img/logo/tag.png" height="35px"></img>
+							</a>
+							<a href="" style="padding:10px 10px;" id="clowder-history-panel">
+								<img src="bootstrap/img/logo/clowder-sm-logo.png" height="50px;"></img>
+							</a>
 						<h4>ID: ` + ID +`</h4>
 						<button class="btn btn-default" id="getComment">get comments</button>`);
 	
 	$("#getComment").on('click',function(e){
 		e.preventDefault();
 		$("#reddit-expand").modal('show');
+	});
+	
+	$("#clowder-history-panel").on('click',function(e){
+		e.preventDefault();
+		invoke_clowder();
+	});
+	
+	$("#tag-history-panel").on('click',function(e){
+		e.preventDefault();
+		$("#tag-modal").modal('show');			
 	});
 }
 

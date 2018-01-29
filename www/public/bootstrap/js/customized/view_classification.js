@@ -280,6 +280,9 @@ function split(){
 					appendImg("#img-container",data.img);
 					appendPreview('#result-container','');
 					
+					// ADD to tag
+					$("#jobId").val(data.uuid);	
+					
 					// ADD TO CLOWDER MODAL
 					$("#clowder-files-list").empty();
 					$.each(data.download, function(i,val){
@@ -355,6 +358,9 @@ function train(){
 					appendDownload("#side-download",data.download);
 					appendPreview('#result-container',data.preview);
 					
+					// ADD to tag
+					$("#jobId").val(data.uuid);	
+					
 					// ADD TO CLOWDER MODAL
 					$("#clowder-files-list").empty();
 					$.each(data.download, function(i,val){
@@ -421,7 +427,6 @@ function predict(){
 					appendPreview('#result-container',data.preview);
 					
 					$("#jobId").val(data.uuid);	
-					$("#tag-modal").modal('show');	
 					
 					// ADD TO CLOWDER MODAL
 					$("#clowder-files-list").empty();

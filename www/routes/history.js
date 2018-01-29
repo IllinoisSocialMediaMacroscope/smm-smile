@@ -21,7 +21,7 @@ router.get('/history',function(req,res,next){
 });
 
 router.post('/history',function(req,res,next){
-	
+	console.log(req.body.folderURL);
 	var arrURL = req.body.folderURL.split('/');
 		
 	if (arrURL[1] === 'NLP' && arrURL[2] === 'preprocessing'){
@@ -69,20 +69,23 @@ router.post('/history',function(req,res,next){
 					var most_freq_word = most_common_array.split(",")[0]
 					
 					var config = JSON.parse(values[3]);
+					
+					var download = [{name:'phrases', content:phrases},
+							{name:'words', content:filtered},
+							{name:'most common words by order', content:most_common},
+							{name:'lemmatized/stemmed text', content:processed},
+							{name:'POS tagged text', content:tagged},
+							{name:'configuration', content:config},
+							{name:'visualization', content:div}]
 										
 					res.send({
 						title:'Natural Language PreProcessing', 
 						ID:req.body.folderURL,
 						img:[{name:'Word Distribution',content:div_data}],
-						download:[
-							{name:'phrases', content:phrases},
-							{name:'words', content:filtered},
-							{name:'most common words by order', content:most_common},
-							{name:'lemmatized/stemmed text', content:processed},
-							{name:'POS tagged text', content:tagged}],
+						download:download,
 						table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
 						config:config,
-						
+						uid:arrURL[3]						
 					});
 					
 				});
@@ -127,18 +130,20 @@ router.post('/history',function(req,res,next){
 					var preview_arr = CSV.parse(preview_string).slice(0,1001);
 					var compound = values[2]['compound']
 					var config = JSON.parse(values[3]);
-										
+					var download = [{name:'sentence-level sentiment scores',content:sentiment},
+								{name:'Has negation words?',content:negation},
+								{name:'Has some capital letter?',content:allcap},
+								{name:'configuration', content:config},
+								{name:'visualization', content:div}];		
 					res.send({
 						title:'Sentiment Analysis',
 						ID:req.body.folderURL,
 						img:[{name:'Document Sentiment Composition',content:div_data}],
 						compound:compound,
-						download:[{name:'sentence-level sentiment scores',content:sentiment},
-								{name:'Has negation words?',content:negation},
-								{name:'Has some capital letter?',content:allcap}],
+						download:download,
 						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}],
 						config:config,
-						
+						uid:arrURL[3]	
 					});
 					
 				});
@@ -161,11 +166,11 @@ router.post('/history',function(req,res,next){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
 					if (filename === 'div_split.dat'){
-						var div_data0 = folderObj[filename];
+						var div_0 = folderObj[filename];
 					}else if (filename === 'div.dat'){
-						var div_data1 = folderObj[filename];
+						var div_1 = folderObj[filename];
 					}else if (filename === 'div_comp.dat'){
-						var div_data2 = folderObj[filename];
+						var div_2 = folderObj[filename];
 					}else if (filename === 'accuracy_score.csv'){
 						var accuracy = folderObj[filename];
 					}else if (filename === 'classification_report.csv'){
@@ -185,9 +190,9 @@ router.post('/history',function(req,res,next){
 					}
 				}	
 		
-				promise_array.push(getMultiRemote(div_data0));
-				promise_array.push(getMultiRemote(div_data1));
-				promise_array.push(getMultiRemote(div_data2));
+				promise_array.push(getMultiRemote(div_0));
+				promise_array.push(getMultiRemote(div_1));
+				promise_array.push(getMultiRemote(div_2));
 				promise_array.push(getMultiRemote(accuracy));
 				promise_array.push(getMultiRemote(metrics));
 				promise_array.push(getMultiRemote(predict));
@@ -205,6 +210,18 @@ router.post('/history',function(req,res,next){
 					var preview_arr3 = CSV.parse(preview_string3).slice(0,1001);
 					
 					var config = JSON.parse(values[6]);
+					
+					var download = [{name:'Download training dataset', content:training},
+									{name:'Download labeled training dataset', content:labeled},
+									{name:'Download unlabeled dataset',content:testing},
+									{name:'Perserved classification pipeline', content:pickle},
+									{name:'Classification performance evaluation',content:metrics},
+									{name:'Accuracy score for each fold', content:accuracy},
+									{name:'Predicted Class using trained model', content:predict},
+									{name:'configuration', content:config},
+									{name:'visualization_00', content:div_0},
+									{name:'visualization_01', content:div_1},
+									{name:'visualization_02', content:div_2}]
 										
 					res.send({
 						title:'text classification', 
@@ -212,18 +229,12 @@ router.post('/history',function(req,res,next){
 						img:[{name:'Split the Corpus', content:div_data0},
 							{name:'ROC curves for each class',content:div_data1},
 							{name:'Count of each class',content:div_data2}],
-						download:[{name:'Download training dataset', content:training},
-									{name:'Download labeled training dataset', content:labeled},
-									{name:'Download unlabeled dataset',content:testing},
-									{name:'Perserved classification pipeline', content:pickle},
-									{name:'Classification performance evaluation',content:metrics},
-									{name:'Accuracy score for each fold', content:accuracy},
-									{name:'Predicted Class using trained model', content:predict}],
+						download:download,
 						preview:[{name:'Accuracy score for each fold',content:preview_arr1,dataTable:false},
 								{name:'Preview training report',content:preview_arr2,dataTable:false},
 									{name:'Predicted results',content:preview_arr3,dataTable:true}],
 						config:config,
-						
+						uid:arrURL[3]
 					});
 					
 				});
@@ -269,19 +280,14 @@ router.post('/history',function(req,res,next){
 						var weak = folderObj[filename];
 					}
 				}	
-		
+				
+				
 				promise_array.push(getMultiRemote(div));
 				promise_array.push(getMultiRemote(config));
 				Promise.all(promise_array).then( values => {
 					var div_data = values[0];
 					var config = JSON.parse(values[1]);
-										
-					res.send({
-						title:'Network Analysis', 
-						ID:req.body.folderURL,
-						img:[{name:'Static Network Visualization',content:div_data}],
-						download: [
-							{'name':'graph exported in GML (Gephi) format', 'content':gephi},
+					var download =[{'name':'graph exported in GML (Gephi) format', 'content':gephi},
 							{'name':'graph exported in JSON format', 'content':d3js},
 							{'name':'graph exported in NET (Pajek) format', 'content':pajek},
 							{'name':'assortativity metrics', 'content':assort},
@@ -289,11 +295,18 @@ router.post('/history',function(req,res,next){
 							{'name':'node attributes','content':node},
 							{'name':'strongly connected component', 'content':strong},
 							{'name':'weakly connected component', 'content':weak},
-							{'name':'triads','content':triads}
-						],
+							{'name':'triads','content':triads},
+							{'name':'configuration', 'content':config},
+							{'name':'visualization', 'content':div}];
+							
+					res.send({
+						title:'Network Analysis', 
+						ID:req.body.folderURL,
+						img:[{name:'Static Network Visualization',content:div_data}],
+						download:download,
 						preview:[],
 						config: config,
-						uid:arrURL[-2]
+						uid:arrURL[3]
 					});
 					
 				});
@@ -341,7 +354,7 @@ router.post('/history',function(req,res,next){
 						download:[{name:'CSV format', content:preview}],
 						preview:[{name: "Preview the .csv file", content:preview_arr,dataTable:true}],
 						config:config,
-						uid:arrURL[-2]
+						uid:arrURL[3]
 					});								
 					
 				});
@@ -393,7 +406,7 @@ router.post('/history',function(req,res,next){
 						preview:[{name: "Preview the .csv file", content:preview_arr,dataTable:true}],
 						length:preview_arr.length-1, // display in the expand comments modal
 						config:config,
-						uid:arrURL[-2]
+						uid:arrURL[3]
 					});						
 					
 				});
