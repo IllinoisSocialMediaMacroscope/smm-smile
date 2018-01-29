@@ -32,10 +32,16 @@ router.post('/text-classification-split',function(req,res,next){
 			'uid':uid })
 		.then(results =>{
 			//console.log(results);
+			var config = results['config'];
 			var uuid = results['uuid'];
 			var div = results['div'];
 			var training = results['training']
 			var testing = results['testing'];
+			
+			var download = [{'name':'Download training dataset', content:training},
+							{'name':'Download unlabeled dataset',content:testing},
+							{'name':'configuration', 'content':config},
+							{'name':'visualization', 'content':div}]
 				
 				getMultiRemote(div).then(value =>{
 					div_data = value;			
@@ -43,8 +49,7 @@ router.post('/text-classification-split',function(req,res,next){
 						uuid:uuid,
 						title:'Partial data generated for labeling and training', 
 						img:[{name:'Split the corpus',content:div_data}],
-						download:[{name:'Download training dataset', content:training},
-							{name:'Download unlabeled dataset',content:testing}]
+						download:download
 					});
 				}).catch(err =>{
 					console.log(err);
@@ -76,11 +81,18 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 			'model':req.body.classifier,
 			's3FolderName':req.body.s3FolderName})
 		.then(results =>{
+			var config = results['config'];
 			var uuid = results['uuid'];
 			var accuracy = results['accuracy'];
 			var pickle = results['pickle'];
 			var div = results['div']
 			var metrics = results['metrics'];
+			
+			var download = [{'name':'Perserved classification pipeline', content:pickle},
+							{'name':'Classification performance evaluation',content:metrics},
+							{'name':'Accuracy score for each fold', content:accuracy},
+							{'name':'configuration', 'content':config},
+							{'name':'visualization', 'content':div}]
 			
 			var promise_array = [];
 			promise_array.push(getMultiRemote(div));
@@ -98,9 +110,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 				res.send({
 					uuid:uuid,
 					img:[{name:'ROC curves for each class',content:div_data}],
-					download:[{name:'Perserved classification pipeline', content:pickle},
-						{name:'Classification performance evaluation',content:metrics},
-							{name:'Accuracy score for each fold', content:accuracy}],
+					download:download,
 					preview:[{name:'10 fold Cross validation accuracy score for each fold', content:accuracy_array,dataTable:false},
 								{name:'10 fold Cross validation Evaluation of the performance',content:preview_arr,dataTable:false}]	
 				});
@@ -134,10 +144,13 @@ router.post('/text-classification-predict',function(req,res,next){
 			'uuid':req.body.uuid,
 			's3FolderName':req.body.s3FolderName})
 		.then(results =>{
-					
+			var config = results['config'];		
 			var uuid = results['uuid'];
 			var predict = results['predict'];
 			var div = results['div'];
+			var download = [{'name':'Predicted Class using trained model', content:predict},
+							{'name':'configuration', 'content':config},
+							{'name':'visualization', 'content':div}]
 			
 			var promise_array = [];
 			promise_array.push(getMultiRemote(div));
@@ -150,7 +163,7 @@ router.post('/text-classification-predict',function(req,res,next){
 				res.send({
 					uuid:uuid,
 					img:[{name:'Count of each class',content:div_data}],
-					download:[{name:'Predicted Class using trained model', content:predict}],
+					download:download,
 					preview:[{name:'Preview of the predicted data ',content:preview_arr,dataTable:true}]	
 				});
 			
