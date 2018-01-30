@@ -393,7 +393,9 @@ tr{
     display: inline-block;
 }
 .historyButtons:hover,
-.historyButtons:active{
+.historyButtons:active,
+.historyButtons:visited,
+.historyButtons:focus{
 	background-color:white;
 	color:#2a5a84;
 }
