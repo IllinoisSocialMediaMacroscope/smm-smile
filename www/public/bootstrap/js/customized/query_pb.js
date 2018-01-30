@@ -1,5 +1,5 @@
 //corresponding to query.pug and searchbox.pug
-$(window).load(function() {
+function init(){
 	
 	// initialization
 	$("#searchbox").prop('disabled',true);
@@ -769,7 +769,7 @@ $(window).load(function() {
 
 	});
 	
-});
+}
 
 function epochTime(datestring){
 	return new Date(datestring).getTime() / 1000
