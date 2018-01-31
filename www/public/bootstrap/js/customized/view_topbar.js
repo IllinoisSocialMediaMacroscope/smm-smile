@@ -163,9 +163,10 @@ $("#dropbox .auth-code").on("keyup",function(e){
 	}
 });
 
-function terminateWarning(){
+$("#topbar-hub").on('click',function(e){
+	e.preventDefault();
 	$("#terminate-modal").modal('show');
-}
+});
 
 function exportOptions(whichTrigger){
 

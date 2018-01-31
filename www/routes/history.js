@@ -68,7 +68,7 @@ router.post('/history',function(req,res,next){
 					var most_common_array = values[2].toString().split("\n")[1];
 					var most_freq_word = most_common_array.split(",")[0]
 					
-					var config = JSON.parse(values[3]);
+					var config_data = JSON.parse(values[3]);
 					
 					var download = [{name:'phrases', content:phrases},
 							{name:'words', content:filtered},
@@ -84,7 +84,7 @@ router.post('/history',function(req,res,next){
 						img:[{name:'Word Distribution',content:div_data}],
 						download:download,
 						table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
-						config:config,
+						config:config_data,
 						uid:arrURL[3]						
 					});
 					
@@ -129,7 +129,7 @@ router.post('/history',function(req,res,next){
 					var preview_string = values[1];
 					var preview_arr = CSV.parse(preview_string).slice(0,1001);
 					var compound = values[2]['compound']
-					var config = JSON.parse(values[3]);
+					var config_data = JSON.parse(values[3]);
 					var download = [{name:'sentence-level sentiment scores',content:sentiment},
 								{name:'Has negation words?',content:negation},
 								{name:'Has some capital letter?',content:allcap},
@@ -142,7 +142,7 @@ router.post('/history',function(req,res,next){
 						compound:compound,
 						download:download,
 						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}],
-						config:config,
+						config:config_data,
 						uid:arrURL[3]	
 					});
 					
@@ -209,7 +209,7 @@ router.post('/history',function(req,res,next){
 					var preview_string3 = values[5];
 					var preview_arr3 = CSV.parse(preview_string3).slice(0,1001);
 					
-					var config = JSON.parse(values[6]);
+					var config_data = JSON.parse(values[6]);
 					
 					var download = [{name:'Download training dataset', content:training},
 									{name:'Download labeled training dataset', content:labeled},
@@ -233,7 +233,7 @@ router.post('/history',function(req,res,next){
 						preview:[{name:'Accuracy score for each fold',content:preview_arr1,dataTable:false},
 								{name:'Preview training report',content:preview_arr2,dataTable:false},
 									{name:'Predicted results',content:preview_arr3,dataTable:true}],
-						config:config,
+						config:config_data,
 						uid:arrURL[3]
 					});
 					
@@ -286,7 +286,7 @@ router.post('/history',function(req,res,next){
 				promise_array.push(getMultiRemote(config));
 				Promise.all(promise_array).then( values => {
 					var div_data = values[0];
-					var config = JSON.parse(values[1]);
+					var config_data = JSON.parse(values[1]);
 					var download =[{'name':'graph exported in GML (Gephi) format', 'content':gephi},
 							{'name':'graph exported in JSON format', 'content':d3js},
 							{'name':'graph exported in NET (Pajek) format', 'content':pajek},
@@ -305,7 +305,7 @@ router.post('/history',function(req,res,next){
 						img:[{name:'Static Network Visualization',content:div_data}],
 						download:download,
 						preview:[],
-						config: config,
+						config: config_data,
 						uid:arrURL[3]
 					});
 					
@@ -343,17 +343,17 @@ router.post('/history',function(req,res,next){
 				promise_array.push(getMultiRemote(config));
 				promise_array.push(getMultiRemote(preview));
 				Promise.all(promise_array).then( values => {
-					var config = JSON.parse(values[0]);
+					var config_data = JSON.parse(values[0]);
 					var preview_string = values[1];
 					var preview_arr = CSV.parse(preview_string).slice(0,1001);
-					config.fields = preview_arr[0];
+					config_data.fields = preview_arr[0];
 
 					res.send({
 						title:'Social Media Past Search Result', 
 						ID:req.body.folderURL,
 						download:[{name:'CSV format', content:preview}],
 						preview:[{name: "Preview the .csv file", content:preview_arr,dataTable:true}],
-						config:config,
+						config:config_data,
 						uid:arrURL[3]
 					});								
 					
@@ -393,10 +393,10 @@ router.post('/history',function(req,res,next){
 				promise_array.push(getMultiRemote(config));
 				promise_array.push(getMultiRemote(preview));
 				Promise.all(promise_array).then( values => {
-					var config = JSON.parse(values[0]);
+					var config_data = JSON.parse(values[0]);
 					var preview_string = values[1];
 					var preview_arr = CSV.parse(preview_string).slice(0,1001);
-					config.fields = preview_arr[0];
+					config_data.fields = preview_arr[0];
 
 					res.send({
 						title:'Social Media Past Search Result', 
@@ -405,7 +405,7 @@ router.post('/history',function(req,res,next){
 						download:download,
 						preview:[{name: "Preview the .csv file", content:preview_arr,dataTable:true}],
 						length:preview_arr.length-1, // display in the expand comments modal
-						config:config,
+						config:config_data,
 						uid:arrURL[3]
 					});						
 					
