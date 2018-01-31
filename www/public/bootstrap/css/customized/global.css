@@ -172,3 +172,58 @@ cite{
 	color:white;
     text-decoration: underline;
 }
+
+/*-----------modals-----------------------------*/
+.modal-body.form{
+	vertical-align:middle;
+	margin-left:20px; 
+	margin-right:20px;
+	overflow:auto;
+	font-size:15px;
+}
+
+.modal-body.confirmation{
+	vertical-align:middle;
+	margin-left:20px;
+	margin-right:20px;
+	overflow:auto;
+	font-size:30px;
+}
+
+.modal-body.export{
+	text-align:left;
+	vertical-align:middle;
+	overflow:auto;
+	padding:20px 50px;
+	font-size:20px;
+}
+
+.btn.btn-yes{
+	background-color:#ea4a36;
+	color:white;
+	border-style:hidden;
+}
+
+.btn.btn-no{
+	background-color:#1e325a;
+	color:white;
+	border-style:hidden;
+}
+
+.export-auth-btn{
+	display:inline-block;
+	margin:15px;
+	background-color:#ddd;
+	padding:5px 30px;
+	border-radius:5px;
+	color:black;
+	box-shadow:6px 6px 5px #888888;
+}
+
+.auth-code{
+	display:none;
+	margin:15px;
+	width:calc(90%)
+}
+
+

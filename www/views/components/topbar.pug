@@ -1,58 +1,3 @@
-div(id="export-modal",class="modal fade",role="dialog")
-	div(class="modal-dialog",style="font-size:20px;width:800px")
-		div(class="modal-content")
-			div(class="modal-header")
-				button(class="close", data-dismiss="modal") &times;
-				h2(class="modal-title") Export 
-				p (Hot keys: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>E</kbd> )
-			div(class="modal-body",style="text-align:left;vertical-align:middle;overflow:auto;padding:20px 50px;")
-				p Authorize with your own online storage account, and we will export a .zip file with <b>ALL</b> of your data associate with this session to your storage.
-				| Make sure you have <b>at least 100MB</b> free space available on your remote drive.
-				div(id="googleDrive",style="display:block;margin-bottom:15px;")
-					a(href="login/google", id="google-auth", target="_blank", style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;") 
-						img(src="bootstrap/img/logo/googledrive-sm-logo.png", width="25px",height="25px")
-						|  Authorize Google Drive 
-					button(class="btn btn-primary", id="googleDrive-export",style="display:none;",onclick="exportFiles(this.id);") export
-					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading", width="40px" style="display:none;")
-					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-					input(class="auth-code", style="display:none;margin:15px;width:calc(90%)",placeholder=` Paste your code as instructed and press enter.`)
-					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
-				
-				div(id="dropbox",style="display:block;margin-bottom:15px;")
-					a(href="login/dropbox", target="_blank", id="dropbox-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
-						img(src="bootstrap/img/logo/dropbox-sm-logo.png", width="30px",height="30px")
-						|  Authorize Dropbox
-					button(class="btn btn-primary", id="dropbox-export",style="display:none;",onclick="exportFiles(this.id);") export
-					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
-					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-					input(class="auth-code", style="display:none;margin:15px;width:calc(90%)",placeholder=` Paste your code as instructed and press enter.`)
-					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
-				
-				div(id="box",style="display:block;margin-bottom:15px;")
-					a(id="box-auth",style="display:inline-block;margin:15px;background-color:#ddd;padding:5px 30px;border-radius:5px;color:black;box-shadow:6px 6px 5px #888888;")
-						img(src="bootstrap/img/logo/box-sm-logo.png", width="30px",height="30px")
-						|  Authorize Box
-					button(class="btn btn-primary", id="box-export",style="display:none;",onclick="exportFiles(this.id);") export
-					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
-					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
-					
-			div(class="modal-footer")
-				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="terminate();") Terminate		
-				
-div(id="terminate-modal" class="modal fade" role="dialog")
-	div(class="modal-dialog",style="width:600px;")
-		div(class="modal-content")
-			div(class="modal-header")
-				button(class="close" data-dismiss="modal") &times;
-				h2(class="modal-title") Terminate This Session?
-				p (Hot keys: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd> )
-				p(style="font-size:16px") <b>Warning:</b> All data associated with this session will no longer be available!
-			div(class="modal-footer")
-				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px",onclick="exportOptions('terminate');") Yes	
-				button(class="btn btn-primary",style="background-color:#1e325a;color:white;border-style:hidden;margin:3px 3px;",data-dismiss="modal") No
-
-				
 nav(class="navbar navbar-inverse navbar-fixed-top")
 	div(class="container-fluid")
 		div(class="navbar-header")
@@ -106,5 +51,5 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 			form(id="sitemap",class="navbar-form navbar-right")
 				input(id="sitemap-input", type="text",class="form-control",placeholder="Search within the tool...")
 
-	script(src="bootstrap/js/customized/view_topbar.js")
+script(src="bootstrap/js/customized/view_topbar.js")
 	

@@ -115,9 +115,8 @@ function init(){
 	
 	$("#filename").on("keyup",function(e){
 		if (e.keyCode !== 13 || e.keyCode!== 10){
-			$('#display').empty();
-			//console.log($(this).val());
-			$('#display').append(`<p style="text-align:left;">` + $(this).val() + '.csv' + `</p>` );
+			$('#display-savefiles').empty();
+			$('#display-savefiles').append(`<p style="text-align:left;padding-top:7px;">` + $(this).val() + '.csv' + `</p>` );
 		}
 	});
 			
