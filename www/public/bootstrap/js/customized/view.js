@@ -251,9 +251,7 @@ function ajaxSubmit(formID,aws_identifier){
 					$("#aws-batch").modal('hide');
 					$("#aws-batch-confirmation").modal('show');
 					
-					$("#jobId").val(data.uid);	
-					$("#tag-modal").modal('show');
-					
+					$("#jobId").val(data.uid);					
 				}else{
 						
 					appendDownload("#side-download",data.download);

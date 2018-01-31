@@ -5,12 +5,11 @@ div(id="alert" class="modal fade" role="dialog" data-backdrop="static" data-keyb
 			div(class="modal-header")
 				h2(class="modal-title" id="modal-title") Illegal!
 			
-			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-left:20px;")
+			div(class="modal-body form")
 				div(id="modal-message")
 				
 			div(class="modal-footer")
-				button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden",onclick=`clearModalMessage("#alert","#modal-message")`) Close
-				//a(href="#", data-dismiss="modal", class="btn") Close
+				button(class="btn btn-no",onclick=`clearModalMessage("#alert","#modal-message")`) Close
 script.
 	// close this modal and clear the message part
 	function clearModalMessage(modalID,modalMessageID){

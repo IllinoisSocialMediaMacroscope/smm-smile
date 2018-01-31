@@ -7,7 +7,7 @@ html
 		<!-- Style sheets! -->
 		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
 		link(href="bootstrap/css/customized/search.css",rel="stylesheet")
-		link(href="bootstrap/css/customized/component.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/global.css",rel="stylesheet")
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
 		link(rel="stylesheet", href="bootstrap/css/bootstrap-multiselect.css", type="text/css")
 		link(rel="stylesheet",href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css")
@@ -29,6 +29,8 @@ html
 	body(onload="init();")
 		<!-- top bar -->
 		include ../components/topbar.pug
+		include ../components/export.pug
+		include ../components/terminate.pug
 		include ../components/warning.pug
 		include ../components/clientside-warning.pug
 		include ../components/sitemap.pug
@@ -108,7 +110,7 @@ html
 							div(class="form-group")
 								label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Downloadable Files
 								div(class="col-md-7 col-md-7 col-xs-12")
-									div(id="display")
+									div(id="display-savefiles")
 						div(class="loading" style="display:none")
 							img(src="bootstrap/img/gifs/loading2.gif", width="15%", height="15%", style="display:block; margin-left:auto; margin-right:auto; margin-top:10px")
 					div(class="modal-footer")

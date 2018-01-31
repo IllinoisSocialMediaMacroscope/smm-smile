@@ -6,7 +6,7 @@ html
 		
 		<!-- style sheet! -->
 		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
-		link(href="bootstrap/css/customized/component.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/global.css",rel="stylesheet")
 		link(href="bootstrap/css/customized/customized.css",rel="stylesheet")
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
 		link(href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css")
@@ -27,6 +27,8 @@ html
 
 	body
 		include ../components/topbar.pug
+		include ../components/export.pug
+		include ../components/terminate.pug
 		include ../components/warning.pug
 		include ../components/clientside-warning.pug
 		include ../components/sitemap.pug

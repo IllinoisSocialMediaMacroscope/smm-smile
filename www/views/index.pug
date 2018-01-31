@@ -8,7 +8,7 @@ html
 		<!-- this is for bootstrap 3! -->
 		link(href="bootstrap/css/bootstrap.css", rel="stylesheet")
 		<!-- this is the customized dashboard style -->
-		link(href="bootstrap/css/customized/component.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/global.css",rel="stylesheet")
 		link(href="bootstrap/css/customized/index.css",rel="stylesheet")
 		
 		<!-- font family -->
@@ -25,6 +25,8 @@ html
 	
 	body
 		include components/topbar.pug
+		include components/export.pug
+		include components/terminate.pug
 		include components/warning.pug
 		include components/sitemap.pug	
 		include components/clientside-warning.pug

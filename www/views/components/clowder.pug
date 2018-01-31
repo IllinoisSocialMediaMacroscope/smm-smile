@@ -4,8 +4,8 @@ div(id="clowder-login-modal" class="modal fade" role="dialog" data-keyboard="fal
 			div(class="modal-header")
 				button(class="close", data-dismiss="modal") &times;
 				img(src="bootstrap/img/logo/clowder-bg-logo.png",width="40%", style="display:block;margin:auto auto;")
-				p(style="text-align:center; margin-top:10px;") <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>C</kbd>
-			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
+				//p(style="text-align:center; margin-top:10px;") <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>C</kbd>
+			div(class="modal-body form")
 				div(id="modal-message")
 						div(class="control-group")
 							label(class="control-label") Username
@@ -14,7 +14,7 @@ div(id="clowder-login-modal" class="modal fade" role="dialog" data-keyboard="fal
 							label(class="control-label") Password
 							input(type="password", class="form-control", id="clowderPassword", placeholder="Password")
 			div(class="modal-footer")
-				button(class="btn btn-primary",style="background-color:#ea4a36;color:white;border-style:hidden;margin:3px 3px", onclick="submit_clowder_login();")
+				button(class="btn btn-yes", onclick="submit_clowder_login();")
 					span(class="glyphicon glyphicon-log-in")
 					| Login
 
@@ -24,7 +24,7 @@ div(id="clowder-new-dataset",class="modal fade", role="dialog", data-backdrop="s
 			div(class="modal-header")
 				button(class="close", data-dismiss="modal") &times;
 				img(src="bootstrap/img/logo/clowder-bg-logo.png", width="40%", style="display:block;margin:auto auto;")
-			div(class="modal-body", style="vertical-align:middle;margin-left:20px;margin-right:20px;overflow:auto;")
+			div(class="modal-body form")
 				div(id="modal-message")
 					div(class="control-group")
 						label(class="control-label") Dataset Title (*)
@@ -54,8 +54,8 @@ div(id="clowder-new-dataset",class="modal fade", role="dialog", data-backdrop="s
 						label(class="control-label") Add Tags
 						input(type="text", class="form-control", id="datasetTags", data-role="tagsinput", placeholder="Type, Enter, Backspace, L/R")
 			div(class="modal-footer")
-				div(class="clowder-dataset-block")
-					button(class="btn btn-danger",id="clowder-next", onclick="create_clowder_dataset();") Create
+				img(src="bootstrap/img/gifs/loading2.gif", width="10%", height="10%",style="display:none;")
+				button(class="btn btn-danger",id="clowder-create", onclick="create_clowder_dataset();") Create
 								
 div(id="clowder-modal" class="modal fade" role="dialog" data-keyboard="false")
 	div(class="modal-dialog")
@@ -63,14 +63,15 @@ div(id="clowder-modal" class="modal fade" role="dialog" data-keyboard="false")
 			div(class="modal-header")
 				button(class="close", data-dismiss="modal") &times;
 				img(src="bootstrap/img/logo/clowder-bg-logo.png",width="40%", style="display:block;margin:auto auto;")
-				p(style="text-align:center; margin-top:10px;") <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>C</kbd> 
-			div(class="modal-body" style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
+				//p(style="text-align:center; margin-top:10px;") <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>C</kbd> 
+			div(class="modal-body form")
 				div(id="modal-message")
 					// dataset!!!
 					div(class="clowder-dataset-block")
 						div(class="control-group")
 							label(class="control-label") Select a dataset
-							select(class="form-control" id="selectDataset")
+							img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
+							select(class="form-control", id="selectDataset")
 					// files!!!
 					div(class="clowder-files-block", style="display:none;")
 						div(class="control-group")
@@ -82,26 +83,27 @@ div(id="clowder-modal" class="modal fade" role="dialog" data-keyboard="false")
 							
 			div(class="modal-footer")
 				div(class="clowder-dataset-block")
-					button(class="btn btn-danger", id="clowder_next", onclick="submit_clowder_dataset();")
+					button(class="btn btn-danger", id="clowder-next", onclick="submit_clowder_dataset();")
 						span(class="glyphicon glyphicon-chevron-right")
 						| Next
 				div(class="clowder-files-block", style="display:none;")
-					button(class="btn btn-primary", onclick="prev_clowder_dataset();")
+					button(class="btn btn-no", onclick="prev_clowder_dataset();", id="clowder-prev")
 						span(class="glyphicon glyphicon-chevron-left")
 						| Prev
-					button(class="btn btn-danger", onclick="submit_clowder_files();")
+					button(class="btn btn-yes", onclick="submit_clowder_files();", id="clowder-upload")
 						span(class="glyphicon glyphicon-upload")
 						| Upload
+					img(src="bootstrap/img/gifs/loading2.gif", width="10%", height="10%",style="display:none;")
 						
 div(id="clowder-confirmation", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
 	div(class="modal-dialog")
 		div(class="modal-content",style="width:650px;")
-			div(class="modal-body",style="vertical-align:middle;margin-left:20px; margin-right:20px;overflow:auto;")
+			div(class="modal-body confirmation")
 				div(id="modal-message")
 					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="80px")
-					p(style="font-size:30px;", id="clowder-message")
+					p(id="clowder-message")
 					div(id="file-links")
 			div(class="modal-footer")
-				button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden",data-dismiss="modal") Close	
+				button(class="btn btn-no",data-dismiss="modal") Close	
 										
 script(src="bootstrap/js/customized/view_clowder.js")

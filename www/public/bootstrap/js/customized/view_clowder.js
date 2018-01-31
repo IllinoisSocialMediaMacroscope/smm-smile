@@ -27,6 +27,9 @@ $('#clowder-modal').on('shown.bs.modal', function (e) {
 })
 
 function generate_data_list(){
+		// lodading gif
+		$(".clowder-dataset-block").find('img').show();
+		$("#selectDataset").hide();
 		
 		$.ajax({
 			type:'POST',
@@ -45,6 +48,10 @@ function generate_data_list(){
 					$.each(data,function(i,val){
 						$("#selectDataset").append(`<option value="`+ val.id +`">` + val.name + `</option>`);
 					});
+					
+					// hide loading bar show selectDataset
+					$(".clowder-dataset-block").find('img').hide();
+					$("#selectDataset").show();
 				}
 			},
 			error: function(jqXHR, exception){
@@ -100,11 +107,11 @@ $("#selectDataset").on('change',function(){
 		$("#clowder-new-dataset").modal('show');
 		
 		// disable the next button incase people accidently hit it without dataID available
-		$("#clowder_next").prop('disabled',true);
+		$("#clowder-next").prop('disabled',true);
 	}else if ($("#selectDataset option:selected" ).val() === 'Please Select...'){
-		$("#clowder_next").prop('disabled',true);
+		$("#clowder-next").prop('disabled',true);
 	}else{
-		$("#clowder_next").prop('disabled',false);
+		$("#clowder-next").prop('disabled',false);
 	}
 });
 
@@ -215,7 +222,6 @@ function clowder_form_validation(caseID){
 
 // CREATE button
 function create_clowder_dataset(){
-	
 	var data = {}
 	// title
 	data['title'] = $("#datasetTitle").val();
@@ -248,6 +254,12 @@ function create_clowder_dataset(){
 	}
 	
 	if (clowder_form_validation('dataset')){
+		
+		// loading gif
+		$("#clowder-new-dataset .modal-dialog .modal-footer img").show();
+		$("#clowder-create").hide();
+	
+		
 		$.ajax({
 			type:'POST',
 			url:'clowder-dataset', 
@@ -258,6 +270,10 @@ function create_clowder_dataset(){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
+					//loading gif resume
+					$("#clowder-new-dataset .modal-dialog .modal-footer img").hide();
+					$("#clowder-create").show();
+					
 					//close this new modal 
 					$("#clowder-new-dataset").modal('hide')
 					
@@ -306,7 +322,11 @@ function prev_clowder_dataset(){
 
 // UPLOAD button
 function submit_clowder_files(){
+	
 	if (clowder_form_validation('files')){
+		$("#clowder-modal .modal-dialog .modal-footer img").show();
+		$("#clowder-upload").hide();
+		$("#clowder-prev").hide();
 		
 		var urls = [];
 		$("#clowder-files-list .form-control .form-check-input").each(function(i,cbox){
@@ -328,10 +348,15 @@ function submit_clowder_files(){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
+					//loading gif resume
+					$("#clowder-modal .modal-dialog .modal-footer img").hide();
+					$("#clowder-upload").show();
+					$("#clowder-prev").show();
+					
 					$("#clowder-message").text(data.info);
 					$("#file-links").empty();
 					$.each(data.ids, function(i,id){
-						$("#file-links").append(`<a style="display:block;" href="https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/`
+						$("#file-links").append(`<a style="display:block;font-size:15px;" href="https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/`
 						+ id +`">https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/` + id + `</a>`);
 					});
 					// hide upoad modal, show confirmation modal
