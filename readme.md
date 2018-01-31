@@ -24,10 +24,8 @@
 2. GraphQL data server runs on **http://localhost:5050/graphql/**
 
 ## WARNING:
-1. For safety and developing reason, **.env** files are not included, if you don't have the permission to access [googleDrive](https://drive.google.com/drive/folders/0B37hhRXKgRPOZG1MbUdwSEdVNWM), 
-Please contact me to get a copy
-2. Make sure to subtitute any **credentials** in .env if not provided!
-3. For details please review the **Memo.docx** file. Link here :point_right: [Memo](https://github.com/IllinoisSocialMediaMacroscope/analytics-standalone/tree/master/docs/memo.pdf)
+1. For details please review the **Memo.docx** file. Link here :point_right: [Memo](https://github.com/IllinoisSocialMediaMacroscope/analytics-standalone/tree/master/www/docs/memo.pdf)
+2. Credentials are covered up, please contact me if you want to test this project
 
 :e-mail: email me: _***REMOVED***_
 
