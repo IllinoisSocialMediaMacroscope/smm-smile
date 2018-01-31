@@ -91,7 +91,11 @@ function submitQuery(textareaID,filenameID){
 
 function submitSearchbox(searchboxID, filenameID){
 	$(".loading").show();
+	
+	// escape doule quotation mark
 	var keyword = $(searchboxID).val();
+	var keyword = keyword.replace(/[\"]+/g, `\\"`);	
+	
 	var queryTerm = $("#social-media").find(':selected').val();
 	
 	if (queryTerm === 'queryTweet'){

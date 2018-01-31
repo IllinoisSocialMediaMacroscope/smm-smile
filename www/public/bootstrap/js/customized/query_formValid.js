@@ -30,7 +30,8 @@ function formValid(searchID){
 	
 	// check the input box has English words or numbers or not
 	// before carry out to save the data part
-	var regx = /^[#@A-Za-z0-9_ _+-_&_|]+$/;
+	// https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators
+	var regx = /^[\":?)(#@A-Za-z0-9_ _+-_&_|]+$/;
 	if ($("#social-media option:selected").val() === ''){
 		
 		$("#modal-message").append(`<h4>Please select a platform!</h4>`);
