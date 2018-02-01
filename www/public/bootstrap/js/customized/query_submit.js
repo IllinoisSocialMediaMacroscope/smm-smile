@@ -281,6 +281,7 @@ function submitSearchbox(searchboxID, filenameID){
 								  hide_score
 								  id
 								  is_self
+								  link_flair_text
 								  locked
 								  name
 								  over_18
@@ -324,6 +325,7 @@ function submitSearchbox(searchboxID, filenameID){
 								  hide_score
 								  id
 								  is_self
+								  link_flair_text
 								  locked
 								  name
 								  over_18
