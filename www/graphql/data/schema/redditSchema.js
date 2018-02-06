@@ -45,6 +45,7 @@ const redditQueryType = module.exports = new GraphQLObjectType({
 									defaultValue: 'relevance',
 									description:'relevance, hot, top, new, comments'},
 					syntax:		{type:GraphQLString,
+									defaultValue: 'lucene',
 									description:'cloudsearch, lucene, plain'},
 					count:		{type:GraphQLInt,
 									defaultValue: 0}
