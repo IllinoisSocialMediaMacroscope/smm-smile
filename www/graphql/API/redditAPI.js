@@ -10,6 +10,8 @@ function redditAPI(tokens,resolveName, id, args){
 			accessToken: tokens.redditaccesstoken
 	});
 	
+	r.config({requestDelay:1000});
+	
 	return new Promise((resolve,reject) =>{
 		switch(resolveName){
 			case 'search':
