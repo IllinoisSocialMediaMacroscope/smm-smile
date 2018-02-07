@@ -282,7 +282,7 @@ function clowderFileGen(datalist){
 						<label class="form-check-label"> &nbsp; ` + val.name + `</label>
 						<a onclick="clowderFileAdvanceToggle(this);" href="#">
 							<span class="pull-right">
-								<span class="glyphicon glyphicon-pencil" style="vertical-align:middle;"></span>
+								<span class="glyphicon glyphicon-pencil" style="vertical-align:middle;">Edit</span>
 							</span>
 						</a>
 						<div class="clowderFileAdvance" style="display:none;">
