@@ -278,12 +278,10 @@ function ajaxSubmit(formID,aws_identifier){
 										
 					// ADD TO CLOWDER MODAL
 					$("#clowder-files-list").empty();
-					$.each(data.download, function(i,val){
-						$("#clowder-files-list").append(`<div class="form-control" style="margin:15px auto;height:100%;">
-															<input type="checkbox" class="form-check-input" value="`+ val.content + `"/>
-															<label class="form-check-label"> &nbsp; ` + val.name + `</label>
-														</div>`);
-					});
+					clowderFileGen(data.download);
+					clowderFileMeta();
+					$('.fileTags').tagsinput({ freeInput: true });
+					
 				}
 			},
 			error: function(jqXHR, exception){

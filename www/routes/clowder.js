@@ -79,8 +79,9 @@ router.post('/clowder-files',function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{
+		console.log(req.body);
 		// invoke CLowder lambda function
-		var args = {'username':req.session.clowder_username,
+		/*var args = {'username':req.session.clowder_username,
 			'password':req.session.clowder_password,
 			'payload':req.body
 		}		
@@ -94,7 +95,7 @@ router.post('/clowder-files',function(req,res,next){
 		}).catch( error =>{
 			console.log(error);
 			res.send({'ERROR':JSON.stringify(error)});
-		});
+		});*/
 	}
 });
 
