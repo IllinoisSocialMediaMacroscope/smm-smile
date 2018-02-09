@@ -645,9 +645,9 @@ QueryBuilder.DEFAULTS = {
 
     sort_filters: false,
     display_errors: true,
-    allow_groups: -1,
+    allow_groups: 1, // this sets how many nested layer it allows
     allow_empty: false,
-    conditions: ['AND', 'OR'],
+    conditions: ['AND', 'OR', 'NOT'],
     default_condition: 'AND',
     inputs_separator: ' , ',
     select_placeholder: '------',
@@ -2110,6 +2110,109 @@ QueryBuilder.prototype.getRules = function(options) {
     return this.change('getRules', out);
 };
 
+QueryBuilder.prototype.getCustomedRules = function(platform) {
+    options = $.extend({
+        get_flags: false,
+        allow_invalid: false,
+        skip_empty: false
+    }, options);
+	
+	
+    var valid = this.validate(options);
+    if (!valid && !options.allow_invalid) {
+        return null;
+    }
+
+    var self = this;
+
+    var out = (function parse(group) {
+        var groupData = {
+            condition: group.condition,
+            rules: []
+        };
+
+        if (group.data) {
+            groupData.data = $.extendext(true, 'replace', {}, group.data);
+        }
+
+        if (options.get_flags) {
+            var flags = self.getGroupFlags(group.flags, options.get_flags === 'all');
+            if (!$.isEmptyObject(flags)) {
+                groupData.flags = flags;
+            }
+        }
+
+        group.each(function(rule) {
+            if (!rule.filter && options.skip_empty) {
+                return;
+            }
+
+            var value = null;
+            if (!rule.operator || rule.operator.nb_inputs !== 0) {
+                value = rule.value;
+            }
+
+            var ruleData = {
+                id: rule.filter ? rule.filter.id : null,
+                field: rule.filter ? rule.filter.field : null,
+                type: rule.filter ? rule.filter.type : null,
+                input: rule.filter ? rule.filter.input : null,
+                operator: rule.operator ? rule.operator.type : null,
+                value: value
+            };
+
+            if (rule.filter && rule.filter.data || rule.data) {
+                ruleData.data = $.extendext(true, 'replace', {}, rule.filter.data, rule.data);
+            }
+
+            if (options.get_flags) {
+                var flags = self.getRuleFlags(rule.flags, options.get_flags === 'all');
+                if (!$.isEmptyObject(flags)) {
+                    ruleData.flags = flags;
+                }
+            }
+
+            /**
+             * Modifies the JSON generated from a Rule object
+             * @event changer:ruleToJson
+             * @memberof QueryBuilder
+             * @param {object} json
+             * @param {Rule} rule
+             * @returns {object}
+             */
+            groupData.rules.push(self.change('ruleToJson', ruleData, rule));
+
+        }, function(model) {
+            var data = parse(model);
+            if (data.rules.length !== 0 || !options.skip_empty) {
+                groupData.rules.push(data);
+            }
+        }, this);
+
+        /**
+         * Modifies the JSON generated from a Group object
+         * @event changer:groupToJson
+         * @memberof QueryBuilder
+         * @param {object} json
+         * @param {Group} group
+         * @returns {object}
+         */
+        return self.change('groupToJson', groupData, group);
+
+    }(this.model.root));
+
+    out.valid = valid;
+
+    /**
+     * Modifies the result of the {@link QueryBuilder#getRules} method
+     * @event changer:getRules
+     * @memberof QueryBuilder
+     * @param {object} json
+     * @returns {object}
+     */
+    return this.change('getRules', out);
+};
+
 /**
  * Sets rules from object
  * @param {object} data
@@ -2929,7 +3032,7 @@ QueryBuilder.templates.group = '\
 <dl id="{{= it.group_id }}" class="rules-group-container"> \
   <dt class="rules-group-header"> \
     <div class="btn-group pull-right group-actions"> \
-      <button type="button" class="btn btn-sm btn-success" data-add="rule"> \
+      <button type="button" class="btn btn-sm btn-warning" data-add="rule"> \
         <i class="{{= it.icons.add_rule }}"></i> {{= it.translate("add_rule") }} \
       </button> \
       {{? it.settings.allow_groups===-1 || it.settings.allow_groups>=it.level }} \
@@ -2945,7 +3048,7 @@ QueryBuilder.templates.group = '\
     </div> \
     <div class="btn-group group-conditions"> \
       {{~ it.conditions: condition }} \
-        <label class="btn btn-sm btn-primary"> \
+        <label class="btn btn-sm btn-default"> \
           <input type="radio" name="{{= it.group_id }}_cond" value="{{= condition }}"> {{= it.translate("conditions", condition) }} \
         </label> \
       {{~}} \
@@ -2963,7 +3066,7 @@ QueryBuilder.templates.rule = '\
 <li id="{{= it.rule_id }}" class="rule-container"> \
   <div class="rule-header"> \
     <div class="btn-group pull-right rule-actions"> \
-      <button type="button" class="btn btn-sm btn-warning" data-delete="rule"> \
+      <button type="button" class="btn btn-sm btn-danger" data-delete="rule"> \
         <i class="{{= it.icons.remove_rule }}"></i> {{= it.translate("delete_rule") }} \
       </button> \
     </div> \
@@ -6219,11 +6322,12 @@ QueryBuilder.regional['en'] = {
   "__author": "Damien \"Mistic\" Sorel, http://www.strangeplanet.fr",
   "add_rule": "Add Keyword",
   "add_group": "Add Keyword Block",
-  "delete_rule": "Delete Keyword",
+  "delete_rule": " ",
   "delete_group": "Delete Keyword Block",
   "conditions": {
-    "AND": "AND",
-    "OR": "OR"
+    "AND": "MATCH ALL",
+    "OR": "MATCH ANY",
+	"NOT": "EXCLUDE",
   },
   "operators": {
     "equal": "equal",
