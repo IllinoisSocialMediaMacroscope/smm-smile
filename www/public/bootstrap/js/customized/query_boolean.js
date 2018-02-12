@@ -32,8 +32,9 @@ $('#btn-set').on('click', function() {
 
 $('#btn-get').on('click', function() {
   var result = $('#builder').queryBuilder('getRules');
-
-  if (!$.isEmptyObject(result)) {
+	console.log(result);
+	
+  /*if (!$.isEmptyObject(result)) {
     alert(JSON.stringify(result, null, 2));
-  }
+  }*/
 });
