@@ -1024,6 +1024,7 @@ QueryBuilder.prototype.bindEvents = function() {
     this.$el.on('change.queryBuilder', Selectors.group_condition, function() {
         if ($(this).is(':checked')) {
             var $group = $(this).closest(Selectors.group_container);
+			//console.log($(group));
             self.getModel($group).condition = $(this).val();
         }
     });
@@ -1043,6 +1044,7 @@ QueryBuilder.prototype.bindEvents = function() {
     // add rule button
     this.$el.on('click.queryBuilder', Selectors.add_rule, function() {
         var $group = $(this).closest(Selectors.group_container);
+		//console.log($group);
         self.addRule(self.getModel($group));
     });
 
@@ -2014,20 +2016,21 @@ QueryBuilder.prototype.getRules = function(options) {
         allow_invalid: false,
         skip_empty: false
     }, options);
-
-    var valid = this.validate(options);
+	
+    /*var valid = this.validate(options);
     if (!valid && !options.allow_invalid) {
         return null;
-    }
+    }*/
 
     var self = this;
-
     var out = (function parse(group) {
+		console.log(group);
         var groupData = {
             condition: group.condition,
             rules: []
         };
-
+		
+		// how to get this data
         if (group.data) {
             groupData.data = $.extendext(true, 'replace', {}, group.data);
         }
@@ -2098,7 +2101,7 @@ QueryBuilder.prototype.getRules = function(options) {
 
     }(this.model.root));
 
-    out.valid = valid;
+    //out.valid = valid;
 
     /**
      * Modifies the result of the {@link QueryBuilder#getRules} method
@@ -2107,6 +2110,7 @@ QueryBuilder.prototype.getRules = function(options) {
      * @param {object} json
      * @returns {object}
      */
+	 
     return this.change('getRules', out);
 };
 
