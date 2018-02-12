@@ -6,11 +6,13 @@ html
 		
 		<!-- Style sheets! -->
 		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		//link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
 		link(href="bootstrap/css/customized/search.css",rel="stylesheet")
 		link(href="bootstrap/css/customized/global.css",rel="stylesheet")
-		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
-		link(rel="stylesheet", href="bootstrap/css/bootstrap-multiselect.css", type="text/css")
-		link(rel="stylesheet",href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css")
+		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300")
+		link(href="bootstrap/css/bootstrap-multiselect.css", rel="stylesheet")
+		link(href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css", rel="stylesheet")
+		link(href="https://cdn.jsdelivr.net/npm/jQuery-QueryBuilder/dist/css/query-builder.default.min.css", rel="stylesheet")
 		
 		<!-- JQUERY -->
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
@@ -25,6 +27,7 @@ html
 		script(src="bootstrap/js/customized/query_submit.js")
 		script(src="bootstrap/js/customized/warning_trigger.js")
 		script(src="bootstrap/js/customized/modal_overlay.js")
+		script(src="jQuery-QueryBuilder-master/dist/js/re_query-builder.standalone.js")
 		
 	body(onload="init();")
 		<!-- top bar -->
@@ -35,7 +38,7 @@ html
 		include ../components/clientside-warning.pug
 		include ../components/sitemap.pug
 		include ../components/cookie.pug
-		
+	
 		<!-- auth -->
 		div(id="auth-panel")
 			p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
@@ -50,11 +53,16 @@ html
 					img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
 					| Authorize with your Reddit account
 				button(class="button-later") later
-			
+		
 		div(class="searchPage",id="searchPage",style="display:none;")
 			<!-- logo -->
 			div(class="row" id="header",style="")
 				img(src="bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
+			
+			<!-- boolean panel -->
+			include ./booleanBuilder.pug
+		
+			
 			<!-- secondary auth panel -->
 			div(class="row",id="second-auth",style="display:block;margin:auto auto;margin-top:50px;text-align:center;color:#333;")
 				div(id="authorized", style="display:inline-block;")
