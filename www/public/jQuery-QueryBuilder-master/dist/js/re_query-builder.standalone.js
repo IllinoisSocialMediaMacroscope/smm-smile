@@ -1346,13 +1346,11 @@ QueryBuilder.prototype.addRule = function(parent, data, flags) {
     var rule_id = this.nextRuleId();
     var $rule = $(this.getRuleTemplate(rule_id));
     var model = parent.addRule($rule);
-		
+	
     if (data !== undefined) {
         model.data = data;
     }
-	// hack here
 	
-
     model.__.flags = $.extend({}, this.settings.default_rule_flags, flags);
 
     /**
@@ -1361,6 +1359,7 @@ QueryBuilder.prototype.addRule = function(parent, data, flags) {
      * @memberof QueryBuilder
      * @param {Rule} rule
      */
+		
     this.trigger('afterAddRule', model);
 
     this.trigger('rulesChanged');
@@ -1381,7 +1380,13 @@ QueryBuilder.prototype.addRule = function(parent, data, flags) {
             model
         );
     }
-
+	
+	//hacks
+	model.filter = this.getFilterById('keyword', true);
+	model.operator = this.getOperatorByType('equal', true);
+	model.value = '';
+	this.applyRuleFlags(model);
+	
     return model;
 };
 
@@ -2284,9 +2289,8 @@ QueryBuilder.prototype.setRules = function(data, options) {
 
         group.condition = data.condition;
 
-        /*data.rules.forEach(function(item) {
+        data.rules.forEach(function(item) {
             var model;
-
             if (item.rules !== undefined) {
                 if (self.settings.allow_groups !== -1 && self.settings.allow_groups < group.level) {
                     Utils.error(!options.allow_invalid, 'RulesParse', 'No more than {0} groups are allowed', self.settings.allow_groups);
@@ -2297,7 +2301,7 @@ QueryBuilder.prototype.setRules = function(data, options) {
                     if (model === null) {
                         return;
                     }
-
+					console.log(model)
                     self.applyGroupFlags(model);
 
                     add(item, model);
@@ -2322,7 +2326,7 @@ QueryBuilder.prototype.setRules = function(data, options) {
                 if (!item.empty) {
                     model.filter = self.getFilterById(item.id, !options.allow_invalid);
                 }
-
+				
                 if (model.filter) {
                     model.operator = self.getOperatorByType(item.operator, !options.allow_invalid);
 
@@ -2340,7 +2344,7 @@ QueryBuilder.prototype.setRules = function(data, options) {
                     }
                 }
 
-                self.applyRuleFlags(model);*/
+                self.applyRuleFlags(model);
 
                 /**
                  * Modifies the Rule object generated from the JSON
@@ -2350,11 +2354,11 @@ QueryBuilder.prototype.setRules = function(data, options) {
                  * @param {object} json
                  * @returns {Rule} the same rule
                  */
-                /*if (self.change('jsonToRule', model, item) != model) {
+                if (self.change('jsonToRule', model, item) != model) {
                     Utils.error('RulesParse', 'Plugin tried to change rule reference');
                 }
             }
-        });*/
+        });
 
         /**
          * Modifies the Group object generated from the JSON
@@ -3087,8 +3091,8 @@ QueryBuilder.templates.rule = '\
   {{? it.settings.display_errors }} \
     <div class="error-container"><i class="{{= it.icons.error }}"></i></div> \
   {{?}} \
-  <div class="rule-filter-container"></div> \
-  <div class="rule-operator-container"></div> \
+  <div class="rule-filter-container" style="display:none;"></div> \
+  <div class="rule-operator-container" style="display:none;"></div> \
   <div class="rule-value-container"></div> \
 </li>';
 
