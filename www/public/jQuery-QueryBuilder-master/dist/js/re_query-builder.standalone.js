@@ -309,9 +309,6 @@
  */
 var QueryBuilder = function($el, options) {
 	
-	console.log($el);
-	console.log(options);
-	
     $el[0].queryBuilder = this;
 
     /**
@@ -3093,7 +3090,7 @@ QueryBuilder.templates.rule = '\
   {{?}} \
   <div class="rule-filter-container" style="display:none;"></div> \
   <div class="rule-operator-container" style="display:none;"></div> \
-  <div class="rule-value-container"></div> \
+  <div class="rule-value-container" style="border:none;"></div> \
 </li>';
 
 // select box change to inputbox
@@ -3312,8 +3309,8 @@ QueryBuilder.prototype.getRuleInput = function(rule, value_id) {
                 break;
 
             default:
-                h += '<input class="form-control" type="text" name="' + name + '"';
-                if (filter.placeholder) h += ' placeholder="' + filter.placeholder + '"';
+                h += '<input class="form-control" placeholder="keyword" type="text" name="' + name + '"';
+               // if (filter.placeholder) h += ' placeholder="' + filter.placeholder + '"';
                 if (filter.type === 'string' && validation.min !== undefined) h += ' minlength="' + validation.min + '"';
                 if (filter.type === 'string' && validation.max !== undefined) h += ' maxlength="' + validation.max + '"';
                 if (filter.size) h += ' size="' + filter.size + '"';

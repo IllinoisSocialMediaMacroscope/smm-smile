@@ -17,79 +17,6 @@ function init(){
 					psPost:{},
 					psComment:{}	
 				};
-	// escape doule quotation mark
-	var keyword =  $("#searchbox").val();
-	var keyword = keyword.replace(/[\"]+/g, `\\"`);
-	
-	parameters['tweet']['q:'] = keyword;
-	parameters['tweet']['count:'] = 100;
-	parameters['tweet']['pages:'] = parseInt($("#tweet-count").val())/100;
-	parameters['tweet']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
-	`\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
-	`\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
-	`\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
-	`\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
-	`\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
-	`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang`+
-	`\n\t\t\t}\n\t\t\tentities{\n\t\t\t\turls\n\t\t\t\thashtags\n\t\t\t\tuser_mentions{\n\t\t\t\t\tauthor_id`+
-	`\n\t\t\t\t\tscreen_name\n\t\t\t\t}\n\t\t\t}`;
-	
-	parameters['twtUser']['q:'] = keyword;
-	parameters['twtUser']['count:'] = 20;
-	parameters['twtUser']['fields'] = `\n\t\t\tauthor_id\n\t\t\tauthor_id_str\n\t\t\tname\n\t\t\tscreen_name\n\t\t\tdescription`+
-	`\n\t\t\tauthor_created_at\n\t\t\tprofile_image_url\n\t\t\tprofile_banner_url\n\t\t\turl\n\t\t\tlocation\n\t\t\ttweets_count`+
-	`\n\t\t\tfollowers_count\n\t\t\tfriends_count\n\t\t\tlisted_count\n\t\t\tfavourites_count\n\t\t\tstatuses_count\n\t\t\ttime_zone`+
-	`\n\t\t\tprotected\n\t\t\tverified\n\t\t\tis_translator\n\t\t\tcontributors_enabled\n\t\t\tgeo_enabled\n\t\t\tauthor_lang\n\t\t\ttimeline{`+
-	`\n\t\t\t\tid\n\t\t\t\tcreated_at\n\t\t\t\ttext\n\t\t\t\tretweet_count\n\t\t\t}`;
-		
-	parameters['es']['q:'] = keyword;
-	parameters['es']['perPage:'] =  1000;
-	parameters['es']['fields'] = `\n\t\t\t_id\n\t\t\t_type\n\t\t\t_index\n\t\t\t_score\n\t\t\t_source{`+
-	`\n\t\t\t\tid\n\t\t\t\tid_str\n\t\t\t\tcreated_at\n\t\t\t\ttext\n\t\t\t\tretweet_count\n\t\t\t\tfavorite_count`+
-	`\n\t\t\t\tretweeted\n\t\t\t\tfavorited\n\t\t\t\tpossibly_sensitive\n\t\t\t\ttruncated\n\t\t\t\tlang\n\t\t\t\tin_reply_to_user_id_str`+
-	`\n\t\t\t\tin_reply_to_status_id_str\n\t\t\t\tin_reply_to_screen_name\n\t\t\t\ttimestamp_ms\n\t\t\t\tmentions\n\t\t\t\thashtags`+
-	`\n\t\t\t\turls\n\t\t\t\tis_quote_status\n\t\t\t\temoticons\n\t\t\t\tsource\n\t\t\t\tsentiments\n\t\t\t\tfilter_level\n\t\t\t\tuser{`+
-	`\n\t\t\t\t\tauthor_id\n\t\t\t\t\tauthor_id_str\n\t\t\t\t\tname\n\t\t\t\t\tscreen_name\n\t\t\t\t\tdescription\n\t\t\t\t\tauthor_created_at`+
-	`\n\t\t\t\t\tprofile_image_url\n\t\t\t\t\tprofile_banner_url\n\t\t\t\t\turl\n\t\t\t\t\tlocation\n\t\t\t\t\ttweets_count\n\t\t\t\t\tfollowers_count`+
-	`\n\t\t\t\t\tfriends_count\n\t\t\t\t\tlisted_count\n\t\t\t\t\tfavourites_count\n\t\t\t\t\tstatuses_count\n\t\t\t\t\ttime_zone\n\t\t\t\t\tprotected`+
-	`\n\t\t\t\t\tverified\n\t\t\t\t\tis_translator\n\t\t\t\t\tcontributors_enabled\n\t\t\t\t\tgeo_enabled\n\t\t\t\t\tauthor_lang`+
-	`\n\t\t\t\t}\n\t\t\t\tcoordinates{\n\t\t\t\t\tlat\n\t\t\t\t\tlon\n\t\t\t\t}\n\t\t\t}`;
-	
-	parameters['rdSearch']['query:'] = keyword;
-	parameters['rdSearch']['time:'] =  'all';
-	parameters['rdSearch']['sort:'] =  'relevance';
-	parameters['rdSearch']['fields'] = `\n\t\t\tarchived\n\t\t\tauthor_name\n\t\t\tbrand_safe\n\t\t\tcontest_mode\n\t\t\tclicked`+
-	`\n\t\t\tcreated\n\t\t\tcreated_utc\n\t\t\tdomain\n\t\t\tdowns\n\t\t\tedited\n\t\t\tgilded\n\t\t\thidden\n\t\t\thide_score`+
-	`\n\t\t\tid\n\t\t\tis_self\n\t\t\tlink_flair_text\n\t\t\tlocked\n\t\t\tname\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tscore`+
-	`\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id\n\t\t\tsubreddit_type\n\t\t\tsubreddit_name_prefixed`+
-	`\n\t\t\ttitle\n\t\t\turl\n\t\t\tups\n\t\t\tvisited`;
-	
-	parameters['rdPost']['subredditName:'] = keyword;
-	parameters['rdPost']['extra:'] = 2000;
-	parameters['rdPost']['fields'] = `\n\t\t\tarchived\n\t\t\tauthor_name\n\t\t\tbrand_safe\n\t\t\tcontest_mode\n\t\t\tclicked`+
-	`\n\t\t\tcreated\n\t\t\tcreated_utc\n\t\t\tdomain\n\t\t\tdowns\n\t\t\tedited\n\t\t\tgilded\n\t\t\thidden\n\t\t\thide_score`+
-	`\n\t\t\tid\n\t\t\tis_self\n\t\t\tlink_flair_text\n\t\t\tlocked\n\t\t\tname\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tscore`+
-	`\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id\n\t\t\tsubreddit_type\n\t\t\tsubreddit_name_prefixed`+
-	`\n\t\t\ttitle\n\t\t\turl\n\t\t\tups\n\t\t\tvisited`;
-	
-	parameters['rdComment']['subredditName:'] = keyword;
-	parameters['rdComment']['extra:'] = 2000;
-	parameters['rdComment']['fields'] = `\n\t\t\tcomment_author_name\n\t\t\tarchived\n\t\t\tbody\n\t\t\tbody_html\n\t\t\tsubreddit_display_name`+
-	`\n\t\t\tcreated_utc\n\t\t\tcomment_created\n\t\t\tcontroversiality\n\t\t\tcomment_downs\n\t\t\tedited\n\t\t\tgilded\n\t\t\tcomment_id`+
-	`\n\t\t\tlink_id\n\t\t\tlink_author\n\t\t\tlink_title\n\t\t\tlink_permalink\n\t\t\tlink_url\n\t\t\tcomment_over_18\n\t\t\tparent_id`+
-	`\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tcomment_score\n\t\t\tsubreddit_id\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_name_prefixed`+
-	`\n\t\t\tscore_hidden\n\t\t\tstickied\n\t\t\tsubreddit_type\n\t\t\tcomment_ups`;
-	
-	parameters['psPost']['q:'] = keyword;
-	parameters['psPost']['size:'] = 1000;
-	parameters['psPost']['fields']=`\n\t\t\t_index\n\t\t\t_id\n\t\t\t_type\n\t\t\t_score\n\t\t\t_source{\n\t\t\t\tauthor_name\n\t\t\t\tcreated_utc`+
-	`\n\t\t\t\tdomain\n\t\t\t\tid\n\t\t\t\tis_self\n\t\t\t\tlocked\n\t\t\t\tnum_comments\n\t\t\t\tover_18\n\t\t\t\tpermalink\n\t\t\t\tfull_link`+
-	`\n\t\t\t\tpinned\n\t\t\t\tretrieved_on\n\t\t\t\tscore\n\t\t\t\tstickied\n\t\t\t\tspoiler\n\t\t\t\tsubreddit_display_name\n\t\t\t\tsubreddit_id`+
-	`\n\t\t\t\tsubreddit_name_prefixed\n\t\t\t\ttitle\n\t\t\t\turl\n\t\t\t}`;
-		
-	parameters['psComment']['q:'] = keyword;
-	parameters['psComment']['fields']=`\n\t\t\tcomment_author_name\n\t\t\tbody\n\t\t\tcomment_created\n\t\t\tid\n\t\t\tlink_id\n\t\t\tparent_id`+
-	`\n\t\t\tcomment_score\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_name_prefixed\n\t\t\tsubreddit_id`;
 	
 	// save modal popup
 	$("#adv-search-btn").on('click', function(e){
@@ -109,15 +36,15 @@ function init(){
 	$("#saveButton").on('click',function(e){
 		saveModalClick()
 	});
-	$("#filename").on('keypress',function(e){
+	$("#sn-filename").on('keypress',function(e){
 		if (e.keyCode === 13 || e.keycode == 10){
 			e.preventDefault(); 
 			saveModalClick()
 		}
 	});
 	
-	$("#filename").on("keyup",function(e){
-		if (e.keyCode !== 13 || e.keyCode!== 10){
+	$("#sn-filename").on("keyup",function(e){
+		if (e.keyCode !== 13 && e.keyCode!== 10){
 			$('#display-savefiles').empty();
 			$('#display-savefiles').append(`<p style="text-align:left;padding-top:7px;">` + $(this).val() + '.csv' + `</p>` );
 		}
@@ -133,6 +60,85 @@ function init(){
 			}else{
 				$("#simple-search-btn").prop('disabled',false);
 			}
+			
+			// initialize the advanced panel
+			// escape doule quotation mark
+			var keyword =  $("#searchbox").val();
+			var keyword = keyword.replace(/[\"]+/g, `\\"`);
+			
+			parameters['tweet']['q:'] = keyword;
+			parameters['tweet']['count:'] = 100;
+			parameters['tweet']['pages:'] = parseInt($("#tweet-count").val())/100;
+			parameters['tweet']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
+			`\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
+			`\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
+			`\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
+			`\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
+			`\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
+			`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang`+
+			`\n\t\t\t}\n\t\t\tentities{\n\t\t\t\turls\n\t\t\t\thashtags\n\t\t\t\tuser_mentions{\n\t\t\t\t\tauthor_id`+
+			`\n\t\t\t\t\tscreen_name\n\t\t\t\t}\n\t\t\t}`;
+			
+			parameters['twtUser']['q:'] = keyword;
+			parameters['twtUser']['count:'] = 20;
+			parameters['twtUser']['fields'] = `\n\t\t\tauthor_id\n\t\t\tauthor_id_str\n\t\t\tname\n\t\t\tscreen_name\n\t\t\tdescription`+
+			`\n\t\t\tauthor_created_at\n\t\t\tprofile_image_url\n\t\t\tprofile_banner_url\n\t\t\turl\n\t\t\tlocation\n\t\t\ttweets_count`+
+			`\n\t\t\tfollowers_count\n\t\t\tfriends_count\n\t\t\tlisted_count\n\t\t\tfavourites_count\n\t\t\tstatuses_count\n\t\t\ttime_zone`+
+			`\n\t\t\tprotected\n\t\t\tverified\n\t\t\tis_translator\n\t\t\tcontributors_enabled\n\t\t\tgeo_enabled\n\t\t\tauthor_lang\n\t\t\ttimeline{`+
+			`\n\t\t\t\tid\n\t\t\t\tcreated_at\n\t\t\t\ttext\n\t\t\t\tretweet_count\n\t\t\t}`;
+				
+			parameters['es']['q:'] = keyword;
+			parameters['es']['perPage:'] =  1000;
+			parameters['es']['fields'] = `\n\t\t\t_id\n\t\t\t_type\n\t\t\t_index\n\t\t\t_score\n\t\t\t_source{`+
+			`\n\t\t\t\tid\n\t\t\t\tid_str\n\t\t\t\tcreated_at\n\t\t\t\ttext\n\t\t\t\tretweet_count\n\t\t\t\tfavorite_count`+
+			`\n\t\t\t\tretweeted\n\t\t\t\tfavorited\n\t\t\t\tpossibly_sensitive\n\t\t\t\ttruncated\n\t\t\t\tlang\n\t\t\t\tin_reply_to_user_id_str`+
+			`\n\t\t\t\tin_reply_to_status_id_str\n\t\t\t\tin_reply_to_screen_name\n\t\t\t\ttimestamp_ms\n\t\t\t\tmentions\n\t\t\t\thashtags`+
+			`\n\t\t\t\turls\n\t\t\t\tis_quote_status\n\t\t\t\temoticons\n\t\t\t\tsource\n\t\t\t\tsentiments\n\t\t\t\tfilter_level\n\t\t\t\tuser{`+
+			`\n\t\t\t\t\tauthor_id\n\t\t\t\t\tauthor_id_str\n\t\t\t\t\tname\n\t\t\t\t\tscreen_name\n\t\t\t\t\tdescription\n\t\t\t\t\tauthor_created_at`+
+			`\n\t\t\t\t\tprofile_image_url\n\t\t\t\t\tprofile_banner_url\n\t\t\t\t\turl\n\t\t\t\t\tlocation\n\t\t\t\t\ttweets_count\n\t\t\t\t\tfollowers_count`+
+			`\n\t\t\t\t\tfriends_count\n\t\t\t\t\tlisted_count\n\t\t\t\t\tfavourites_count\n\t\t\t\t\tstatuses_count\n\t\t\t\t\ttime_zone\n\t\t\t\t\tprotected`+
+			`\n\t\t\t\t\tverified\n\t\t\t\t\tis_translator\n\t\t\t\t\tcontributors_enabled\n\t\t\t\t\tgeo_enabled\n\t\t\t\t\tauthor_lang`+
+			`\n\t\t\t\t}\n\t\t\t\tcoordinates{\n\t\t\t\t\tlat\n\t\t\t\t\tlon\n\t\t\t\t}\n\t\t\t}`;
+			
+			parameters['rdSearch']['query:'] = keyword;
+			parameters['rdSearch']['time:'] =  'all';
+			parameters['rdSearch']['sort:'] =  'relevance';
+			parameters['rdSearch']['fields'] = `\n\t\t\tarchived\n\t\t\tauthor_name\n\t\t\tbrand_safe\n\t\t\tcontest_mode\n\t\t\tclicked`+
+			`\n\t\t\tcreated\n\t\t\tcreated_utc\n\t\t\tdomain\n\t\t\tdowns\n\t\t\tedited\n\t\t\tgilded\n\t\t\thidden\n\t\t\thide_score`+
+			`\n\t\t\tid\n\t\t\tis_self\n\t\t\tlink_flair_text\n\t\t\tlocked\n\t\t\tname\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tscore`+
+			`\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id\n\t\t\tsubreddit_type\n\t\t\tsubreddit_name_prefixed`+
+			`\n\t\t\ttitle\n\t\t\turl\n\t\t\tups\n\t\t\tvisited`;
+			
+			parameters['rdPost']['subredditName:'] = keyword;
+			parameters['rdPost']['extra:'] = 2000;
+			parameters['rdPost']['fields'] = `\n\t\t\tarchived\n\t\t\tauthor_name\n\t\t\tbrand_safe\n\t\t\tcontest_mode\n\t\t\tclicked`+
+			`\n\t\t\tcreated\n\t\t\tcreated_utc\n\t\t\tdomain\n\t\t\tdowns\n\t\t\tedited\n\t\t\tgilded\n\t\t\thidden\n\t\t\thide_score`+
+			`\n\t\t\tid\n\t\t\tis_self\n\t\t\tlink_flair_text\n\t\t\tlocked\n\t\t\tname\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tscore`+
+			`\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id\n\t\t\tsubreddit_type\n\t\t\tsubreddit_name_prefixed`+
+			`\n\t\t\ttitle\n\t\t\turl\n\t\t\tups\n\t\t\tvisited`;
+			
+			parameters['rdComment']['subredditName:'] = keyword;
+			parameters['rdComment']['extra:'] = 2000;
+			parameters['rdComment']['fields'] = `\n\t\t\tcomment_author_name\n\t\t\tarchived\n\t\t\tbody\n\t\t\tbody_html\n\t\t\tsubreddit_display_name`+
+			`\n\t\t\tcreated_utc\n\t\t\tcomment_created\n\t\t\tcontroversiality\n\t\t\tcomment_downs\n\t\t\tedited\n\t\t\tgilded\n\t\t\tcomment_id`+
+			`\n\t\t\tlink_id\n\t\t\tlink_author\n\t\t\tlink_title\n\t\t\tlink_permalink\n\t\t\tlink_url\n\t\t\tcomment_over_18\n\t\t\tparent_id`+
+			`\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tcomment_score\n\t\t\tsubreddit_id\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_name_prefixed`+
+			`\n\t\t\tscore_hidden\n\t\t\tstickied\n\t\t\tsubreddit_type\n\t\t\tcomment_ups`;
+			
+			parameters['psPost']['q:'] = keyword;
+			parameters['psPost']['size:'] = 1000;
+			parameters['psPost']['fields']=`\n\t\t\t_index\n\t\t\t_id\n\t\t\t_type\n\t\t\t_score\n\t\t\t_source{\n\t\t\t\tauthor_name\n\t\t\t\tcreated_utc`+
+			`\n\t\t\t\tdomain\n\t\t\t\tid\n\t\t\t\tis_self\n\t\t\t\tlocked\n\t\t\t\tnum_comments\n\t\t\t\tover_18\n\t\t\t\tpermalink\n\t\t\t\tfull_link`+
+			`\n\t\t\t\tpinned\n\t\t\t\tretrieved_on\n\t\t\t\tscore\n\t\t\t\tstickied\n\t\t\t\tspoiler\n\t\t\t\tsubreddit_display_name\n\t\t\t\tsubreddit_id`+
+			`\n\t\t\t\tsubreddit_name_prefixed\n\t\t\t\ttitle\n\t\t\t\turl\n\t\t\t}`;
+				
+			parameters['psComment']['q:'] = keyword;
+			parameters['psComment']['fields']=`\n\t\t\tcomment_author_name\n\t\t\tbody\n\t\t\tcomment_created\n\t\t\tid\n\t\t\tlink_id\n\t\t\tparent_id`+
+			`\n\t\t\tcomment_score\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_name_prefixed\n\t\t\tsubreddit_id`;
+			
+			Query =updateString(queryTerm,parameters);
+			$("#input").val(`{\n\n` + Query +`\n\n}`);
+			
 		}else{
 			$("#modal-message").append(`<h4>Advanced search disabled unless you provide some search keywords!</h4>`);
 			$("#alert").modal('show');
@@ -227,24 +233,27 @@ function init(){
 	$("#until-start").val(until_start);
 			
 	/*---------------------------------------global search term---------------------------------------------------------------------------*/
-	$("#searchbox").change(function(){
-		// escape doule quotation mark
-		var keyword =  $("#searchbox").val();
-		var keyword = keyword.replace(/[\"]+/g, `\\"`);
+	$("#searchbox").on('keyup', function(e){
 		
-		parameters['tweet']['q:'] = keyword;
-		parameters['twtUser']['q:'] = keyword;
-		parameters['es']['q:'] = keyword;
-		parameters['rdSearch']['query:'] = keyword;
-		parameters['rdPost']['subredditName:']= keyword;
-		parameters['rdComment']['subredditName:'] = keyword;
-		parameters['psPost']['q:'] = keyword;
-		parameters['psComment']['q:'] = keyword;
-		
-		Query =updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
+		if ( e.keyCode !== 13 && e.keycode !== 10 ){
+			// escape doule quotation mark
+			var keyword =  $("#searchbox").val();
+			var keyword = keyword.replace(/[\"]+/g, `\\"`);
+			
+			parameters['tweet']['q:'] = keyword;
+			parameters['twtUser']['q:'] = keyword;
+			parameters['es']['q:'] = keyword;
+			parameters['rdSearch']['query:'] = keyword;
+			parameters['rdPost']['subredditName:']= keyword;
+			parameters['rdComment']['subredditName:'] = keyword;
+			parameters['psPost']['q:'] = keyword;
+			parameters['psComment']['q:'] = keyword;
+			
+			Query =updateString(queryTerm,parameters);
+			$("#input").val(`{\n\n` + Query +`\n\n}`);
+		}
 	});
-	
+		
 	/*---------------------------------------------query tweet ------------------------------------------------------------------------*/
 	// toggle date range checkbox
 	$("#dateRange").change(function(){
@@ -853,14 +862,14 @@ function saveModalClick(){
 	var searchID = $("#saveButton").attr('name');
 	
 	if (searchID === '#searchbox'){
-		if (saveValid('#filename')){ 
-			submitSearchbox(`#searchbox`,`#filename`);					
+		if (saveValid('#sn-filename')){ 
+			submitSearchbox(`#searchbox`,`#sn-filename`);					
 		}
 					
 	}
 	else if (searchID === '#input'){
-		if (saveValid('#filename')){
-			submitQuery(`#input`,`#filename`);
+		if (saveValid('#sn-filename')){
+			submitQuery(`#input`,`#sn-filename`);
 		}
 	}
 }
