@@ -1,9 +1,9 @@
 var rules_plugins = {
   condition: 'AND',
   rules: [{
-    id: 'name',
+    id: 'keyword',
     operator: 'equal',
-    value: 'Mistic'
+    value: ''
   }]
 };
 
@@ -13,13 +13,13 @@ $('#builder').queryBuilder({
   ],
 
   filters: [{
-    id: 'name',
-    label: 'Name',
+    id: 'keyword',
+    label: 'keyword',
     type: 'string',
     operators: ['equal']
   }],
 
-  //rules: rules_plugins
+  rules: rules_plugins
 });
 
 $('#btn-reset').on('click', function() {
