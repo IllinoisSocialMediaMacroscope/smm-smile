@@ -7,8 +7,8 @@ div(class="input-group-addon-btn")
 	div(class="btn-group")
 		div(class="dropdown dropdown-lg")
 			button(id="dropdownButton" type="button",class="btn btn-default dropdown-toggle" aria-expanded="false") 
-				span(class="glyphicon glyphicon-cog")
-				| advanced
+				span(class="glyphicon glyphicon-chevron-down")
+				| Advanced
 			<!-- dropdown content start -->
 			div(class="dropdown-menu dropdown-menu-right")
 				br
@@ -32,7 +32,10 @@ div(class="input-group-addon-btn")
 							button(type="button", class="btn btn-info",id="expandDoc") 
 								span(class="glyphicon glyphicon-tasks")
 								| Help
-											
+			<!-- boolean helper button -->
+			button(type="button",class="btn btn-primary", id="boolean-toggle") 
+				span(class="glyphicon glyphicon-chevron-up")
+				| Boolean			
 			<!-- search button -->								
 			button(type="button",class="btn btn-primary",id="simple-search-btn") 
 				span(class="glyphicon glyphicon-search" aria-hidden="true")
