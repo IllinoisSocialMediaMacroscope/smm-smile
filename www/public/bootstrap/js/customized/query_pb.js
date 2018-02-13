@@ -21,7 +21,9 @@ function init(){
 	
 	// boolean toggle
 	$("#boolean-toggle").on('click',function(){
-		$("#query-builder-container").toggle();
+		//$("#query-builder-container").toggle();
+		$("#booleanQueryPreview").empty();
+		$("#query-builder-modal").modal('show');
 	});
 	// save modal popup
 	$("#adv-search-btn").on('click', function(e){

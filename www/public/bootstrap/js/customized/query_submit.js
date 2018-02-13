@@ -513,7 +513,6 @@ function renderPreview(data,prefix){
 	
 	// construct previews
 	$("#grid").empty();
-	$("#grid").append(`<div id="grid"></div>`)
 	if (prefix === 'twitter-Tweet' || prefix === 'twitter-Stream'){
 		$.each(data.rendering, function(i,val){
 			

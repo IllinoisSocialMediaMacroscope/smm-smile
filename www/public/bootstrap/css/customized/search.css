@@ -121,6 +121,7 @@ body {
 #boolean-toggle{
 	border:none;
 }
+
 #adv-search-btn {
 	 background-color:#ea4a36;
 	 border-radius:4px;
@@ -537,4 +538,11 @@ nav-tabs li a:hover{
 .btn.btn-sm.btn-danger>
 .glyphicon{
   margin-right:0px;
+}
+
+#booleanQueryPreview{
+	font-style: italic;
+	font-size: 18px;
+    text-align: center;
+    background: #d4eafd;
 }
