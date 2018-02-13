@@ -4,6 +4,7 @@ function init(){
 	// initialization
 	$("#searchbox").prop('disabled',true);
 	$("#dropdownButton").prop('disabled',true);
+	$("#boolean-toggle").prop('disabled',true);
 	$("#simple-search-btn").prop('disabled',true);
 	
 	queryTerm = '';
@@ -18,6 +19,10 @@ function init(){
 					psComment:{}	
 				};
 	
+	// boolean toggle
+	$("#boolean-toggle").on('click',function(){
+		$("#query-builder-container").toggle();
+	});
 	// save modal popup
 	$("#adv-search-btn").on('click', function(e){
 		modalPopUp('#input');
@@ -160,10 +165,11 @@ function init(){
 		enableCollapsibleOptGroups: true,			
 		});
 	
-	// select box enable search
+	// select box enable search/boolean/advanced
 	$("#social-media").change(function(){
 		$("#searchbox").prop('disabled',false);
 		$("#dropdownButton").prop('disabled',false);
+		$("#boolean-toggle").prop('disabled',false);
 		$("#simple-search-btn").prop('disabled',false);
 		
 		$(".tweet").hide();

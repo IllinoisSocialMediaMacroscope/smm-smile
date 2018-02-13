@@ -1,7 +1,6 @@
-div(id="query-builder-container" class="row")
+div(id="query-builder-container", class="row", style="display:none;")
+		h3 Construct Query
 		<div id="builder"></div>
-		<button id="btn-get" class="btn btn-primary pull-right" data-target="plugins">
-			Get rules
-		</button>
+		button(id="btn-get",class="btn btn-danger btn-block", data-target="plugins") Set Query
 	
 script(src="bootstrap/js/customized/query_boolean.js")
