@@ -53,6 +53,15 @@ div(id="clowder-new-dataset",class="modal fade", role="dialog", data-backdrop="s
 					div(class="control-group")
 						label(class="control-label") Add Tags
 						input(type="text", class="form-control", id="datasetTags", data-role="tagsinput", placeholder="Type, Enter, Backspace, L/R")
+					div(class="control-group")
+						label(class="control-label") Add to a Collection
+						img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
+						select(class="form-control", id="selectCollection")
+					div(class="control-group")
+						label(class="control-label") Share with a Space
+						img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
+						select(class="form-control", id="selectSpace")
+						
 			div(class="modal-footer")
 				img(src="bootstrap/img/gifs/loading2.gif", width="10%", height="10%",style="display:none;")
 				button(class="btn btn-danger",id="clowder-create", onclick="create_clowder_dataset();") Create

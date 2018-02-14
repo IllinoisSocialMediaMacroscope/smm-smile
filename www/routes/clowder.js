@@ -34,7 +34,8 @@ router.post('/list-dataset', function(req, res, next){
 	}else{
 		// invoke CLowder lambda function
 		var args = {'username':req.session.clowder_username, 
-			'password':req.session.clowder_password
+			'password':req.session.clowder_password,
+			'item':'dataset'
 		}	
 		lambda_invoke('lambda_list_clowder', args).then(results =>{
 			if (results['data'].length === 0){
@@ -49,6 +50,54 @@ router.post('/list-dataset', function(req, res, next){
 			res.send({'ERROR':JSON.stringify(error)});
 		});
 	}
+});
+
+router.post('/list-collection',function(req,res,next){
+	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
+		res.send({ERROR:'Your login session has expired. Please login again!'});
+	}else{
+		// invoke CLowder lambda function
+		var args = {'username':req.session.clowder_username, 
+			'password':req.session.clowder_password,
+			'item':'collection'
+		}	
+		lambda_invoke('lambda_list_clowder', args).then(results =>{
+			if (results['data'].length === 0){
+				req.session.destroy();
+				res.send({'ERROR':results['info']});
+			}else{
+				res.send(results['data']);
+			}
+			
+		}).catch( error =>{
+			console.log(error);
+			res.send({'ERROR':JSON.stringify(error)});
+		});
+	}	
+});
+
+router.post('/list-space',function(req,res,next){
+	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
+		res.send({ERROR:'Your login session has expired. Please login again!'});
+	}else{
+		// invoke CLowder lambda function
+		var args = {'username':req.session.clowder_username, 
+			'password':req.session.clowder_password,
+			'item':'space'
+		}	
+		lambda_invoke('lambda_list_clowder', args).then(results =>{
+			if (results['data'].length === 0){
+				req.session.destroy();
+				res.send({'ERROR':results['info']});
+			}else{
+				res.send(results['data']);
+			}
+			
+		}).catch( error =>{
+			console.log(error);
+			res.send({'ERROR':JSON.stringify(error)});
+		});
+	}	
 });
 
 router.post('/clowder-dataset',function(req,res,next){
