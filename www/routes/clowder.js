@@ -124,6 +124,30 @@ router.post('/clowder-dataset',function(req,res,next){
 	}
 });
 
+router.post('/clowder-collection',function(req,res,next){
+	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
+		res.send({ERROR:'Your login session has expired. Please login again!'});
+	}else{
+		var args = {'username':req.session.clowder_username, 
+			'password':req.session.clowder_password,
+			'payload':req.body
+		}	
+		lambda_invoke('clowder_create_collection', args).then(results =>{
+			if (results['id']  === 'null'){
+				res.send({'ERROR':'Creating new dataset failed!'});
+			}else{
+				//console.log(results);
+				res.send(results);
+			}
+			
+		}).catch( error =>{
+			console.log(error);
+			res.send({'ERROR':JSON.stringify(error)});
+		});
+	}
+});
+
+
 router.post('/clowder-files',function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
