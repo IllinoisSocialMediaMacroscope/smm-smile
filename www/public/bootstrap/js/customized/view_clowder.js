@@ -26,6 +26,11 @@ $(document).ready(function(){
 	$('#clowder-modal').on('shown.bs.modal', function (e) {
 		generate_data_list();
 	})
+	
+	$('#clowder-new-dataset').on('shown.bs.modal',function(e){
+		generate_collection_list();
+		generate_space_list();
+	});
 });
 
 function generate_data_list(){
@@ -54,6 +59,76 @@ function generate_data_list(){
 					// hide loading bar show selectDataset
 					$(".clowder-dataset-block").find('img').hide();
 					$("#selectDataset").show();
+				}
+			},
+			error: function(jqXHR, exception){
+				$("#error").val(jqXHR.responseText);
+				$("#warning").modal('show');				
+			} 
+		}); 
+	}
+	
+function generate_collection_list(){
+		// lodading gif
+		$("#selectCollection").prev().show();
+		$("#selectCollection").hide();
+		
+		$.ajax({
+			type:'POST',
+			url:'list-collection', 
+			data: {},			
+			success:function(data){
+				if ('ERROR' in data){
+					$("#clowder-modal").modal('hide');
+					$("#error").val(JSON.stringify(data));
+					$("#warning").modal('show');					
+				}else{
+					// get a list, and add them to the select collection options
+					$("#selectCollection").empty();
+					$("#selectCollection").append(`<option value="Please Select...">Please Select...</option> 
+								<option value="newCollection">Create a new collection</option>`);					
+					$.each(data,function(i,val){
+						$("#selectCollection").append(`<option value="`+ val.id +`">` + val.name + `</option>`);
+					});
+					
+					// hide loading bar show selectCollection
+					$("#selectCollection").prev().hide();
+					$("#selectCollection").show();
+				}
+			},
+			error: function(jqXHR, exception){
+				$("#error").val(jqXHR.responseText);
+				$("#warning").modal('show');				
+			} 
+		}); 
+	}
+	
+function generate_space_list(){
+		// lodading gif
+		$("#selectSpace").prev().show();
+		$("#selectSpace").hide();
+		
+		$.ajax({
+			type:'POST',
+			url:'list-space', 
+			data: {},			
+			success:function(data){
+				if ('ERROR' in data){
+					$("#clowder-modal").modal('hide');
+					$("#error").val(JSON.stringify(data));
+					$("#warning").modal('show');					
+				}else{
+					// get a list, and add them to the select space options
+					$("#selectSpace").empty();
+					$("#selectSpace").append(`<option value="Please Select...">Please Select...</option> 
+								<option value="newSpace">Create a new space</option>`);					
+					$.each(data,function(i,val){
+						$("#selectSpace").append(`<option value="`+ val.id +`">` + val.name + `</option>`);
+					});
+					
+					// hide loading bar show selectSpace
+					$("#selectSpace").prev().hide();
+					$("#selectSpace").show();
 				}
 			},
 			error: function(jqXHR, exception){
@@ -106,19 +181,18 @@ $("#clowderPassword").on('keypress',function(e){
 
 
 /*-------------------------------create new dataset---------------------------------*/
-
-	$("#selectDataset").on('change',function(){
-		if ($("#selectDataset option:selected" ).val() === 'newDataset'){
-			$("#clowder-new-dataset").modal('show');
-			
-			// disable the next button incase people accidently hit it without dataID available
-			$("#clowder-next").prop('disabled',true);
-		}else if ($("#selectDataset option:selected" ).val() === 'Please Select...'){
-			$("#clowder-next").prop('disabled',true);
-		}else{
-			$("#clowder-next").prop('disabled',false);
-		}
-	});
+$("#selectDataset").on('change',function(){
+	if ($("#selectDataset option:selected" ).val() === 'newDataset'){
+		$("#clowder-new-dataset").modal('show');
+		
+		// disable the next button incase people accidently hit it without dataID available
+		$("#clowder-next").prop('disabled',true);
+	}else if ($("#selectDataset option:selected" ).val() === 'Please Select...'){
+		$("#clowder-next").prop('disabled',true);
+	}else{
+		$("#clowder-next").prop('disabled',false);
+	}
+});
 
 //metadata
 $("#datasetMeta select").on('change',function(){
@@ -205,7 +279,16 @@ function create_clowder_dataset(){
 				data['tags'].push($(val).text());
 			});
 		}
-		
+		// collection
+		if ($("#selectCollection option:selected" ).val() !== 'newCollection' 
+			&& $("#selectCollection option:selected" ).val() !== 'Please Select...'){
+				data['collection'] = [$("#selectCollection option:selected" ).val()]				
+		}
+		// space
+		if ($("#selectSpace option:selected" ).val() !== 'newSpace' 
+			&& $("#selectSpace option:selected" ).val() !== 'Please Select...'){
+				data['space'] = [$("#selectSpace option:selected" ).val()]				
+		}
 		// loading gif
 		$("#clowder-new-dataset .modal-dialog .modal-footer img").show();
 		$("#clowder-create").hide();
