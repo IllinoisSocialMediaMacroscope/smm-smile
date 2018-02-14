@@ -60,11 +60,33 @@ div(id="clowder-new-dataset",class="modal fade", role="dialog", data-backdrop="s
 					div(class="control-group")
 						label(class="control-label") Share with a Space
 						img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
-						select(class="form-control", id="selectSpace")
-						
+						select(class="form-control selectSpace")
 			div(class="modal-footer")
 				img(src="bootstrap/img/gifs/loading2.gif", width="10%", height="10%",style="display:none;")
-				button(class="btn btn-danger",id="clowder-create", onclick="create_clowder_dataset();") Create
+				button(class="btn btn-danger",id="clowder-createDataset-btn", onclick="create_clowder_dataset();") Create
+						
+div(id="clowder-new-collection",class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content",style="width:800px;")
+			div(class="modal-header")
+				button(class="close", data-dismiss="modal") &times;
+				img(src="bootstrap/img/logo/clowder-bg-logo.png", width="40%", style="display:block;margin:auto auto;")
+			div(class="modal-body form")
+				div(id="modal-message")
+					div(class="control-group")
+						label(class="control-label") Collection Name (*)
+						input(type="text", class="form-control", id="collectionName", placeholder="A short name")
+					div(class="control-group")
+						label(class="control-label") Descriptions
+						textarea(class="form-control", rows="5", style="resize:none;", id="collectionDesc", placeholder="A longer description")
+					div(class="control-group")
+						label(class="control-label") Share with a Space
+						img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
+						select(class="form-control selectSpace")
+			div(class="modal-footer")
+				img(src="bootstrap/img/gifs/loading2.gif", width="10%", height="10%",style="display:none;")
+				button(class="btn btn-danger",id="clowder-createCollection-btn", onclick="create_clowder_collection();") Create
+				
 								
 div(id="clowder-modal" class="modal fade" role="dialog" data-keyboard="false")
 	div(class="modal-dialog")
