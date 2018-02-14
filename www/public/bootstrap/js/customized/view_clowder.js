@@ -578,7 +578,15 @@ function clowder_form_validation(caseID){
 				return false;
 			}
 			break;
-		
+			
+		case 'space':
+			if($("#spaceName").val() === '' || $("#spaceName").val() ===undefined){
+				$("#modal-message").append(`<h4>You must fill in the name for a new space.</h4>`);
+				$("#alert").modal('show');
+				return false;
+			}
+			break;
+					
 		default:
 			return false
 	}
@@ -589,14 +597,15 @@ function clowder_form_validation(caseID){
 /*----------------------------------------------collection---------------------------------------------------*/
 $("#selectCollection").on('change',function(){
 	if ($("#selectCollection option:selected" ).val() === 'newCollection'){
+		// important: make sure to update space list 
+		// in case user add new space first then collection
+		generate_space_list();
 		$("#clowder-new-collection").modal('show');	
 	}
 });
 
 function create_clowder_collection(){
-	
 	if (clowder_form_validation('collection')){
-		
 		var data = {}
 		// name
 		data['name'] = $("#collectionName").val();
@@ -641,6 +650,58 @@ function create_clowder_collection(){
 			} 
 		}); 
 	}
+}
+
+/*----------------------------------------------collection---------------------------------------------------*/
+$(".selectSpace").on('change',function(){
+	if ($(".selectSpace option:selected" ).val() === 'newSpace'){
+		$("#clowder-new-space").modal('show');	
+	}
+});
+
+function create_clowder_space(){
+	
+	if (clowder_form_validation('space')){
+		
+		var data = {}
+		// name
+		data['name'] = $("#spaceName").val();
+		// descriptions
+		if ($("#spaceDesc").val() !== '' && $("#spaceDesc").val() !== undefined){
+			data['descriptions'] = $("#spaceDesc").val();
+		}		
+		// loading gif
+		$("#clowder-new-space .modal-dialog .modal-footer img").show();
+		$("#clowder-createSpace-btn").hide();
+		
+		$.ajax({
+			type:'POST',
+			url:'clowder-space', 
+			data: JSON.stringify(data),	
+			contentType: "application/json",			
+			success:function(data){
+				if ('ERROR' in data){
+					$("#error").val(JSON.stringify(data));
+					$("#warning").modal('show');
+				}else{
+					//loading gif resume
+					$("#clowder-new-space .modal-dialog .modal-footer img").hide();
+					$("#clowder-createSpace-btn").show();
+					
+					//close this new modal 
+					$("#clowder-new-space").modal('hide')
+					
+					//update the list of space
+					generate_space_list();
+				}
+			},
+			error: function(jqXHR, exception){
+				$("#modal-message").append(`<h4>Please enter a value before you save it.</h4>`);
+				$("#alert").modal('show');					
+			} 
+		}); 
+	}
 	
 	
 }
+
