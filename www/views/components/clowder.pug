@@ -102,6 +102,10 @@ div(id="clowder-new-space",class="modal fade", role="dialog", data-backdrop="sta
 					div(class="control-group")
 						label(class="control-label") Descriptions
 						textarea(class="form-control", rows="5", style="resize:none;", id="spaceDesc", placeholder="A longer description")
+					div(class="control-group")
+						label(class="control-label") Add user as Editors (hold <kbd>ctrl</kbd> to add multiple)
+						img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
+						select(class="form-control", id="selectUser", multiple)
 			div(class="modal-footer")
 				img(src="bootstrap/img/gifs/loading2.gif", width="10%", height="10%",style="display:none;")
 				button(class="btn btn-danger",id="clowder-createSpace-btn", onclick="create_clowder_space();") Create

@@ -137,6 +137,40 @@ function generate_space_list(){
 			} 
 		}); 
 	}
+	
+function generate_user_list(){
+		// lodading gif
+		$("#selectUser").prev().show();
+		$("#selectUser").hide();
+		
+		$.ajax({
+			type:'POST',
+			url:'list-user', 
+			data: {},			
+			success:function(data){
+				if ('ERROR' in data){
+					$("#clowder-modal").modal('hide');
+					$("#error").val(JSON.stringify(data));
+					$("#warning").modal('show');					
+				}else{
+					// get a list, and add them to the add user to space options
+					$("#selectUser").empty();
+					$("#selectUser").append(`<option value="Please Select...">Please Select...</option>`);					
+					$.each(data,function(i,val){
+						$("#selectUser").append(`<option value="`+ val.id +`">` + val.identityProvider + `</option>`);
+					});
+					
+					// hide loading bar show #selectUser
+					$("#selectUser").prev().hide();
+					$("#selectUser").show();
+				}
+			},
+			error: function(jqXHR, exception){
+				$("#error").val(jqXHR.responseText);
+				$("#warning").modal('show');				
+			} 
+		}); 
+	}
 
 /*--------------------------------login---------------------------------------------*/
 function login_request(){
@@ -652,9 +686,10 @@ function create_clowder_collection(){
 	}
 }
 
-/*----------------------------------------------collection---------------------------------------------------*/
+/*----------------------------------------------space---------------------------------------------------*/
 $(".selectSpace").on('change',function(){
 	if ($(".selectSpace option:selected" ).val() === 'newSpace'){
+		generate_user_list();
 		$("#clowder-new-space").modal('show');	
 	}
 });
@@ -670,6 +705,18 @@ function create_clowder_space(){
 		if ($("#spaceDesc").val() !== '' && $("#spaceDesc").val() !== undefined){
 			data['descriptions'] = $("#spaceDesc").val();
 		}		
+		
+		// users
+		var user_ids = '';
+		$("#selectUser option:selected").each(function(){
+			if ($(this).length && $(this).val() !== 'Please Select...'){
+				user_ids += $(this).val() + ',';
+			}
+		});
+		if (user_ids !== ''){
+			data['usr_ids'] = user_ids.slice(0,-1); // trim off last ','
+		}
+		
 		// loading gif
 		$("#clowder-new-space .modal-dialog .modal-footer img").show();
 		$("#clowder-createSpace-btn").hide();

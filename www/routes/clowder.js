@@ -100,6 +100,30 @@ router.post('/list-space',function(req,res,next){
 	}	
 });
 
+router.post('/list-user',function(req,res,next){
+	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
+		res.send({ERROR:'Your login session has expired. Please login again!'});
+	}else{
+		// invoke CLowder lambda function
+		var args = {'username':req.session.clowder_username, 
+			'password':req.session.clowder_password,
+			'item':'user'
+		}	
+		lambda_invoke('lambda_list_clowder', args).then(results =>{
+			if (results['data'].length === 0){
+				req.session.destroy();
+				res.send({'ERROR':results['info']});
+			}else{
+				res.send(results['data']);
+			}
+			
+		}).catch( error =>{
+			console.log(error);
+			res.send({'ERROR':JSON.stringify(error)});
+		});
+	}	
+});
+
 router.post('/clowder-dataset',function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
@@ -164,9 +188,10 @@ router.post('/clowder-space',function(req,res,next){
 			}
 			
 		}).catch( error =>{
-			console.log(error);
+			//console.log(error);
 			res.send({'ERROR':JSON.stringify(error)});
 		});
+		console.log(req.body);
 	}
 });
 
@@ -175,7 +200,7 @@ router.post('/clowder-files',function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{
-		// invoke CLowder lambda function
+		// invoke Clowder lambda function
 		var args = {'username':req.session.clowder_username,
 			'password':req.session.clowder_password,
 			'payload':req.body
