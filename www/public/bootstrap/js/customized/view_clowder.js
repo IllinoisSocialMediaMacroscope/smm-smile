@@ -69,74 +69,77 @@ function generate_data_list(){
 	}
 	
 function generate_collection_list(){
-		// lodading gif
-		$("#selectCollection").prev().show();
-		$("#selectCollection").hide();
-		
-		$.ajax({
-			type:'POST',
-			url:'list-collection', 
-			data: {},			
-			success:function(data){
-				if ('ERROR' in data){
-					$("#clowder-modal").modal('hide');
-					$("#error").val(JSON.stringify(data));
-					$("#warning").modal('show');					
-				}else{
-					// get a list, and add them to the select collection options
-					$("#selectCollection").empty();
-					$("#selectCollection").append(`<option value="Please Select...">Please Select...</option> 
-								<option value="newCollection">Create a new collection</option>`);					
-					$.each(data,function(i,val){
-						$("#selectCollection").append(`<option value="`+ val.id +`">` + val.name + `</option>`);
-					});
-					
-					// hide loading bar show selectCollection
-					$("#selectCollection").prev().hide();
-					$("#selectCollection").show();
-				}
-			},
-			error: function(jqXHR, exception){
-				$("#error").val(jqXHR.responseText);
-				$("#warning").modal('show');				
-			} 
-		}); 
-	}
+	// show loading bar show selectCollection
+	$("#selectCollection").prev().show();
+	$("#selectCollection").hide();
+	
+	$.ajax({
+		type:'POST',
+		url:'list-collection', 
+		data: {},			
+		success:function(data){
+			// hide loading bar show selectCollection
+			$("#selectCollection").prev().hide();
+			$("#selectCollection").show();
+			
+			if ('ERROR' in data){
+				$("#clowder-modal").modal('hide');
+				$("#error").val(JSON.stringify(data));
+				$("#warning").modal('show');					
+			}else{
+				// get a list, and add them to the select collection options
+				$("#selectCollection").empty();
+				$("#selectCollection").append(`<option value="Please Select...">Please Select...</option> 
+							<option value="newCollection">Create a new collection</option>`);					
+				$.each(data,function(i,val){
+					$("#selectCollection").append(`<option value="`+ val.id +`">` + val.name + `</option>`);
+				});
+			}
+		},
+		error: function(jqXHR, exception){
+			$("#error").val(jqXHR.responseText);
+			$("#warning").modal('show');				
+		} 
+	}); 
+}
 	
 function generate_space_list(){
-		// lodading gif
-		$(".selectSpace").prev().show();
-		$(".selectSpace").hide();
-		
-		$.ajax({
-			type:'POST',
-			url:'list-space', 
-			data: {},			
-			success:function(data){
-				if ('ERROR' in data){
-					$("#clowder-modal").modal('hide');
-					$("#error").val(JSON.stringify(data));
-					$("#warning").modal('show');					
-				}else{
-					// get a list, and add them to the select space options
-					$(".selectSpace").empty();
-					$(".selectSpace").append(`<option value="Please Select...">Please Select...</option> 
-								<option value="newSpace">Create a new space</option>`);					
-					$.each(data,function(i,val){
-						$(".selectSpace").append(`<option value="`+ val.id +`">` + val.name + `</option>`);
-					});
-					
-					// hide loading bar show selectSpace
-					$(".selectSpace").prev().hide();
-					$(".selectSpace").show();
-				}
-			},
-			error: function(jqXHR, exception){
-				$("#error").val(jqXHR.responseText);
-				$("#warning").modal('show');				
-			} 
-		}); 
-	}
+	// lodading gif
+	$(".selectSpace").prev().show();
+	$(".selectSpace").hide();
+	
+	$.ajax({
+		type:'POST',
+		url:'list-space', 
+		data: {},			
+		success:function(data){
+			// hide loading bar show selectSpace
+			$(".selectSpace").prev().hide();
+			$(".selectSpace").show();
+			
+			if ('ERROR' in data){
+				$("#clowder-modal").modal('hide');
+				$("#error").val(JSON.stringify(data));
+				$("#warning").modal('show');					
+			}else{
+				// get a list, and add them to the select space options
+				$(".selectSpace").empty();
+				$(".selectSpace").append(`<option value="Please Select...">Please Select...</option> 
+							<option value="newSpace">Create a new space</option>`);					
+				$.each(data,function(i,val){
+					$(".selectSpace").append(`<option value="`+ val.id +`">` + val.name + `</option>`);
+				});	
+
+				
+						
+			}
+		},
+		error: function(jqXHR, exception){
+			$("#error").val(jqXHR.responseText);
+			$("#warning").modal('show');				
+		} 
+	}); 
+}
 	
 function generate_user_list(){
 		// lodading gif
@@ -148,6 +151,10 @@ function generate_user_list(){
 			url:'list-user', 
 			data: {},			
 			success:function(data){
+				// hide loading bar show #selectUser
+				$("#selectUser").prev().hide();
+				$("#selectUser").show();
+				
 				if ('ERROR' in data){
 					$("#clowder-modal").modal('hide');
 					$("#error").val(JSON.stringify(data));
@@ -159,10 +166,6 @@ function generate_user_list(){
 					$.each(data,function(i,val){
 						$("#selectUser").append(`<option value="`+ val.id +`">` + val.identityProvider + `</option>`);
 					});
-					
-					// hide loading bar show #selectUser
-					$("#selectUser").prev().hide();
-					$("#selectUser").show();
 				}
 			},
 			error: function(jqXHR, exception){
@@ -334,13 +337,14 @@ function create_clowder_dataset(){
 			data: JSON.stringify(data),	
 			contentType: "application/json",			
 			success:function(data){
+				//loading gif resume
+				$("#clowder-new-dataset .modal-dialog .modal-footer img").hide();
+				$("#clowder-createDataset-btn").show();
+					
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
-					//loading gif resume
-					$("#clowder-new-dataset .modal-dialog .modal-footer img").hide();
-					$("#clowder-createDataset-btn").show();
 					
 					//close this new modal 
 					$("#clowder-new-dataset").modal('hide')
@@ -529,15 +533,15 @@ function submit_clowder_files(){
 			data: JSON.stringify(data),	
 			contentType: "application/json",			
 			success:function(data){
+				//loading gif resume
+				$("#clowder-modal .modal-dialog .modal-footer img").hide();
+				$("#clowder-upload").show();
+				$("#clowder-prev").show();
+				
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
-					//loading gif resume
-					$("#clowder-modal .modal-dialog .modal-footer img").hide();
-					$("#clowder-upload").show();
-					$("#clowder-prev").show();
-					
 					$("#clowder-message").text(data.info);
 					$("#file-links").empty();
 					$.each(data.ids, function(i,id){
@@ -545,9 +549,8 @@ function submit_clowder_files(){
 						+ id +`">https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/` + id + `</a>`);
 					});
 					// hide upoad modal, show confirmation modal
-					$("#clowder-modal").modal('hide').on('hidden.bs.modal',function(){
-						$("#clowder-confirmation").modal('show');
-					});
+					$("#clowder-modal").modal('hide');
+					$("#clowder-confirmation").modal('show');
 				}
 			},
 			error: function(jqXHR, exception){
@@ -663,14 +666,14 @@ function create_clowder_collection(){
 			data: JSON.stringify(data),	
 			contentType: "application/json",			
 			success:function(data){
+				//loading gif resume
+				$("#clowder-new-collection .modal-dialog .modal-footer img").hide();
+				$("#clowder-createCollection-btn").show();
+				
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
-					//loading gif resume
-					$("#clowder-new-collection .modal-dialog .modal-footer img").hide();
-					$("#clowder-createCollection-btn").show();
-					
 					//close this new modal 
 					$("#clowder-new-collection").modal('hide')
 					
@@ -729,14 +732,14 @@ function create_clowder_space(){
 			data: JSON.stringify(data),	
 			contentType: "application/json",			
 			success:function(data){
+				//loading gif resume
+				$("#clowder-new-collection .modal-dialog .modal-footer img").hide();
+				$("#clowder-createCollection-btn").show();
+				
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
-					$("#warning").modal('show');
+					$("#warning").modal('show');					
 				}else{
-					//loading gif resume
-					$("#clowder-new-space .modal-dialog .modal-footer img").hide();
-					$("#clowder-createSpace-btn").show();
-					
 					//close this new modal 
 					$("#clowder-new-space").modal('hide')
 					
