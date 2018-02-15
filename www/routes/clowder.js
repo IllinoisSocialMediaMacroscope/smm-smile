@@ -38,7 +38,7 @@ router.post('/list-dataset', function(req, res, next){
 			'item':'dataset'
 		}	
 		lambda_invoke('lambda_list_clowder', args).then(results =>{
-			if (results['data'].length === 0){
+			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
 			}else{
@@ -62,7 +62,7 @@ router.post('/list-collection',function(req,res,next){
 			'item':'collection'
 		}	
 		lambda_invoke('lambda_list_clowder', args).then(results =>{
-			if (results['data'].length === 0){
+			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
 			}else{
@@ -86,7 +86,7 @@ router.post('/list-space',function(req,res,next){
 			'item':'space'
 		}	
 		lambda_invoke('lambda_list_clowder', args).then(results =>{
-			if (results['data'].length === 0){
+			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
 			}else{
@@ -110,7 +110,7 @@ router.post('/list-user',function(req,res,next){
 			'item':'user'
 		}	
 		lambda_invoke('lambda_list_clowder', args).then(results =>{
-			if (results['data'].length === 0){
+			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
 			}else{

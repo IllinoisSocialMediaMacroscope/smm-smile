@@ -688,10 +688,12 @@ function create_clowder_collection(){
 
 /*----------------------------------------------space---------------------------------------------------*/
 $(".selectSpace").on('change',function(){
-	if ($(".selectSpace option:selected" ).val() === 'newSpace'){
-		generate_user_list();
-		$("#clowder-new-space").modal('show');	
-	}
+	$(".selectSpace").each(function(){
+		if ($(this).val() === 'newSpace'){
+			generate_user_list();
+			$("#clowder-new-space").modal('show');	
+		}
+	});
 });
 
 function create_clowder_space(){
