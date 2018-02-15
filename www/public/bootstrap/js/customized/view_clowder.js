@@ -733,8 +733,8 @@ function create_clowder_space(){
 			contentType: "application/json",			
 			success:function(data){
 				//loading gif resume
-				$("#clowder-new-collection .modal-dialog .modal-footer img").hide();
-				$("#clowder-createCollection-btn").show();
+				$("#clowder-new-space .modal-dialog .modal-footer img").hide();
+				$("#clowder-createSpace-btn").show();
 				
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));

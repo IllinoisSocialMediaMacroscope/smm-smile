@@ -158,7 +158,7 @@ router.post('/clowder-collection',function(req,res,next){
 		}	
 		lambda_invoke('clowder_create_collection', args).then(results =>{
 			if (results['id']  === 'null'){
-				res.send({'ERROR':'Creating new dataset failed!'});
+				res.send({'ERROR':'Creating new collection failed!'});
 			}else{
 				//console.log(results);
 				res.send(results);
@@ -181,7 +181,7 @@ router.post('/clowder-space',function(req,res,next){
 		}	
 		lambda_invoke('clowder_create_space', args).then(results =>{
 			if (results['id']  === 'null'){
-				res.send({'ERROR':'Creating new dataset failed!'});
+				res.send({'ERROR':'Creating new space failed!'});
 			}else{
 				//console.log(results);
 				res.send(results);
@@ -191,7 +191,6 @@ router.post('/clowder-space',function(req,res,next){
 			//console.log(error);
 			res.send({'ERROR':JSON.stringify(error)});
 		});
-		console.log(req.body);
 	}
 });
 
