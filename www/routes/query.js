@@ -9,6 +9,7 @@ var appPath = path.dirname(__dirname);
 var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
+var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
 
 router.get('/query',function(req,res,next){
 
@@ -137,21 +138,34 @@ router.post('/query',function(req,res,next){
 								promise_arr.push(uploadToS3(directory+processed, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+processed));
 								promise_arr.push(uploadToS3(directory+config, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+config));
 								Promise.all(promise_arr).then((URLs) => {
-									// success!!
-									var rendering = responseObj[key1][key2][key3].slice(0,99);
-									deleteLocalFolders(directory.slice(0,-1)).then(() =>{
-										res.send({fname:processed,URL: URLs[0] ,rendering:rendering});
-									}).catch(err =>{
-										console.log(err);
-										res.send({ERROR:err});
+									
+									var args = {'s3FolderName':req.body.s3FolderName, 
+										'filename':processed,
+										'remoteReadPath':req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'
+									}
+									lambda_invoke('histogram', args).then(results =>{
+										console.log(results);
+										
+										// rendering
+										var rendering = responseObj[key1][key2][key3].slice(0,99);
+										deleteLocalFolders(directory.slice(0,-1)).then(() =>{
+											res.send({fname:processed,URL: URLs[0] ,rendering:rendering});
+										}).catch(err =>{ // deleteFolderERROR
+											console.log(err);
+											res.send({ERROR:err});
+										});
+										
+									}).catch( error =>{ // lambda histogram error
+										console.log(error);
+										res.send({'ERROR':JSON.stringify(error)});
 									});
-								
-								}).catch(err =>{ 
+			
+								}).catch(err =>{ // upload s3 ERROR
 									console.log(err);
 									res.send({ERROR:JSON.stringify(err)});
 								});
 								
-							}).catch(err =>{
+							}).catch(err =>{ // save to CSV error
 								console.log(err);
 								res.send({ERROR:JSON.stringify(err)});
 							});
