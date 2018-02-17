@@ -62,6 +62,7 @@ function submitQuery(textareaID,filenameID){
 					$(".loading").hide();
 			}else{
 				renderPreview(data, prefix);
+				renderHistogram(data);
 			}
 		},
 		error: function(jqXHR, exception){
@@ -470,7 +471,8 @@ function submitSearchbox(searchboxID, filenameID){
 					$("#warning").modal('show');
 					$(".loading").hide();
 			}else{
-				renderPreview(data, prefix);			
+				renderPreview(data, prefix);
+				renderHistogram(data);
 			}
 		},
 		error: function(jqXHR, exception){
@@ -496,6 +498,10 @@ function submitSearchbox(searchboxID, filenameID){
 				
 			} 
 	});
+}
+
+function renderHistogram(data){
+	$("#img-container").append(data.div);
 }
 
 function renderPreview(data,prefix){

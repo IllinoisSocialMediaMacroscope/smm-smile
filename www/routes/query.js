@@ -10,6 +10,7 @@ var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','dele
 var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
+var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 
 router.get('/query',function(req,res,next){
 
@@ -144,16 +145,26 @@ router.post('/query',function(req,res,next){
 										'remoteReadPath':req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'
 									}
 									lambda_invoke('histogram', args).then(results =>{
-										console.log(results);
 										
-										// rendering
-										var rendering = responseObj[key1][key2][key3].slice(0,99);
-										deleteLocalFolders(directory.slice(0,-1)).then(() =>{
-											res.send({fname:processed,URL: URLs[0] ,rendering:rendering});
-										}).catch(err =>{ // deleteFolderERROR
+										// download div file
+										getMultiRemote(results).then(function(data){
+											
+											var histogram = data;
+											// rendering
+											var rendering = responseObj[key1][key2][key3].slice(0,99);
+											deleteLocalFolders(directory.slice(0,-1)).then(() =>{
+												res.send({fname:processed, URL: URLs[0] ,rendering:rendering,
+															histogram:histogram});
+											}).catch(err =>{ // deleteFolderERROR
+												console.log(err);
+												res.send({ERROR:err});
+											});
+										}).catch(err =>{ // download div error
 											console.log(err);
 											res.send({ERROR:err});
 										});
+										
+										
 										
 									}).catch( error =>{ // lambda histogram error
 										console.log(error);
