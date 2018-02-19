@@ -96,8 +96,18 @@ html
 					include searchbox.pug
 						
 			<!-- rendering -->
+			div(id="img-container", style="padding:50px 100px;")
+				select(class="form-control" id="histogram-interval" title="Choose a Data Source...")
+					option(value="Please Select..." disabled) Please Select...
+					option(value="1H") 1 hour
+					option(value="6H") 6 hours
+					option(value="1D") 1 day
+					option(value="1W") 1 week
+					option(value="1M") 1 month
+					option(value="6M") 6 months
+					option(value="1Y") 1 year					 
 			div(id="grid")
-			div(id="img-container")
+			
 								
 		<!-- popup modal save -->
 		div(id="save" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")

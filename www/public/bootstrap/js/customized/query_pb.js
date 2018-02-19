@@ -793,6 +793,24 @@ function init(){
 
 	});
 	
+	/*----------------------set intervals--------------------------------------------*/
+	$("#histogram-interval").change(function(){
+		if ($("#histogram-interval option:selected" ).val() === '1H'){
+			setHitogramInterval('1H');
+		}else if ($("#histogram-interval option:selected" ).val() === '6H'){
+			setHitogramInterval('6H');
+		}else if ($("#histogram-interval option:selected" ).val() === '1D'){
+			setHitogramInterval('1D');
+		}else if ($("#histogram-interval option:selected" ).val() === '1W'){
+			setHitogramInterval('1W');
+		}else if ($("#histogram-interval option:selected" ).val() === '1M'){
+			setHitogramInterval('1M');
+		}else if ($("#histogram-interval option:selected" ).val() === '6M'){
+			setHitogramInterval('6M');
+		}else if ($("#histogram-interval option:selected" ).val() === '1Y'){
+			setHitogramInterval('1Y');
+		}
+	});
 }
 
 function epochTime(datestring){
@@ -891,4 +909,23 @@ function setDate(){
 	
 	$("#until").attr('min', min);
 	$("#until").attr('max', max);
+}
+
+function setHitogramInterval(freq){
+	$.ajax({
+		type:'POST',
+		url:'histogram', 
+		data: {'s3FolderName':,
+				'filename':,
+				'remoteReadPath':,
+				'interval': freq},	
+		contentType: "application/json",			
+		success:function(data){
+			console.log(data)
+		},
+		error: function(jqXHR, exception){
+			$("#modal-message").append(`<h4>Please enter a value before you save it.</h4>`);
+			$("#alert").modal('show');					
+		} 
+	}); 
 }

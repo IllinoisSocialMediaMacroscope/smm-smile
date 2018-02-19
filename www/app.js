@@ -43,6 +43,7 @@ app.use('/',require('./routes/auth/reddit_auth'));
 app.use('/', require('./routes/sitemap'));
 app.use('/',require('./routes/RedditExpand'));
 app.use('/',require('./routes/clowder.js'));
+app.use('/',require('./routes/histogram.js'));
 
 /*app.use(function(err, req, res, next) {
   // set locals, only providing error in development
