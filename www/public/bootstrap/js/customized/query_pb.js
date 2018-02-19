@@ -912,12 +912,33 @@ function setDate(){
 }
 
 function setHitogramInterval(freq){
+	var filename = $("#sn-filename").val();
+	
+	var queryTerm = $("#social-media").find(':selected').val();
+	if (queryTerm === 'queryTweet'){
+		var prefix = 'twitter-Tweet';
+	}else if (queryTerm === 'queryUser'){
+		var prefix = 'twitter-User';
+	}else if (queryTerm === 'streamTweet'){
+		var prefix = 'twitter-Stream';
+	}else if (queryTerm === 'queryReddit'){
+		var prefix = 'reddit-Search';
+	}else if (queryTerm === 'redditPost'){
+		var prefix = 'reddit-Post';
+	}else if (queryTerm === 'redditComment'){
+		var prefix = 'reddit-Historical-Post';
+	}else if (queryTerm === 'pushshiftPost'){
+		var prefix = 'reddit-Historical-Comment';
+	}else if (queryTerm === 'pushshiftComment'){
+		var prefix = 'reddit-Historical-Post';
+	}
+
 	$.ajax({
 		type:'POST',
 		url:'histogram', 
-		data: {'s3FolderName':,
-				'filename':,
-				'remoteReadPath':,
+		data: {'s3FolderName': s3FolderName,
+				'filename':filename,
+				'remoteReadPath': s3FolderName + '/GraphQL/' + prefix + '/' + filename + '/',
 				'interval': freq},	
 		contentType: "application/json",			
 		success:function(data){

@@ -501,7 +501,7 @@ function submitSearchbox(searchboxID, filenameID){
 }
 
 function renderHistogram(data){
-	$("#img-container").append(data.div);
+	$("#img-container").append(data.url);
 }
 
 function renderPreview(data,prefix){
