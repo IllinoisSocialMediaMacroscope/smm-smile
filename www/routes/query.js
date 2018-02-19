@@ -1,4 +1,3 @@
-require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
@@ -147,7 +146,7 @@ router.post('/query',function(req,res,next){
 									lambda_invoke('histogram', args).then(results =>{
 										
 										// download div file
-										getMultiRemote(results).then(function(data){
+										getMultiRemote(results['url']).then(function(data){
 											
 											var histogram = data;
 											// rendering
