@@ -939,7 +939,7 @@ function setHitogramInterval(freq){
 		data: {'s3FolderName': s3FolderName,
 				'filename':filename,
 				'remoteReadPath': s3FolderName + '/GraphQL/' + prefix + '/' + filename + '/',
-				'interval': freq},	
+				'interval': freq },	
 		contentType: "application/json",			
 		success:function(data){
 			console.log(data)
