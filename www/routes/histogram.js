@@ -6,7 +6,7 @@ var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHel
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 
 router.post('/histogram',function(req,res,next){
-	
+	console.log(req.body);
 	var args = {'s3FolderName':req.body.s3FolderName, 
 				'filename':req.body.filename,
 				'remoteReadPath':req.body.remoteReadPath,
