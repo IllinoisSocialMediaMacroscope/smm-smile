@@ -143,31 +143,43 @@ router.post('/query',function(req,res,next){
 										'filename':processed,
 										'remoteReadPath':req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'
 									}
+									
 									lambda_invoke('histogram', args).then(results =>{
 										
-										// download div file
-										getMultiRemote(results['url']).then(function(data){
-											
-											var histogram = data;
+										if (results['url'] == 'null'){
 											// rendering
 											var rendering = responseObj[key1][key2][key3].slice(0,99);
 											deleteLocalFolders(directory.slice(0,-1)).then(() =>{
-												res.send({fname:processed, URL: URLs[0] ,rendering:rendering,
-															histogram:histogram});
+												res.send({fname:processed, URL: URLs[0] ,rendering:rendering});
 											}).catch(err =>{ // deleteFolderERROR
 												console.log(err);
 												res.send({ERROR:err});
 											});
-										}).catch(err =>{ // download div error
-											console.log(err);
-											res.send({ERROR:err});
-										});
+										}
 										
-										
+										else{
+											// download div file
+											getMultiRemote(results['url']).then(function(data){
+												
+												var histogram = data;
+												// rendering
+												var rendering = responseObj[key1][key2][key3].slice(0,99);
+												deleteLocalFolders(directory.slice(0,-1)).then(() =>{
+													res.send({fname:processed, URL: URLs[0] ,rendering:rendering,
+																histogram:histogram});
+												}).catch(err =>{ // deleteFolderERROR
+													console.log(err);
+													res.send({ERROR:err});
+												});
+											}).catch(err =>{ // download div error
+												console.log(err);
+												res.send({ERROR:err});
+											});
+										}										
 										
 									}).catch( error =>{ // lambda histogram error
 										console.log(error);
-										res.send({'ERROR':JSON.stringify(error)});
+										res.send({'ERROR':error});
 									});
 			
 								}).catch(err =>{ // upload s3 ERROR

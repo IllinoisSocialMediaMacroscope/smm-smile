@@ -96,17 +96,41 @@ html
 					include searchbox.pug
 						
 			<!-- rendering -->
-			div(id="img-container", style="padding:50px 100px;")
-				select(class="form-control" id="histogram-interval" title="Choose a Data Source...")
-					option(value="Please Select..." disabled) Please Select...
-					option(value="1H") 1 hour
-					option(value="6H") 6 hours
-					option(value="1D") 1 day
-					option(value="1W") 1 week
-					option(value="1M") 1 month
-					option(value="6M") 6 months
-					option(value="1Y") 1 year					 
-			div(id="grid")
+			div(id="histogram-panel")
+				h2 Recap
+				label(class="radio-inline") 
+					input(name="histogram-interval", type="radio", class="histogram-interval", value="1T")
+					| per minute
+				label(class="radio-inline") 
+					input(name="histogram-interval", type="radio", class="histogram-interval", value="1H")
+					| per hour
+				label(class="radio-inline") 
+					input(name="histogram-interval", type="radio", class="histogram-interval", value="6H")
+					| per 6 hours
+				label(class="radio-inline")
+					input(name="histogram-interval", type="radio", class="histogram-interval", value="1D")
+					| per day
+				label(class="radio-inline")
+					input(name="histogram-interval", type="radio", class="histogram-interval", value="1W")
+					| per week
+				label(class="radio-inline")
+					input(name="histogram-interval", type="radio", class="histogram-interval", value="1M")
+					| per month
+				label(class="radio-inline")
+					input(name="histogram-interval", type="radio", class="histogram-interval", value="1Q")
+					| per quarter
+				label(class="radio-inline")
+					input(name="histogram-interval", type="radio", class="histogram-interval", value="6M")
+					| per 6 months
+				label(class="radio-inline")
+					input(name="histogram-interval", type="radio", class="histogram-interval", value="1A")
+					| per year
+				div(class="loading", style="display:none;")
+					img(src="bootstrap/img/gifs/loading3.gif", width="400px", style="display:block;margin:auto auto;")
+				div(id="img-container", style="padding:50px 100px;")
+			div(id="rendering")
+				h2 Review
+				div(id="grid")
 			
 								
 		<!-- popup modal save -->

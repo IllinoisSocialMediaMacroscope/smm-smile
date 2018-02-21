@@ -471,18 +471,21 @@ nav-tabs li a:hover{
   100% { background-color: #6ba1d0; -webkit-box-shadow: 0 0 3px #6ba1d0;}
 }
 
-#grid{
-	margin-top:40px;
-	width: 1100px;
+#rendering,#histogram-panel{
 	overflow:auto;
-	margin:auto auto;
+	margin:20px 100px;
+	margin-top:40px;
+	background:white;
+	padding:50px 50px;
 	display:none;
 }
+
+.radio-inline{
+	margin-right: 20px;
+}
+
 .grid-element{
-	width:350px;
-	height:350px;
-	float:left;
-	margin:8px 8px;
+	margin:20px 20px;
 	background-color:#f5f5f5;
 	border-radius:4px;
 	padding:30px 30px;

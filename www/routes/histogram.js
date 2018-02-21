@@ -6,28 +6,32 @@ var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHel
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 
 router.post('/histogram',function(req,res,next){
-	console.log(req.body);
+	
 	var args = {'s3FolderName':req.body.s3FolderName, 
 				'filename':req.body.filename,
 				'remoteReadPath':req.body.remoteReadPath,
 				'interval': req.body.interval
 			}
 			
+	console.log(args);
+	
 	lambda_invoke('histogram', args).then(results =>{
 		// download div file
-		getMultiRemote(results['url'])
-		.then(function(data){
-			var histogram = data;
-			// rendering
-			res.send({histogram:histogram});
-		}).catch(err =>{ // download div error
-			console.log(err);
-			res.send({ERROR:err});
-		});
-				
+		if (results['url'] == 'null'){
+			res.send({'ERROR': 'this dataset does not contain timestamps! Hence, we cannot rendering a recap for you.'});
+		}else{
+			getMultiRemote(results['url'])
+			.then(function(data){
+				var histogram = data;
+				res.send({histogram:histogram});
+			}).catch(err =>{ // download div error
+				console.log(err);
+				res.send({ERROR:err});
+			});
+		}		
 	}).catch( error =>{ // lambda histogram error
 		console.log(error);
-		res.send({'ERROR':JSON.stringify(error)});
+		res.send({'ERROR':error});
 	});
 });
 

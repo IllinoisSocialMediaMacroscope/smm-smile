@@ -1,6 +1,10 @@
 function submitQuery(textareaID,filenameID){
 	// once the button is hit, disable the submit button until data comes back later!!
 	
+	// clear out preview and histogram here
+	$("#img-container").empty();
+	$("#grid").empty();
+	
 	$(".loading").show();
 	
 	var queryString = $(textareaID).val();
@@ -62,35 +66,20 @@ function submitQuery(textareaID,filenameID){
 					$(".loading").hide();
 			}else{
 				renderPreview(data, prefix);
-				renderHistogram(data);
+				if ('histogram' in data) renderHistogram(data);
 			}
 		},
 		error: function(jqXHR, exception){
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
-				
-				$("#error").val(msg);
+				$("#error").val(jqXHR.responseText);
 				$("#warning").modal('show');
-				
 			}  
 	});	
 } 
 
 function submitSearchbox(searchboxID, filenameID){
+	// clear out preview and histogram here
+	$("#img-container").empty();
+	$("#grid").empty();
 	$(".loading").show();
 	
 	// escape doule quotation mark
@@ -472,36 +461,19 @@ function submitSearchbox(searchboxID, filenameID){
 					$(".loading").hide();
 			}else{
 				renderPreview(data, prefix);
-				renderHistogram(data);
+				if ('histogram' in data) renderHistogram(data);
 			}
 		},
-		error: function(jqXHR, exception){
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
-			
-				$("#error").val(msg);
+		error: function(jqXHR, exception){	
+				$("#error").val(jqXHR.responseText);
 				$("#warning").modal('show');
-				
 			} 
 	});
 }
 
 function renderHistogram(data){
-	$("#img-container").append(data.url);
+	$("#img-container").append(data.histogram);
+	$("#histogram-panel").show();
 }
 
 function renderPreview(data,prefix){
@@ -518,7 +490,6 @@ function renderPreview(data,prefix){
 	$("#success").modal('show');
 	
 	// construct previews
-	$("#grid").empty();
 	if (prefix === 'twitter-Tweet' || prefix === 'twitter-Stream'){
 		$.each(data.rendering, function(i,val){
 			
@@ -698,7 +669,7 @@ function renderPreview(data,prefix){
 	}
 		
 	
-	$("#grid").show();
+	$("#rendering").show();
 
 }
 

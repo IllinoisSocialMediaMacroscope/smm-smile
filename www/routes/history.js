@@ -330,7 +330,7 @@ router.post('/history',function(req,res,next){
 			var promise_array = [];	
 			var fileList = Object.keys(folderObj);
 			
-			if(fileList.length === 2){
+			if(fileList.length >= 2){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
 					if (filename.slice(-4) === '.dat'){

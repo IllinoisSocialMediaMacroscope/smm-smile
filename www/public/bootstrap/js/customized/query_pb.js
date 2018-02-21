@@ -794,22 +794,8 @@ function init(){
 	});
 	
 	/*----------------------set intervals--------------------------------------------*/
-	$("#histogram-interval").change(function(){
-		if ($("#histogram-interval option:selected" ).val() === '1H'){
-			setHitogramInterval('1H');
-		}else if ($("#histogram-interval option:selected" ).val() === '6H'){
-			setHitogramInterval('6H');
-		}else if ($("#histogram-interval option:selected" ).val() === '1D'){
-			setHitogramInterval('1D');
-		}else if ($("#histogram-interval option:selected" ).val() === '1W'){
-			setHitogramInterval('1W');
-		}else if ($("#histogram-interval option:selected" ).val() === '1M'){
-			setHitogramInterval('1M');
-		}else if ($("#histogram-interval option:selected" ).val() === '6M'){
-			setHitogramInterval('6M');
-		}else if ($("#histogram-interval option:selected" ).val() === '1Y'){
-			setHitogramInterval('1Y');
-		}
+	$('input[name=histogram-interval]').change(function(){
+		setHitogramInterval($("input[name=histogram-interval]:checked").val());
 	});
 }
 
@@ -914,6 +900,8 @@ function setDate(){
 function setHitogramInterval(freq){
 	var filename = $("#sn-filename").val();
 	
+	if (s3FolderName == undefined) s3FolderName = 'local';
+	
 	var queryTerm = $("#social-media").find(':selected').val();
 	if (queryTerm === 'queryTweet'){
 		var prefix = 'twitter-Tweet';
@@ -926,27 +914,42 @@ function setHitogramInterval(freq){
 	}else if (queryTerm === 'redditPost'){
 		var prefix = 'reddit-Post';
 	}else if (queryTerm === 'redditComment'){
-		var prefix = 'reddit-Historical-Post';
+		var prefix = 'reddit-Comment';
 	}else if (queryTerm === 'pushshiftPost'){
-		var prefix = 'reddit-Historical-Comment';
-	}else if (queryTerm === 'pushshiftComment'){
 		var prefix = 'reddit-Historical-Post';
+	}else if (queryTerm === 'pushshiftComment'){
+		var prefix = 'reddit-Historical-Comment';
 	}
-
-	$.ajax({
-		type:'POST',
-		url:'histogram', 
-		data: {'s3FolderName': s3FolderName,
-				'filename':filename,
-				'remoteReadPath': s3FolderName + '/GraphQL/' + prefix + '/' + filename + '/',
-				'interval': freq },	
-		contentType: "application/json",			
-		success:function(data){
-			console.log(data)
-		},
-		error: function(jqXHR, exception){
-			$("#modal-message").append(`<h4>Please enter a value before you save it.</h4>`);
-			$("#alert").modal('show');					
-		} 
-	}); 
+	
+	if (prefix === undefined || filename === '' || filename === undefined){
+		$("#modal-message").append(`<h4>Incomplete information for histogram. Please make sure you have specified a data source, as well as retrieved data first.</h4>`);
+		$("#alert").modal('show');
+	}else{
+		
+		$("#img-container").empty();
+		$("#histogram-panel .loading").show();
+		
+		$.ajax({
+			type:'POST',
+			url:'histogram', 
+			data: JSON.stringify({'s3FolderName': s3FolderName,
+					'filename':filename + '.csv',
+					'remoteReadPath': s3FolderName + '/GraphQL/' + prefix + '/' + filename,
+					'interval': freq }),	
+			contentType: "application/json",			
+			success:function(data){
+				$("#histogram-panel .loading").hide();
+				if ('ERROR' in data){
+					$("#error").val(JSON.stringify(data));
+					$("#warning").modal('show');
+				}else{
+					$("#img-container").append(data.histogram);
+				}
+			},
+			error: function(jqXHR, exception){
+				$("#error").val(jqXHR.responseText);
+				$("#warning").modal('show');				
+			} 
+		}); 
+	}
 }
