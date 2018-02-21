@@ -1091,3 +1091,4 @@ function pushDropdown(state){
 		$(".input-group-addon-btn").css('margin-bottom','0px');
 	}
 }
+
