@@ -13,8 +13,6 @@ router.post('/histogram',function(req,res,next){
 				'interval': req.body.interval
 			}
 			
-	console.log(args);
-	
 	lambda_invoke('histogram', args).then(results =>{
 		// download div file
 		if (results['url'] == 'null'){

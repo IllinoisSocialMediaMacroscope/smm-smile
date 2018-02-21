@@ -454,14 +454,17 @@ function submitSearchbox(searchboxID, filenameID){
 				"s3FolderName":s3FolderName
 			},
 		success:function(data){
-			//console.log(data);
 			if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 					$(".loading").hide();
 			}else{
 				renderPreview(data, prefix);
-				if ('histogram' in data) renderHistogram(data);
+				if ('histogram' in data){
+					$("#histogram-panel").show();
+					renderHistogram(data);
+					$(".loading").hide();
+				}
 			}
 		},
 		error: function(jqXHR, exception){	
@@ -472,16 +475,27 @@ function submitSearchbox(searchboxID, filenameID){
 }
 
 function renderHistogram(data){
-	$("#img-container").append(data.histogram);
-	$("#histogram-panel").show();
+	$("#img-container").append(`<div class="x_content">
+									<div class="note">
+										<li><b>click, drag, and mouseover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the graph will give you more information</li>
+										<li><b>hover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over top-right corner of the chart will present various operations
+											<br><img src="bootstrap/img/gifs/plotlyDemo.gif"/>
+										</li>
+										<li>details please consult 
+											<a href="https://plot.ly/" target="_blank">
+												<img src="bootstrap/img/logo/plotly.png" width="18px"/>Plotly
+											</a>
+										</li>
+									</div>
+								</div>
+								<div class="x_content">`+data.histogram+`</div>`);
 }
 
 function renderPreview(data,prefix){
 	
 	// hide the saving modal
 	$("#save").modal('hide');
-	$(".loading").hide();
-	
+		
 	// append modal-download in the background								
 	$("#modal-download").empty();
 	$("#modal-download").append(`<ul style="margin:5px 5px;">

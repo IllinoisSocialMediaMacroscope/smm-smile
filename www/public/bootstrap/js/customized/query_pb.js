@@ -64,8 +64,12 @@ function init(){
 			if ($(this).parent().attr('class') === 'dropdown dropdown-lg open'){
 				// disable search and enable advanced search
 				$("#simple-search-btn").prop('disabled',true);
+				
+				// toggle css effect
+				pushDropdown('on');
 			}else{
 				$("#simple-search-btn").prop('disabled',false);
+				pushDropdown('off');
 			}
 			
 			// initialize the advanced panel
@@ -225,6 +229,12 @@ function init(){
 	
 		Query = updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
+		
+		if ( $('.dropdown.dropdown-lg.open').length ){
+			pushDropdown('on');
+		}else{
+			pushDropdown('off');
+		}
 	});
 
 	/* documentation */
@@ -277,9 +287,16 @@ function init(){
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
 			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}else{
 			parameters['tweet']['until:'] = '';	
 			$(".form-group.dateRange").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}	
 		
 		Query =updateString(queryTerm,parameters);
@@ -311,11 +328,19 @@ function init(){
 				parameters['tweet']['geocode:'] = lat + `,`+ lon + `,`+ radius +`mi`;
 				Query =updateString(queryTerm,parameters);
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
-			})
+			});
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		
 		}else{
 			parameters['tweet']['geocode:'] = '';
 			$(".form-group.geocode").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
@@ -387,10 +412,18 @@ function init(){
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
 			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
+			
 		}else{
 			parameters['es']['startDate:']='';
 			parameters['es']['endDate:']  = '';
 			$(".form-group.es-dateRange").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}	
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
@@ -403,7 +436,7 @@ function init(){
 		
 		if ($("#es-geocode").is(':checked')){
 			$(".form-group.es-geocode").show();
-
+			
 			$("#es-lat").change(function(){
 				parameters['es']['lat:'] =  parseFloat($("#es-lat").val());
 				Query =updateString(queryTerm,parameters);
@@ -419,12 +452,20 @@ function init(){
 				Query =updateString(queryTerm,parameters);
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			})
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		
 		}else{
 			parameters['es']['lat:'] =  ''
 			parameters['es']['lon:'] =  ''
 			parameters['es']['distance:'] =  ''
 			$(".form-group.es-geocode").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
@@ -435,7 +476,7 @@ function init(){
 		parameters['es']['statuses_count:'] =  parseInt($("#statuses_count").val());
 		if ($("#es-popularity").is(':checked')){
 			$(".form-group.es-popularity").show();
-			
+					
 			$("#followers_count").change(function(){
 				parameters['es']['followers_count:'] = parseInt($("#followers_count").val());
 				Query =updateString(queryTerm,parameters);
@@ -446,11 +487,19 @@ function init(){
 				Query =updateString(queryTerm,parameters);
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		
 		}else{
 			parameters['es']['followers_count:'] = '';
 			parameters['es']['statuses_count:'] =  '';
 			$(".form-group.es-popularity").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
@@ -560,18 +609,28 @@ function init(){
 	//toggle restrict to subreddit checkbox
 	$("#rd-subreddit").change(function(){
 		if ($("#rd-subreddit").is(':checked')){
+			
 			$(".form-group.rd-subreddit").show();
+			
 			parameters['rdSearch']['restrictSr:'] = true;
 			$("#subreddit").change(function(){
 				parameters['rdSearch']['subreddit:'] = $(this).val();
 				Query =updateString(queryTerm,parameters);
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}else{
 			$("#subreddit").val("");
 			parameters['rdSearch']['restrictSr:'] = '';
 			parameters['rdSearch']['subreddit:'] =  '';
 			$(".form-group.rd-subreddit").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
@@ -599,15 +658,24 @@ function init(){
 	$("#ps-subreddit").change(function(){
 		if ($("#ps-subreddit").is(':checked')){
 			$(".form-group.ps-subreddit").show();
+			
 			$("#ps-subreddit-name").change(function(){
 				parameters['psPost']['subreddit:'] = $(this).val();
 				Query =updateString(queryTerm,parameters);
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}else{
 			$("#ps-subreddit-name").val("");
 			parameters['psPost']['subreddit:'] =  '';
 			$(".form-group.ps-subreddit").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
@@ -616,15 +684,24 @@ function init(){
 	$("#ps-author").change(function(){
 		if ($("#ps-author").is(':checked')){
 			$(".form-group.ps-author").show();
+			
 			$("#ps-author-name").change(function(){
 				parameters['psPost']['author:'] = $(this).val();
 				Query =updateString(queryTerm,parameters);
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}else{
 			$("#ps-author-name").val("");
 			parameters['psPost']['author:'] =  '';
 			$(".form-group.ps-author").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
@@ -633,6 +710,7 @@ function init(){
 	$("#ps-dateRange").change(function(){
 		if ($("#ps-dateRange").is(':checked')){
 			$(".form-group.ps-dateRange").show();
+			
 			$("#ps-start").change(function(){
 				parameters['psPost']['after:'] = epochTime($("#ps-start").val());
 				Query =updateString(queryTerm,parameters);
@@ -643,10 +721,18 @@ function init(){
 				Query =updateString(queryTerm,parameters);
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}else{
 			parameters['psPost']['before:'] =  '';
 			parameters['psPost']['after:'] =  '';
 			$(".form-group.ps-dateRange").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
@@ -688,15 +774,24 @@ function init(){
 	$("#ps-cm-subreddit").change(function(){
 		if ($("#ps-cm-subreddit").is(':checked')){
 			$(".form-group.ps-cm-subreddit").show();
+			
 			$("#ps-cm-subreddit-name").change(function(){
 				parameters['psComment']['subreddit:'] = $(this).val();
 				Query =updateString(queryTerm,parameters);
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}else{
 			$("#ps-cm-subreddit-name").val("");
 			parameters['psComment']['subreddit:'] =  '';
 			$(".form-group.ps-cm-subreddit").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
@@ -705,15 +800,24 @@ function init(){
 	$("#ps-cm-author").change(function(){
 		if ($("#ps-cm-author").is(':checked')){
 			$(".form-group.ps-cm-author").show();
+			
 			$("#ps-cm-author-name").change(function(){
 				parameters['psComment']['author:'] = $(this).val();
 				Query =updateString(queryTerm,parameters);
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
+			
 		}else{
 			$("#ps-author-name").val("");
 			parameters['psComment']['author:'] =  '';
 			$(".form-group.ps-cm-author").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
@@ -732,10 +836,19 @@ function init(){
 				Query =updateString(queryTerm,parameters);
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
+			
 		}else{
 			parameters['psComment']['before:'] =  '';
 			parameters['psComment']['after:'] =  '';
 			$(".form-group.ps-cm-dateRange").hide();
+			
+			if ( $('.dropdown.dropdown-lg.open').length ){
+				pushDropdown('on');
+			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
@@ -797,6 +910,9 @@ function init(){
 	$('input[name=histogram-interval]').change(function(){
 		setHitogramInterval($("input[name=histogram-interval]:checked").val());
 	});
+	
+	/*---------------------- toggle css effect on dropdown----------------------*/
+	
 }
 
 function epochTime(datestring){
@@ -943,7 +1059,20 @@ function setHitogramInterval(freq){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
-					$("#img-container").append(data.histogram);
+					$("#img-container").append(`<div class="x_content">
+									<div class="note">
+										<li><b>click, drag, and mouseover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the graph will give you more information</li>
+										<li><b>hover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over top-right corner of the chart will present various operations
+											<br><img src="bootstrap/img/gifs/plotlyDemo.gif"/>
+										</li>
+										<li>details please consult 
+											<a href="https://plot.ly/" target="_blank">
+												<img src="bootstrap/img/logo/plotly.png" width="18px"/>Plotly
+											</a>
+										</li>
+									</div>
+								</div>
+								<div class="x_content">`+data.histogram+`</div>`);
 				}
 			},
 			error: function(jqXHR, exception){
@@ -951,5 +1080,14 @@ function setHitogramInterval(freq){
 				$("#warning").modal('show');				
 			} 
 		}); 
+	}
+}
+
+function pushDropdown(state){
+	if (state === 'on'){
+		var height = $('.dropdown-menu.dropdown-menu-right').height();
+		$(".input-group-addon-btn").css('margin-bottom',height);
+	}else if (state === 'off'){
+		$(".input-group-addon-btn").css('margin-bottom','0px');
 	}
 }
