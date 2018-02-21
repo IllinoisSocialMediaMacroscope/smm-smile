@@ -114,11 +114,12 @@ router.post('/query',function(req,res,next){
 							if (params['fields'] === "") params['fields'] === "DEFAULT";
 
 							fs.writeFileSync(directory +  config, JSON.stringify(params), 'utf8');
+							//fs.writeFileSync('tweet.json', JSON.stringify(responseObj), 'utf8');
 								
 							// save CSV; Async
 							var processed = req.body.filename + '.csv';	
 							var promise_csv = new Promise((resolve,reject) =>{	
-								jsonexport(responseObj[key1][key2][key3], {fillGaps:true,undefinedString:'NaN'},function(err,csv){
+								jsonexport(responseObj[key1][key2][key3], {fillGaps:true, undefinedString:'NaN'},function(err,csv){
 									if (err) reject(err);
 									if (csv !== ''){
 										fs.writeFile(directory +  processed,csv,'utf8',function(err){ 
@@ -240,6 +241,8 @@ function gatherMultiPost(query,headers,pageNum){
 			}).then(function(response){
 				return response.text();
 			}).then(function(responseBody){
+				//fix bug!!
+				responseBody = responseBody.replace(/\\r/g,'');
 				var responseObj = JSON.parse(responseBody);
 				resolve(responseObj);				
 			}).catch((error) => {
