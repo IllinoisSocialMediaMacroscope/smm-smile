@@ -485,7 +485,15 @@ nav-tabs li a:hover{
 }
 
 .grid-element{
-	margin:20px 20px;
+	/*margin:20px 20px;
+	background-color:#f5f5f5;
+	border-radius:4px;
+	padding:30px 30px;
+	vertical-align:middle;*/
+	width:350px;
+	height:350px;
+	float:left;
+	margin:8px 8px;
 	background-color:#f5f5f5;
 	border-radius:4px;
 	padding:30px 30px;

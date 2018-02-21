@@ -131,14 +131,16 @@ html
 				div(id="img-container", style="padding:50px 100px;")
 			div(id="rendering")
 				h2 Review
-				div(id="grid")
-				div(style="float:right;")
-					button(class="btn btn-no", onclick="", style="margin-right:10px;")
+				div
+					button(class="btn btn-no", onclick="renderPreviewPagination('prev');", style="margin-right:10px;")
 						span(class="glyphicon glyphicon-chevron-left")
 						| Prev
-					button(class="btn btn-yes", onclick="")
-						span(class="glyphicon glyphicon-upload")
+					button(class="btn btn-yes", onclick="renderPreviewPagination('next');", style="margin-right:10px;")
+						span(class="glyphicon glyphicon-chevron-right")
 						| Next
+					a(class="btn btn-info" role="button") Download
+				div(id="grid")
+				
 								
 		<!-- popup modal save -->
 		div(id="save" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")

@@ -60,13 +60,17 @@ function submitQuery(textareaID,filenameID){
 			},
 		success:function(data){
 			// if error then prompt user to rename
+			$(".loading").hide();
 			if ('ERROR' in data){				
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
-					$(".loading").hide();
 			}else{
-				renderPreview(data, prefix);
-				if ('histogram' in data) renderHistogram(data);
+				renderDownload(data.URLs, data.fname)
+				renderPreview(data.rendering, prefix);
+				if ('histogram' in data){
+					$("#histogram-panel").show();
+					renderHistogram(data.histogram);
+				}
 			}
 		},
 		error: function(jqXHR, exception){
@@ -454,16 +458,16 @@ function submitSearchbox(searchboxID, filenameID){
 				"s3FolderName":s3FolderName
 			},
 		success:function(data){
+			$(".loading").hide();
 			if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
-					$(".loading").hide();
 			}else{
-				renderPreview(data, prefix);
+				renderDownload(data.URLs, data.fname)
+				renderPreview(data.rendering, prefix);
 				if ('histogram' in data){
 					$("#histogram-panel").show();
-					renderHistogram(data);
-					$(".loading").hide();
+					renderHistogram(data.histogram);
 				}
 			}
 		},
@@ -474,7 +478,7 @@ function submitSearchbox(searchboxID, filenameID){
 	});
 }
 
-function renderHistogram(data){
+function renderHistogram(histogram){
 	$("#img-container").append(`<div class="x_content">
 									<div class="note">
 										<li><b>click, drag, and mouseover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the graph will give you more information</li>
@@ -488,24 +492,27 @@ function renderHistogram(data){
 										</li>
 									</div>
 								</div>
-								<div class="x_content">`+data.histogram+`</div>`);
+								<div class="x_content">`+histogram+`</div>`);
 }
-
-function renderPreview(data,prefix){
-	
+function renderDownload(URLs, fname){
 	// hide the saving modal
 	$("#save").modal('hide');
 		
 	// append modal-download in the background								
 	$("#modal-download").empty();
 	$("#modal-download").append(`<ul style="margin:5px 5px;">
-									<a href="` + data.URL + `" style="color:red;"><span class="glyphicon glyphicon-download-alt"></span>`+ `DONWLOAD ` +  data.fname + `</a>
+									<a href="` + URLs[0] + `" style="color:red;"><span class="glyphicon glyphicon-download-alt"></span>`+ `DONWLOAD ` +  fname + `</a>
+									<p hidden>` + URLs[1] +`</p>
 								</ul>`);
 	$("#success").modal('show');
 	
+	$("#rendering").find('a[class="btn btn-info"]').attr('href',URLs[0]);
+}
+
+function renderPreview(rendering,prefix){
 	// construct previews
 	if (prefix === 'twitter-Tweet' || prefix === 'twitter-Stream'){
-		$.each(data.rendering, function(i,val){
+		$.each(rendering, function(i,val){
 			
 			if (val.user !== undefined){
 				var img_url = val.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
@@ -560,7 +567,7 @@ function renderPreview(data,prefix){
 							</div>`);
 		});
 	}else if (prefix === 'twitter-User'){
-		$.each(data.rendering, function(i,val){
+		$.each(rendering, function(i,val){
 			
 			var img_url = val.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
 			var user_name = val.name || 'Not Provided';
@@ -580,7 +587,7 @@ function renderPreview(data,prefix){
 							</div>`);
 		});
 	}else if (prefix === 'reddit-Search' || prefix === 'reddit-Post' || prefix === 'reddit-Historical-Post'){
-		$.each(data.rendering, function(i,val){
+		$.each(rendering, function(i,val){
 			
 			if (val.author_name !== undefined){
 				var author_name = val.author_name;
@@ -652,7 +659,7 @@ function renderPreview(data,prefix){
 				
 		});
 	}else if (prefix === 'reddit-Comment' || prefix === 'reddit-Historical-Comment'){
-		$.each(data.rendering, function(i,val){
+		$.each(rendering, function(i,val){
 			var author_name = val.comment_author_name || 'Not Provided';
 			var subreddit_name_prefixed = val.subreddit_name_prefixed || 'NotProvided';
 			var body = val.body || 'Not Provided';
@@ -687,6 +694,45 @@ function renderPreview(data,prefix){
 
 }
 
+// Global variable currPrevNum
+currPreviewNum = 0;
+function renderPreviewPagination(whichButton){
+	
+	if (whichButton == 'prev'){
+		currPreviewNum -= 100;
+	}else if (whichButton == 'next'){
+		currPreviewNum += 100;
+	}
+	
+	$.ajax({
+		url:"render-json",
+		type:"post",
+		data:{"fileURL":$("#modal-download").find('p').text(),
+				"begin": currPreviewNum
+			},
+		success:function(data){
+			if ('ERROR' in data){
+					$("#error").val(JSON.stringify(data));
+					$("#warning").modal('show');
+					$(".loading").hide();
+					
+					// if failed, revert the currNumber back
+					if (whichButton == 'prev'){
+						currPreviewNum += 100;
+					}else if (whichButton == 'next'){
+						currPreviewNum -= 100;
+					}
+			}else{
+				$("#grid").empty();
+				renderPreview(data.preview, data.prefix);
+			}
+		},
+		error: function(jqXHR, exception){	
+				$("#error").val(jqXHR.responseText);
+				$("#warning").modal('show');
+			} 
+	});
+}
 	
 function timeConverter(UNIX_timestamp){
   var a = new Date(UNIX_timestamp * 1000);

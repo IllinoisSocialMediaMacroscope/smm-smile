@@ -112,10 +112,16 @@ router.post('/query',function(req,res,next){
 							params = JSON.parse(req.body.params);
 							if (req.body.pages !== '-999') params['pages:'] = req.body.pages;
 							if (params['fields'] === "") params['fields'] === "DEFAULT";
-
+							
+							// save config
 							fs.writeFileSync(directory +  config, JSON.stringify(params), 'utf8');
-							//fs.writeFileSync('tweet.json', JSON.stringify(responseObj), 'utf8');
-								
+							
+							// save json
+							// due to [{xxx:xxx},{xxx:xxx}...] is not a valid json format
+							var jsonObj = {};
+							jsonObj[req.body.prefix] = responseObj[key1][key2][key3];
+							fs.writeFileSync(directory + req.body.filename + '.json', JSON.stringify(jsonObj, null, 2), 'utf8');
+							
 							// save CSV; Async
 							var processed = req.body.filename + '.csv';	
 							var promise_csv = new Promise((resolve,reject) =>{	
@@ -137,6 +143,7 @@ router.post('/query',function(req,res,next){
 								
 								var promise_arr = [];
 								promise_arr.push(uploadToS3(directory+processed, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+processed));
+								promise_arr.push(uploadToS3(directory + req.body.filename + '.json', req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+ req.body.filename + '.json'));
 								promise_arr.push(uploadToS3(directory+config, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+config));
 								Promise.all(promise_arr).then((URLs) => {
 									
@@ -151,7 +158,7 @@ router.post('/query',function(req,res,next){
 											// rendering
 											var rendering = responseObj[key1][key2][key3].slice(0,99);
 											deleteLocalFolders(directory.slice(0,-1)).then(() =>{
-												res.send({fname:processed, URL: URLs[0] ,rendering:rendering});
+												res.send({fname:processed, URLs:URLs, rendering:rendering});
 											}).catch(err =>{ // deleteFolderERROR
 												console.log(err);
 												res.send({ERROR:err});
@@ -166,7 +173,7 @@ router.post('/query',function(req,res,next){
 												// rendering
 												var rendering = responseObj[key1][key2][key3].slice(0,99);
 												deleteLocalFolders(directory.slice(0,-1)).then(() =>{
-													res.send({fname:processed, URL: URLs[0] ,rendering:rendering,
+													res.send({fname:processed, URLs:URLs, rendering:rendering,
 																histogram:histogram});
 												}).catch(err =>{ // deleteFolderERROR
 													console.log(err);
