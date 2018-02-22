@@ -236,7 +236,7 @@ $("#datasetMeta select").on('change',function(){
 	var selected = $("#datasetMeta select option:selected" );
 	
 	// need to make sure if this ID has already exist(means this field has already been modified
-	if (selected.val() !== 'Please Select...' && $("#" + selected.val()).length == 0){
+	if (selected.val() !== 'Please Select...' && $("#datasetMeta-block").find("#" + selected.val()).length == 0){
 		
 		$("#datasetMeta-block").append(`<div class="form-group" id="`+ selected.val()+ `">
 									<div class="col-md-4 col-md-4 col-xs-12">
@@ -246,10 +246,8 @@ $("#datasetMeta select").on('change',function(){
 										<input type="text" class="form-control" placeholder="field value">
 									</div>
 									<div class="col-md-4 col-md-4 col-xs-12">
-										<button class="btn btn-primary" style="margin:auto 5px;" onclick="saveMeta('#` 
-											+selected.val()+ `')">Save</button>
-										<button class="btn btn-warning" onclick="removeMeta('#`
-											+selected.val()+ `')">remove</button>
+										<button class="btn btn-primary" style="margin:auto 5px;" onclick="saveMeta(this)">Save</button>
+										<button class="btn btn-warning" onclick="removeMeta(this)">remove</button>
 									</div>
 								</div>`);
 	}else{
@@ -265,11 +263,13 @@ $('#datasetTags').tagsinput({
 
 
 //save metadata
-function saveMeta(metaID){
+function saveMeta(clickBtn){
 	// if value has content, save; if not, do not allow to save
-	var value = $(metaID + ' :input[type=text]').val();
+	$value = $(clickBtn).parent().prev().find('input[type=text]')
+	
+	var value = $value.val();
 	if ( value !== '' && value !== undefined ){
-		$(metaID + ' :input[type=text]').prop('disabled', true);
+		$value.prop('disabled', true);
 	}else{
 		$("#modal-message").append(`<h4>Please enter a value before you save it.</h4>`);
 		$("#alert").modal('show');
@@ -277,8 +277,8 @@ function saveMeta(metaID){
 }
 
 //remote metadata
-function removeMeta(metaID){
-	$(metaID).remove();
+function removeMeta(clickBtn){
+	$(clickBtn).parent().parent().remove();
 }
 
 // CREATE button
@@ -446,12 +446,12 @@ function clowderFileMeta(){
 		var selected = $(this).find(":selected");
 		
 		// first find the file block, then find fileMeta-block inside of this
-		var fileMeta_block = $(this).parent().parent().find('.fileMeta-block');
+		var $fileMeta_block = $(this).parent().parent().find('.fileMeta-block');
 
 		// need to make sure if this ID has already exist(means this field has already been modified
-		if (selected.val() !== 'Please Select...' && $("#" + selected.val()).length == 0){
+		if (selected.val() !== 'Please Select...' && $fileMeta_block.find("#" + selected.val()).length == 0){
 			
-			fileMeta_block
+			$fileMeta_block
 				.append(`<div class="form-group" id="`+ selected.val()+ `">
 							<div class="col-md-4 col-md-4 col-xs-12">
 								<p style="float:right;margin-top:5px;">` + selected.text() +`</p>
@@ -460,10 +460,8 @@ function clowderFileMeta(){
 								<input type="text" class="form-control" placeholder="field value">
 							</div>
 							<div class="col-md-4 col-md-4 col-xs-12">
-								<button class="btn btn-primary" style="margin:auto 5px;" onclick="saveMeta('#` 
-									+selected.val()+ `')">Save</button>
-								<button class="btn btn-warning" onclick="removeMeta('#`
-									+selected.val()+ `')">remove</button>
+								<button class="btn btn-primary" style="margin:auto 5px;" onclick="saveMeta(this)">Save</button>
+								<button class="btn btn-warning" onclick="removeMeta(this)">remove</button>
 							</div>
 						</div>`);
 		}else{
