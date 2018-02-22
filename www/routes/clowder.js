@@ -18,7 +18,6 @@ router.post('/clowder-login', function(req,res,next){
 		req.session.clowder_username = req.body.clowder_username;
 		req.session.clowder_password = req.body.clowder_password;
 		req.session.save();
-		// set the cookie as true for 29 minutes, so good for 29 minutes
 		res.send({success:'succesfully provided username and password information!'});
 	
 	// if faild to provide username and password, set the frontend cookie to false forever (a year)...
