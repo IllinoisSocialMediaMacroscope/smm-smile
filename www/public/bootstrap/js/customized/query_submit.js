@@ -1,5 +1,5 @@
 function submitQuery(textareaID,filenameID){
-	// once the button is hit, disable the submit button until data comes back later!!
+	currPreviewNum = 0;
 	
 	// clear out preview and histogram here
 	$("#img-container").empty();
@@ -81,6 +81,8 @@ function submitQuery(textareaID,filenameID){
 } 
 
 function submitSearchbox(searchboxID, filenameID){
+	currPreviewNum = 0;
+	
 	// clear out preview and histogram here
 	$("#img-container").empty();
 	$("#grid").empty();
@@ -494,6 +496,7 @@ function renderHistogram(histogram){
 								</div>
 								<div class="x_content">`+histogram+`</div>`);
 }
+
 function renderDownload(URLs, fname){
 	// hide the saving modal
 	$("#save").modal('hide');
@@ -513,7 +516,6 @@ function renderPreview(rendering,prefix){
 	// construct previews
 	if (prefix === 'twitter-Tweet' || prefix === 'twitter-Stream'){
 		$.each(rendering, function(i,val){
-			
 			if (val.user !== undefined){
 				var img_url = val.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
 				var user_name = val.user.name || 'Not Provided';
@@ -566,7 +568,9 @@ function renderPreview(rendering,prefix){
 									`&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-heart" style="position:inherit;"></span>&nbsp;` +favorite_count +`</p>
 							</div>`);
 		});
-	}else if (prefix === 'twitter-User'){
+	}
+	
+	else if (prefix === 'twitter-User'){
 		$.each(rendering, function(i,val){
 			
 			var img_url = val.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
@@ -586,7 +590,9 @@ function renderPreview(rendering,prefix){
 									<p style="margin-top:10px;">`+ description + `<br><a href="` + url + `">`+ url + `</a></p>
 							</div>`);
 		});
-	}else if (prefix === 'reddit-Search' || prefix === 'reddit-Post' || prefix === 'reddit-Historical-Post'){
+	}
+	
+	else if (prefix === 'reddit-Search' || prefix === 'reddit-Post' || prefix === 'reddit-Historical-Post'){
 		$.each(rendering, function(i,val){
 			
 			if (val.author_name !== undefined){
@@ -651,9 +657,9 @@ function renderPreview(rendering,prefix){
 						<p style="display:inline;color:green;">&nbsp;&bull;`+ subreddit_name_prefixed + `</p>
 						<p style="display:inline;color:grey;">&nbsp;&bull;` + created_utc + `</p>
 					</div>
-					<a target="_blank" href="` + url + `" style="margin-top:10px;display:block;">`+ title + `</a>
-					<a target="_blank" href="https://www.reddit.com` + permalink + `" style="margin-top:20px;margin-bottom:20px;display:block;color:black;">Go to this Reddit Thread
-						<span class="glyphicon glyphicon-share-alt" style="position:inherit;"></span></a>
+					<img src="` + url + `" height="120px"/>
+					<a target="_blank" href="https://www.reddit.com` + permalink + `" style="margin-top:20px;margin-bottom:20px;display:block;">`
+						+ title + `</a>
 					<p style="margin-top:10px;"><span class="glyphicon glyphicon-heart" style="position:inherit;"></span>`+score +`</p>
 				</div>`);
 				
@@ -694,8 +700,6 @@ function renderPreview(rendering,prefix){
 
 }
 
-// Global variable currPrevNum
-currPreviewNum = 0;
 function renderPreviewPagination(whichButton){
 	
 	if (whichButton == 'prev'){

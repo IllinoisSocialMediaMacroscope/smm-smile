@@ -1,3 +1,6 @@
+// Global variable currPrevNum
+currPreviewNum = 0;
+
 //corresponding to query.pug and searchbox.pug
 function init(){
 	
