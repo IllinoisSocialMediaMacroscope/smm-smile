@@ -29,5 +29,4 @@ Please contact me to get a copy
 2. Make sure to subtitute any **credentials** in .env if not provided!
 3. For details please review the **Memo.docx** file. Link here :point_right: [Memo](https://github.com/IllinoisSocialMediaMacroscope/analytics-standalone/tree/master/docs/memo.pdf)
 
-:e-mail: email me: _***REMOVED***_
-
+:e-mail: email me: _cwang138@illinois.edu_

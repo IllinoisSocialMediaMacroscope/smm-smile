@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
 var BoxSDK = require('box-node-sdk');
+var config = require('../../main_config');
 
 router.get('/login/box', function(req,res,next){
 	
@@ -11,15 +12,17 @@ router.get('/login/box', function(req,res,next){
 	req.session.currentURL = req.query.currentURL;
 	req.session.save();
 	
-	var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=***REMOVED***&redirect_uri=https://socialmediamacroscope.org:8000` + req.query.currentURL +`login/box/callback`;
-	//var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=***REMOVED***&redirect_uri=http://localhost:8001/login/box/callback`;
+	var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=`
+	+ config.box.client_id
+	+`&redirect_uri=https://socialmediamacroscope.org:8000` + req.query.currentURL +`login/box/callback`;
+
 	res.redirect(authUrl);
 });
 
 router.get('/login/box/callback',function(req,res,next){
 	var box = new BoxSDK({
-		clientID: '***REMOVED***', 
-		clientSecret: '***REMOVED***' 
+		clientID: config.box.client_id,
+		clientSecret: config.box.client_secret
 	});
 	
 	if (req.query.error !== undefined){

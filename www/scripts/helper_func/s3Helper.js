@@ -1,7 +1,9 @@
 var AWS = require('aws-sdk');
+var config = require('../../main_config');
+
 AWS.config.update({
-	accessKeyId: '***REMOVED***',
-	secretAccessKey:'***REMOVED***' });
+	accessKeyId: config.aws.access_key,
+	secretAccessKey:config.aws.access_key_secret });
 	
 var s3 = new AWS.S3();
 var fs = require('fs');
@@ -69,10 +71,7 @@ function list_files(prefix){
 						folderObj[filename] = fileURL;
 					}
 
-					resolve(folderObj);	
-				//}else{
-				//	reject('You have more than 1000 items in your folders, we cannot render, download or delete that many files. Please contact the administrator: ***REMOVED***');
-				//}
+					resolve(folderObj);
 			}
 		});
 	});					
@@ -125,7 +124,7 @@ function download_folder(prefix){
 						reject(err);
 					});
 				}else{
-					reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: ***REMOVED*** with your sessionID.');
+					reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: cwang138@illinois.edu with your sessionID.');
 				}	
 			}				
 		});
@@ -163,7 +162,7 @@ var deleteRemoteFolder = function(prefix){
 							}
 						});
 					}else{
-						reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: ***REMOVED*** with your sessionID.');
+						reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: cwang138@illinois.edu with your sessionID.');
 					}
 				}
 			}

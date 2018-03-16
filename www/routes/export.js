@@ -2,11 +2,15 @@ var express = require('express');
 var router = express.Router();
 var archiver = require('archiver');
 var fs = require('fs');
+var config = require('../main_config');
+
 var google = require('googleapis');
-var fs = require('fs');
 var OAuth2 = google.auth.OAuth2;
+
 var Dropbox = require('dropbox');
+
 var BoxSDK = require('box-node-sdk');
+
 var path = require('path');
 var appPath = path.dirname(__dirname);
 var download_folder = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).download_folder;
@@ -33,8 +37,8 @@ router.post('/export',function(req,res,next){
 						if (req.body.id == 'googleDrive-export'){		
 							if (req.session.google_access_token !== undefined){
 											
-								var oauth2Client = new OAuth2('***REMOVED***',
-												'***REMOVED***', 'http://localhost:8001/login/google/callback');
+								var oauth2Client = new OAuth2(config.google.client_id,
+												config.google.client_secret, 'http://localhost:8001/login/google/callback');
 								oauth2Client.credentials = {'access_token':req.session.google_access_token}
 								var drive = google.drive({version: 'v2', auth: oauth2Client });
 								drive.files.insert(
@@ -109,8 +113,8 @@ router.post('/export',function(req,res,next){
 						}else if (req.body.id == 'box-export'){
 							if (req.session.box_access_token !== undefined){
 								var sdk = new BoxSDK({
-								  clientID: '***REMOVED***',
-								  clientSecret: '***REMOVED***'
+								  clientID: config.box.client_id,
+								  clientSecret: config.box.client_secret
 								});
 								var client = sdk.getBasicClient(req.session.box_access_token);
 								
