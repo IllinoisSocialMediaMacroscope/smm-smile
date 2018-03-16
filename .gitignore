@@ -1,8 +1,8 @@
-www/node_modules
 www/downloads
-www/graphql/node_modules
-*.DS_Store
-www/nltk_data
-*.env
 www/uploads
-www/map.json
+node_modules
+www/nltk_data
+.*
+*.json
+npm-debug.log.*
+*.swp

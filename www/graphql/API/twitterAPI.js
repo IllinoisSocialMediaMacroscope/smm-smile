@@ -1,14 +1,14 @@
 var Twitter = require('twitter');
 var Promise = require('bluebird');
 var querystring = require('querystring');    // parse query parameters
-//require('dotenv').config();
+var config = require('../graphql_config.json');
 
 function twitterAPI(tokens,resolveName, id, args){
 	
 	// using twitterstreamingapi2sample@lists.illinonis.edu
 	var client = new Twitter({
-			consumer_key:"***REMOVED***",
-			consumer_secret:"***REMOVED***",
+			consumer_key:config.twitter.client_id,
+			consumer_secret:config.twitter.client_secret,
 			access_token_key:tokens.twtaccesstokenkey,
 			access_token_secret:tokens.twtaccesstokensecret
 		})

@@ -1,15 +1,15 @@
-//require('dotenv').config();
 var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
 var OAuth1 = require('oauth').OAuth;
+var config = require('../../main_config.json');
 
 var consumer = new OAuth1(
         "https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token", 
-        "***REMOVED***", "***REMOVED***", "1.0", "http://localhost:8001/login/twitter/callback", "HMAC-SHA1");
+        config.twitter.client_id, config.twitter.client_secret, "1.0", "http://localhost:8001/login/twitter/callback", "HMAC-SHA1");
 
 router.get('/login/twitter', function(req,res,next){
-
+    // patch the oauth library node_modules/oauth/lib/oauth.js, line 540 add: extraParams["oauth_callback"]===undefined
 	consumer.getOAuthRequestToken({ 'oauth_callback': "https://socialmediamacroscope.org:8000" + req.query.currentURL + "login/twitter/callback"}, function(error, oauthToken, oauthTokenSecret, results){
     if (error) {
 		res.send("Error getting OAuth request token : " + util.inspect(error), 500);

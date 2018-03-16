@@ -221,7 +221,7 @@ function ajaxSubmit(formID,aws_identifier){
 	
 	var prefix = $("#selectFile").children(":selected").val();
 	var length = $("#length").val();
-	var email = $("#batch-email-alert").val() || '***REMOVED***';
+	var email = $("#batch-email-alert").val() || 'cwang138@illinois.edu';
 	
 	// session ID already calculated in topbar.pug
 	if (s3FolderName == undefined) s3FolderName = 'local'

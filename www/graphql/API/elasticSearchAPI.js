@@ -5,39 +5,7 @@ var fetch = require('node-fetch');
 //require('dotenv').config();
 
 function elasticSearchAPI(args){
-	
-	//AWS.config.update({ region: 'us-west-2' });
 
-	// create an elasticsearch client for your Amazon ES
-	//var client = require('elasticsearch').Client({
-	  //hosts: [ 'https://search-es-twitter-stream-yugu6rvjulzswrsj2y764qyy5i.us-west-2.es.amazonaws.com' ],
-	  //connectionClass: require('http-aws-es')
-	//});
-	/*param = {};
-	param['q'] = 'text:' + args['q'] +' AND lang:en';
-	param['from'] = (args['pageNum'] -1)* args['perPage'];
-	param['size'] = args['perPage'];
-	
-	// filter by date range
-	if ('startDate' in args && 'endDate' in args){
-		param['q'] += ' AND timestamp_ms:>=' + args['startDate'] + ' AND timestamp_ms:<=' + args['endDate'];
-	}
-	
-	// filter by geolocation
-	if ('distance' in args && 'lon' in args && 'lat' in args){
-		param['q'] += ' AND geo_distance:distance:' + args['distance'] + ' AND geo_distance:coordinates.coordinates:[' + args['lon'] + ',' + args['lat'] + ']';
-	}
-	
-	// filter by followers count of the author
-	if ('followers_count' in args){
-		param['q'] += ' AND user.followers_count:>=' + args['followers_count'];
-	}
-	
-	// filter by author status count
-	if ('statuses_count' in args){
-		param['q'] += ' AND user.statuses_count:>=' + args['statuses_count'];
-	}*/
-	
 	var param = {
 		  from: (args['pageNum'] -1)* args['perPage'],
 		  size: args['perPage'],
