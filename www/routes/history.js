@@ -35,7 +35,7 @@ router.post('/history',function(req,res,next){
 			if(fileList.length === 7){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
-					if (filename === 'div.dat'){
+					if (filename === 'div.html'){
 						var div = folderObj[filename];
 					}else if (filename === 'sentence.csv'){
 						var phrases = folderObj[filename];
@@ -45,7 +45,7 @@ router.post('/history',function(req,res,next){
 						var most_common = folderObj[filename];
 					}else if (filename === 'POStagged.csv'){
 						var tagged = folderObj[filename];
-					}else if (filename === 'config.dat'){
+					}else if (filename === 'config.json'){
 						var config = folderObj[filename];
 					}else if (filename === 'lemmatized.csv' || filename === 'stemmed.csv' || filename === 'lemmatized-stemmed.csv'){
 						var processed = folderObj[filename];
@@ -105,7 +105,7 @@ router.post('/history',function(req,res,next){
 			if(fileList.length === 6){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
-					if (filename === 'div_sent.dat'){
+					if (filename === 'div_sent.html'){
 						var div = folderObj[filename];
 					}else if (filename === 'sentiment.csv'){
 						var sentiment = folderObj[filename];
@@ -115,7 +115,7 @@ router.post('/history',function(req,res,next){
 						var negation = folderObj[filename];
 					}else if (filename === 'allcap.csv'){
 						var allcap = folderObj[filename];
-					}else if (filename === 'config.dat'){
+					}else if (filename === 'config.json'){
 						var config = folderObj[filename];
 					}
 				}	
@@ -165,11 +165,11 @@ router.post('/history',function(req,res,next){
 			if(fileList.length === 11){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
-					if (filename === 'div_split.dat'){
+					if (filename === 'div_split.html'){
 						var div_0 = folderObj[filename];
-					}else if (filename === 'div.dat'){
+					}else if (filename === 'div.html'){
 						var div_1 = folderObj[filename];
-					}else if (filename === 'div_comp.dat'){
+					}else if (filename === 'div_comp.html'){
 						var div_2 = folderObj[filename];
 					}else if (filename === 'accuracy_score.csv'){
 						var accuracy = folderObj[filename];
@@ -177,7 +177,7 @@ router.post('/history',function(req,res,next){
 						var metrics = folderObj[filename];
 					}else if (filename === 'classification_pipeline.pickle'){
 						var pickle = folderObj[filename];
-					}else if (filename === 'config.dat'){
+					}else if (filename === 'config.json'){
 						var config = folderObj[filename];
 					}else if (filename.slice(0,10) === 'PREDICTED_'){
 						var predict = folderObj[filename];
@@ -256,9 +256,9 @@ router.post('/history',function(req,res,next){
 			if(fileList.length === 11){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
-					if (filename === 'div.dat'){
+					if (filename === 'div.html'){
 						var div = folderObj[filename];
-					}else if (filename === 'config.dat'){
+					}else if (filename === 'config.json'){
 						var config = folderObj[filename];
 					}else if (filename === 'd3js.json'){
 						var d3js = folderObj[filename];
@@ -333,7 +333,7 @@ router.post('/history',function(req,res,next){
 			if(fileList.length >= 2){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
-					if (filename.slice(-4) === '.dat'){
+					if (filename.slice(-5) === '.json'){
 						var config = folderObj[filename];
 					}else if (filename.slice(-4) === '.csv'){
 						var preview = folderObj[filename];
@@ -379,7 +379,7 @@ router.post('/history',function(req,res,next){
 			if(fileList.length >= 2){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
-					if (filename.slice(-4) === '.dat'){
+					if (filename.slice(-5) === '.json'){
 						var config = folderObj[filename];
 					}else if (filename.slice(-4) === '.csv'){
 						var preview = folderObj[filename];
