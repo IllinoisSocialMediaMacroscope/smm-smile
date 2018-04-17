@@ -108,19 +108,13 @@ router.post('/query',function(req,res,next){
 							
 		
 							// save query parameters to it so history page can use it! Synchronous method
-							var config = req.body.filename + '.dat';
+							var config = req.body.filename + '.json';
 							params = JSON.parse(req.body.params);
 							if (req.body.pages !== '-999') params['pages:'] = req.body.pages;
 							if (params['fields'] === "") params['fields'] === "DEFAULT";
 							
 							// save config
 							fs.writeFileSync(directory +  config, JSON.stringify(params), 'utf8');
-							
-							// save json
-							// due to [{xxx:xxx},{xxx:xxx}...] is not a valid json format
-							var jsonObj = {};
-							jsonObj[req.body.prefix] = responseObj[key1][key2][key3];
-							fs.writeFileSync(directory + req.body.filename + '.json', JSON.stringify(jsonObj, null, 2), 'utf8');
 							
 							// save CSV; Async
 							var processed = req.body.filename + '.csv';	
