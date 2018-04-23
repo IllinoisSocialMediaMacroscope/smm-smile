@@ -399,8 +399,8 @@ function clowderFileGen(datalist){
 		//id = url -->
 		$("#clowder-files-list")
 			.append(`<div class="form-control" style="margin:15px auto;height:100%;background-color:#eee;">
-						<input type="checkbox" class="form-check-input" value="`+ val.content + `"/>
-						<label class="form-check-label"> &nbsp; ` + val.name + `</label>
+						<input type="checkbox" class="form-check-input" value="`+ val.content + `" style="margin-right:5px;"/>
+						<label class="form-check-label">` + val.name + `</label>
 						<a onclick="clowderFileAdvanceToggle(this);" href="#">
 							<span class="pull-right">
 								<span class="glyphicon glyphicon-pencil" style="vertical-align:middle;"></span>
@@ -492,8 +492,15 @@ function submit_clowder_files(){
 		
 		// loop through each file
 		$("#clowder-files-list .form-control").each(function(i,file){
+
+			// mark the configuration file
+			var filename = $(file).find(".form-check-label").text();
+			var url = $(file).find(".form-check-input").val();
+			if (filename === 'configuration'){
+				data['configuration'] = url;
+			}
+
 			if ($(file).find(".form-check-input").is(':checked')){
-				var url = $(file).find(".form-check-input").val();
 				data[url] = {};
 				
 				// descriptions
