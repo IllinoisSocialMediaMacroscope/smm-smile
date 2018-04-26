@@ -19,7 +19,7 @@ router.get('/login/reddit',function(req,res,next){
 												headers:{
 													'Authorization': 'Basic ' + base64encodedData,
 													'Content-Type': "application/x-www-form-urlencoded",
-													'user-agent': 'cwang138 testing various things v0.1',
+													'user-agent': 'TechServicesAnalytics@mx.uillinois.edu testing various things v0.1',
 												},
 												body:"grant_type=https://oauth.reddit.com/grants/installed_client&device_id=" + RANDOM_STRING
 			}).then(function(response){

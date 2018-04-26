@@ -189,9 +189,8 @@ $(document).ready(function(){
 			$("#citation-notice").append(
 				`<p><b>Thank you for using our tool, if you use these results please cite it and the Vader method:</b></p>
 				<ul>
-					<li>Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, 
-						A., & Hodgkins, H. (September, 2017) – Social Media Macroscope, <a href="http://socialmediamacroscope.org" target="_blank">
-						http://socialmediamacroscope.org</a>.
+					<li>Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, A., & Hodgkins, H. 
+					(September, 2017) – Social Media Macroscope, <a href="http://hdl.handle.net/2142/99742" target="_blank">http://hdl.handle.net/2142/99742</a>.
 					</li>
 					<li><a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&
 					q=Hutto%2C+C.J.+%26+Gilbert%2C+E.E.+%282014%29.+VADER%3A+A+Parsimonious+Rule-based+Model+for+S

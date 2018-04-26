@@ -16,7 +16,7 @@ router.post('/login/dropbox',function(req,res,next){
 											headers:{
 												'Authorization': 'Basic ' + base64encodedData,
 												'Content-Type': "application/x-www-form-urlencoded",
-												'user-agent': 'cwang138 testing various things v0.1',
+												'user-agent': 'TechServicesAnalytics@mx.uillinois.edu testing various things v0.1',
 											},
 											body:"grant_type=authorization_code&code=" + req.body.authorizeCode
 							

@@ -124,7 +124,7 @@ function download_folder(prefix){
 						reject(err);
 					});
 				}else{
-					reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: cwang138@illinois.edu with your sessionID.');
+					reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: TechServicesAnalytics@mx.uillinois.edu with your sessionID.');
 				}	
 			}				
 		});
@@ -162,7 +162,7 @@ var deleteRemoteFolder = function(prefix){
 							}
 						});
 					}else{
-						reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: cwang138@illinois.edu with your sessionID.');
+						reject('You have more than 1000 items in your folders, we cannot download or delete that many files. Please contact the administrator: TechServicesAnalytics@mx.uillinois.edu with your sessionID.');
 					}
 				}
 			}
