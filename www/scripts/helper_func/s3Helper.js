@@ -1,5 +1,6 @@
 var AWS = require('aws-sdk');
 var config = require('../../main_config');
+var mime = require('mime');
 
 AWS.config.update({
 	accessKeyId: config.aws.access_key,
@@ -14,7 +15,9 @@ function uploadToS3(localFile, remoteKey){
 				var buffer = fs.readFileSync(localFile);
 				var param = {Bucket:'macroscope-smile', 
 					Key: remoteKey, 
-					Body: buffer};
+					Body: buffer,
+					ContentType:mime.getType(localFile)
+				};
 				s3.upload(param, function(err,data){
 						if (err){
 							console.log(err);
