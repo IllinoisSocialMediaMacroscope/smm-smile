@@ -116,7 +116,7 @@ body {
 	position: static !important;
 }
 .dropdown.dropdown-lg .dropdown-menu {
-	min-width: 767px;
+	min-width: 681px;
 }
 #boolean-toggle{
 	border:none;

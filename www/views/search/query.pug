@@ -13,7 +13,11 @@ html
 		link(href="bootstrap/css/bootstrap-multiselect.css", rel="stylesheet")
 		link(href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css", rel="stylesheet")
 		link(href="jQuery-QueryBuilder-master/dist/css/re_query-builder.default.css", rel="stylesheet")
-		
+		link(rel="stylesheet",
+			href="https://use.fontawesome.com/releases/v5.0.10/css/all.css",
+			integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg",
+			crossorigin="anonymous")
+
 		<!-- JQUERY -->
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
 		script(src="bootstrap/js/bootstrap.min.js")
@@ -73,25 +77,22 @@ html
 					p(style="display:inline-block;margin:10px 10px;") You have already authorized:
 					img(id="twitter-authorized", src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
 					img(id="reddit-authorized",src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
-			
-			<!-- boolean panel -->
-			include ./booleanBuilder.pug
-		
-			<!-- search --->
+
+		<!-- search --->
 			div(class="row")
 				div(id="tabs")
 					select(class="selectpicker show-tick" id="social-media" title="Choose a Data Source..." data-width="220px")
 						optgroup(label="Search Twitter")
-							option(data-icon="glyphicon-search" value="queryTweet" disabled) Tweets
+							option(data-icon="fab fa-twitter" value="queryTweet" disabled) Tweets
 							option(data-icon="glyphicon-user" value="queryUser" disabled) Twitter Users
 						optgroup(label="Search Reddit")
-							option(data-icon="glyphicon-search" value="queryReddit" disabled) Search Reddit Posts
-							option(data-icon="glyphicon-file" value="redditPost" disabled) Posts in Subreddit
-							option(data-icon="glyphicon-comment" value="redditComment" disabled) Comments in Subreddit
+							option(data-icon="fab fa-reddit-alien" value="queryReddit" disabled) Search Reddit Posts
+							option(data-icon="fas fa-list-ul" value="redditPost" disabled) Posts in Subreddit
+							option(data-icon="far fa-comment" value="redditComment" disabled) Comments in Subreddit
 						optgroup(label="Partial Historical Database")
-							option(data-icon="glyphicon-envelope" value="streamTweet") Streamed Tweets
-							option(data-icon="glyphicon-envelope" value="pushshiftPost") Historical Reddit Posts
-							option(data-icon="glyphicon-comment" value="pushshiftComment") Historical Reddit Comments
+							option(data-icon="fab fa-twitter-square" value="streamTweet") Streamed Tweets
+							option(data-icon="fab fa-reddit-square" value="pushshiftPost") Historical Reddit Posts
+							option(data-icon="fas fa-comment-dots" value="pushshiftComment") Historical Reddit Comments
 					
 					include searchbox.pug
 						
