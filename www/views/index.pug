@@ -30,7 +30,7 @@ html
 		include components/warning.pug
 		include components/sitemap.pug	
 		include components/clientside-warning.pug
-		include components/cookie.pug		
+		include components/cookie.pug
 								
 		div(class="headers")
 			//img(id="index-banner", src="bootstrap/img/logo/index-banner.png",width="100%")
@@ -61,7 +61,9 @@ html
 							h1(class="app-title") #{page.name}
 							p(class="intro",id=page.name) !{page.introduction}
 							a(class="prose-button",href=page.wiki,target="_blank") Read More
-							a(class="prose-button",href=page.url,id=page.url) Start
+
+							if page.url !== ''
+								a(class="prose-button",href=page.url,id=page.url) Start
 						div(class="app")
 							a(href=page.url)
 								img(src=page.imgURL, width="400px", class="logos")
@@ -75,7 +77,8 @@ html
 							h1(class="app-title") #{page.name}
 							p(class="intro") !{page.introduction}
 							a(class="prose-button",href=page.wiki,target="_blank") Read More
-							a(class="prose-button",href=page.url,id=page.url) Start
+							if page.url !== ''
+								a(class="prose-button",href=page.url,id=page.url) Start
 										
 		include components/footer.pug								
 				
