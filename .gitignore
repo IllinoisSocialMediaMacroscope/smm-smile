@@ -4,5 +4,5 @@ node_modules
 www/nltk_data
 .*
 *.json
-npm-debug.log.*
+*.log
 *.swp

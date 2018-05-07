@@ -1,31 +1,57 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
+
 ## SMILE (Social Media Intelligence and Learning Environment)
-![Architecture](/www/docs/SMILE_architecture.png)
 
-## Pre-requisit:
-1. **Nodejs** installed: https://nodejs.org/en/download/
-2. **Python 3** installed: https://www.python.org/downloads/ 
+### For users or potential users:
+- Go to [socialmediamacroscope.org](https://socialmediamacroscope.org) and request for an account
+- If you want to access Clowder within SMILE, you have to also set up a [Clowder account](https://socialmediamacroscope.ncsa.illinois.edu/clowder/signup)
+- [Unofficial demo](https://drive.google.com/file/d/1A4RVoNnciGluaW8OS8VLaAsozKkdCfIC/view?usp=sharing)
+- Contact us if you have any question: TechServicesAnalytics@mx.uillinois.edu
 
+### For developers:
+#### Structure of SMILE:
+![Architecture](./www/docs/small_SMILE_architecture.png)
 
-## How to Run:
-1. Download/or pull this repository to your local disk. 
-2. ```cd into the pulled repository```. Install the dependency libraries by runnig the bash script. ```$ ./install_libraries```
-3. Put .env files in the rootDIR, another .env in the graphql directory. 
-	* Link here :point_right: [googleDrive](https://drive.google.com/drive/folders/0B37hhRXKgRPOZG1MbUdwSEdVNWM)
-	* **Be Careful** sometimes google drive or your operating system will change the ".env" filename into "_env" or "env". Make sure to change it back to ".env" 
-	* make sure the **rootDIR** variable in the file matches your desired destination (home directory or any places). This rootDIR will be where it starts to hold analytics and downloadable data.
-	e.g.```rootDIR=/home/chen/analytics-standalone```
-	* make sure the **PYTHONPATH** variable points to where your python3 executable locates. e.g. ```PYTHONPATH = /usr/bin/python3```
-4. **TEST** the analytics server by typing **_npm test_**; **_cd graphql_** and **_npm test_** to test graphql server;
-5. **RUN** concurrently by typing **_npm start_**
+![CODE STRUCTURE](./www/docs/code_structure.png)
 
-## Port:
-1. Analytic tools run on **http://localhost:8080/**
-2. GraphQL data server runs on **http://localhost:5050/graphql/**
+#### Prerequisite:
+- **Nodejs** installed: https://nodejs.org/en/download/
+- Place ```main_config.json``` file under the path ```/www/``` and place ```graphql_config.json``` file under path ```/www/graphql```
+   * These two files contain credentials to acess **AWS**, **Box**, **Dropbox**, **Google drive**, **Reddit**, and **Twitter**
+   * **AWS** access to the current establishments:
+       * lambda
+       * batch
+       * s3
+       * elasticsearch
+       * ec2
+- contact TechServicesAnalytics@mx.uillinois.edu to request configuration files
 
-## WARNING:
-1. For details please review the **Memo.docx** file. Link here :point_right: [Memo](https://github.com/IllinoisSocialMediaMacroscope/analytics-standalone/tree/master/www/docs/memo.pdf)
-2. Credentials are covered up, please contact me if you want to test this project
+#### Configuration:
+1. ```git clone ``` this repository to your local disk, ```cd www ```. 
+2. Install nodejs dependency libraries in the SMILE server and GraphQL server:
 
-:e-mail: email me: _***REMOVED***_
+```npm install && cd grpahql && npm install```
 
+3. Install **concurently** library
+
+```npm install concurently -g```
+Concurrent library is used to run SMILE sever and GraphQL server at the same time. To avoid confusion, just isntall
+concurrently library globally with a ```-g```.
+
+4. **TEST** the analytics server
+
+```npm test```;
+
+5. **TEST** the graphql server
+
+```cd graphql && npm test```
+
+6. **RUN** concurrently
+
+```npm start``` in the ```www``` folder
+
+#### Port:
+1. Analytic tools run on ```http://localhost:8001```
+2. GraphQL data server runs on ```http://localhost:5050/graphql```
+
+:e-mail: email the developer: **cwang138@illinois.edu**
