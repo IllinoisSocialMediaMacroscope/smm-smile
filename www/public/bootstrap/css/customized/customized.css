@@ -472,3 +472,11 @@ marker#arrow {
 .control-group{
 	margin:20px auto;
 }
+
+#datasetAdvancedBtn{
+	margin-left: 5px;
+	font-size: 12px;
+	background-color: #eee;
+	padding: 5px;
+	border-radius: 5px;
+}

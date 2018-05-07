@@ -26,11 +26,6 @@ $(document).ready(function(){
 	$('#clowder-modal').on('shown.bs.modal', function (e) {
 		generate_data_list();
 	})
-	
-	$('#clowder-new-dataset').on('shown.bs.modal',function(e){
-		generate_collection_list();
-		generate_space_list();
-	});
 });
 
 function generate_data_list(){
@@ -98,40 +93,37 @@ function generate_collection_list(){
 		},
 		error: function(jqXHR, exception){
 			$("#error").val(jqXHR.responseText);
-			$("#warning").modal('show');				
+			$("#warning").modal('show');
 		} 
 	}); 
 }
 	
-function generate_space_list(){
+function generate_space_list_dataset(){
 	// lodading gif
-	$(".selectSpace").prev().show();
-	$(".selectSpace").hide();
-	
+	$("#selectSpaceInDataset").prev().show();
+	$("#selectSpaceInDataset").hide();
+
 	$.ajax({
 		type:'POST',
 		url:'list-space', 
 		data: {},			
 		success:function(data){
 			// hide loading bar show selectSpace
-			$(".selectSpace").prev().hide();
-			$(".selectSpace").show();
-			
+			$("#selectSpaceInDataset").prev().hide();
+			$("#selectSpaceInDataset").show();
 			if ('ERROR' in data){
 				$("#clowder-modal").modal('hide');
 				$("#error").val(JSON.stringify(data));
 				$("#warning").modal('show');					
 			}else{
 				// get a list, and add them to the select space options
-				$(".selectSpace").empty();
-				$(".selectSpace").append(`<option value="Please Select...">Please Select...</option> 
-							<option value="newSpace">Create a new space</option>`);					
-				$.each(data,function(i,val){
-					$(".selectSpace").append(`<option value="`+ val.id +`">` + val.name + `</option>`);
-				});	
+				$("#selectSpaceInDataset").empty();
 
-				
-						
+				$("#selectSpaceInDataset").append(`<option value="Please Select...">Please Select...</option> 
+							<option value="newSpace">Create a new space</option>`);
+                $.each(data,function(i,val){
+					$("#selectSpaceInDataset").append(`<option value="`+ val.id +`">` + val.name + `</option>`);
+				});
 			}
 		},
 		error: function(jqXHR, exception){
@@ -139,6 +131,43 @@ function generate_space_list(){
 			$("#warning").modal('show');				
 		} 
 	}); 
+}
+
+function generate_space_list_collection(){
+    // lodading gif
+    $("#selectSpaceInCollection").prev().show();
+    $("#selectSpaceInCollection").hide();
+
+    $.ajax({
+        type:'POST',
+        url:'list-space',
+        data: {},
+        success:function(data){
+            // hide loading bar show selectSpace
+            $("#selectSpaceInCollection").prev().hide();
+            $("#selectSpaceInCollection").show();
+
+            if ('ERROR' in data){
+                $("#clowder-modal").modal('hide');
+                $("#error").val(JSON.stringify(data));
+                $("#warning").modal('show');
+            }else{
+                // get a list, and add them to the select space options
+                $("#selectSpaceInCollection").empty();
+                $("#selectSpaceInCollection").append(`<option value="Please Select...">Please Select...</option>`);
+                // deactivate create new space in collection to avoid confusion
+                // 		<option value="newSpace">Create a new space</option>`);
+
+                $.each(data,function(i,val){
+                    $("#selectSpaceInCollection").append(`<option value="`+ val.id +`">` + val.name + `</option>`);
+                });
+            }
+        },
+        error: function(jqXHR, exception){
+            $("#error").val(jqXHR.responseText);
+            $("#warning").modal('show');
+        }
+    });
 }
 	
 function generate_user_list(){
@@ -175,6 +204,42 @@ function generate_user_list(){
 		}); 
 	}
 
+function checkNumShown(){
+    // check how many open tabs in id=create-new
+    return $('#create-new').children(':visible').length;
+}
+
+function resizeDiv(){
+    if (checkNumShown() == 1){
+        $('#create-new').children().each(function(i, val){
+            $(val).attr('class','col-12 col-sm-12 col-md-12');
+        })
+    }else if (checkNumShown() == 2){
+        $('#create-new').children().each(function(i, val){
+            $(val).attr('class','col-6 col-sm-6 col-md-6');
+        })
+    }else{
+        $('#create-new').children().each(function(i, val){
+            $(val).attr('class','col-12 col-sm-4 col-md-4');
+        })
+    }
+}
+
+function closeTab(e){
+    // close tab
+	$(e).parent().hide();
+
+	// flip the status to please select in the "create dataset"
+	var parent_id = $(e).parent().attr('id');
+    if (parent_id.split("-").indexOf("collection") > -1){
+        $("#selectCollection").val("Please Select...");
+	}else if (parent_id.split("-").indexOf("space") > -1){
+		$("#selectSpaceInDataset").val("Please Select...")
+	}
+
+	// resize
+    resizeDiv();
+}
 /*--------------------------------login---------------------------------------------*/
 function login_request(){
 	if (clowder_form_validation('login')){
@@ -215,21 +280,39 @@ $("#clowderPassword").on('keypress',function(e){
 	}
 });
 
-
-
 /*-------------------------------create new dataset---------------------------------*/
 $("#selectDataset").on('change',function(){
 	if ($("#selectDataset option:selected" ).val() === 'newDataset'){
-		$("#clowder-new-dataset").modal('show');
-		
+        generate_collection_list();
+        generate_space_list_collection();
+        generate_space_list_dataset();
+
+		$("#clowder-new-dataset").show();
+		resizeDiv();
+
 		// disable the next button incase people accidently hit it without dataID available
 		$("#clowder-next").prop('disabled',true);
 	}else if ($("#selectDataset option:selected" ).val() === 'Please Select...'){
+        $("#clowder-new-dataset").hide();
+        $("#clowder-new-collection").hide();
+        $("#clowder-new-space").hide();
 		$("#clowder-next").prop('disabled',true);
 	}else{
+        $("#clowder-new-dataset").hide();
+        $("#clowder-new-collection").hide();
+        $("#clowder-new-space").hide();
 		$("#clowder-next").prop('disabled',false);
 	}
 });
+
+function clowderDatasetAdvanceToggle(e){
+    $("#datasetAdvanced").toggle();
+    if ($("#datasetAdvanced").is(":visible")){
+        $("#datasetAdvancedBtn").text('Show less...');
+	}else{
+        $("#datasetAdvancedBtn").text('Show more...');
+	}
+}
 
 //metadata
 $("#datasetMeta select").on('change',function(){
@@ -242,11 +325,10 @@ $("#datasetMeta select").on('change',function(){
 									<div class="col-md-4 col-md-4 col-xs-12">
 										<p style="float:right;margin-top:5px;">` + selected.text() +`</p>
 									</div>
-									<div class="col-md-4 col-md-4 col-xs-12">
+									<div class="col-md-5 col-md-5 col-xs-12">
 										<input type="text" class="form-control" placeholder="field value">
 									</div>
-									<div class="col-md-4 col-md-4 col-xs-12">
-										<button class="btn btn-primary" style="margin:auto 5px;" onclick="saveMeta(this)">Save</button>
+									<div class="col-md-3 col-md-3 col-xs-12">
 										<button class="btn btn-warning" onclick="removeMeta(this)">remove</button>
 									</div>
 								</div>`);
@@ -301,7 +383,7 @@ function create_clowder_dataset(){
 				//map it back to the field name in the select
 				var metadata_id = val.id;
 				var metadata_field = $('#datasetMeta option[value="' + metadata_id +'"]').text();
-				var metadata_value = $("#" + metadata_id).find('input:disabled').val();
+				var metadata_value = $("#" + metadata_id).find('input').val();
 				
 				// field must be saved (disabled)
 				if (metadata_value !== '' && metadata_value !== undefined){
@@ -326,29 +408,17 @@ function create_clowder_dataset(){
 		if ($space.val() !== 'newSpace' && $space.val() !== 'Please Select...'){
 				data['space'] = [$space.val()]				
 		}
-		// loading gif
-		$("#clowder-new-dataset .modal-dialog .modal-footer img").show();
-		$("#clowder-createDataset-btn").hide();
-	
-		
+
 		$.ajax({
 			type:'POST',
 			url:'clowder-dataset', 
 			data: JSON.stringify(data),	
 			contentType: "application/json",			
 			success:function(data){
-				//loading gif resume
-				$("#clowder-new-dataset .modal-dialog .modal-footer img").hide();
-				$("#clowder-createDataset-btn").show();
-					
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
-					
-					//close this new modal 
-					$("#clowder-new-dataset").modal('hide')
-					
 					//put id in the files block
 					var datasetID = data.id;
 					$("#datasetID").val(datasetID);
@@ -409,7 +479,7 @@ function clowderFileGen(datalist){
 						<div class="clowderFileAdvance" style="display:none;">
 							<div class="control-group">
 								<label class="control-label">Descriptions</label>
-								<textarea class="form-control" rows="5" style="resize:none;" placeholder="A longer description"/>
+								<textarea class="form-control" rows="10" style="resize:none;" placeholder="A longer description"/>
 							</div>
 							<div class="control-group fileMeta">
 								<label class="control-label">Add Metadata</label>
@@ -456,11 +526,10 @@ function clowderFileMeta(){
 							<div class="col-md-4 col-md-4 col-xs-12">
 								<p style="float:right;margin-top:5px;">` + selected.text() +`</p>
 							</div>
-							<div class="col-md-4 col-md-4 col-xs-12">
+							<div class="col-md-5 col-md-5 col-xs-12">
 								<input type="text" class="form-control" placeholder="field value">
 							</div>
-							<div class="col-md-4 col-md-4 col-xs-12">
-								<button class="btn btn-primary" style="margin:auto 5px;" onclick="saveMeta(this)">Save</button>
+							<div class="col-md-3 col-md-3 col-xs-12">
 								<button class="btn btn-warning" onclick="removeMeta(this)">remove</button>
 							</div>
 						</div>`);
@@ -514,7 +583,7 @@ function submit_clowder_files(){
 						//map it back to the field name in the select
 						var metadata_id = val.id;
 						var metadata_field = $('#datasetMeta option[value="' + metadata_id +'"]').text();
-						var metadata_value = $("#" + metadata_id).find('input:disabled').val();
+						var metadata_value = $("#" + metadata_id).find('input').val();
 						// field must be saved (disabled)
 						if (metadata_value !== '' && metadata_value !== undefined){
 							metadata[metadata_field] = metadata_value
@@ -550,7 +619,8 @@ function submit_clowder_files(){
 					$("#clowder-message").text(data.info);
 					$("#file-links").empty();
 					$.each(data.ids, function(i,id){
-						$("#file-links").append(`<a style="display:block;font-size:15px;" href="https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/`
+						$("#file-links").append(`<a style="display:block;font-size:15px;" 
+							href="https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/`
 						+ id +`">https://socialmediamacroscope.ncsa.illinois.edu/clowder/files/` + id + `</a>`);
 					});
 					// hide upoad modal, show confirmation modal
@@ -641,8 +711,12 @@ $("#selectCollection").on('change',function(){
 	if ($("#selectCollection option:selected" ).val() === 'newCollection'){
 		// important: make sure to update space list 
 		// in case user add new space first then collection
-		generate_space_list();
-		$("#clowder-new-collection").modal('show');	
+		generate_space_list_collection();
+        $("#clowder-new-collection").show();
+        resizeDiv();
+	}else{
+        $("#clowder-new-collection").hide();
+        resizeDiv();
 	}
 });
 
@@ -660,28 +734,21 @@ function create_clowder_collection(){
 		if ($space.val() !== 'newSpace'	&& $space.val() !== 'Please Select...'){
 				data['space'] = $space.val();	
 		}
-		
-		// loading gif
-		$("#clowder-new-collection .modal-dialog .modal-footer img").show();
-		$("#clowder-createCollection-btn").hide();
-		
+
 		$.ajax({
 			type:'POST',
 			url:'clowder-collection', 
 			data: JSON.stringify(data),	
 			contentType: "application/json",			
 			success:function(data){
-				//loading gif resume
-				$("#clowder-new-collection .modal-dialog .modal-footer img").hide();
-				$("#clowder-createCollection-btn").show();
-				
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else{
-					//close this new modal 
-					$("#clowder-new-collection").modal('hide')
-					
+					//close this div
+					$("#clowder-new-collection").hide()
+                    resizeDiv();
+
 					//update the list of collection
 					generate_collection_list();
 				}
@@ -695,13 +762,16 @@ function create_clowder_collection(){
 }
 
 /*----------------------------------------------space---------------------------------------------------*/
-$(".selectSpace").on('change',function(){
-	$(".selectSpace").each(function(){
-		if ($(this).val() === 'newSpace'){
-			generate_user_list();
-			$("#clowder-new-space").modal('show');	
-		}
-	});
+$("#selectSpaceInDataset").on('change',function(){
+    if ($("#selectSpaceInDataset option:selected" ).val() === 'newSpace'){
+        generate_user_list();
+
+        $("#clowder-new-space").show();
+        resizeDiv();
+    }else{
+        $("#clowder-new-space").hide();
+        resizeDiv();
+    }
 });
 
 function create_clowder_space(){
@@ -726,30 +796,25 @@ function create_clowder_space(){
 		if (user_ids !== ''){
 			data['usr_ids'] = user_ids.slice(0,-1); // trim off last ','
 		}
-		
-		// loading gif
-		$("#clowder-new-space .modal-dialog .modal-footer img").show();
-		$("#clowder-createSpace-btn").hide();
-		
+
 		$.ajax({
 			type:'POST',
 			url:'clowder-space', 
 			data: JSON.stringify(data),	
 			contentType: "application/json",			
 			success:function(data){
-				//loading gif resume
-				$("#clowder-new-space .modal-dialog .modal-footer img").hide();
-				$("#clowder-createSpace-btn").show();
-				
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');					
 				}else{
-					//close this new modal 
-					$("#clowder-new-space").modal('hide')
+					//close this new modal
+                    //close this div
+					$("#clowder-new-space").hide();
+                    resizeDiv();
 					
 					//update the list of space
-					generate_space_list();
+					generate_space_list_collection();
+					generate_space_list_dataset();
 				}
 			},
 			error: function(jqXHR, exception){
@@ -761,4 +826,3 @@ function create_clowder_space(){
 	
 	
 }
-
