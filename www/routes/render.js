@@ -18,7 +18,7 @@ router.post('/render-json', function(req,res,next){
 			var preview_json = JSON.parse(preview_string);
 			var prefix = Object.keys(preview_json)[0];
 			var begin = parseInt(req.body.begin);
-			
+
 			if (begin < 0){
 				res.send({ERROR: 'It\'s already the first page!'})
 			}else if (begin > preview_json[prefix].length -1){

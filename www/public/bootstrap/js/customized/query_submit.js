@@ -707,11 +707,14 @@ function renderPreviewPagination(whichButton){
 	}else if (whichButton == 'next'){
 		currPreviewNum += 100;
 	}
-	
+
+	// the .json URL is hidden in the download modal
+	var fileURL = $("#success").find("#modal-download").find('p:hidden').text();
+
 	$.ajax({
 		url:"render-json",
 		type:"post",
-		data:{"fileURL":$("#modal-download").find('p').text(),
+		data:{"fileURL":fileURL,
 				"begin": currPreviewNum
 			},
 		success:function(data){

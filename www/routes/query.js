@@ -108,13 +108,20 @@ router.post('/query',function(req,res,next){
 							
 		
 							// save query parameters to it so history page can use it! Synchronous method
-							var config = req.body.filename + '.json';
+							var config = 'config.json';
 							params = JSON.parse(req.body.params);
 							if (req.body.pages !== '-999') params['pages:'] = req.body.pages;
 							if (params['fields'] === "") params['fields'] === "DEFAULT";
 							
 							// save config
 							fs.writeFileSync(directory +  config, JSON.stringify(params), 'utf8');
+
+                            // save json for future pagination purpose
+                            // due to [{xxx:xxx},{xxx:xxx}...] is not a valid json format
+                            var jsonObj = {};
+                            jsonObj[req.body.prefix] = responseObj[key1][key2][key3];
+                            var raw_json = req.body.filename + '.json'
+                            fs.writeFileSync(directory + raw_json, JSON.stringify(jsonObj, null, 2), 'utf8');
 							
 							// save CSV; Async
 							var processed = req.body.filename + '.csv';	
@@ -137,7 +144,7 @@ router.post('/query',function(req,res,next){
 								
 								var promise_arr = [];
 								promise_arr.push(uploadToS3(directory+processed, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+processed));
-								promise_arr.push(uploadToS3(directory + req.body.filename + '.json', req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+ req.body.filename + '.json'));
+								promise_arr.push(uploadToS3(directory + raw_json, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+ raw_json));
 								promise_arr.push(uploadToS3(directory+config, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+config));
 								Promise.all(promise_arr).then((URLs) => {
 									

@@ -21,7 +21,6 @@ router.get('/history',function(req,res,next){
 });
 
 router.post('/history',function(req,res,next){
-	console.log(req.body.folderURL);
 	var arrURL = req.body.folderURL.split('/');
 		
 	if (arrURL[1] === 'NLP' && arrURL[2] === 'preprocessing'){
@@ -333,7 +332,7 @@ router.post('/history',function(req,res,next){
 			if(fileList.length >= 2){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
-					if (filename.slice(-5) === '.json'){
+					if (filename === 'config.json'){
 						var config = folderObj[filename];
 					}else if (filename.slice(-4) === '.csv'){
 						var preview = folderObj[filename];
@@ -379,7 +378,7 @@ router.post('/history',function(req,res,next){
 			if(fileList.length >= 2){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
-					if (filename.slice(-5) === '.json'){
+					if (filename === 'config.json'){
 						var config = folderObj[filename];
 					}else if (filename.slice(-4) === '.csv'){
 						var preview = folderObj[filename];
@@ -448,7 +447,7 @@ router.post('/delete',function(req,res,next){
 	
 	else if (req.body.type === 'history'){
 		var p = deleteRemoteFolder(req.body.folderURL);
-		console.log(req.body.folderURL);
+
 		p.then(() =>{
 			res.send({'data':'Successfully deleted!'});
 		}).catch(err =>{
