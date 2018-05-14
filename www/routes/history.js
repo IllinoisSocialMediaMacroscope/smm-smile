@@ -227,11 +227,10 @@ router.post('/history',function(req,res,next){
 						title:'text classification', 
 						ID:req.body.folderURL,
 						img:[{name:'Split the Corpus', content:div_data0},
-							{name:'ROC curves for each class',content:div_data1},
+							{name:'Accuracy Score',content:div_data1},
 							{name:'Count of each class',content:div_data2}],
 						download:download,
-						preview:[{name:'Accuracy score for each fold',content:preview_arr1,dataTable:false},
-								{name:'Preview training report',content:preview_arr2,dataTable:false},
+						preview:[{name:'Preview training report',content:preview_arr2,dataTable:false},
 									{name:'Predicted results',content:preview_arr3,dataTable:true}],
 						config:config_data,
 						uid:arrURL[3]
