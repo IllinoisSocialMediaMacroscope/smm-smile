@@ -109,10 +109,9 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 			
 				res.send({
 					uuid:uuid,
-					img:[{name:'ROC curves for each class',content:div_data}],
+					img:[{name:'10 fold Cross Validation Accuracy Score',content:div_data}],
 					download:download,
-					preview:[{name:'10 fold Cross validation accuracy score for each fold', content:accuracy_array,dataTable:false},
-								{name:'10 fold Cross validation Evaluation of the performance',content:preview_arr,dataTable:false}]	
+					preview:[{name:'10 fold Cross validation Evaluation of the performance',content:preview_arr,dataTable:false}]
 				});
 
 			}).catch( (error) =>{
