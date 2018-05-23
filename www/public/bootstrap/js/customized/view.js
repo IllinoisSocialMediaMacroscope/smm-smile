@@ -229,7 +229,8 @@ function ajaxSubmit(formID,aws_identifier){
 	var data = $(formID).serialize() + "&prefix="+ prefix
 				+ "&s3FolderName=" + s3FolderName 
 				+ "&aws_identifier=" + aws_identifier
-				+ "&email=" + email;
+				+ "&email=" + email
+				+ "&sessionURL=" + sessionURL;
 
 	if (formValidation(aws_identifier)){
 		

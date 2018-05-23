@@ -9,7 +9,8 @@ $("#rdCommentReq").on('click',function(){
 			url:'reddit-expand', 
 			data: {"prefix":$(".dataset").val(), 
 					"email":$("#email-alert").val(),
-					"s3FolderName":s3FolderName},				
+					"s3FolderName":s3FolderName,
+					"sessionURL": sessionURL},
 			success:function(data){
 				if (data === 'done'){
 					$("#reddit-expand").modal('hide');
@@ -55,7 +56,9 @@ $("#rdCommentYes").on('click',function(){
 			data: {"prefix":$(".dataset").val(), 
 					"email":$("#email-alert").val(),
 					"s3FolderName":s3FolderName,
-					"consent":true},				
+					"consent":true,
+                	"sessionURL": sessionURL
+			},
 			success:function(data){
 				if (data === 'done'){
 					$("#reddit-expand").modal('hide');
@@ -108,7 +111,8 @@ $("#email-alert").on('keypress',function(e){
 				url:'reddit-expand', 
 				data: {"prefix":$(".dataset").val(), 
 						"email":$("#email-alert").val(),
-						"s3FolderName":s3FolderName},				
+						"s3FolderName":s3FolderName,
+                    	"sessionURL": sessionURL},
 				success:function(data){
 					if (data === 'done'){
 						$("#reddit-expand").modal('hide');

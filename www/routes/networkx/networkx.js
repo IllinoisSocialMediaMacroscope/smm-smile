@@ -75,7 +75,8 @@ router.post('/networkx',function(req,res,next){
 				console.log(err);
 				res.send({'ERROR':err});
 			});
-		}else if (req.body.aws_identifier === 'batch'){
+		}
+		else if (req.body.aws_identifier === 'batch'){
 			
 			var jobName = req.body.s3FolderName + '_NW_sdk';
 			var command = [ "python3.6", "/scripts/batch_network_analysis.py",
@@ -84,7 +85,8 @@ router.post('/networkx',function(req,res,next){
 					"--relations", req.body.relations,
 					"--s3FolderName", req.body.s3FolderName,
 					"--email", req.body.email,
-					"--uid", uid]
+					"--uid", uid,
+					"--sessionURL", req.body.sessionURL]
 			
 			submit_Batchjob(jobName,command).then(results =>{
 				results['uid'] = uid;

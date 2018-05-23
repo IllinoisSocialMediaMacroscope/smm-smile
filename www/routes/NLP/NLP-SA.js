@@ -78,7 +78,8 @@ router.post('/NLP-sentiment',function(req,res,next){
 					"--column", req.body.selectFileColumn,
 					"--s3FolderName", req.body.s3FolderName,
 					"--email", req.body.email,
-					"--uid", uid ] 
+					"--uid", uid,
+                	"--sessionURL", req.body.sessionURL]
 			
 			submit_Batchjob(jobName,command).then(results =>{
 				results['uid'] = uid;
