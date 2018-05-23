@@ -1,4 +1,5 @@
 // get session id
+var sessionURL = window.location.href;
 var pathArray = window.location.pathname.split('/');
 var newPath = "";
 for (i=0; i<pathArray.length-1; i++){
