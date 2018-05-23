@@ -504,7 +504,7 @@ function renderDownload(URLs, fname){
 	// append modal-download in the background								
 	$("#modal-download").empty();
 	$("#modal-download").append(`<ul style="margin:5px 5px;">
-									<a href="` + URLs[0] + `" style="color:red;"><span class="glyphicon glyphicon-download-alt"></span>`+ `DONWLOAD ` +  fname + `</a>
+									<a href="` + URLs[0] + `" style="color:red;"><span class="glyphicon glyphicon-download-alt"></span>`+ `DOWNLOAD ` +  fname + `</a>
 									<p hidden>` + URLs[1] +`</p>
 								</ul>`);
 	$("#success").modal('show');
