@@ -16,15 +16,6 @@ router.get('/',function(req,res,next){
 					and analyze content with just a few clicks. Both live and historical data are available for search.`
 			},
 			{
-				name:'Clowder',
-				url:'',
-				imgURL:'bootstrap/img/logo/clowder-only-logo.png',
-				wiki:'https://clowder.ncsa.illinois.edu',
-				introduction:`Clowder is a research data management system. You can choose to add search results 
-					and analytics outputs to Clowder within SMILE. A cluster of extraction services will process the 
-					data to extract interesting metadata and create web based data previews and visualizations.`
-			},
-			{
 				name:'Pre-processing',
 				url:'NLP-preprocess',
 				imgURL:'bootstrap/img/logo/NLP/NLP-preprocess.png',
@@ -65,9 +56,17 @@ router.get('/',function(req,res,next){
 				introduction:`<b>Social network analysis</b> is the process of investigating social 
 					structures through the use of <a href="https://en.wikipedia.org/wiki/Network_theory">networks</a> and <a href="https://en.wikipedia.org/wiki/Graph_theory">graph theory
 					</a>.It characterizes networked structures in terms of <i>nodes</i> (individual actors, people, or things within the network) and the <i>ties</i>, <i>edges</i>, 
-					or <i>links</i> (relationships or interactions) that connect them.`}]
-				}
-			);
+					or <i>links</i> (relationships or interactions) that connect them.`},
+            {
+                name:'Clowder',
+                url:'',
+                imgURL:'bootstrap/img/logo/clowder-only-logo.png',
+                wiki:'https://clowder.ncsa.illinois.edu',
+                introduction:`Clowder is a research data management system. You can choose to add search results 
+					and analytics outputs to Clowder within SMILE. A cluster of extraction services will process the 
+					data to extract interesting metadata and create web based data previews and visualizations.`
+            }]
+		});
 });
 
 module.exports = router;
