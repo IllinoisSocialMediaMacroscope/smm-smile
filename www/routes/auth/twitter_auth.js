@@ -12,7 +12,8 @@ router.get('/login/twitter', function(req,res,next){
     // patch the oauth library node_modules/oauth/lib/oauth.js, line 540 add: extraParams["oauth_callback"]===undefined
 	consumer.getOAuthRequestToken({ 'oauth_callback': "https://socialmediamacroscope.org:8000" + req.query.currentURL + "login/twitter/callback"}, function(error, oauthToken, oauthTokenSecret, results){
     if (error) {
-		res.send("Error getting OAuth request token : " + util.inspect(error), 500);
+		console.log(error);
+		res.redirect(req.query.currentURL + 'query?error=' + JSON.stringify(error));
     } else {  
 		
 		req.session.twt_oauthRequestToken = oauthToken;
