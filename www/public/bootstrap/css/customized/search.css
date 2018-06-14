@@ -557,3 +557,33 @@ nav-tabs li a:hover{
     text-align: center;
     background: #d4eafd;
 }
+
+#twitter-pin{
+	margin-top:10px;
+	width:500px;
+	margin-left:10px;
+	vertical-align:baseline;
+}
+
+#twitter-login-header h2{
+	display:inline;
+	vertical-align: middle;
+	margin-left:10px;
+}
+
+#twitter-login-notes {
+	margin: 20px auto 20px auto;
+}
+#twitter-login-notes p{
+	display:inline;
+	color:#ea4937;
+}
+#twitter-login-notes a{
+	margin-left:5px;
+	text-decoration:underline
+}
+#twitter-login-notes img{
+	width: 15px;
+	vertical-align: top;
+	margin-right: 5px;
+}
