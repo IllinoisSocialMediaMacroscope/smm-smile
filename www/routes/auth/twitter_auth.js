@@ -10,7 +10,7 @@ var consumer = new OAuth1(
 
 router.get('/login/twitter', function(req,res,next){
     // patch the oauth library node_modules/oauth/lib/oauth.js, line 540 add: extraParams["oauth_callback"]===undefined
-	consumer.getOAuthRequestToken({ 'oauth_callback': "https://socialmediamacroscope.org:8000" + req.query.currentURL + "login/twitter/callback"}, function(error, oauthToken, oauthTokenSecret, results){
+	consumer.getOAuthRequestToken({ 'oauth_callback': "oob"}, function(error, oauthToken, oauthTokenSecret, results){
     if (error) {
 		console.log(error);
 		res.redirect(req.query.currentURL + 'query?error=' + JSON.stringify(error));
@@ -25,12 +25,11 @@ router.get('/login/twitter', function(req,res,next){
   });
 });
 
-router.get('/login/twitter/callback',function(req,res,next){
-	
+router.post('/login/twitter',function(req,res,next){
 	consumer.getOAuthAccessToken(req.session.twt_oauthRequestToken,req.session.twt_oauthRequestTokenSecret, 
-		req.query.oauth_verifier, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
+		req.body.twt_pin, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
 			if (error) {
-				res.redirect('/query?error=' + JSON.stringify(error));
+				res.send({redirect_url: req.session.currentURL + 'query?error=' + JSON.stringify(error)});
 			} else {
 				
 				// save in the session
@@ -41,7 +40,7 @@ router.get('/login/twitter/callback',function(req,res,next){
 				// set the cookie as true for 29 minutes maybe?
 				res.cookie('twitter-success','true',{maxAge:1000*60*29, httpOnly:false});	
 				res.cookie('twitter-later','false',{maxAge:1000*60*29, httpOnly:false});
-				res.redirect(req.session.currentURL + 'query');
+				res.send({redirect_url: req.session.currentURL + 'query'});
 			}
 		});
 
