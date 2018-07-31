@@ -233,7 +233,10 @@ function ajaxSubmit(formID,aws_identifier){
 	if (formValidation(aws_identifier)){
 		
 		customized_reset();
+
+		// scroll to loading gif
 		$(".loading").show();
+        $("html, body").animate({scrollTop:$(".loading").offset().top -100}, 1000);
 
 		$.ajax({
 			type:'POST',
