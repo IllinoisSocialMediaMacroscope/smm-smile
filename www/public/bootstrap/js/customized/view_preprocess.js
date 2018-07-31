@@ -9,7 +9,7 @@ function drawWordTree(name,table,root){
 						<div class="x_content"> 
 							<div class="note">
 								<li>word tree reads from <b>left to right</b>, and each branch is a sentence/phrase</li>					
-								<li><b>click</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> on the word will expand or collapse the tree</li>
+								<li><b>click</b> on the word will expand or collapse the tree</li>
 								<li>size of the word stands for the <b>weight</b> of the word, which is proportional to their usage</li>
 								<li>details please consult 
 									<a href="https://developers.google.com/chart/interactive/docs/gallery/wordtree" target="_blank">
