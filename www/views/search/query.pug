@@ -23,6 +23,9 @@ html
 		script(src="bootstrap/js/bootstrap-multiselect.js")
 		script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js")
 		script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+
+		<!-- Tooltip -->
+		script(src="javascript/popper.js")
 		
 		<!-- customized -->
 		script(src="bootstrap/js/customized/query_pb.js")
@@ -80,6 +83,7 @@ html
 			<!-- search --->
 			div(class="row")
 				div(id="tabs")
+					boolean(data-toggle="tooltip", data-placement="left", data-html="true")
 					select(class="selectpicker show-tick" id="social-media" title="Choose a Data Source..." data-width="220px")
 						optgroup(label="Search Twitter")
 							option(data-icon="fab fa-twitter" value="queryTweet" disabled) Tweets
@@ -92,7 +96,6 @@ html
 							option(data-icon="fab fa-twitter-square" value="streamTweet") Streamed Tweets
 							option(data-icon="fab fa-reddit-square" value="pushshiftPost") Historical Reddit Posts
 							option(data-icon="fas fa-comment-dots" value="pushshiftComment") Historical Reddit Comments
-					
 					include searchbox.pug
 						
 			<!-- rendering -->

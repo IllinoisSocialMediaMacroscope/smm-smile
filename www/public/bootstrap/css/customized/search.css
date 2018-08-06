@@ -551,12 +551,12 @@ nav-tabs li a:hover{
   margin-right:0px;
 }
 
-#booleanQueryPreview{
-	font-style: italic;
-	font-size: 18px;
-    text-align: center;
-    background: #d4eafd;
-}
+/*#booleanQueryPreview{*/
+	/*font-style: italic;*/
+	/*font-size: 18px;*/
+    /*text-align: center;*/
+    /*background: #d4eafd;*/
+/*}*/
 
 #twitter-pin{
 	margin-top:10px;
@@ -586,4 +586,11 @@ nav-tabs li a:hover{
 	width: 15px;
 	vertical-align: top;
 	margin-right: 5px;
+}
+
+/* tooltips */
+.tooltip-inner{
+	min-width: 300px;
+	text-align: left;
+	padding: 20px;
 }
