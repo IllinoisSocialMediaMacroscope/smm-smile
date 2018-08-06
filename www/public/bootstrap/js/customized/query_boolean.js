@@ -133,5 +133,5 @@ function updateBooleanString(QueryString){
 	Query =updateString(queryTerm,parameters);
 	$("#input").val(`{\n\n` + Query +`\n\n}`);
 	
-	$("#booleanQueryPreview").html("Query matches each platform's rule has been set in the searchbox: <br>" + QueryString);
+	// $("#booleanQueryPreview").html("Query matches each platform's rule has been set in the searchbox: <br>" + QueryString);
 }

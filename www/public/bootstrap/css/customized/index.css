@@ -115,6 +115,8 @@ body {
     top: 100px;
     margin: auto auto;
     width: calc(50%);
+    min-width:600px;
+    overflow:auto;
     padding: 30px 30px;
     background-color: #17466f;
     color: white;
@@ -133,7 +135,6 @@ body {
 	color:white;
 	font-size:15px;
 	font-weight:600;
-	margin:-25px -15px;
 }
 #citation-notice-btn:hover{
 	color:#ea4a36;

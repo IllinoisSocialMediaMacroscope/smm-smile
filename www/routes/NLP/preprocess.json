@@ -23,15 +23,9 @@
 						"options":[
 							{"value":"Please Select...",
 							"label":"Please Select..."},
-							
-							{"value":"lemmatization",
-							"label":"lemmatization"},
-							
+
 							{"value":"stemming",
-							"label":"stemming"},
-							
-							{"value":"both",
-							"label":"lemmatization + stemming"}
+							"label":"stemming"}
 						]
 					}
 				]},
@@ -54,4 +48,3 @@
 	],
 	"custom-script":"bootstrap/js/customized/view_preprocess.js"
 }
-			
