@@ -84,10 +84,15 @@ html
 				
 		script.
 			$("#citation-notice-btn").click(function(){
-				$("#citation-notice").hide('slow');
+
+				// hide citation; show start buttons;
+			    $("#citation-notice").hide('slow');
 				$(".fadein").show('slow');
 				$(".button-unit").show('slow');
-				
+
+				// scroll down
+				$("html, body").animate({ scrollTop: $("#get-started").offset().top/2 }, 1000);
+
 			});
 					
 		script(src="bootstrap/js/customized/hotkeys.js").	

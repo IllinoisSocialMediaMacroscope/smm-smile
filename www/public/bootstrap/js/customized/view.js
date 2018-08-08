@@ -152,10 +152,8 @@ function appendImg(imgID, imgData){
 							</div>
 							<div class="x_content">
 								<div class="note">
-									<li><b>click, drag, and mouseover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the graph will give you more information</li>
-									<li><b>hover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over top-right corner of the chart will present various operations
-										<br><img src="bootstrap/img/gifs/plotlyDemo.gif"/>
-									</li>
+									<li><b>click, drag, and mouseover</b> the graph will give you more information</li>
+									<li><b>hover</b> over top-right corner of the chart will present various operations</li>
 									<li>details please consult 
 										<a href="https://plot.ly/" target="_blank">
 											<img src="bootstrap/img/logo/plotly.png" width="18px"/>Plotly
@@ -179,7 +177,7 @@ function appendPreview(previewID, previewData){
 							<div class="x_content">
 								<div class="note">
 									<li>pagination and search keywords enabled</li>
-									<li><b>Click</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> table heads will rank the corresponding column</li>
+									<li><b>Click</b> table heads will rank the corresponding column</li>
 									<li>details please consult 
 										<a href="https://datatables.net/" target="_blank">DataTable plugin for JQuery</a>
 									</li>
@@ -235,7 +233,10 @@ function ajaxSubmit(formID,aws_identifier){
 	if (formValidation(aws_identifier)){
 		
 		customized_reset();
+
+		// scroll to loading gif
 		$(".loading").show();
+        $("html, body").animate({scrollTop:$(".loading").offset().top -100}, 1000);
 
 		$.ajax({
 			type:'POST',
