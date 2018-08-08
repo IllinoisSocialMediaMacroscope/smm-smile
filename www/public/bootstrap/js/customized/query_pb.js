@@ -21,13 +21,13 @@ function init(){
 					psPost:{},
 					psComment:{}	
 				};
-	
+
 	// boolean toggle
-	$("#boolean-toggle").on('click',function(){
-		//$("#query-builder-container").toggle();
-		$("#booleanQueryPreview").empty();
-		$("#query-builder-modal").modal('show');
-	});
+	// $("#boolean-toggle").on('click',function(){
+	// 	//$("#query-builder-container").toggle();
+	// 	$("#booleanQueryPreview").empty();
+	// 	$("#query-builder-modal").modal('show');
+	// });
 	// save modal popup
 	$("#adv-search-btn").on('click', function(e){
 		modalPopUp('#input');
@@ -202,32 +202,62 @@ function init(){
 		$(".form-group.ps-cm-subreddit").hide();
 		$(".form-group.ps-cm-author").hide();
 		$(".form-group.ps-cm-dateRange").hide();
-		
-		queryTerm = $(this).find(':selected').val();
+
+        queryTerm = $(this).find(':selected').val();
 		if ( queryTerm === 'queryTweet'){
 			$(".tweet").show();
 			$("#searchbox").attr("placeholder","Tweet keywords that you wish to search...");
-		}else if ( queryTerm === 'queryUser'){
+
+			// tooltip to show twitter rules
+            $("boolean").attr('data-original-title',
+				"Twitter API supports a list of standard search operators to modify the behavior of the query. For example, " +
+				"<b>SPACE, OR, MINUS SIGN, HASHTAG and etc</b>. <br>Details please refer to&nbsp" +
+				"<a href='https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators.html' target='_blank'>" +
+				"standard-operators.html</a>")
+                .tooltip('fixTitle')
+                .tooltip('show');
+		}
+		else if ( queryTerm === 'queryUser'){
 			$(".user").show();
 			$("#searchbox").attr("placeholder","Username keywords that you wish to search...");
-		}else if ( queryTerm === 'streamTweet'){
+            $("boolean").tooltip('hide');
+        }
+        else if ( queryTerm === 'streamTweet'){
 			$(".es-tweet").show();
 			$("#searchbox").attr("placeholder","Tweet keywords that you wish to search...");
-		}else if ( queryTerm === 'queryReddit'){
+            $("boolean").tooltip('hide');
+        }
+        else if ( queryTerm === 'queryReddit'){
 			$(".reddit-search").show();
 			$("#searchbox").attr("placeholder","Keywords for the Reddit posts that you wish to search...");
-		}else if ( queryTerm === 'redditPost'){
+
+            // tooltip to show twitter rules
+            $("boolean").attr('data-original-title',
+                "Reddit search supports the boolean operators <b>AND, OR, and NOT</b> (case sensitive) as well as parenthesis. Details please refer to&nbsp" +
+                "<a href='https://www.reddit.com/wiki/search' target='_blank'>" +
+                "https://www.reddit.com/wiki/search</a>")
+                .tooltip('fixTitle')
+                .tooltip('show');
+		}
+		else if ( queryTerm === 'redditPost'){
 			$(".reddit-post").show();
 			$("#searchbox").attr("placeholder","The subreddit name you wish to get posts from...");
-		}else if ( queryTerm === 'redditComment'){
+            $("boolean").tooltip('hide');
+		}
+		else if ( queryTerm === 'redditComment'){
 			$(".reddit-comment").show();
 			$("#searchbox").attr("placeholder","The subreddit name you wish to get comments from...");
-		}else if ( queryTerm === 'pushshiftPost'){
+            $("boolean").tooltip('hide');
+		}
+		else if ( queryTerm === 'pushshiftPost'){
 			$(".pushshift-post").show();
 			$("#searchbox").attr("placeholder","Keyword that you wish to search...");
-		}else if ( queryTerm === 'pushshiftComment'){
+            $("boolean").tooltip('hide');
+		}
+		else if ( queryTerm === 'pushshiftComment'){
 			$(".pushshift-comment").show();
 			$("#searchbox").attr("placeholder","Keyword that you wish to search...");
+            $("boolean").tooltip('hide');
 		}
 	
 		Query = updateString(queryTerm,parameters);
@@ -1064,10 +1094,8 @@ function setHitogramInterval(freq){
 				}else{
 					$("#img-container").append(`<div class="x_content">
 									<div class="note">
-										<li><b>click, drag, and mouseover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> the graph will give you more information</li>
-										<li><b>hover</b><img src="bootstrap/img/logo/img-materials/mouse.png" width="20px"/> over top-right corner of the chart will present various operations
-											<br><img src="bootstrap/img/gifs/plotlyDemo.gif"/>
-										</li>
+										<li><b>click, drag, and mouseover</b> the graph will give you more information</li>
+										<li><b>hover</b> over top-right corner of the chart will present various operations</li>
 										<li>details please consult 
 											<a href="https://plot.ly/" target="_blank">
 												<img src="bootstrap/img/logo/plotly.png" width="18px"/>Plotly

@@ -71,9 +71,10 @@ $(document).ready(function(){
 		var prefix = $(this).children(":selected").val();
 		var directory = $(this).children(":selected").attr("class");
 		$("#selectFilePreview-container").empty();
+
 		// add loading bar here for preview
 		$("#preview-loading").show();
-		
+
 		$.ajax({
 			type:'POST',
 			url:'render', 
@@ -207,7 +208,6 @@ $(document).ready(function(){
 	
 	// lambda vs batch
 	$("#submit").on('click',function(){
-			console.log($(".length").val() );
 			if($(".length").val() === undefined){
 				// pop error
 				$("#modal-message").val("Cannot perform analysis on this dataset. Check if it exists!");
