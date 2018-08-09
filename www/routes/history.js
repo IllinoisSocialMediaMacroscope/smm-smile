@@ -320,7 +320,8 @@ router.post('/history',function(req,res,next){
 		arrURL[2] === 'twitter-User' ||
 		arrURL[2] === 'twitter-Stream' ||
 		arrURL[2] === 'reddit-Comment' ||
-		arrURL[2] === 'reddit-Historical-Comment')) {
+		arrURL[2] === 'reddit-Historical-Comment' ||
+		arrURL[2] === 'crimson-Hexagon')) {
 					
 		var p = list_files(req.body.folderURL);
 		p.then(folderObj =>{

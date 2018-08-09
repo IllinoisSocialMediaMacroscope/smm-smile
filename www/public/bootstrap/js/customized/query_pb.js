@@ -22,12 +22,6 @@ function init(){
 					psComment:{}	
 				};
 
-	// boolean toggle
-	// $("#boolean-toggle").on('click',function(){
-	// 	//$("#query-builder-container").toggle();
-	// 	$("#booleanQueryPreview").empty();
-	// 	$("#query-builder-modal").modal('show');
-	// });
 	// save modal popup
 	$("#adv-search-btn").on('click', function(e){
 		modalPopUp('#input');
@@ -170,6 +164,7 @@ function init(){
 		dropUp:true,
 		maxHeight:600,
 		buttonWidth:'600px',
+		maxWidth:600,
 		includeSelectAllOption: true,		
 		enableCollapsibleOptGroups: true,			
 		});
@@ -259,6 +254,9 @@ function init(){
 			$("#searchbox").attr("placeholder","Keyword that you wish to search...");
             $("boolean").tooltip('hide');
 		}
+		else if (queryTerm === 'crimsonHexagon'){
+		    window.location.href = 'query-crimson'
+        }
 	
 		Query = updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);

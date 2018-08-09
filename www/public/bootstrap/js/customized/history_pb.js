@@ -208,7 +208,7 @@ function appendOverview(container,config, download){
 	// vertical table	
 	var tableContent = `<div class="table-responsive"><table class="table table-striped table-bordered"><tbody>`;
 	$.each(config, function(key,value){
-		tableContent += `<tr><th>` + key + `</th><td>` + value + `</td></tr>`;
+		tableContent += `<tr><th>` + JSON.stringify(key) + `</th><td>` + JSON.stringify(value) + `</td></tr>`;
 	});
 	
 	// add download files

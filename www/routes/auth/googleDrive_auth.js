@@ -23,9 +23,9 @@ router.post('/login/google',function(req,res,next){
 	
 	oauth2Client.getToken(req.body.authorizeCode, function(err, token) {
 		if (err) {
-			console.log('Error while trying to retrieve access token', err);
-			res.send({'ERROR':err});
-		}else{
+            console.log('Error while trying to retrieve access token', err);
+            res.send({'ERROR':err});
+        }else{
 			req.session.google_access_token = token.access_token;
 			req.session.save();
 			

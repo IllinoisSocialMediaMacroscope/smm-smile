@@ -109,7 +109,17 @@ function twitterAPI(tokens,resolveName, id, args){
 					resolve(tweets.users);
 				});
 				break;
-			
+
+			case 'statusesLookup':
+				client.get('statuses/lookup', args, function(error, tweets, response){
+					if (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+					resolve(tweets);
+				})
+                break;
+
 			default:
 				console.log('sorry we can\'t find matching resolve type:' + resolveName);
 				resolve(null);

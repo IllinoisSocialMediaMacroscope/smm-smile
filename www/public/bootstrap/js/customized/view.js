@@ -66,7 +66,7 @@ function arrayToTable(array,tableID){
 		}else if (val === 'selftext'){
 			val = 'reddit post text (selftext)';
 		}else if (val === 'title'){
-			val = 'reddit post title (title)';
+			val = 'title';
 		}else if (val === 'public_description'){
 			val = 'subreddit public description (public_description)';
 		}else if (val === ''){
@@ -80,10 +80,10 @@ function arrayToTable(array,tableID){
 	$.each(array.slice(1),function(i,val){
 		tableContent += "<tr>";
 		$.each(val,function(j,cval){
-			// trim the content to 100 character maximum
-			//if (cval.length >=100){
-			//	cval = cval.slice(0,100) + '...';
-			if (cval === '' || cval === undefined){
+			// trim the content to 140 character maximum
+			if (cval.length >=140) {
+                cval = cval.slice(0, 140) + '...';
+            }else if (cval === '' || cval === undefined){
 				cval = 'NaN';
 			}
 			tableContent += `<td>` + cval + "</td>"
@@ -220,8 +220,7 @@ function ajaxSubmit(formID,aws_identifier){
 	var prefix = $("#selectFile").children(":selected").val();
 	var length = $("#length").val();
 	var email = $("#batch-email-alert").val();
-	
-	// session ID already calculated in topbar.pug
+
 	if (s3FolderName == undefined) s3FolderName = 'local'
 
 	var data = $(formID).serialize() + "&prefix="+ prefix

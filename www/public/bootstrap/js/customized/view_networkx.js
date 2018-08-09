@@ -10,8 +10,7 @@ $(document).ready(function(){
 			$("#clusters").show();
 		}
 	});
-	
-	// session ID already calculated in topbar.pug
+
 	if (s3FolderName == undefined) s3FolderName = 'local';
 	$.ajax({
 		type:'POST',

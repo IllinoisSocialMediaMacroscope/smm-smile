@@ -10,6 +10,7 @@
 	background-color:#1e325a;
 	border:solid 1px #888;
 }
+
 #topbar-home{
 	font-size:14px;
 	color:white;
@@ -43,7 +44,8 @@
 #topbar-export:hover,
 #topbar-generic:hover,
 #topbar-home:hover,
-#topbar-hub:hover{
+#topbar-hub:hover,
+#topbar-query:hover{
 	color:black;
 	background-color:#eae8e8;
 }
