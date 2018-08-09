@@ -143,7 +143,7 @@ router.post('/text-classification-predict',function(req,res,next){
 			'uuid':req.body.uuid,
 			's3FolderName':req.body.s3FolderName})
 		.then(results =>{
-			var config = results['config'];		
+			var config = results['config'];
 			var uuid = results['uuid'];
 			var predict = results['predict'];
 			var div = results['div'];

@@ -86,6 +86,7 @@ router.post('/list',function(req,res,next){
 	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Comment/'));
 	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Historical-Post/'));
 	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
+	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/crimson-Hexagon/'));
 	Promise.all(promise_array).then( values => {
 		
 		directory['twitter-Tweet'] = values[0];
@@ -96,7 +97,8 @@ router.post('/list',function(req,res,next){
 		directory['reddit-Comment'] = values[5];
 		directory['reddit-Historical-Post'] = values[6];
 		directory['reddit-Historical-Comment'] = values[7];
-	
+		directory['crimson-Hexagon'] = values[8];
+
 		res.send(directory);
 	}).catch(err =>{
 		res.send({ERROR:err});
@@ -115,7 +117,8 @@ router.post('/list-all',function(req,res,next){
 							"reddit-Comment":{},
 							"reddit-Post":{},
 							"reddit-Historical-Post":{},
-							"reddit-Historical-Comment":{}
+							"reddit-Historical-Comment":{},
+							"crimson-Hexagon":{},
 						},
 						"ML":
 						{
@@ -145,7 +148,8 @@ router.post('/list-all',function(req,res,next){
 	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Comment/'));
 	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Historical-Post/'));
 	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
-	
+	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/crimson-Hexagon/'));
+
 	Promise.all(promise_array).then( values => {
 		directory['ML']['classification'] = values[0];
 		directory['NLP']['preprocessing'] = values[1];
@@ -159,7 +163,8 @@ router.post('/list-all',function(req,res,next){
 		directory['GraphQL']['reddit-Comment'] = values[9];
 		directory['GraphQL']['reddit-Historical-Post'] = values[10];
 		directory['GraphQL']['reddit-Historical-Comment'] = values[11];
-		
+		directory['GraphQL']['crimson-Hexagon'] = values[12];
+
 		res.send(directory);
 		
 	}).catch( (err) => { 

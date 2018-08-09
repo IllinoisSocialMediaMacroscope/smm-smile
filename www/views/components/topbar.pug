@@ -1,7 +1,8 @@
 nav(class="navbar navbar-inverse navbar-fixed-top")
 	div(class="container-fluid")
 		div(class="navbar-header")
-			button(type="button",class="navbar-toggle collapsed", data-toggle="collapse", data-target="#navbar", aria-expanded="true", aria-controls="navbar")
+			button(type="button",class="navbar-toggle collapsed", data-toggle="collapse", data-target="#navbar",
+				aria-expanded="true", aria-controls="navbar")
 				span(class="sr-only") Toggle navigation
 				span(class="icon-bar")
 				span(class="icon-bar")
@@ -29,13 +30,15 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 					a(id="topbar-export")
 						span(class="glyphicon glyphicon-cloud")
 						| Export
-				li 
-					a(href="query",id="topbar-query")
+				li
+					a(href="query", id="topbar-query")
 						span(class="glyphicon glyphicon-search")
 						| Social Media
-						
+
 				div(class="dropdown",id="topbar-analytics")
-					button(type="button",id="topbar-analytics-btn", class="btn btn-default dropdown-toggle", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true") Analytics Tools &nbsp;
+					button(type="button",id="topbar-analytics-btn", class="btn btn-default dropdown-toggle",
+						data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
+						| Analytics Tools &nbsp;
 						span(class="caret")
 					ul(class="dropdown-menu", aria-labelledby="dropdownMenu1")
 						
@@ -46,10 +49,7 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 						li 
 							a(href="NLP-sentiment", id="topbar-sentiment") Sentiment Analysis
 						li 
-							a(href="networkx", id="topbar-networkx") Network Analysis		
-					 
+							a(href="networkx", id="topbar-networkx") Network Analysis
 			form(id="sitemap",class="navbar-form navbar-right")
 				input(id="sitemap-input", type="text",class="form-control",placeholder="Search within the tool...")
-
-script(src="bootstrap/js/customized/view_topbar.js")
 	
