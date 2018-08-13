@@ -27,8 +27,6 @@ function drawGauge(name,compound) {
 
 
 $(document).ready(function(){
-	//select 
-	// session ID already calculated in topbar.pug
 	if (s3FolderName == undefined) s3FolderName = 'local';
 	$.ajax({
 		type:'POST',
@@ -109,7 +107,7 @@ $(document).ready(function(){
 						// public description, description(redditSearchSubreddit)
 						// _source.text, _source.user.description(streaming)
 						var allowed_field_list = ['text','user.description','description',
-						'_source.text', '_source.user.description','body','title','_source.body','_source.title'];
+						'_source.text', '_source.user.description','body','title','_source.body','_source.title','contents'];
 						
 						var index = [];
 						$.each(data.preview[0],function(i,val){

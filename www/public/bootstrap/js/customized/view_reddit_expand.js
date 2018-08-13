@@ -1,6 +1,4 @@
 $("#rdCommentReq").on('click',function(){
-	
-	// session ID already calculated in topbar.pug
 	if (s3FolderName == undefined) s3FolderName = 'local'
 	
 	if (checkRedditReq()){
@@ -46,7 +44,6 @@ $("#rdCommentReq").on('click',function(){
 
 $("#rdCommentYes").on('click',function(){
 	console.log('click');
-	// session ID already calculated in topbar.pug
 	if (s3FolderName == undefined) s3FolderName = 'local'
 	
 	if (checkRedditReq()){
@@ -101,8 +98,7 @@ $("#rdCommentNo").on('click',function(){
 $("#email-alert").on('keypress',function(e){
 	if (e.keyCode === 13 || e.keycode == 10){
 		e.preventDefault(); 
-		
-		// session ID already calculated in topbar.pug
+
 		if (s3FolderName == undefined) s3FolderName = 'local'
 		
 		if (checkRedditReq()){
