@@ -4,7 +4,7 @@ var fetch = require('node-fetch');
 var fs = require('fs');
 var jsonexport = require('jsonexport');
 var path = require('path');
-var appPath = path.dirname(__dirname);
+var appPath = path.dirname(path.dirname(__dirname));
 var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
@@ -21,14 +21,17 @@ router.get('/query',function(req,res,next){
 	if (req.session.rd_access_token === undefined){
 		res.cookie('reddit-success','false',{maxAge:365 * 24 * 60 * 60 * 1000, httpOnly:false});	
 	}
-	
+
+    if (req.session.crimson_access_token === undefined){
+        res.cookie('crimson-success','false',{maxAge:365 * 24 * 60 * 60 * 1000, httpOnly:false});
+    }
+
 	res.render('search/query',{	parent:'/',	error:req.query.error});
 	
 });
 
 
 router.post('/query',function(req,res,next){
-	
 	var dir_downloads = './downloads';	
 	if (!fs.existsSync(dir_downloads)){
 		fs.mkdirSync(dir_downloads);
@@ -54,6 +57,7 @@ router.post('/query',function(req,res,next){
 								'redditaccesstoken':req.session.rd_access_token,
 								'twtaccesstokenkey':req.session.twt_access_token_key,
 								'twtaccesstokensecret':req.session.twt_access_token_secret,
+								'crimsonaccesstoken': req.session.crimson_access_token
 							}
 				
 				p_array_2 = [];
@@ -81,6 +85,8 @@ router.post('/query',function(req,res,next){
 					p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
 				}else if (req.body.prefix === 'reddit-Historical-Comment'){
 					p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
+				}else if (req.body.prefix === 'crimson-Hexagon'){
+                    p_array_2.push(gatherMultiPost(req.body.query, headers, -999));
 				}
 				
 				

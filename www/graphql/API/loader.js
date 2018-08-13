@@ -22,9 +22,8 @@ const replyLoader = new DataLoader(function(ids){
 	return Promise.all(promise_array);
 });
 
+
 function getCompleteReplies(id){
-	//console.log(id);
-	
 	return new Promise((resolve,reject) =>{
 		r.getSubmission(JSON.parse(id)['id']).expandReplies({limit:100,depth:1}).then(data =>  {
 				agg_comments = [];
@@ -63,4 +62,4 @@ function wait(ms){
 	}
 }
 
-module.exports = replyLoader;
+module.exports = {replyLoader};

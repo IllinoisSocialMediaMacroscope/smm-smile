@@ -2,7 +2,6 @@ body {
 	font-family: "Ubuntu", sans-serif;
     color: black;
     background-color: #eae8e8;
-	
 }
 .searchPage{
 	display:block;
@@ -401,8 +400,8 @@ nav-tabs li a:hover{
 #auth-panel{
 	background-color:#9d9d9d; 
 	padding:20px 20px;
-	width:800px;
-	margin:200px auto; 
+	width:850px;
+	margin:200px auto;
 	border-radius:6px;
 }
 
@@ -447,6 +446,11 @@ nav-tabs li a:hover{
 	background-color:#deddde;
 }
 
+#crimson-icon-button{
+	border:none;
+	background:none;
+	padding:0;
+}
 /* preview tweet */
 .user-img{
 	float:middle;
@@ -501,7 +505,7 @@ nav-tabs li a:hover{
 }
 
 /* download modal */
-#download-note{
+.download-note{
 	margin-left:20px;
 	margin-top:40px; 
 	font-size:16px; 
@@ -558,6 +562,10 @@ nav-tabs li a:hover{
     /*background: #d4eafd;*/
 /*}*/
 
+
+/* crimson hexagon auth */
+#crimson-username,
+#crimson-password,
 #twitter-pin{
 	margin-top:10px;
 	width:500px;
@@ -565,27 +573,32 @@ nav-tabs li a:hover{
 	vertical-align:baseline;
 }
 
-#twitter-login-header h2{
-	display:inline;
-	vertical-align: middle;
-	margin-left:10px;
-}
-
-#twitter-login-notes {
+#crimson-login-notes,
+#twitter-login-notes{
 	margin: 20px auto 20px auto;
 }
+#crimson-login-notes p,
 #twitter-login-notes p{
 	display:inline;
 	color:#ea4937;
 }
+#crimson-login-notes a,
 #twitter-login-notes a{
 	margin-left:5px;
 	text-decoration:underline
 }
+#crimson-login-notes img,
 #twitter-login-notes img{
 	width: 15px;
 	vertical-align: top;
 	margin-right: 5px;
+}
+
+#twitter-login-header h2,
+#crimson-login-header h2 {
+	display: inline;
+	vertical-align: middle;
+	margin-left: 10px;
 }
 
 /* tooltips */

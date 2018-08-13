@@ -30,7 +30,8 @@ app.use('/',require('./routes/scikit-learn/text-classification'));
 app.use('/',require('./routes/NLP/NLP-preprocess')); 
 app.use('/',require('./routes/NLP/NLP-SA'));
 //app.use('/',require('./routes/NLP/NLP-topic'));
-app.use('/',require('./routes/query'));
+app.use('/',require('./routes/search/query'));
+app.use('/',require('./routes/search/crimson'))
 app.use('/',require('./routes/download'));
 app.use('/',require('./routes/render'));
 app.use('/',require('./routes/history'));
@@ -40,6 +41,7 @@ app.use('/', require('./routes/auth/googleDrive_auth'));
 app.use('/', require('./routes/auth/dropbox_auth'));
 app.use('/', require('./routes/auth/box_auth'));
 app.use('/',require('./routes/auth/reddit_auth'));
+app.use('/',require('./routes/auth/crimson_auth'));
 app.use('/', require('./routes/sitemap'));
 app.use('/',require('./routes/RedditExpand'));
 app.use('/',require('./routes/clowder.js'));

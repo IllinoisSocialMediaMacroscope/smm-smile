@@ -22,7 +22,7 @@ html
 		script(src="bootstrap/js/customized/view.js")
 		script(src="bootstrap/js/customized/warning_trigger.js")
 		script(src="bootstrap/js/customized/modal_overlay.js")
-		
+		script(src="bootstrap/js/customized/parse_session.js")
 		
 	body
 		include components/topbar.pug
@@ -151,6 +151,7 @@ html
 										else if(key1 === 'reddit-Comment'){var second_level = 'Subreddit Comment';}
 										else if(key1 === 'reddit-Historical-Post'){var second_level = 'Reddit Historical Post';}
 										else if(key1 === 'reddit-Historical-Comment'){var second_level = 'Reddit Historical Comment';}
+										else if(key1 === 'crimson-Hexagon'){var second_level = 'Crimson Hexagon Data';}
 										else if(key1 === 'networkx'){var second_level = 'Python NetworkX';}
 										else if(key1 === 'classification'){var second_level = 'Text Classification';}
 										else{var second_level = key1; }

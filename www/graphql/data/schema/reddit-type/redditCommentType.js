@@ -1,10 +1,8 @@
 var {
-	GraphQLSchema,
 	GraphQLObjectType,
 	GraphQLString,
 	GraphQLList,
 	GraphQLInt,
-	GraphQLFloat,
 	GraphQLBoolean
 } = require('graphql');
 

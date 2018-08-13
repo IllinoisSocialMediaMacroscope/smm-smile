@@ -33,8 +33,6 @@ function drawWordTree(name,table,root){
 }
 
 $(document).ready(function(){
-	
-	// session ID already calculated in topbar.pug
 	if (s3FolderName == undefined) s3FolderName = 'local';
 	$.ajax({
 		type:'POST',
@@ -114,7 +112,7 @@ $(document).ready(function(){
 						body(redditComment), selftext,title(redditSearch), 
 						public description, description(redditSearchSubreddit)*/
 						var allowed_field_list = ['text','user.description','_source.text', '_source.user.description','description',
-						'body','title','_source.body','_source.title'];
+						'body','title','_source.body','_source.title', 'contents'];
 						
 						var index = [];
 						$.each(data.preview[0],function(i,val){

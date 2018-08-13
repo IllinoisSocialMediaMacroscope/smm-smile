@@ -8,7 +8,7 @@ var {
 	GraphQLBoolean
 } = require('graphql');
 var redditAPI = require('../../../API/redditAPI');
-var replyLoader = require('../../../API/loader');
+var replyLoader = require('../../../API/loader').replyLoader;
 
 const redditLinkType = module.exports = new GraphQLObjectType({
 	name:'redditLink',

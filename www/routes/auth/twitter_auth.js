@@ -17,8 +17,7 @@ router.get('/login/twitter', function(req,res,next){
     } else {  
 		
 		req.session.twt_oauthRequestToken = oauthToken;
-		req.session.twt_oauthRequestTokenSecret = oauthTokenSecret; 
-		req.session.currentURL = req.query.currentURL;
+		req.session.twt_oauthRequestTokenSecret = oauthTokenSecret;
 		req.session.save();
 		res.redirect("https://twitter.com/oauth/authorize?oauth_token="+req.session.twt_oauthRequestToken);     
     }
@@ -29,7 +28,7 @@ router.post('/login/twitter',function(req,res,next){
 	consumer.getOAuthAccessToken(req.session.twt_oauthRequestToken,req.session.twt_oauthRequestTokenSecret, 
 		req.body.twt_pin, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
 			if (error) {
-				res.send({redirect_url: req.session.currentURL + 'query?error=' + JSON.stringify(error)});
+				res.send({redirect_url: req.body.currentURL + 'query?error=' + JSON.stringify(error)});
 			} else {
 				
 				// save in the session
@@ -40,7 +39,7 @@ router.post('/login/twitter',function(req,res,next){
 				// set the cookie as true for 29 minutes maybe?
 				res.cookie('twitter-success','true',{maxAge:1000*60*29, httpOnly:false});	
 				res.cookie('twitter-later','false',{maxAge:1000*60*29, httpOnly:false});
-				res.send({redirect_url: req.session.currentURL + 'query'});
+				res.send({redirect_url: req.body.currentURL + req.body.currentPage});
 			}
 		});
 
