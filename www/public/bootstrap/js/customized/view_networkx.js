@@ -68,7 +68,6 @@ $(document).ready(function(){
 	
 	$("#selectFile").on('change',function(){
 		var prefix = $(this).children(":selected").val();
-		var directory = $(this).children(":selected").attr("class");
 		$("#selectFilePreview-container").empty();
 
 		// add loading bar here for preview
@@ -86,40 +85,26 @@ $(document).ready(function(){
 						$("#error").val(JSON.stringify(data));
 						$("#warning").modal('show');
 					}else{
-						var allowed_field_list = [
+						var allowedFieldList = [
 							// tweet
 							'user.screen_name',
 							'text',
 							// stream
 							'_source.user.screen_name',
 							'_source.text'];
-						
-						var index = [];
-						$.each(data.preview[0],function(i,val){
-							if (allowed_field_list.indexOf(val) >=0){
-								index.push(i)
-							}
-						});
-						var numCat_data = [];
-							$.each(data.preview,function(i,val){
-								var line = [];
-								$.each(index,function(i,indice){
-									line.push(val[indice]);
-								});
-								numCat_data.push(line); 
-							});
-						
+
+                        text_data = previewSelectedFile(allowedFieldList, data);
 						// hide loading bar
 						$("#preview-loading").hide();
 						
 						$("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-						$("#selectFilePreview").append(arrayToTable(numCat_data.slice(0,11),'#selectFileTable'));
+						$("#selectFilePreview").append(arrayToTable(text_data.slice(0, 11),'#selectFileTable'));
 						//$("#selectFileTable").DataTable();
 						
 						$(".dataset").val(prefix);
-						$(".length").val(numCat_data.length-1);
+						$(".length").val(text_data.length-1);
 					}
 					
 				}					

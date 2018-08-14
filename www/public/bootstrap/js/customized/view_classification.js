@@ -82,44 +82,28 @@ $(document).ready(function(){
 						$("#error").val(JSON.stringify(data));
 						$("#warning").modal('show');
 					}else{
-						var allowed_field_list = [
-							// tweet
-							'text',
-							// stream
-							'_source.text',
-							// twtUser
-							'description', 
-							// reddit
-							'title','body','_source.body','_source.title',
-							// crimson
-							'contents'
-						];
-						
-						var index = [];
-						$.each(data.preview[0],function(i,val){
-							if (allowed_field_list.indexOf(val) >=0){
-								index.push(i)
-							}
-						});
-						var numCat_data = [];
-							$.each(data.preview,function(i,val){
-								var line = [];
-								$.each(index,function(i,indice){
-									line.push(val[indice]);
-								});
-								numCat_data.push(line);
-							});
-						
+						if (directory == 'twitter-Tweet' || directory == 'twitter-Stream' || directory == 'twitter-User'){
+							var allowedFieldList = ['text', '_source.text', 'description'];
+						}
+						else if (directory == 'reddit-Post' || directory =='reddit-Search' || directory == 'reddit-Comment'
+						|| directory == 'reddit-Historical-Comment' || directory == 'reddit-Historical-Post'){
+							var allowedFieldList = ['title','body','_source.body','_source.title'];
+						}
+						else if (directory == 'crimson-Hexagon'){
+							var allowedFieldList = ['contents'];
+						}
+                        text_data = previewSelectedFile(allowedFieldList, data);
+
 						// hide loading bar
 						$("#preview-loading").hide();
 						
 						$("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-						$("#selectFilePreview").append(arrayToTable(numCat_data.slice(0,11),'#selectFileTable'));
+						$("#selectFilePreview").append(arrayToTable(text_data.slice(0,11),'#selectFileTable'));
 												
 						// hidden field here to divide using aws lambda or batch
-						$(".length").val(numCat_data.length-1);
+						$(".length").val(text_data.length-1);
 						$(".dataset").val(prefix);
 						
 						// offer crawling for reddit comments modal
