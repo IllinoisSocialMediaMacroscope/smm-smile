@@ -128,7 +128,34 @@ function extractHeader2(array){
 	//console.log(headerContent);
 	return headerContent;
 }
-	
+
+function previewSelectedFile(allowedFieldList, data){
+    var index = [];
+    $.each(data.preview[0],function(i,val){
+        if (allowedFieldList.indexOf(val) >=0){
+            index.push(i)
+        }
+    });
+
+    var text_data = [];
+    var count = 0;
+    $.each(data.preview,function(i,val){
+        var line = [];
+
+        // rendering rows has all the content non-empty for asthetic purpose
+        var flag = true;
+        $.each(index,function(i,indice){
+            if (val[indice] == ''){
+                flag = false;
+            }
+            line.push(val[indice]);
+        });
+        if (flag) text_data.push(line);
+    });
+
+    return text_data;
+
+}
 
 /*----------------------------display results---------------------------------*/
 function appendDownload(downloadID, downloadData){
