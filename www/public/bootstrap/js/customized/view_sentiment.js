@@ -106,23 +106,9 @@ $(document).ready(function(){
 						// body(redditComment), selftext,title(redditSearch), 
 						// public description, description(redditSearchSubreddit)
 						// _source.text, _source.user.description(streaming)
-						var allowed_field_list = ['text','user.description','description',
+						var allowedFieldList = ['text','user.description','description',
 						'_source.text', '_source.user.description','body','title','_source.body','_source.title','contents'];
-						
-						var index = [];
-						$.each(data.preview[0],function(i,val){
-							if (allowed_field_list.indexOf(val) >=0){
-								index.push(i)
-							}
-						});
-						var text_data = [];
-						$.each(data.preview,function(i,val){
-							var line = [];
-							$.each(index,function(i,indice){
-								line.push(val[indice]);
-							});
-							text_data.push(line);
-						});
+                        text_data = previewSelectedFile(allowedFieldList, data);
 						
 						// hide loading bar
 						$("#preview-loading").hide();
