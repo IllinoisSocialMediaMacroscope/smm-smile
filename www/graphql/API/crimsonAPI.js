@@ -4,7 +4,6 @@ var appendQuery = require('append-query');
 var twitterAPI = require('./twitterAPI');
 
 function crimsonAPI(tokens, args) {
-
     args['auth'] = tokens.crimsonaccesstoken;
     var twitter = args['twitter'];
 
@@ -23,9 +22,13 @@ function crimsonAPI(tokens, args) {
             // add quotation mark around blog contents
             for (var i=0, length=json.posts.length; i<length; i++){
                 if (json.posts[i]['contents'] !== undefined){
+                    // line break change to '.'
                     json.posts[i]['contents'] = json.posts[i]['contents'].replace(/\n/gmius, ".");
                     json.posts[i]['title'] = json.posts[i]['title'].replace(/\n/gmius, ".");
-                    json.posts[i]['contents'] = "\"" + json.posts[i]['contents'] + "\"";
+
+                    // " change to '
+                    json.posts[i]['contents'] = json.posts[i]['contents'].replace(/"/gmius, "'");
+                    json.posts[i]['title'] = json.posts[i]['title'].replace(/"/gmius, "'");
                 }
             }
 
