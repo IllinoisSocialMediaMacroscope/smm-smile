@@ -111,31 +111,18 @@ $(document).ready(function(){
 						/* the text fields are:  text, user.description(tweet), description(twtUser),
 						body(redditComment), selftext,title(redditSearch), 
 						public description, description(redditSearchSubreddit)*/
-						var allowed_field_list = ['text','user.description','_source.text', '_source.user.description','description',
-						'body','title','_source.body','_source.title', 'contents'];
-						
-						var index = [];
-						$.each(data.preview[0],function(i,val){
-							if (allowed_field_list.indexOf(val) >=0){
-								index.push(i)
-							}
-						});
-						var text_data = [];
-						$.each(data.preview,function(i,val){
-							var line = [];
-							$.each(index,function(i,indice){
-								line.push(val[indice]);
-							});
-							text_data.push(line);
-						});
-						
+
+						var allowedFieldList = ['text','user.description','_source.text', '_source.user.description',
+							'description', 'body','title','_source.body','_source.title', 'contents'];
+						text_data = previewSelectedFile(allowedFieldList, data);
+
 						// hide loading bar
 						$("#preview-loading").hide();
 						
 						$("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-						$("#selectFilePreview").append(arrayToTable(text_data.slice(0,11) ,'#selectFileTable'));
+						$("#selectFilePreview").append(arrayToTable(text_data.slice(0, 11) ,'#selectFileTable'));
 						
 						$("#selectFileHeader-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">Select Column to Analyze</label>
