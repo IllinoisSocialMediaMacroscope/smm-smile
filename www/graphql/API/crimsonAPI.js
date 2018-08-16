@@ -23,12 +23,12 @@ function crimsonAPI(tokens, args) {
             for (var i=0, length=json.posts.length; i<length; i++){
                 if (json.posts[i]['contents'] !== undefined){
                     // line break change to '.'
-                    json.posts[i]['contents'] = json.posts[i]['contents'].replace(/\n/gmius, ".");
-                    json.posts[i]['title'] = json.posts[i]['title'].replace(/\n/gmius, ".");
+                    json.posts[i]['contents'] = json.posts[i]['contents'].replace(/\n/g, ".");
+                    json.posts[i]['title'] = json.posts[i]['title'].replace(/\n/g, ".");
 
                     // " change to '
-                    json.posts[i]['contents'] = json.posts[i]['contents'].replace(/"/gmius, "'");
-                    json.posts[i]['title'] = json.posts[i]['title'].replace(/"/gmius, "'");
+                    json.posts[i]['contents'] = json.posts[i]['contents'].replace(/"/g, "'");
+                    json.posts[i]['title'] = json.posts[i]['title'].replace(/"/g, "'");
                 }
             }
 
