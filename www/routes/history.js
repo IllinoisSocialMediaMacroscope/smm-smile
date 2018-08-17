@@ -101,7 +101,7 @@ router.post('/history',function(req,res,next){
 			var promise_array = [];	
 			var fileList = Object.keys(folderObj);
 			
-			if(fileList.length === 6){
+			if(fileList.length >= 4){
 				for (var i=0, length=fileList.length; i< length; i++){
 					var filename = fileList[i];
 					if (filename === 'div_sent.html'){
@@ -117,9 +117,9 @@ router.post('/history',function(req,res,next){
 					}else if (filename === 'config.json'){
 						var config = folderObj[filename];
 					}
-				}	
-		
-				promise_array.push(getMultiRemote(div));
+				}
+
+                promise_array.push(getMultiRemote(div));
 				promise_array.push(getMultiRemote(sentiment));
 				promise_array.push(getMultiRemote(doc_sentiment));
 				promise_array.push(getMultiRemote(config));
@@ -127,18 +127,30 @@ router.post('/history',function(req,res,next){
 					var div_data = values[0];
 					var preview_string = values[1];
 					var preview_arr = CSV.parse(preview_string).slice(0,1001);
-					var compound = values[2]['compound']
 					var config_data = JSON.parse(values[3]);
-					var download = [{name:'sentence-level sentiment scores',content:sentiment},
-								{name:'Has negation words?',content:negation},
-								{name:'Has some capital letter?',content:allcap},
-								{name:'configuration', content:config},
-								{name:'visualization', content:div}];		
+
+					if (config_data["algorithm"] == 'sentiWordNet'){
+                        var download = [
+                        	{name:'sentence-level sentiment scores',content:sentiment},
+                        	{name:'document-level sentiment scores',content:doc_sentiment},
+                            {name:'configuration', content:config},
+                            {name:'visualization', content:div}];
+					}else if (config_data['algorithm'] == 'vader'){
+                        var download = [
+                        	{name:'sentence-level sentiment scores',content:sentiment},
+                        	{name:'document-level sentiment scores',content:doc_sentiment},
+                            {name:'Has negation words?',content:negation},
+                            {name:'Has some capital letter?',content:allcap},
+                            {name:'configuration', content:config},
+                            {name:'visualization', content:div}];
+					}else{
+						var download = [];
+					}
+
 					res.send({
 						title:'Sentiment Analysis',
 						ID:req.body.folderURL,
 						img:[{name:'Document Sentiment Composition',content:div_data}],
-						compound:compound,
 						download:download,
 						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}],
 						config:config_data,

@@ -271,8 +271,8 @@ function ajaxSubmit(formID,aws_identifier){
 			success:function(data){
 				
 				$(".loading").hide();
-				
-				if ('ERROR' in data){
+
+                if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
 				}else if ('jobName' in data && 'jobId' in data){
@@ -281,7 +281,6 @@ function ajaxSubmit(formID,aws_identifier){
 					
 					$("#jobId").val(data.uid);					
 				}else{
-						
 					appendDownload("#side-download",data.download);
 					appendImg("#img-container",data.img);
 					
@@ -289,14 +288,7 @@ function ajaxSubmit(formID,aws_identifier){
 						appendPreview('#result-container',data.preview);
 					}
 					
-					if ('compound' in data){
-						// add gauge for sentiment analysis
-						//google.charts.setOnLoadCallback(drawGauge('Compound Sentiment Score of the whole document', parseFloat(data.compound)));
-						console.log('revoke it');
-					}else if('iframe' in data){
-						// draw iframe for topic modeling
-						drawIframe(data.iframe.name, data.iframe.content);
-					}else if('table' in data){
+					if('table' in data){
 						// draw word tree for preprocessing
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
 					}
