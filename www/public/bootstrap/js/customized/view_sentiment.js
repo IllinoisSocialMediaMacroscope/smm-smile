@@ -177,16 +177,28 @@ $(document).ready(function(){
 					The Social Media Macroscope. In Gateways 2018.&nbsp<a href="https://doi.org/10.6084/m9.figshare.6855269.v2" target="_blank">
 					https://doi.org/10.6084/m9.figshare.6855269.v2</a>
 					</li>
-					<li><a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&
-					q=Hutto%2C+C.J.+%26+Gilbert%2C+E.E.+%282014%29.+VADER%3A+A+Parsimonious+Rule-based+Model+for+S
-					entiment+Analysis+of+Social+Media+Text.++%09%09%09%09%09%09Eighth+International
-					+Conference+on+Weblogs+and+Social+Media+%28ICWSM-14%29.+Ann+Arbor%2C+MI%2C+June+2014.&btnG=" target="_blank">
+					<li><a href="http://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/download/8109/8122" target="_blank">
 					Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. 
 						Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.</a>
 					</li>
 				</ul>`
 			);
 			$("#citation-container").show();
+		}else if (algorithm === 'sentiWordNet'){
+            $("#citation-notice").append(
+                `<p><b>Thank you for using our tool, if you use these results please cite it and the Vader method:</b></p>
+				<ul>
+					<li>Yun, J. T., Vance, N., Wang, C., Troy, J., Marini, L., Booth, R., Nelson, T., Hetrick, A., Hodgekins, H. (2018). 
+					The Social Media Macroscope. In Gateways 2018.&nbsp<a href="https://doi.org/10.6084/m9.figshare.6855269.v2" target="_blank">
+					https://doi.org/10.6084/m9.figshare.6855269.v2</a>
+					</li>
+					<li><a href="http://nmis.isti.cnr.it/sebastiani/Publications/LREC10.pdf" target="_blank">
+					Baccianella, Stefano, Andrea Esuli, and Fabrizio Sebastiani. "Sentiwordnet 3.0: an enhanced lexical 
+					resource for sentiment analysis and opinion mining." Lrec. Vol. 10. No. 2010. 2010.</a>
+					</li>
+				</ul>`
+            );
+            $("#citation-container").show();
 		}
 		
 	});

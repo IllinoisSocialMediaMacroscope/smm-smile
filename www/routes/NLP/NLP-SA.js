@@ -27,6 +27,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 			var args = {'remoteReadPath':req.body.prefix, 
 					'column':req.body.selectFileColumn,
 					's3FolderName':req.body.s3FolderName,
+					'algorithm': req.body.algorithm,
 					'uid':uid
 			}
 			
@@ -35,28 +36,36 @@ router.post('/NLP-sentiment',function(req,res,next){
 				var div=results['div'];
 				var doc_sentiment=results['doc'];
 				var sentiment = results['sentiment'];
-				var negation = results['negation'];
-				var allcap = results['allcap'];
-				
+
 				var promise_array = [];
 				promise_array.push(getMultiRemote(div));
 				promise_array.push(getMultiRemote(sentiment));
-				promise_array.push(getMultiRemote(doc_sentiment));
 				Promise.all(promise_array).then( values => {
 					var div_data = values[0]; 
 					var preview_string = values[1];
 					var preview_arr = CSV.parse(preview_string).slice(0,1001);
-					var compound = values[2]['compound']
-					
-					var download = [{name:'sentence-level sentiment scores',content:sentiment},
-								{name:'negation words',content:negation},
-								{name:'capital letter',content:allcap},
-								{name:'configuration', content:config},
-								{name:'visualization', content:div}]
+                    var download;
+
+					if (req.body.algorithm == 'vader'){
+                        download = [
+                        	{name:'sentence-level sentiment scores',content:sentiment},
+                        	{name:'document-level sentiment scores',content:doc_sentiment},
+                            {name:'negation words',content:results['negation']},
+                            {name:'capital letter',content:results['allcap']},
+                            {name:'configuration', content:config},
+                            {name:'visualization', content:div}]
+					}
+					else if (req.body.algorithm == 'sentiWordNet'){
+                        download = [
+                        	{name:'sentence-level sentiment scores',content:sentiment},
+                            {name:'document-level sentiment scores',content:doc_sentiment},
+                            {name:'configuration', content:config},
+                            {name:'visualization', content:div}]
+					}
+
 					res.send({
 						title:'Sentiment Analysis',
 						img:[{name:'Document Sentiment Composition',content:div_data}],
-						compound:compound,
 						download:download,
 						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}],
 						uid:uid
@@ -75,8 +84,10 @@ router.post('/NLP-sentiment',function(req,res,next){
 			var jobName = req.body.s3FolderName + '_SA_sdk';
 			var command = [ "python3.6", "/scripts/batch_sentiment_analysis.py",
 					"--remoteReadPath", req.body.prefix,
+					"--algorithm", req.body.algorithm,
 					"--column", req.body.selectFileColumn,
 					"--s3FolderName", req.body.s3FolderName,
+					"--algorithm", req.body.algorithm,
 					"--email", req.body.email,
 					"--uid", uid,
                 	"--sessionURL", req.body.sessionURL]
