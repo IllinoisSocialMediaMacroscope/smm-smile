@@ -296,7 +296,7 @@ nav-tabs li a:hover{
 
 
 /* geolocation */
-#googleMap{
+#openLayerMap{
 	display:block;
 	width:100%;
 	height:400px;
