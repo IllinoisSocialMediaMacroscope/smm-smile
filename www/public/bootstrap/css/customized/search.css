@@ -451,6 +451,10 @@ nav-tabs li a:hover{
 	background:none;
 	padding:0;
 }
+#crimson-icon-button:focus{
+	outline:none;
+}
+
 /* preview tweet */
 .user-img{
 	float:middle;
