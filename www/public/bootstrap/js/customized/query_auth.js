@@ -1,10 +1,14 @@
 var platforms = ['twitter', 'reddit', 'crimson'];
 
 $.each(platforms,function(i,platform){
-    if (platform !== 'crimson'){
+    if (platform === 'twitter'){
         // newPath has already been calculated in the parse_session.js
-        $("." + platform + "-auth").find('a').attr("href","login/"+ platform + "?currentURL=" + newPath);
+        $(".twitter-auth").find('a').attr("href","login/twitter?currentURL=" + newPath);
 	}
+	else if (platform === 'reddit'){
+		$("#reddit-agree").attr("href", "login/reddit?currentURL=" + newPath)
+	}
+
 	clickEffect(platform);
 });
 
@@ -66,4 +70,9 @@ $(".crimson-auth").find("#crimson-icon-button").on('click', function(e){
 // display twitter pin callback input
 $(".twitter-auth").find('a').on('click', function(){
 	$("#twitter-callback").modal('show');
+});
+
+//***************************** REDDIT ******************************/
+$(".reddit-auth").find('a').on('click', function(){
+	$("#reddit-callback").modal('show');
 });

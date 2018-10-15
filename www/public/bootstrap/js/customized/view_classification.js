@@ -207,9 +207,6 @@ $(document).ready(function(){
 
 function addUUID(uuid){
 	if (uuid !== ''){
-		//put the uuid in hidden text box for copy purpose
-		//$("#generated-uuid").val(uuid);
-		//console.log($("#generated-uuid").val());
 		$("#ID-code h3").text(uuid);
 	}
 }
@@ -261,8 +258,9 @@ function split(){
 					$(".loading").hide();
 					addUUID(data.uuid);
 					$("#uuid-modal").modal('show');
+
+                    appendIntermediateDownload("#intermediate-download", data.download)
 					appendInstruction("#gaudge",data.len_training, data.len_testing);
-					
 					appendDownload("#side-download",data.download);
 					appendImg("#img-container",data.img);
 					appendPreview('#result-container','');
@@ -337,7 +335,8 @@ function train(){
 					addUUID(data.uuid);
 					$("#uuid-modal").modal('show');
 					$("#gaudge").empty();
-					
+
+                    appendIntermediateDownload("#intermediate-download", data.download)
 					appendImg("#img-container",data.img);
 					appendDownload("#side-download",data.download);
 					appendPreview('#result-container',data.preview);
@@ -378,7 +377,7 @@ function train(){
 			
 } 
 
-/*-----------------------train -------------------------------------------*/
+/*-----------------------predict -------------------------------------------*/
 function predict(){
 	
 	if (formValidation('predict')){

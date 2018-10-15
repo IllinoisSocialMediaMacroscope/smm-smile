@@ -183,6 +183,7 @@ html
 
 		include crimson/crimson-login.pug
 		include twitter/twitter-login.pug
+		include reddit/reddit-login.pug
 
 		<!-- popup modal download-->
 		div(id="success" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
@@ -221,7 +222,7 @@ html
 							});
 						
 					div(class="modal-footer download",style="display:none;")
-						a(href="./", class="btn btn-primary",style="background-color:#ea4a36;border-style:hidden") Go To Analytics
+						a(href="./#Pre-processing", class="btn btn-primary",style="background-color:#ea4a36;border-style:hidden") Go To Analytics
 						a(href="history", class="btn btn-primary", style="background-color:#1e325a;border-style:hidden") Review in History
 								
 		<!-- side bar HELP-->
