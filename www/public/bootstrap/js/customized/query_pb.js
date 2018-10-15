@@ -206,9 +206,9 @@ function init(){
 			// tooltip to show twitter rules
             $("boolean").attr('data-original-title',
 				"Twitter API supports a list of standard search operators to modify the behavior of the query. For example, " +
-				"<b>SPACE, OR, MINUS SIGN, HASHTAG and etc</b>. <br>Details please refer to&nbsp" +
+				"<b>SPACE, OR, MINUS SIGN, HASHTAG and etc</b>. <br>Details please refer to the&nbsp" +
 				"<a href='https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators.html' target='_blank'>" +
-				"standard-operators.html</a>")
+				"standard operators</a>")
                 .tooltip('fixTitle')
                 .tooltip('show');
 		}
@@ -228,9 +228,9 @@ function init(){
 
             // tooltip to show twitter rules
             $("boolean").attr('data-original-title',
-                "Reddit search supports the boolean operators <b>AND, OR, and NOT</b> (case sensitive) as well as parenthesis. Details please refer to&nbsp" +
+                "Reddit search supports the boolean operators <b>AND, OR, and NOT</b> (case sensitive) as well as parenthesis. Details please refer to the&nbsp" +
                 "<a href='https://www.reddit.com/wiki/search' target='_blank'>" +
-                "https://www.reddit.com/wiki/search</a>")
+                "rules</a>")
                 .tooltip('fixTitle')
                 .tooltip('show');
 		}

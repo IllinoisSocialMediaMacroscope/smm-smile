@@ -607,7 +607,6 @@ nav-tabs li a:hover{
 
 /* tooltips */
 .tooltip-inner{
-	min-width: 300px;
 	text-align: left;
 	padding: 20px;
 }

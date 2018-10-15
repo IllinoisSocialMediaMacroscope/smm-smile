@@ -169,6 +169,18 @@ function appendDownload(downloadID, downloadData){
 		});
 	}
 }
+
+function appendIntermediateDownload(downloadID, downloadData){
+    $(downloadID).empty()
+    if(downloadData !== [] && downloadData !== ''){
+        $(downloadID).append('<br><p>Files necessary for the next step:</p><ul class="list-unstyled"></ul>')
+        $.each(downloadData,function(i,val){
+            $(downloadID).find(".list-unstyled").append(`<li>
+									<a href="` + val.content + `">` + val.name + `</a>
+								</li>`);
+        });
+    }
+}
 	
 function appendImg(imgID, imgData){
 	$(imgID).empty();
