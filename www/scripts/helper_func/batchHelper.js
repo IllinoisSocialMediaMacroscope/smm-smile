@@ -12,12 +12,12 @@ var batch = new AWS.Batch({region: 'us-west-2',
 	httpOptions:{timeout:600000}
 });
 
-function submit_Batchjob(jobName, command){
+function submit_Batchjob(jobDefinition, jobName, jobQueue, command){
 	
 	var params = {
-		jobDefinition: "arn:aws:batch:us-west-2:083781070261:job-definition/smile:3",
+		jobDefinition: jobDefinition,
 		jobName: jobName,
-		jobQueue: 'arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch',
+		jobQueue: jobQueue,
 		containerOverrides: {
 			command: command,
 			memory: 2048,

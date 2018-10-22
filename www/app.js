@@ -15,7 +15,6 @@ app.use(session({ secret: 'keyboard cat',
 				  cookie: { maxAge: 1000*1800 }, // last half an hour?
 				  rolling: true
 }));
-//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(express.static(path.join(__dirname, '/public')));
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine', 'pug');
@@ -23,13 +22,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 app.use('/',require('./routes/index'));
 app.use('/',require('./routes/networkx/networkx'));
-//app.use('/',require('./routes/scikit-learn/scikit-learn-cluster'));
 app.use('/',require('./routes/scikit-learn/text-classification'));
 app.use('/',require('./routes/NLP/NLP-preprocess')); 
 app.use('/',require('./routes/NLP/NLP-SA'));
-//app.use('/',require('./routes/NLP/NLP-topic'));
+app.use('/', require('./routes/NLP/NLP-autophrase'))
 app.use('/',require('./routes/search/query'));
 app.use('/',require('./routes/search/crimson'))
 app.use('/',require('./routes/download'));
@@ -46,16 +45,6 @@ app.use('/', require('./routes/sitemap'));
 app.use('/',require('./routes/RedditExpand'));
 app.use('/',require('./routes/clowder.js'));
 app.use('/',require('./routes/histogram.js'));
-
-/*app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});*/
 
 /*--------------------set server----------------------*/
 var debug = require('debug');

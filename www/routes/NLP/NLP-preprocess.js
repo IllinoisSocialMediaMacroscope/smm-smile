@@ -3,7 +3,6 @@ var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
-var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
 var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
 var uuidv4 = require(path.join(appPath,'scripts','helper_func','uuidv4.js'));
@@ -97,8 +96,13 @@ router.post('/NLP-preprocess',function(req,res,next){
 					"--email", req.body.email,
 					"--uid", uid,
                 	"--sessionURL", req.body.sessionURL]
-			
-			submit_Batchjob(jobName,command).then(results =>{
+
+			submit_Batchjob(
+                "arn:aws:batch:us-west-2:083781070261:job-definition/smile:3",
+                jobName,
+                "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
+                command
+			).then(results =>{
 				results['uid'] = uid;
 				res.send(results);
 			}).catch(err =>{
