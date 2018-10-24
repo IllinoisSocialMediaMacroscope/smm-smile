@@ -6,10 +6,10 @@ var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemot
 var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
 var uuidv4 = require(path.join(appPath,'scripts','helper_func','uuidv4.js'));
 
-// router.get('/NLP-autophrase',function(req,res,next){
-//     var formParam = require('./autophrase.json');
-//     res.render('analytics/formTemplate',{parent:'/#Auto-phrase', title:'Auto Phrase Detection', param:formParam});
-// });
+router.get('/NLP-autophrase',function(req,res,next){
+    var formParam = require('./autophrase.json');
+    res.render('analytics/formTemplate',{parent:'/#Auto-phrase', title:'Automated Phrase Mining', param:formParam});
+});
 
 router.post('/NLP-autophrase',function(req,res,next){
 

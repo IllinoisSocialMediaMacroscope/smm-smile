@@ -30,6 +30,14 @@ router.get('/',function(req,res,next){
 					<a href="https://en.wikipedia.org/wiki/Parts_of_speech">part of speech</a>, based on both 
 					its definition and its context.`},
             {
+                name:'Automated Phrase Mining',
+                url:'NLP-autophrase',
+                imgURL:'bootstrap/img/logo/NLP/phrase.jpg',
+                wiki:'https://arxiv.org/abs/1702.04457',
+                introduction:`As one of the fundamental tasks in text analysis, phrase mining aims at extracting quality 
+					phrases from a text corpus. Phrase mining is important in various tasks such as information 
+					extraction/retrieval, taxonomy construction, and topic modeling.`},
+            {
             	name: 'Text Classification',
 				url:'text-classification',
 				imgURL:'bootstrap/img/logo/sklearn-logo.png',

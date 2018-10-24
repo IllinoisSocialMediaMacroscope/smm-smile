@@ -1,12 +1,7 @@
-/* Move down content because we have a fixed navbar that is 50px tall */
-/*colors:
-	red: :#c84b49;
-	light blue:#428bca
-	dark blue:#2a5a84;
-	salmon color:#faeeee;
-	background light grey:#f7f7f7;
-	background dark grey:#eae8e8;
-*/
+.logos{
+    margin-top:20%;
+    width:390px;
+}
 .caption{
 	font-size:50px;
 	font-weight:900;
