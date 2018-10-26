@@ -84,7 +84,7 @@ router.post('/history',function(req,res,next){
 						download:download,
 						table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
 						config:config_data,
-						uid:arrURL[3]						
+						uid:arrURL[3]
 					});
 					
 				});
@@ -94,6 +94,65 @@ router.post('/history',function(req,res,next){
 			}
 		});	
 	}
+    if (arrURL[1] === 'NLP' && arrURL[2] === 'autophrase'){
+
+        var p = list_files(req.body.folderURL);
+        p.then(folderObj =>{
+
+            var promise_array = [];
+            var fileList = Object.keys(folderObj);
+
+            if(fileList.length >= 6){
+                for (var i=0, length=fileList.length; i< length; i++){
+                    var filename = fileList[i];
+                    if (filename === 'div.html'){
+                        var div = folderObj[filename];
+                    }else if (filename === 'AutoPhrase.txt'){
+                        var phrases = folderObj[filename];
+                    }else if (filename === 'AutoPhrase_multi-words.txt'){
+                        var phrasesMultiWords = folderObj[filename];
+                    }else if (filename === 'AutoPhrase_single-word.csv'){
+                        var phrasesSingleWord = folderObj[filename];
+                    }else if (filename === 'segmentation.model'){
+                        var segmentationModel = folderObj[filename];
+                    }else if (filename === 'config.json'){
+                        var config = folderObj[filename];
+                    }else if (filename === 'token_mapping.txt'){
+                        var tokenMapping = folderObj[filename];
+                    }
+                }
+
+                // promise_array.push(getMultiRemote(div));
+                promise_array.push(getMultiRemote(phrases));
+                promise_array.push(getMultiRemote(config));
+                Promise.all(promise_array).then( values => {
+                	var preview_arr = CSV.parse(values[0]).slice(0,1001);
+                	preview_arr.unshift(['ranking score', 'phrases']);
+                    var config_data = JSON.parse(values[1]);
+
+                    var download = [{name:'phrases', content:phrases},
+                        {name:'phrases mutliple words', content:phrasesMultiWords},
+                        {name:'phrases single word', content:phrasesSingleWord},
+                        {name:'segmentation model', content:segmentationModel},
+                        {name:'token mappings', content:tokenMapping},
+                        {name:'configuration', content:config}]
+
+                    res.send({
+                        title:'Automated Phrase Mining',
+                        ID:req.body.folderURL,
+                        download:download,
+                        preview:[{name:'Preview the top ranking phrases',content:preview_arr,dataTable:true}],
+                        config:config_data,
+                        uid:arrURL[3]
+                    });
+
+                });
+            }else{
+                res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double checked
+				if you have fulfilled all the required  process when carrying out this analysis.`});
+            }
+        });
+    }
 	else if (arrURL[1] === 'NLP' && arrURL[2] === 'sentiment'){
 		var p = list_files(req.body.folderURL);
 		p.then(folderObj =>{

@@ -141,6 +141,7 @@ html
 										if (key1 === 'feature'){ var second_level = 'Feature Selection'; }
 										else if(key1 === 'clustering'){var second_level = 'Unsupervised Learning (clustering)';}
 										else if(key1 === 'preprocessing'){var second_level = 'NLP Preprocessing'; }
+										else if(key1 === 'autophrase'){var second_level = 'Automated Phrase Mining'; }
 										else if(key1 === 'sentiment'){var second_level = 'Sentiment Analysis';}
 										else if(key1 === 'topic-modeling'){var second_level = 'LDA Topic Modeling';}
 										else if(key1 === 'twitter-Tweet'){var second_level = 'Twitter Tweet';}
@@ -199,25 +200,8 @@ html
 						}
 					},
 					error: function(jqXHR, exception){
-						var msg = '';
-						if (jqXHR.status === 0) {
-							msg = 'Not connect.\n Verify Network.';
-						} else if (jqXHR.status == 404) {
-							msg = 'Requested page not found. [404]';
-						} else if (jqXHR.status == 500) {
-							msg = 'Internal Server Error [500].';
-						} else if (exception === 'parsererror') {
-							msg = 'Requested JSON parse failed.';
-						} else if (exception === 'timeout') {
-							msg = 'Time out error.';
-						} else if (exception === 'abort') {
-							msg = 'Ajax request aborted.';
-						} else {
-							msg = 'Uncaught Error.\n' + jqXHR.responseText;
-						}
-						$("#error").val(msg);
+						$("#error").val(jqXHR.responseText);
 						$("#warning").modal('show');
-						
 					} 
 				});
 				

@@ -30,7 +30,7 @@ router.get('/',function(req,res,next){
 					<a href="https://en.wikipedia.org/wiki/Parts_of_speech">part of speech</a>, based on both 
 					its definition and its context.`},
             {
-                name:'Automated Phrase Mining',
+                name:'Phrase Mining',
                 url:'NLP-autophrase',
                 imgURL:'bootstrap/img/logo/NLP/phrase.jpg',
                 wiki:'https://arxiv.org/abs/1702.04457',

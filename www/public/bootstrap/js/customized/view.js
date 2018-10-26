@@ -223,7 +223,8 @@ function appendPreview(previewID, previewData){
 								</div>
 							</div>
 							<div class="x_content">`+arrayToTable(val.content, '#previewTopic') + `</div>`);
-				$("#previewTopic").DataTable(); // change it to datatable
+				$("#previewTopic").DataTable();
+
 			}else{
 				$(previewID).append(`<div class="x_title">
 								<h2>`+ val.name + `</h2>
