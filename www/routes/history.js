@@ -141,7 +141,7 @@ router.post('/history',function(req,res,next){
                         title:'Automated Phrase Mining',
                         ID:req.body.folderURL,
                         download:download,
-                        preview:[{name:'Preview the top ranking phrases',content:preview_arr,dataTable:true}],
+                        preview:[{name:'Preview the top ranking phrases',content:preview_arr,dataTable:true, orderColumn:0}],
                         config:config_data,
                         uid:arrURL[3]
                     });
