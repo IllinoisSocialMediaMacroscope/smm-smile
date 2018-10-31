@@ -102,7 +102,7 @@ router.post('/history',function(req,res,next){
             var promise_array = [];
             var fileList = Object.keys(folderObj);
 
-            if(fileList.length >= 6){
+            if(fileList.length === 7){
                 for (var i=0, length=fileList.length; i< length; i++){
                     var filename = fileList[i];
                     if (filename === 'div.html'){
@@ -122,13 +122,14 @@ router.post('/history',function(req,res,next){
                     }
                 }
 
-                // promise_array.push(getMultiRemote(div));
+                promise_array.push(getMultiRemote(div));
                 promise_array.push(getMultiRemote(phrases));
                 promise_array.push(getMultiRemote(config));
                 Promise.all(promise_array).then( values => {
-                	var preview_arr = CSV.parse(values[0]).slice(0,1001);
+                	var div_data = values[0];
+                	var preview_arr = CSV.parse(values[1]).slice(0,1001);
                 	preview_arr.unshift(['ranking score', 'phrases']);
-                    var config_data = JSON.parse(values[1]);
+                    var config_data = JSON.parse(values[2]);
 
                     var download = [{name:'phrases', content:phrases},
                         {name:'phrases mutliple words', content:phrasesMultiWords},
@@ -141,6 +142,7 @@ router.post('/history',function(req,res,next){
                         title:'Automated Phrase Mining',
                         ID:req.body.folderURL,
                         download:download,
+                        img:[{name:'Top Phrases',content:div_data}],
                         preview:[{name:'Preview the top ranking phrases',content:preview_arr,dataTable:true, orderColumn:0}],
                         config:config_data,
                         uid:arrURL[3]

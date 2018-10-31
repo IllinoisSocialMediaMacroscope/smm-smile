@@ -224,7 +224,7 @@ function appendPreview(previewID, previewData){
 							</div>
 							<div class="x_content">`+arrayToTable(val.content, '#previewTopic') + `</div>`);
 				if (val.orderColumn !== undefined){
-                    $("#previewTopic").DataTable({ "order": [[ orderColumn, 'desc' ]]});
+                    $("#previewTopic").DataTable({ "order": [[ val.orderColumn, 'desc' ]]});
 				}
 				else $("#previewTopic").DataTable();
 
