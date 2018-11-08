@@ -1,0 +1,55 @@
+nav(class="navbar navbar-inverse navbar-fixed-top")
+	div(class="container-fluid")
+		div(class="navbar-header")
+			button(type="button",class="navbar-toggle collapsed", data-toggle="collapse", data-target="#navbar",
+				aria-expanded="true", aria-controls="navbar")
+				span(class="sr-only") Toggle navigation
+				span(class="icon-bar")
+				span(class="icon-bar")
+				span(class="icon-bar")
+				
+		div(id="navbar",class="navbar-collapse collapse")
+			ul(class="nav navbar-nav navbar-left")
+				li
+					a(id="topbar-home",href="./")
+						span(class="glyphicon glyphicon-home")
+						| Home 
+				li
+					a(id="topbar-hub",href="")
+						span(class="glyphicon glyphicon-log-out")
+						| Terminate 
+						
+		
+			ul(class="nav navbar-nav navbar-right")
+					
+				li
+					a(href="history",id="topbar-history")
+						span(class="glyphicon glyphicon-time")
+						| History
+				li
+					a(id="topbar-export")
+						span(class="glyphicon glyphicon-cloud")
+						| Export
+				li
+					a(href="query", id="topbar-query")
+						span(class="glyphicon glyphicon-search")
+						| Social Media
+
+				div(class="dropdown",id="topbar-analytics")
+					button(type="button",id="topbar-analytics-btn", class="btn btn-default dropdown-toggle",
+						data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
+						| Analytics Tools &nbsp;
+						span(class="caret")
+					ul(class="dropdown-menu", aria-labelledby="dropdownMenu1")
+						
+						li 
+							a(href="NLP-preprocess", id="topbar-preprocessing") Text Preprocessing
+						li 
+							a(href="text-classification", id="topbar-classification") Text Classification	
+						li 
+							a(href="NLP-sentiment", id="topbar-sentiment") Sentiment Analysis
+						li 
+							a(href="networkx", id="topbar-networkx") Network Analysis
+			form(id="sitemap",class="navbar-form navbar-right")
+				input(id="sitemap-input", type="text",class="form-control",placeholder="Search within the tool...")
+	

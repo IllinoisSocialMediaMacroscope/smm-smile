@@ -1,0 +1,203 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+
+        <!-- Style sheets! -->
+        link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
+        link(href="bootstrap/css/customized/crimson.css",rel="stylesheet")
+        link(href="bootstrap/css/customized/global.css",rel="stylesheet")
+        link(href="https://fonts.googleapis.com/css?family=Ubuntu:300")
+        link(href="bootstrap/css/bootstrap-multiselect.css", rel="stylesheet")
+        link(href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css", rel="stylesheet")
+        link(rel="stylesheet",
+            href="https://use.fontawesome.com/releases/v5.0.10/css/all.css",
+            integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg",
+            crossorigin="anonymous")
+        link(href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css", rel="stylesheet")
+
+        <!-- JQUERY -->
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+        script(src="bootstrap/js/bootstrap.min.js")
+        script(src="bootstrap/js/bootstrap-multiselect.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+        script(src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js")
+        script(src="bootstrap/js/jquery.highlight.js")
+
+        <!-- customized -->
+        script(src="bootstrap/js/customized/warning_trigger.js")
+        script(src="bootstrap/js/customized/modal_overlay.js")
+        script(src="bootstrap/js/customized/parse_session.js")
+
+    body
+        include ../../components/topbar
+        include ../../components/export
+        include ../../components/terminate
+        include ../../components/warning
+        include ../../components/clientside-warning
+        include ../../components/sitemap
+        include ../../components/cookie
+        include ../twitter/twitter-login
+
+
+        <!-- logo -->
+        div(class="row" id="header")
+            img(src="bootstrap/img/logo/crimson-bg-logo.png",width="800px")
+
+        div(class="row")
+            div(class="form-group")
+                div(class="col-lg-4 col-md-4 col-sm-4 col-xs-12")
+                    a(href="query" style="float:right;font-size:22px;")
+                        i(class="fas fa-arrow-left" style="font-size:22px;color:#418bca;margin-right:3px;")
+                        | Other data sources ...
+                div(class="col-lg-4 col-md-4 col-sm-4 col-xs-12")
+                    select(class="form-control", id="monitor-dataSource")
+                        option(value="null") Filter by Data Sources...
+                        option(value="Twitter") Twitter
+                        option(value="Facebook") Facebook
+                        option(value="Youtube") Youtube
+                        option(value="Tumblr") Tumblr
+                        option(value="Reddit") Reddit
+                        option(value="Google Plus") Google Plus
+                        option(value="QQ") QQ
+                        option(value="Instagram") Instagram
+                        option(value="Blogs") Blogs
+                        option(value="Comments") Comments
+                        option(value="Forums") Forums
+                        option(value="News") News
+                div(class="col-lg-4 col-md-4 col-sm-4 col-xs-12")
+                    select(class="form-control", id="monitor-type")
+                        option(value="null") Select Types...
+                        option(value="BUZZ") BUZZ
+                        option(value="OPINION") OPINION
+                        option(value="SOCIAL") SOCIAL
+
+        div(class="col-lg-12 col-md-12 col-sm-12 col-xs-12", style="padding:0;")
+            div(class="monitor-list")
+                each monitor in monitor_list
+                    div(class="monitor-item")
+                        div(class="basic-monitor-fields", style="overflow:auto;")
+                            div(class="col-lg-4 col-md-4 col-sm-4 col-xs-12")
+                                a(href="https://forsight.crimsonhexagon.com/ch/opinion/results?id="+monitor.id, target="_blank")
+                                    | #{monitor.name.toUpperCase()}
+                                p(style="color:#999; font-size:12px;")
+                                    i(id="monitor-id") #{monitor.id}
+                                p(style="display:inline;")
+                                    kbd #{monitor.type}
+                                p(class="results-start" style="display:inline;") #{monitor.resultsStart.slice(0, 10)}
+                                p(style="display:inline;") --
+                                p(class="results-end" style="display:inline;") #{monitor.resultsEnd.slice(0, 10)}
+                                p(style="color:#004f8e;") Team: #{monitor.teamName}
+                                if monitor.sources.indexOf('Twitter') > -1
+                                    i(class="fab fa-twitter")
+                                    p(style="display:none;") Twitter
+                                if monitor.sources.indexOf('Facebook') > -1
+                                    i(class="fab fa-facebook-f")
+                                    p(style="display:none;") Facebook
+                                if monitor.sources.indexOf('Youtube') > -1
+                                    i(class="fab fa-youtube")
+                                    p(style="display:none;") Youtube
+                                if monitor.sources.indexOf('Tumblr') > -1
+                                    i(class="fab fa-tumblr")
+                                    p(style="display:none;") Tumblr
+                                if monitor.sources.indexOf('Reddit') > -1
+                                    i(class="fab fa-reddit")
+                                    p(style="display:none;") Reddit
+                                if monitor.sources.indexOf('Google Plus') > -1
+                                    i(class="fab fa-google-plus-g")
+                                    p(style="display:none;") Google Plus
+                                if monitor.sources.indexOf('QQ') > -1
+                                    i(class="fab fa-qq")
+                                    p(style="display:none;") QQ
+                                if monitor.sources.indexOf('Instagram') > -1
+                                    i(class="fab fa-instagram")
+                                    p(style="display:none;") Instagram
+                                if monitor.sources.indexOf('Blogs') > -1
+                                    i(class="fab fa-blogger-b")
+                                    p(style="display:none;") Blogs
+                                if monitor.sources.indexOf('Comments') > -1
+                                    i(class="fas fa-comment")
+                                    p(style="display:none;") Comments
+                                if monitor.sources.indexOf('News') > -1
+                                    i(class="fas fa-newspaper")
+                                    p(style="display:none;") News
+                                if monitor.sources.indexOf('Forums') > -1
+                                    i(class="fab fa-stack-exchange")
+                                    p(style="display:none;") Forums
+                                button(class="btn btn-warning search-monitor-btn") Search within the monitor
+                            div(class="col-lg-8 col-md-8 col-sm-8 col-xs-12")
+                                p(class="keywords") #{monitor.keywords}
+        div(class="col-lg-4 col-md-4 col-sm-4 col-xs-12", style="padding:0;")
+            <!-- side bar HELP-->
+            div(class="documentation",id="documentation")
+                iframe(id="docIframe", src="graphql-doc/schema/crimsonquery.doc.html",width="100%",scrolling="yes")
+
+        <!-- popup modal save -->
+        div(id="save" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+            div(class="modal-dialog")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        button(class="close" data-dismiss="modal") &times;
+                        h2(class="modal-title")
+                            span(class="glyphicon glyphicon-floppy-save" style="font-size:20px;margin-left:5px")
+                            | Save the result
+
+                    div(class="modal-body" style="text-align:center;vertical-aligcd :middle;")
+                        form(class="form-horizontal")
+                            div(class="form-group")
+                                label(class="control-label col-md-4 col-md-4 col-xs-12") Filename
+                                div(class="col-md-7 col-md-7 col-xs-12")
+                                    input(class="form-control" id="sn-filename" placeholder="filename")
+                            div(class="form-group")
+                                label(class="control-label col-md-4 col-md-4 col-xs-12") Downloadable Files
+                                div(class="col-md-7 col-md-7 col-xs-12")
+                                    div(id="display-savefiles")
+                        div(class="loading" style="display:none")
+                            img(src="bootstrap/img/gifs/loading2.gif", width="15%", height="15%", style="display:block; margin-left:auto; margin-right:auto; margin-top:10px")
+                    div(class="modal-footer")
+                        button(class="btn btn-default", id="saveButton", style="background-color:#ea4a36;color:white;border-style:hidden") Save
+                        button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden", data-dismiss="modal") Close
+
+        <!-- popup modal download-->
+        div(id="success" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+            div(class="modal-dialog", style="width:800px;")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        button(class="close" data-dismiss="modal") &times;
+                        h2(class="modal-title" id="modal-title") Download Your Search Results
+                    div(class="modal-body" style="vertical-align:middle;font-size:20px;")
+                        div(id="citation-notice")
+                            p <b>Thank you for using our tool, if you use these results please cite it:</b><br>
+                            ul
+                                li Yun, J. T., Wang, C., Troy, J., Vance, N. P., Marini, L., Booth, R., Nelson, T., Hetrick, A., & Hodgkins, H.
+                                    | (September, 2017) – Social Media Macroscope,
+                                    a(href="http://hdl.handle.net/2142/99742",target="_blank") http://hdl.handle.net/2142/99742
+                            p <b>If you are using Historical Reddit data, please also cite this:</b><br>
+                            ul
+                                li Jason Baumgartner, PUSHSHIFT.IO, <u>https://pushshift.io</u>
+                            button(id="citation-notice-btn") click to continue
+                        div(id="modal-download",style="display:none;")
+                        p(class="download-note",style="display:none;") <b>NOTE</b>: Your search results are saved in your home directory. You can either <b>download</b> here;
+                            | or go to any of the analytics tools --> <b>select from your folder</b>;
+                            | or review, manage and download it in the <b>history</b> page
+                            | If you accidentally close this modal window, you can click <b>export</b> button in this page to resume.
+                        p(id="download-note",style="display:none;") <b>Example of usage:</b>
+                        video(id="gotoAnalytics-demo",style="display:none;" controls)
+                            source(src="bootstrap/img/gifs/gotoAnalytics.mp4", type="video/mp4")
+                        script.
+                            $("#citation-notice-btn").click(function () {
+                                $("#citation-notice").hide('slow');
+                                $("#modal-download").show('slow');
+                                $(".download-note").show('slow');
+                                $("#gotoAnalytics-demo").show('slow');
+                                $(".modal-footer.download").show('slow');
+                            });
+
+                    div(class="modal-footer download",style="display:none;")
+                        a(href="./", class="btn btn-primary",style="background-color:#ea4a36;border-style:hidden") Go To Analytics
+                        a(href="history", class="btn btn-primary", style="background-color:#1e325a;border-style:hidden") Review in History
+
+
+        script(src="bootstrap/js/customized/view_crimson.js")

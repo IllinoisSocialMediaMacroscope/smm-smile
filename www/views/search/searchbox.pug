@@ -1,0 +1,40 @@
+div(class="input-group", id="adv-search")
+	<!-- search box -->
+	input(type="text", class="form-control", id="searchbox", placeholder="Search...")
+				
+<!-- search buttons -->
+div(class="input-group-addon-btn")
+	div(class="btn-group")
+		div(class="dropdown dropdown-lg")
+			button(id="dropdownButton" type="button",class="btn btn-default dropdown-toggle" aria-expanded="false" aria-haspopup="true") 
+				span(class="glyphicon glyphicon-chevron-down")
+				| Advanced
+			<!-- dropdown content start -->
+			div(class="dropdown-menu dropdown-menu-right")
+				br
+				form(class="form-horizontal")
+					
+					include twitter/tweet-searchbox.pug
+					include twitter/user-searchbox.pug
+					include twitter/es-searchbox.pug
+					include reddit/search-searchbox.pug
+					include reddit/post-searchbox.pug
+					include reddit/comment-searchbox.pug
+					include reddit/psPost-searchbox.pug
+					include reddit/psComment-searchbox.pug
+
+					div(class="col-md-12")
+						textarea(class="form-control", id="input", rows="15",placeholder="If you know GraphQL, try typing your own string! :-D",disabled) 
+					div(class="col-md-12")
+							button(type="button", class="btn btn-primary", id="adv-search-btn") 
+								span(class="glyphicon glyphicon-search")
+								| Search	
+							button(type="button", class="btn btn-info",id="expandDoc") 
+								span(class="glyphicon glyphicon-tasks")
+								| Help
+			<!-- search button -->								
+			button(type="button",class="btn btn-primary",id="simple-search-btn") 
+				span(class="glyphicon glyphicon-search" aria-hidden="true")
+				| Search
+			
+			

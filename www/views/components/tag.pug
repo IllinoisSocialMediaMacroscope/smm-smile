@@ -1,0 +1,26 @@
+div(id="tag-modal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", data-dismiss="modal") &times;
+				//img(src="bootstrap/img/logo/tag.png",width="20px")
+				h3(class="modal-title", id="modal-title", style="text-align:left;vertical-align:middle;") Give it a name 
+				//p <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>N</kbd>
+			div(class="modal-body form")
+				div(id="modal-message")
+					div(class="form-group")
+						p Tag a personalized name to this job so that you can locate it faster in the history page. Otherwise the default ID will be displayed.
+					div(class="form-group")
+						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") ID
+						div(class="col-md-8 col-md-8 col-xs-12")
+							input(class="form-control" id="jobId", placeholder="Nothing to name yet" disabled)
+					div(class="form-group")
+						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Rename
+						div(class="col-md-8 col-md-8 col-xs-12")
+							input(id="tagName", class="form-control")
+			div(class="modal-footer")
+				button(class="btn btn-yes",id="tag") Tag
+				button(class="btn btn-no",data-dismiss="modal") Close
+
+script(src="bootstrap/js/customized/view_tag.js")
+	

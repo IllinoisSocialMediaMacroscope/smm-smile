@@ -1,0 +1,27 @@
+// server side error modal
+div(id="warning" class="modal fade" role="dialog")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close" data-dismiss="modal") &times;
+				h2(class="modal-title") Whoops...
+				p Have you verified every thing you filled in is valid?
+			div(class="modal-body" style="text-align:center;vertical-align:middle;overflow:hidden;")
+				div(class="form-group")
+					div(class="col-md-2 col-md-2 col-xs-12") 
+						button(class="btn btn-yes",id="copyError",onclick="copyToClipboard(`#error`);") copy
+					div(class="col-md-10 col-md-10 col-xs-12")
+						textarea(class="form-control", id="error", name="error", rows="20")
+			div(class="modal-footer")
+				a(href="https://socialmediamacroscope.org/feedback/report_problems",target="_blank")
+					button(class="btn btn-yes") Report the Error
+				button(class="btn btn-no", data-dismiss="modal", style="margin-left:5px;") Close
+				
+script.
+	/*------------------------copy the error ---------------------------*/
+	function copyToClipboard(textID) {
+		$(textID).select();
+		document.execCommand('copy');
+	}
+	
+

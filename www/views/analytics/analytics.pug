@@ -1,0 +1,142 @@
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		
+		<!-- style sheet! -->
+		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		link(href="bootstrap/css/customized/global.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/customized.css",rel="stylesheet")
+		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+		link(href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css")
+		
+		<!-- scripts -->
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="https://www.gstatic.com/charts/loader.js")
+		script(src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
+		script(src="bootstrap/js/bootstrap.min.js")
+		script(src="https://d3js.org/d3.v2.js")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js")
+		
+		<!-- customized scripts -->
+		script(src="bootstrap/js/customized/view.js")
+		script(src="bootstrap/js/customized/warning_trigger.js")
+		script(src="bootstrap/js/customized/modal_overlay.js")
+		script(src="bootstrap/js/customized/parse_session.js")
+	body
+		include ../components/topbar.pug
+		include ../components/export.pug
+		include ../components/terminate.pug
+		include ../components/warning.pug
+		include ../components/clientside-warning.pug
+		include ../components/sitemap.pug
+		include ../components/cookie.pug
+		include ../components/reddit-expand.pug
+		include ../components/aws-batch.pug
+		include ../components/tag.pug
+		include ../components/clowder.pug
+			
+		div(id="container-fluid")
+				<!-- side bar -->
+				div(class="col-sm-3 col-md-3 sidebar")
+					ul(class="nav nav-sidebar")
+						li 
+							a 
+								span(class="glyphicon glyphicon-tasks pull-left") 
+								| Overview
+							ul(class="nav child_menu" style="display:block;" id="side-configuration")
+								li
+									a(href="#config-anchor")
+										span(class="glyphicon glyphicon-wrench pull-left")
+										| Setting
+								li
+									a(href="#img-anchor")
+										span(class="glyphicon glyphicon glyphicon-picture pull-left")
+										| Chart
+								li
+									a(href="#result-anchor")
+										span(class="glyphicon glyphicon-zoom-in pull-left")
+										| Result Preview
+						li 
+							a 
+								span(class="glyphicon glyphicon-th-large pull-left") 
+								| Functions
+							ul(class="nav child_menu" style="display:block;" id="side-configuration")
+								li
+									a(href="",id="clowder-left-panel")
+										span(class="glyphicon glyphicon-cloud-upload")
+										| Export to Clowder
+								li
+									a(href="", id="tag-left-panel")
+										span(class="glyphicon glyphicon-tag pull-left")
+										| Tag the Results						
+						li(id='side-download-li', style="display:none;") 
+							a(id="side-download-head")
+								span(class="glyphicon glyphicon-download-alt pull-left")
+								| Download 
+							ul(class="nav child_menu", style="display:block;", id="side-download")
+								
+		
+		div(id="container-fluid")
+			div(class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main")
+						
+					div(class="row")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							h1 #{title}
+				
+					div(class="row")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							a(class="anchor" name="config-anchor")
+								
+							<!-- setting area -->							
+							div(class="x_panel")
+								div(class="x_title")
+									h2 Configuration
+								div(class="x_content")
+									br
+									block config-form					
+						
+					div(class="loading",style="display:none;")
+						//p This computation might take up to a few minutes if you have a large dataset. 
+						img(src="bootstrap/img/gifs/loading.gif", width="400", height="400px",style="display:block; margin:auto;")
+						h4(style="text-align:center;")
+							i For large dataset, the computation might take a few minutes. Thank you for your patience.
+							
+						
+					<!-- img -->
+					div(class="row")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							a(class="anchor" name="img-anchor")
+							div(id="img-container")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							div(id="gaudge")
+								
+					<!-- result -->
+					div(class="row")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+							a(class="anchor" name="result-anchor")
+							div(id="result-container")
+			
+									
+		block customized-script
+		script(src="bootstrap/js/customized/detect_cookie.js").				
+		script(src="bootstrap/js/customized/hotkeys.js").				
+		
+		
+							
+		
+				
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							

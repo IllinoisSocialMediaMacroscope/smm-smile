@@ -1,0 +1,231 @@
+body {
+    font-family: "Ubuntu", sans-serif;
+    color: black;
+    background-color: #eae8e8;
+}
+/* banner */
+#header {
+    display: block;
+    margin: auto auto;
+    margin-top: 150px;
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+/* monitor filters */
+#monitor-dataSource{
+    max-width:300px;
+    float:right;
+}
+
+#monitor-type{
+    max-width:300px;
+    float:left;
+}
+
+/* each monitors */
+.monitor-list{
+    margin-top:25px;
+    margin-bottom:25px;
+}
+.monitor-item{
+    border-bottom: 2px solid #ccc;
+    border-top: 2px solid #ccc;
+    border-left: 2px solid #ccc;
+    border-right: 2px solid #ccc;
+    padding-top:20px;
+    padding-bottom:20px;
+    padding-left: calc(10%);
+    padding-right:calc(10%);
+    overflow:auto;
+}
+
+.search-monitor-btn{
+    display:block;
+    margin-top:10px;
+}
+
+/* glyphicon font-awesome icons */
+.fab, .fas{
+    padding:3px;
+    color:#ff5722;
+}
+
+.glyphicon{
+    margin-right:10px;
+}
+
+/* kbd style */
+kbd{
+    background-color:#009688;
+    margin-right:5px;
+}
+
+.toggle, .toggle-on, .toggle-off, .toggle-handle{
+    border-radius: 20px;
+    margin-left:auto;
+}
+
+.multiselect-container.dropdown-menu{
+    width:838px;
+}
+
+/* search keywords highlight */
+.keywords{
+    max-height:171px;
+    overflow:auto;
+}
+
+.parenthesis{
+    color:red;
+    font-weight:600;
+}
+
+.NOT{
+    color:red;
+    font-weight:600;
+}
+
+.AND{
+    color:darkgreen;
+    font-weight:600;
+}
+
+.OR{
+    color:orange;
+    font-weight:600;
+}
+
+/* download modal */
+.download-note{
+    margin-left:20px;
+    margin-top:40px;
+    font-size:16px;
+    color:#1e325a;
+}
+
+#gotoAnalytics-demo{
+    max-width:90%;
+    max-height:90%;
+    display:block;
+    margin:auto auto;
+    box-shadow: 10px 10px 5px #888888;
+}
+
+#citation-notice-btn{
+    background-color:#ea4a36;
+    padding:5px 10px;
+    border-radius:6px;
+    border:none;
+    float:right;
+    color:white;
+    font-size:15px;
+    font-weight:600;
+    margin:-10px -15px;
+}
+
+#citation-notice-btn:hover{
+    color:#ea4a36;
+    background-color:white;
+}
+
+/* textarea */
+#input{
+    resize:none;
+    background-color:#e9f2f9;
+    color:#333;
+    height:auto;
+}
+
+/* toogle help */
+.documentation{
+    display:none;
+}
+
+.documentation.expand{
+    display:block;
+    width:100%;
+    margin: 0 0;
+    vertical-align:top;
+}
+
+/* buttons */
+#expandDoc {
+    background-color: #005fb2;
+    color:#fff;
+    border-radius: 4px;
+    outline:none;
+    margin-top:10px;
+    margin-bottom:15px;
+    margin-left:5px;
+    margin-right:5px;
+    display:inline-block;
+    border-color:#005fb2;
+}
+
+#adv-search-btn {
+    background-color:#ea4a36;
+    border-radius:4px;
+    outline:none;
+    margin-top:10px;
+    margin-bottom:15px;
+    margin-left:5px;
+    margin-right:5px;
+    display:inline-block;
+    border:none;
+}
+
+#simple-search-btn{
+    background-color:#ea4a36;
+    color:#fff;
+    border:solid 1px #ea4a36;
+    overflow:auto;
+    margin-left:-2px;
+}
+
+#dropdownButton{
+    background-color:#73879c;
+    color:#ffffff;
+    border:none;
+}
+
+/* hover text */
+.warningText{
+    display:block;
+    color:#ea4a36;
+    padding-left:5px;
+}
+
+/* twitter auth */
+#twitter-pin{
+    margin-top:10px;
+    width:500px;
+    margin-left:10px;
+    vertical-align:baseline;
+}
+
+#twitter-login-notes{
+    margin: 20px auto 20px auto;
+}
+
+#twitter-login-notes p{
+    display:inline;
+    color:#ea4937;
+}
+
+#twitter-login-notes a{
+    margin-left:5px;
+    text-decoration:underline
+}
+
+#twitter-login-notes img{
+    width: 15px;
+    vertical-align: top;
+    margin-right: 5px;
+}
+
+#twitter-login-header h2{
+    display:inline;
+    vertical-align: middle;
+    margin-left:10px;
+}

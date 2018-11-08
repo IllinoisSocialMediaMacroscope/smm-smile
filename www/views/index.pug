@@ -1,0 +1,99 @@
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible",content="IE=edge")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		
+		<!-- this is for bootstrap 3! -->
+		link(href="bootstrap/css/bootstrap.css", rel="stylesheet")
+		<!-- this is the customized dashboard style -->
+		link(href="bootstrap/css/customized/global.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/index.css",rel="stylesheet")
+		
+		<!-- font family -->
+		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="bootstrap/js/bootstrap.min.js")
+		
+		<!-- jquery cookie plugin -->
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+		script(src="bootstrap/js/customized/detect_cookie.js")
+
+		<!-- customized -->
+		script(src="bootstrap/js/customized/warning_trigger.js")
+		script(src="bootstrap/js/customized/parse_session.js")
+	
+	body
+		include components/topbar.pug
+		include components/export.pug
+		include components/terminate.pug
+		include components/warning.pug
+		include components/sitemap.pug	
+		include components/clientside-warning.pug
+		include components/cookie.pug
+								
+		div(class="headers")
+			//img(id="index-banner", src="bootstrap/img/logo/index-banner.png",width="100%")
+			img(id="index-banner", src="bootstrap/img/logo/index-banner.png",width="70%")
+			div(class="fadein",style="display:none;")
+				img(id="f1", src="bootstrap/img/logo/1.png",width="240px")
+				img(id="f2", src="bootstrap/img/logo/2.png",width="240px")
+				img(id="f3", src="bootstrap/img/logo/3.png",width="240px")
+			div(id="citation-notice")
+				p <b>If you use this tool please cite it in your work using the citation below:</b><br>
+				p Yun, J. T., Vance, N., Wang, C., Troy, J., Marini, L., Booth, R., Nelson, T., Hetrick, A., Hodgekins, H. (2018).
+					| The Social Media Macroscope. In Gateways 2018.&nbsp
+					a(href="https://doi.org/10.6084/m9.figshare.6855269.v2", target="_blank") https://doi.org/10.6084/m9.figshare.6855269.v2
+				p Your citation will help us continue to provide and improve this platform! 
+				button(id="citation-notice-btn") click to continue
+								
+			div(class="button-unit",style="display:none;")
+				a(class="button" href="query" id="get-started") Get Started
+				a(class="button" href="history" id="past-results") Past Results
+				
+		each page,i in pages
+			if i%2 === 0
+				div(class="even")
+					if i === 0
+						img(src="bootstrap/img/logo/provides.png",id="provides")
+					section(class="even")
+						div(class="prose",id=page.name)
+							h1(class="app-title") #{page.name}
+							p(class="intro",id=page.name) !{page.introduction}
+							a(class="prose-button",href=page.wiki,target="_blank") Read More
+
+							if page.url !== ''
+								a(class="prose-button",href=page.url,id=page.url) Start
+						div(class="app")
+							a(href=page.url)
+								img(src=page.imgURL, width="400px", class="logos")
+			else
+				div(class="odd")
+					section(class="odd")
+						div(class="app", id=page.name)
+							a(href=page.url)
+								img(src=page.imgURL, width="400px", class="logos")
+						div(class="prose")
+							h1(class="app-title") #{page.name}
+							p(class="intro") !{page.introduction}
+							a(class="prose-button",href=page.wiki,target="_blank") Read More
+							if page.url !== ''
+								a(class="prose-button",href=page.url,id=page.url) Start
+										
+		include components/footer.pug								
+				
+		script.
+			$("#citation-notice-btn").click(function(){
+
+				// hide citation; show start buttons;
+			    $("#citation-notice").hide('slow');
+				$(".fadein").show('slow');
+				$(".button-unit").show('slow');
+
+				// scroll down
+				$("html, body").animate({ scrollTop: $("#get-started").offset().top/2 }, 1000);
+
+			});
+					
+		script(src="bootstrap/js/customized/hotkeys.js").	

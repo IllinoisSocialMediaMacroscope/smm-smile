@@ -1,0 +1,43 @@
+<!-- user -->
+div(class="user")
+	div(class="form-group")
+		<label class="label-control warning">maximum number of users
+			<span class="warningText">Careful! Every 20 count is ONE http request, and you only have 900 requests allowed over 15 minutes window</span></label>
+		div(class="range range-node")
+			input(type="range" min="20" max="1000" value="100" step="20" id="twtUser-count" onchange="twtUserRange.value=value")
+			<output id="twtUserRange">100</output>
+	
+	div(class="form-group")
+		<label class="label-control">Select Fields</label>
+		br
+		select(multiple,id="twtUserFields",class="fields")
+			optgroup(label="BasicFields")
+				option(value="author_id" selected) author id
+				option(value="author_id_str" selected) author id str
+				option(value="name" selected) name
+				option(value="screen_name" selected) screen name
+				option(value="description" selected) description
+				option(value="author_created_at" selected) author created_at
+				option(value="profile_image_url" selected) profile image URL
+				option(value="profile_banner_url" selected) profile banner URL
+				option(value="url" selected) URL
+				option(value="location" selected) location
+				option(value="tweets_count" selected) tweets count
+				option(value="followers_count" selected) followers count
+				option(value="friends_count" selected) friends count
+				option(value="listed_count" selected) listed count
+				option(value="favourites_count" selected) favorites count
+				option(value="statuses_count" selected) statuses count
+				option(value="time_zone" selected) timezone
+				option(value="protected" selected) protected
+				option(value="verified" selected) verified
+				option(value="is_translator" selected) is translator
+				option(value="contributors_enabled" selected) contributors enabled
+				option(value="geo_enabled" selected) geo enabled
+				option(value="author_lang" selected) author lang
+			optgroup(label="UserTimeline")
+				option(value="id" selected) tweet id
+				option(value="created_at" selected) tweet created at
+				option(value="text" selected) text
+				option(value="retweet_count" selected) retweet_count
+													

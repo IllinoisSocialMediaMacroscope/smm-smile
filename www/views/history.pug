@@ -1,0 +1,228 @@
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		
+		<!-- Style Sheets -->
+		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
+		link(href="bootstrap/css/customized/customized.css",rel="stylesheet")
+		link(href="bootstrap/css/customized/global.css",rel="stylesheet")
+
+		<!-- scripts -->
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+		script(src="https://www.gstatic.com/charts/loader.js")
+		script(src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
+		script(src="bootstrap/js/bootstrap.min.js")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js")
+		
+		<!-- customized -->
+		script(src="bootstrap/js/customized/view.js")
+		script(src="bootstrap/js/customized/warning_trigger.js")
+		script(src="bootstrap/js/customized/modal_overlay.js")
+		script(src="bootstrap/js/customized/parse_session.js")
+		
+	body
+		include components/topbar.pug
+		include components/export.pug
+		include components/terminate.pug
+		include components/sitemap.pug
+		include components/warning.pug
+		include components/clientside-warning.pug
+		include components/cookie.pug
+		include components/reddit-expand.pug
+		include components/tag.pug		
+		include components/clowder.pug
+								
+		div(class="container-fluid")
+			div(class="row")
+				div(class="col-sm-3 col-md-3 sidebar")
+					h2(style="color:#ffffff;text-align:center;") History 
+						img(src="bootstrap/img/logo/history-logo.png" width="50px", id="historyLogo", style="display:none;")
+						img(src="bootstrap/img/gifs/loading5.gif",width="50px",id="historyListLoading")
+					ul(class="nav nav-sidebar")
+										
+												
+		div(class="container-fluid")
+			div(class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main")
+				div(id="background")
+					div(class="col-md-12 col-sm-12 col-xs-12")
+						p(style="text-align:center; margin-top:200px;font-size:20px;") 
+							<span class="glyphicon glyphicon-hand-left"></span>Please Click the Past Job ID to View.
+				div(id="loading",style="display:none;")
+					div(class="col-md-12 col-sm-12 col-xs-12" style="text-align:center;margin-top:155px;")
+						//p <span class="glyphicon glyphicon-refresh"></span>Please Wait. 
+						img(src="bootstrap/img/gifs/loading3.gif", width="250px")
+				
+				<!-- title -->
+				div(class="row")
+						div(class="col-md-12 col-sm-12 col-xs-12")
+						div(id="title-container")
+							
+				br
+				<!-- overview -->
+				div(class="row")
+					div(class="col-md-12 col-sm-12 col-xs-12")
+						div(id="overview-container")
+						
+				<!-- img -->
+				br
+				div(class="row")
+					div(class="col-md-12 col-sm-12 col-xs-12")
+						a(class="anchor" name="img-anchor")
+						div(id="img-container")
+					div(class="col-md-12 col-sm-12 col-xs-12")
+						div(id="gaudge")
+						//div(id="gaudge-overlay", style="position:absolute; top: 0; bottom: 0; left:0; right: 0; background-color:black;")
+									
+				<!-- result -->
+				br
+				div(class="row")
+					div(class="col-md-12 col-sm-12 col-xs-12")
+						a(class="anchor" name="result-anchor")
+						div(id="result-container")
+						
+	
+		<!-- popup modal delete -->
+		div(id="delete" class="modal fade" role="dialog")
+			div(class="modal-dialog")
+				div(class="modal-content")
+					div(class="modal-header")
+						button(class="close" data-dismiss="modal") &times;
+						h2(class="modal-title") 
+							span(class="glyphicon glyphicon-trash" style="font-size:20px;margin-left:5px") 
+							| Delete this Job? 
+						input(id="folderURL",hidden)
+						input(id="tab",hidden)
+						
+					div(class="modal-footer")
+						button(class="btn btn-primary" id="deleteButton") Delete
+						button(class="btn btn-default" data-dismiss="modal") Close
+		
+		script.
+			// no other choices has to use tagIdMap pushed from get method
+			// hence inline scripts
+			$(document).ready(function(){
+				var tags = !{JSON.stringify(tagIdMap)};
+				if (s3FolderName == undefined) s3FolderName = 'local';
+					
+				$.ajax({
+					type:'POST',
+					url:'list-all', 
+					data: {"s3FolderName":s3FolderName},			
+					success:function(data){
+						if (data){
+							if ('ERROR' in data){
+								$("#loading").hide();
+								$("#background").show();
+								$("#error").val(JSON.stringify(data));
+								$("#warning").modal('show');
+							}else{
+								// first level
+								$.each(data, function(key,val){
+									if(key === 'ML'){ var first_level = 'Machine Learning'; }
+									else if (key === 'NLP'){ var first_level = 'Nature Language Processing'; }
+									else if (key === 'NW'){ var first_level ='Network Visualization and Analysis'; }
+									else if (key === 'GraphQL'){ var first_level = 'Social Media Data'; }
+									else{ var first_level = key }
+									$(".nav.nav-sidebar").append(
+									`<li>
+										<a onclick="toggle(this,` + key +`);" id="` + key + `-btn">
+											<span class="glyphicon glyphicon-minus"></span>`
+											+ first_level +
+										`</a>
+									</li>
+									<ul class="nav child_menu" style="display:block;" id="` + key + `"></ul>`);
+														
+									// second level			
+									$.each(val, function(key1,val1){
+										if (key1 === 'feature'){ var second_level = 'Feature Selection'; }
+										else if(key1 === 'clustering'){var second_level = 'Unsupervised Learning (clustering)';}
+										else if(key1 === 'preprocessing'){var second_level = 'NLP Preprocessing'; }
+										else if(key1 === 'sentiment'){var second_level = 'Sentiment Analysis';}
+										else if(key1 === 'topic-modeling'){var second_level = 'LDA Topic Modeling';}
+										else if(key1 === 'twitter-Tweet'){var second_level = 'Twitter Tweet';}
+										else if(key1 === 'twitter-User'){var second_level = 'Twitter User';}
+										else if(key1 === 'twitter-Stream'){var second_level = 'Twitter Streaming Data';}
+										else if(key1 === 'reddit-Search'){var second_level = 'Reddit Search Posts Title';}
+										else if(key1 === 'reddit-Post'){var second_level = 'Subreddit Posts Title';}
+										else if(key1 === 'reddit-Comment'){var second_level = 'Subreddit Comment';}
+										else if(key1 === 'reddit-Historical-Post'){var second_level = 'Reddit Historical Post';}
+										else if(key1 === 'reddit-Historical-Comment'){var second_level = 'Reddit Historical Comment';}
+										else if(key1 === 'crimson-Hexagon'){var second_level = 'Crimson Hexagon Data';}
+										else if(key1 === 'networkx'){var second_level = 'Python NetworkX';}
+										else if(key1 === 'classification'){var second_level = 'Text Classification';}
+										else{var second_level = key1; }
+										$("#"+key).append(
+										`<li>
+											<a onclick="toggle(this,'#` + key1 + `');" id="` + key1 + `-btn">
+												<span class="glyphicon glyphicon-plus"></span>`
+												+ second_level +
+											`</a>
+											<ul class="nav child_menu" style="display:none;" id="` + key1 + `"></ul>
+										</li>`);
+										
+										
+										$.each(val1, function(key2,val2){
+											if (key2 in tags){
+												$("#"+key1).append(
+													`<li id="` + key1 + "-"+ key2 +`">
+														<p class="historyTabs">` +key2 +`</p>
+														<p class="historyTags" id="`+ key2 + `"><kbd>tag: ` + tags[key2] + `</kbd></p>
+														<div class="button-unit">
+															<button class="historyButtons" onclick="submitHistory('` + val2 + `');">view</button>
+															<button class="historyButtons" onclick="deleteModal('` + val2 + "','" + key1 + "-" + key2 +`');">delete</button>
+															<!-- button class="historyButtons" onclick="tag('` + key2 + `');">tag</button -->
+														</div>
+													</li>`);
+											}else{
+												$("#"+key1).append(
+													`<li id="` + key1 + "-"+ key2 +`">
+														<p class="historyTabs">` +key2 +`</p>
+														<p class="historyTags" id="`+ key2 + `"><p>
+														<div class="button-unit">
+															<button class="historyButtons" onclick="submitHistory('` + val2 + `');">view</button>
+															<button class="historyButtons" onclick="deleteModal('` + val2 + "','" + key1 + "-" + key2 +`');">delete</button>
+															<!-- button class="historyButtons" onclick="tag('` + key2 + `');">tag</button -->
+														</div>
+													</li>`);
+											}
+										});
+										
+									});
+								});
+								$("#historyListLoading").hide();
+								$("#historyLogo").show();
+							}
+						}
+					},
+					error: function(jqXHR, exception){
+						var msg = '';
+						if (jqXHR.status === 0) {
+							msg = 'Not connect.\n Verify Network.';
+						} else if (jqXHR.status == 404) {
+							msg = 'Requested page not found. [404]';
+						} else if (jqXHR.status == 500) {
+							msg = 'Internal Server Error [500].';
+						} else if (exception === 'parsererror') {
+							msg = 'Requested JSON parse failed.';
+						} else if (exception === 'timeout') {
+							msg = 'Time out error.';
+						} else if (exception === 'abort') {
+							msg = 'Ajax request aborted.';
+						} else {
+							msg = 'Uncaught Error.\n' + jqXHR.responseText;
+						}
+						$("#error").val(msg);
+						$("#warning").modal('show');
+						
+					} 
+				});
+				
+			});
+			
+		script(src="bootstrap/js/customized/history_pb.js")
+		script(src="bootstrap/js/customized/detect_cookie.js")
+		script(src="bootstrap/js/customized/hotkeys.js")

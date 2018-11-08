@@ -1,0 +1,44 @@
+div(class="reddit-post")
+	div(class="form-group")
+		<label class="label-control warning">maximum number of posts
+		div(class="range range-node")
+			input(type="range" min="100" max="10000" value="2000" step="100" id="rdPostCount" onchange="rdPostCount_rangeNode.value=value")
+			<output id="rdPostCount_rangeNode">2000</output>
+	div(class="form-group")
+		<label class="label-control">Select Fields</label>
+		br
+		select(multiple,id="redditPostFields",class="fields")
+			option(value="archived" selected) archived
+			option(value="author_name" selected) author name
+			option(value="brand_safe" selected) brand safe
+			option(value="contest_mode" selected) contest mode
+			option(value="clicked" selected) clicked
+			option(value="created" selected) created
+			option(value="created_utc" selected) created utc
+			option(value="domain" selected) domain
+			option(value="downs" selected) downs
+			option(value="edited" selected) edited
+			option(value="gilded" selected) gilded
+			option(value="hidden" selected) hidden
+			option(value="hide_score" selected) hide score
+			option(value="id" selected) id
+			option(value="is_self" selected) is self
+			option(value="link_flair_text" selected) link flair text
+			option(value="locked" selected) locked
+			option(value="name" selected) name
+			option(value="over_18" selected) over 18
+			option(value="permalink" selected) permalink
+			option(value="quarantine" selected) quarantine
+			option(value="saved" selected) saved
+			option(value="score" selected) score
+			option(value="stickied" selected) stickied						
+			option(value="spoiler" selected) spoiler						
+			option(value="subreddit_display_name" selected) subreddit display name						
+			option(value="subreddit_id" selected) subreddit id						
+			option(value="subreddit_type" selected) subreddit type						
+			option(value="subreddit_name_prefixed" selected) subreddit name prefixed						
+			option(value="title" selected) title			
+			option(value="url" selected) url			
+			option(value="ups" selected) ups			
+			option(value="visited" selected) visited			
+								

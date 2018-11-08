@@ -1,0 +1,37 @@
+{
+	"form-action": "NLP-sentiment",
+	"containers":[
+		{"container-name":"file-container",
+		"container-label-name":"Select from your folder",
+		"inputs":[
+					{"type":"select",
+						"name":"selectFile",
+						"id":"selectFile",
+						"sytle":"",
+						"class":"form-control",
+						"data-width":"800px",
+						"optgroup": true,
+						"options":[]
+					}
+				]},
+		{"container-name":"",
+		"container-label-name":"Algorithm",
+		"inputs":[
+					{"type":"select",
+						"name":"algorithm",
+						"id":"algorithm",
+						"class":"form-control",
+						"optgroup": false,
+						"options":[
+									{"value":"Please Select...",
+									"label":"Please Select..."},
+									
+									{"value":"vader",
+									"label":"VADER (Valence Aware Dictionary and Sentiment Reasoner)"},
+
+									{"value":"sentiWordNet", "label":"sentiWordNet"}]
+					}
+				]}
+	],
+	"custom-script":"bootstrap/js/customized/view_sentiment.js"
+}

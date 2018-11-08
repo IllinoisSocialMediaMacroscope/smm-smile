@@ -1,0 +1,145 @@
+div(id="clowder-login-modal" class="modal fade" role="dialog" data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content",style="width:800px;")
+			div(class="modal-header")
+				button(class="close", data-dismiss="modal") &times;
+				img(src="bootstrap/img/logo/clowder-bg-logo.png",width="200", style="display:block;margin-right:auto;")
+			div(class="modal-body form")
+				div(class="control-group")
+					label(class="control-label") Username
+					input(type="email", class="form-control", id="clowderEmail", placeholder="Use your registered Email address")
+				div(class="control-group")
+					label(class="control-label") Password
+					input(type="password", class="form-control", id="clowderPassword", placeholder="Password")
+			div(class="modal-footer")
+				button(class="btn btn-yes", onclick="submit_clowder_login();")
+					span(class="glyphicon glyphicon-log-in")
+					| Login
+
+div(id="clowder-modal" class="modal fade" role="dialog" data-keyboard="false")
+	div(class="modal-dialog", style="width:calc(90%)")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", data-dismiss="modal") &times;
+				img(src="bootstrap/img/logo/clowder-bg-logo.png",width="200", style="display:block;margin-right:auto;")
+				//p(style="text-align:center; margin-top:10px;") <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>C</kbd> 
+			div(class="modal-body form")
+				// dataset!!!
+				div(class="clowder-dataset-block")
+					div(class="control-group")
+						label(class="control-label") Select a dataset
+						img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
+						select(class="form-control", id="selectDataset")
+
+					div(id="create-new")
+						// new dataset
+						div(class="col-12 col-sm-4 col-md-4", id="clowder-new-dataset", style="display:none;")
+							div(class="control-group")
+								label(class="control-label") Dataset Title (*)
+								input(type="text", class="form-control", id="datasetTitle", placeholder="A short name")
+							div(class="control-group")
+								label(class="control-label") Descriptions
+								textarea(class="form-control", rows="5", style="resize:none;", id="datasetDesc", placeholder="A longer description")
+							div(id="datasetAdvanced" style="display:none;")
+								div(class="control-group", id="datasetMeta")
+									label(class="control-label") Add Metadata
+									select(class="form-control")
+										option(value="Please Select...") Please Select...
+										option(value="CSDMSStandardName") CSDMS Standard Name
+										option(value="DateandTime") Date and Time
+										option(value="FundingInstitution") Funding Institution
+										option(value="GeoJSON") GeoJSON
+										option(value="GrantNumber") ODM2 Variable Name
+										option(value="PrimaryInitialPublication") Primary/Initial Publication
+										option(value="PrincipalInvestigator") Principal Investigator(s)
+										option(value="References") References
+										option(value="RelatedPublications") Related Publications
+										option(value="SASSpatialGeocode") SAS Spatial Geocode
+										option(value="SASVariableName") SAS Variable Name
+										option(value="TimePeriods") Time Periods
+										option(value="Unit") Unit
+								div(id="datasetMeta-block")
+								div(class="control-group")
+									label(class="control-label") Add Tags
+									input(type="text", class="form-control", id="datasetTags", data-role="tagsinput", placeholder="Type, Enter, Backspace, L/R")
+								div(class="control-group")
+									label(class="control-label") Add to a Collection
+									img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
+									select(class="form-control", id="selectCollection")
+								div(class="control-group")
+									label(class="control-label") Share with a Space
+									img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
+									select(class="form-control", id="selectSpaceInDataset")
+							div(class="control-group")
+								a(href="#" id="datasetAdvancedBtn" onclick="clowderDatasetAdvanceToggle(this);") Show more
+							div(class="control-group")
+								button(class="btn btn-info pull-right",id="clowder-createDataset-btn", onclick="create_clowder_dataset();") Create Dataset
+						// new collection
+						div(class="col-12 col-sm-4 col-md-4", id="clowder-new-collection", style="display:none;min-height:594px;")
+							button(class="close", onclick="closeTab(this);") &times;
+							div(class="control-group")
+								label(class="control-label") Collection Name (*)
+								input(type="text", class="form-control", id="collectionName", placeholder="A short name")
+							div(class="control-group")
+								label(class="control-label") Descriptions
+								textarea(class="form-control", rows="5", style="resize:none;", id="collectionDesc", placeholder="A longer description")
+							div(class="control-group")
+								label(class="control-label") Share with a Space
+								img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
+								select(class="form-control", id="selectSpaceInCollection")
+							div(class="control-group")
+								button(class="btn btn-info pull-right",id="clowder-createCollection-btn",
+									onclick="create_clowder_collection();") Create Collection
+						// new space
+						div(class="col-12 col-sm-4 col-md-4", id="clowder-new-space", style="display:none;")
+							button(class="close", onclick="closeTab(this);") &times;
+							div(class="control-group")
+								label(class="control-label") Space Name (*)
+								input(type="text", class="form-control", id="spaceName", placeholder="A short name")
+							div(class="control-group")
+								label(class="control-label") Descriptions
+								textarea(class="form-control", rows="10", style="resize:none;", id="spaceDesc", placeholder="A longer description")
+							div(class="control-group")
+								label(class="control-label") Add user as Editors (hold <kbd>ctrl</kbd> to add multiple)
+								img(src="bootstrap/img/gifs/loading4.gif",width="100px",style="display:none;")
+								select(class="formcontrol-", id="selectUser", multiple, style="height:150px;width:100%")
+							div(class="control-group")
+								button(class="btn btn-info pull-right",id="clowder-createSpace-btn",
+									onclick="create_clowder_space();") Create Space
+
+
+				// files!!!
+				div(class="clowder-files-block", style="display:none;")
+					div(class="control-group")
+						label(class="control-label") Dataset ID (*)
+						input(type="text", class="form-control", id="datasetID", disabled)
+					div(class="control-group")
+						label(class="control-label") Select files to upload
+						div(id="clowder-files-list")
+							
+			div(class="modal-footer")
+				div(class="clowder-dataset-block")
+					button(class="btn btn-danger", id="clowder-next", onclick="submit_clowder_dataset();")
+						span(class="glyphicon glyphicon-chevron-right")
+						| Next
+				div(class="clowder-files-block", style="display:none;")
+					button(class="btn btn-no", onclick="prev_clowder_dataset();", id="clowder-prev")
+						span(class="glyphicon glyphicon-chevron-left")
+						| Prev
+					button(class="btn btn-yes", onclick="submit_clowder_files();", id="clowder-upload")
+						span(class="glyphicon glyphicon-upload")
+						| Upload
+					img(src="bootstrap/img/gifs/loading2.gif", width="10%", height="10%",style="display:none;")
+						
+div(id="clowder-confirmation", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content",style="width:650px;")
+			div(class="modal-body confirmation")
+				div(id="modal-message")
+					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="80px")
+					p(id="clowder-message")
+					div(id="file-links")
+			div(class="modal-footer")
+				button(class="btn btn-no",data-dismiss="modal") Close	
+										
+script(src="bootstrap/js/customized/view_clowder.js")

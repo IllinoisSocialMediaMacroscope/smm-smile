@@ -1,0 +1,57 @@
+div(id="reddit-expand" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", data-dismiss="modal") &times;
+				h3(class="modal-title", id="modal-title", style="text-align:left;") Gather the replies for each Reddit Post?
+			
+			div(class="modal-body form")
+				div(id="modal-message")
+					div(class="form-group")
+						p Your selected dataset contains hundreds/thousands Reddit post, and for each reddit post, it might have thousands of comments and replies. 
+							| This process is very time consuming. Once you submit the request, we will have to place this on a job queue.
+							| We will email you with further instruction when the collection is completed.
+						img(src="bootstrap/img/gifs/warning.gif",style="width:15px;") 
+						p(style="display:inline;color:red;") 
+							b You may feel free to leave this page or close your browser. 
+								| BUT DO NOT TERMINATE THIS SESSION AFTER SUBMITTING THIS JOB! 
+					div(class="form-group")
+						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Dataset
+						div(class="col-md-8 col-md-8 col-xs-12")
+							input(class="form-control dataset",disabled)
+					div(class="form-group")
+						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Number of posts
+						div(class="col-md-8 col-md-8 col-xs-12")
+							input(class="form-control length",disabled)
+					div(class="form-group")
+						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Email Address
+						div(class="col-md-8 col-md-8 col-xs-12")
+							input(id="email-alert", class="form-control", type="email", name="email-alert")
+			div(class="modal-footer")
+				button(class="btn btn-yes",id="rdCommentReq") Request comments
+
+
+div(id="reddit-expand-confirmation", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-body confirmation")
+				div(id="modal-message")
+					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="80px")
+					p(style="f") Your request for the Reddit comments has been sent. You will receive an email from us once it's done!
+			div(class="modal-footer")
+				button(class="btn btn-no",data-dismiss="modal") Close	
+				
+div(id="reddit-expand-exist", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-body confirmation")
+				div(id="modal-message")
+					img(src="bootstrap/img/gifs/warning.gif", class="export-success", width="80px")
+					p You have already collected comments for this dataset. Do you still want to proceed?
+			div(class="modal-footer")
+				button(class="btn btn-yes",id="rdCommentYes") Yes	
+				button(class="btn btn-no",id="rdCommentNo") No	
+			
+				
+script(src="bootstrap/js/customized/view_reddit_expand.js")
+	

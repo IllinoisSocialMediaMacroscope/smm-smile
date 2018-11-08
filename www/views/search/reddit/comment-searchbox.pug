@@ -1,0 +1,39 @@
+div(class="reddit-comment")
+	div(class="form-group")
+		<label class="label-control warning">maximum number of comments
+		div(class="range range-node")
+			input(type="range" min="100" max="10000" value="2000" step="100" id="rdCommentCount" onchange="rdCommentCount_rangeNode.value=value")
+			<output id="rdCommentCount_rangeNode">2000</output>
+	div(class="form-group")
+		<label class="label-control">Select Fields</label>
+		br
+		select(multiple,id="redditCommentFields",class="fields")
+			option(value="comment_author_name" selected) comment author name
+			option(value="archived" selected) archived
+			option(value="body" selected) body
+			option(value="body_html" selected) body html
+			option(value="subreddit_display_name" selected) subreddit display name
+			option(value="created_utc" selected) created utc
+			option(value="comment_created" selected) comment created
+			option(value="controversiality" selected) controversiality
+			option(value="comment_downs" selected) comment downs
+			option(value="edited" selected) edited
+			option(value="gilded" selected) gilded
+			option(value="comment_id" selected) comment_id
+			option(value="link_id" selected) link_id
+			option(value="link_author" selected) link author
+			option(value="link_title" selected) link title
+			option(value="link_permalink" selected) link permalink
+			option(value="link_url" selected) link url
+			option(value="comment_over_18" selected) comment over 18
+			option(value="parent_id" selected) parent id
+			option(value="quarantine" selected) quarantine
+			option(value="saved" selected) saved
+			option(value="comment_score" selected) comment score
+			option(value="subreddit_id" selected) subreddit id						
+			option(value="subreddit_display_name" selected) subreddit display name						
+			option(value="subreddit_name_prefixed" selected) subreddit name prefixed
+			option(value="score_hidden" selected) score hidden 					
+			option(value="stickied" selected) stickied				
+			option(value="subreddit_type" selected) subreddit type					
+			option(value="comment_ups" selected) comment ups		

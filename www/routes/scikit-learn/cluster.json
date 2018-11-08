@@ -1,0 +1,67 @@
+{
+	"form-action": "sklearn-cluster",
+	"containers":[
+		{"container-name":"file-container",
+		"container-label-name":"select from your folder",
+		"inputs":[
+					{"type":"select",
+						"name":"selectFile",
+						"id":"selectFile",
+						"sytle":"",
+						"class":"form-control",
+						"optgroup": true
+					}
+				]},
+		{"container-name":"",
+		"container-label-name":"select model",
+		"inputs":[
+					{"type":"select",
+						"name":"model",
+						"id":"model",
+						"class":"form-control",
+						"optgroup": false,
+						"options":[
+							{"value":"random-Kmeans",
+							"label":"K-Means"},
+							
+							{"value":"k-means++",
+							"label":"K-Means ++"},
+							
+							{"value":"AffinityPropagation",
+							"label":" Affinity Propagation"},
+							
+							{"value":"AgglomerativeClustering",
+							"label":"Agglomerative Clustering"},
+							
+							{"value":"Birch",
+							"label":"Birch"},
+							
+							{"value":"DBSCAN",
+							"label":"DBSCAN"},
+							
+							{"value":"MiniBatchKMeans",
+							"label":" Mini Batch K-Means"},
+							
+							{"value":"MeanShift",
+							"label":"Mean Shift"}
+							
+						]
+					}
+				]},
+		{"container-name":"clusters",
+		"container-label-name":"cluster number ",
+		"inputs":[
+					{"type":"range",
+						"min":"2",
+						"max":"20",
+						"value":"3",
+						"name":"n_clusters",
+						"onchange":"rangeNode.value=value",
+						"id":"n_clusters",
+						"output_id":"rangeNode"
+					}
+				]}
+	],
+	"custom-script":"bootstrap/js/customized/view_cluster.js"
+}
+			

@@ -1,0 +1,68 @@
+extends analytics.pug 
+	
+block customized-script
+	<!-- customized script -->
+	script(src=param['custom-script']).	
+	
+block config-form
+	form(id="analytics-config", action=param['form-action'], name='NLP', method='post',class="form-horizontal")
+		each container in param['containers']
+			div(id=container['container-name'])
+				div(class="form-group")
+					label(class="control-label col-md-2 col-md-2 col-xs-12",for="") #{container['container-label-name']}
+					each input in container['inputs']
+						
+						if input['type'] == 'radio'
+							div(class="col-md-8 col-md-8 col-xs-12")
+							label(class="radio-inline")
+								input(type=input.type name=input.name id=input.id value=input.value class=input.class checked=input.checked) 
+								| #{input['label']}
+							
+							
+						else if input['type'] == 'select'
+							if input['optgroup']
+								div(class="col-md-8 col-md-8 col-xs-12")
+									img(src="bootstrap/img/gifs/loading4.gif",width="100px",id="selectLoading")
+									select(class=input.class,id=input.id,name=input.name,style="display:none;")
+										option(value="Please Select...", class="", id="empty", checked) Please Select...
+								div(class="col-md-2 col-md-2 col-xs-12")
+									button(class="btn btn-default",id="getComment") get comments								
+							else
+								div(class="col-md-8 col-md-8 col-xs-12")
+									select(name=input.name id=input.id class=input.class)
+										each opt in input.options
+											option(value=opt.value) #{opt.label}
+																	
+						else if input['type'] == 'text'
+							div(class="col-md-8 col-md-8 col-xs-12")
+								input(id=input.id type=input.type name=input.name value=input.value class=input.class)
+							
+						else if input['type'] == 'range'
+							div(class="col-md-8 col-md-8 col-xs-12")
+								div(class="range range-node")
+									input(type=input.type, min=input.min, max=input.max, value=input.value, step=input.step, name=input.name, onchange=input.onchange, id=input.id)
+									output(id=input.output_id) #{input.value}
+							
+						else if input['type'] == 'file'
+							div(class="col-md-8 col-md-8 col-xs-12")
+								input(id=input.id, type=input.type, name=input.name)
+								
+			if container['container-name'] == 'network-relation-container'
+				div(id="explanation-container", style="display:none")
+					div(class="form-group")
+						label(class="control-label col-md-2 col-md-2 col-xs-12",for="") 
+						div(class="col-md-8 col-md-8 col-xs-12")
+							div(id="explanation-notice")
+
+		div(id="citation-container",style="display:none")
+			div(class="form-group")
+				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") 
+				div(class="col-md-8 col-md-8 col-xs-12")
+					div(id="citation-notice")
+			
+		div(class="form-group")
+			div(class="col-md-8 col-md-8 col-xs-12 col-md-offset-2")
+				input(type="button", class='btn btn-danger', id="submit", value="Submit",style="margin: auto 5px;")
+				input(type="button", class='btn btn-primary', value="Clear", onclick="customized_reset();",style="margin: auto 5px;") 
+					
+				
