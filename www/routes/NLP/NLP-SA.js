@@ -91,8 +91,13 @@ router.post('/NLP-sentiment',function(req,res,next){
 					"--email", req.body.email,
 					"--uid", uid,
                 	"--sessionURL", req.body.sessionURL]
-			
-			submit_Batchjob(jobName,command).then(results =>{
+
+			submit_Batchjob(
+                "arn:aws:batch:us-west-2:083781070261:job-definition/smile:3",
+                jobName,
+                "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
+                command
+			).then(results =>{
 				results['uid'] = uid;
 				res.send(results);
 				

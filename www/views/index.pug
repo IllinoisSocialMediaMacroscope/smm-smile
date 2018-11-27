@@ -67,13 +67,13 @@ html
 								a(class="prose-button",href=page.url,id=page.url) Start
 						div(class="app")
 							a(href=page.url)
-								img(src=page.imgURL, width="400px", class="logos")
+								img(src=page.imgURL,class="logos")
 			else
 				div(class="odd")
 					section(class="odd")
 						div(class="app", id=page.name)
 							a(href=page.url)
-								img(src=page.imgURL, width="400px", class="logos")
+								img(src=page.imgURL, class="logos")
 						div(class="prose")
 							h1(class="app-title") #{page.name}
 							p(class="intro") !{page.introduction}
@@ -87,7 +87,7 @@ html
 			$("#citation-notice-btn").click(function(){
 
 				// hide citation; show start buttons;
-			    $("#citation-notice").hide('slow');
+				$("#citation-notice").hide('slow');
 				$(".fadein").show('slow');
 				$(".button-unit").show('slow');
 

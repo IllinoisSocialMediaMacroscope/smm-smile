@@ -24,8 +24,13 @@ router.post('/reddit-expand',function(req,res,next){
 					"--s3FolderName", req.body.s3FolderName,
 					"--email", req.body.email,
                 	"--sessionURL", req.body.sessionURL]
-					
-			submit_Batchjob(jobName,command).then(results =>{
+
+			submit_Batchjob(
+                "arn:aws:batch:us-west-2:083781070261:job-definition/smile:3",
+                jobName,
+                "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
+                command
+			).then(results =>{
 				res.end('done');
 			}).catch(err =>{
 				res.send({ERROR:err});
