@@ -108,7 +108,7 @@ function generate_space_list_dataset(){
 		url:'list-space', 
 		data: {},			
 		success:function(data){
-			// hide loading bar show selectSpace
+			// hide loading bar show selectSpaceInDataset
 			$("#selectSpaceInDataset").prev().hide();
 			$("#selectSpaceInDataset").show();
 			if ('ERROR' in data){
@@ -143,7 +143,7 @@ function generate_space_list_collection(){
         url:'list-space',
         data: {},
         success:function(data){
-            // hide loading bar show selectSpace
+            // hide loading bar show selectSpaceInDataset
             $("#selectSpaceInCollection").prev().hide();
             $("#selectSpaceInCollection").show();
 
@@ -404,16 +404,16 @@ function create_clowder_dataset(){
 				data['collection'] = [$("#selectCollection option:selected" ).val()]				
 		}
 		// space
-		var $space = $("#clowder-new-dataset").find(".selectSpace option:selected" );
+		var $space = $("#clowder-new-dataset").find("#selectSpaceInDataset option:selected");
 		if ($space.val() !== 'newSpace' && $space.val() !== 'Please Select...'){
 				data['space'] = [$space.val()]				
 		}
 
 		$.ajax({
 			type:'POST',
-			url:'clowder-dataset', 
-			data: JSON.stringify(data),	
-			contentType: "application/json",			
+			url:'clowder-dataset',
+			data: JSON.stringify(data),
+			contentType: "application/json",
 			success:function(data){
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
@@ -422,7 +422,7 @@ function create_clowder_dataset(){
 					//put id in the files block
 					var datasetID = data.id;
 					$("#datasetID").val(datasetID);
-					
+
 					//switch to files block
 					$(".clowder-dataset-block").hide();
 					$(".clowder-files-block").show();
@@ -430,9 +430,9 @@ function create_clowder_dataset(){
 			},
 			error: function(jqXHR, exception){
 				$("#modal-message").append(`<h4>Please enter a value before you save it.</h4>`);
-				$("#alert").modal('show');					
-			} 
-		}); 
+				$("#alert").modal('show');
+			}
+		});
 	}
 	
 	
@@ -730,16 +730,16 @@ function create_clowder_collection(){
 			data['descriptions'] = $("#collectionDesc").val();
 		}
 		// space
-		var $space = $("#clowder-new-collection").find(".selectSpace option:selected" )
+		var $space = $("#clowder-new-collection").find("#selectSpaceInCollection option:selected" )
 		if ($space.val() !== 'newSpace'	&& $space.val() !== 'Please Select...'){
-				data['space'] = $space.val();	
+				data['space'] = $space.val();
 		}
 
 		$.ajax({
 			type:'POST',
-			url:'clowder-collection', 
-			data: JSON.stringify(data),	
-			contentType: "application/json",			
+			url:'clowder-collection',
+			data: JSON.stringify(data),
+			contentType: "application/json",
 			success:function(data){
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
@@ -755,9 +755,9 @@ function create_clowder_collection(){
 			},
 			error: function(jqXHR, exception){
 				$("#modal-message").append(`<h4>Please enter a value before you save it.</h4>`);
-				$("#alert").modal('show');					
-			} 
-		}); 
+				$("#alert").modal('show');
+			}
+		});
 	}
 }
 
