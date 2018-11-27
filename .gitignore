@@ -4,6 +4,8 @@ www/uploads
 node_modules
 www/nltk_data
 .*
-*.json
+main_config.json
+graphql_config.json
+map.json
 *.log
 *.swp

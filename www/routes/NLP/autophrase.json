@@ -1,0 +1,45 @@
+{
+  "form-action": "NLP-autophrase",
+  "containers":[
+    {"container-name":"file-container",
+      "container-label-name":"Select from your folder",
+      "inputs":[
+        {"type":"select",
+          "name":"selectFile",
+          "id":"selectFile",
+          "sytle":"",
+          "class":"form-control",
+          "optgroup": true
+        }
+      ]},
+    {"container-name":"minimum-support",
+      "container-label-name":"Minimum Support",
+      "inputs":[
+        {"type":"range",
+          "min":"1",
+          "max":"10",
+          "value":"3",
+          "name":"minSup",
+          "onchange":"rangeNode.value=value",
+          "id":"minSup",
+          "output_id":"rangeNode"
+        }
+      ]},
+    {"container-name":"",
+      "container-label-name":"Algorithm",
+      "inputs":[
+        {"type":"select",
+          "name":"algorithm",
+          "id":"algorithm",
+          "class":"form-control",
+          "optgroup": false,
+          "options":[
+            {"value":"Please Select...",
+              "label":"Please Select..."},
+            {"value":"autophrase",
+              "label":"AutoPhrase (Automated Phrase Mining from Massive Text Corpora)"}]
+        }
+      ]}
+  ],
+  "custom-script":"bootstrap/js/customized/view_autophrase.js"
+}
