@@ -26,7 +26,7 @@ body {
 .glyphicon:before {
   margin-right: 10px;
 }
-			
+
 .sidebar {
 	position: fixed;
 	top: 50px;
@@ -140,25 +140,11 @@ h3 {
 }
 
 .form-group label{
-    font-size: 1.2em; 
+    font-size: 1.2em;
 	font-family: "Ubuntu", sans-serif;
 	text-align:left;
     padding-right:15px;
 }
-
-/*  big logos in analytics 
-.logos {
-	margin-left: auto;	
-	margin-right: auto;	
-	margin-top:80px;
-	margin-bottom:80px;
-	display: block;
-	padding:40px; 
-	border:8px solid #cecece; 
-	border-radius:30px;
-	border-style:outset;
-} */
-
 
 /* upload form */
 .form-group{
@@ -193,10 +179,10 @@ a.anchor{
 .preview-input {
     position: relative;
 	overflow: hidden;
-	margin: 0px;    
+	margin: 0px;
     color: #fff;
     background-color: #428bca;
-    border-color: #eee;    
+    border-color: #eee;
 }
 /* .preview-input input[type=file] {
 	position: absolute;
@@ -211,7 +197,7 @@ a.anchor{
 	font-size: 20px;
 } */
 
-/* checkbox 
+/* checkbox
 .checkbox-flat, .checkbox-flat-checked{
     display: inline-block;
     vertical-align: middle;
@@ -233,7 +219,7 @@ a.anchor{
 }
 
 .checkbox-flat:hover{
-    background:#428bca; 
+    background:#428bca;
 }*/
 
 /* radio button */
@@ -368,7 +354,7 @@ tr{
     border-right: 1px solid #ccc;
 }
 
-.table td.fit, 
+.table td.fit,
 .table th.fit {
     white-space: nowrap;
     width: 1%;
@@ -423,9 +409,9 @@ marker#arrow {
 }
 
 #tweet-display{
-	margin:10px 0px; 
+	margin:10px 0px;
 	padding:10px 20px;
-	background-color:white; 
+	background-color:white;
 	border:solid 1.5px;
 	border-radius:5px;
 }

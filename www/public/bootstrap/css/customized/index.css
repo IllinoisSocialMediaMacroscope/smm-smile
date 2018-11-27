@@ -69,6 +69,16 @@ body {
     100% {opacity: 0;}
 }
 
+/*  big logos in analytics */
+.logos {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:20%;
+    margin-bottom:80px;
+    width:100%;
+    display: block;
+}
+
 #f1 {
     #background-color: lightblue;
 }
