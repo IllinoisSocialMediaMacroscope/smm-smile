@@ -11,11 +11,10 @@ $(document).ready(function(){
 		}
 	});
 
-	if (s3FolderName == undefined) s3FolderName = 'local';
 	$.ajax({
 		type:'POST',
 		url:'list', 
-		data: {"s3FolderName":s3FolderName},			
+		data: {},
 		success:function(data){
 			if (data){
 				if ('ERROR' in data){

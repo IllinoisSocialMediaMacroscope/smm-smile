@@ -1,5 +1,4 @@
 $("#rdCommentReq").on('click',function(){
-	if (s3FolderName == undefined) s3FolderName = 'local'
 	
 	if (checkRedditReq()){
 		$.ajax({
@@ -7,7 +6,6 @@ $("#rdCommentReq").on('click',function(){
 			url:'reddit-expand', 
 			data: {"prefix":$(".dataset").val(), 
 					"email":$("#email-alert").val(),
-					"s3FolderName":s3FolderName,
 					"sessionURL": sessionURL},
 			success:function(data){
 				if (data === 'done'){
@@ -43,8 +41,6 @@ $("#rdCommentReq").on('click',function(){
 });
 
 $("#rdCommentYes").on('click',function(){
-	console.log('click');
-	if (s3FolderName == undefined) s3FolderName = 'local'
 	
 	if (checkRedditReq()){
 		$.ajax({
@@ -52,7 +48,6 @@ $("#rdCommentYes").on('click',function(){
 			url:'reddit-expand', 
 			data: {"prefix":$(".dataset").val(), 
 					"email":$("#email-alert").val(),
-					"s3FolderName":s3FolderName,
 					"consent":true,
                 	"sessionURL": sessionURL
 			},
@@ -97,9 +92,7 @@ $("#rdCommentNo").on('click',function(){
 
 $("#email-alert").on('keypress',function(e){
 	if (e.keyCode === 13 || e.keycode == 10){
-		e.preventDefault(); 
-
-		if (s3FolderName == undefined) s3FolderName = 'local'
+		e.preventDefault();
 		
 		if (checkRedditReq()){
 			$.ajax({
@@ -107,7 +100,6 @@ $("#email-alert").on('keypress',function(e){
 				url:'reddit-expand', 
 				data: {"prefix":$(".dataset").val(), 
 						"email":$("#email-alert").val(),
-						"s3FolderName":s3FolderName,
                     	"sessionURL": sessionURL},
 				success:function(data){
 					if (data === 'done'){

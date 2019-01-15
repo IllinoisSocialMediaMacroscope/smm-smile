@@ -5,11 +5,10 @@ $(document).ready(function(){
 	$(".uuid").hide();
 	
 	// for select
-	if (s3FolderName == undefined) s3FolderName = 'local';
 	$.ajax({
 		type:'POST',
 		url:'list', 
-		data: {"s3FolderName":s3FolderName},			
+		data: {},
 		success:function(data){
 			if (data){
 				if ('ERROR' in data){
@@ -218,13 +217,8 @@ function appendInstruction(ID, len_training, len_testing){
 function split(){
 	var prefix = $("#selectFile").children(":selected").val();
 	var ratio = $("#ratio").val();
-	var selectFileColumn = $("input[name='selectFileColumn']:checked").val();
-	if (s3FolderName == undefined) s3FolderName = 'local'
-	var data = "ratio=" + ratio 
-	+ "&s3FolderName=" + s3FolderName
-	+ "&prefix="+ prefix
-	+ "&selectFileColumn=" + selectFileColumn;
-	
+    var selectFileColumn = $("input[name='selectFileColumn']:checked").val();
+	var data = "ratio=" + ratio + "&prefix="+ prefix + "&selectFileColumn=" + selectFileColumn;
 	if (formValidation('split')){
 
 		$(".loading").show();
@@ -295,12 +289,10 @@ function train(){
 		
 		
 		var file = $("#labeled").get(0).files[0];
-		if (s3FolderName == undefined) s3FolderName = 'local'
 		var formData = new FormData();
 		formData.append('labeled', file, file.name);
 		formData.append('uuid', $("#uuid").val());
 		formData.append('classifier',$("#classifier option:selected").val());
-		formData.append('s3FolderName',s3FolderName);
 
         $(".loading").show();
         customized_reset();
@@ -370,12 +362,12 @@ function train(){
 function predict(){
 	
 	if (formValidation('predict')){
-		
-		if (s3FolderName == undefined) s3FolderName = 'local'
-		var prefix = $("#selectFile").children(":selected").val();
-		var data = "uuid=" + $("#uuid").val() + "&s3FolderName=" + s3FolderName  + "&prefix=" + prefix;
 
-        $(".loading").show();
+		var prefix = $("#selectFile").children(":selected").val();
+		var data = "uuid=" + $("#uuid").val() + "&prefix=" + prefix;
+		
+		$(".loading").show();
+
         customized_reset();
         $("html, body").animate({scrollTop:$(".loading").offset().top -100}, 1000);
 

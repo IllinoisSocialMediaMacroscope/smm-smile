@@ -27,10 +27,9 @@ router.post('/import',upload.single('importFile'),function(req,res,next){
            if (err) res.send({ERROR: err});
            else {
                var promise_arr = [];
-
-               promise_arr.push(uploadToS3(filepath, req.body.s3FolderName + '/GraphQL/'
+               promise_arr.push(uploadToS3(filepath, s3FolderName + '/GraphQL/'
                    + category + '/' + foldername + '/' + filename));
-               promise_arr.push(uploadToS3(configPath, req.body.s3FolderName + '/GraphQL/'
+               promise_arr.push(uploadToS3(configPath, s3FolderName + '/GraphQL/'
                    + category + '/' + foldername + '/config.json'));
                Promise.all(promise_arr).then(urls => {
                    fs.unlinkSync(filepath);

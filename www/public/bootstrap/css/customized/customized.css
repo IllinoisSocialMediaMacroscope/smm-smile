@@ -221,46 +221,7 @@ a.anchor{
     background-color: #428bca;
     border-color: #eee;
 }
-<<<<<<< HEAD
-/* .preview-input input[type=file] {
-	position: absolute;
-	top: 0;
-	left: 0;
-	left:0;
-	margin: 0;
-	padding: 0;
-	cursor: pointer;
-	opacity: 0;
-	filter: alpha(opacity=0);
-	font-size: 20px;
-} */
 
-/* checkbox
-.checkbox-flat, .checkbox-flat-checked{
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 10px;
-	margin-right:5px;
-    padding: 0;
-    width: 15px;
-    height: 15px;
-    border: none;
-    cursor: pointer;
-	border-radius: 3px;
-	background-position:0 0;
-}
-.checkbox-flat{
-	background: #c1c1c1;
-}
-.checkbox-flat-checked{
-    background:#c84b49;
-}
-
-.checkbox-flat:hover{
-    background:#428bca;
-}*/
-=======
->>>>>>> 87ee39f16804a224199d687529e2e00a07187f2b
 
 /* radio button */
 .customized-radio:after {

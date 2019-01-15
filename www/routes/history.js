@@ -11,8 +11,16 @@ var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.j
 var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
 
 router.get('/history',function(req,res,next){
-	if (fs.existsSync('./map.json')){
-		var tagIdMap = JSON.parse(fs.readFileSync('./map.json'));
+
+    // if smile home folder doesn't exist, create one
+    if (!fs.existsSync(smileHomePath)){
+        fs.mkdirSync(smileHomePath);
+    }
+
+    var tagIdMapPath = path.join(smileHomePath, 'map.json');
+
+    if (fs.existsSync(tagIdMapPath)){
+		var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
 	}else{
 		tagIdMap = {};
 	}
@@ -502,17 +510,8 @@ router.post('/delete',function(req,res,next){
 		var p = [];
 		p.push(deleteLocalFolders('./downloads'));
 		p.push(deleteLocalFolders('./uploads'));
-		if (fs.existsSync('./map.json')){
-			fs.unlinkSync('./map.json');
-		}
-		
 		Promise.all(p).then(() =>{
-			deleteRemoteFolder(req.body.s3FolderName).then( values => {
-				res.send({'data':'Successfully purged!'});
-			}).catch( err =>{
-				console.log(err);
-				res.send({ERROR:err});
-			});
+			res.send({'data':'Successfully purged!'});
 		}).catch( err=>{
 			console.log(err);
 			res.send({ERROR:err});
@@ -521,7 +520,6 @@ router.post('/delete',function(req,res,next){
 	
 	else if (req.body.type === 'history'){
 		var p = deleteRemoteFolder(req.body.folderURL);
-
 		p.then(() =>{
 			res.send({'data':'Successfully deleted!'});
 		}).catch(err =>{

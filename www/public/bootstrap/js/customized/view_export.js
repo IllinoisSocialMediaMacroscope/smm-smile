@@ -159,12 +159,10 @@ function exportFiles(id){
 		$("#box-export").hide();
 		$("#box .export-loading").css('display','inline-block');
 	}
-	if (s3FolderName === undefined) s3FolderName='local';
-	//console.log(s3FolderName);
 	$.ajax({
 		type:'post',
 		url:'export', 
-		data: {"id":id, "s3FolderName":s3FolderName},				
+		data: {"id":id},
 		success:function(data){
 			if (id ===  'googleDrive-export') $("#googleDrive .export-loading").css('display','none');
 			else if(id==='dropbox-export') $("#dropbox .export-loading").css('display','none');

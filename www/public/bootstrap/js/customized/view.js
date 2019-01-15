@@ -286,10 +286,7 @@ function ajaxSubmit(formID,aws_identifier){
 	var length = $("#length").val();
 	var email = $("#batch-email-alert").val();
 
-	if (s3FolderName == undefined) s3FolderName = 'local'
-
 	var data = $(formID).serialize() + "&prefix="+ prefix
-				+ "&s3FolderName=" + s3FolderName 
 				+ "&aws_identifier=" + aws_identifier
 				+ "&email=" + email
 				+ "&sessionURL=" + sessionURL;

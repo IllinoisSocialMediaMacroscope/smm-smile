@@ -84,7 +84,6 @@ $("#import-btn").on("click", function(){
         var formData = new FormData();
         formData.append('importFile', importFile, importFile.name);
         formData.append('selectedItem', selectedItem);
-        formData.append('s3FolderName', s3FolderName);
         formData.append('keywords', keywords);
 
         $.ajax({

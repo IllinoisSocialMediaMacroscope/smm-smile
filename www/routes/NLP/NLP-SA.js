@@ -25,7 +25,7 @@ router.post('/NLP-sentiment',function(req,res,next){
 		if(req.body.aws_identifier === 'lambda'){
 			var args = {'remoteReadPath':req.body.prefix, 
 					'column':req.body.selectFileColumn,
-					's3FolderName':req.body.s3FolderName,
+					's3FolderName':s3FolderName,
 					'algorithm': req.body.algorithm,
 					'uid':uid
 			}
@@ -80,12 +80,12 @@ router.post('/NLP-sentiment',function(req,res,next){
 			});
 		}else if (req.body.aws_identifier === 'batch'){
 			
-			var jobName = req.body.s3FolderName + '_SA_sdk';
+			var jobName = s3FolderName + '_SA_sdk';
 			var command = [ "python3.6", "/scripts/batch_sentiment_analysis.py",
 					"--remoteReadPath", req.body.prefix,
 					"--algorithm", req.body.algorithm,
 					"--column", req.body.selectFileColumn,
-					"--s3FolderName", req.body.s3FolderName,
+					"--s3FolderName", s3FolderName,
 					"--algorithm", req.body.algorithm,
 					"--email", req.body.email,
 					"--uid", uid,

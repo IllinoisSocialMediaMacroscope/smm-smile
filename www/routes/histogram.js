@@ -7,11 +7,11 @@ var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemot
 
 router.post('/histogram',function(req,res,next){
 	
-	var args = {'s3FolderName':req.body.s3FolderName, 
+	var args = {
+				's3FolderName': s3FolderName,
 				'filename':req.body.filename,
-				'remoteReadPath':req.body.remoteReadPath,
-				'interval': req.body.interval
-			}
+				'remoteReadPath':s3FolderName + req.body.remoteReadPath,
+				'interval': req.body.interval };
 			
 	lambda_invoke('histogram', args).then(results =>{
 		// download div file

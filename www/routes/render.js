@@ -10,7 +10,6 @@ var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemot
 var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var fs = require('fs');
-const smileHomePath = path.join(process.env.HOME, 'smile');
 
 router.post('/render-json', function(req,res,next){
 	getMultiRemote(req.body.fileURL).then((preview_string) => {
@@ -100,16 +99,16 @@ router.post('/list',function(req,res,next){
 	var directory = {};
 							
 	var promise_array = [];
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/twitter-Tweet/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/twitter-User/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/twitter-Stream/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Search/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Post/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Comment/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Historical-Post/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/crimson-Hexagon/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/userspec-Others/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-Tweet/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-User/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-Stream/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Search/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Post/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Comment/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Historical-Post/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/crimson-Hexagon/'));
+    promise_array.push(list_folders(s3FolderName + '/GraphQL/userspec-Others/'));
 	Promise.all(promise_array).then( values => {
 		
 		directory['twitter-Tweet'] = values[0];
@@ -159,22 +158,21 @@ router.post('/list-all',function(req,res,next){
 	
 	var promise_array = [];
 	// session id instead of local here!!
-	promise_array.push(list_folders(req.body.s3FolderName + '/ML/classification/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/NLP/preprocessing/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/NLP/autophrase/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/NLP/sentiment/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/NW/networkx/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/twitter-Tweet/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/twitter-User/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/twitter-Stream/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Search/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Post/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Comment/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Historical-Post/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/crimson-Hexagon/'));
-	promise_array.push(list_folders(req.body.s3FolderName + '/GraphQL/userspec-Others/'));
-
+	promise_array.push(list_folders(s3FolderName + '/ML/classification/'));
+	promise_array.push(list_folders(s3FolderName + '/NLP/preprocessing/'));
+	promise_array.push(list_folders(s3FolderName + '/NLP/autophrase/'));
+	promise_array.push(list_folders(s3FolderName + '/NLP/sentiment/'));
+	promise_array.push(list_folders(s3FolderName + '/NW/networkx/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-Tweet/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-User/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-Stream/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Search/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Post/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Comment/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Historical-Post/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
+	promise_array.push(list_folders(s3FolderName + '/GraphQL/crimson-Hexagon/'));
+    promise_array.push(list_folders(s3FolderName + '/GraphQL/userspec-Others/'));
 	Promise.all(promise_array).then( values => {
 		directory['ML']['classification'] = values[0];
 		directory['NLP']['preprocessing'] = values[1];
@@ -202,10 +200,18 @@ router.post('/list-all',function(req,res,next){
 });
 
 router.post('/tag',function(req,res,next){
-	// update the map
+
 	if (req.body.tagName !== '' && req.body.tagName !== undefined){
-		if (fs.existsSync('./map.json')){
-			var tagIdMap = JSON.parse(fs.readFileSync('./map.json'));
+
+        // if smile home folder doesn't exist, create one
+        if (!fs.existsSync(smileHomePath)){
+            fs.mkdirSync(smileHomePath);
+        }
+
+        var tagIdMapPath = path.join(smileHomePath, 'map.json');
+
+		if (fs.existsSync(tagIdMapPath)){
+			var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
 			tagIdMap[req.body.jobId] = req.body.tagName;
 		}else{
 			tagIdMap = {};
@@ -213,8 +219,7 @@ router.post('/tag',function(req,res,next){
 		}
 	
 		// save it to file
-		fs.writeFileSync('./map.json',JSON.stringify(tagIdMap));
-		
+		fs.writeFileSync(tagIdMapPath,JSON.stringify(tagIdMap));
 	}
 	
 	res.send({message: 'done!'});
@@ -259,8 +264,7 @@ router.post('/add-columnHead', function(req,res,next){
         }
 
         // save it to file
-        fs.writeFileSync(path.join(smileHomePath, 'customColumnHeaders.json'),
-			JSON.stringify(customColumnHeaders, null, 4));
+        fs.writeFileSync(customColumnHeadersPath, JSON.stringify(customColumnHeaders, null, 4));
         res.send({message: 'done!'});
     }
 });

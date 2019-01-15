@@ -22,11 +22,11 @@ var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','dele
 // not neccessary at all!!
 // Chen 2018.01.02
 router.post('/export',function(req,res,next){
-	list_files(req.body.s3FolderName + '/').then(files =>{
+	list_files(s3FolderName + '/').then(files =>{
 		if (Object.keys(files).length === 0){
 			res.send({'ERROR':'You don\'t have any data associate with this session. Nothing to export!'});
 		}else{
-			download_folder(req.body.s3FolderName + '/').then(files =>{
+			download_folder(s3FolderName + '/').then(files =>{
 				
 					var filename = 'SMILE-' + Date.now() + '.zip';
 					zipDownloads(filename).then(() => {

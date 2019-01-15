@@ -100,7 +100,7 @@ function onError(error) {
       break;
     default:
       throw error;
-  }
+  }git
 }
 
 /**
@@ -114,3 +114,9 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+/**
+ * read user name from environment file and set it global
+ */
+s3FolderName = process.env.USER || 'local';
+smileHomePath = path.join(process.env.HOME, 'smile');

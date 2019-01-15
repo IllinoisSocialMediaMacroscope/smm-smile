@@ -18,10 +18,10 @@ router.post('/reddit-expand',function(req,res,next){
 		
 		// check if user still wants to collect it; overwrite the exist 
 		if(exist == false || (exist == true && req.body.consent == 'true')){
-			var jobName = req.body.s3FolderName + '_RedditComment_sdk';
+			var jobName = s3FolderName + '_RedditComment_sdk';
 			var command = [ "python3.6", "/scripts/RedditComment.py",
 					"--remoteReadPath", req.body.prefix,
-					"--s3FolderName", req.body.s3FolderName,
+					"--s3FolderName", s3FolderName,
 					"--email", req.body.email,
                 	"--sessionURL", req.body.sessionURL]
 

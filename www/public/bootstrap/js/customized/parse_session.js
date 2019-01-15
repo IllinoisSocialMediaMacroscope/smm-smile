@@ -6,7 +6,6 @@ for (i=0; i<pathArray.length-1; i++){
 	if (pathArray[i] === 'weber'){
 		// session ID always is the one after weber
 		var sessionID = pathArray[i+1];
-		var s3FolderName = pathArray[i+2];
 	}
 	
 	newPath += pathArray[i];

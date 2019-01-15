@@ -22,7 +22,7 @@ router.post('/networkx',function(req,res,next){
 			var args = {'remoteReadPath':req.body.prefix, 
 					'layout':req.body.layout, 
 					'relations':req.body.relations,
-					's3FolderName':req.body.s3FolderName,
+					's3FolderName':s3FolderName,
 					'uid':uid
 			}
 			
@@ -77,12 +77,12 @@ router.post('/networkx',function(req,res,next){
 		}
 		else if (req.body.aws_identifier === 'batch'){
 			
-			var jobName = req.body.s3FolderName + '_NW_sdk';
+			var jobName = s3FolderName + '_NW_sdk';
 			var command = [ "python3.6", "/scripts/batch_network_analysis.py",
 					"--remoteReadPath", req.body.prefix,
 					"--layout", req.body.layout,
 					"--relations", req.body.relations,
-					"--s3FolderName", req.body.s3FolderName,
+					"--s3FolderName", s3FolderName,
 					"--email", req.body.email,
 					"--uid", uid,
 					"--sessionURL", req.body.sessionURL]

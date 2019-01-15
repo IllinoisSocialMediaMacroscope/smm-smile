@@ -48,7 +48,7 @@ router.post('/query',function(req,res,next){
 	if (fs.existsSync(dir_downloads_graphql + '/' +  req.body.prefix)){
 		var directory = fs.readdirSync(dir_downloads_graphql + '/' + req.body.prefix);
 		
-		checkExist(req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/', req.body.filename).then((value) =>{
+		checkExist(s3FolderName + '/GraphQL/'+req.body.prefix +'/', req.body.filename).then((value) =>{
 			if (value){
 					
 				var headers = {
@@ -149,14 +149,14 @@ router.post('/query',function(req,res,next){
 							promise_csv.then(() =>{
 								
 								var promise_arr = [];
-								promise_arr.push(uploadToS3(directory+processed, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+processed));
-								promise_arr.push(uploadToS3(directory + raw_json, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+ raw_json));
-								promise_arr.push(uploadToS3(directory+config, req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+config));
+								promise_arr.push(uploadToS3(directory+processed, s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+processed));
+								promise_arr.push(uploadToS3(directory + raw_json, s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+ raw_json));
+								promise_arr.push(uploadToS3(directory+config, s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'+config));
 								Promise.all(promise_arr).then((URLs) => {
 									
-									var args = {'s3FolderName':req.body.s3FolderName, 
+									var args = {'s3FolderName':s3FolderName,
 										'filename':processed,
-										'remoteReadPath':req.body.s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'
+										'remoteReadPath':s3FolderName + '/GraphQL/'+req.body.prefix +'/'+req.body.filename +'/'
 									}
 									
 									lambda_invoke('histogram', args).then(results =>{

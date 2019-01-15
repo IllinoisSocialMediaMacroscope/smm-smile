@@ -1047,8 +1047,6 @@ function setDate(){
 function setHitogramInterval(freq){
 	var filename = $("#sn-filename").val();
 	
-	if (s3FolderName == undefined) s3FolderName = 'local';
-	
 	var queryTerm = $("#social-media").find(':selected').val();
 	if (queryTerm === 'queryTweet'){
 		var prefix = 'twitter-Tweet';
@@ -1079,9 +1077,9 @@ function setHitogramInterval(freq){
 		$.ajax({
 			type:'POST',
 			url:'histogram', 
-			data: JSON.stringify({'s3FolderName': s3FolderName,
+			data: JSON.stringify({
 					'filename':filename + '.csv',
-					'remoteReadPath': s3FolderName + '/GraphQL/' + prefix + '/' + filename,
+					'remoteReadPath': '/GraphQL/' + prefix + '/' + filename,
 					'interval': freq }),	
 			contentType: "application/json",			
 			success:function(data){

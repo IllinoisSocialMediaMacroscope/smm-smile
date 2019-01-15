@@ -22,7 +22,7 @@ router.post('/NLP-preprocess',function(req,res,next){
 		if(req.body.aws_identifier === 'lambda'){
 			var args = {'remoteReadPath':req.body.prefix, 
 					'column':req.body.selectFileColumn,
-					's3FolderName':req.body.s3FolderName,
+					's3FolderName':s3FolderName,
 					'source':'twitter', // bug here!
 					'process':req.body.model,
 					'tagger':req.body.tagger,
@@ -85,11 +85,11 @@ router.post('/NLP-preprocess',function(req,res,next){
 		
 		}
 		else if(req.body.aws_identifier === 'batch'){
-			var jobName = req.body.s3FolderName + '_Preprocess_sdk';
+			var jobName = s3FolderName + '_Preprocess_sdk';
 			var command = [ "python3.6", "/scripts/batch_preprocessing.py",
 					"--remoteReadPath", req.body.prefix,
 					"--column", req.body.selectFileColumn,
-					"--s3FolderName", req.body.s3FolderName,
+					"--s3FolderName", s3FolderName,
 					"--source","twitter",
 					"--process",req.body.model,
 					"--tagger",req.body.tagger,

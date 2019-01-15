@@ -28,7 +28,7 @@ router.post('/text-classification-split',function(req,res,next){
 		lambda_invoke('lambda_classification_split',
 			{'remoteReadPath':req.body.prefix, 
 			'ratio':req.body.ratio,
-			's3FolderName':req.body.s3FolderName,
+			's3FolderName':s3FolderName,
 			'column':req.body.selectFileColumn,
 			'uid':uid })
 		.then(results =>{
@@ -36,7 +36,7 @@ router.post('/text-classification-split',function(req,res,next){
 			var config = results['config'];
 			var uuid = results['uuid'];
 			var div = results['div'];
-			var training = results['training']
+			var training = results['training'];
 			var testing = results['testing'];
 			
 			var download = [{'name':'Download training dataset', content:training},
@@ -70,9 +70,9 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 	
 	var filename = 'LABELED_' + req.file.originalname;
 	
-	uploadToS3(req.file.path, req.body.s3FolderName + '/ML/classification/' + req.body.uuid + '/' + filename).then(url => {
+	uploadToS3(req.file.path, s3FolderName + '/ML/classification/' + req.body.uuid + '/' + filename).then(url => {
 		
-		var remoteReadPath = req.body.s3FolderName + '/ML/classification/' + req.body.uuid + '/';
+		var remoteReadPath = s3FolderName + '/ML/classification/' + req.body.uuid + '/';
 		fs.unlinkSync(req.file.path);
 		
 		lambda_invoke('lambda_classification_train',
@@ -80,7 +80,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 			'labeledFilename':filename,
 			'uuid':req.body.uuid,
 			'model':req.body.classifier,
-			's3FolderName':req.body.s3FolderName})
+			's3FolderName':s3FolderName})
 		.then(results =>{
 			var config = results['config'];
 			var uuid = results['uuid'];
@@ -142,7 +142,7 @@ router.post('/text-classification-predict',function(req,res,next){
 	lambda_invoke('lambda_classification_predict',
 		{'remoteReadPath':req.body.prefix, 
 			'uuid':req.body.uuid,
-			's3FolderName':req.body.s3FolderName})
+			's3FolderName':s3FolderName})
 		.then(results =>{
 			var config = results['config'];
 			var uuid = results['uuid'];

@@ -16,13 +16,13 @@ router.post('/NLP-autophrase',function(req,res,next){
 
     if (req.body.selectFile !== 'Please Select'){
 
-            var jobName = req.body.s3FolderName + '_Autophrase_sdk';
+            var jobName = s3FolderName + '_Autophrase_sdk';
             var command = [
                 "./auto_phrase.sh",
                 req.body.prefix,
                 req.body.selectFileColumn,
                 req.body.minSup,
-                req.body.s3FolderName + '/NLP/autophrase/' + uid +'/',
+                s3FolderName + '/NLP/autophrase/' + uid +'/',
                 req.body.email,
                 req.body.sessionURL
             ];

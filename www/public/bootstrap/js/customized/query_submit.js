@@ -46,8 +46,7 @@ function submitQuery(textareaID,filenameID){
 		var params = parameters.psComment ;	
 		var pages = -999;		
 	}
-	
-	if (s3FolderName == undefined) s3FolderName = 'local';
+
 	$.ajax({
 		url:"query",
 		type:"post",
@@ -55,8 +54,7 @@ function submitQuery(textareaID,filenameID){
 				"filename":filename,
 				"params":JSON.stringify(params),
 				"pages":pages,
-				"prefix":prefix,
-				"s3FolderName":s3FolderName
+				"prefix":prefix
 			},
 		success:function(data){
 			// if error then prompt user to rename
@@ -447,8 +445,7 @@ function submitSearchbox(searchboxID, filenameID){
 		var pages = -999;
 		var params = parameters.psComment;
 	}
-	
-	if (s3FolderName == undefined) s3FolderName = 'local';
+
 	$.ajax({
 		url:"query",
 		type:"post",
@@ -456,8 +453,7 @@ function submitSearchbox(searchboxID, filenameID){
 				"filename":filename,
 				"params":JSON.stringify(params),
 				"pages":pages,
-				"prefix":prefix,
-				"s3FolderName":s3FolderName
+				"prefix":prefix
 			},
 		success:function(data){
 			$(".loading").hide();
