@@ -89,8 +89,8 @@ router.post('/history',function(req,res,next){
 					
 				});
 			}else{
-				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double checked
-				if you have fulfilled all the required  process when carrying out this analysis.`});
+				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double check ` +
+				`if you have fulfilled all the required  process when carrying out this analysis.`});
 			}
 		});	
 	}
@@ -190,13 +190,13 @@ router.post('/history',function(req,res,next){
 					var preview_arr = CSV.parse(preview_string).slice(0,1001);
 					var config_data = JSON.parse(values[3]);
 
-					if (config_data["algorithm"] == 'sentiWordNet'){
+					if (config_data["algorithm"] === 'sentiWordNet'){
                         var download = [
                         	{name:'sentence-level sentiment scores',content:sentiment},
                         	{name:'document-level sentiment scores',content:doc_sentiment},
                             {name:'configuration', content:config},
                             {name:'visualization', content:div}];
-					}else if (config_data['algorithm'] == 'vader'){
+					}else if (config_data['algorithm'] === 'vader'){
                         var download = [
                         	{name:'sentence-level sentiment scores',content:sentiment},
                         	{name:'document-level sentiment scores',content:doc_sentiment},
@@ -221,8 +221,8 @@ router.post('/history',function(req,res,next){
 				});
 		
 			}else{
-				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double checked
-				if you have fulfilled all the required  process when carrying out this analysis.`});
+				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double check ` +
+				`if you have fulfilled all the required  process when carrying out this analysis.`});
 			}
 		});		
 }		
@@ -310,8 +310,8 @@ router.post('/history',function(req,res,next){
 					
 				});
 			}else{
-				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double checked
-				if you have fulfilled all the required  process when carrying out this analysis.`});
+				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double check ` +
+				`if you have fulfilled all the required  process when carrying out this analysis.`});
 			}
 		});			
 		
@@ -382,8 +382,8 @@ router.post('/history',function(req,res,next){
 					
 				});
 			}else{
-				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double checked
-				if you have fulfilled all the required  process when carrying out this analysis.`});
+				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double check ` +
+				`if you have fulfilled all the required  process when carrying out this analysis.`});
 			}
 		});			
 					
@@ -394,7 +394,8 @@ router.post('/history',function(req,res,next){
 		arrURL[2] === 'twitter-Stream' ||
 		arrURL[2] === 'reddit-Comment' ||
 		arrURL[2] === 'reddit-Historical-Comment' ||
-		arrURL[2] === 'crimson-Hexagon')) {
+		arrURL[2] === 'crimson-Hexagon' ||
+		arrURL[2] === 'userspec-Others')) {
 					
 		var p = list_files(req.body.folderURL);
 		p.then(folderObj =>{
@@ -411,7 +412,7 @@ router.post('/history',function(req,res,next){
 						var preview = folderObj[filename];
 					}
 				}	
-					
+
 				promise_array.push(getMultiRemote(config));
 				promise_array.push(getMultiRemote(preview));
 				Promise.all(promise_array).then( values => {
@@ -431,8 +432,8 @@ router.post('/history',function(req,res,next){
 					
 				});
 			}else{
-				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double checked
-				if you have fulfilled all the required  process when carrying out this analysis.`});
+				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double check ` +
+				`if you have fulfilled all the required  process when carrying out this analysis.`});
 			}
 		});
 	}
@@ -484,8 +485,8 @@ router.post('/history',function(req,res,next){
 				});
 				
 			}else{
-				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double checked
-				if you have fulfilled all the required  process when carrying out this analysis.`});
+				res.send({ERROR:`Sorry! We cannot find a complete analytic history associated with this ID. You should double check `
+					+ `if you have fulfilled all the required  process when carrying out this analysis.`});
 			}
 		});
 				

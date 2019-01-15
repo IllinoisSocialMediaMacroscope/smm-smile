@@ -44,23 +44,7 @@ $(document).ready(function(){
 			}
 		},
 		error: function(jqXHR, exception){
-			var msg = '';
-			if (jqXHR.status === 0) {
-				msg = 'Not connect.\n Verify Network.';
-			} else if (jqXHR.status == 404) {
-				msg = 'Requested page not found. [404]';
-			} else if (jqXHR.status == 500) {
-				msg = 'Internal Server Error [500].';
-			} else if (exception === 'parsererror') {
-				msg = 'Requested JSON parse failed.';
-			} else if (exception === 'timeout') {
-				msg = 'Time out error.';
-			} else if (exception === 'abort') {
-				msg = 'Ajax request aborted.';
-			} else {
-				msg = 'Uncaught Error.\n' + jqXHR.responseText;
-			}
-			$("#error").val(msg);
+			$("#error").val(jqXHR.responseText);
 			$("#warning").modal('show');
 			
 		} 
@@ -70,67 +54,48 @@ $(document).ready(function(){
 		var prefix = $(this).children(":selected").val();
 		$("#selectFilePreview-container").empty();
 
-		// add loading bar here for preview
-		$("#preview-loading").show();
 
-		$.ajax({
-			type:'POST',
-			url:'render', 
-			data: {"prefix":prefix},				
-			success:function(data){
-				if (data){
-					if ('ERROR' in data){
-						$("#loading").hide();
-						$("#background").show();
-						$("#error").val(JSON.stringify(data));
-						$("#warning").modal('show');
-					}else{
-						var allowedFieldList = [
-							// tweet
-							'user.screen_name',
-							'text',
-							// stream
-							'_source.user.screen_name',
-							'_source.text'];
+		if (prefix !== "Please Select..."){
+            // add loading bar here for preview
+            $("#preview-loading").show();
 
-                        text_data = previewSelectedFile(allowedFieldList, data);
-						// hide loading bar
-						$("#preview-loading").hide();
-						
-						$("#selectFilePreview-container").append(`<div class="form-group">
+            $.ajax({
+                type:'POST',
+                url:'render',
+                data: {"prefix":prefix},
+                success:function(data){
+                    if (data){
+                        if ('ERROR' in data){
+                            $("#loading").hide();
+                            $("#background").show();
+                            $("#error").val(JSON.stringify(data));
+                            $("#warning").modal('show');
+                        }else{
+                            var allowedFieldList = data['columnHeaders']['network'];
+                            text_data = previewSelectedFile(allowedFieldList, data);
+                            // hide loading bar
+                            $("#preview-loading").hide();
+
+                            $("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
-						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-						$("#selectFilePreview").append(arrayToTable(text_data.slice(0, 11),'#selectFileTable'));
-						//$("#selectFileTable").DataTable();
-						
-						$(".dataset").val(prefix);
-						$(".length").val(text_data.length-1);
-					}
-					
-				}					
-			},
-			error: function(jqXHR, exception){
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
-				$("#error").val(msg);
-				$("#warning").modal('show');
-				
-			} 
-		}); 
+						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)
+                            $("#selectFilePreview").append(arrayToTable(text_data.slice(0, 11),'#selectFileTable'));
+                            //$("#selectFileTable").DataTable();
+
+                            $(".dataset").val(prefix);
+                            $(".length").val(text_data.length-1);
+                        }
+
+                    }
+                },
+                error: function(jqXHR, exception){
+                    $("#error").val(jqXHR.responseText);
+                    $("#warning").modal('show');
+
+                }
+            });
+        }
+
 	});
 
 
@@ -209,7 +174,7 @@ $(document).ready(function(){
 function formValidation(aws_identifier){
 	
 	if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
-		$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
+		$("#modal-message").append(`<h4>Please select a dataset from your folder!</h4>`);
 		$("#alert").modal('show');
 		$("#selectFile").focus();
 		return false;

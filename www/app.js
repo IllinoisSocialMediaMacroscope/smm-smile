@@ -35,6 +35,7 @@ app.use('/',require('./routes/download'));
 app.use('/',require('./routes/render'));
 app.use('/',require('./routes/history'));
 app.use('/',require('./routes/export'));
+app.use('/',require('./routes/import'));
 app.use('/',require('./routes/auth/twitter_auth'));
 app.use('/', require('./routes/auth/googleDrive_auth'));
 app.use('/', require('./routes/auth/dropbox_auth'));
@@ -45,17 +46,6 @@ app.use('/', require('./routes/sitemap'));
 app.use('/',require('./routes/RedditExpand'));
 app.use('/',require('./routes/clowder.js'));
 app.use('/',require('./routes/histogram.js'));
-
-/*app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});*/
-
 
 /*--------------------set server----------------------*/
 var debug = require('debug');

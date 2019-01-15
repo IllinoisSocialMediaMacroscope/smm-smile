@@ -6,11 +6,15 @@ html
 		
 		<!-- style sheet! -->
 		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
-		link(href="bootstrap/css/customized/global.css",rel="stylesheet")
-		link(href="bootstrap/css/customized/customized.css",rel="stylesheet")
 		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
 		link(href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css")
-		
+		link(href="bootstrap/css/customized/global.css", rel="stylesheet")
+		link(href="bootstrap/css/customized/customized.css", rel="stylesheet")
+		link(rel="stylesheet",
+		href="https://use.fontawesome.com/releases/v5.5.0/css/all.css",
+		integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU",
+		crossorigin="anonymous")
+
 		<!-- scripts -->
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
 		script(src="https://www.gstatic.com/charts/loader.js")
@@ -21,6 +25,7 @@ html
 		script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js")
 		
 		<!-- customized scripts -->
+		script(src="bootstrap/js/jquery.csv.js")
 		script(src="bootstrap/js/customized/view.js")
 		script(src="bootstrap/js/customized/warning_trigger.js")
 		script(src="bootstrap/js/customized/modal_overlay.js")
@@ -37,8 +42,10 @@ html
 		include ../components/aws-batch.pug
 		include ../components/tag.pug
 		include ../components/clowder.pug
+		include ../components/import.pug
+		include ../components/uuid.pug
 			
-		div(id="container-fluid")
+		div(class="container-fluid")
 				<!-- side bar -->
 				div(class="col-sm-3 col-md-3 sidebar")
 					ul(class="nav nav-sidebar")
@@ -46,7 +53,7 @@ html
 							a 
 								span(class="glyphicon glyphicon-tasks pull-left") 
 								| Overview
-							ul(class="nav child_menu" style="display:block;" id="side-configuration")
+							ul(class="nav child_menu" style="display:block;")
 								li
 									a(href="#config-anchor")
 										span(class="glyphicon glyphicon-wrench pull-left")
@@ -63,7 +70,7 @@ html
 							a 
 								span(class="glyphicon glyphicon-th-large pull-left") 
 								| Functions
-							ul(class="nav child_menu" style="display:block;" id="side-configuration")
+							ul(class="nav child_menu" style="display:block;")
 								li
 									a(href="",id="clowder-left-panel")
 										span(class="glyphicon glyphicon-cloud-upload")
@@ -79,7 +86,7 @@ html
 							ul(class="nav child_menu", style="display:block;", id="side-download")
 								
 		
-		div(id="container-fluid")
+		div(class="container-fluid")
 			div(class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main")
 						
 					div(class="row")
@@ -99,7 +106,6 @@ html
 									block config-form					
 						
 					div(class="loading",style="display:none;")
-						//p This computation might take up to a few minutes if you have a large dataset. 
 						img(src="bootstrap/img/gifs/loading.gif", width="400", height="400px",style="display:block; margin:auto;")
 						h4(style="text-align:center;")
 							i For large dataset, the computation might take a few minutes. Thank you for your patience.

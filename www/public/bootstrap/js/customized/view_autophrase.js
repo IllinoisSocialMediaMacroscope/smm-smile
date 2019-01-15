@@ -44,60 +44,56 @@ $(document).ready(function(){
         $("#selectFilePreview-container").empty();
         $("#selectFileHeader-container").empty();
 
-        // add loading bar here for preview
-        $("#preview-loading").show();
+        if (prefix !== 'Please Select...'){
+            // add loading bar here for preview
+            $("#preview-loading").show();
 
-        $.ajax({
-            type:'POST',
-            url:'render',
-            data: {"prefix":prefix},
-            success:function(data){
-                if (data){
-                    if ('ERROR' in data){
-                        $("#loading").hide();
-                        $("#background").show();
-                        $("#error").val(JSON.stringify(data));
-                        $("#warning").modal('show');
-                    }else{
-                        /* the text fields are:  text, user.description(tweet), description(twtUser),
-                        body(redditComment), selftext,title(redditSearch),
-                        public description, description(redditSearchSubreddit)*/
+            $.ajax({
+                type:'POST',
+                url:'render',
+                data: {"prefix":prefix},
+                success:function(data){
+                    if (data){
+                        if ('ERROR' in data){
+                            $("#loading").hide();
+                            $("#background").show();
+                            $("#error").val(JSON.stringify(data));
+                            $("#warning").modal('show');
+                        }else{
+                            var allowedFieldList = data['columnHeaders']['autophrase'];
+                            text_data = previewSelectedFile(allowedFieldList, data);
 
-                        var allowedFieldList = ['text','user.description','_source.text', '_source.user.description',
-                            'description', 'body','title','_source.body','_source.title', 'contents'];
-                        text_data = previewSelectedFile(allowedFieldList, data);
+                            // hide loading bar
+                            $("#preview-loading").hide();
 
-                        // hide loading bar
-                        $("#preview-loading").hide();
-
-                        $("#selectFilePreview-container").append(`<div class="form-group">
+                            $("#selectFilePreview-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)
-                        $("#selectFilePreview").append(arrayToTable(text_data.slice(0, 11) ,'#selectFileTable'));
+                            $("#selectFilePreview").append(arrayToTable(text_data.slice(0, 11) ,'#selectFileTable'));
 
-                        $("#selectFileHeader-container").append(`<div class="form-group">
+                            $("#selectFileHeader-container").append(`<div class="form-group">
 						<label class="control-label col-md-2 col-md-2 col-xs-12">Select Column to Analyze</label>
 						<div class="col-md-8 col-md-8 col-xs-12" id="selectFileHeader"></div></div>`);
-                        $("#selectFileHeader").append(extractHeader2(text_data));
+                            $("#selectFileHeader").append(extractHeader2(text_data));
 
-                        $(".dataset").val(prefix);
-                        $(".length").val(text_data.length-1);
+                            $(".dataset").val(prefix);
+                            $(".length").val(text_data.length-1);
 
-                        // offer crawling for reddit comments modal
-                        if(directory === 'reddit-Post' || directory === 'reddit-Historical-Post' || directory === 'reddit-Search'){
-                            $("#getComment").show();
-                        }else{
-                            $("#getComment").hide();
+                            // offer crawling for reddit comments modal
+                            if(directory === 'reddit-Post' || directory === 'reddit-Historical-Post' || directory === 'reddit-Search'){
+                                $("#getComment").show();
+                            }else{
+                                $("#getComment").hide();
+                            }
                         }
                     }
+                },
+                error: function(jqXHR, exception){
+                    $("#error").val(jqXHR.responseText);
+                    $("#warning").modal('show');
                 }
-            },
-            error: function(jqXHR, exception){
-                $("#error").val(jqXHR.responseText);
-                $("#warning").modal('show');
-            }
-        });
-
+            });
+        }
     });
 
     // citation
@@ -138,7 +134,7 @@ $(document).ready(function(){
 function formValidation(aws_identifier){
 
     if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
-        $("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
+        $("#modal-message").append(`<h4>Please select a dataset from your folder!</h4>`);
         $("#alert").modal('show');
         $("#selectFile").focus();
         return false;
