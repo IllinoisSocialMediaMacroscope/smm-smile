@@ -338,12 +338,6 @@ $("#datasetMeta select").on('change',function(){
 	};
 });
 
-//tags
-$('#datasetTags').tagsinput({
-	freeInput: true
-});
-
-
 //save metadata
 function saveMeta(clickBtn){
 	// if value has content, save; if not, do not allow to save

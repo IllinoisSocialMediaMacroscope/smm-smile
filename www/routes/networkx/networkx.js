@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));

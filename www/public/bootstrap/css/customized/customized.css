@@ -1,12 +1,3 @@
-/* Move down content because we have a fixed navbar that is 50px tall */
-/*colors:
-	red: :#c84b49;
-	light blue:#428bca
-	dark blue:#2a5a84;
-	salmon color:#faeeee;
-	background light grey:#f7f7f7;
-	background dark grey:#eae8e8;
-*/
 body {
 	padding-top: 50px;
     font-family: "Ubuntu", sans-serif;
@@ -146,14 +137,66 @@ h3 {
     padding-right:15px;
 }
 
-/* upload form */
+/* import form */
 .form-group{
 	overflow:auto;
 	margin-right:0;
 	margin-left:0;
 	margin-bottom:15px;
 }
+#import-fname{
+	display:inline-block;
+	margin:0px 20px;
+}
 
+#import-cloud-btn{
+	display:none;
+	vertical-align: middle;
+}
+#import-cloud-btn:hover{
+	color:black;
+}
+
+#datasrc-criteria{
+	color:red;
+	font-style:italic;
+}
+
+#datasrc-analyses{
+	font-size:12px;
+	color:black;
+}
+
+#userspec-Others-metadata{
+	padding: 20px;
+	border: dashed 2px;
+	margin: 20px;
+}
+
+.or {
+	display:flex;
+	justify-content:center;
+	align-items: center;
+	color:grey;
+	font-weight: bolder;
+}
+
+.or:after,
+.or:before {
+	content: "";
+	display: block;
+	background: grey;
+	width: 100%;
+	height:2px;
+	margin: 10px;
+}
+
+.btn.btn-default.btn-file{
+	border-radius:5px;
+	color:black;
+	background:white;
+	border:1px #2a5a84 solid;
+}
 
 a.anchor{
 	display: block;
@@ -162,16 +205,10 @@ a.anchor{
     visibility: hidden;
 }
 
-/*.btn-success:hover,
-.btn-success:focus,
-.btn-success:active,
-.btn-success {
-    color: #fff;
-    background-color: #a94442;
-    border-color: #f2dede;
-}*/
+.btn:focus,
 .btn:hover,
 .btn:active{
+	outline: none !important;
 	color:black;
 	background-color:#eae8e8;
 }
@@ -184,6 +221,7 @@ a.anchor{
     background-color: #428bca;
     border-color: #eee;
 }
+<<<<<<< HEAD
 /* .preview-input input[type=file] {
 	position: absolute;
 	top: 0;
@@ -221,6 +259,8 @@ a.anchor{
 .checkbox-flat:hover{
     background:#428bca;
 }*/
+=======
+>>>>>>> 87ee39f16804a224199d687529e2e00a07187f2b
 
 /* radio button */
 .customized-radio:after {

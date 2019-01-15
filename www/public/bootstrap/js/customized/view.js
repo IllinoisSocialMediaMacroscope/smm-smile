@@ -74,18 +74,19 @@ function arrayToTable(array,tableID){
 		}
 		tableContent += "<th>"+val+"</th>";
 	});
-	tableContent += `</tr></thead><tbody>`
+	tableContent += `</tr></thead><tbody>`;
 	
 	// set table content
 	$.each(array.slice(1),function(i,val){
 		tableContent += "<tr>";
 		$.each(val,function(j,cval){
 			// trim the content to 140 character maximum
-			if (cval.length >=140) {
-                cval = cval.slice(0, 140) + '...';
-            }else if (cval === '' || cval === undefined){
-				cval = 'NaN';
+			if (cval === undefined || cval.length === 0){
+                cval = '';
 			}
+			else if (cval.length >=140) {
+                cval = cval.slice(0, 140) + '...';
+            }
 			tableContent += `<td>` + cval + "</td>"
 		});
 		tableContent += "</tr>";
@@ -99,14 +100,8 @@ function extractHeader1(array){
 	var headerContent = '';
 	column_header = array[0];
 	$.each(column_header,function(i,val){
-		
-		headerContent += `<label class>
-					<div id="customized-checkbox" class="checkbox-flat" style="position:relative;">
-						<input type="checkbox" class="flat" style="position:absolute;opacity:0;" name="fields" id=`+ val + ` value=`+ val +
-						`></div>` + val + `</label>`;
-		
+		headerContent += `<label class=checkbox-inline" style="font-weight:normal;"><input type="checkbox" value=`+ val +` style="margin-right:3px;">` + val + `</label>`;
 	});
-	//console.log(headerContent);
 	return headerContent;
 }
 
@@ -158,6 +153,34 @@ function previewSelectedFile(allowedFieldList, data){
 }
 
 /*----------------------------display results---------------------------------*/
+// for import
+function loadHandler(event){
+    var csv = event.target.result;
+    processData(csv);
+}
+
+function processData(csv) {
+    var previewLines = csv.split(/\r\n|\n/).slice(0, 2);
+    var previewLinesWords = [];
+    $(previewLines).each(function(i, val){
+        previewLinesWords.push($.csv.toArray(val));
+	});
+
+    // set preview
+    $("#import-cloud-preview").empty();
+    $("#import-cloud-preview").append(arrayToTable(previewLinesWords,""));
+
+    // set column headers for userspec-Others-metadata
+    $("#column-header-selection").empty();
+    $("#column-header-selection").append(extractHeader1(previewLinesWords));
+
+}
+
+function errorHandler(event) {
+    $("#error").val("Can't read the file!");
+    $("#warning").modal('show');
+}
+
 function appendDownload(downloadID, downloadData){
 	$('#side-download-li').show();
 	$(downloadID).empty()

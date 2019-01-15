@@ -1,6 +1,6 @@
 $(document).ready(function(){
+    $(".split").show();
 	$(".train").hide();
-	$(".split").hide();
 	$(".predict").hide();
 	$(".uuid").hide();
 	
@@ -66,79 +66,58 @@ $(document).ready(function(){
 		$("#selectFilePreview-container").empty();
 		$("#selectFileHeader-container").empty();
 		
-		// add loading bar here for preview
-		$("#preview-loading").show();
-		
 		// for select
-		$.ajax({
-			type:'POST',
-			url:'render', 
-			data: {"prefix":prefix},				
-			success:function(data){
-				if (data){
-					if ('ERROR' in data){
-						$("#loading").hide();
-						$("#background").show();
-						$("#error").val(JSON.stringify(data));
-						$("#warning").modal('show');
-					}else{
-						if (directory == 'twitter-Tweet' || directory == 'twitter-Stream' || directory == 'twitter-User'){
-							var allowedFieldList = ['text', '_source.text', 'description'];
-						}
-						else if (directory == 'reddit-Post' || directory =='reddit-Search' || directory == 'reddit-Comment'
-						|| directory == 'reddit-Historical-Comment' || directory == 'reddit-Historical-Post'){
-							var allowedFieldList = ['title','body','_source.body','_source.title'];
-						}
-						else if (directory == 'crimson-Hexagon'){
-							var allowedFieldList = ['contents'];
-						}
-                        text_data = previewSelectedFile(allowedFieldList, data);
+		if (prefix !== 'Please Select...') {
+			$("#preview-loading").show();
+            $.ajax({
+                type: 'POST',
+                url: 'render',
+                data: {"prefix": prefix},
+                success: function (data) {
+                    if (data) {
+                        if ('ERROR' in data) {
+                            $("#loading").hide();
+                            $("#background").show();
+                            $("#error").val(JSON.stringify(data));
+                            $("#warning").modal('show');
+                        } else {
+                            var allowedFieldList = data['columnHeaders']['classification'];
+                            text_data = previewSelectedFile(allowedFieldList, data);
 
-						// hide loading bar
-						$("#preview-loading").hide();
-						
-						$("#selectFilePreview-container").append(`<div class="form-group">
-						<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
-						<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)				
-						$("#selectFilePreview").append(arrayToTable(text_data.slice(0,11),'#selectFileTable'));
-												
-						// hidden field here to divide using aws lambda or batch
-						$(".length").val(text_data.length-1);
-						$(".dataset").val(prefix);
-						
-						// offer crawling for reddit comments modal
-						if(directory === 'reddit-Post' || directory === 'reddit-Historical-Post' || directory === 'reddit-Search'){
-							$("#getComment").show();
-						}else{
-							$("#getComment").hide();
-						}
-						
-					}
-				}					
-			},
-			error: function(jqXHR, exception){
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
-				$("#error").val(msg);
-				$("#warning").modal('show');
-				
-			} 
-		}); 
-		
+                            // hide loading bar
+                            $("#preview-loading").hide();
+
+                            $("#selectFilePreview-container").append(`<div class="form-group">
+							<label class="control-label col-md-2 col-md-2 col-xs-12">preview data</label>
+							<div class="col-md-8 col-md-8 col-xs-12" id="selectFilePreview"></div></div>`)
+                            $("#selectFilePreview").append(arrayToTable(text_data.slice(0, 11), '#selectFileTable'));
+
+                            $("#selectFileHeader-container").append(`<div class="form-group">
+							<label class="control-label col-md-2 col-md-2 col-xs-12">Select Column to Analyze</label>
+							<div class="col-md-8 col-md-8 col-xs-12" id="selectFileHeader"></div></div>`);
+								$("#selectFileHeader").append(extractHeader2(text_data));
+
+                            // hidden field here to divide using aws lambda or batch
+                            $(".length").val(text_data.length - 1);
+                            $(".dataset").val(prefix);
+
+                            // offer crawling for reddit comments modal
+                            if (directory === 'reddit-Post' || directory === 'reddit-Historical-Post' || directory === 'reddit-Search') {
+                                $("#getComment").show();
+                            } else {
+                                $("#getComment").hide();
+                            }
+
+                        }
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    $("#error").val(jqXHR.responseText);
+                    $("#warning").modal('show');
+
+                }
+            });
+        }
 				
 	});
 	
@@ -148,30 +127,36 @@ $(document).ready(function(){
 		}else{
 			var fname = $("#labeled").get(0).files[0].name;
 		}
-		$("#labeled-fname").text(fname);
+		$("#upload-fname").text(fname);
 	});
 	
 	$("#task").on('change',function(){
 		var task = $(this).children(":selected").attr("value");
 		if (task === 'split'){
-			// enable file selection and hide "train" and "predict" configuration
-			$("#selectFile").prop('disabled',false);
+            $("#file-container").show();
+            $("#divider").show();
+            $("#import-container").show();
+
 			$(".split").show();
 			$(".train").hide();
 			$(".uuid").hide();
 			$(".predict").hide();
 		}
 		else if (task === 'train'){
-			// disable sselect file and hide "split" and "predict" configuration
-			$("#selectFile").prop('disabled',true);
+			$("#file-container").hide();
+			$("#divider").hide();
+			$("#import-container").hide();
+
 			$(".train").show();
 			$(".split").hide();
 			$(".uuid").show();
 			$(".predict").hide();
 		}
 		else if (task === 'predict'){
-			// disable sselect file and hide "split" and "predict" configuration
-			$("#selectFile").prop('disabled',true);
+            $("#file-container").hide();
+            $("#divider").hide();
+            $("#import-container").hide();
+
 			$(".train").hide();
 			$(".split").hide();
 			$(".uuid").show();
@@ -211,10 +196,6 @@ function addUUID(uuid){
 	}
 }
 
-function showUUID(){
-	$("#uuid-modal").modal('show');
-}
-
 function appendInstruction(ID, len_training, len_testing){
 	$(ID).empty();
 	$(ID).append(`<h2>Instruction</h2>
@@ -237,14 +218,19 @@ function appendInstruction(ID, len_training, len_testing){
 function split(){
 	var prefix = $("#selectFile").children(":selected").val();
 	var ratio = $("#ratio").val();
+	var selectFileColumn = $("input[name='selectFileColumn']:checked").val();
 	if (s3FolderName == undefined) s3FolderName = 'local'
 	var data = "ratio=" + ratio 
 	+ "&s3FolderName=" + s3FolderName
-	+ "&prefix="+ prefix;
+	+ "&prefix="+ prefix
+	+ "&selectFileColumn=" + selectFileColumn;
 	
 	if (formValidation('split')){
-		
+
 		$(".loading").show();
+        customized_reset();
+        $("html, body").animate({scrollTop:$(".loading").offset().top -100}, 1000);
+
 		$.ajax({
 			type:'POST',
 			url:'text-classification-split', 
@@ -315,8 +301,11 @@ function train(){
 		formData.append('uuid', $("#uuid").val());
 		formData.append('classifier',$("#classifier option:selected").val());
 		formData.append('s3FolderName',s3FolderName);
-		
-		$(".loading").show();
+
+        $(".loading").show();
+        customized_reset();
+        $("html, body").animate({scrollTop:$(".loading").offset().top -100}, 1000);
+
 		$.ajax({
 			type:'POST',
 			url:'text-classification-train', 
@@ -385,8 +374,11 @@ function predict(){
 		if (s3FolderName == undefined) s3FolderName = 'local'
 		var prefix = $("#selectFile").children(":selected").val();
 		var data = "uuid=" + $("#uuid").val() + "&s3FolderName=" + s3FolderName  + "&prefix=" + prefix;
-		
-		$(".loading").show();
+
+        $(".loading").show();
+        customized_reset();
+        $("html, body").animate({scrollTop:$(".loading").offset().top -100}, 1000);
+
 		$.ajax({
 			type:'POST',
 			url:'text-classification-predict', 
@@ -444,7 +436,7 @@ function predict(){
 function formValidation(task){
 	if ($("#selectFile option:selected").val() === 'Please Select...' || $("#selectFile option:selected").val() === undefined){
 		
-		$("#modal-message").append(`<h4>Please select a csv file from your folder!</h4>`);
+		$("#modal-message").append(`<h4>Please select a dataset from your folder!</h4>`);
 		$("#alert").modal('show');
 		$("#selectFile").focus();
 		return false;
@@ -456,7 +448,13 @@ function formValidation(task){
 			$("#selectFile").focus();
 			return false;
 		}
-		
+
+    if ($("input[name='selectFileColumn']:checked").val() === '' ||$("input[name='selectFileColumn']:checked").val() === undefined){
+        $("#modal-message").append(`<h4>Please select a column of the text to analyze!</h4>`);
+        $("#alert").modal('show');
+        return false;
+    }
+
 	if (task === 'train'){
 		if	($("#labeled").val() == '' || $("#labeled").val()=== undefined){
 			$("#modal-message").append(`<h4>Please upload a LABELED csv file!</h4>`);

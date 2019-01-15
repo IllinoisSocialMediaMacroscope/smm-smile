@@ -5,7 +5,6 @@ var multer = require('multer');
 var upload = multer({dest:'uploads/'});
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
-var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
 var uuidv4 = require(path.join(appPath,'scripts','helper_func','uuidv4.js'));
@@ -13,7 +12,8 @@ var CSV = require('csv-string');
 var fs = require('fs');
 
 router.get('/text-classification',function(req,res,next){
-	res.render('analytics/text-classification',{parent:'/#Clustering', title:'Text Classification'}); 
+    var formParam = require('./text-classification.json');
+	res.render('analytics/formTemplate',{parent:'/#Text Classification', title:'Text Classification', param:formParam});
 });
  
 router.post('/text-classification-split',function(req,res,next){
@@ -29,6 +29,7 @@ router.post('/text-classification-split',function(req,res,next){
 			{'remoteReadPath':req.body.prefix, 
 			'ratio':req.body.ratio,
 			's3FolderName':req.body.s3FolderName,
+			'column':req.body.selectFileColumn,
 			'uid':uid })
 		.then(results =>{
 			//console.log(results);

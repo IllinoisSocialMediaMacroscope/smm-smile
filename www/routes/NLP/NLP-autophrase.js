@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js'));
 var uuidv4 = require(path.join(appPath,'scripts','helper_func','uuidv4.js'));
 

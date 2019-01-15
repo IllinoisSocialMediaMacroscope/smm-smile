@@ -12,6 +12,22 @@
           "optgroup": true
         }
       ]},
+    {"container-name":"divider",
+      "container-label-name":"",
+      "inputs":[
+        {"type":"divider"}
+      ]},
+
+    {"container-name":"import-container",
+      "container-label-name":"Import local file",
+      "inputs":[
+        {"type":"file",
+          "name":"importFile",
+          "id":"importFile",
+          "style":"width: 0.1px; height: 0.1px; opacity: 0; overflow: hidden; position: absolute; z-index: -1;",
+          "class":"form-control"
+        }
+      ]},
     {"container-name":"minimum-support",
       "container-label-name":"Minimum Support",
       "inputs":[
@@ -40,6 +56,21 @@
               "label":"AutoPhrase (Automated Phrase Mining from Massive Text Corpora)"}]
         }
       ]}
+  ],
+  "buttonGroups":[
+    {
+      "id":"submit",
+      "class":"btn btn-danger",
+      "value":"Submit",
+      "style":"margin: auto 5px;"
+    },
+    {
+      "id":"clear",
+      "class":"btn btn-primary",
+      "value":"Clear",
+      "style":"margin: auto 5px;",
+      "onclick":"customized_reset();"
+    }
   ],
   "custom-script":"bootstrap/js/customized/view_autophrase.js"
 }
