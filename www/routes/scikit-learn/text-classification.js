@@ -32,7 +32,6 @@ router.post('/text-classification-split',function(req,res,next){
 			'column':req.body.selectFileColumn,
 			'uid':uid })
 		.then(results =>{
-			//console.log(results);
 			var config = results['config'];
 			var uuid = results['uuid'];
 			var div = results['div'];
@@ -48,7 +47,8 @@ router.post('/text-classification-split',function(req,res,next){
 					div_data = value;			
 					res.send({
 						uuid:uuid,
-						title:'Partial data generated for labeling and training', 
+						title:'Partial data generated for labeling and training',
+						ID: s3FolderName + '/ML/classification/' + uuid + '/',
 						img:[{name:'Split the corpus',content:div_data}],
 						download:download
 					});
@@ -93,7 +93,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 							{'name':'Classification performance evaluation',content:metrics},
 							{'name':'Accuracy score for each fold', content:accuracy},
 							{'name':'configuration', 'content':config},
-							{'name':'visualization', 'content':div}]
+							{'name':'visualization', 'content':div}];
 			
 			var promise_array = [];
 			promise_array.push(getMultiRemote(div));
@@ -110,6 +110,7 @@ router.post('/text-classification-train',upload.single('labeled'),function(req,r
 			
 				res.send({
 					uuid:uuid,
+                    ID: s3FolderName + '/ML/classification/' + uuid + '/',
 					img:[{name:'10 fold Cross Validation Accuracy Score',content:div_data}],
 					download:download,
 					preview:[{name:'10 fold Cross validation Evaluation of the performance',content:preview_arr,dataTable:false}]
@@ -162,6 +163,7 @@ router.post('/text-classification-predict',function(req,res,next){
 				
 				res.send({
 					uuid:uuid,
+                    ID: s3FolderName + '/ML/classification/' + uuid + '/',
 					img:[{name:'Count of each class',content:div_data}],
 					download:download,
 					preview:[{name:'Preview of the predicted data ',content:preview_arr,dataTable:true}]	

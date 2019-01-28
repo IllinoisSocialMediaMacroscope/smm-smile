@@ -33,6 +33,7 @@ app.use('/',require('./routes/search/query'));
 app.use('/',require('./routes/search/crimson'));
 app.use('/',require('./routes/download'));
 app.use('/',require('./routes/render'));
+app.use('/',require('./routes/tag'));
 app.use('/',require('./routes/history'));
 app.use('/',require('./routes/export'));
 app.use('/',require('./routes/import'));

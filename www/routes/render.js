@@ -1,7 +1,6 @@
 //require('dotenv').config();
 var express = require('express');
 var router = express.Router();
-var fs = require('fs');
 var CSV = require('csv-string');
 var path = require('path');
 var appPath = path.dirname(__dirname);
@@ -173,6 +172,7 @@ router.post('/list-all',function(req,res,next){
 	promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
 	promise_array.push(list_folders(s3FolderName + '/GraphQL/crimson-Hexagon/'));
     promise_array.push(list_folders(s3FolderName + '/GraphQL/userspec-Others/'));
+
 	Promise.all(promise_array).then( values => {
 		directory['ML']['classification'] = values[0];
 		directory['NLP']['preprocessing'] = values[1];
@@ -196,33 +196,6 @@ router.post('/list-all',function(req,res,next){
 		res.send({ERROR:err}); 
 		
 	});
-	
-});
-
-router.post('/tag',function(req,res,next){
-
-	if (req.body.tagName !== '' && req.body.tagName !== undefined){
-
-        // if smile home folder doesn't exist, create one
-        if (!fs.existsSync(smileHomePath)){
-            fs.mkdirSync(smileHomePath);
-        }
-
-        var tagIdMapPath = path.join(smileHomePath, 'map.json');
-
-		if (fs.existsSync(tagIdMapPath)){
-			var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
-			tagIdMap[req.body.jobId] = req.body.tagName;
-		}else{
-			tagIdMap = {};
-			tagIdMap[req.body.jobId] = req.body.tagName;
-		}
-	
-		// save it to file
-		fs.writeFileSync(tagIdMapPath,JSON.stringify(tagIdMap));
-	}
-	
-	res.send({message: 'done!'});
 	
 });
 
@@ -286,6 +259,5 @@ router.get('/list-columnHead', function(req, res, next){
 
     res.send(columnHeaders);
 });
-
 
 module.exports = router;

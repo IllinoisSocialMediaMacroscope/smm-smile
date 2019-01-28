@@ -56,12 +56,12 @@ router.post('/networkx',function(req,res,next){
 				
 				getMultiRemote(div).then(div_data => {	
 					res.send({
-						title:'Network Analysis', 
+						title:'Network Analysis',
+						ID: s3FolderName + '/NW/networkx/' + uid + '/',
 						img:[{name:'Static Network Visualization',content:div_data}],
 						download: downloadFiles,
 						metrics:{name:'', content:''}, 
 						preview:[],
-						uid:uid
 					});
 				}).catch( err =>{
 					// retreive remote div data error
@@ -93,7 +93,7 @@ router.post('/networkx',function(req,res,next){
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
 				command
 			).then(results =>{
-				results['uid'] = uid;
+				results['ID'] = s3FolderName + '/NW/networkx/' + uid + '/';
 				res.send(results);
 			}).catch(err =>{
 				res.send({ERROR:err});

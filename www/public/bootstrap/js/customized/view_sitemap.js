@@ -15,7 +15,7 @@ $("#sitemap").keypress(function(e){
 				}else{
 					$.each(data,function(index,value){
 						var complete_URL = $(location).attr('protocol') + '//' + $(location).attr('host') + "/" + value.url;
-						$("#sitemap-list").append(`<div class="sitemap-list-container">
+						$("#sitemap-list").append(`<div class="list-container">
 														<h4 class="page-title"><a href="`+ value.url + `">` + value['pageName'] + `</a></h4><cite>`
 														+ complete_URL + `</cite></div>`);						
 						});
@@ -46,4 +46,3 @@ $("#sitemap").keypress(function(e){
 			});
 	}
 });
-						

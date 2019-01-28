@@ -180,7 +180,6 @@ h3 {
 	color:grey;
 	font-weight: bolder;
 }
-
 .or:after,
 .or:before {
 	content: "";
@@ -221,7 +220,6 @@ a.anchor{
     background-color: #428bca;
     border-color: #eee;
 }
-
 
 /* radio button */
 .customized-radio:after {

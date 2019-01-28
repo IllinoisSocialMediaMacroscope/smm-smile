@@ -35,25 +35,8 @@ $(document).ready(function(){
 			}
 		},
 		error: function(jqXHR, exception){
-			var msg = '';
-			if (jqXHR.status === 0) {
-				msg = 'Not connect.\n Verify Network.';
-			} else if (jqXHR.status == 404) {
-				msg = 'Requested page not found. [404]';
-			} else if (jqXHR.status == 500) {
-				msg = 'Internal Server Error [500].';
-			} else if (exception === 'parsererror') {
-				msg = 'Requested JSON parse failed.';
-			} else if (exception === 'timeout') {
-				msg = 'Time out error.';
-			} else if (exception === 'abort') {
-				msg = 'Ajax request aborted.';
-			} else {
-				msg = 'Uncaught Error.\n' + jqXHR.responseText;
-			}
-			$("#error").val(msg);
+			$("#error").val(jqXHR.responseText);
 			$("#warning").modal('show');
-			
 		} 
 	}); 
 	
@@ -219,6 +202,7 @@ function split(){
 	var ratio = $("#ratio").val();
     var selectFileColumn = $("input[name='selectFileColumn']:checked").val();
 	var data = "ratio=" + ratio + "&prefix="+ prefix + "&selectFileColumn=" + selectFileColumn;
+
 	if (formValidation('split')){
 
 		$(".loading").show();
@@ -246,7 +230,7 @@ function split(){
 					appendPreview('#result-container','');
 					
 					// ADD to tag
-					$("#jobId").val(data.uuid);	
+					$("#jobId").val(data.ID);
 					
 					// ADD TO CLOWDER MODAL
 					$("#clowder-files-list").empty();
@@ -257,23 +241,7 @@ function split(){
 				}
 			},
 			error: function(jqXHR, exception){
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
-				$("#error").val(msg);
+				$("#error").val(jqXHR.responseText);
 				$("#warning").modal('show');
 				
 			} 
@@ -313,45 +281,30 @@ function train(){
 					$("#warning").modal('show');
 				}else{
 					$(".loading").hide();
-					addUUID(data.uuid);
-					$("#uuid-modal").modal('show');
+
+                    // ADD TO CLOWDER MODAL
+                    $("#clowder-files-list").empty();
+                    clowderFileGen(data.download);
+                    clowderFileMeta();
+                    $('.fileTags').tagsinput({ freeInput: true });
+
+                    // ADD to tag
+                    $("#jobId").val(data.ID);
+
 					$("#gaudge").empty();
 
                     appendIntermediateDownload("#intermediate-download", data.download)
 					appendImg("#img-container",data.img);
 					appendDownload("#side-download",data.download);
 					appendPreview('#result-container',data.preview);
-					
-					// ADD to tag
-					$("#jobId").val(data.uuid);	
-					
-					// ADD TO CLOWDER MODAL
-					$("#clowder-files-list").empty();
-					clowderFileGen(data.download);
-					clowderFileMeta();
-					$('.fileTags').tagsinput({ freeInput: true });
+                    addUUID(data.uuid);
+
+                    $("#uuid-modal").modal('show');
 				}
 			},
 			error: function(jqXHR, exception){
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
-				$("#error").val(msg);
+				$("#error").val(jqXHR.responseText);
 				$("#warning").modal('show');
-				
 			} 
 		}); 
 	}
@@ -383,40 +336,25 @@ function predict(){
 				}else{
 					$(".loading").hide();
 					$("#gaudge").empty();
-					
-					// addUUID(data.uuid);
-					// $("#uuid-modal").modal('show');
+
+					// tag
+                    $("#jobId").val(data.ID);
+
+                    // ADD TO CLOWDER MODAL
+                    $("#clowder-files-list").empty();
+                    clowderFileGen(data.download);
+                    clowderFileMeta();
+                    $('.fileTags').tagsinput({ freeInput: true });
+
 					appendImg("#img-container",data.img);
 					appendDownload("#side-download",data.download);
 					appendPreview('#result-container',data.preview);
-					
-					$("#jobId").val(data.uuid);	
-					
-					// ADD TO CLOWDER MODAL
-					$("#clowder-files-list").empty();
-					clowderFileGen(data.download);
-					clowderFileMeta();
-					$('.fileTags').tagsinput({ freeInput: true });
+
+                    $("#tag-modal").modal("show");
 				}
 			},
 			error: function(jqXHR, exception){
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
-				$("#error").val(msg);
+				$("#error").val(jqXHR.responseText);
 				$("#warning").modal('show');
 				
 			} 

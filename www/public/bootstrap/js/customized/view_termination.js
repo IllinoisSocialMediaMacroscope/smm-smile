@@ -21,9 +21,10 @@ function terminate(){
 	var cleanData = function(){
 		return new Promise(function(resolve, reject) {
 			$.ajax({
-				type:'post',
-				url:'delete',
-				data:{"type":"purge"},
+                type:'delete',
+                url:'history',
+				data:JSON.stringify({"type":"local"}),
+                contentType: "application/json",
 				success:function(data){
 					if (data){
 						if ('ERROR' in data){

@@ -33,7 +33,7 @@ router.post('/NLP-autophrase',function(req,res,next){
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_autophrase",
                 command
             ).then(results =>{
-                results['uid'] = uid;
+                results['ID'] = s3FolderName + '/NLP/autophrase/' + uid +'/';
                 res.send(results);
             }).catch(err =>{
                 res.send({ERROR:err});

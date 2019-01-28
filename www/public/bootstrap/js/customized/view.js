@@ -1,6 +1,4 @@
 $(document).ready(function(){
-	// checkbox_onclick();
-	
 	//tweek file container
 	$("#file").prop('checked',true);
 	$("#file-container").show();
@@ -307,56 +305,43 @@ function ajaxSubmit(formID,aws_identifier){
 				
 				$(".loading").hide();
 
+                // ADD TO CLOWDER MODAL
+                $("#clowder-files-list").empty();
+                clowderFileGen(data.download);
+                clowderFileMeta();
+                $('.fileTags').tagsinput({ freeInput: true });
+
+                // ADD TO TAG MODAL
+                $("#jobId").val(data.ID);
+
                 if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
 					$("#warning").modal('show');
-				}else if ('jobName' in data && 'jobId' in data){
+				}
+				else if ('jobName' in data && 'jobId' in data){
 					$("#aws-batch").modal('hide');
 					$("#aws-batch-confirmation").modal('show');
-					
-					$("#jobId").val(data.uid);					
-				}else{
+
+                    // ADD TO TAG MODAL
+                    $("#jobId").val(data.ID);
+                    $("#tag-modal").modal("show");
+				}
+				else{
 					appendDownload("#side-download",data.download);
 					appendImg("#img-container",data.img);
-					
 					if (data.preview.content !== ''){
 						appendPreview('#result-container',data.preview);
 					}
-					
 					if('table' in data){
 						// draw word tree for preprocessing
 						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
 					}
-					
-					// ADD TO TAG MODAL
-					$("#jobId").val(data.uid);	
-										
-					// ADD TO CLOWDER MODAL
-					$("#clowder-files-list").empty();
-					clowderFileGen(data.download);
-					clowderFileMeta();
-					$('.fileTags').tagsinput({ freeInput: true });
-					
-				}
+
+                    $("#tag-modal").modal("show");
+                }
 			},
 			error: function(jqXHR, exception){
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
-				$("#error").val(msg);
+				$("#error").val(jqXHR.responseText);
 				$("#warning").modal('show');
 				
 			},

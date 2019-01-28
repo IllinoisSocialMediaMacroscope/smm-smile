@@ -64,10 +64,10 @@ router.post('/NLP-sentiment',function(req,res,next){
 
 					res.send({
 						title:'Sentiment Analysis',
+                        ID:s3FolderName + "/NLP/sentiment/" + uid + "/",
 						img:[{name:'Document Sentiment Composition',content:div_data}],
 						download:download,
-						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}],
-						uid:uid
+						preview:[{name:'Preview the sentiment scores for each sentence',content:preview_arr,dataTable:true}]
 					});				
 				}).catch( (error) =>{
 					//fetch s3 data error
@@ -97,7 +97,7 @@ router.post('/NLP-sentiment',function(req,res,next){
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
                 command
 			).then(results =>{
-				results['uid'] = uid;
+				results['ID'] = s3FolderName + "/NLP/sentiment/" + uid + "/";
 				res.send(results);
 				
 			}).catch(err =>{

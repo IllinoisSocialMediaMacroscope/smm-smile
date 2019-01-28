@@ -65,12 +65,12 @@ router.post('/NLP-preprocess',function(req,res,next){
 						];
 							
 					res.send({
-						title:'Natural Language PreProcessing', 
+						title:'Natural Language PreProcessing',
+						ID: s3FolderName + '/NLP/preprocessing/' + uid + '/',
 						img:[{name:'Word Distribution',content:div_data}],
 						download: download,
 						table:{name:'word tree', content:new_sentence_array, root:most_freq_word},
 						preview:[],
-						uid:uid
 					});
 				}).catch( (error) =>{
 					//fetch s3 data error
@@ -102,7 +102,7 @@ router.post('/NLP-preprocess',function(req,res,next){
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
                 command
 			).then(results =>{
-				results['uid'] = uid;
+				results['ID'] = s3FolderName + '/NLP/preprocessing/' + uid + '/';
 				res.send(results);
 			}).catch(err =>{
 				res.send({ERROR:err});

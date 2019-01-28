@@ -15,13 +15,6 @@ document.addEventListener ("keydown", function (e) {
 		exportOptions('export');
 	}
 	
-	// download search results ctrl + alt + D
-	if (e.ctrlKey  &&  e.altKey  &&  e.code === "KeyD") {
-		if(currPage !== 'history'){
-			$("#success").modal('show');
-		}
-	}
-	
 	// clowder hotkey ctrl + at + C
 	if (e.ctrlKey  &&  e.altKey  &&  e.code === "KeyC"){
 		invoke_clowder();

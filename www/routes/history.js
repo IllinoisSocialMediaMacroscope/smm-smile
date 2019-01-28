@@ -7,25 +7,10 @@ var appPath = path.dirname(__dirname);
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var deleteRemoteFolder = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).deleteRemoteFolder;
-var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
 var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
 
 router.get('/history',function(req,res,next){
-
-    // if smile home folder doesn't exist, create one
-    if (!fs.existsSync(smileHomePath)){
-        fs.mkdirSync(smileHomePath);
-    }
-
-    var tagIdMapPath = path.join(smileHomePath, 'map.json');
-
-    if (fs.existsSync(tagIdMapPath)){
-		var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
-	}else{
-		tagIdMap = {};
-	}
-	
-	res.render('history',{parent:'/',tagIdMap:tagIdMap});		
+	res.render('history',{parent:'/'});
 });
 
 router.post('/history',function(req,res,next){
@@ -503,10 +488,9 @@ router.post('/history',function(req,res,next){
 
 });
 
-router.post('/delete',function(req,res,next){
+router.delete('/history',function(req,res,next){
 	
-	if(req.body.type === 'purge'){
-		// wipe out local directory and remote folders
+	if(req.body.type === 'local'){
 		var p = [];
 		p.push(deleteLocalFolders('./downloads'));
 		p.push(deleteLocalFolders('./uploads'));
@@ -518,7 +502,7 @@ router.post('/delete',function(req,res,next){
 		});
 	}
 	
-	else if (req.body.type === 'history'){
+	else if (req.body.type === 'remote'){
 		var p = deleteRemoteFolder(req.body.folderURL);
 		p.then(() =>{
 			res.send({'data':'Successfully deleted!'});
