@@ -363,13 +363,13 @@ $("#search-tag").on("keyup", function (e) {
                                                 <cite>cannot find matching tag</cite></div>`);
                 }
                 else {
-                    for (const [uuid, tag] of Object.entries(data)) {
+                	for (var uuid in data){
                         $("#search-tag-results").append(
                             `<div class="list-container">
                                             <h4>
                                                 <a class="page-title" onclick="submitHistory('` + uuid + `')">` + uuid + `</a>
                                             </h4>
-                                            <cite>` + tag + `</cite>
+                                            <cite>` + data[uuid] + `</cite>
                                         </div>`
                         );
                     }
@@ -397,14 +397,14 @@ $("#search-tag-btn").on("click", function (e) {
                                             <cite>cannot find matching tag</cite></div>`);
             }
             else {
-                for (const [uuid, tag] of Object.entries(data)) {
+            	for (var uuid in data){
                     $("#search-tag-results").append(
                         `<div class="list-container">
-                                        <h4>
-                                            <a class="page-title" onclick="submitHistory('` + uuid + `')">` + uuid + `</a>
-                                        </h4>
-                                        <cite>` + tag + `</cite>
-                                    </div>`
+							<h4>
+								<a class="page-title" onclick="submitHistory('` + uuid + `')">` + uuid + `</a>
+							</h4>
+							<cite>` + data[uuid] + `</cite>
+						</div>`
                     );
                 }
             }
@@ -437,10 +437,10 @@ function listTag(){
         url: 'tag',
         data: {},
         success: function (data) {
-            for (const [ID, tag] of Object.entries(data)){
+        	for (var ID in data){
                 var parentID = ID.split('/').slice(-3, -1).join("-");
                 var tagID = ID.split('/').slice(-2, -1)[0];
-                $("#"+parentID).find("#" + tagID).append(`<kbd>tag: ` + tag + `</kbd>`);
+                $("#"+parentID).find("#" + tagID).append(`<kbd>tag: ` + data[ID] + `</kbd>`);
             }
         },
         error: function (jqXHR, exception) {

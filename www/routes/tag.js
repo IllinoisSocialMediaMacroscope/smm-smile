@@ -10,10 +10,10 @@ router.get('/tag', function(req,res,next){
 
     if (fs.existsSync(tagIdMapPath)){
         var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
-        for (const [ID, tag] of Object.entries(tagIdMap)){
-            for (var i=0; i < tag.length; i++){
-                if (tag[i].toLowerCase().indexOf(searchTag.toLowerCase()) >= 0){
-                    matchedTag[ID] = tag;
+        for (var ID in tagIdMap){
+            for (var i=0; i < tagIdMap[ID].length; i++){
+                if (tagIdMap[ID][i].toLowerCase().indexOf(searchTag.toLowerCase()) >= 0){
+                    matchedTag[ID] = tagIdMap[ID];
                 }
             }
         }
