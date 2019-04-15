@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
+var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js')).lambda_invoke;
 
 router.get('/query-crimson',function(req,res,next){
 

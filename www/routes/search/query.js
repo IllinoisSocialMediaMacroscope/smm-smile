@@ -8,7 +8,7 @@ var appPath = path.dirname(path.dirname(__dirname));
 var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 var uploadToS3 = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).uploadToS3;
 var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
-var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js'));
+var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js')).lambda_invoke;
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 
 router.get('/query',function(req,res,next){

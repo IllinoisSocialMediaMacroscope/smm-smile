@@ -80,7 +80,7 @@ function list_files(prefix){
 	});					
 }
 
-function download_folder(prefix){
+function download_folder(prefix, downloadPath){
 	
 	return new Promise((resolve,reject) =>{
 		s3.listObjectsV2({Bucket:'macroscope-smile',Prefix:prefix}, function(err,data){
@@ -90,7 +90,7 @@ function download_folder(prefix){
 			}else{
 				if (!data.IsTruncated){
 					// create a place to hold the the downloaded files
-					if (!fs.existsSync('./downloads')) fs.mkdirSync('./downloads');
+					if (!fs.existsSync(downloadPath)) fs.mkdirSync(downloadPath);
 					
 					// create a promise array to hold all the downloads since it's async
 					var p_arr = [];
@@ -98,7 +98,7 @@ function download_folder(prefix){
 					data.Contents.forEach(function(val,index,array){						
 						// making the path
 						var path = val.Key.split('/');
-						var currPath = './downloads';
+						var currPath = downloadPath;
 						for (var i=1, length=path.length-1; i< length; i++){
 							currPath += '/' + path[i];
 							if (!fs.existsSync(currPath)) fs.mkdirSync(currPath);

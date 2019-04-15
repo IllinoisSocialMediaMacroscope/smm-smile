@@ -1,0 +1,108 @@
+<table>
+    <tr>
+        <th>path</th>
+        <td>required</td>
+        <td>path denotes the url of your analysis page. For example, <kbd>{"path": "/NLP-sentiment", ...}</kbd>
+            defines that the sentiment page will show up if you route to
+            <kbd>https://socialmediamacroscope.org/.../.../NLP-sentiment</kbd></td>
+    </tr>
+    <tr>
+        <th>title</th>
+        <td>required</td>
+        <td>title will be displayed on the top of an analysis page</td>
+    </tr>
+    <tr>
+        <th>imgURL</th>
+        <td>required</td>
+        <td>imgURL will be the icon for that analysis tab in the home page.</td>
+    </tr>
+    <tr>
+        <th>wiki</th>
+        <td>not required</td>
+        <td>this will be the url to redirect to after clicking "read more..." button located within the analysis tab in
+            the home page</td>
+    </tr>
+    <tr>
+        <th>introduction</th>
+        <td>required</td>
+        <td>this is the short paragraph describing the analysis in the home page. Long sentences can be break into segments and
+            SMILE will be able to concatenate them by space.</td>
+    </tr>
+    <tr>
+        <th>result_path</th>
+        <td>required</td>
+        <td>It defines where your output is stored on the remote storage S3 bucket. <i>Note you only need
+            to provide a relative path, i.e. SMILE has already taken into account that which S3 bucket and under which user/session
+            the output will store.</i> For example, in run time <kbd>{"result_path": "/NLP/sentiment/", ...}</kbd>
+            means my (username: cwang138) sentiment analysis
+            results will be stored under the path <kbd>/SMILE/cwang138/NLP/sentiment/</kbd>
+        </td>
+    </tr>
+    <tr>
+        <th>args</th>
+        <td>required</td>
+        <td>It is the <b>ID</b> of the input parameter, if your algorithm has no input parameters, you can simply
+            leave the value of args as an empty array. <u>But it is very important that each value of the args must match the id of
+                html element. </u>. For example: <kbd>{"args": ["algorithm"], ...}</kbd> means there will be one user input parameter and its id
+            will be "algorithm". This matches the part in the same config file which we will talk about later.
+            <kbd>
+                {
+                    "get":
+                    "containers": [{
+                        "input": {
+                        "type": "select",
+                        "name": "algorithm",
+                        "id": "algorithm",
+                        ...
+                        },
+                    }]
+                    ...
+                }
+            </kbd>
+
+            </td>
+    </tr>
+    <tr>
+        <th>custom_script</th>
+        <td>not required</td>
+        <td>The value of this entry should be the path of a custom javascript file, for example:
+            <kbd>{"custom_script": "bootstrap/js/customized/analyses/view_classification.js", ...}</kbd>.
+            Within this .js file you can add your own custom actions to overwrite
+            the current actions, or to add more effects to the frontend.</td>
+    </tr>
+    <tr>
+        <th>get</th>
+        <td>not required</td>
+        <td>
+            <table>
+                <tr>
+                    <th>containers</th>
+                    <td>
+                        <table>
+                            <tr>
+                                <th>input</th>
+                                <td>Input the actual input element, which requires a <i>type, name, id</i> and based on what type it is there will be more fields</td>
+                            </tr>
+                            <tr>
+                                <th>buttonGroups</th>
+                                <td>
+                                    represents the buttons you see by the end of the form. If your analysis just need
+                                    a simple Submit/Clear feature that POST all the form input to the backend, you should use the template.
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>citation</th>
+                                <td>defines the citation block content you will see on the page. You need to decide which event triggers
+                                    which citation display. <b>trigger_id</b> is the element id that you want to listen to, for example, setting the "trigger_id"
+                                    to be "algorithm" means whenever I change algorithm, the citation blocks will toggle and change. <b>text</b> is the full text
+                                    content of a citation, <b>condition</b> is the condition to evaluate and decides which citation to show.</td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+</table>

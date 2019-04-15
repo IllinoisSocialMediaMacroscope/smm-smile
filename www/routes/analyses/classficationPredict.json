@@ -1,0 +1,94 @@
+{
+  "path": "classification-predict",
+  "title": "Text Classification",
+  "result_path": "/ML/classification/",
+  "results": [
+    {
+      "acronym": "config",
+      "name": "configuration",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": true
+    },
+    {
+      "acronym": "div",
+      "name": "break down of labeled and unlabeled data",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "training",
+      "name": "Download training dataset",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "testing",
+      "name": "Download unlabeled dataset",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "pipeline",
+      "name": "Perserved classification pipeline",
+      "download": true,
+      "img": false,
+      "preview": false
+    },
+    {
+      "acronym": "metrics",
+      "name": "Classification performance evaluation",
+      "download": true,
+      "img": false,
+      "preview": true,
+      "dataTable": false
+    },
+    {
+      "acronym": "accuracy",
+      "name": "Accuracy score for each fold",
+      "download": true,
+      "img": false,
+      "preview": false
+    },
+    {
+      "acronym": "div_accuracy",
+      "name": "bar chart of 10 fold accuracy",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "predicting",
+      "name": "Predicted Class using trained model",
+      "download": true,
+      "img": false,
+      "preview": true,
+      "dataTable": true
+    },
+    {
+      "acronym": "div_category",
+      "name": "break down of each category in predicted data",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    }
+  ],
+  "custom_script": "bootstrap/js/customized/analyses/view_classification.js",
+  "args": [
+    "uid"
+  ],
+  "post": {
+    "lambda_config": {
+      "aws_lambda_function": "lambda_classification_predict_dev"
+    }
+  }
+}

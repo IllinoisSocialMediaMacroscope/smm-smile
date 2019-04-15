@@ -559,7 +559,7 @@ function submit_clowder_files(){
 			// mark the configuration file
 			var filename = $(file).find(".form-check-label").text();
 			var url = $(file).find(".form-check-input").val();
-			if (filename === 'configuration'){
+			if (filename.indexOf('config') !== -1){
 				data['configuration'] = url;
 			}
 
