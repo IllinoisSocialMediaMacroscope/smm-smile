@@ -15,16 +15,14 @@ function submitQuery(textareaID,filenameID){
 		var prefix = 'twitter-Tweet';
 		var params = parameters.tweet;
 		var pages = -999;
-	}else if (queryTerm === 'queryUser'){
-		var prefix = 'twitter-User' ;
-		var params = parameters.twtUser;
-		var pages = parseInt($("#twtUser-count").val())/20;
-		//var pages = parameters['twtUser']['pageNum:'] 	
+	}else if (queryTerm === 'getTimeline'){
+		var prefix = 'twitter-Timeline';
+		var params = parameters.twtTimeline;
+		var pages = -999;
 	}else if (queryTerm === 'streamTweet'){
-		var prefix = 'twitter-Stream'
+		var prefix = 'twitter-Stream';
 		var params = parameters.es;
 		var pages = parseInt($("#perPage").val())/1000;
-		//var pages = parameters['es']['pageNum:'];	
 	}else if (queryTerm === 'queryReddit'){
 		var prefix = 'reddit-Search';
 		var params = parameters.rdSearch ;	
@@ -88,14 +86,16 @@ function submitSearchbox(searchboxID, filenameID){
 	
 	// escape doule quotation mark
 	var keyword = $(searchboxID).val();
-	var keyword = keyword.replace(/[\"]+/g, `\\"`);	
+	keyword = keyword.replace(/[\"]+/g, `\\"`);
+
+    var filename = $(filenameID).val();
 	
 	var queryTerm = $("#social-media").find(':selected').val();
 	
 	if (queryTerm === 'queryTweet'){
 		var queryString = `{
 							  twitter {
-								queryTweet(q:"` + keyword + `", count: 100,pages:18) {
+								queryTweet(q:"` + keyword + `", count: 100, pages:18) {
 								  id
 								  id_str
 								  created_at
@@ -140,48 +140,62 @@ function submitSearchbox(searchboxID, filenameID){
 								}
 							  }
 							}
-							`
-		var filename = $(filenameID).val();
+							`;
 		var prefix = 'twitter-Tweet';
 		var pages = 18;
-		// parameters['tweet']['pages:'] = 18;
 		var params = parameters.tweet;
 		
-	}else if (queryTerm === 'queryUser'){
+	}else if (queryTerm === 'getTimeline'){
 		var queryString = `{
 							  twitter{
-								queryUser(q:"` + keyword + `", count:20){
-								  author_id
-								  author_id_str
-								  name
-								  screen_name
-								  description
-								  author_created_at
-								  profile_image_url
-								  profile_banner_url
-								  url
-								  location
-								  tweets_count
-								  followers_count
-								  friends_count
-								  listed_count
-								  favourites_count
-								  statuses_count
-								  time_zone
-								  protected
-								  verified
-								  is_translator
-								  contributors_enabled
-								  geo_enabled
-								  author_lang
+								getTimeline(screen_name:"` + keyword + `", count:200, pages:5){
+								  id
+								  id_str
+								  created_at
+								  text
+								  retweet_count
+								  favorite_count
+								  retweeted
+								  favorited
+								  possibly_sensitive
+								  truncated
+								  lang
+								  in_reply_to_screen_name
+								  in_reply_to_user_id_str
+								  in_reply_to_status_id_str
+								  is_quote_status
+								  source
+								  user {
+									author_id
+									author_id_str
+									name
+									screen_name
+									description
+									author_created_at
+									profile_image_url
+									profile_banner_url
+									url
+									location
+									tweets_count
+									followers_count
+									friends_count
+									listed_count
+									favourites_count
+									statuses_count
+									time_zone
+									protected
+									verified
+									is_translator
+									contributors_enabled
+									geo_enabled
+									author_lang
+								  }
 								}
 							  }
-							}`
-		var filename = $(filenameID).val();	
-		var prefix = 'twitter-User';
-		var pages = 90;		
-		// parameters['twtUser']['pageNum:'] = pages;
-		var params = parameters.twtUser;			
+							}`;
+		var prefix = 'twitter-Timeline';
+		var pages = 5;
+		var params = parameters.twtTimeline;
 		
 		
 	}else if (queryTerm === 'streamTweet'){
@@ -250,7 +264,6 @@ function submitSearchbox(searchboxID, filenameID){
 							  }
 							}
 							`;
-		var filename = $(filenameID).val();
 		var prefix = 'twitter-Stream';
 		var pages = 10;
 		// params['es']['pageNum:'] = pages;
@@ -296,7 +309,6 @@ function submitSearchbox(searchboxID, filenameID){
 								}
 							  }
 							}`;
-		var filename = $(filenameID).val();
 		var prefix = 'reddit-Search';
 		var pages = 10;
 		var params = parameters.rdSearch;
@@ -340,7 +352,6 @@ function submitSearchbox(searchboxID, filenameID){
 								}
 							  }
 							}`;
-		var filename = $(filenameID).val();
 		var prefix = 'reddit-Post';
 		var pages = -999;
 		var params = parameters.rdPost;
@@ -377,7 +388,6 @@ function submitSearchbox(searchboxID, filenameID){
 									}
 								}
 							}`;
-		var filename = $(filenameID).val();
 		var prefix = 'reddit-Historical-Post';
 		var pages = -999;
 		var params = parameters.psPost;
@@ -417,7 +427,6 @@ function submitSearchbox(searchboxID, filenameID){
 							}
 						  }
 						}`;
-		var filename = $(filenameID).val();
 		var prefix = 'reddit-Comment';
 		var pages = -999;
 		var params = parameters.rdComment;
@@ -440,7 +449,6 @@ function submitSearchbox(searchboxID, filenameID){
 								}
 							  }
 							}`;
-		var filename = $(filenameID).val();
 		var prefix = 'reddit-Historical-Comment';
 		var pages = -999;
 		var params = parameters.psComment;
@@ -508,7 +516,7 @@ function renderDownload(URLs, fname){
 
 function renderPreview(rendering,prefix){
 	// construct previews
-	if (prefix === 'twitter-Tweet' || prefix === 'twitter-Stream'){
+	if (prefix === 'twitter-Tweet' || prefix === 'twitter-Stream' || prefix === 'twitter-Timeline'){
 		$.each(rendering, function(i,val){
 			if (val.user !== undefined){
 				var img_url = val.user.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
@@ -560,28 +568,6 @@ function renderPreview(rendering,prefix){
 									<p style="margin-top:10px;">`+ text + `</p>
 									<p style="margin-top:10px;"><span class="glyphicon glyphicon-retweet" style="position:inherit;"></span>&nbsp;`+ retweet_count + 
 									`&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-heart" style="position:inherit;"></span>&nbsp;` +favorite_count +`</p>
-							</div>`);
-		});
-	}
-	
-	else if (prefix === 'twitter-User'){
-		$.each(rendering, function(i,val){
-			
-			var img_url = val.profile_image_url || 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
-			var user_name = val.name || 'Not Provided';
-			var screen_name = val.screen_name || 'NotProvided';
-			var created_at = val.author_created_at || 'Not Provided';
-			var url = val.url || 'Not Provided';
-			var description = val.description || 'Not Provided';
-			
-			$("#grid").append(`<div class="grid-element">
-									<img src="` + img_url + `" class="user-img"/>
-									<div style="margin-top:10px;">
-										<p style="display:inline;font-size:15px;"><b>` + user_name + `‏</b></p> 
-										<p style="display:inline;color:green;"><i>&nbsp;&bull;@`+ screen_name + `</i></p>
-										<p style="display:inline;color:grey;">&nbsp;&bull;`+ created_at +`</p>
-									</div>
-									<p style="margin-top:10px;">`+ description + `<br><a href="` + url + `">`+ url + `</a></p>
 							</div>`);
 		});
 	}

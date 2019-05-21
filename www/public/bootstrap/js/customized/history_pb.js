@@ -68,8 +68,8 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                 else if (key1 === 'twitter-Tweet') {
                                     var second_level = 'Twitter Tweet';
                                 }
-                                else if (key1 === 'twitter-User') {
-                                    var second_level = 'Twitter User';
+                                else if (key1 === 'twitter-Timeline') {
+                                    var second_level = 'Twitter User Timeline';
                                 }
                                 else if (key1 === 'twitter-Stream') {
                                     var second_level = 'Twitter Streaming Data';

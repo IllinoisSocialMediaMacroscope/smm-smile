@@ -1,6 +1,7 @@
 var Twitter = require('twitter');
 var Promise = require('bluebird');
 var querystring = require('querystring');    // parse query parameters
+var bigInt = require("big-integer");
 var config = require('../graphql_config.json');
 
 function twitterAPI(tokens,resolveName, id, args){
@@ -11,7 +12,7 @@ function twitterAPI(tokens,resolveName, id, args){
 			consumer_secret:config.twitter.client_secret,
 			access_token_key:tokens.twtaccesstokenkey,
 			access_token_secret:tokens.twtaccesstokensecret
-		})
+		});
 	
 	return new Promise((resolve,reject) =>{
 		switch(resolveName){	
@@ -64,6 +65,47 @@ function twitterAPI(tokens,resolveName, id, args){
 					
 				});
 				break;
+
+            case 'searchTimeline':
+                var max_pages = args['pages']-1;
+                delete args['pages'];
+                client.get('statuses/user_timeline',args,function(error,tweets,response){
+                    if (error){
+                        console.log(error);
+                        reject(JSON.stringify(error));
+                    }
+
+                    if (max_pages === 0){
+                        resolve(tweets);
+                    }else{
+                        var result = tweets;
+                        WaterfallOver2(max_pages, tweets, function(item,report){
+                        	if (item.length > 0){
+                                // Returns results with an ID less than (that is, older than) or equal to the specified ID.
+                                // that means we might get the same tweet as the specified max_id, hence -1
+                                var max_id = bigInt(item[item.length-1]['id']);
+								args['max_id'] = max_id.minus(1).toString();
+                                client.get('statuses/user_timeline',args,function(error,newTweets,response){
+                                    if(error) reject(error);
+
+                                    if (newTweets.length > 0){
+                                        result = result.concat(newTweets);
+                                        item = newTweets;
+                                        report(item);
+									}
+
+                                });
+							}
+							else{
+                        		report(item);
+							}
+                        }, function(){
+                            resolve(result);
+                        });
+                    }
+
+                });
+                break;
 		
 		
 			case 'searchGeo':
@@ -117,7 +159,7 @@ function twitterAPI(tokens,resolveName, id, args){
                         reject(error);
                     }
 					resolve(tweets);
-				})
+				});
                 break;
 
 			default:
@@ -128,29 +170,6 @@ function twitterAPI(tokens,resolveName, id, args){
 }
 
 /*--------------------helper--------------------------------------------------------------------------------------*/
-function WaterfallOver2(max_pages,page, iterator, callback) {
-
-    var nextItemIndex = 0;  //keep track of the index of the next item to be processed
-
-    function report(item) {
-
-        nextItemIndex++;
-		
-		//next results is a string:?max_id=875733529404948479&q=UIUC&count=1&include_entities=1&result_type=mixed
-		//parse it will give you new args
-		//now think a recursive way 
-		//console.log(item);	
-		// you dont want to reach the bottom of search; OR exceed the req limit of 180 calls per 15 min
-        if(nextItemIndex === max_pages)
-            callback(); //if all the reports are back, great! resolve the result
-        else
-            iterator(item, report); //keep iterate
-    }
-
-    // instead of starting all the iterations, we only start the 1st one
-    iterator(page, report);
-}
-
 function WaterfallOver(max_pages,tweets, iterator, callback) {
 
     var nextItemIndex = 0;  //keep track of the index of the next item to be processed
@@ -174,6 +193,28 @@ function WaterfallOver(max_pages,tweets, iterator, callback) {
     iterator(tweets, report);
 }
 
+function WaterfallOver2(max_pages,tweets, iterator, callback) {
+
+    var nextItemIndex = 0;  //keep track of the index of the next item to be processed
+
+    function report(item) {
+
+        nextItemIndex++;
+
+        //next results is a string:?max_id=875733529404948479&q=UIUC&count=1&include_entities=1&result_type=mixed
+        //parse it will give you new args
+        //now think a recursive way
+        //console.log(item);
+        // you dont want to reach the bottom of search; OR exceed the req limit of 180 calls per 15 min
+        if(nextItemIndex === max_pages)
+            callback(); //if all the reports are back, great! resolve the result
+        else
+            iterator(item, report); //keep iterate
+    }
+
+    // instead of starting all the iterations, we only start the 1st one
+    iterator(tweets, report);
+}
 
 
 module.exports = twitterAPI;

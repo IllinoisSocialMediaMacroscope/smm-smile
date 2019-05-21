@@ -101,7 +101,7 @@ router.post('/list', function (req, res, next) {
 
     var promise_array = [];
     promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-Tweet/'));
-    promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-User/'));
+    promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-Timeline/'));
     promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-Stream/'));
     promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Search/'));
     promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Post/'));
@@ -113,7 +113,7 @@ router.post('/list', function (req, res, next) {
     Promise.all(promise_array).then(values => {
 
         directory['twitter-Tweet'] = values[0];
-        directory['twitter-User'] = values[1];
+        directory['twitter-Timeline'] = values[1];
         directory['twitter-Stream'] = values[2];
         directory['reddit-Search'] = values[3];
         directory['reddit-Post'] = values[4];
@@ -134,7 +134,7 @@ router.post('/list-all', function (req, res, next) {
 
     var promise_array = [];
     promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-Tweet/'));
-    promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-User/'));
+    promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-Timeline/'));
     promise_array.push(list_folders(s3FolderName + '/GraphQL/twitter-Stream/'));
     promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Search/'));
     promise_array.push(list_folders(s3FolderName + '/GraphQL/reddit-Post/'));
@@ -168,7 +168,7 @@ router.post('/list-all', function (req, res, next) {
     Promise.all(promise_array).then(values => {
         directory['GraphQL'] = {};
         directory['GraphQL']['twitter-Tweet'] = values[0];
-        directory['GraphQL']['twitter-User'] = values[1];
+        directory['GraphQL']['twitter-Timeline'] = values[1];
         directory['GraphQL']['twitter-Stream'] = values[2];
         directory['GraphQL']['reddit-Search'] = values[3];
         directory['GraphQL']['reddit-Post'] = values[4];

@@ -28,7 +28,7 @@ function clickEffect(platform){
 
 		if (platform === 'twitter'){
 			$("#social-media option[value='queryTweet']").removeAttr('disabled');
-			$("#social-media option[value='queryUser']").removeAttr('disabled');
+			$("#social-media option[value='getTimeline']").removeAttr('disabled');
 		}else if (platform === 'reddit'){
 			$("#social-media option[value='queryReddit']").removeAttr('disabled');
 			$("#social-media option[value='redditPost']").removeAttr('disabled');

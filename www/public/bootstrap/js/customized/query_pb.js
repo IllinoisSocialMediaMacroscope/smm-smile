@@ -13,7 +13,7 @@ function init(){
 	queryTerm = '';
 	Query ='';
 	parameters = { 	tweet: {},
-					twtUser: {},
+					twtTimeline: {},
 					es: {},
 					rdSearch: {},
 					rdComment:{},
@@ -84,16 +84,19 @@ function init(){
 			`\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
 			`\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
 			`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang`+
-			`\n\t\t\t}\n\t\t\tentities{\n\t\t\t\turls\n\t\t\t\thashtags\n\t\t\t\tuser_mentions{\n\t\t\t\t\tauthor_id`+
-			`\n\t\t\t\t\tscreen_name\n\t\t\t\t}\n\t\t\t}`;
+			`\n\t\t\t}\n\t\t\t`;
 			
-			parameters['twtUser']['q:'] = keyword;
-			parameters['twtUser']['count:'] = 20;
-			parameters['twtUser']['fields'] = `\n\t\t\tauthor_id\n\t\t\tauthor_id_str\n\t\t\tname\n\t\t\tscreen_name\n\t\t\tdescription`+
-			`\n\t\t\tauthor_created_at\n\t\t\tprofile_image_url\n\t\t\tprofile_banner_url\n\t\t\turl\n\t\t\tlocation\n\t\t\ttweets_count`+
-			`\n\t\t\tfollowers_count\n\t\t\tfriends_count\n\t\t\tlisted_count\n\t\t\tfavourites_count\n\t\t\tstatuses_count\n\t\t\ttime_zone`+
-			`\n\t\t\tprotected\n\t\t\tverified\n\t\t\tis_translator\n\t\t\tcontributors_enabled\n\t\t\tgeo_enabled\n\t\t\tauthor_lang\n\t\t\ttimeline{`+
-			`\n\t\t\t\tid\n\t\t\t\tcreated_at\n\t\t\t\ttext\n\t\t\t\tretweet_count\n\t\t\t}`;
+			parameters['twtTimeline']['screen_name:'] = keyword;
+			parameters['twtTimeline']['count:'] = 200;
+			parameters['twtTimeline']['pages:'] = parseInt($("#twtTimeline-count").val())/200;
+			parameters['twtTimeline']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
+                `\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
+                `\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
+                `\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
+                `\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
+                `\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
+                `\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang`+
+                `\n\t\t\t}\n\t\t\t`;
 				
 			parameters['es']['q:'] = keyword;
 			parameters['es']['perPage:'] =  1000;
@@ -177,7 +180,7 @@ function init(){
 		$("#simple-search-btn").prop('disabled',false);
 		
 		$(".tweet").hide();
-		$(".user").hide();
+		$(".timeline").hide();
 		$(".es-tweet").hide();
 		$(".reddit-search").hide();
 		$(".reddit-post").hide();
@@ -212,9 +215,9 @@ function init(){
                 .tooltip('fixTitle')
                 .tooltip('show');
 		}
-		else if ( queryTerm === 'queryUser'){
-			$(".user").show();
-			$("#searchbox").attr("placeholder","Username keywords that you wish to search...");
+		else if ( queryTerm === 'getTimeline'){
+			$(".timeline").show();
+			$("#searchbox").attr("placeholder","User screen name starting after @");
             $("boolean").tooltip('hide');
         }
         else if ( queryTerm === 'streamTweet'){
@@ -290,7 +293,7 @@ function init(){
 			var keyword = keyword.replace(/[\"]+/g, `\\"`);
 			
 			parameters['tweet']['q:'] = keyword;
-			parameters['twtUser']['q:'] = keyword;
+			parameters['twtTimeline']['screen_name:'] = keyword;
 			parameters['es']['q:'] = keyword;
 			parameters['rdSearch']['query:'] = keyword;
 			parameters['rdPost']['subredditName:']= keyword;
@@ -387,7 +390,7 @@ function init(){
 	$("#twtTweetFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],AuthorInformation:[],TweetEntities:[]};
+		fields = {BasicFields:[],AuthorInformation:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -402,17 +405,6 @@ function init(){
 			fields_string += '\n\t\t\tuser{' ;
 			$.each(fields['AuthorInformation'],function(i,val){
 				fields_string += '\n\t\t\t\t' + val;
-			});
-			fields_string += '\n\t\t\t}' ;
-		}
-		if (fields['TweetEntities'].length !== 0){
-			fields_string += '\n\t\t\tentities{' ;
-			$.each(fields['TweetEntities'],function(i,val){
-				if (val === 'user_mentions'){
-					fields_string += '\n\t\t\t\tuser_mentions{\n\t\t\t\t\tauthor_id\n\t\t\t\t\tscreen_name\n\t\t\t\t}';
-				}else{
-					fields_string += '\n\t\t\t\t' + val;
-				}
 			});
 			fields_string += '\n\t\t\t}' ;
 		}
@@ -585,20 +577,41 @@ function init(){
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});		
-	
-	
-	/*----------------------------------------------------- twitter user-------------------------------------------------------*/
-	$("#twtUser-count").change(function(){
-		parameters['twtUser']['count:'] = 20;
-		//parameters['twtUser']['pageNum:'] = parseInt($("#twtUser-count").val())/20;
+
+	/*----------------------------------------------------- twitter timeline -------------------------------------------------------*/
+	$("#twtTimeline-count").change(function(){
+		parameters['twtTimeline']['count:'] = 200;
+        parameters['twtTimeline']['pages:'] = parseInt($("#twtTimeline-count").val())/200;
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
+
+	$("#twtTimeline-exclude-replies").change(function(){
+        if ($("#twtTimeline-exclude-replies").is(":checked")){
+            parameters['twtTimeline']['exclude_replies:'] = true;
+        }
+        else{
+            parameters['twtTimeline']['exclude_replies:'] = false;
+        }
+        Query =updateString(queryTerm,parameters);
+        $("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
+
+	$("#twtTimeline-exclude-rts").change(function(){
+		if ($("#twtTimeline-exclude-rts").is(":checked")){
+			parameters['twtTimeline']['include_rts:'] = false;
+		}
+		else{
+            parameters['twtTimeline']['include_rts:'] = true;
+		}
+        Query =updateString(queryTerm,parameters);
+        $("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
 	
-	$("#twtUserFields").change(function(){
+	$("#twtTimelineFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],UserTimeline:[]};
+		fields = {BasicFields:[],AuthorInformation:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -609,20 +622,19 @@ function init(){
 				fields_string += '\n\t\t\t' + val;
 			});
 		}
-		if (fields['UserTimeline'].length !== 0){
-			fields_string += '\n\t\t\ttimeline{' ;
-			$.each(fields['UserTimeline'],function(i,val){
-				fields_string += '\n\t\t\t\t' + val;
-			});
-			fields_string += '\n\t\t\t}' ;
-		}
+        if (fields['AuthorInformation'].length !== 0){
+            fields_string += '\n\t\t\tuser{' ;
+            $.each(fields['AuthorInformation'],function(i,val){
+                fields_string += '\n\t\t\t\t' + val;
+            });
+            fields_string += '\n\t\t\t}' ;
+        }
 		
-		parameters['twtUser']['fields'] = fields_string;
+		parameters['twtTimeline']['fields'] = fields_string;
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 
 	});
-	
 	
 	/*----------------------------------------------------- Reddit Search-------------------------------------------------------*/
 	$("input[name='time']").change(function(){
@@ -680,12 +692,14 @@ function init(){
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 
 	});
+
 	/*------------------------------pushshift Post ------------------------------------*/
 	$("#ps-size").change(function(){
 		parameters['psPost']['size:'] = parseInt($("#ps-size").val());
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
+
 	$("#ps-subreddit").change(function(){
 		if ($("#ps-subreddit").is(':checked')){
 			$(".form-group.ps-subreddit").show();
@@ -711,7 +725,8 @@ function init(){
 		
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});	
+	});
+
 	$("#ps-author").change(function(){
 		if ($("#ps-author").is(':checked')){
 			$(".form-group.ps-author").show();
@@ -738,6 +753,7 @@ function init(){
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
+
 	$("#ps-dateRange").change(function(){
 		if ($("#ps-dateRange").is(':checked')){
 			$(".form-group.ps-dateRange").show();
@@ -769,7 +785,6 @@ function init(){
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
-	
 
 	$("#psPostFields").change(function(){
 		fields_string = '';
@@ -800,7 +815,7 @@ function init(){
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 
 	});
-	
+
 		/*------------------------------pushshift Comment ------------------------------------*/
 	$("#ps-cm-subreddit").change(function(){
 		if ($("#ps-cm-subreddit").is(':checked')){
@@ -951,7 +966,6 @@ function epochTime(datestring){
 }
 
 function constructQuery(parameterObj){
-	//console.log(parameterObj);
 	var keys = [];
 	$.each(Object.keys(parameterObj),function(i,item){
 		if (item !== 'fields' && parameterObj[item] !== '' && item !=='pageNum:'){
@@ -980,11 +994,11 @@ function constructQuery(parameterObj){
 		
 function updateString(queryTerm,parameters){
 	var query = '';
-	if (queryTerm == 'queryUser'){
+	if (queryTerm === 'getTimeline'){
 		
-		query = `\ttwitter{\n\t\t`	+ queryTerm + `(` +  constructQuery(parameters.twtUser) +  `\n\t\t}\n\t}`;
+		query = `\ttwitter{\n\t\t`	+ queryTerm + `(` +  constructQuery(parameters.twtTimeline) +  `\n\t\t}\n\t}`;
 		
-	}else if(queryTerm == 'queryTweet'){ 
+	}else if(queryTerm === 'queryTweet'){
 		
 		query =  `\ttwitter{\n\t\t`	+ queryTerm + `(`+ constructQuery(parameters.tweet)	+ `\n\t\t}\n\t}`;  
 		
@@ -1050,8 +1064,8 @@ function setHitogramInterval(freq){
 	var queryTerm = $("#social-media").find(':selected').val();
 	if (queryTerm === 'queryTweet'){
 		var prefix = 'twitter-Tweet';
-	}else if (queryTerm === 'queryUser'){
-		var prefix = 'twitter-User';
+	}else if (queryTerm === 'getTimeline'){
+		var prefix = 'twitter-Timeline';
 	}else if (queryTerm === 'streamTweet'){
 		var prefix = 'twitter-Stream';
 	}else if (queryTerm === 'queryReddit'){

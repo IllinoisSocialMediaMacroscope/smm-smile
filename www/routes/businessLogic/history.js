@@ -17,7 +17,7 @@ router.post('/history',function(req,res,next){
 	var arrURL = req.body.folderURL.split('/');
 	if (arrURL[1] === 'GraphQL') {
         if (arrURL[2] === 'twitter-Tweet' ||
-            arrURL[2] === 'twitter-User' ||
+            arrURL[2] === 'twitter-Timeline' ||
             arrURL[2] === 'twitter-Stream' ||
             arrURL[2] === 'reddit-Comment' ||
             arrURL[2] === 'reddit-Historical-Comment' ||
