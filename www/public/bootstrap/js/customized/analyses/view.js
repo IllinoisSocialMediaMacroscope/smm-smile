@@ -22,7 +22,7 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                         $("#warning").modal('show');
                     } else {
                         // networkx page has restriction to only apply to twitter data
-                        if (window.location.pathname === '/networkx') {
+                        if (window.location.pathname.split('/').slice(-1)[0] === 'networkx') {
                             $.each(data, function (key, val) {
                                 if (key === 'twitter-Tweet' || key === 'twitter-Stream') {
                                     $("#selectFile").append($("<optgroup></optgroup>").attr("label", key));
