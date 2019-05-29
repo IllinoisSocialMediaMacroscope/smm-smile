@@ -165,19 +165,31 @@
             },
             {
               "value": "SGD",
-              "label": "Linear classifiers with stochastic gradient descent learning"
+              "label": "linear classifiers with Stochastic Gradient Descent learning"
             },
             {
               "value": "RandomForest",
-              "label": "Random forest classifier"
+              "label": "Random Forest classifier"
             },
             {
               "value": "KNN",
-              "label": "K-nearest neighbors vote"
+              "label": "K-Nearest Neighbors vote"
             },
             {
-              "value": "passiveAggressive",
+              "value": "PassiveAggressive",
               "label": "Passive Aggressive Classifier"
+            },
+            {
+              "value": "SupportVector",
+              "label": "C-Support Vector Classification"
+            },
+            {
+              "value": "DecisionTree",
+              "label": "Decision Tree classifier"
+            },
+            {
+              "value": "AdaBoost",
+              "label": "AdaBoost classifier"
             }
           ]
         }

@@ -150,13 +150,20 @@ function appendDownload(downloadID, downloadData) {
 }
 
 function appendIntermediateDownload(downloadID, downloadData) {
-    $(downloadID).empty()
+    $(downloadID).empty();
     if (downloadData !== [] && downloadData !== '') {
         $(downloadID).append('<br><p>Files necessary for the next step:</p><ul class="list-unstyled"></ul>')
         $.each(downloadData, function (i, val) {
-            $(downloadID).find(".list-unstyled").append(`<li>
+            if (val.name === 'Perserved classification pipeline'){
+                $(downloadID).find(".list-unstyled").append(`<li>
+									<a href="` + val.content + `" style="color:red;">` + val.name + `</a>
+								</li>`);
+            }
+            else{
+                $(downloadID).find(".list-unstyled").append(`<li>
 									<a href="` + val.content + `">` + val.name + `</a>
 								</li>`);
+            }
         });
     }
 }
@@ -499,12 +506,6 @@ function submitHistory(folderURL){
                         appendPreview('#result-container',data.preview);
                     }
 
-                    if ('compound' in data){
-                        // add gauge for sentiment analysis
-                        //google.charts.setOnLoadCallback(drawGauge('Compound Sentiment Score of the whole document', parseFloat(data.compound)));
-                        console.log('revoke it');
-                    }
-
                     if('iframe' in data){
                         // draw iframe for topic modeling
                         drawIframe(data.iframe.name, data.iframe.content);
@@ -646,7 +647,6 @@ function drawGauge(name,compound) {
         ['Label', 'Value'],	['Compound', compound],
     ]);
 
-    console.log($("#gaudge").width());
     var options = {
         width: $("#gaudge").width()*0.25, height: $("#gaudge").width()*0.25,
         backgroundColor: "transparent",
@@ -700,7 +700,7 @@ function addUUID(ID){
     }
 }
 
-function appendInstruction(ID, len_training, len_testing){
+function appendInstruction(ID){
     $(ID).empty();
     $(ID).append(`<h2>Instruction</h2>
 								<div id="split-stats" style="padding:40px 100px;background-color:white;overflow:auto;">
@@ -818,11 +818,11 @@ function train() {
 
                         $("#gaudge").empty();
 
-                        appendIntermediateDownload("#intermediate-download", data.download)
+                        appendIntermediateDownload("#intermediate-download", data.download);
                         appendImg("#img-container", data.img);
                         appendDownload("#side-download", data.download);
                         appendPreview('#result-container', data.preview);
-                        addUUID(data.uid);
+                        addUUID(data.ID);
 
                         $("#uuid-modal").modal('show');
                     }
@@ -870,6 +870,7 @@ function predict() {
                         clowderFileMeta();
                         $('.fileTags').tagsinput({freeInput: true});
 
+                        appendIntermediateDownload("#intermediate-download", data.download);
                         appendImg("#img-container", data.img);
                         appendDownload("#side-download", data.download);
                         appendPreview('#result-container', data.preview);
