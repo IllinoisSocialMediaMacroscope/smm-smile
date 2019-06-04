@@ -610,3 +610,47 @@ nav-tabs li a:hover{
 	text-align: left;
 	padding: 20px;
 }
+
+/* user suggestions */
+.prompt{
+	background: white;
+	text-align: left;
+	max-height: 300px;
+	overflow:auto;
+	z-index:2000;
+	font-size:12px;
+	box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.prompt-user{
+	padding: 8px 15px;
+}
+.prompt-user:hover,
+.prompt-user:focus,
+.prompt-user:checked{
+	background:#eeeeee;
+}
+
+.prompt-img{
+	border-radius:50px;
+	width:30px;
+	margin:0 10px 0 10px;
+}
+
+.prompt-screen-name{
+	display:inline;
+	font-size:15px;
+	font-weight: bold;
+}
+
+.prompt-user-name{
+	margin-left:2px;
+	display:inline;
+	color:green;
+	font-style:italic;
+}
+
+.prompt-user-description{
+	color:#777777;
+	margin-left:50px;
+}

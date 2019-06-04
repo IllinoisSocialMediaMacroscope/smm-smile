@@ -174,6 +174,8 @@ function init(){
 	
 	// select box enable search/boolean/advanced
 	$("#social-media").change(function(){
+		$(".prompt").empty();
+
 		$("#searchbox").prop('disabled',false);
 		$("#dropdownButton").prop('disabled',false);
 		$("#boolean-toggle").prop('disabled',false);
@@ -285,27 +287,79 @@ function init(){
 	$("#until-start").val(until_start);
 			
 	/*---------------------------------------global search term---------------------------------------------------------------------------*/
-	$("#searchbox").on('keyup', function(e){
+	$("#searchbox").on('keyup', delay(function(e){
 		
 		if ( e.keyCode !== 13 && e.keycode !== 10 ){
-			// escape doule quotation mark
-			var keyword =  $("#searchbox").val();
-			var keyword = keyword.replace(/[\"]+/g, `\\"`);
-			
-			parameters['tweet']['q:'] = keyword;
-			parameters['twtTimeline']['screen_name:'] = keyword;
-			parameters['es']['q:'] = keyword;
-			parameters['rdSearch']['query:'] = keyword;
-			parameters['rdPost']['subredditName:']= keyword;
-			parameters['rdComment']['subredditName:'] = keyword;
-			parameters['psPost']['q:'] = keyword;
-			parameters['psComment']['q:'] = keyword;
-			
-			Query =updateString(queryTerm,parameters);
-			$("#input").val(`{\n\n` + Query +`\n\n}`);
+			// user prompt
+			if (queryTerm === 'getTimeline'){
+                var $prompt = $(".prompt");
+                if ($(this).val() !== ""){
+                    $.ajax({
+                        url: "prompt",
+                        type: "post",
+                        data: {"screenName": $(this).val()},
+                        success: function (data) {
+                            $prompt.empty();
+                            $(data).each(function(i, user){
+                                $prompt.append('<div class="prompt-user">' +
+                                    '<img class="prompt-img" src="'+ user.profile_image_url + '"/>' +
+                                    '<p class="prompt-screen-name">' + user.screen_name + '</p>' +
+                                    '<p class="prompt-user-name">' + user.name + '</p>' +
+                                    '<p class="prompt-user-description">' + user.description + '</p></div>')
+                            });
+
+                            $(".prompt-user").on("click", function(){
+                                $("#searchbox").val($(this).find(".prompt-screen-name").text());
+
+                                var keyword =  $("#searchbox").val();
+                                var keyword = keyword.replace(/[\"]+/g, `\\"`);
+                                parameters['twtTimeline']['screen_name:'] = keyword;
+                                parameters['tweet']['q:'] = keyword;
+                                parameters['twtTimeline']['screen_name:'] = keyword;
+                                parameters['es']['q:'] = keyword;
+                                parameters['rdSearch']['query:'] = keyword;
+                                parameters['rdPost']['subredditName:']= keyword;
+                                parameters['rdComment']['subredditName:'] = keyword;
+                                parameters['psPost']['q:'] = keyword;
+                                parameters['psComment']['q:'] = keyword;
+                                Query =updateString(queryTerm,parameters);
+                                $("#input").val(`{\n\n` + Query +`\n\n}`);
+
+                                $prompt.hide();
+                            });
+                        },
+                        error: function (jqXHR, exception) {
+                            $("#error").val(jqXHR.responseText);
+                            $("#warning").modal('show');
+                        }
+                    });
+                }
+                else{
+                    $prompt.empty();
+                }
+            }
+
+            // escape doule quotation mark
+            var keyword =  $("#searchbox").val();
+            var keyword = keyword.replace(/[\"]+/g, `\\"`);
+
+            parameters['tweet']['q:'] = keyword;
+            parameters['twtTimeline']['screen_name:'] = keyword;
+            parameters['es']['q:'] = keyword;
+            parameters['rdSearch']['query:'] = keyword;
+            parameters['rdPost']['subredditName:']= keyword;
+            parameters['rdComment']['subredditName:'] = keyword;
+            parameters['psPost']['q:'] = keyword;
+            parameters['psComment']['q:'] = keyword;
+
+            Query =updateString(queryTerm,parameters);
+            $("#input").val(`{\n\n` + Query +`\n\n}`);
 		}
-	});
-		
+	}, 300))
+	.click(function(){
+        $(this).siblings(".prompt").show();
+    });
+
 	/*---------------------------------------------query tweet ------------------------------------------------------------------------*/
 	// toggle date range checkbox
 	$("#dateRange").change(function(){
@@ -1131,5 +1185,16 @@ function pushDropdown(state){
 	}else if (state === 'off'){
 		$(".input-group-addon-btn").css('margin-bottom','0px');
 	}
+}
+
+function delay(callback, ms) {
+    var timer = 0;
+    return function() {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            callback.apply(context, args);
+        }, ms || 0);
+    };
 }
 

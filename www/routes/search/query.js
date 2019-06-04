@@ -10,6 +10,7 @@ var uploadToS3 = require(path.join(appPath, 'scripts', 'helper_func', 's3Helper.
 var list_folders = require(path.join(appPath, 'scripts', 'helper_func', 's3Helper.js')).list_folders;
 var lambda_invoke = require(path.join(appPath, 'scripts', 'helper_func', 'lambdaHelper.js')).lambda_invoke;
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
+var config = require('../../main_config');
 
 router.get('/query', function (req, res, next) {
 
@@ -205,6 +206,23 @@ router.post('/query', function (req, res, next) {
         else {
             res.send({ERROR: 'This filename ' + req.body.filename + ' already exist in your directory. Please rename it to something else!'});
         }
+    });
+});
+
+router.post('/prompt', function(req, res) {
+    lambda_invoke('bae_screen_name_prompt', {
+        consumer_key: config.twitter.client_id,
+        consumer_secret: config.twitter.client_secret,
+        access_token: req.session.twt_access_token_key,
+        access_token_secret: req.session.twt_access_token_secret,
+        screen_name: req.body.screenName
+    })
+    .then(user => {
+        res.send(user);
+    })
+    .catch(err => {
+        console.log(err);
+        reject(err);
     });
 });
 
