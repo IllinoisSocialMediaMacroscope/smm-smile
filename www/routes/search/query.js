@@ -31,7 +31,6 @@ router.get('/query', function (req, res, next) {
 
 });
 
-
 router.post('/query', function (req, res, next) {
     if (!fs.existsSync(smileHomePath)) {
         fs.mkdirSync(smileHomePath);
@@ -209,7 +208,7 @@ router.post('/query', function (req, res, next) {
     });
 });
 
-router.post('/prompt', function(req, res) {
+router.post('/prompt', function (req, res) {
     lambda_invoke('bae_screen_name_prompt', {
         consumer_key: config.twitter.client_id,
         consumer_secret: config.twitter.client_secret,
@@ -226,7 +225,6 @@ router.post('/prompt', function(req, res) {
     });
 });
 
-
 /****************************************************************** helper *****************************************************************************************/
 function checkExist(remotePrefix, localFolderName) {
     var p = list_folders(remotePrefix);
@@ -240,7 +238,6 @@ function checkExist(remotePrefix, localFolderName) {
         return true;
     });
 }
-
 
 function gatherMultiPost(query, headers, pageNum) {
     // user regex to add a page:pageNum in the query here

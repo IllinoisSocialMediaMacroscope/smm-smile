@@ -44,55 +44,61 @@ router.post('/render-json', function (req, res, next) {
 
 router.post('/render', function (req, res, next) {
 
-    if (req.body.prefix !== '' && req.body.prefix !== undefined) {
+    if (req.body.prefix.split("/")[0] === s3FolderName) {
+        if (req.body.prefix !== '' && req.body.prefix !== undefined) {
 
-        var p = list_files(req.body.prefix);
-        p.then((folderObj) => {
-            var fileList = Object.keys(folderObj);
-            for (var i = 0, length = fileList.length; i < length; i++) {
-                if (fileList[i].slice(-4) === '.csv') {
-                    var fileURL = folderObj[fileList[i]];
+            var p = list_files(req.body.prefix);
+            p.then((folderObj) => {
+                var fileList = Object.keys(folderObj);
+                for (var i = 0, length = fileList.length; i < length; i++) {
+                    if (fileList[i].slice(-4) === '.csv') {
+                        var fileURL = folderObj[fileList[i]];
 
-                    var p2 = getMultiRemote(fileURL);
-                    p2.then((preview_string) => {
-                        if (preview_string === '') {
-                            res.send({ERROR: 'This dataset you selected is empty, please select another one!'});
-                        } else {
+                        var p2 = getMultiRemote(fileURL);
+                        p2.then((preview_string) => {
+                            if (preview_string === '') {
+                                res.send({ERROR: 'This dataset you selected is empty, please select another one!'});
+                            } else {
 
-                            if (fs.existsSync(columnHeadersPath)) {
-                                var columnHeaders = JSON.parse(fs.readFileSync(columnHeadersPath));
-                            }
-                            else {
-                                res.send({ERROR: "Cannot load preview due to missing the columnHeaders.json file."})
-                            }
+                                if (fs.existsSync(columnHeadersPath)) {
+                                    var columnHeaders = JSON.parse(fs.readFileSync(columnHeadersPath));
+                                }
+                                else {
+                                    res.send({ERROR: "Cannot load preview due to missing the columnHeaders.json file."})
+                                }
 
-                            // add custom setting headers
-                            var customColumnHeadersPath = path.join(smileHomePath, 'customColumnHeaders.json');
-                            if (fs.existsSync(customColumnHeadersPath)) {
-                                var customColumnHeaders = JSON.parse(fs.readFileSync(customColumnHeadersPath));
-                                for (var key in customColumnHeaders) {
-                                    for (i = 0; i < customColumnHeaders[key].length; i++) {
-                                        if (columnHeaders[key].indexOf(customColumnHeaders[key][i]) < 0) {
-                                            columnHeaders[key].push(customColumnHeaders[key][i]);
+                                // add custom setting headers
+                                var customColumnHeadersPath = path.join(smileHomePath, 'customColumnHeaders.json');
+                                if (fs.existsSync(customColumnHeadersPath)) {
+                                    var customColumnHeaders = JSON.parse(fs.readFileSync(customColumnHeadersPath));
+                                    for (var key in customColumnHeaders) {
+                                        for (i = 0; i < customColumnHeaders[key].length; i++) {
+                                            if (columnHeaders[key].indexOf(customColumnHeaders[key][i]) < 0) {
+                                                columnHeaders[key].push(customColumnHeaders[key][i]);
+                                            }
                                         }
                                     }
                                 }
+
+                                var preview_arr = CSV.parse(preview_string);
+                                res.send({preview: preview_arr, columnHeaders: columnHeaders});
                             }
+                        });
 
-                            var preview_arr = CSV.parse(preview_string);
-                            res.send({preview: preview_arr, columnHeaders: columnHeaders});
-                        }
-                    });
-
+                    }
                 }
-            }
 
-        }).catch((err) => {
-            res.send({ERROR: err});
-        });
-    } else {
-        res.send();
+            }).catch((err) => {
+                res.send({ERROR: err});
+            });
+        } else {
+            res.send();
+        }
     }
+    else {
+        res.send({ERROR: "Access Denied!"});
+    }
+
 });
 
 router.post('/list', function (req, res, next) {
@@ -263,7 +269,9 @@ router.get('/list-analyses', function (req, res, next) {
     var analyses = [];
     var routesFiles = fs.readdirSync(routesDir);
     routesFiles.forEach(function (route, i) {
-        if (route.split(".")[0] !== "" && route.split(".")[1] === "json" && fs.lstatSync(path.join(routesDir, route)).isFile()) {
+        if (route.split(".")[0] !== ""
+            && route.split(".")[1] === "json"
+            && fs.lstatSync(path.join(routesDir, route)).isFile()) {
 
             var routesConfig = require(path.join(routesDir, route));
             if ("get" in routesConfig) {
