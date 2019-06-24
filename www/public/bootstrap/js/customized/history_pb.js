@@ -62,8 +62,8 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                 else if (key1 === 'sentiment') {
                                     var second_level = 'Sentiment Analysis';
                                 }
-                                else if (key1 === 'topic-modeling') {
-                                    var second_level = 'LDA Topic Modeling';
+                                else if (key1 === 'topic') {
+                                    var second_level = 'Topic Modeling';
                                 }
                                 else if (key1 === 'twitter-Tweet') {
                                     var second_level = 'Twitter Tweet';
