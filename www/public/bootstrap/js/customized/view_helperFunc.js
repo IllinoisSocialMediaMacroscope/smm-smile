@@ -523,6 +523,14 @@ function submitHistory(folderURL){
                     }else{
                         $("#getComment").hide();
                     }
+
+                    if ('crawlImage' in data && data.crawlImage !== undefined){
+                        $(".dataset").val(data.crawlImage);
+                        $(".length").val(data.length);
+                        $("#getImg").show();
+                    }else{
+                        $("#getImg").hide();
+                    }
                 }
             }
         },
@@ -595,8 +603,10 @@ function appendTitle(container, title,ID){
 								<span class="glyphicon glyphicon-cloud-upload"></span>Clowder
 							</a>
 						<h4>ID: ` + ID +`</h4>
-						<button class="btn btn-default" id="getComment">get comments</button>
-						<button class="btn btn-default" id="getImg">Collect Images</button>`);
+						<button class="btn btn-default favicon-button" id="getComment">
+						    <i class="fas fa-comments"></i></button>
+						<button class="btn btn-default favicon-button" id="getImg">
+						    <i class="fas fa-image"></i></button>`);
 
     $("#getComment").on('click',function(e){
         e.preventDefault();
