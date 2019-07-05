@@ -8,6 +8,12 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
             $("#reddit-expand").modal({show: true});
         });
 
+        // for image crawling
+        $("#getImg").on("click", function(e) {
+            e.preventDefault();
+            $("#image-crawler").modal({show: true});
+        });
+
         // list dropdown menu
         $.ajax({
             type: 'POST',
@@ -102,13 +108,28 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                 $("#selectFilePreview-container").show();
                                 $("#selectFileHeader-container").show();
 
-                                // offer crawling for reddit comments modal
+
+                                // offer image crawling
                                 if (directory === 'reddit-Post'
                                     || directory === 'reddit-Historical-Post'
-                                    || directory === 'reddit-Search') {
-                                    $("#getComment").show();
-                                } else {
-                                    $("#getComment").hide();
+                                    || directory === 'reddit-Search'
+                                    || directory === 'crimson-Hexagon'
+                                    || directory === 'twitter-Tweet'
+                                    || directory === 'twitter-Timeline'
+                                    || directory === 'twitter-Stream'){
+                                    $("#getImg").show();
+
+                                    // offer crawling for reddit comments modal
+                                    if (directory === 'reddit-Post'
+                                        || directory === 'reddit-Historical-Post'
+                                        || directory === 'reddit-Search') {
+                                        $("#getComment").show();
+                                    } else {
+                                        $("#getComment").hide();
+                                    }
+                                }
+                                else{
+                                    $("#getImg").hide();
                                 }
                             }
                         }

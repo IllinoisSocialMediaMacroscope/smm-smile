@@ -516,7 +516,7 @@ function submitHistory(folderURL){
                         google.charts.setOnLoadCallback(drawWordTree(data.wordtree.name,data.wordtree.content,data.wordtree.root));
                     }
 
-                    if ('expandable' in data && data.expandable != undefined){
+                    if ('expandable' in data && data.expandable !== undefined){
                         $(".dataset").val(data.expandable);
                         $(".length").val(data.length);
                         $("#getComment").show();
@@ -595,11 +595,18 @@ function appendTitle(container, title,ID){
 								<span class="glyphicon glyphicon-cloud-upload"></span>Clowder
 							</a>
 						<h4>ID: ` + ID +`</h4>
-						<button class="btn btn-default" id="getComment">get comments</button>`);
+						<button class="btn btn-default" id="getComment">get comments</button>
+						<button class="btn btn-default" id="getImg">Collect Images</button>`);
 
     $("#getComment").on('click',function(e){
         e.preventDefault();
         $("#reddit-expand").modal('show');
+    });
+
+    // for image crawling
+    $("#getImg").on("click", function(e) {
+        e.preventDefault();
+        $("#image-crawler").modal({show: true});
     });
 
     $("#clowder-history-panel").on('click',function(e){
