@@ -602,11 +602,13 @@ function appendTitle(container, title,ID){
 							<a class="btn btn-danger" href="" id="clowder-history-panel">
 								<span class="glyphicon glyphicon-cloud-upload"></span>Clowder
 							</a>
-						<h4>ID: ` + ID +`</h4>
-						<button class="btn btn-default favicon-button" id="getComment">
-						    <i class="fas fa-comments"></i></button>
-						<button class="btn btn-default favicon-button" id="getImg">
-						    <i class="fas fa-image"></i></button>`);
+							<button class="btn btn-default favicon-button" id="getComment">
+						        <i class="fas fa-comments"></i>&nbsp;Comment
+						    </button>
+						    <button class="btn btn-default favicon-button" id="getImg">
+						        <i class="fas fa-image"></i>&nbsp;Image
+						    </button>
+						<h4>ID: ` + ID +`</h4>`);
 
     $("#getComment").on('click',function(e){
         e.preventDefault();

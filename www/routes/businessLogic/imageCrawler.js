@@ -3,16 +3,15 @@ var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js')).submit_Batchjob;
-var list_folders = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_folders;
+var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
 
 router.post('/image-crawler',function(req,res,next){
-    list_folders(req.body.prefix).then((data) =>{
+    list_files(req.body.prefix).then((data) =>{
 
         // check if img already exist or not
         var exist = false;
-        for (folder in data){
-            console.log(folder);
-            if (folder === 'img'){
+        for (filename in data){
+            if (filename === 'images.zip'){
                 exist = true;
             }
         }

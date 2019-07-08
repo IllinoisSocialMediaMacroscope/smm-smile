@@ -48,17 +48,29 @@ router.post('/history', function (req, res, next) {
                         var preview_arr = CSV.parse(preview_string).slice(0, 1001);
                         config_data.fields = preview_arr[0];
 
-                        res.send({
+                        var data =
+                        {
                             title: 'Social Media Past Search Result',
-                            expandable: req.body.folderURL,
-                            crawlImage: req.body.folderURL,
                             ID: req.body.folderURL,
                             download: download,
                             preview: [{name: "Preview the .csv file", content: preview_arr, dataTable: true}],
                             length: preview_arr.length - 1, // display in the expand comments modal
                             config: config_data,
                             uid: arrURL[3]
-                        });
+                        };
+
+                        if (arrURL[2] === 'reddit-Search' || arrURL[2] === 'reddit-Post' || arrURL[2] === 'reddit-Historical-Post'){
+                            data['expandable'] = req.body.folderURL;
+                        }
+
+                        if (arrURL[2] === 'reddit-Search' || arrURL[2] === 'reddit-Post'
+                            || arrURL[2] === 'reddit-Historical-Post' || arrURL[2] === 'twitter-Tweet'
+                            || arrURL[2] === 'twitter-Timeline' || arrURL[2] === 'twitter-Stream'
+                            || arrURL === 'crimson-Hexagon'){
+                            data['crawlImage'] = req.body.folderURL;
+                        }
+
+                        res.send(data);
 
                     });
 
