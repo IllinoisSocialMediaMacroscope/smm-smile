@@ -115,8 +115,7 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                     || directory === 'reddit-Search'
                                     || directory === 'crimson-Hexagon'
                                     || directory === 'twitter-Tweet'
-                                    || directory === 'twitter-Timeline'
-                                    || directory === 'twitter-Stream'){
+                                    || directory === 'twitter-Timeline'){
                                     $("#getImg").show();
 
                                     // offer crawling for reddit comments modal

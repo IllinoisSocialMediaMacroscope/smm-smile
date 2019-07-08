@@ -137,6 +137,11 @@ function submitSearchbox(searchboxID, filenameID){
 									geo_enabled
 									author_lang
 								  }
+								  entities{
+								  	media{
+								  		media_url
+								  	}
+								  }
 								}
 							  }
 							}
@@ -189,6 +194,11 @@ function submitSearchbox(searchboxID, filenameID){
 									contributors_enabled
 									geo_enabled
 									author_lang
+								  }
+								  entities{
+								  	media{
+								  		media_url
+								  	}
 								  }
 								}
 							  }

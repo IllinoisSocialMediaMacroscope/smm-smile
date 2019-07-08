@@ -65,8 +65,7 @@ router.post('/history', function (req, res, next) {
 
                         if (arrURL[2] === 'reddit-Search' || arrURL[2] === 'reddit-Post'
                             || arrURL[2] === 'reddit-Historical-Post' || arrURL[2] === 'twitter-Tweet'
-                            || arrURL[2] === 'twitter-Timeline' || arrURL[2] === 'twitter-Stream'
-                            || arrURL === 'crimson-Hexagon'){
+                            || arrURL[2] === 'twitter-Timeline' || arrURL === 'crimson-Hexagon'){
                             data['crawlImage'] = req.body.folderURL;
                         }
 

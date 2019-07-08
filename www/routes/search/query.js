@@ -112,7 +112,7 @@ router.post('/query', function (req, res, next) {
                         var processed = req.body.filename + '.csv';
                         var promise_csv = new Promise((resolve, reject) => {
                             jsonexport(jsonObj[req.body.prefix], {
-                                fillGaps: false,
+                                fillGaps: true,
                                 undefinedString: 'NaN'
                             }, function (err, csv) {
                                 if (err) reject(err);

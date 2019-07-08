@@ -83,8 +83,8 @@ function init(){
 			`\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
 			`\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
 			`\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
-			`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang`+
-			`\n\t\t\t}\n\t\t\t`;
+			`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang\n\t\t\t}`+
+			`\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
 			
 			parameters['twtTimeline']['screen_name:'] = keyword;
 			parameters['twtTimeline']['count:'] = 200;
@@ -95,8 +95,8 @@ function init(){
                 `\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
                 `\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
                 `\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
-                `\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang`+
-                `\n\t\t\t}\n\t\t\t`;
+                `\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang\n\t\t\t}`+
+                `\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
 				
 			parameters['es']['q:'] = keyword;
 			parameters['es']['perPage:'] =  1000;
@@ -444,7 +444,7 @@ function init(){
 	$("#twtTweetFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],AuthorInformation:[]};
+		fields = {BasicFields:[],AuthorInformation:[], Entities:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -461,6 +461,9 @@ function init(){
 				fields_string += '\n\t\t\t\t' + val;
 			});
 			fields_string += '\n\t\t\t}' ;
+		}
+		if (fields['Entities'].length !== 0){
+            fields_string += '\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}';
 		}
 		
 		parameters['tweet']['fields'] = fields_string;
@@ -624,6 +627,7 @@ function init(){
 				});
 				fields_string += '\n\t\t\t\t}' ;
 			}
+
 			fields_string += '\n\t\t\t}' ;
 		}
 		
@@ -665,7 +669,7 @@ function init(){
 	$("#twtTimelineFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],AuthorInformation:[]};
+		fields = {BasicFields:[],AuthorInformation:[], Entities:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -682,6 +686,10 @@ function init(){
                 fields_string += '\n\t\t\t\t' + val;
             });
             fields_string += '\n\t\t\t}' ;
+        }
+
+        if (fields['Entities'].length !== 0){
+            fields_string += '\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}';
         }
 		
 		parameters['twtTimeline']['fields'] = fields_string;
