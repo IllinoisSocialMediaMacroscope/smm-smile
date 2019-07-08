@@ -11,7 +11,7 @@ function customized_reset() {
 function arrayToTable(array, tableID) {
 
     // set table head
-
+    var tableRowLength = array[0].length;
     var tableContent = `<div class="table-responsive"><table class="table table-striped table-bordered" id=` + tableID.slice(1) + `><thead><tr>`;
     $.each(array[0], function (i, val) {
         /* the text fields are:  text(tweet), description(twtUser),
@@ -37,6 +37,7 @@ function arrayToTable(array, tableID) {
     // set table content
     $.each(array.slice(1), function (i, val) {
         tableContent += "<tr>";
+        var rowLength = 0 ;
         $.each(val, function (j, cval) {
             // trim the content to 140 character maximum
             if (cval === undefined || cval.length === 0) {
@@ -46,7 +47,16 @@ function arrayToTable(array, tableID) {
                 cval = cval.slice(0, 140) + '...';
             }
             tableContent += `<td>` + cval + "</td>"
+            rowLength = j;
         });
+
+        // fix bug
+        if (rowLength < tableRowLength -1){
+            for (var e = 0; e < (tableRowLength -1) - rowLength; e ++) {
+                tableContent += `<td></td>`;
+            }
+        }
+
         tableContent += "</tr>";
     });
     tableContent += "</tbody></table></div>"
@@ -494,6 +504,22 @@ function submitHistory(folderURL){
                         appendTitle("#title-container",data.title,data.ID);
                     }
 
+                    if ('expandable' in data && data.expandable !== undefined){
+                        $(".dataset").val(data.expandable);
+                        $(".length").val(data.length);
+                        $("#getComment").show();
+                    }else{
+                        $("#getComment").hide();
+                    }
+
+                    if ('crawlImage' in data && data.crawlImage !== undefined){
+                        $(".dataset").val(data.crawlImage);
+                        $(".length").val(data.length);
+                        $("#getImg").show();
+                    }else{
+                        $("#getImg").hide();
+                    }
+
                     if('config' in data || 'donwload' in data){
                         appendOverview("#overview-container",data.config,data.download);
                     }
@@ -514,22 +540,6 @@ function submitHistory(folderURL){
                     if('wordtree' in data){
                         // draw word tree for preprocessing
                         google.charts.setOnLoadCallback(drawWordTree(data.wordtree.name,data.wordtree.content,data.wordtree.root));
-                    }
-
-                    if ('expandable' in data && data.expandable !== undefined){
-                        $(".dataset").val(data.expandable);
-                        $(".length").val(data.length);
-                        $("#getComment").show();
-                    }else{
-                        $("#getComment").hide();
-                    }
-
-                    if ('crawlImage' in data && data.crawlImage !== undefined){
-                        $(".dataset").val(data.crawlImage);
-                        $(".length").val(data.length);
-                        $("#getImg").show();
-                    }else{
-                        $("#getImg").hide();
                     }
                 }
             }
