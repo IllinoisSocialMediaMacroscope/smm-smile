@@ -138,7 +138,7 @@
       "trigger_id": "tagger",
       "content": [
         {
-          "text": "<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=NLTK%3A+the+natural+language+toolkit.+In+Proceedings+of+the+COLING%2FACL+on+Interactive++++++++presentation+sessions+%28pp.+69-72%29.+Association+for+Computational+Linguistics&btnG=\" target=\"_blank\">Bird, S. (2006, July). NLTK: the natural language toolkit. In Proceedings of the COLING/ACL on Interactivepresentation sessions (pp. 69-72). Association for Computational Linguistics.</a>",
+          "text": ["<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=NLTK%3A+the+natural+language+toolkit.+In+Proceedings+of+the+COLING%2FACL+on+Interactive++++++++presentation+sessions+%28pp.+69-72%29.+Association+for+Computational+Linguistics&btnG=\" target=\"_blank\">Bird, S. (2006, July). NLTK: the natural language toolkit. In Proceedings of the COLING/ACL on Interactivepresentation sessions (pp. 69-72). Association for Computational Linguistics.</a>"],
           "condition": "posTag"
         }
       ]

@@ -115,7 +115,7 @@
       "trigger_id": "algorithm",
       "content": [
         {
-          "text": "Rehurek, R., & Sojka, P. (2010). Software framework for topic modelling with large corpora. In <i>In Proceedings of the LREC 2010 Workshop on New Challenges for NLP Frameworks.</i> <a href=\"https://is.muni.cz/repo/884893/lrec2010-rehurek-sojka.pdf\" target=\"_blank\">https://is.muni.cz/repo/884893/lrec2010-rehurek-sojka.pdf</a>",
+          "text": ["Rehurek, R., & Sojka, P. (2010). Software framework for topic modelling with large corpora. In <i>In Proceedings of the LREC 2010 Workshop on New Challenges for NLP Frameworks.</i> <a href=\"https://is.muni.cz/repo/884893/lrec2010-rehurek-sojka.pdf\" target=\"_blank\">https://is.muni.cz/repo/884893/lrec2010-rehurek-sojka.pdf</a>"],
           "condition": "gensimLDA"
         }
       ]

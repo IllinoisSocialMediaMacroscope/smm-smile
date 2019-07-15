@@ -190,7 +190,7 @@
       "trigger_id": "layout",
       "content": [
         {
-          "text": "<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Exploring+network+structure%2C+dynamics%2C+and+function+using+NetworkX&btnG=\" target=\"_blank\">Hagberg, A., Swart, P., & S Chult, D. (2008). Exploring network structure, dynamics,and function using NetworkX (No. LA-UR-08-05495; LA-UR-08-5495). Los Alamos National Laboratory (LANL).</a><i>Large networks will be pruned to only display the 500 nodes with the highest degree centrality.</i>",
+          "text": ["<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Exploring+network+structure%2C+dynamics%2C+and+function+using+NetworkX&btnG=\" target=\"_blank\">Hagberg, A., Swart, P., & S Chult, D. (2008). Exploring network structure, dynamics,and function using NetworkX (No. LA-UR-08-05495; LA-UR-08-5495). Los Alamos National Laboratory (LANL).</a><i>Large networks will be pruned to only display the 500 nodes with the highest degree centrality.</i>"],
           "condition": "!"
         }
       ]
