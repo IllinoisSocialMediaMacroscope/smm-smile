@@ -176,41 +176,43 @@ function history_routes_template(req, config) {
                 // this might be slow since we are fetching everything
                 // in theory we only need to fetch image and previews
                 var promise_array = [];
+                var promise_array_acronym = [];
                 var resultConfig = config.results;
+                var download = [];
                 for (var i = 0; i < resultConfig.length; i++) {
                     for (var j = 0; j < Object.keys(results).length; j++) {
                         if (Object.keys(results)[j].split(".")[0] === resultConfig[i]['acronym']) {
                             var fname = Object.keys(results)[j];
                             var url = results[fname];
+                            if (resultConfig[i]["download"]) {
+                                download.push({
+                                    name: resultConfig[i]['name'],
+                                    content: url
+                                })
+                            }
+                            // record the order of collected
+                            promise_array_acronym.push(fname);
                             promise_array.push(getMultiRemote(url));
                         }
                     }
                 }
                 Promise.all(promise_array).then(values => {
                     // put together data to send
-                    var download = [];
                     var preview = [];
                     var config_data;
                     var img = [];
                     var wordtree;
 
                     for (var i = 0; i < resultConfig.length; i++) {
-                        for (var j = 0; j < Object.keys(results).length; j++) {
-                            if (Object.keys(results)[j].split(".")[0] === (resultConfig[i]['acronym'])) {
-                                if (resultConfig[i]["download"]) {
-                                    download.push({
-                                        name: resultConfig[i]["name"],
-                                        content: results[Object.keys(results)[j]]
-                                    })
-                                }
-
+                        for (var j = 0; j < promise_array_acronym.length; j++) {
+                            if (promise_array_acronym[j].split(".")[0] === (resultConfig[i]['acronym'])) {
                                 if (resultConfig[i]["config"]) {
-                                    config_data = JSON.parse(values[i]);
+                                    config_data = JSON.parse(values[j]);
                                 }
 
                                 if (resultConfig[i]["preview"]) {
                                     // sort string to array
-                                    var preview_arr = CSV.parse(values[i]).slice(0, 1001);
+                                    var preview_arr = CSV.parse(values[j]).slice(0, 1001);
                                     if (resultConfig[i]["dataTable"] !== undefined)
                                         preview.push({
                                             name: resultConfig[i]["name"],
@@ -220,7 +222,7 @@ function history_routes_template(req, config) {
                                     else {
                                         preview.push({
                                             name: resultConfig[i]["name"],
-                                            content: values[i],
+                                            content: values[j],
                                             dataTable: false
                                         })
                                     }
@@ -229,16 +231,16 @@ function history_routes_template(req, config) {
                                 if (resultConfig[i]["img"]) {
                                     img.push({
                                         name: resultConfig[i]["name"],
-                                        content: values[i]
+                                        content: values[j]
                                     })
                                 }
 
                                 if ("wordtree" in resultConfig[i] && resultConfig[i]["wordtree"]) {
-                                    var phrase_array = values[i].toString().split("\n");
+                                    var phrase_array = values[j].toString().split("\n");
                                     var new_phrase_array = [];
-                                    for (var j = 0, length = phrase_array.length; j < length; j++) {
+                                    for (var k = 0, length = phrase_array.length; k < length; k++) {
                                         //add [] to make it comply with google word tree requirement
-                                        new_phrase_array.push([phrase_array[j]]);
+                                        new_phrase_array.push([phrase_array[k]]);
                                     }
                                     wordtree = {
                                         name: resultConfig[i]["name"],

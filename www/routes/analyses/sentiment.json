@@ -124,7 +124,7 @@
         },
         {
           "text":["Speer, R., Chin, J., & Havasi, C. (2017, February). Conceptnet 5.5: An open multilingual graph of general knowledge. In Thirty-First AAAI Conference on Artificial Intelligence.",
-            "Speer, R. (2017). How to make a racist AI without really trying. <a href=\"http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying\" target=\"_blank\">http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying</a>"],
+            "Speer, R. (2017). How to make a racist AI without really trying. <a href=\"http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-tryinghttp://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying"],
           "condition": "debias"
         }
       ]
