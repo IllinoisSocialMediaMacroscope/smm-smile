@@ -221,28 +221,29 @@ const redditQueryType = module.exports = new GraphQLObjectType({
 			resolve: (_,args,context) => pushshiftAPI(context, resolveName = 'pushshiftComment', id='', args = args)
 		},
 		pushshiftPost:{
-			type: new GraphQLList(pushshiftMetaType),
+			// type: new GraphQLList(pushshiftMetaType),
+			type: new GraphQLList(pushshiftPostType),
 			description:'partial historical database at https://github.com/pushshift/api',
 			args:{
 				q: 			{type:GraphQLString},
 				size:		{type:GraphQLInt,
-								defaultValue:1000},
+								defaultValue:500},
 				sort:		{type:GraphQLString,
-					defaultValue:'score:desc'},
-				/*sort_type:	{type:GraphQLString,
-					defaultValue:'score'},*/
+								defaultValue:'score:desc'},
+				sort_type:	{type:GraphQLString,
+								defaultValue:'score'},
 				subreddit:	{type:GraphQLString},
 				author:		{type:GraphQLString},
 				after:		{type:GraphQLInt},
 				before:		{type:GraphQLInt},
 				score:		{type:GraphQLInt},
 				num_comments:	{type:GraphQLInt},
-				/*over_18: 	{type:GraphQLBoolean,
+				over_18: 	{type:GraphQLBoolean,
 								defaultValue:false},
 				is_video:	{type:GraphQLBoolean},
 				locked:		{type:GraphQLBoolean},
 				stickied:	{type:GraphQLBoolean},
-				spoiler:	{type:GraphQLBoolean},*/
+				spoiler:	{type:GraphQLBoolean},
 			},
 			resolve: (_,args,context) => pushshiftAPI(context, resolveName = 'pushshiftPost', id='', args = args)
 		},
@@ -253,4 +254,5 @@ const subreddditType = require('./reddit-type/subredditType');
 const redditLinkType = require('./reddit-type/redditLinkType');
 const redditCommentType = require('./reddit-type/redditCommentType');
 const pushshiftCommentType = require('./reddit-type/pushshiftCommentType');
-const pushshiftMetaType = require('./reddit-type/pushshiftPostType');
+const pushshiftPostType = require('./reddit-type/pushshiftPostType');
+// const pushshiftMetaType = require('./reddit-type/pushshiftPostType');
