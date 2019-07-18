@@ -369,32 +369,26 @@ function submitSearchbox(searchboxID, filenameID){
 		var queryString = `{
 								reddit{
 									pushshiftPost(q:"`+ keyword + `"){
-										_id
-										_type
-										_index
-										_score
-										_source{
-											author_name
-											created_utc
-											domain
-											id
-											is_self
-											locked
-											num_comments
-											over_18
-											permalink
-											full_link
-											pinned
-											retrieved_on
-											score
-											stickied
-											spoiler
-											subreddit_display_name
-											subreddit_id
-											subreddit_name_prefixed
-											title
-											url
-										}
+										author_name
+										created_utc
+										domain
+										id
+										is_self
+										locked
+										num_comments
+										over_18
+										permalink
+										full_link
+										pinned
+										retrieved_on
+										score
+										stickied
+										spoiler
+										subreddit_display_name
+										subreddit_id
+										subreddit_name_prefixed
+										title
+										url
 									}
 								}
 							}`;

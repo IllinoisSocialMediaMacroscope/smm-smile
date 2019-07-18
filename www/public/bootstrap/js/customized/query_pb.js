@@ -138,10 +138,10 @@ function init(){
 			
 			parameters['psPost']['q:'] = keyword;
 			parameters['psPost']['size:'] = 1000;
-			parameters['psPost']['fields']=`\n\t\t\t_index\n\t\t\t_id\n\t\t\t_type\n\t\t\t_score\n\t\t\t_source{\n\t\t\t\tauthor_name\n\t\t\t\tcreated_utc`+
-			`\n\t\t\t\tdomain\n\t\t\t\tid\n\t\t\t\tis_self\n\t\t\t\tlocked\n\t\t\t\tnum_comments\n\t\t\t\tover_18\n\t\t\t\tpermalink\n\t\t\t\tfull_link`+
-			`\n\t\t\t\tpinned\n\t\t\t\tretrieved_on\n\t\t\t\tscore\n\t\t\t\tstickied\n\t\t\t\tspoiler\n\t\t\t\tsubreddit_display_name\n\t\t\t\tsubreddit_id`+
-			`\n\t\t\t\tsubreddit_name_prefixed\n\t\t\t\ttitle\n\t\t\t\turl\n\t\t\t}`;
+			parameters['psPost']['fields']=`\n\t\t\tauthor_name\n\t\t\tcreated_utc`+
+			`\n\t\t\tdomain\n\t\t\tid\n\t\t\tis_self\n\t\t\tlocked\n\t\t\tnum_comments\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tfull_link`+
+			`\n\t\t\tpinned\n\t\t\tretrieved_on\n\t\t\tscore\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id`+
+			`\n\t\t\tsubreddit_name_prefixed\n\t\t\ttitle\n\t\t\turl`;
 				
 			parameters['psComment']['q:'] = keyword;
 			parameters['psComment']['fields']=`\n\t\t\tcomment_author_name\n\t\t\tbody\n\t\t\tcomment_created\n\t\t\tid\n\t\t\tlink_id\n\t\t\tparent_id`+
@@ -538,9 +538,9 @@ function init(){
 			}
 		
 		}else{
-			parameters['es']['lat:'] =  ''
-			parameters['es']['lon:'] =  ''
-			parameters['es']['distance:'] =  ''
+			parameters['es']['lat:'] =  '';
+			parameters['es']['lon:'] =  '';
+			parameters['es']['distance:'] =  '';
 			$(".form-group.es-geocode").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
@@ -851,25 +851,17 @@ function init(){
 	$("#psPostFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],psMetadata:[]};
+		fields = {BasicFields:[]};
 		$.each($(this).find(':selected'),function(i,val){
-			var label = $(val.parentNode)[0].label;
-			fields[label].push(val.value);
-			//fields_string += '\n\t\t\t' + val.value;
+            fields_string += '\n\t\t\t' + val.value;
 		});
-
-		if (fields['psMetadata'].length !== 0){
-			$.each(fields['psMetadata'],function(i,val){
-				fields_string += '\n\t\t\t' + val;
-			});
-		}
 
 		if(fields['BasicFields'].length !== 0){
 			fields_string += '\n\t\t\t_source{' ;
 			$.each(fields['BasicFields'],function(i,val){
 				fields_string += '\n\t\t\t\t' + val;
-			});	
-			fields_string += '\n\t\t\t}' ;	
+			});
+			fields_string += '\n\t\t\t}' ;
 		}
 		
 		parameters['psPost']['fields'] = fields_string;
