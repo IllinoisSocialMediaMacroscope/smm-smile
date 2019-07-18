@@ -10,19 +10,19 @@ var {
 var redditAPI = require('../../../API/redditAPI');
 //var replyLoader = require('../../../API/loader');
 
-const pushshiftMetaType = module.exports = new GraphQLObjectType({
-	name:'pushshiftMeta',
-	description:'',
-	fields: () => ({
-		_index: 	{type: GraphQLString},
-		_type:		{type: GraphQLString},
-		_id:		{type: GraphQLInt},
-		_score:		{type: GraphQLInt},
-		_source:	{type: pushshiftPostType}	
-	})
-});
+// const pushshiftMetaType = module.exports = new GraphQLObjectType({
+// 	name:'pushshiftMeta',
+// 	description:'',
+// 	fields: () => ({
+// 		_index: 	{type: GraphQLString},
+// 		_type:		{type: GraphQLString},
+// 		_id:		{type: GraphQLInt},
+// 		_score:		{type: GraphQLInt},
+// 		_source:	{type: pushshiftPostType}
+// 	})
+// });
 
-const pushshiftPostType = new GraphQLObjectType({
+const pushshiftPostType = module.exports = new GraphQLObjectType({
 	name:'pushshiftPost',
 	description:'',
 	fields: () => ({
