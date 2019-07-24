@@ -123,8 +123,8 @@
           "condition": "sentiWordNet"
         },
         {
-          "text":["Speer, R., Chin, J., & Havasi, C. (2017, February). Conceptnet 5.5: An open multilingual graph of general knowledge. In Thirty-First AAAI Conference on Artificial Intelligence.",
-            "Speer, R. (2017). How to make a racist AI without really trying. <a href=\"http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-tryinghttp://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying"],
+          "text":["Speer, R., Chin, J., & Havasi, C. (2017, February). Conceptnet 5.5: An open multilingual graph of general knowledge. In Thirty-First AAAI Conference on Artificial Intelligence. <a href=\"https://aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14972/14051\" target=\"_blank\">https://aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14972/14051</a>",
+            "Speer, R. (2017). How to make a racist AI without really trying. <a href=\"http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying\" target=\"_blank\">http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying</a>"],
           "condition": "debias"
         }
       ]
