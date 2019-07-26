@@ -141,7 +141,7 @@ block config-form
                             li Yun, J. T., Vance, N., Wang, C., Troy, J., Marini, L., Booth, R., Nelson, T., Hetrick, A., Hodgekins, H. (2018).
                                 |  The Social Media Macroscope. In Gateways 2018.&nbsp<a href="https://doi.org/10.6084/m9.figshare.6855269.v2" target="_blank">
                                 |  https://doi.org/10.6084/m9.figshare.6855269.v2</a>
-                            li(id="custom-citation-notice")
+                            div(id="custom-citation-notice")
                             script.
                                 var citation = !{JSON.stringify(param.get.citation)};
                                 $("#" + citation.trigger_id).on('change', function () {
@@ -151,11 +151,13 @@ block config-form
                                     var trigger = $(this).children(":selected").val();
                                     $(citation.content).each(function(i, item){
                                         if (item.condition === "!" && trigger !== "Please Select...") {
-                                            $("#custom-citation-notice").append(item.text);
+                                            $("#custom-citation-notice").append(`<li>` + item.text + `</li>`);
                                             $("#citation-container").show();
                                         }
                                         else if (trigger === item.condition){
-                                            $("#custom-citation-notice").append(item.text);
+                                            $(item.text).each(function(j, ref){
+                                                $("#custom-citation-notice").append(`<li>` + ref + `</li>`);
+                                            });
                                             $("#citation-container").show();
                                         }
                                     });

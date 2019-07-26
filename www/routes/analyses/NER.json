@@ -98,7 +98,7 @@
       "trigger_id": "algorithm",
       "content": [
         {
-          "text": "Mishra, S., & Diesner, J. (2016). <a href=\"http://www.aclweb.org/anthology/W16-3927\" target=\"_blank\">Semi-supervised Named Entity Recognition in noisy-text.</a> In Proceedings of the 2nd Workshop on Noisy User-generated Text (WNUT) (pp. 203-212).",
+          "text": ["Mishra, S., & Diesner, J. (2016). <a href=\"http://www.aclweb.org/anthology/W16-3927\" target=\"_blank\">Semi-supervised Named Entity Recognition in noisy-text.</a> In Proceedings of the 2nd Workshop on Noisy User-generated Text (WNUT) (pp. 203-212)."],
           "condition": "twitterNER"
         }
       ]
