@@ -10,11 +10,13 @@ var s3 = new AWS.S3();
 var fs = require('fs');
 
 function uploadToS3(localFile, remoteKey){
-	
+	// make sure no space in file object in S3
+	remoteKey = remoteKey.replace(/\s+/g, "_");
+
 	return new Promise((resolve, reject) =>{
 				var buffer = fs.readFileSync(localFile);
-				var param = {Bucket:'macroscope-smile', 
-					Key: remoteKey, 
+				var param = {Bucket:'macroscope-smile',
+					Key: remoteKey,
 					Body: buffer,
 					ContentType:mime.getType(localFile)
 				};
