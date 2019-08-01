@@ -157,6 +157,12 @@ h3 {
 	color:black;
 }
 
+#datasrc-criteria-hint{
+	color:#418bca;
+	font-style:italic;
+	font-size:12px;
+}
+
 #datasrc-criteria{
 	color:red;
 	font-style:italic;

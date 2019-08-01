@@ -121,7 +121,28 @@ function processData(csv) {
     $(previewLines).each(function (i, val) {
         previewLinesWords.push($.csv.toArray(val));
     });
-
+    // detect Category based on the first line
+    $("#datasrc-criteria-hint").text("");
+    console.log(previewLinesWords[0].indexOf('text'));
+    if (previewLinesWords[0].indexOf('text') > 0 ||  previewLinesWords[0].indexOf('user.description') > 0 ){
+        $("#datasrc-criteria-hint").html("<p>Based on the column of your imported file, it is likely that you uploaded a " +
+            "<u>Tweet</u> dataset or <u>Twitter User Timeline</u> dataset.</p>")
+    }
+    else if (previewLinesWords[0].indexOf('title') > 0 || previewLinesWords[0].indexOf('description') > 0){
+        $("#datasrc-criteria-hint").html("<p>Based on the column of your imported file, it is likely that you uploaded a " +
+            "<u>Reddit Post (Submission)</u> dataset.</p>")
+    }
+    else if (previewLinesWords[0].indexOf('body') > 0 ){
+        $("#datasrc-criteria-hint").html("<p>Based on the column of your imported file, it is likely that you uploaded a " +
+            "<u>Reddit Comment</u> dataset.</p>")
+    }
+    else if (previewLinesWords[0].indexOf('contents') > 0){
+        $("#datasrc-criteria-hint").html("<p>Based on the column of your imported file, it is likely that you uploaded a " +
+            "<u>Crimson Hexagon</u> dataset.</p>")
+    }
+    else{
+        $("#datasrc-criteria-hint").html("<p>We cannot detect the file category, make sure you choose <u>Others</u> in the category.</p>")
+    }
     // set preview
     $("#import-cloud-preview").empty();
     $("#import-cloud-preview").append(arrayToTable(previewLinesWords, ""));

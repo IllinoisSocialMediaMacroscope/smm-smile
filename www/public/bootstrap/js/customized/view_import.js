@@ -5,7 +5,7 @@ $("#datasrc-category").on("change", function(){
 
     var selectedItem = $(this).find("option:selected").val();
 
-    if (selectedItem === 'twitter-Tweet' || selecedItem === 'twitter-Timeline'){
+    if (selectedItem === 'twitter-Tweet' || selectedItem === 'twitter-Timeline'){
         $("#datasrc-criteria").html("<p>Make sure your file has column <u>text</u> and/or column <u>user.description</u>.</p>")
     }
     else if (selectedItem === 'reddit-Post') {
