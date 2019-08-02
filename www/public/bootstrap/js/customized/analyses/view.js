@@ -170,12 +170,18 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                     }
                                 });
                             }
-                            if ($(".length").val() === undefined) {
+                            if ($("#aws-batch").find(".length").val() === undefined) {
                                 $("#modal-message").val("Cannot perform analysis on this dataset. Check if it exists!");
                                 $("#alert").modal('show');
                             }
                             else if ($(".length").val() <= cutOff) {
-                                ajaxSubmit(`#analytics-config`, 'lambda');
+                                // special case for sentiment classification
+                                if ($("#algorithm").val() === "debias"){
+                                    $("#aws-batch").modal('show');
+                                }
+                                else{
+                                    ajaxSubmit(`#analytics-config`, 'lambda');
+                                }
                             }
                             else {
                                 $("#aws-batch").modal('show');
