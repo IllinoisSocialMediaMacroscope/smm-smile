@@ -28,10 +28,10 @@ $("#auth-next").on("click", function(){
     });
 
     if (flag){
-        $("#auth-alert").show();
+        $("#modal-message").append(`<h4>You need to authorize at least one social media account!</h4>`);
+        $("#alert").modal('show');
     }
     else{
-        $("#auth-alert").hide();
         $("#auth-panel").hide();
         $("#searchPage").show();
     }
