@@ -1,11 +1,22 @@
-var platforms = ['twitter', 'reddit', 'crimson'];
+$(document).ready(function(){
+    var platforms = ['twitter', 'reddit', 'crimson'];
+    $.each(platforms,function(i,platform){
+        if ($.cookie(platform+ "-success") === "true") {
+            console.log(platform);
+            $("#" + platform + "-auth").find('img').show();
 
-$.each(platforms,function(i,platform){
-    if (platform === 'twitter'){
-        // newPath has already been calculated in the parse_session.js
-        $(".twitter-auth").find('a').attr("href","login/twitter?currentURL=" + newPath);
-	}
-	checkAuthState(platform);
+            if (platform === 'twitter'){
+                $("#social-media option[value='queryTweet']").removeAttr('disabled');
+                $("#social-media option[value='getTimeline']").removeAttr('disabled');
+            }else if (platform === 'reddit'){
+                $("#social-media option[value='queryReddit']").removeAttr('disabled');
+                $("#social-media option[value='redditPost']").removeAttr('disabled');
+                $("#social-media option[value='redditComment']").removeAttr('disabled');
+            }else if (platform === 'crimson'){
+                $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
+            }
+        }
+    });
 });
 
 // post the pin to retreive access key and token
@@ -130,25 +141,6 @@ $("#crimson-auth-submit").on('click', function () {
         }
     });
 });
-
-function checkAuthState(platform){
-    if ($.cookie(platform+ "-success") === "true") {
-        // click the icon to authorize hide
-        $("#" + platform + "-callback").modal("hide");
-        $("#" + +platform + "-auth").find('img').show();
-    }
-
-    if (platform === 'twitter'){
-        $("#social-media option[value='queryTweet']").removeAttr('disabled');
-        $("#social-media option[value='getTimeline']").removeAttr('disabled');
-    }else if (platform === 'reddit'){
-        $("#social-media option[value='queryReddit']").removeAttr('disabled');
-        $("#social-media option[value='redditPost']").removeAttr('disabled');
-        $("#social-media option[value='redditComment']").removeAttr('disabled');
-    }else if (platform === 'crimson'){
-        $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
-    }
-}
 
 $("#auth-next").on("click", function(){
     $("#auth-panel").hide();

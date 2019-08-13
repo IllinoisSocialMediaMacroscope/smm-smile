@@ -12,10 +12,8 @@ router.get('/login/twitter', function(req,res,next){
     // patch the oauth library node_modules/oauth/lib/oauth.js, line 540 add: extraParams["oauth_callback"]===undefined
 	consumer.getOAuthRequestToken({ 'oauth_callback': "oob"}, function(error, oauthToken, oauthTokenSecret, results){
     if (error) {
-		console.log(error);
-		res.redirect(req.query.currentURL + 'query?error=' + JSON.stringify(error));
-    } else {  
-		
+    	res.send({ERROR: JSON.stringify(error)});
+    } else {
 		req.session.twt_oauthRequestToken = oauthToken;
 		req.session.twt_oauthRequestTokenSecret = oauthTokenSecret;
 		req.session.save();
