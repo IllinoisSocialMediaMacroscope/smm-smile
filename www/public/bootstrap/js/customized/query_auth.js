@@ -1,37 +1,39 @@
-$(document).ready(function(){
+$(document).ready(function () {
     var platforms = ['twitter', 'reddit', 'crimson'];
-    $.each(platforms,function(i,platform){
-        if ($.cookie(platform+ "-success") === "true") {
+    $.each(platforms, function (i, platform) {
+        if ($.cookie(platform + "-success") === "true") {
             $("#" + platform + "-auth").find('img').show();
-
-            if (platform === 'twitter'){
+            if (platform === 'twitter') {
                 $("#social-media option[value='queryTweet']").removeAttr('disabled');
                 $("#social-media option[value='getTimeline']").removeAttr('disabled');
-            }else if (platform === 'reddit'){
+            } else if (platform === 'reddit') {
                 $("#social-media option[value='queryReddit']").removeAttr('disabled');
                 $("#social-media option[value='redditPost']").removeAttr('disabled');
                 $("#social-media option[value='redditComment']").removeAttr('disabled');
-            }else if (platform === 'crimson'){
+            } else if (platform === 'crimson') {
                 $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
             }
+
+            $("#unauthorized").find("." + platform + "-auth").hide();
+            $("#authorized").find("#" + platform + "-authorized").show();
         }
     });
 });
 
-$("#auth-next").on("click", function(){
+$("#auth-next").on("click", function () {
     var platforms = ['twitter', 'reddit', 'crimson'];
     var flag = true;
-    $.each(platforms,function(i,platform){
-        if ($.cookie(platform+ "-success") === "true") {
+    $.each(platforms, function (i, platform) {
+        if ($.cookie(platform + "-success") === "true") {
             flag = false;
         }
     });
 
-    if (flag){
+    if (flag) {
         $("#modal-message").append(`<h4>You need to authorize at least one social media account!</h4>`);
         $("#alert").modal('show');
     }
-    else{
+    else {
         $("#auth-panel").hide();
         $("#searchPage").show();
     }
@@ -53,9 +55,15 @@ $("#crimson-password").on('keyup', function (e) {
                     $("#error").val(JSON.stringify(data));
                     $("#warning").modal('show');
                 }
-                else{
+                else {
                     $("#crimson-callback").modal("hide");
                     $("#crimson-auth").find('img').show();
+
+                    $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
+
+                    $("#unauthorized").find(".crimson-auth").hide();
+                    $("#authorized").find("#crimson-authorized").show();
+
                 }
             },
             error: function (jqXHR, exception) {
@@ -78,9 +86,14 @@ $("#crimson-auth-submit").on('click', function () {
                 $("#error").val(JSON.stringify(data));
                 $("#warning").modal('show');
             }
-            else{
+            else {
                 $("#crimson-callback").modal("hide");
                 $("#crimson-auth").find('img').show();
+
+                $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
+
+                $("#unauthorized").find(".crimson-auth").hide();
+                $("#authorized").find("#crimson-authorized").show();
             }
         },
         error: function (jqXHR, exception) {
@@ -89,11 +102,11 @@ $("#crimson-auth-submit").on('click', function () {
         }
     });
 });
-$(".crimson-auth").find(".auth-button").on('click', function(e){
-	e.preventDefault();
+$(".crimson-auth").find(".auth-button").on('click', function (e) {
+    e.preventDefault();
     $("#crimson-callback").modal('show');
 });
-$(".crimson-auth").find("#crimson-icon-button").on('click', function(e){
+$(".crimson-auth").find("#crimson-icon-button").on('click', function (e) {
     e.preventDefault();
     $("#crimson-callback").modal('show');
 });
@@ -111,9 +124,15 @@ $("#twitter-pin-submit").on('click', function () {
                 $("#error").val(JSON.stringify(data));
                 $("#warning").modal('show');
             }
-            else{
+            else {
                 $("#twitter-callback").modal("hide");
                 $("#twitter-auth").find('img').show();
+
+                $("#social-media option[value='queryTweet']").removeAttr('disabled');
+                $("#social-media option[value='getTimeline']").removeAttr('disabled');
+
+                $("#unauthorized").find(".twitter-auth").hide();
+                $("#authorized").find("#twitter-authorized").show();
             }
         },
         error: function (jqXHR, exception) {
@@ -133,9 +152,15 @@ $("#twitter-pin").on('keyup', function (e) {
                     $("#error").val(JSON.stringify(data));
                     $("#warning").modal('show');
                 }
-                else{
+                else {
                     $("#twitter-callback").modal("hide");
                     $("#twitter-auth").find('img').show();
+
+                    $("#social-media option[value='queryTweet']").removeAttr('disabled');
+                    $("#social-media option[value='getTimeline']").removeAttr('disabled');
+
+                    $("#unauthorized").find(".twitter-auth").hide();
+                    $("#authorized").find("#twitter-authorized").show();
                 }
             },
             error: function (jqXHR, exception) {
@@ -145,23 +170,34 @@ $("#twitter-pin").on('keyup', function (e) {
         });
     }
 });
-$(".twitter-auth").find('a').on('click', function(){
-	$("#twitter-callback").modal('show');
+$(".twitter-auth").find('a').on('click', function () {
+    $("#twitter-callback").modal('show');
 });
 
 //***************************** REDDIT ******************************/
-$("#reddit-agree").on('click', function(){
+$("#reddit-agree").on('click', function () {
     $.ajax({
-        type:'get',
-        url:'login/reddit',
-        success: function(data){
+        type: 'get',
+        url: 'login/reddit',
+        success: function (data) {
             if ('ERROR' in data) {
                 $("#error").val(JSON.stringify(data));
                 $("#warning").modal('show');
             }
-            else{
+            else {
+                // hide modal
                 $("#reddit-callback").modal("hide");
                 $("#reddit-auth").find('img').show();
+
+                // choose a data source
+                $("#social-media option[value='queryReddit']").removeAttr('disabled');
+                $("#social-media option[value='redditPost']").removeAttr('disabled');
+                $("#social-media option[value='redditComment']").removeAttr('disabled');
+
+                // move icon
+                $("#unauthorized").find(".reddit-auth").hide();
+                $("#authorized").find("#reddit-authorized").show();
+
             }
         },
         error: function (jqXHR, exception) {
@@ -170,6 +206,6 @@ $("#reddit-agree").on('click', function(){
         }
     });
 });
-$(".reddit-auth").find('a').on('click', function(){
-	$("#reddit-callback").modal('show');
+$(".reddit-auth").find('a').on('click', function () {
+    $("#reddit-callback").modal('show');
 });
