@@ -1,21 +1,27 @@
+function authorize(platform){
+    $("#" + platform + "-callback").modal("hide");
+    $("#" + platform + "-auth").find('img').show();
+    $("#unauthorized").find("." + platform + "-auth").hide();
+    $("#authorized").find("#" + platform + "-authorized").show();
+
+    if (platform === 'twitter') {
+        $("#social-media option[value='queryTweet']").removeAttr('disabled');
+        $("#social-media option[value='getTimeline']").removeAttr('disabled');
+    } else if (platform === 'reddit') {
+        $("#social-media option[value='queryReddit']").removeAttr('disabled');
+        $("#social-media option[value='redditPost']").removeAttr('disabled');
+        $("#social-media option[value='redditComment']").removeAttr('disabled');
+    } else if (platform === 'crimson') {
+        $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
+    }
+}
+
+
 $(document).ready(function () {
     var platforms = ['twitter', 'reddit', 'crimson'];
     $.each(platforms, function (i, platform) {
         if ($.cookie(platform + "-success") === "true") {
-            $("#" + platform + "-auth").find('img').show();
-            if (platform === 'twitter') {
-                $("#social-media option[value='queryTweet']").removeAttr('disabled');
-                $("#social-media option[value='getTimeline']").removeAttr('disabled');
-            } else if (platform === 'reddit') {
-                $("#social-media option[value='queryReddit']").removeAttr('disabled');
-                $("#social-media option[value='redditPost']").removeAttr('disabled');
-                $("#social-media option[value='redditComment']").removeAttr('disabled');
-            } else if (platform === 'crimson') {
-                $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
-            }
-
-            $("#unauthorized").find("." + platform + "-auth").hide();
-            $("#authorized").find("#" + platform + "-authorized").show();
+            authorize(platform);
         }
     });
 });
@@ -56,14 +62,7 @@ $("#crimson-password").on('keyup', function (e) {
                     $("#warning").modal('show');
                 }
                 else {
-                    $("#crimson-callback").modal("hide");
-                    $("#crimson-auth").find('img').show();
-
-                    $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
-
-                    $("#unauthorized").find(".crimson-auth").hide();
-                    $("#authorized").find("#crimson-authorized").show();
-
+                    authorize("crimson");
                 }
             },
             error: function (jqXHR, exception) {
@@ -87,13 +86,7 @@ $("#crimson-auth-submit").on('click', function () {
                 $("#warning").modal('show');
             }
             else {
-                $("#crimson-callback").modal("hide");
-                $("#crimson-auth").find('img').show();
-
-                $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
-
-                $("#unauthorized").find(".crimson-auth").hide();
-                $("#authorized").find("#crimson-authorized").show();
+                authorize("crimson");
             }
         },
         error: function (jqXHR, exception) {
@@ -125,14 +118,7 @@ $("#twitter-pin-submit").on('click', function () {
                 $("#warning").modal('show');
             }
             else {
-                $("#twitter-callback").modal("hide");
-                $("#twitter-auth").find('img').show();
-
-                $("#social-media option[value='queryTweet']").removeAttr('disabled');
-                $("#social-media option[value='getTimeline']").removeAttr('disabled');
-
-                $("#unauthorized").find(".twitter-auth").hide();
-                $("#authorized").find("#twitter-authorized").show();
+                authorize("twitter");
             }
         },
         error: function (jqXHR, exception) {
@@ -153,14 +139,7 @@ $("#twitter-pin").on('keyup', function (e) {
                     $("#warning").modal('show');
                 }
                 else {
-                    $("#twitter-callback").modal("hide");
-                    $("#twitter-auth").find('img').show();
-
-                    $("#social-media option[value='queryTweet']").removeAttr('disabled');
-                    $("#social-media option[value='getTimeline']").removeAttr('disabled');
-
-                    $("#unauthorized").find(".twitter-auth").hide();
-                    $("#authorized").find("#twitter-authorized").show();
+                    authorize("twitter");
                 }
             },
             error: function (jqXHR, exception) {
@@ -185,19 +164,7 @@ $("#reddit-agree").on('click', function () {
                 $("#warning").modal('show');
             }
             else {
-                // hide modal
-                $("#reddit-callback").modal("hide");
-                $("#reddit-auth").find('img').show();
-
-                // choose a data source
-                $("#social-media option[value='queryReddit']").removeAttr('disabled');
-                $("#social-media option[value='redditPost']").removeAttr('disabled');
-                $("#social-media option[value='redditComment']").removeAttr('disabled');
-
-                // move icon
-                $("#unauthorized").find(".reddit-auth").hide();
-                $("#authorized").find("#reddit-authorized").show();
-
+                authorize("reddit");
             }
         },
         error: function (jqXHR, exception) {
