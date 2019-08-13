@@ -405,7 +405,7 @@ nav-tabs li a:hover{
 	border-radius:6px;
 }
 
-.button{
+.auth-button{
 	font-weight: 600;
     color: white;
     font-size: 20px;
@@ -418,11 +418,11 @@ nav-tabs li a:hover{
 	margin-top:10px;
     display: inline-block;
     text-decoration: none;
-	width: calc(70%);
+	width: calc(85%);
 	text-align: left;
 	border: none;
 }
-.button-later{
+#auth-next{
 	font-weight: 600;
     color: #333;
     font-size: 20px;
@@ -440,8 +440,8 @@ nav-tabs li a:hover{
 }
 .button:hover,
 .button:focus,
-.button-later:hover,
-.button-later:focus{
+#auth-next:hover,
+#auth-next:focus{
 	color:black;
 	background-color:#deddde;
 }

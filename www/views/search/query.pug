@@ -43,32 +43,13 @@ html
 		include ../components/warning.pug
 		include ../components/clientside-warning.pug
 		include ../components/cookie.pug
-	
-		<!-- auth -->
-		div(id="auth-panel")
-			p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
-			
-			div(class="twitter-auth" id="twitter-auth")
-				a(class="button", target="_blank")
-					img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-					| Authorize with your Twitter account
-				button(class="button-later") later
-			div(class="reddit-auth" id="reddit-auth")
-				a(class="button") 
-					img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-					| Authorize with your Reddit account
-				button(class="button-later") later
-			div(class="crimson-auth" id="crimson-auth")
-				button(class="button")
-					img(src='bootstrap/img/logo/crimson-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-					| Authorize with your Crimson Hexagon account
-				button(class="button-later") later
+		include ../auth.pug
 		
 		div(class="searchPage",id="searchPage",style="display:none;")
 			<!-- logo -->
 			div(class="row" id="header",style="")
 				img(src="bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
-			
+
 			<!-- secondary auth panel -->
 			div(class="row",id="second-auth",style="display:block;margin:auto auto;margin-top:50px;text-align:center;color:#333;")
 				div(id="authorized", style="display:inline-block;")

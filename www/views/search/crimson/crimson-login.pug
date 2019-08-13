@@ -1,5 +1,5 @@
 <!-- crimson input popup -->
-div(id="crimson" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+div(id="crimson-callback" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
     div(class="modal-dialog")
         div(class="modal-content")
             div(class="modal-body", style="padding:30px;overflow:auto;")
@@ -19,47 +19,3 @@ div(id="crimson" class="modal fade" role="dialog" data-backdrop="static" data-ke
                     i(class="fas fa-key")
                     input(id="crimson-password", type="password", class="form-control", placeholder="Password")
                 button(class="btn btn-yes pull-right" style="margin:10px;" id="crimson-auth-submit") submit
-
-script.
-    // on enter
-    $("#crimson-password").on('keyup', function (e) {
-        if (e.keyCode == 13 || e.keyCode == 10) {
-
-            $.ajax({
-                type: 'post',
-                url: 'login/crimson',
-                data: {
-                    "crimson_username": $("#crimson-username").val(),
-                    "crimson_password": $("#crimson-password").val(),
-                    "currentURL": newPath
-                },
-                success: function (data) {
-                    window.location.replace(data.redirect_url);
-                },
-                error: function (jqXHR, exception) {
-                    $("#error").val(jqXHR.responseText);
-                    $("#warning").modal('show');
-                }
-            });
-        }
-    });
-
-    // on click
-    $("#crimson-auth-submit").on('click', function () {
-        $.ajax({
-            type: 'post',
-            url: 'login/crimson',
-            data: {
-                "crimson_username": $("#crimson-username").val(),
-                "crimson_password": $("#crimson-password").val(),
-                "currentURL": newPath
-            },
-            success: function (data) {
-                window.location.replace(data.redirect_url);
-            },
-            error: function (jqXHR, exception) {
-                $("#error").val(jqXHR.responseText);
-                $("#warning").modal('show');
-            }
-        });
-    });
