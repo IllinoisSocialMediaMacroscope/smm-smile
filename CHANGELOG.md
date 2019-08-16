@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add features to collect images from social media sources
 
+### Changed
+- Modify the Authorization page when search from social media data sources
+
 ## [1.1.9] - 2019-07-26
 ### Added
 - Add sentiment classification using debiased word embedding algorithm
