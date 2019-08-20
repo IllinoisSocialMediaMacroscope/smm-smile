@@ -18,6 +18,7 @@ function getMultiRemote(endpoint){
 		});
 	});
 		
-};
+}
+
 
 module.exports = getMultiRemote;

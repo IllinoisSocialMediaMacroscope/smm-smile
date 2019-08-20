@@ -10,11 +10,7 @@ router.post('/reddit-expand',function(req,res,next){
 		
 		// check if comment.zip already exist or not
 		var exist = false;
-		for (filename in data){
-			if (filename.slice(-4) === '.zip'){
-				exist = true;
-			}
-		}
+
 		
 		// check if user still wants to collect it; overwrite the exist 
 		if(exist == false || (exist == true && req.body.consent == 'true')){

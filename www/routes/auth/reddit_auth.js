@@ -26,16 +26,15 @@ router.get('/login/reddit',function(req,res,next){
 				return response.json();
 			}).then(function(json){
 				if ('error' in json){
-					res.redirect(req.session.currentURL + 'query?error=' + JSON.stringify(json));
+                    res.cookie('reddit-success', 'false', {maxAge: 1000000000, httpOnly: false});
+                    res.send({ERROR: JSON.stringify(json)});
 				}else{
-					//console.log(json.access_token);
 					req.session.rd_access_token = json.access_token;
 					req.session.save();
 					
 					// set the cookie as true for 29 minutes maybe?
 					res.cookie('reddit-success','true',{maxAge:1000*60*29, httpOnly:false});	
-					res.cookie('reddit-later','false',{maxAge:1000*60*29, httpOnly:false});
-					res.redirect(req.query.currentURL + 'query');
+                    res.send({})
 
 				}
 			});

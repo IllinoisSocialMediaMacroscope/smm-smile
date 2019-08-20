@@ -44,6 +44,7 @@ const tweetType = module.exports = new GraphQLObjectType({
 		user_mentions:	{ type: twtUserMentionType },
 		user: 			{ type: twtUserType },
 		entities:		{ type: twtEntityType },
+        extended_entities: { type: twtExtendedEntityType },
 		retweet: 		{
 							type: new GraphQLList(retweetType),
 							description: 'Get a list of retweets',
@@ -96,4 +97,5 @@ const twtCoordinateType = new GraphQLObjectType({
 
 const twtUserType = require('./twtUserType');
 const twtEntityType = require('./twtEntityType');
+const twtExtendedEntityType = require('./twtExtendedEntityType');
 const retweetType = require('./twtRetweetType');

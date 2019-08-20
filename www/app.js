@@ -132,6 +132,7 @@ app.use('/', require('./routes/businessLogic/history'));
 app.use('/', require('./routes/businessLogic/export'));
 app.use('/', require('./routes/businessLogic/import'));
 app.use('/', require('./routes/businessLogic/RedditExpand'));
+app.use('/', require('./routes/businessLogic/imageCrawler'));
 app.use('/', require('./routes/businessLogic/clowder.js'));
 app.use('/', require('./routes/businessLogic/histogram.js'));
 

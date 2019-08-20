@@ -83,8 +83,8 @@ function init(){
 			`\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
 			`\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
 			`\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
-			`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang`+
-			`\n\t\t\t}\n\t\t\t`;
+			`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang\n\t\t\t}`+
+			`\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
 			
 			parameters['twtTimeline']['screen_name:'] = keyword;
 			parameters['twtTimeline']['count:'] = 200;
@@ -95,8 +95,8 @@ function init(){
                 `\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
                 `\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
                 `\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
-                `\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang`+
-                `\n\t\t\t}\n\t\t\t`;
+                `\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang\n\t\t\t}`+
+                `\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
 				
 			parameters['es']['q:'] = keyword;
 			parameters['es']['perPage:'] =  1000;
@@ -138,10 +138,10 @@ function init(){
 			
 			parameters['psPost']['q:'] = keyword;
 			parameters['psPost']['size:'] = 1000;
-			parameters['psPost']['fields']=`\n\t\t\t_index\n\t\t\t_id\n\t\t\t_type\n\t\t\t_score\n\t\t\t_source{\n\t\t\t\tauthor_name\n\t\t\t\tcreated_utc`+
-			`\n\t\t\t\tdomain\n\t\t\t\tid\n\t\t\t\tis_self\n\t\t\t\tlocked\n\t\t\t\tnum_comments\n\t\t\t\tover_18\n\t\t\t\tpermalink\n\t\t\t\tfull_link`+
-			`\n\t\t\t\tpinned\n\t\t\t\tretrieved_on\n\t\t\t\tscore\n\t\t\t\tstickied\n\t\t\t\tspoiler\n\t\t\t\tsubreddit_display_name\n\t\t\t\tsubreddit_id`+
-			`\n\t\t\t\tsubreddit_name_prefixed\n\t\t\t\ttitle\n\t\t\t\turl\n\t\t\t}`;
+			parameters['psPost']['fields']=`\n\t\t\tauthor_name\n\t\t\tcreated_utc`+
+			`\n\t\t\tdomain\n\t\t\tid\n\t\t\tis_self\n\t\t\tlocked\n\t\t\tnum_comments\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tfull_link`+
+			`\n\t\t\tpinned\n\t\t\tretrieved_on\n\t\t\tscore\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id`+
+			`\n\t\t\tsubreddit_name_prefixed\n\t\t\ttitle\n\t\t\turl`;
 				
 			parameters['psComment']['q:'] = keyword;
 			parameters['psComment']['fields']=`\n\t\t\tcomment_author_name\n\t\t\tbody\n\t\t\tcomment_created\n\t\t\tid\n\t\t\tlink_id\n\t\t\tparent_id`+
@@ -444,7 +444,7 @@ function init(){
 	$("#twtTweetFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],AuthorInformation:[]};
+		fields = {BasicFields:[],AuthorInformation:[], Entities:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -461,6 +461,9 @@ function init(){
 				fields_string += '\n\t\t\t\t' + val;
 			});
 			fields_string += '\n\t\t\t}' ;
+		}
+		if (fields['Entities'].length !== 0){
+            fields_string += '\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}';
 		}
 		
 		parameters['tweet']['fields'] = fields_string;
@@ -535,9 +538,9 @@ function init(){
 			}
 		
 		}else{
-			parameters['es']['lat:'] =  ''
-			parameters['es']['lon:'] =  ''
-			parameters['es']['distance:'] =  ''
+			parameters['es']['lat:'] =  '';
+			parameters['es']['lon:'] =  '';
+			parameters['es']['distance:'] =  '';
 			$(".form-group.es-geocode").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
@@ -624,6 +627,7 @@ function init(){
 				});
 				fields_string += '\n\t\t\t\t}' ;
 			}
+
 			fields_string += '\n\t\t\t}' ;
 		}
 		
@@ -665,7 +669,7 @@ function init(){
 	$("#twtTimelineFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],AuthorInformation:[]};
+		fields = {BasicFields:[],AuthorInformation:[], Entities:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -682,6 +686,10 @@ function init(){
                 fields_string += '\n\t\t\t\t' + val;
             });
             fields_string += '\n\t\t\t}' ;
+        }
+
+        if (fields['Entities'].length !== 0){
+            fields_string += '\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}';
         }
 		
 		parameters['twtTimeline']['fields'] = fields_string;
@@ -843,25 +851,17 @@ function init(){
 	$("#psPostFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],psMetadata:[]};
+		fields = {BasicFields:[]};
 		$.each($(this).find(':selected'),function(i,val){
-			var label = $(val.parentNode)[0].label;
-			fields[label].push(val.value);
-			//fields_string += '\n\t\t\t' + val.value;
+            fields_string += '\n\t\t\t' + val.value;
 		});
-
-		if (fields['psMetadata'].length !== 0){
-			$.each(fields['psMetadata'],function(i,val){
-				fields_string += '\n\t\t\t' + val;
-			});
-		}
 
 		if(fields['BasicFields'].length !== 0){
 			fields_string += '\n\t\t\t_source{' ;
 			$.each(fields['BasicFields'],function(i,val){
 				fields_string += '\n\t\t\t\t' + val;
-			});	
-			fields_string += '\n\t\t\t}' ;	
+			});
+			fields_string += '\n\t\t\t}' ;
 		}
 		
 		parameters['psPost']['fields'] = fields_string;

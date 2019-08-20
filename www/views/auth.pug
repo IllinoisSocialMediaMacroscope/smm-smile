@@ -1,0 +1,20 @@
+<!-- auth -->
+div(id="auth-panel")
+    p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
+    div(class="twitter-auth", id="twitter-auth")
+        a(class="auth-button", href="login/twitter", target="_blank")
+            img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+            | Authorize with your Twitter account
+        img(src="bootstrap/img/logo/checkbox.png", class="export-success", width="30px", style="display:none;")
+    div(class="reddit-auth", id="reddit-auth")
+        a(class="auth-button")
+            img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+            | Authorize with your Reddit account
+        img(src="bootstrap/img/logo/checkbox.png", class="export-success", width="30px", style="display:none;")
+    div(class="crimson-auth", id="crimson-auth")
+        button(class="auth-button")
+            img(src='bootstrap/img/logo/crimson-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+            | Authorize with your Crimson Hexagon account
+        img(src="bootstrap/img/logo/checkbox.png", class="export-success", width="30px", style="display:none;")
+    div
+        button(id="auth-next", style="") next

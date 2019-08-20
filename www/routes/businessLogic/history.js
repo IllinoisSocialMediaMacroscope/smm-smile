@@ -19,107 +19,67 @@ router.post('/history', function (req, res, next) {
     // check if the requested folder matches the current user's identity
     if (arrURL[0] === s3FolderName) {
         if (arrURL[1] === 'GraphQL') {
-            if (arrURL[2] === 'twitter-Tweet' ||
-                arrURL[2] === 'twitter-Timeline' ||
-                arrURL[2] === 'twitter-Stream' ||
-                arrURL[2] === 'reddit-Comment' ||
-                arrURL[2] === 'reddit-Historical-Comment' ||
-                arrURL[2] === 'crimson-Hexagon' ||
-                arrURL[2] === 'userspec-Others') {
-                var p = list_files(req.body.folderURL);
-                p.then(folderObj => {
+            var p = list_files(req.body.folderURL);
+            p.then(folderObj => {
+                var promise_array = [];
+                var fileList = Object.keys(folderObj);
 
-                    var promise_array = [];
-                    var fileList = Object.keys(folderObj);
+                if (fileList.length >= 2) {
+                    for (var i = 0, length = fileList.length; i < length; i++) {
+                        var filename = fileList[i];
+                        if (filename === 'config.json') {
+                            var config = folderObj[filename];
+                        } else if (filename.slice(-4) === '.csv') {
+                            var preview = folderObj[filename];
+                        } else if (filename.slice(-4) === '.zip') {
+                            if (filename === "images.zip") var images = folderObj[filename];
+                            else var comments = folderObj[filename];
+                        }
+                    }
+                    var download = [{name: 'CSV format', content: preview}];
+                    if (comments !== undefined) download.push({name: 'Collection of comments', content: comments});
+                    if (images !== undefined) download.push({name:'Collection of images', content:images});
 
-                    if (fileList.length >= 2) {
-                        for (var i = 0, length = fileList.length; i < length; i++) {
-                            var filename = fileList[i];
-                            if (filename === 'config.json') {
-                                var config = folderObj[filename];
-                            } else if (filename.slice(-4) === '.csv') {
-                                var preview = folderObj[filename];
-                            }
+                    promise_array.push(getMultiRemote(config));
+                    promise_array.push(getMultiRemote(preview));
+                    Promise.all(promise_array).then(values => {
+                        var config_data = JSON.parse(values[0]);
+                        var preview_string = values[1];
+                        var preview_arr = CSV.parse(preview_string).slice(0, 1001);
+                        config_data.fields = preview_arr[0];
+
+                        var data =
+                        {
+                            title: 'Social Media Past Search Result',
+                            ID: req.body.folderURL,
+                            download: download,
+                            preview: [{name: "Preview the .csv file", content: preview_arr, dataTable: true}],
+                            length: preview_arr.length - 1, // display in the expand comments modal
+                            config: config_data,
+                            uid: arrURL[3]
+                        };
+
+                        if (arrURL[2] === 'reddit-Search' || arrURL[2] === 'reddit-Post' || arrURL[2] === 'reddit-Historical-Post'){
+                            data['expandable'] = req.body.folderURL;
                         }
 
-                        promise_array.push(getMultiRemote(config));
-                        promise_array.push(getMultiRemote(preview));
-                        Promise.all(promise_array).then(values => {
-                            var config_data = JSON.parse(values[0]);
-                            var preview_string = values[1];
-                            var preview_arr = CSV.parse(preview_string).slice(0, 1001);
-                            config_data.fields = preview_arr[0];
-
-                            res.send({
-                                title: 'Social Media Past Search Result',
-                                ID: req.body.folderURL,
-                                download: [{name: 'CSV format', content: preview}],
-                                preview: [{name: "Preview the .csv file", content: preview_arr, dataTable: true}],
-                                config: config_data,
-                                uid: arrURL[3]
-                            });
-
-                        });
-                    } else {
-                        res.send({
-                            ERROR: `Sorry! We cannot find a complete analytic history associated with this ID. You should double check ` +
-                            `if you have fulfilled all the required  process when carrying out this analysis.`
-                        });
-                    }
-                });
-            }
-            else if (arrURL[2] === 'reddit-Search' ||
-                arrURL[2] === 'reddit-Post' ||
-                arrURL[2] === 'reddit-Historical-Post') {
-                var p = list_files(req.body.folderURL);
-                p.then(folderObj => {
-
-                    var promise_array = [];
-                    var fileList = Object.keys(folderObj);
-
-                    if (fileList.length >= 2) {
-                        for (var i = 0, length = fileList.length; i < length; i++) {
-                            var filename = fileList[i];
-                            if (filename === 'config.json') {
-                                var config = folderObj[filename];
-                            } else if (filename.slice(-4) === '.csv') {
-                                var preview = folderObj[filename];
-                            } else if (filename.slice(-4) === '.zip') {
-                                var comments = folderObj[filename];
-                            }
+                        if (arrURL[2] === 'reddit-Search' || arrURL[2] === 'reddit-Post'
+                            || arrURL[2] === 'reddit-Historical-Post' || arrURL[2] === 'twitter-Tweet'
+                            || arrURL[2] === 'twitter-Timeline' || arrURL === 'crimson-Hexagon'){
+                            data['crawlImage'] = req.body.folderURL;
                         }
-                        var download = [{name: 'CSV format', content: preview}];
-                        if (comments !== undefined) download.push({name: 'Collection of comments', content: comments})
 
-                        promise_array.push(getMultiRemote(config));
-                        promise_array.push(getMultiRemote(preview));
-                        Promise.all(promise_array).then(values => {
-                            var config_data = JSON.parse(values[0]);
-                            var preview_string = values[1];
-                            var preview_arr = CSV.parse(preview_string).slice(0, 1001);
-                            config_data.fields = preview_arr[0];
+                        res.send(data);
 
-                            res.send({
-                                title: 'Social Media Past Search Result',
-                                expandable: req.body.folderURL,
-                                ID: req.body.folderURL,
-                                download: download,
-                                preview: [{name: "Preview the .csv file", content: preview_arr, dataTable: true}],
-                                length: preview_arr.length - 1, // display in the expand comments modal
-                                config: config_data,
-                                uid: arrURL[3]
-                            });
+                    });
 
-                        });
-
-                    } else {
-                        res.send({
-                            ERROR: `Sorry! We cannot find a complete analytic history associated with this ID. You should double check `
-                            + `if you have fulfilled all the required  process when carrying out this analysis.`
-                        });
-                    }
-                });
-            }
+                } else {
+                    res.send({
+                        ERROR: `Sorry! We cannot find a complete analytic history associated with this ID. You should double check `
+                        + `if you have fulfilled all the required  process when carrying out this analysis.`
+                    });
+                }
+            });
         }
         else {
             var routesDir = path.join(path.dirname(__dirname), "analyses");
