@@ -11,6 +11,7 @@ const crimsonPostType = module.exports = new GraphQLObjectType({
     name:'crimsonPost',
     description:'',
     fields: () => ({
+        // TODO: investigate why crimson dataset doesn't have a ID?
         assignedCategoryId:	{type:GraphQLString},
         assignedEmotionId:	{type:GraphQLString},
         author:	            {type:GraphQLString},
