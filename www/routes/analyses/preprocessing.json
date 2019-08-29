@@ -147,7 +147,7 @@
   "post": {
     "cutoff":20000,
     "lambda_config": {
-      "aws_lambda_function": "lambda_preprocessing_dev"
+      "aws_lambda_function": "lambda_preprocessing"
     },
     "batch_config": {
       "batch_action": "python3.6",

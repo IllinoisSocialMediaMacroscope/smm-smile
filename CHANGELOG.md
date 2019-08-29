@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.1] - 2019-08-20
 ### Changed
+- Add ids to analysis output (hence rotate the aws lambda for NW, SA, PP)
 - Add restrictions and hint text for upload user dataset
 
 ## [1.2.0] - 2019-07-26
