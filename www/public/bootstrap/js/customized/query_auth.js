@@ -1,9 +1,12 @@
 function authorize(platform){
-    $("#" + platform + "-callback").modal("hide");
+    // showing the check mark
     $("#" + platform + "-auth").find('img').show();
+
+    // toggle the second auth panel
     $("#unauthorized").find("." + platform + "-auth").hide();
     $("#authorized").find("#" + platform + "-authorized").show();
 
+    // enable the authorized platform selection
     if (platform === 'twitter') {
         $("#social-media option[value='queryTweet']").removeAttr('disabled');
         $("#social-media option[value='getTimeline']").removeAttr('disabled');
@@ -27,22 +30,8 @@ $(document).ready(function () {
 });
 
 $("#auth-next").on("click", function () {
-    var platforms = ['twitter', 'reddit', 'crimson'];
-    var flag = true;
-    $.each(platforms, function (i, platform) {
-        if ($.cookie(platform + "-success") === "true") {
-            flag = false;
-        }
-    });
-
-    if (flag) {
-        $("#modal-message").append(`<h4>You need to authorize at least one social media account!</h4>`);
-        $("#alert").modal('show');
-    }
-    else {
-        $("#auth-panel").hide();
-        $("#searchPage").show();
-    }
+    $("#auth-panel").hide();
+    $("#searchPage").show();
 });
 
 /****************************** CRIMSON Hexagon ******************************/
@@ -62,7 +51,7 @@ $("#crimson-password").on('keyup', function (e) {
                     $("#warning").modal('show');
                 }
                 else {
-                    authorize("crimson");
+                    location.reload(true);
                 }
             },
             error: function (jqXHR, exception) {
@@ -86,7 +75,7 @@ $("#crimson-auth-submit").on('click', function () {
                 $("#warning").modal('show');
             }
             else {
-                authorize("crimson");
+                location.reload(true);
             }
         },
         error: function (jqXHR, exception) {
@@ -118,7 +107,7 @@ $("#twitter-pin-submit").on('click', function () {
                 $("#warning").modal('show');
             }
             else {
-                authorize("twitter");
+                location.reload(true);
             }
         },
         error: function (jqXHR, exception) {
@@ -139,7 +128,7 @@ $("#twitter-pin").on('keyup', function (e) {
                     $("#warning").modal('show');
                 }
                 else {
-                    authorize("twitter");
+                    location.reload(true);
                 }
             },
             error: function (jqXHR, exception) {
@@ -164,7 +153,7 @@ $("#reddit-agree").on('click', function () {
                 $("#warning").modal('show');
             }
             else {
-                authorize("reddit");
+                location.reload(true);
             }
         },
         error: function (jqXHR, exception) {
