@@ -1,68 +1,175 @@
-extends analytics.pug 
-	
-block customized-script
-	<!-- customized script -->
-	script(src=param['custom-script']).	
-	
-block config-form
-	form(id="analytics-config", action=param['form-action'], name='NLP', method='post',class="form-horizontal")
-		each container in param['containers']
-			div(id=container['container-name'])
-				div(class="form-group")
-					label(class="control-label col-md-2 col-md-2 col-xs-12",for="") #{container['container-label-name']}
-					each input in container['inputs']
-						
-						if input['type'] == 'radio'
-							div(class="col-md-8 col-md-8 col-xs-12")
-							label(class="radio-inline")
-								input(type=input.type name=input.name id=input.id value=input.value class=input.class checked=input.checked) 
-								| #{input['label']}
-							
-							
-						else if input['type'] == 'select'
-							if input['optgroup']
-								div(class="col-md-8 col-md-8 col-xs-12")
-									img(src="bootstrap/img/gifs/loading4.gif",width="100px",id="selectLoading")
-									select(class=input.class,id=input.id,name=input.name,style="display:none;")
-										option(value="Please Select...", class="", id="empty", checked) Please Select...
-								div(class="col-md-2 col-md-2 col-xs-12")
-									button(class="btn btn-default",id="getComment") get comments								
-							else
-								div(class="col-md-8 col-md-8 col-xs-12")
-									select(name=input.name id=input.id class=input.class)
-										each opt in input.options
-											option(value=opt.value) #{opt.label}
-																	
-						else if input['type'] == 'text'
-							div(class="col-md-8 col-md-8 col-xs-12")
-								input(id=input.id type=input.type name=input.name value=input.value class=input.class)
-							
-						else if input['type'] == 'range'
-							div(class="col-md-8 col-md-8 col-xs-12")
-								div(class="range range-node")
-									input(type=input.type, min=input.min, max=input.max, value=input.value, step=input.step, name=input.name, onchange=input.onchange, id=input.id)
-									output(id=input.output_id) #{input.value}
-							
-						else if input['type'] == 'file'
-							div(class="col-md-8 col-md-8 col-xs-12")
-								input(id=input.id, type=input.type, name=input.name)
-								
-			if container['container-name'] == 'network-relation-container'
-				div(id="explanation-container", style="display:none")
-					div(class="form-group")
-						label(class="control-label col-md-2 col-md-2 col-xs-12",for="") 
-						div(class="col-md-8 col-md-8 col-xs-12")
-							div(id="explanation-notice")
+extends analytics.pug
 
-		div(id="citation-container",style="display:none")
-			div(class="form-group")
-				label(class="control-label col-md-2 col-md-2 col-xs-12",for="") 
-				div(class="col-md-8 col-md-8 col-xs-12")
-					div(id="citation-notice")
-			
-		div(class="form-group")
-			div(class="col-md-8 col-md-8 col-xs-12 col-md-offset-2")
-				input(type="button", class='btn btn-danger', id="submit", value="Submit",style="margin: auto 5px;")
-				input(type="button", class='btn btn-primary', value="Clear", onclick="customized_reset();",style="margin: auto 5px;") 
-					
-				
+block customized-script
+    <!-- customized script -->
+    if 'custom_script' in param
+        script(src=param['custom_script']).
+
+block config-form
+    form(id="analytics-config", action=param['path'], name='NLP', method='post',class="form-horizontal")
+        h4 Step 1: Import data
+        // select files
+        div(id="file-container")
+            div(class="form-group")
+                label(class="control-label col-md-2 col-md-2 col-xs-12") Select from your folder
+                div(class="col-md-10 col-md-10 col-xs-12")
+                    img(src="bootstrap/img/gifs/loading4.gif", width="100px", id="selectLoading")
+                    select(class="form-control", id="selectFile", name="selectFile", style="display:none;")
+                        option(value="Please Select...", class="", id="empty", checked) Please Select...
+                div(class="col-md-2 col-md-2 col-xs-12")
+                    button(class="btn btn-default favicon-button", id="getComment")
+                        i(class="fas fa-comments")
+                        | &nbsp;Comment
+                    button(class="btn btn-default favicon-button", id="getImg")
+                        i(class="fas fa-image")
+                        | &nbsp;Image
+
+        // loading bar
+        div(id="previewLoading", style="display:none;")
+            div(class="form-group")
+                label(class="control-label col-md-2 col-md-2 col-xs-12")
+                div(class="col-md-10 col-md-10 col-xs-12")
+                    img(src="bootstrap/img/gifs/loading3.gif", style="margin:auto auto; display:block; width:250px;")
+
+        // preview container
+        div(id="selectFilePreview-container", style="display:none;")
+            div(class="form-group")
+                label(class="control-label col-md-2 col-md-2 col-xs-12") Preview data
+                div(class="col-md-10 col-md-10 col-xs-12")
+
+        // column selector container
+        div(id="selectFileHeader-container", style="display:none;")
+            div(class="form-group")
+                label(class="control-label col-md-2 col-md-2 col-xs-12") Select Column to Analyze
+                div(class="col-md-10 col-md-10 col-xs-12")
+
+        // divider
+        div(class="divider" id="divider")
+            div(class="form-group")
+                label(class="control-label col-md-2 col-md-2 col-xs-12")
+                div(class="col-md-10 col-md-10 col-xs-12")
+                    div(class="or") OR
+
+        // import local file
+        div(class="import-container" id="import-container")
+            div(class="form-group")
+                label(class="control-label col-md-2 col-md-2 col-xs-12") Import local file
+                div(class="col-md-10 col-md-10 col-xs-12")
+                    label(class="input-group-btn",style="display:inline;")
+                        span(class="btn btn-default btn-file") select ...
+                            input(id="importFile", type="file", name="importFile",
+                            style="width: 0.1px; height: 0.1px; opacity: 0; overflow: hidden; position: absolute; z-index: -1;")
+                    button(class="btn btn-primary", id="import-cloud-btn")
+                        p(id="import-fname")
+                        i(class="fas fa-cloud-upload-alt")
+            script.
+                $("#importFile").on('change', function () {
+                    if ($(this).get(0).files[0] === undefined || $(this).get(0).files[0].name.slice(-4) !== '.csv') {
+                        var fname = '';
+                        $("#modal-message").append(`<h4>Only .csv file can be imported to the SMILE at the moment. \
+                            Please submit a support ticket if you have any special request.</h4>`);
+                        $("#alert").modal('show');
+                        $("#import-cloud-btn").hide()
+                    } else {
+                        var fname = $(this).get(0).files[0].name;
+                        $("#import-cloud-btn").show();
+                    }
+                    $("#import-fname").text(fname);
+                });
+
+                $("#import-cloud-btn").on('click', function (e) {
+                    e.preventDefault();
+                    var reader = new FileReader();
+                    reader.readAsText($("#importFile").get(0).files[0]);
+                    reader.onload = loadHandler;
+                    reader.onerror = errorHandler;
+                    $("#import-cloud-modal").modal('show');
+                });
+
+        h4 Step 2: Analytics configuration
+        // custom form input containers
+        each container in param.get['containers']
+            div(class=container['container-classname'] id=container['container-name'])
+                div(class="form-group")
+                    label(class="control-label col-md-2 col-md-2 col-xs-12",for="") #{container['container-label-name']}
+                    if container.input['type'] === 'radio'
+                        div(class="col-md-10 col-md-10 col-xs-12")
+                        label(class="radio-inline")
+                            input(type=container.input.type, name=container.input.name, id=container.input.id,
+                                value=container.input.value, checked=container.input.checked, class="form-control", )
+                            | #{container.input['label']}
+
+                    else if container.input['type'] === 'select'
+                        div(class="col-md-10 col-md-10 col-xs-12")
+                            select(name=container.input.name, id=container.input.id, class="form-control")
+                                each opt in container.input.options
+                                    option(value=opt.value) #{opt.label}
+
+                    else if container.input['type'] === 'text'
+                        div(class="col-md-10 col-md-10 col-xs-12")
+                                input(id=container.input.id, type=container.input.type, name=container.input.name,
+                                class="form-control")
+
+                    else if container.input['type'] === 'range'
+                        div(class="col-md-10 col-md-10 col-xs-12")
+                            div(class="range range-node")
+                                input(type=container.input.type, min=container.input.min, max=container.input.max,
+                                    value=container.input.value, step=container.input.step,
+                                    name=container.input.name, onchange=container.input.onchange, id=container.input.id,
+                                    class="form-control")
+                                output(id=container.input.output_id) #{container.input.value}
+
+                    else if container.input['type'] === 'file-upload'
+                        div(class="col-md-10 col-md-10 col-xs-12")
+                            label(class="input-group-btn", style="display:inline;")
+                                span(class="btn btn-default btn-file") upload ...
+                                    input(id=container.input.id, type="file", name=container.input.name, style=container.input.style)
+                            p(id=container.input.displayname)
+
+                    else if container.input['type'] === 'uid'
+                        div(class="col-md-10 col-md-10 col-xs-12")
+                            input(id=container.input.id, type="text", name=container.input.id, class="form-control")
+                            a(style="float:right;", href="", onclick="showUUID(); return false;") Current Identification code
+                            script.
+                                function showUUID() {
+                                    $("#uuid-modal").modal('show');
+                                }
+
+        // citations
+        div(id="citation-container",style="display:none")
+            div(class="form-group")
+                label(class="control-label col-md-2 col-md-2 col-xs-12")
+                div(class="col-md-10 col-md-10 col-xs-12")
+                    div(id="citation-notice", class="citation-notice")
+                        p <b>Thank you for using our tool, if you use these results please cite it and the NLTK python library:</b>
+                        ul
+                            li Yun, J. T., Vance, N., Wang, C., Marini, L., Troy, J., Donelson, C., Chin, C. L., Henderson, M. D. (2019).
+                                | The Social Media Macroscope: A science gateway for research using social media data. Future Generation
+                                | Computer Systems. doi:10.1016/j.future.2019.10.029
+                            div(id="custom-citation-notice")
+                            script.
+                                var citation = !{JSON.stringify(param.get.citation)};
+                                $("#" + citation.trigger_id).on('change', function () {
+                                    $("#citation-container").hide();
+                                    $("#custom-citation-notice").empty();
+
+                                    var trigger = $(this).children(":selected").val();
+                                    $(citation.content).each(function(i, item){
+                                        if (item.condition === "!" && trigger !== "Please Select...") {
+                                            $("#custom-citation-notice").append(`<li>` + item.text + `</li>`);
+                                            $("#citation-container").show();
+                                        }
+                                        else if (trigger === item.condition){
+                                            $(item.text).each(function(j, ref){
+                                                $("#custom-citation-notice").append(`<li>` + ref + `</li>`);
+                                            });
+                                            $("#citation-container").show();
+                                        }
+                                    });
+                                });
+
+        // submit buttons
+        div(class="form-group")
+            div(class="col-md-10 col-md-10 col-xs-12 col-md-offset-2", style="text-align:right;")
+                each button in param.get['buttonGroups']
+                    input(type="button", class=button.class, id=button.id, value=button.value, style=button.style, onclick=button.onclick)

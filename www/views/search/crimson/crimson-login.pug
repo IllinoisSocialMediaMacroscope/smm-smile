@@ -1,14 +1,13 @@
 <!-- crimson input popup -->
-div(id="crimson" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
+div(id="crimson-callback" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
     div(class="modal-dialog")
         div(class="modal-content")
             div(class="modal-body", style="padding:30px;overflow:auto;")
                 button(class="close" data-dismiss="modal") &times;
-                div(id="crimson-login-header")
+                div(class="login-header")
                     img(src="bootstrap/img/logo/crimson-sm-logo.png", width=80)
                     h2 Crimson Hexagon
-                div(id="crimson-login-notes")
-                    img(src="bootstrap/img/gifs/warning.gif",style="width:15px;")
+                div(class="login-notes")
                     p Note that Crimson Hexagon is only provided to the predefined users. If you have been granted Crimson
                         |  Hexagon access but without the <b>API access</b>,
                         |  please submit a request to your Crimson Hexagon administrator first.
@@ -18,48 +17,4 @@ div(id="crimson" class="modal fade" role="dialog" data-backdrop="static" data-ke
                 div(class="form-inline")
                     i(class="fas fa-key")
                     input(id="crimson-password", type="password", class="form-control", placeholder="Password")
-                button(class="btn btn-yes pull-right" style="margin:10px;" id="crimson-auth-submit") submit
-
-script.
-    // on enter
-    $("#crimson-password").on('keyup', function (e) {
-        if (e.keyCode == 13 || e.keyCode == 10) {
-
-            $.ajax({
-                type: 'post',
-                url: 'login/crimson',
-                data: {
-                    "crimson_username": $("#crimson-username").val(),
-                    "crimson_password": $("#crimson-password").val(),
-                    "currentURL": newPath
-                },
-                success: function (data) {
-                    window.location.replace(data.redirect_url);
-                },
-                error: function (jqXHR, exception) {
-                    $("#error").val(jqXHR.responseText);
-                    $("#warning").modal('show');
-                }
-            });
-        }
-    });
-
-    // on click
-    $("#crimson-auth-submit").on('click', function () {
-        $.ajax({
-            type: 'post',
-            url: 'login/crimson',
-            data: {
-                "crimson_username": $("#crimson-username").val(),
-                "crimson_password": $("#crimson-password").val(),
-                "currentURL": newPath
-            },
-            success: function (data) {
-                window.location.replace(data.redirect_url);
-            },
-            error: function (jqXHR, exception) {
-                $("#error").val(jqXHR.responseText);
-                $("#warning").modal('show');
-            }
-        });
-    });
+                button(class="btn btn-primary pull-right" style="margin:10px;" id="crimson-auth-submit") submit

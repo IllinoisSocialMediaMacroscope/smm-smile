@@ -79,40 +79,6 @@ function formValid(searchID){
 				return false
 			}
 		}
-		else if ($("#social-media option:selected").val() === 'streamTweet'){
-			if ($("#es-dateRange").is(':checked')){
-				if ($("#start").val() === '' || $("#end").val() === ''){
-					$("#modal-message").append(`<h4>Please select start time and end time!</h4>`);
-					$("#alert").modal('show');
-					$("#start").focus();
-					return false
-				}else if($("#start").val() > $("#end").val()){
-					$("#modal-message").append(`<h4>Start time cannot be later than end time!</h4>`);
-					$("#alert").modal('show');
-					$("#start").focus();
-					return false
-				}
-			}
-			if ($("#es-geocode").is(':checked') && ($("#es-lat").val() === '' || $("#es-lat").val() === '' || $("#es-radius").val() === '')){
-				$("#modal-message").append(`<h4>Please fill in the geolocation information!</h4>`);
-				$("#alert").modal('show');
-				$("#es-lat").focus();
-				return false
-			} 
-			if ($("#es-popularity").is(':checked') && ($("#followers_count").val() === '' || $("#statuses_count").val() === '')){
-				$("#modal-message").append(`<h4>Please select followers and statuses range!</h4>`);
-				$("#alert").modal('show');
-				$("#followers_count").focus();
-				return false
-			} 
-			if ($("#twtStreamFields option:selected").val()===undefined){
-				$("#modal-message").append(`<h4>Please select at least one Field of the search result!</h4>`);
-				$("#alert").modal('show');
-				$("#twtStreamFields").focus();
-				return false
-			}
-			
-		}
 		else if ($("#social-media option:selected").val() === 'queryReddit'){
 			if (!$("input[name='time']").is(':checked')){
 				$("#modal-message").append(`<h4>Please select a timespan for reddit search!</h4>`);

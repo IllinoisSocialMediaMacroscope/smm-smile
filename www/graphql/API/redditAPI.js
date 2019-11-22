@@ -15,19 +15,15 @@ function redditAPI(tokens,resolveName, id, args){
 	return new Promise((resolve,reject) =>{
 		switch(resolveName){
 			case 'search':
-				//args['limit'] = args['count'];
 				r.search(args).then((listing) =>  {
-						
-						//console.log(listing.length);
-						listing.fetchAll().then(extendedListing => {
+							listing.fetchAll().then(extendedListing => {
 							resolve(extendedListing);					
 						});
-						
 					})
 					.catch((err) =>{
 						console.log(err);
 						reject(err)
-					})
+					});
 				break;
 				
 			case 'getCompleteReplies':
@@ -61,7 +57,6 @@ function redditAPI(tokens,resolveName, id, args){
 				}
 				r.getSubreddit(args['subredditName']).getNewComments({limit:1}).then((listing) =>  {
 					listing.fetchMore({amount:args['extra'],skipReplies:false,append:true}).then((data) => {
-						console.log(data.length);
 						resolve(data);
 					})
 					.catch((err) =>{
@@ -79,7 +74,6 @@ function redditAPI(tokens,resolveName, id, args){
 				}
 				r.getSubreddit(args['subredditName']).getNew({limit:1}).then((listing) =>  {
 					listing.fetchMore({amount:args['extra'],skipReplies:false,append:true}).then((data) => {
-						console.log(data.length);
 						resolve(data);
 					})
 					.catch((err) =>{
@@ -309,7 +303,6 @@ function redditAPI(tokens,resolveName, id, args){
 			case 'upvote':
 				r.getUser(id).getUpvotedContent().then((listing) =>  {
 					listing.fetchMore({amount:args['extra']}).then((data) => {
-						//console.log(data);
 						resolve(data);
 					})
 					.catch((err) =>{
@@ -338,8 +331,6 @@ function redditAPI(tokens,resolveName, id, args){
 			case 'expansion':
 				agg_comments = [];
 				r.getSubmission(id).expandReplies({options:{limit:Infinity,depth:Infinity}}).then(data =>  {
-						
-					//console.log(data.comments.length);
 					for (var i = 0, length=data.comments.length; i< length; i++){
 						commentTreeFlaten(data.comments[i]);
 					}
@@ -349,45 +340,7 @@ function redditAPI(tokens,resolveName, id, args){
 				.catch((err) =>{
 					reject(err);
 				});
-				break;	
-				
-			/*case 'getUserFlairTemplates':
-				r.getSubreddit(id).getUserFlairTemplates().then((data) => {
-						//console.log(data);
-						resolve(data);
-				});
 				break;
-				
-			case 'subreddit_hot':
-				r.getSubreddit(id).getHot().then((listing) =>  {
-					listing.fetchMore({amount:args['extra']}).then((data) => {
-						//console.log(data);
-						resolve(data);
-					})
-				});
-				break;
-				
-			case 'subreddit_new':
-				r.getSubreddit(id).getNew().then((listing) =>  {
-					listing.fetchMore({amount:args['extra']}).then((data) => {
-						//console.log(data);
-						resolve(data);
-					})
-				});
-				break;
-			
-			case 'comment':
-				r.getUser(id).getComments().then((listing) =>  {
-					args['limit'] = 1;
-					listing.fetchMore({amount:0}).then((data) => {
-						resolve(data);
-					})
-					.catch((err) =>{
-						reject(err)
-					})
-				});
-				break;*/
-				
 				
 			default:
 				console.log('sorry we can\'t find matching resolve type:' + resolveName);

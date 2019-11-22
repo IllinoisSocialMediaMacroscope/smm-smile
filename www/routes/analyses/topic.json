@@ -1,0 +1,132 @@
+{
+  "path": "topic-modeling",
+  "title": "Topic Modeling",
+  "imgURL": "bootstrap/img/logo/NLP/topic.png",
+  "wiki": "https://en.wikipedia.org/wiki/Topic_model",
+  "introduction": [
+    "One of the primary applications of natural language processing is to automatically extract what topics people are ",
+    "discussing from large volumes of text. Topic modeling is a type of statistical modeling for ",
+    "discovering the abstract topics that occur in a collection ",
+    "of documents. Latent Dirichlet Allocation (LDA) is an example of topic model and is used to classify text in a ",
+    "document to a particular topic. It builds a topic per document model and words per topic model, ",
+    "modeled as Dirichlet distributions."
+  ],
+  "result_path": "/NLP/topic/",
+  "results": [
+    {
+      "acronym": "config",
+      "name": "configuration",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": true
+    },
+    {
+      "acronym": "lemmatized",
+      "name": "lemmatized corpus",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "dataTable": false,
+      "config": false
+    },
+    {
+      "acronym": "lda_model",
+      "name": "LDA model using Gensim package",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "metrics",
+      "name": "Model perplexity and coherence score",
+      "download": true,
+      "img": false,
+      "preview": true,
+      "dataTable": false,
+      "config": false
+    },
+    {
+      "acronym": "div",
+      "name": "visualize the topics-keywords",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    }
+  ],
+  "args": [
+    "numTopics",
+    "algorithm"
+  ],
+  "get": {
+    "containers": [
+      {
+        "container-name": "num-topics",
+        "container-label-name": "Number of Topics",
+        "input": {
+          "type": "range",
+          "min": "1",
+          "max": "20",
+          "value": "5",
+          "name": "numTopics",
+          "onchange": "rangeNode.value=value",
+          "id": "numTopics",
+          "output_id": "rangeNode"
+        }
+      },
+      {
+        "container-name": "",
+        "container-label-name": "Algorithm",
+        "input": {
+          "type": "select",
+          "name": "algorithm",
+          "id": "algorithm",
+          "options": [
+            {
+              "value": "Please Select...",
+              "label": "Please Select..."
+            },
+            {
+              "value": "gensimLDA",
+              "label": "Latent Dirichlet Allocation (LDA) from Gensim package"
+            }
+          ]
+        }
+      }
+    ],
+    "buttonGroups": [
+      {
+        "id": "clear",
+        "class": "btn btn-primary",
+        "value": "Clear",
+        "style": "margin: auto 5px;",
+        "onclick": "customized_reset();"
+      },
+      {
+        "id": "submit",
+        "class": "btn btn-danger",
+        "value": "Submit",
+        "style": "margin: auto 5px;"
+      }
+    ],
+    "citation": {
+      "trigger_id": "algorithm",
+      "content": [
+        {
+          "text": ["Rehurek, R., & Sojka, P. (2010). Software framework for topic modelling with large corpora. In <i>In Proceedings of the LREC 2010 Workshop on New Challenges for NLP Frameworks.</i> <a href=\"https://is.muni.cz/repo/884893/lrec2010-rehurek-sojka.pdf\" target=\"_blank\">https://is.muni.cz/repo/884893/lrec2010-rehurek-sojka.pdf</a>"],
+          "condition": "gensimLDA"
+        }
+      ]
+    }
+  },
+  "post": {
+    "batch_config": {
+      "batch_action": "python3.6",
+      "batch_script": "/scripts/batch_function.py",
+      "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_topic_modeling:1",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
+    }
+  }
+}

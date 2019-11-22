@@ -17,7 +17,7 @@ $(document).ready(function(){
         `\n\t\t\tcountry\n\t\t\tcountry_id\n\t\t\tcountry_name\n\t\t\tlanguage\n\t\t\tlocation\n\t\t\ttitle` +
         `\n\t\t\ttype\n\t\t\turl`;
 
-})
+});
 
 $(document).on('click', '.dropdown-menu', function (e) {
     if ($(this).parent().is(".open")) {
@@ -34,13 +34,14 @@ $("#monitor-type").on('change', function(){
 });
 
 $(".search-monitor-btn").on('click',function(){
-    //var monitor_id = $(this).find('#monitor-id').text();
     $("div.searchbox").remove();
-    $(".monitor-item").css('height', 212);
-    $(".monitor-item").css('border', '1px solid #ccc');
-    $(".monitor-item").css('background-color', '#eae8e8');
-    $(this).parents(".monitor-item").css('border', '5px solid #00bcd487');
-    $(this).parents(".monitor-item").css('background-color', 'white');
+    $(".monitor-item")
+        .css('height', 212)
+        .css('border', '1px solid #ccc')
+        .css('background-color', '#eae8e8');
+    $(this).parents(".monitor-item")
+        .css('border', '5px solid #00bcd487')
+        .css('background-color', 'white');
 
     if ($(this).parents("#searchbox").length === 0) {
         $(this).parents(".monitor-item").append(`
@@ -50,7 +51,7 @@ $(".search-monitor-btn").on('click',function(){
                             <div class="btn-group" role="group">
                                 <div class="dropdown dropdown-lg">
                                     <button type="button" class="btn btn-default" onclick="toggleDropdown(this);">
-                                        <span class="glyphicon glyphicon-chevron-down"></span>
+                                        <i class="fas fa-chevron-down"></i>&nbsp;
                                         Advanced
                                     </button>    
                                     <div class="dropdown-menu dropdown-menu-right" style="width:900px;margin-top:-1px;padding:30px;">
@@ -96,11 +97,11 @@ $(".search-monitor-btn").on('click',function(){
 						                </div>
 					                    <div class="form-group" style="overflow:auto;">
 							                <button type="button" class="btn btn-primary" id="adv-search-btn">
-							                    <span class="glyphicon glyphicon-search"></span>
+							                    <i class="fas fa-search"></i>&nbsp;
 								                Search	
                                             </button> 
 											<button type="button" class="btn btn-info" id="expandDoc">
-											    <span class="glyphicon glyphicon-tasks"></span>
+											    <i class="fas fa-question-circle"></i>&nbsp;
 								                Help
                                             </button>
                                         </div>								
@@ -108,7 +109,7 @@ $(".search-monitor-btn").on('click',function(){
                                 </div> 
                             </div> 
                             <button type="button" class="btn btn-primary" id="simple-search-btn">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                <i class="fas fa-search"></i>&nbsp;
                                 Search
                             </button>
                         </div>
@@ -129,8 +130,7 @@ $(".search-monitor-btn").on('click',function(){
 
         $("#simple-search-btn").on('click', function(e){
             var id = $(this).parents(".monitor-item").find("#monitor-id").text();
-            writeMonitorId(id);
-            modalPopUp('#searchbox');
+            saveModalInvoke(id, '#searchbox');
         });
 
         $("#searchbox").on('keypress', function(e){
@@ -138,15 +138,14 @@ $(".search-monitor-btn").on('click',function(){
                 e.preventDefault();
 
                 var id = $(this).parents(".monitor-item").find("#monitor-id").text();
-                writeMonitorId(id);
-                modalPopUp('#searchbox');
+                saveModalInvoke(id, '#searchbox');
             }
         });
 
         setDate();
         expandDoc();
     }
-})
+});
 
 function filterMonitors(){
     var dataSource = $("#monitor-dataSource option:selected").val();
@@ -219,17 +218,10 @@ function toggleDropdown(e){
 
         /* trigger save modal */
         $("#adv-search-btn").on('click', function(e){
-            writeMonitorId(id);
-            modalPopUp('#input');
+            saveModalInvoke(id, '#input');
         });
     }
     $(e).parent().toggleClass('open');
-}
-
-function writeMonitorId(id) {
-    // write monitor id to save modal
-    $("#save").find(".modal-header p").remove();
-    $("#save").find(".modal-header").append(`<p style="color:#b3b3b3"><i>` + id + `</i></p>`)
 }
 
 function updateGraphQL(id) {
@@ -278,7 +270,7 @@ function updateGraphQL(id) {
         }
         Query = updateString(parameters);
         $("#input").val(`{\n\n` + Query + `\n\n}`);
-    })
+    });
 
     //End Date
     $("#end").change(function () {
@@ -353,26 +345,25 @@ function constructQuery(parameterObj){
 }
 
 /* save file modal */
-function modalPopUp(searchID){
+function saveModalInvoke(id, searchID){
     if ( formValid(searchID)){
         $("#save").modal('show');
     }
-
-    //pass the searchID to somewhere
-    $("#saveButton").attr('name',searchID);
+    $("#saveButton")
+        .attr('name',searchID)
+        .attr('monitor-id', id);
 }
 
 /* save file modal click events */
-function saveModalClick(){
+function saveButtonClick(){
     var searchID = $("#saveButton").attr('name');
-    if (searchID === '#searchbox'){
-        if (saveValid('#sn-filename')){
-            submitSearchbox(`#searchbox`,`#sn-filename`);
+    if (saveValid('#sn-filename')){
+        if (searchID === '#searchbox'){
+            var id = $("#saveButton").attr('monitor-id');
+            submitSearchbox(id, searchID,`#sn-filename`);
         }
-    }
-    else if (searchID === '#input'){
-        if (saveValid('#sn-filename')){
-            submitFullQuery(`#input`,`#sn-filename`);
+        else{
+            submitFullQuery(searchID,`#sn-filename`);
         }
     }
 }
@@ -458,14 +449,14 @@ function formValid(searchID){
 
 // save modal click
 $("#saveButton").on('click',function(e){
-    saveModalClick()
+    saveButtonClick()
 });
 
 // save file name
 $("#sn-filename").on('keypress',function(e){
     if (e.keyCode === 13 || e.keycode == 10){
         e.preventDefault();
-        saveModalClick()
+        saveButtonClick()
     }
 });
 
@@ -484,8 +475,6 @@ function submitFullQuery(textareaID,filenameID){
     var filename = $(filenameID).val();
     var prefix = 'crimson-Hexagon';
     var params = parameters;
-
-    if (s3FolderName == undefined) s3FolderName = 'local';
     $.ajax({
         url:"query",
         type:"post",
@@ -493,8 +482,7 @@ function submitFullQuery(textareaID,filenameID){
             "filename":filename,
             "params":JSON.stringify(params),
             "pages":-999,
-            "prefix":prefix,
-            "s3FolderName":s3FolderName
+            "prefix":prefix
         },
         success:function(data){
             $(".loading").hide();
@@ -512,18 +500,17 @@ function submitFullQuery(textareaID,filenameID){
     });
 }
 
-function submitSearchbox(searchboxID, filenameID){
+function submitSearchbox(monitorId, searchboxID, filenameID){
 
     $(".loading").show();
 
     // escape doule quotation mark
     var keyword = $(searchboxID).val();
     var keyword = keyword.replace(/[\"]+/g, `\\"`);
-    var id = $("#save").find(".modal-header p").text();
 
     dateRange = setDate();
     parameters['filter:']['keywords:'] = keyword;
-    parameters['id:'] = id;
+    parameters['id:'] = monitorId;
 
     if (keyword === ''){
         var queryString = `{
@@ -572,8 +559,6 @@ function submitSearchbox(searchboxID, filenameID){
     var filename = $(filenameID).val();
     var prefix = 'crimson-Hexagon';
     var params = parameters;
-
-    if (s3FolderName == undefined) s3FolderName = 'local';
     $.ajax({
         url:"query",
         type:"post",
@@ -581,8 +566,7 @@ function submitSearchbox(searchboxID, filenameID){
             "filename":filename,
             "params":JSON.stringify(params),
             "pages":-999,
-            "prefix":prefix,
-            "s3FolderName":s3FolderName
+            "prefix":prefix
         },
         success:function(data){
             $(".loading").hide();
@@ -605,15 +589,15 @@ function renderDownload(URLs, fname){
     $("#save").modal('hide');
 
     // append modal-download in the background
-    $("#modal-download").empty();
-    $("#modal-download").append(`<ul style="margin:5px 5px;">
-									<a href="` + URLs[0] + `" style="color:red;">
-									    <span class="glyphicon glyphicon-download-alt"></span>`
-                                            + `DONWLOAD ` +  fname + `</a>
-									<p hidden>` + URLs[1] +`</p>
-								</ul>`);
+    $("#modal-download")
+        .empty()
+        .append(`<ul style="margin:5px 5px;">
+            <a href="` + URLs[0] + `" style="color:red;">
+        <i class="fas fa-download"></i>&nbsp;`
+        + `DONWLOAD ` +  fname + `</a>
+            <p hidden>` + URLs[1] +`</p>
+        </ul>`);
     $("#success").modal('show');
-
     $("#rendering").find('a[class="btn btn-info"]').attr('href',URLs[0]);
 }
 
@@ -641,5 +625,3 @@ function expandDoc(){
         $(".monitor-list").parent().toggleClass('col-lg-8 col-md-8 col-sm-8 col-xs-8');
     });
 }
-
-// exchange tweet id for tweet text not working yet

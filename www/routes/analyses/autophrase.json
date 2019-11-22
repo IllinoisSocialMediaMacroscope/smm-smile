@@ -1,0 +1,144 @@
+{
+  "path": "autophrase",
+  "title": "Automated Phrase Mining",
+  "imgURL": "bootstrap/img/logo/NLP/phrase.jpg",
+  "wiki": "https://arxiv.org/abs/1702.04457",
+  "introduction": [
+    "As one of the fundamental tasks in text analysis, phrase mining aims at extracting quality",
+    "phrases from a text corpus. Phrase mining is important in various tasks such as information",
+    "extraction/retrieval, taxonomy construction, and topic modeling."
+  ],
+  "result_path": "/NLP/autophrase/",
+  "results": [
+    {
+      "acronym": "config",
+      "name": "configuration",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": true
+    },
+    {
+      "acronym": "AutoPhrase",
+      "name": "complete list of phrase extracted",
+      "download": true,
+      "img": false,
+      "preview": true,
+      "dataTable": true,
+      "config": false
+    },
+    {
+      "acronym": "AutoPhrase_multi-words",
+      "name": "phrase with multiple words",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "AutoPhrase_single-word",
+      "name": "phrase that has single word",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "div",
+      "name": "visualization",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "segmentation",
+      "name": "model",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "token_mapping",
+      "name": "token mapping",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    }
+  ],
+  "args": [
+    "minSup",
+    "algorithm"
+  ],
+  "get": {
+    "containers": [
+      {
+        "container-name": "minimum-support",
+        "container-label-name": "Minimum Support",
+        "input": {
+          "type": "range",
+          "min": "1",
+          "max": "100",
+          "value": "30",
+          "name": "minSup",
+          "onchange": "rangeNode.value=value",
+          "id": "minSup",
+          "output_id": "rangeNode"
+        }
+      },
+      {
+        "container-name": "",
+        "container-label-name": "Algorithm",
+        "input": {
+          "type": "select",
+          "name": "algorithm",
+          "id": "algorithm",
+          "options": [
+            {
+              "value": "Please Select...",
+              "label": "Please Select..."
+            },
+            {
+              "value": "autophrase",
+              "label": "AutoPhrase (Automated Phrase Mining from Massive Text Corpora)"
+            }
+          ]
+        }
+      }
+    ],
+    "buttonGroups": [
+      {
+        "id": "clear",
+        "class": "btn btn-primary",
+        "value": "Clear",
+        "style": "margin: auto 5px;",
+        "onclick": "customized_reset();"
+      },
+      {
+        "id": "submit",
+        "class": "btn btn-danger",
+        "value": "Submit",
+        "style": "margin: auto 5px;"
+      }
+    ],
+    "citation": {
+      "trigger_id": "algorithm",
+      "content": [
+        {
+          "text": ["Shang, J., Liu, J., Jiang, M., Ren, X., Voss, C. R., & Han, J. (2017).<a href=\"https://arxiv.org/pdf/1702.04457.pdf\" target=\"_blank\">Automated phrase mining from massive text corpora. arXiv preprint arXiv:1702.04457.</a>"],
+          "condition": "autophrase"
+        }
+      ]
+    }
+  },
+  "post": {
+    "batch_config": {
+      "batch_action": "/bin/bash",
+      "batch_script": "auto_phrase.sh",
+      "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_autophrase_dev:2",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
+    }
+  }
+}

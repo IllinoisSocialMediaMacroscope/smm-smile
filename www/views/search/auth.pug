@@ -1,0 +1,23 @@
+<!-- auth -->
+div(id="auth-panel")
+    p(class="auth-header") Authorization
+    p(class="auth-description") SMILE ensures compliant data collection by connecting to the social media platforms
+        | using official APIs and
+        | requesting users to provide authorized account to log into their services. Users will only access data that
+        | they have permission to, and the data will be collected following the protocol of each platform.
+    div(class="twitter-auth", id="twitter-auth")
+        a(class="btn btn-primary btn-block auth-button", href="login/twitter", target="_blank")
+            img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px")
+            | Authorize with your Twitter account
+            img(src="bootstrap/img/logo/checkbox.png", class="export-success", width="30px", style="display:none;")
+    div(class="reddit-auth", id="reddit-auth")
+        a(class="btn btn-primary btn-block auth-button")
+            img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px")
+            | Authorize with your Reddit account
+            img(src="bootstrap/img/logo/checkbox.png", class="export-success", width="30px", style="display:none;")
+    div(class="crimson-auth", id="crimson-auth")
+        button(class="btn btn-primary btn-block auth-button")
+            img(src='bootstrap/img/logo/crimson-sm-logo.png', width="30px",height="30px")
+            | Authorize with your Crimson Hexagon account
+            img(src="bootstrap/img/logo/checkbox.png", class="export-success", width="30px", style="display:none;")
+    button(id="auth-next", style="", class="pull-right") next

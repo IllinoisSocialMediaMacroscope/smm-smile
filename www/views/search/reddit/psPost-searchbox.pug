@@ -2,16 +2,13 @@ div(class="pushshift-post")
 	div(class="form-group")
 		<label class="label-control warning">maximum number of reddit submissions
 			<span class="warningText">Careful, Large number will cause internet traffic jam! </span></label>
-		div(class="range range-node")
-			input(type="range" min="100" max="10000" value="1000" step="100" id="ps-size" onchange="psPost_rangeNode.value=value")
-			<output id="psPost_rangeNode">1000</output>
 	
 	div(class="form-group")
 		<label class="label-control">Restrict to a specific Subreddit
 			<input type="checkbox" id="ps-subreddit" value="ps-subreddit">
 		</label>
 	div(class="form-group ps-subreddit")
-		label(for="") Subreddit name
+		label Subreddit name
 		input(type="text" class="form-control" id="ps-subreddit-name" placeholder="subreddit name e.g. news")
 		
 	div(class="form-group")
@@ -19,11 +16,11 @@ div(class="pushshift-post")
 			<input type="checkbox" id="ps-author" value="ps-author">
 		</label>
 	div(class="form-group ps-author")
-		label(for="") Author name
+		label Author name
 		input(type="text" class="form-control" id="ps-author-name" placeholder="author name e.g. FakeUserName")
 	<!-- date -->
 	div(class="form-group")
-		<label class="label-control"><span class="glyphicon glyphicon-calendar" style="margin-right:5px;"></span>Filter based on DATE
+		<label class="label-control"><i class="far fa-calendar-alt"></i>&nbsp;Filter based on DATE
 			<input type="checkbox" id="ps-dateRange" value="ps-dateRange">
 		</label>
 	div(class="form-group ps-dateRange")
@@ -39,30 +36,23 @@ div(class="pushshift-post")
 		<label class="label-control">Select Fields</label>
 		br
 		select(multiple,id="psPostFields",class="fields")
-			optgroup(label="psMetadata")
-				option(value="_index" selected) _index 
-				option(value="_id" selected) _id
-				option(value="_type" selected) _type
-				option(value="_score" selected) _score 
-			optgroup(label="BasicFields")
-				option(value="author_name" selected) author name
-				option(value="created_utc" selected) created utc
-				option(value="domain" selected) domain
-				option(value="id" selected) id
-				option(value="is_self" selected) is self
-				option(value="locked" selected) locked
-				option(value="num_comments" selected) num comments
-				option(value="over_18" selected) over 18
-				option(value="permalink" selected) permalink
-				option(value="full_link" selected) full_link
-				option(value="pinned" selected) pinned
-				option(value="retrieved_on" selected) retrieved on
-				option(value="score" selected) score
-				option(value="stickied" selected) stickied						
-				option(value="spoiler" selected) spoiler						
-				option(value="subreddit_display_name" selected) subreddit display name						
-				option(value="subreddit_id" selected) subreddit id						
-				option(value="subreddit_name_prefixed" selected) subreddit name prefixed						
-				option(value="title" selected) title			
-				option(value="url" selected) url			
-		
+			option(value="author_name" selected) author name
+			option(value="created_utc" selected) created utc
+			option(value="domain" selected) domain
+			option(value="id" selected) id
+			option(value="is_self" selected) is self
+			option(value="locked" selected) locked
+			option(value="num_comments" selected) num comments
+			option(value="over_18" selected) over 18
+			option(value="permalink" selected) permalink
+			option(value="full_link" selected) full_link
+			option(value="pinned" selected) pinned
+			option(value="retrieved_on" selected) retrieved on
+			option(value="score" selected) score
+			option(value="stickied" selected) stickied
+			option(value="spoiler" selected) spoiler
+			option(value="subreddit_display_name" selected) subreddit display name
+			option(value="subreddit_id" selected) subreddit id
+			option(value="subreddit_name_prefixed" selected) subreddit name prefixed
+			option(value="title" selected) title
+			option(value="url" selected) url

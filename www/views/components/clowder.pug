@@ -4,6 +4,7 @@ div(id="clowder-login-modal" class="modal fade" role="dialog" data-keyboard="fal
 			div(class="modal-header")
 				button(class="close", data-dismiss="modal") &times;
 				img(src="bootstrap/img/logo/clowder-bg-logo.png",width="200", style="display:block;margin-right:auto;")
+				p <kbd>Ctrl + Alt + C</kbd>
 			div(class="modal-body form")
 				div(class="control-group")
 					label(class="control-label") Username
@@ -13,8 +14,8 @@ div(id="clowder-login-modal" class="modal fade" role="dialog" data-keyboard="fal
 					input(type="password", class="form-control", id="clowderPassword", placeholder="Password")
 			div(class="modal-footer")
 				button(class="btn btn-yes", onclick="submit_clowder_login();")
-					span(class="glyphicon glyphicon-log-in")
-					| Login
+					i(class="fas fa-sign-in-alt")
+					| &nbsp;Login
 
 div(id="clowder-modal" class="modal fade" role="dialog" data-keyboard="false")
 	div(class="modal-dialog", style="width:calc(90%)")
@@ -22,7 +23,7 @@ div(id="clowder-modal" class="modal fade" role="dialog" data-keyboard="false")
 			div(class="modal-header")
 				button(class="close", data-dismiss="modal") &times;
 				img(src="bootstrap/img/logo/clowder-bg-logo.png",width="200", style="display:block;margin-right:auto;")
-				//p(style="text-align:center; margin-top:10px;") <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>C</kbd> 
+				p <kbd>Ctrl + Alt + C</kbd>
 			div(class="modal-body form")
 				// dataset!!!
 				div(class="clowder-dataset-block")
@@ -119,16 +120,16 @@ div(id="clowder-modal" class="modal fade" role="dialog" data-keyboard="false")
 							
 			div(class="modal-footer")
 				div(class="clowder-dataset-block")
-					button(class="btn btn-danger", id="clowder-next", onclick="submit_clowder_dataset();")
-						span(class="glyphicon glyphicon-chevron-right")
-						| Next
+					button(class="btn btn-yes", id="clowder-next", onclick="submit_clowder_dataset();")
+						i(class="fas fa-chevron-right")
+						| &nbsp;Next
 				div(class="clowder-files-block", style="display:none;")
 					button(class="btn btn-no", onclick="prev_clowder_dataset();", id="clowder-prev")
-						span(class="glyphicon glyphicon-chevron-left")
-						| Prev
+						i(class="fas fa-chevron-left")
+						| &nbsp;Prev
 					button(class="btn btn-yes", onclick="submit_clowder_files();", id="clowder-upload")
-						span(class="glyphicon glyphicon-upload")
-						| Upload
+						i(class="fas fa-upload")
+						| &nbsp;Upload
 					img(src="bootstrap/img/gifs/loading2.gif", width="10%", height="10%",style="display:none;")
 						
 div(id="clowder-confirmation", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
@@ -136,7 +137,7 @@ div(id="clowder-confirmation", class="modal fade", role="dialog", data-backdrop=
 		div(class="modal-content",style="width:650px;")
 			div(class="modal-body confirmation")
 				div(id="modal-message")
-					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="80px")
+					img(src="bootstrap/img/gifs/success.gif", width="80px")
 					p(id="clowder-message")
 					div(id="file-links")
 			div(class="modal-footer")

@@ -1,0 +1,145 @@
+{
+  "path": "sentiment",
+  "title": "Sentiment Analysis",
+  "imgURL": "bootstrap/img/logo/NLP/SA.png",
+  "wiki": "https://en.wikipedia.org/wiki/Sentiment_analysis",
+  "introduction": [
+    "<b>Sentiment analysis</b> (sometimes known as opinion mining or emotion AI) refers to the",
+    "use of <a href=\"https://en.wikipedia.org/wiki/Sentiment_analysis/wiki/Natural_language_processing\">",
+    "natural language processing</a>, <a href=\"https://en.wikipedia.org/wiki/Sentiment_analysis/wiki/Text_analytics\" >text analysis</a>,",
+    "<a href=\"https://en.wikipedia.org/wiki/Sentiment_analysis/wiki/Computational_linguistics\">computational linguistics</a>, and",
+    "<a href=\"https://en.wikipedia.org/wiki/Sentiment_analysis/wiki/Biometrics\">biometrics</a> to systematically identify, extract,",
+    "quantify, and study affective states and subjective information."
+  ],
+  "result_path": "/NLP/sentiment/",
+  "results": [
+    {
+      "acronym": "config",
+      "name": "configuration",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": true
+    },
+    {
+      "acronym": "div",
+      "name": "visualization",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "sentiment",
+      "name": "sentence-level sentiment scores",
+      "download": true,
+      "img": false,
+      "preview": true,
+      "dataTable": true,
+      "config": false
+    },
+    {
+      "acronym": "doc",
+      "name": "document-level sentiment scores",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "negation",
+      "name": "negation words",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "allcap",
+      "name": "capital letter",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    }
+  ],
+  "args": [
+    "algorithm"
+  ],
+  "get": {
+    "containers": [
+      {
+        "container-name": "",
+        "container-label-name": "Algorithm",
+        "input": {
+          "type": "select",
+          "name": "algorithm",
+          "id": "algorithm",
+          "options": [
+            {
+              "value": "Please Select...",
+              "label": "Please Select..."
+            },
+            {
+              "value": "vader",
+              "label": "VADER (Valence Aware Dictionary and Sentiment Reasoner)"
+            },
+            {
+              "value": "sentiWordNet",
+              "label": "sentiWordNet"
+            },
+            {
+              "value":"debias",
+              "label":"Sentiment Classification using Debiasing Word Embeddings"
+            }
+          ]
+        }
+      }
+    ],
+    "buttonGroups": [
+      {
+        "id": "clear",
+        "class": "btn btn-primary",
+        "value": "Clear",
+        "style": "margin: auto 5px;",
+        "onclick": "customized_reset();"
+      },
+      {
+        "id": "submit",
+        "class": "btn btn-danger",
+        "value": "Submit",
+        "style": "margin: auto 5px;"
+      }
+    ],
+    "citation": {
+      "trigger_id": "algorithm",
+      "content": [
+        {
+          "text": ["Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014. <a href=\"http://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/download/8109/8122\" target=\"_blank\">http://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/download/8109/8122</a>"],
+          "condition": "vader"
+        },
+        {
+          "text": ["Baccianella, Stefano, Andrea Esuli, and Fabrizio Sebastiani. \"Sentiwordnet 3.0: an enhanced lexical resource for sentiment analysis and opinion mining.\" Lrec. Vol. 10. No. 2010. 2010. <a href=\"http://nmis.isti.cnr.it/sebastiani/Publications/LREC10.pdf\" target=\"_blank\">http://nmis.isti.cnr.it/sebastiani/Publications/LREC10.pdf</a>"],
+          "condition": "sentiWordNet"
+        },
+        {
+          "text":["Speer, R., Chin, J., & Havasi, C. (2017, February). Conceptnet 5.5: An open multilingual graph of general knowledge. In Thirty-First AAAI Conference on Artificial Intelligence. <a href=\"https://aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14972/14051\" target=\"_blank\">https://aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14972/14051</a>",
+            "Speer, R. (2017). How to make a racist AI without really trying. <a href=\"http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying\" target=\"_blank\">http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying</a>"],
+          "condition": "debias"
+        }
+      ]
+    }
+  },
+  "post": {
+    "cutoff":10000,
+    "lambda_config": {
+      "aws_lambda_function": "lambda_sentiment_analysis"
+    },
+    "batch_config": {
+      "batch_action": "python3.6",
+      "batch_script": "/scripts/batch_function.py",
+      "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_sentiment_analysis:3",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
+    }
+  }
+}

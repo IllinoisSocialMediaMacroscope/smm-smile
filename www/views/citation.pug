@@ -1,0 +1,48 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible",content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+
+        <!-- this is for bootstrap 3! -->
+        link(href="bootstrap/css/bootstrap.css", rel="stylesheet")
+        <!-- this is the customized dashboard style -->
+        link(href="bootstrap/css/customized/citation.css", rel="stylesheet")
+        link(href="bootstrap/css/customized/global.css", rel="stylesheet")
+        link(rel="stylesheet",
+            href="https://use.fontawesome.com/releases/v5.0.10/css/all.css",
+            integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg",
+            crossorigin="anonymous")
+
+        <!-- font family -->
+        link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+        script(src="bootstrap/js/bootstrap.min.js")
+
+        <!-- jquery cookie plugin -->
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+        script(src="bootstrap/js/customized/detect_cookie.js")
+
+        <!-- customized -->
+        script(src="bootstrap/js/customized/warning_trigger.js")
+        script(src="bootstrap/js/customized/parse_session.js")
+
+    body
+        include components/topbar.pug
+        include components/export.pug
+        include components/terminate.pug
+        include components/warning.pug
+        include components/clientside-warning.pug
+        include components/cookie.pug
+
+        div(class="citation")
+            h4(class="citation-header") Citation
+            h4(class="citation-content") If you use this tool please cite it in your work using the citation below.
+                | Your citation will help us
+                | continue to provide and improve this platform!
+            div(class="citation-notice")
+                p Yun, J. T., Vance, N., Wang, C., Marini, L., Troy, J., Donelson, C., Chin, C. L., Henderson, M. D. (2019).
+                    | The Social Media Macroscope: A science gateway for research using social media data. Future Generation
+                    | Computer Systems. doi:10.1016/j.future.2019.10.029
+            a(class="btn btn-default pull-right", id="cite-next", href="query") Next

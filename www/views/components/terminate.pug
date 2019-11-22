@@ -4,13 +4,14 @@ div(id="terminate-modal" class="modal fade" role="dialog")
 			div(class="modal-header")
 				button(class="close" data-dismiss="modal") &times;
 				h2(class="modal-title") Terminate This Session?
-				//p (Hot keys: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd> )
+				p <kbd>Ctrl + Alt + T</kbd>
 			div(class="modal-body form")
 				img(src="bootstrap/img/gifs/warning.gif",style="width:15px;")
 				p(style="display:inline;color:red;margin-left:5px;") <b>Warning:</b> 
-				p All data associated with this session will no longer be available!
+				p Any data you collected or generated within 30 days will be
+					|  restored when you launch your next session.
 			div(class="modal-footer")
-				button(class="btn btn-yes",onclick="exportOptions('terminate');") Yes	
+				button(class="btn btn-yes",onclick="exportOptions();") Yes
 				button(class="btn btn-no",data-dismiss="modal") No
 
 script(src="bootstrap/js/customized/view_termination.js")

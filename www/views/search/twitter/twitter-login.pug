@@ -4,53 +4,13 @@ div(id="twitter-callback" class="modal fade" role="dialog" data-backdrop="static
         div(class="modal-content")
             div(class="modal-body", style="padding:30px;overflow:auto;")
                 button(class="close" data-dismiss="modal") &times;
-                div(id="twitter-login-header")
+                div(class="login-header")
                     img(src="bootstrap/img/logo/twitter-sm-logo.png", width=80)
                     h2 Twitter
-                div(id="twitter-login-notes")
-                    img(src="bootstrap/img/gifs/warning.gif")
-                    p You have granted Twitter access to Social Media Macroscope SMILE. Enter the PIN to complete the authorization process.
+                div(class="login-notes")
+                    p You have granted Twitter access to Social Media Macroscope SMILE. Enter the PIN to complete the
+                        | authorization process.
                 div(class="form-inline")
                     i(class="fas fa-key")
                     input(id="twitter-pin", class="form-control", placeholder="PIN")
-                button(class="btn btn-yes pull-right" style="margin:10px;" id="twitter-pin-submit") submit
-
-script.
-    // post the pin to retreive access key and token
-    $("#twitter-pin-submit").on('click', function () {
-        console.log('click');
-        $.ajax({
-            type: 'post',
-            url: 'login/twitter',
-            data: {
-                "twt_pin": $("#twitter-pin").val(),
-                "currentURL": newPath,
-                "currentPage": currPage
-            },
-            success: function (data) {
-                window.location.replace(data.redirect_url);
-            },
-            error: function (jqXHR, exception) {
-                $("#error").val(jqXHR.responseText);
-                $("#warning").modal('show');
-            }
-        });
-    });
-
-    // post the pin to retreive access key and token
-    $("#twitter-pin").on('keyup', function (e) {
-        if (e.keyCode == 13 || e.keyCode == 10) {
-            $.ajax({
-                type: 'post',
-                url: 'login/twitter',
-                data: {"twt_pin": $("#twitter-pin").val()},
-                success: function (data) {
-                    window.location.replace(data.redirect_url);
-                },
-                error: function (jqXHR, exception) {
-                    $("#error").val(jqXHR.responseText);
-                    $("#warning").modal('show');
-                }
-            });
-        }
-    });
+                button(class="btn btn-primary pull-right" style="margin:10px;" id="twitter-pin-submit") submit

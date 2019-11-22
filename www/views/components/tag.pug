@@ -3,24 +3,28 @@ div(id="tag-modal" class="modal fade" role="dialog" data-backdrop="static" data-
 		div(class="modal-content")
 			div(class="modal-header")
 				button(class="close", data-dismiss="modal") &times;
-				//img(src="bootstrap/img/logo/tag.png",width="20px")
-				h3(class="modal-title", id="modal-title", style="text-align:left;vertical-align:middle;") Give it a name 
-				//p <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>N</kbd>
+				h2(class="modal-title", id="modal-title", style="text-align:left;vertical-align:middle;") Tag the Results
+				p <kbd>Ctrl + Alt + N</kbd>
 			div(class="modal-body form")
-				div(id="modal-message")
+				div(class="modal-message")
 					div(class="form-group")
-						p Tag a personalized name to this job so that you can locate it faster in the history page. Otherwise the default ID will be displayed.
+						p Please add a tag to identify/describe the analysis results. This is designed to help you
+							|  memorize and locate the related items easier in the <b>HISTORY</b> page.
+							|  <u>Note that if no tag is provided, only the default ID will be displayed.</u>
 					div(class="form-group")
-						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") ID
-						div(class="col-md-8 col-md-8 col-xs-12")
-							input(class="form-control" id="jobId", placeholder="Nothing to name yet" disabled)
+						label(class="control-label col-md-2 col-md-2 col-xs-12") ID
+						div(class="col-md-10 col-md-10 col-xs-12")
+							input(class="form-control" id="jobId", placeholder="Nothing to be tagged yet" disabled)
 					div(class="form-group")
-						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Rename
-						div(class="col-md-8 col-md-8 col-xs-12")
-							input(id="tagName", class="form-control")
+						label(class="control-label col-md-2 col-md-2 col-xs-12") Tag
+						div(class="col-md-10 col-md-10 col-xs-12")
+							input(id="tagName", class="form-control", data-role="tagsinput", placeholder="Type, Enter, Backspace, L/R")
 			div(class="modal-footer")
-				button(class="btn btn-yes",id="tag") Tag
-				button(class="btn btn-no",data-dismiss="modal") Close
+				button(class="btn btn-yes", id="tag") Tag
+
+script.
+	$("#tag-modal").on('hidden.bs.modal', function() {
+		$('#tagName').tagsinput('removeAll');
+	});
 
 script(src="bootstrap/js/customized/view_tag.js")
-	

@@ -12,14 +12,7 @@ document.addEventListener ("keydown", function (e) {
 	
 	// for terminate ctrl + alt + E
 	if (e.ctrlKey  &&  e.altKey  &&  e.code === "KeyE") {
-		exportOptions('export');
-	}
-	
-	// download search results ctrl + alt + D
-	if (e.ctrlKey  &&  e.altKey  &&  e.code === "KeyD") {
-		if(currPage !== 'history'){
-			$("#success").modal('show');
-		}
+		exportOptions();
 	}
 	
 	// clowder hotkey ctrl + at + C

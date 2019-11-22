@@ -21,7 +21,7 @@ const elasticSearchType = module.exports = new GraphQLObjectType({
 							description:'The search query to run against people search.' 
 						},
 				perPage:{ 	type:GraphQLInt,
-							defaultValue:3
+							defaultValue:100
 						},
 				pageNum: 	{ 	type: GraphQLInt,
 								defaultValue:1
@@ -29,12 +29,10 @@ const elasticSearchType = module.exports = new GraphQLObjectType({
 				startDate:  {
 								type:GraphQLString,
 								description:"yyyy-mm-dd",
-								//defaultValue: 'now-7d/d',
 							},
 				endDate:	{
 								type:GraphQLString,
 								description:"yyyy-mm-dd",
-								//defaultValue:'now/d'
 							},
 				lat:		{
 								type:GraphQLFloat,

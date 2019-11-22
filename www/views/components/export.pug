@@ -1,43 +1,38 @@
-div(id="export-modal",class="modal fade",role="dialog")
-	div(class="modal-dialog")
-		div(class="modal-content",style="width:800px;")
-			div(class="modal-header")
-				button(class="close", data-dismiss="modal") &times;
-				h2(class="modal-title") Export 
-				//p (Hot keys: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>E</kbd> )
-			div(class="modal-body export")
-				p Authorize with your own online storage account, and we will export a .zip file with <b>ALL</b> of your data associate with this session to your storage.
-				| Make sure you have <b>at least 100MB</b> free space available on your remote drive.
-				div(id="googleDrive",class="form-group")
-					a(href="login/google", id="google-auth", target="_blank", class="export-auth-btn") 
-						img(src="bootstrap/img/logo/googledrive-sm-logo.png", width="25px",height="25px")
-						|  Authorize Google Drive 
-					button(class="btn btn-primary", id="googleDrive-export",style="display:none;",onclick="exportFiles(this.id);") export
-					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading", width="40px" style="display:none;")
-					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-					input(class="auth-code", placeholder=` Paste your code as instructed and press enter.`)
-					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
-				
-				div(id="dropbox",class="form-group")
-					a(href="login/dropbox", target="_blank", id="dropbox-auth", class="export-auth-btn")
-						img(src="bootstrap/img/logo/dropbox-sm-logo.png", width="30px",height="30px")
-						|  Authorize Dropbox
-					button(class="btn btn-primary", id="dropbox-export",style="display:none;",onclick="exportFiles(this.id);") export
-					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
-					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-					input(class="auth-code",placeholder=` Paste your code as instructed and press enter.`)
-					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
-				
-				div(id="box",class="form-group")
-					a(id="box-auth", class="export-auth-btn")
-						img(src="bootstrap/img/logo/box-sm-logo.png", width="30px",height="30px")
-						|  Authorize Box
-					button(class="btn btn-primary", id="box-export",style="display:none;",onclick="exportFiles(this.id);") export
-					img(src="bootstrap/img/gifs/loading2.gif", class="export-loading",width="40px" style="display:none;")
-					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="30px" style="display:none;")
-					a(id="embedded-link", target="_blank", style="display:none;padding:15px;") 
-					
-			div(class="modal-footer")
-				button(class="btn btn-yes",onclick="terminate();") Terminate		
+div(id="export-modal", class="modal fade", role="dialog")
+    div(class="modal-dialog")
+        div(class="modal-content", style="width:800px;")
+            div(class="modal-header")
+                button(class="close", data-dismiss="modal") &times;
+                h2(class="modal-title") Export
+                p <kbd>Ctrl + Alt + E</kbd>
+            div(class="modal-body export")
+                p Authorize with your own online storage account, and we will export a .zip file to your storage.
+                    | &nbsp;Make sure you have enough free space available on your remote drive.
+                div(id="google", class="form-group")
+                    a(href="login/google", id="google-auth", target="_blank", class="export-auth-btn")
+                        img(src="bootstrap/img/logo/googledrive-sm-logo.png", width="25px", height="25px")
+                        |  Authorize Google Drive
+                    button(class="btn btn-primary export-btn", id="google-export") export
+                    img(src="bootstrap/img/gifs/loading2.gif", class="export-loading", width="40px" style="display:none;")
+                    input(class="auth-code", placeholder="Paste your code as instructed and press enter.")
+                    a(class="embedded-link", target="_blank", style="display:none;padding:15px;")
+                div(id="dropbox", class="form-group")
+                    a(href="login/dropbox", target="_blank", id="dropbox-auth", class="export-auth-btn")
+                        img(src="bootstrap/img/logo/dropbox-sm-logo.png", width="30px", height="30px")
+                        |  Authorize Dropbox
+                    button(class="btn btn-primary export-btn", id="dropbox-export") export
+                    img(src="bootstrap/img/gifs/loading2.gif", class="export-loading", width="40px" style="display:none;")
+                    input(class="auth-code",placeholder="Paste your code as instructed and press enter.")
+                    a(class="embedded-link", target="_blank", style="display:none;padding:15px;")
+
+                div(id="box", class="form-group")
+                    a(id="box-auth", class="export-auth-btn")
+                        img(src="bootstrap/img/logo/box-sm-logo.png", width="30px", height="30px")
+                        |  Authorize Box
+                    button(class="btn btn-primary export-btn", id="box-export") export
+                    img(src="bootstrap/img/gifs/loading2.gif", class="export-loading", width="40px" style="display:none;")
+                    a(class="embedded-link", target="_blank", style="display:none;padding:15px;")
+            div(class="modal-footer")
+                button(class="btn btn-yes",onclick="terminate();") Terminate
 
 script(src="bootstrap/js/customized/view_export.js")

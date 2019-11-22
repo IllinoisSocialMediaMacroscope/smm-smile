@@ -1,22 +1,22 @@
 div(class="input-group", id="adv-search")
 	<!-- search box -->
 	input(type="text", class="form-control", id="searchbox", placeholder="Search...")
+	div(class="prompt")
 				
 <!-- search buttons -->
 div(class="input-group-addon-btn")
 	div(class="btn-group")
 		div(class="dropdown dropdown-lg")
-			button(id="dropdownButton" type="button",class="btn btn-default dropdown-toggle" aria-expanded="false" aria-haspopup="true") 
-				span(class="glyphicon glyphicon-chevron-down")
-				| Advanced
+			button(id="dropdownButton" type="button",class="btn btn-default dropdown-toggle" aria-expanded="false" aria-haspopup="true")
+				i(class="fas fa-chevron-down")
+				| &nbsp;Advanced
 			<!-- dropdown content start -->
 			div(class="dropdown-menu dropdown-menu-right")
 				br
 				form(class="form-horizontal")
 					
 					include twitter/tweet-searchbox.pug
-					include twitter/user-searchbox.pug
-					include twitter/es-searchbox.pug
+					include twitter/timeline-searchbox.pug
 					include reddit/search-searchbox.pug
 					include reddit/post-searchbox.pug
 					include reddit/comment-searchbox.pug
@@ -27,14 +27,12 @@ div(class="input-group-addon-btn")
 						textarea(class="form-control", id="input", rows="15",placeholder="If you know GraphQL, try typing your own string! :-D",disabled) 
 					div(class="col-md-12")
 							button(type="button", class="btn btn-primary", id="adv-search-btn") 
-								span(class="glyphicon glyphicon-search")
-								| Search	
+								i(class="fas fa-search")
+								| &nbsp;Search
 							button(type="button", class="btn btn-info",id="expandDoc") 
-								span(class="glyphicon glyphicon-tasks")
-								| Help
+								i(class="far fa-question-circle")
+								| &nbsp;Help
 			<!-- search button -->								
 			button(type="button",class="btn btn-primary",id="simple-search-btn") 
-				span(class="glyphicon glyphicon-search" aria-hidden="true")
-				| Search
-			
-			
+				i(class="fas fa-search" aria-hidden="true")
+				| &nbsp;Search

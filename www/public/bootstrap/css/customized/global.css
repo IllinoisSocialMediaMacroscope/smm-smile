@@ -1,66 +1,36 @@
+/*Top bars*/
+.navbar-inverse .navbar-nav > li > a {
+	color: #ffffff;
+	font-size:14px;
+}
+
 #topbar-analytics{
 	font-size:14px;
 	display:inline-block;
 	margin:10px 10px;
 }
 #topbar-analytics-btn{
-	border-radius:5px;
 	padding:6px 30px;
 	color:white;
 	background-color:#1e325a;
-	border:solid 1px #888;
+	border:none;
 }
 
-#topbar-home{
-	font-size:14px;
-	color:white;
-	background-color:#ea4a36;
-	margin:10px 10px;
-	border-radius:30px;
-	padding:6px 20px;
-}
 #topbar-hub{
 	font-size:14px;
 	color:white;
-	background-color:#e2af51;
-	margin:10px 10px;
-	border-radius:30px;
-	padding:6px 20px;
+	margin: 10px 10px;
+	border-radius: 10px;
+	border: 1px solid #e94a36;
+	padding: 6px 20px;
 }
 
-#topbar-export,
 #topbar-history,
 #topbar-query{
 	font-size:14px;
 	color:white;
-	border:solid 1px #888;
-	margin:10px 10px;
-	border-radius:5px;
+	margin:10px 0px;
 	padding:6px 20px;
-}
-
-	
-#topbar-analytics-btn:hover,
-#topbar-export:hover,
-#topbar-generic:hover,
-#topbar-home:hover,
-#topbar-hub:hover,
-#topbar-query:hover{
-	color:black;
-	background-color:#eae8e8;
-}
-
-#sitemap-input{
-	border-radius:30px;
-}
-
-#sitemap-none{
-	margin-top:0;
-	margin-left:30px;
-	margin-bottom:26px;
-	font-size:small;
-	line-height:1.2;
-	text-align:left;
 }
 
 .page-title{
@@ -68,7 +38,7 @@
 	font-weight:600;
 }
 
-.sitemap-list-container{
+.list-container{
 	margin-top:0;
 	margin-left:30px; 
 	margin-bottom:26px;
@@ -100,77 +70,32 @@ cite{
 
 /* footer */
 .footer-bs {
-    background-color: #1e325a;
-	padding: 60px 40px;
+	background-color: #1e325a;
+	padding: 20px;
 	color: #f5f6f8;
-}
-
-.footer-bs .footer-brand, 
-.footer-bs .footer-nav, 
-.footer-bs .footer-power, 
-.footer-bs .footer-ns { 
-	padding:10px 25px; 
-	border-color: transparent;
-}
-
-.footer-bs .footer-nav ul.list,
-.footer-bs .footer-power ul { 
-	list-style:none; 
-	padding:0px; 
-}
-.footer-bs .footer-nav ul.list li,
-.footer-bs .footer-power li  { 
-	padding:5px 0px;
-	font-size:14px;
-}
-.footer-bs .footer-nav ul.list li a,
-.footer-bs .footer-power li a{ 
-	color:#f5f6f8;
-}
-.footer-bs .footer-nav ul.list li a:hover,
-.footer-bs .footer-power li a:hover,
-.footer-bs .footer-nav ul.list li a:focus,
-.footer-bs .footer-power li a:focus{ 
-	font-size:18px;
-}
-
-.footer-bs .footer-ns h4,
-.footer-bs .footer-brand h4,
-.footer-bs .footer-power h4,
-.footer-bs .footer-nav h4 {
-	font-size: 16px;
-	font-weight:600;
-	text-transform: uppercase;
-	letter-spacing: 3px;
-	margin-bottom:10px;
-}
-.footer-bs .footer-ns p,
-.footer-bs .footer-brand p{ 
-	font-size:14px; 
-	color:#f5f6f8; 
-	line-height:18px;
+	text-align: center;
+	font-size: 14px;
 }
 
 @media (min-width: 768px) {
-	.footer-bs .footer-nav, .footer-bs .footer-power, .footer-bs .footer-ns { border-left:solid 1px rgba(255,255,255,0.10); }
+	.footer-bs{ border-left:solid 1px rgba(255,255,255,0.10); }
 }
 
-#citation-notice,
-#explanation-notice{
+.citation-notice{
     position: relative;
-    margin: auto auto;
-    width: calc(100%);
-    padding: 30px 30px;
-    background-color: #2a5a84;
+    padding: 30px;
+    background-color: #1e325a;
     color: white;
     border-radius: 6px;
     font-size: 16px;
     line-height:28px;
 	animation: slide 0.5s 1s ease-in-out both;
+	margin:auto auto;
+	max-width:800px;
 }
-#citation-notice ul li a,
-#citation-notice ul li a:hover,
-#citation-notice ul li a:focus{
+.citation-notice ul li a,
+.citation-notice ul li a:hover,
+.citation-notice ul li a:focus{
 	color:white;
     text-decoration: underline;
 }
@@ -212,6 +137,16 @@ cite{
 	border-style:hidden;
 }
 
+.btn.btn-link{
+	background:none;
+	color:white;
+}
+.btn.btn-link:hover,
+.btn.btn-link:focus{
+	background:none;
+	color: #d3d3d3;
+}
+
 .export-auth-btn{
 	display:inline-block;
 	margin:15px;
@@ -222,6 +157,10 @@ cite{
 	box-shadow:6px 6px 5px #888888;
 }
 
+.export-btn{
+	display:none;
+}
+
 .auth-code{
 	display:none;
 	margin:15px;
@@ -230,4 +169,15 @@ cite{
 
 button:focus{
 	outline:none;
+}
+
+.fa,.far,.fas{
+	margin:0 2px;
+}
+
+/* tooltips */
+.tooltip-inner{
+	text-align: left;
+	padding: 20px;
+	max-width: 400px;
 }

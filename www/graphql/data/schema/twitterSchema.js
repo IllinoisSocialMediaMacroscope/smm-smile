@@ -3,7 +3,8 @@ var {
 	GraphQLObjectType,
 	GraphQLString,
 	GraphQLList,
-	GraphQLInt
+	GraphQLInt,
+	GraphQLBoolean
 } = require('graphql');
 
 var twitterAPI = require('./../../API/twitterAPI');
@@ -20,17 +21,15 @@ const twitterQueryType = module.exports = new GraphQLObjectType({
 							description:'The search query to run against people search.' 
 						},
 				count:	{ 	type:GraphQLInt,
-							defaultValue:3,
+							defaultValue:20,
 							description:'The number of potential user results to retrieve per page. This value has a maximum of 20.' 
 						},
-				pageNum: 	{ 	type: GraphQLInt,
-							defaultValue:5,
+				pages: 	{ 	type: GraphQLInt,
+							defaultValue:1,
 							description: 'madeup field; the aggregated pages' 
 						}
 			},
-			//resolve: (twitter,args) => searchUser(twitter.args, args)
-			// redditAPI(headers, resolveName = 'search', id='', args = args)
-			resolve: (_,args,context) => twitterAPI(context,resolveName = 'searchUser', id='',args=args)
+			resolve: (_,args,context) => twitterAPI(context,resolveName = 'searchUser', id='',args=args),
 		},
 		queryTweet:{
 			type: new GraphQLList(tweetType),
@@ -43,14 +42,14 @@ const twitterQueryType = module.exports = new GraphQLObjectType({
 						},
 				count:	{	
 							type:GraphQLInt,
-							defaultValue:3,
+							defaultValue:100,
 							description:`The number of tweets to return per page, up to a maximum of 100. 
 										Defaults to 15. This was formerly the “rpp” parameter in the 
 										old Search API.`
 						},
 				pages: 	{
 							type:GraphQLInt,
-							defaultValue:3,
+							defaultValue:1,
 							description:`This is not in the original twitter api. This fields is the iterator that append new pages
 										to the search. if you specify the number of pages you want to go through, you will get the 
 										amount of tweets = count * pages; detail check out API/twitterAPI.js and the max_id,since_id fields
@@ -89,7 +88,6 @@ const twitterQueryType = module.exports = new GraphQLObjectType({
 								defaultValue:'en'
 							}
 			},
-			//resolve: (_,args) => searchTweet(args)
 			resolve: (_,args,context) => twitterAPI(context,resolveName = 'searchTweet', id='',args=args)
 		},
 		queryGeo: {
@@ -140,6 +138,42 @@ const twitterQueryType = module.exports = new GraphQLObjectType({
 			},
 			//resolve: (_,args) => searchGeo(args)
 			resolve: (_,args,context) => twitterAPI(context,resolveName = 'searchGeo', id='',args=args)
+		},
+		getTimeline:{
+			description:"This method can only return up to 3,200 of a user's most recent Tweets. ",
+			type: new GraphQLList(tweetType),
+            args:{
+				screen_name:{
+					type:GraphQLString,
+					description:`The screen name of the user for whom to return results.`
+				},
+				count:{
+                    type:GraphQLInt,
+                    defaultValue:200,
+                    description:`The number of tweets to return per page, up to a maximum of 200.`
+				},
+                pages: 	{
+                    type:GraphQLInt,
+                    defaultValue:1,
+                    description:`This is not in the original twitter api. This fields is the iterator that append new pages
+								to the search. if you specify the number of pages you want to go through, you will get the 
+								amount of tweets = count * pages; detail check out API/twitterAPI.js and the max_id,since_id fields
+								in twitter restful API documentation.`
+                },
+				trim_user:{
+					type:GraphQLBoolean,
+					defaultValue:false
+				},
+				exclude_replies:{
+					type:GraphQLBoolean,
+					defaultValue: false
+				},
+				include_rts:{
+					type:GraphQLBoolean,
+					defaultValue:true
+				}
+            },
+            resolve:(_,args,context) =>twitterAPI(context,resolveName = 'searchTimeline', id='', args=args)
 		}
 	})
 });

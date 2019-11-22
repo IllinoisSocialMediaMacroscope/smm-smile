@@ -1,283 +1,223 @@
-function submitHistory(folderURL){	
-	$("#title-container").empty();
-	$("#overview-container").empty();
-	$("#img-container").empty();
-	$("#result-container").empty();
-	$("#gaudge").empty();
-	$("#title").empty();
-	$("#d3js-container").hide();
-	$("#background").hide();			
-	$("#loading").show();
-	
-	$.ajax({
-		type:'post',
-		url:'history', 
-		data: {'folderURL': folderURL },				
-		success:function(data){
-			if(data){
-				if ('ERROR' in data){
-					$("#loading").hide();
-					$("#background").show();
-					$("#error").val(JSON.stringify(data));
-					$("#warning").modal('show');
-				}else{
-					$("#loading").hide();
-					if ('title' in data || 'ID' in data){
-						appendTitle("#title-container",data.title,data.ID);
-					}
-					
-					if('config' in data || 'donwload' in data){
-						appendOverview("#overview-container",data.config,data.download);
-					}
-					
-					if ('img' in data){
-						appendImg("#img-container",data.img);
-					}
-					
-					if ('preview' in data){
-						appendPreview('#result-container',data.preview);
-					}
-					
-					if ('compound' in data){
-						// add gauge for sentiment analysis
-						//google.charts.setOnLoadCallback(drawGauge('Compound Sentiment Score of the whole document', parseFloat(data.compound)));
-						console.log('revoke it');
-					}
-					
-					if('iframe' in data){
-						// draw iframe for topic modeling
-						drawIframe(data.iframe.name, data.iframe.content);
-					}
-					
-					if('table' in data){
-						// draw word tree for preprocessing
-						google.charts.setOnLoadCallback(drawWordTree(data.table.name,data.table.content,data.table.root));
-					}
-					
-					if ('expandable' in data && data.expandable != undefined){
-						$(".dataset").val(data.expandable);
-						$(".length").val(data.length);
-						$("#getComment").show();
-					}else{
-						$("#getComment").hide();
-					}
-					
-					// ADD TO TAG MODAL
-					$("#jobId").val(data.uid);
-					
-					// ADD TO CLOWDER MODAL
-					$("#clowder-files-list").empty();
-					if (data.title != 'Social Media Past Search Result'){
-						clowderFileGen(data.download);
-						clowderFileMeta();
-						$('.fileTags').tagsinput({ freeInput: true });
-					}
-				}
-			}
-		},
-		error: function(jqXHR, exception){
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
-				$("#error").val(msg);
-				$("#warning").modal('show');
-				
-			} 
-	}); 
-	
-} 
+$.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
 
+    $(document).ready(function () {
 
-/* delete job modal */
-function deleteModal(folderURL,tab){
-	$("#folderURL").val(folderURL);
-	$("#tab").val(tab);
-	$("#delete").modal('show');
-}
-$("#deleteButton").click(function(e){
-	var folderURL = $("#folderURL").val();
-	var tab = $("#tab").val();
-	deleteHistory(folderURL,tab);
+        // google chart
+        google.charts.load('current', {packages: ['wordtree']});
+
+        $.ajax({
+            type: 'POST',
+            url: 'list-all',
+            data: {},
+            success: function (data) {
+                if (data) {
+                    if ('ERROR' in data) {
+                        $("#loading").hide();
+
+                        $("#search-tag-results").empty();
+                        $("#background").show();
+
+                        $("#error").val(JSON.stringify(data));
+                        $("#warning").modal('show');
+                    } else {
+                        // first level
+                        $.each(data, function (key, val) {
+                            if (key === 'ML') {
+                                var firstLevel = 'Machine Learning';
+                            }
+                            else if (key === 'NLP') {
+                                var firstLevel = 'Nature Language Processing';
+                            }
+                            else if (key === 'NW') {
+                                var firstLevel = 'Network Visualization and Analysis';
+                            }
+                            else if (key === 'GraphQL') {
+                                var firstLevel = 'Social Media Data';
+                            }
+                            else {
+                                var firstLevel = key
+                            }
+                            $(".nav.nav-sidebar").append(
+                                `<li>
+                                    <a onclick="toggle(this,` + key + `);" id="` + key + `-btn">
+                                        <i class="fas fa-minus"></i>&nbsp;`
+                                + firstLevel + `</a>
+                                </li>
+                                <ul class="nav child_menu" style="display:block;" id="` + key + `"></ul>`);
+
+                            // second level
+                            $.each(val, function (key1, val1) {
+                                if (key1 === 'feature') {
+                                    var secondLevel = 'Feature Selection';
+                                }
+                                else if (key1 === 'clustering') {
+                                    var secondLevel = 'Unsupervised Learning (clustering)';
+                                }
+                                else if (key1 === 'preprocessing') {
+                                    var secondLevel = 'NLP Preprocessing';
+                                }
+                                else if (key1 === 'autophrase') {
+                                    var secondLevel = 'Automated Phrase Mining';
+                                }
+                                else if (key1 === 'sentiment') {
+                                    var secondLevel = 'Sentiment Analysis';
+                                }
+                                else if (key1 === 'topic') {
+                                    var secondLevel = 'Topic Modeling';
+                                }
+                                else if (key1 === 'twitter-Tweet') {
+                                    var secondLevel = 'Twitter Tweet';
+                                }
+                                else if (key1 === 'twitter-Timeline') {
+                                    var secondLevel = 'Twitter User Timeline';
+                                }
+                                else if (key1 === 'reddit-Search') {
+                                    var secondLevel = 'Reddit Search Posts Title';
+                                }
+                                else if (key1 === 'reddit-Post') {
+                                    var secondLevel = 'Subreddit Posts Title';
+                                }
+                                else if (key1 === 'reddit-Comment') {
+                                    var secondLevel = 'Subreddit Comment';
+                                }
+                                else if (key1 === 'reddit-Historical-Post') {
+                                    var secondLevel = 'Reddit Historical Post';
+                                }
+                                else if (key1 === 'reddit-Historical-Comment') {
+                                    var secondLevel = 'Reddit Historical Comment';
+                                }
+                                else if (key1 === 'crimson-Hexagon') {
+                                    var secondLevel = 'Crimson Hexagon Data';
+                                }
+                                else if (key1 === 'networkx') {
+                                    var secondLevel = 'Python NetworkX';
+                                }
+                                else if (key1 === 'classification') {
+                                    var secondLevel = 'Text Classification';
+                                }
+                                else {
+                                    var secondLevel = key1;
+                                }
+                                var secondLevelEntryNum = Object.keys(val1).length || 0;
+
+                                $("#" + key).append(
+                                    `<li>
+                                            <a onclick="toggle(this,'#` + key1 + `');" id="` + key1 + `-btn">
+                                                <i class="fas fa-plus"></i>&nbsp;`
+                                    + secondLevel + ` (` + secondLevelEntryNum + `)</a>
+                                            <ul class="nav child_menu" style="display:none;" id="` + key1 + `"></ul>
+                                        </li>`);
+
+                                $.each(val1, function (key2, val2) {
+                                    $("#" + key1).append(
+                                        `<li id="` + key1 + "-" + key2 + `">
+                                            <a class="historyTabs" onclick="submitHistory(this, '` + val2 + `');">` + key2 + `</a>
+								    </li>`);
+                                });
+                            });
+                        });
+                        $("#historyListLoading").hide();
+                        $("#historyLogo").show();
+                        listTag();
+                    }
+                }
+            },
+            error: function (jqXHR, exception) {
+                $("#error").val(jqXHR.responseText);
+                $("#warning").modal('show');
+            }
+        });
+    });
+
+    $("#deleteButton").on('click', function (e) {
+        e.preventDefault();
+        var folderURL = $(this).attr('folder-url');
+        deleteHistory(folderURL);
+    });
+
+    /* search tag */
+    $("#search-tag").on("keyup", function (e) {
+        if (e.keyCode == 13 || e.keyCode == 10) {
+
+            var tagName = $("#search-tag").val();
+            $("#search-tag-results").empty();
+
+            $.ajax({
+                type: 'GET',
+                url: 'tag',
+                data: {tagName: tagName},
+                success: function (data) {
+                    if (Object.keys(data).length === 0) {
+                        $("#search-tag-results").append(`<div class="list-container">
+                                                <cite>cannot find matching tag</cite></div>`);
+                    }
+                    else {
+                        for (var uuid in data) {
+                            $("#search-tag-results").append(
+                                `<div class="list-container">
+                                            <h4>
+                                                <a class="page-title" onclick="submitHistory(this, '` + uuid + `')">` + uuid + `</a>
+                                            </h4>
+                                            <cite>` + data[uuid] + `</cite>
+                                        </div>`
+                            );
+                        }
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    $("#error").val(jqXHR.responseText);
+                    $("#warning").modal('show');
+                }
+            });
+        }
+    });
+
+    $("#search-tag-btn").on("click", function (e) {
+
+        var tagName = $("#search-tag").val();
+        $("#search-tag-results").empty();
+        $.ajax({
+            type: 'GET',
+            url: 'tag',
+            data: {tagName: tagName},
+            success: function (data) {
+                if (Object.keys(data).length === 0) {
+                    $("#search-tag-results").append(`<div class="list-container">
+                                            <cite>cannot find matching tag</cite></div>`);
+                }
+                else {
+                    for (var uuid in data) {
+                        $("#search-tag-results").append(
+                            `<div class="list-container">
+							<h4>
+								<a class="page-title" onclick="submitHistory(this, '` + uuid + `')">` + uuid + `</a>
+							</h4>
+							<cite>` + data[uuid] + `</cite>
+						</div>`
+                        );
+                    }
+                }
+            },
+            error: function (jqXHR, exception) {
+                $("#error").val(jqXHR.responseText);
+                $("#warning").modal('show');
+            }
+        });
+    });
+
+    $("#search-tag-invoke").on("click", function (e) {
+        $("#title-container").empty();
+        $("#overview-title").hide();
+        $("#overview-container").empty();
+        $("#img-container").empty();
+        $("#result-container").empty();
+        $("#gaudge").empty();
+        $("#title").empty();
+        $("#d3js-container").hide();
+        $("#loading").hide();
+
+        $("#search-tag-results").empty();
+        $("#background").show();
+    });
+
 });
-
-$("#deleteButton").keypress(function(e){
-	if (e.which == 13){
-		var folderURL = $("#folderURL").val();
-		var tab = $("#tab").val();
-		deleteHistory(folderURL,tab);
-	}
-});
-	
-function deleteHistory(folderURL,tab){	
-	$.ajax({
-		type:'post',
-		url:'delete', 
-		data: {'folderURL':folderURL,
-				'type':'history'},				
-		success:function(data){
-			if(data){
-				console.log(data);
-				$("#title-container").empty();
-				$("#overview-container").empty();
-				$("#img-container").empty();
-				$("#result-container").empty();
-				$("#gaudge").empty();
-				$("#title").empty();
-				$("#d3js-network-container").empty();
-				$("#d3js-container").hide();
-				$("#" + tab).css( "display", "none" );
-				$("#delete").modal('hide');
-				$("#background").show();
-			}
-		},
-		error: function(jqXHR, exception){
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
-				$("#error").val(msg);
-				$("#warning").modal('show');
-				
-			} 
-	}); 
-	
-} 
-
-/*function tag(uuid){
-	$("#jobId").val(uuid);	
-	$("#tag-modal").modal('show');	
-}*/
-
-function appendTitle(container, title,ID){
-	$(container).append(`<h1 style="display:inline;vertical-align:middle">`+ title+ `</h1>
-						<div style="display:inline;">
-							<a href="" style="padding:10px 10px;" id="tag-history-panel">
-								<img src="bootstrap/img/logo/tag.png" height="35px"></img>
-							</a>
-							<a href="" style="padding:10px 10px;" id="clowder-history-panel">
-								<img src="bootstrap/img/logo/clowder-sm-logo.png" height="50px;"></img>
-							</a>
-						<h4>ID: ` + ID +`</h4>
-						<button class="btn btn-default" id="getComment">get comments</button>`);
-	
-	$("#getComment").on('click',function(e){
-		e.preventDefault();
-		$("#reddit-expand").modal('show');
-	});
-	
-	$("#clowder-history-panel").on('click',function(e){
-		e.preventDefault();
-		invoke_clowder();
-	});
-	
-	$("#tag-history-panel").on('click',function(e){
-		e.preventDefault();
-		$("#tag-modal").modal('show');			
-	});
-}
-
-
-function appendOverview(container,config, download){
-	
-	$(container).append(`<h2>Overview</h2>`);
-	// vertical table	
-	var tableContent = `<div class="table-responsive"><table class="table table-striped table-bordered"><tbody>`;
-	$.each(config, function(key,value){
-		tableContent += `<tr><th>` + JSON.stringify(key) + `</th><td>` + JSON.stringify(value) + `</td></tr>`;
-	});
-	
-	// add download files
-	tableContent += `<tr><th>downloadables</th><td>`;
-	$.each(download,function(i,val){
-		tableContent += `<a style="display:block;color:red;" href="` + val.content+ `">` +val.name+`</a>`;
-	});
-	tableContent += `</td></tr></tbody></table></div>`;
-	
-	$(container).append(tableContent);
-}
-
-function drawIframe(name,fname){
-	$('#gaudge').empty();
-	$('#gaudge').append(`<div class="x_title"><h2>`+ name +`</h2></div></div><div class="x_content" id="chart_div"></div>`);
-	$('#chart_div').append(`<iframe src="../../pyLDAvis/` + fname + `" style="background:#FFFFFF;display:block; width:100%; height:900px;">`);
-}
-
-google.charts.load('current', {packages:['wordtree']});
-function drawWordTree(name,table,root){
-	$('#gaudge').empty();
-	$('#gaudge').append(`<div class="x_title"><h2>`+ name +`</h2></div></div><div class="x_content" id="chart_div" sytle="margin:0 auto;"></div>`);
-	
-	var data = google.visualization.arrayToDataTable(table);
-	var options = {
-          wordtree: {
-            format: 'implicit',
-			word:root.toLowerCase()
-          }
-        };
-	var chart = new google.visualization.WordTree(document.getElementById('chart_div'));
-        chart.draw(data, options);
-}
-
-google.charts.load('current', {'packages':['gauge']});
-/*--------------------------------draw gaudge---------------------------------------*/
-function drawGauge(name,compound) {
-	$('#gaudge').empty();
-	$('#gaudge').append(`<div class="x_title"><h2>`+ name +`</h2></div></div><div class="x_content" id="chart_div" sytle="margin:auto 0;"></div>`);
-	
-	var data = google.visualization.arrayToDataTable([
-		['Label', 'Value'],	['Compound', compound],
-	]);
-	
-	console.log($("#gaudge").width());
-	var options = {
-		width: $("#gaudge").width()*0.25, height: $("#gaudge").width()*0.25,
-		backgroundColor: "transparent",
-		greenFrom:0.5, greenTo:1.0,
-		redFrom: -1, redTo: -0.5,
-		yellowFrom:-0.75, yellowTo: 0.5,
-		minorTicks: 0.5,
-		min:-1,
-		max:1
-	};
-
-	var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-	chart.draw(data, options);
-	
-}
-
-
-function toggle(self,id){
-	
-	$(id).toggle();
-		
-	if ($(id).is(':visible')){
-		$(self).children('span').attr('class','glyphicon glyphicon-minus');
-	}else{
-		$(self).children('span').attr('class','glyphicon glyphicon-plus');
-	}
-}

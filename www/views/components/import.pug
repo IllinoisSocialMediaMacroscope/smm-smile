@@ -1,0 +1,69 @@
+// import local file to s3 bucket
+div(id="import-cloud-modal" class="modal fade" role="dialog")
+    div(class="modal-dialog modal-lg")
+        div(class="modal-content", style="padding:20px;")
+            div(class="modal-header")
+                button(class="close" data-dismiss="modal") &times;
+                h2(class="modal-title") Import your own data source
+            div(class="modal-body" style="vertical-align:middle;overflow:auto;")
+                    div(id="datasrc-metadata")
+                        div(class="form-group")
+                            label PREVIEW
+                            div(id="import-cloud-preview")
+                        div(class="form-group")
+                            label CATEGORY
+                            div(id="datasrc-criteria-hint")
+                            select(class="form-control", id="datasrc-category", name="datasrc-category")
+                                option(value="Please Select...", class="", id="empty", selected=true) Please Select...
+                                option(value="twitter-Tweet") Is this a Tweet collection?
+                                option(value="twitter-Timeline") Is this a Twitter User Timeline?
+                                option(value="reddit-Post") Is this a Reddit submission (post) collection?
+                                option(value="reddit-Comment") Is this a Reddit comment collection?
+                                option(value="crimson-Hexagon") Is this file exported from Crimson Hexagon?
+                                option(value="userspec-Others") Others...
+                            div(id="datasrc-criteria")
+                        div(id="userspec-Others-metadata", style="display:none;")
+                            div(class="form-group")
+                                label WHICH COLUMN(S)
+                                div(id="column-header-selection", style="font-size: 12px;color: black;")
+                            div(class="form-group")
+                                label ANALYSES
+                                div(id="datasrc-analyses")
+                                    label(class="checkbox-inline")
+                                        input(type="checkbox", name="datasrc-analyses", value="sentiment", checked=true)
+                                        | sentiment analysis
+                                    label(class="checkbox-inline")
+                                        input(type="checkbox", name="datasrc-analyses", value="autophrase", checked=true)
+                                        | auto phrase detection
+                                    label(class="checkbox-inline")
+                                        input(type="checkbox", name="datasrc-analyses", value="preprocess", checked=true)
+                                        | NLP preprocess
+                                    label(class="checkbox-inline")
+                                        input(type="checkbox", name="datasrc-analyses", value="classification", checked=true)
+                                        | text classification
+                            div(class="form-group")
+                                a(onclick="listColumnHeadersRules();") show existing rules ...
+                                div(id="column-headers-area")
+                            div(class="form-group", id="userspec-Others-setHeaders")
+                                button(class="btn btn-primary pull-right") Set Headers
+                                img(src="bootstrap/img/gifs/success.gif", width="50px", style="float:right;display:none;")
+                        div(class="form-group")
+                            label KEYWORDS
+                            input(class="form-control", data-role="tagsinput", id="datasrc-keywords", placeholder="Type, Enter, Backspace, L/R")
+            div(class="modal-footer")
+                img(id="import-btn-loading", src="bootstrap/img/gifs/loading2.gif", width="10%", height="10%",style="display:none;")
+                button(class="btn btn-yes", id="import-btn") Import
+
+div(id="import-cloud-confirmation", class="modal fade", role="dialog", data-backdrop="static", data-keyboard="false")
+    div(class="modal-dialog")
+        div(class="modal-content")
+            div(class="modal-body confirmation", style="")
+                div(id="modal-message")
+                    img(src="bootstrap/img/gifs/success.gif", width="80px")
+                    p You have successfully imported your data to SMILE. Access your data in the <u>Select from your folder</u> dropdown.
+                    video(id="findImportedData-demo", width="100%", controls)
+                        source(src="bootstrap/img/gifs/gotoAnalytics.mp4", type="video/mp4")
+            div(class="modal-footer")
+                button(class="btn btn-no", data-dismiss="modal") Close
+
+script(src="bootstrap/js/customized/view_import.js")

@@ -1,239 +1,177 @@
 doctype html
 html
-	head
-		meta(charset="utf-8")
-		meta(name="viewport", content="width=device-width, initial-scale=1")
-		
-		<!-- Style sheets! -->
-		link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
-		link(href="https://fonts.googleapis.com/css?family=Ubuntu:300")
-		link(href="bootstrap/css/bootstrap-multiselect.css", rel="stylesheet")
-		link(href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css", rel="stylesheet")
-		link(href="jQuery-QueryBuilder-master/dist/css/re_query-builder.default.css", rel="stylesheet")
-		link(rel="stylesheet",
-			href="https://use.fontawesome.com/releases/v5.0.10/css/all.css",
-			integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg",
-			crossorigin="anonymous")
-		link(href="bootstrap/css/customized/search.css",rel="stylesheet")
-		link(href="bootstrap/css/customized/global.css",rel="stylesheet")
+    head
+        meta(charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
 
-		<!-- JQUERY -->
-		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
-		script(src="bootstrap/js/bootstrap.min.js")
-		script(src="bootstrap/js/bootstrap-multiselect.js")
-		script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js")
-		script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+        <!-- Style sheets! -->
+        link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
+        link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+        link(href="bootstrap/css/bootstrap-multiselect.css", rel="stylesheet")
+        link(href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css", rel="stylesheet")
+        link(href="jQuery-QueryBuilder-master/dist/css/re_query-builder.default.css", rel="stylesheet")
+        link(rel="stylesheet",
+            href="https://use.fontawesome.com/releases/v5.0.10/css/all.css",
+            integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg",
+            crossorigin="anonymous")
+        link(href="bootstrap/css/customized/auth.css", rel="stylesheet")
+        link(href="bootstrap/css/customized/search.css", rel="stylesheet")
+        link(href="bootstrap/css/customized/global.css", rel="stylesheet")
 
-		<!-- Tooltip -->
-		script(src="javascript/popper.js")
-		
-		<!-- customized -->
-		script(src="bootstrap/js/customized/query_pb.js")
-		script(src="bootstrap/js/customized/query_formValid.js")
-		script(src="bootstrap/js/customized/query_submit.js")
-		script(src="bootstrap/js/customized/warning_trigger.js")
-		script(src="bootstrap/js/customized/modal_overlay.js")
-		script(src="jQuery-QueryBuilder-master/dist/js/re_query-builder.standalone.js")
-		script(src="bootstrap/js/customized/parse_session.js")
-	body(onload="init();")
-		<!-- top bar -->
-		include ../components/topbar.pug
-		include ../components/export.pug
-		include ../components/terminate.pug
-		include ../components/warning.pug
-		include ../components/clientside-warning.pug
-		include ../components/sitemap.pug
-		include ../components/cookie.pug
-	
-		<!-- auth -->
-		div(id="auth-panel")
-			p(style="font-size:50px; margin:30px 30px; color:white;") Authorization
-			
-			div(class="twitter-auth" id="twitter-auth")
-				a(class="button", target="_blank")
-					img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-					| Authorize with your Twitter account
-				button(class="button-later") later
-			div(class="reddit-auth" id="reddit-auth")
-				a(class="button") 
-					img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-					| Authorize with your Reddit account
-				button(class="button-later") later
-			div(class="crimson-auth" id="crimson-auth")
-				button(class="button")
-					img(src='bootstrap/img/logo/crimson-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-					| Authorize with your Crimson Hexagon account
-				button(class="button-later") later
-		
-		div(class="searchPage",id="searchPage",style="display:none;")
-			<!-- logo -->
-			div(class="row" id="header",style="")
-				img(src="bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
-			
-			<!-- secondary auth panel -->
-			div(class="row",id="second-auth",style="display:block;margin:auto auto;margin-top:50px;text-align:center;color:#333;")
-				div(id="authorized", style="display:inline-block;")
-					p(style="display:inline-block;margin:10px 10px;") Click the icon to authorize:
-					div(class="twitter-auth",style="display:inline-block;")
-						a(target="_blank")
-							img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-					div(class="reddit-auth",style="display:inline-block;")
-						a
-							img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-					div(class="crimson-auth",style="display:inline-block;")
-						button(id="crimson-icon-button")
-							img(src='bootstrap/img/logo/crimson-sm-logo.png', width="35px",height="30px", style="margin-right:10px")
-				div(id="unauthorized",style="display:inline-block;")
-					p(style="display:inline-block;margin:10px 10px;") You have already authorized:
-					img(id="twitter-authorized", src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
-					img(id="reddit-authorized",src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
-					img(id="crimson-authorized",src='bootstrap/img/logo/crimson-sm-logo.png', width="35px",height="30px", style="margin-right:10px;display:none;")
-			<!-- search --->
-			div(class="row")
-				div(id="tabs")
-					boolean(data-toggle="tooltip", data-placement="left", data-html="true")
-					select(class="selectpicker show-tick" id="social-media" title="Choose a Data Source..." data-width="220px")
-						optgroup(label="Search Twitter")
-							option(data-icon="fab fa-twitter" value="queryTweet" disabled) Tweets
-							option(data-icon="glyphicon-user" value="queryUser" disabled) Twitter Users
-						optgroup(label="Search Reddit")
-							option(data-icon="fab fa-reddit-alien" value="queryReddit" disabled) Search Reddit Posts
-							option(data-icon="fas fa-list-ul" value="redditPost" disabled) Posts in Subreddit
-							option(data-icon="far fa-comment" value="redditComment" disabled) Comments in Subreddit
-						optgroup(label="Partial Historical Database")
-							option(data-icon="fab fa-twitter-square" value="streamTweet") Streamed Tweets
-							option(data-icon="fab fa-reddit-square" value="pushshiftPost") Historical Reddit Posts
-							option(data-icon="fas fa-comment-dots" value="pushshiftComment") Historical Reddit Comments
-							option(data-icon="fas fa-share-alt" value="crimsonHexagon" disabled) Crimson Hexagon
+        <!-- JQUERY -->
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+        script(src="bootstrap/js/bootstrap.min.js")
+        script(src="bootstrap/js/bootstrap-multiselect.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
 
-					include searchbox.pug
+        <!-- Tooltip -->
+        script(src="bootstrap/js/popper.js")
 
-			<!-- rendering -->
+        <!-- customized -->
+        script(src="bootstrap/js/customized/query_pb.js")
+        script(src="bootstrap/js/customized/query_formValid.js")
+        script(src="bootstrap/js/customized/query_submit.js")
+        script(src="bootstrap/js/customized/warning_trigger.js")
+        script(src="bootstrap/js/customized/modal_overlay.js")
+        script(src="jQuery-QueryBuilder-master/dist/js/re_query-builder.standalone.js")
+        script(src="bootstrap/js/customized/parse_session.js")
+    body(onload="init();")
+        <!-- top bar -->
+        include ../components/topbar.pug
+        include ../components/export.pug
+        include ../components/terminate.pug
+        include ../components/warning.pug
+        include ../components/clientside-warning.pug
+        include ../components/cookie.pug
+        include auth.pug
 
-			div(id="histogram-panel")
-				h2 Recap
-				label(class="radio-inline")
-					input(name="histogram-interval", type="radio", class="histogram-interval", value="1T")
-					| per minute
-				label(class="radio-inline")
-					input(name="histogram-interval", type="radio", class="histogram-interval", value="1H")
-					| per hour
-				label(class="radio-inline")
-					input(name="histogram-interval", type="radio", class="histogram-interval", value="6H")
-					| per 6 hours
-				label(class="radio-inline")
-					input(name="histogram-interval", type="radio", class="histogram-interval", value="1D")
-					| per day
-				label(class="radio-inline")
-					input(name="histogram-interval", type="radio", class="histogram-interval", value="1W")
-					| per week
-				label(class="radio-inline")
-					input(name="histogram-interval", type="radio", class="histogram-interval", value="1M")
-					| per month
-				label(class="radio-inline")
-					input(name="histogram-interval", type="radio", class="histogram-interval", value="1Q")
-					| per quarter
-				label(class="radio-inline")
-					input(name="histogram-interval", type="radio", class="histogram-interval", value="6M")
-					| per 6 months
-				label(class="radio-inline")
-					input(name="histogram-interval", type="radio", class="histogram-interval", value="1A")
-					| per year
-				div(class="loading", style="display:none;")
-					img(src="bootstrap/img/gifs/loading3.gif", width="400px", style="display:block;margin:auto auto;")
-				div(id="img-container", style="padding:50px 100px;")
-			div(id="rendering")
-				h2 Review
-				div
-					button(class="btn btn-no", onclick="renderPreviewPagination('prev');", style="margin-right:10px;")
-						span(class="glyphicon glyphicon-chevron-left")
-						| Prev
-					button(class="btn btn-yes", onclick="renderPreviewPagination('next');", style="margin-right:10px;")
-						span(class="glyphicon glyphicon-chevron-right")
-						| Next
-					a(class="btn btn-info" role="button") Download
-				div(id="grid")
-				
-								
-		<!-- popup modal save -->
-		div(id="save" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
-			div(class="modal-dialog")
-				div(class="modal-content")
-					div(class="modal-header")
-						button(class="close" data-dismiss="modal") &times;
-						h2(class="modal-title")
-							span(class="glyphicon glyphicon-floppy-save" style="font-size:20px;margin-left:5px") 
-							| Save the result 
-					
-					div(class="modal-body" style="text-align:center;vertical-aligcd :middle;")
-						form(class="form-horizontal")
-							div(class="form-group")
-								label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Filename
-								div(class="col-md-7 col-md-7 col-xs-12")
-									input(class="form-control" id="sn-filename" placeholder="filename")
-							div(class="form-group")
-								label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Downloadable Files
-								div(class="col-md-7 col-md-7 col-xs-12")
-									div(id="display-savefiles")
-						div(class="loading" style="display:none")
-							img(src="bootstrap/img/gifs/loading2.gif", width="15%", height="15%", style="display:block; margin-left:auto; margin-right:auto; margin-top:10px")
-					div(class="modal-footer")
-						button(class="btn btn-default", id="saveButton", style="background-color:#ea4a36;color:white;border-style:hidden") Save
-						button(class="btn btn-default",style="background-color:#1e325a;color:white;border-style:hidden", data-dismiss="modal") Close
+        div(class="searchPage",id="searchPage",style="display:none;")
+            <!-- logo -->
+            div(class="row" id="header",style="")
+                img(src="bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
+            div(class="citation-notice")
+                button(class="close") &times;
+                p Due to issues with receiving a consistent stream of data from Twitter's API, our historical streamed
+                    |  Twitter search/database has been deprecated. Please use the remaining Twitter non-historical
+                    |  search feature or connection to services such as Crimson Hexagon.
 
-		include crimson/crimson-login.pug
-		include twitter/twitter-login.pug
-		include reddit/reddit-login.pug
+            <!-- secondary auth panel -->
+            div(class="row", id="second-auth",style="display:block;margin:auto auto;margin-top:50px;text-align:center;color:#333;")
+                div(id="unauthorized", style="display:inline-block;")
+                    p(style="display:inline-block;margin:10px 10px;") Click the icon to authorize:
+                    div(class="twitter-auth",style="display:inline-block;")
+                        a(target="_blank", href="login/twitter")
+                            img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+                    div(class="reddit-auth",style="display:inline-block;")
+                        a
+                            img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+                    div(class="crimson-auth",style="display:inline-block;")
+                        button(id="crimson-icon-button")
+                            img(src='bootstrap/img/logo/crimson-sm-logo.png', width="35px",height="30px", style="margin-right:10px")
+                div(id="authorized",style="display:inline-block;")
+                    p(style="display:inline-block;margin:10px 10px;") You have already authorized:
+                    img(id="twitter-authorized", src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
+                    img(id="reddit-authorized",src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
+                    img(id="crimson-authorized",src='bootstrap/img/logo/crimson-sm-logo.png', width="35px",height="30px", style="margin-right:10px;display:none;")
 
-		<!-- popup modal download-->
-		div(id="success" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false")
-			div(class="modal-dialog", style="width:800px;")
-				div(class="modal-content")
-					div(class="modal-header")
-						button(class="close" data-dismiss="modal") &times;
-						h2(class="modal-title" id="modal-title") Download Your Search Results
-						p (Hot keys: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>D</kbd> )
-					div(class="modal-body" style="vertical-align:middle;font-size:20px;")
-						div(id="citation-notice")
-							p <b>Thank you for using our tool, if you use these results please cite it:</b><br>
-							ul
-								li Yun, J. T., Vance, N., Wang, C., Troy, J., Marini, L., Booth, R., Nelson, T., Hetrick, A., Hodgekins, H. (2018).
-									| The Social Media Macroscope. In Gateways 2018.&nbsp
-									a(href="https://doi.org/10.6084/m9.figshare.6855269.v2", target="_blank") https://doi.org/10.6084/m9.figshare.6855269.v2
-							p <b>If you are using Historical Reddit data, please also cite this:</b><br>
-							ul
-								li Jason Baumgartner, PUSHSHIFT.IO, <u>https://pushshift.io</u>
-							button(id="citation-notice-btn") click to continue
-						div(id="modal-download",style="display:none;")
-						p(class="download-note",style="display:none;") <b>NOTE</b>: Your search results are saved in your home directory. You can either <b>download</b> here;
-							| or go to any of the analytics tools --> <b>select from your folder</b>;
-							| or review, manage and download it in the <b>history</b> page
-							| If you accidentally close this modal window, you can click <b>export</b> button in this page to resume.
-						p(id="download-note",style="display:none;") <b>Example of usage:</b>
-						video(id="gotoAnalytics-demo",style="display:none;" controls)
-							source(src="bootstrap/img/gifs/gotoAnalytics.mp4", type="video/mp4")
-						script.
-							$("#citation-notice-btn").click(function(){
-								$("#citation-notice").hide('slow');
-								$("#modal-download").show('slow');
-								$(".download-note").show('slow');
-								$("#gotoAnalytics-demo").show('slow');
-								$(".modal-footer.download").show('slow');
-							});
-						
-					div(class="modal-footer download",style="display:none;")
-						a(href="./#Pre-processing", class="btn btn-primary",style="background-color:#ea4a36;border-style:hidden") Go To Analytics
-						a(href="history", class="btn btn-primary", style="background-color:#1e325a;border-style:hidden") Review in History
-								
-		<!-- side bar HELP-->
-		div(class="documentation",id="documentation")
-			iframe(id="docIframe", src="graphql-doc/schema/index.html",width="100%",scrolling="yes",style="padding-top: 40px;margin:0 0;")
-							
-					
-		script(src="bootstrap/js/customized/query_auth.js")
-		script(src="bootstrap/js/customized/detect_cookie.js")
-		script(src="bootstrap/js/customized/hotkeys.js").
-		
-							
-							
-							
+            <!-- search --->
+            div(class="row")
+                div(id="tabs")
+                    boolean(data-toggle="tooltip", data-placement="top", data-html="true")
+                    select(class="selectpicker show-tick" id="social-media" title="Choose a Data Source..." data-width="220px")
+                        optgroup(label="Search Twitter")
+                            option(data-icon="fab fa-twitter" value="queryTweet" disabled) Tweets
+                            option(data-icon="fas fa-user" value="getTimeline" disabled) User timeline
+                        optgroup(label="Search Reddit")
+                            option(data-icon="fab fa-reddit-alien" value="queryReddit" disabled) Search Reddit Posts
+                            option(data-icon="fas fa-list-ul" value="redditPost" disabled) Posts in Subreddit
+                            option(data-icon="far fa-comment" value="redditComment" disabled) Comments in Subreddit
+                        optgroup(label="Partial Historical Database")
+                            option(data-icon="fab fa-reddit-square" value="pushshiftPost") Historical Reddit Posts
+                            option(data-icon="fas fa-comment-dots" value="pushshiftComment") Historical Reddit Comments
+                            option(data-icon="fas fa-share-alt" value="crimsonHexagon" disabled) Crimson Hexagon
+                    include searchbox.pug
+
+            div(id="save-result")
+                h2 Save the result&nbsp;
+                    i(class="far fa-question-circle", data-toggle="tooltip", data-html="true", data-placement="right",
+                    title="Your results will be saved as a CSV file on SMILE across sessions. You can download the <u>CSV file</u>, " +
+                    " analyze it with the <u>analytics tools</u> in SMILE, review and download in the <u>Past Results</u> page")
+                p Save this search result to this application to further analyze it.
+                div(class="form-group")
+                    h4 Filename
+                    input(class="form-control" id="sn-filename" placeholder="filename without file extension")
+                    button(class="btn btn-yes", id="saveButton" disabled=true) Save
+            div(class="loading")
+                img(src="bootstrap/img/gifs/loading2.gif")
+
+            div(id="instruction")
+                h2 Download and Analyze
+                p Your search results are successfully saved by the applicatoin. You can now:
+                ol
+                    li Download a CSV file
+                        a(class="btn btn-primary", id="download") Download
+                        a(class="btn btn-primary", id="download-json", style="display:none;") Download Json Format
+                    li Analyze with Analytics Tools
+                        a(class="btn btn-primary", href="NER") Analyze
+                    li Review and manage in the Past Results
+                        a(class="btn btn-primary", href="history") Review
+
+            div(id="histogram-panel")
+                h2 Recap
+                label(class="radio-inline")
+                    input(name="histogram-interval", type="radio", class="histogram-interval", value="1T")
+                    | per minute
+                label(class="radio-inline")
+                    input(name="histogram-interval", type="radio", class="histogram-interval", value="1H")
+                    | per hour
+                label(class="radio-inline")
+                    input(name="histogram-interval", type="radio", class="histogram-interval", value="6H")
+                    | per 6 hours
+                label(class="radio-inline")
+                    input(name="histogram-interval", type="radio", class="histogram-interval", value="1D")
+                    | per day
+                label(class="radio-inline")
+                    input(name="histogram-interval", type="radio", class="histogram-interval", value="1W")
+                    | per week
+                label(class="radio-inline")
+                    input(name="histogram-interval", type="radio", class="histogram-interval", value="1M")
+                    | per month
+                label(class="radio-inline")
+                    input(name="histogram-interval", type="radio", class="histogram-interval", value="1Q")
+                    | per quarter
+                label(class="radio-inline")
+                    input(name="histogram-interval", type="radio", class="histogram-interval", value="6M")
+                    | per 6 months
+                label(class="radio-inline")
+                    input(name="histogram-interval", type="radio", class="histogram-interval", value="1A")
+                    | per year
+                div(class="loading", style="display:none;")
+                    img(src="bootstrap/img/gifs/loading3.gif", width="400px", style="display:block;margin:auto auto;")
+                div(id="img-container", style="padding:50px 100px;")
+            div(id="rendering")
+                h2 Preview
+                div(style="text-align:right;margin-right:50px;")
+                    button(class="btn btn-no", onclick="renderPreviewPagination('prev');",
+                    style="margin-right:10px; display:none;")
+                        i(class="fas fa-chevron-left")
+                        | &nbsp;Prev
+                    button(class="btn btn-no", onclick="renderPreviewPagination('next');",
+                    style="margin-right:10px; display:none;")
+                        i(class="fas fa-chevron-right")
+                        | &nbsp;Next
+                div(id="grid")
+
+        include crimson/crimson-login.pug
+        include twitter/twitter-login.pug
+        include reddit/reddit-login.pug
+
+        <!-- side bar HELP-->
+        div(class="documentation",id="documentation")
+            iframe(id="docIframe", src="graphql-doc/schema/index.html",width="100%",scrolling="yes",style="padding-top: 40px;margin:0 0;")
+
+
+        script(src="bootstrap/js/customized/query_auth.js")
+        script(src="bootstrap/js/customized/detect_cookie.js")
+        script(src="bootstrap/js/customized/hotkeys.js").

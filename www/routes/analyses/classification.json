@@ -1,0 +1,243 @@
+{
+  "path": "classification",
+  "title": "Text Classification",
+  "imgURL": "bootstrap/img/logo/sklearn-logo.png",
+  "wiki": "https://nlp.stanford.edu/IR-book/html/htmledition/text-classification-and-naive-bayes-1.html",
+  "introduction": [
+    "Text classification is one of the important and typical task in supervised machine learning (ML).",
+    "Text Classification assigns one or more classes to a document according to their content. Classes are selected from",
+    "a previously established taxonomy (catergories or classes), which are usually established by human hand labeling."
+  ],
+  "result_path": "/ML/classification/",
+  "results": [
+    {
+      "acronym": "config",
+      "name": "configuration",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": true
+    },
+    {
+      "acronym": "div",
+      "name": "break down of labeled and unlabeled data",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "training",
+      "name": "Download training dataset",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "testing",
+      "name": "Download unlabeled dataset",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "pipeline",
+      "name": "Perserved classification pipeline",
+      "download": true,
+      "img": false,
+      "preview": false
+    },
+    {
+      "acronym": "metrics",
+      "name": "Classification performance evaluation",
+      "download": true,
+      "img": false,
+      "preview": true,
+      "dataTable": false
+    },
+    {
+      "acronym": "accuracy",
+      "name": "Accuracy score for each fold",
+      "download": true,
+      "img": false,
+      "preview": false
+    },
+    {
+      "acronym": "div_accuracy",
+      "name": "bar chart of 10 fold accuracy",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "predicting",
+      "name": "Predicted Class using trained model",
+      "download": true,
+      "img": false,
+      "preview": true,
+      "dataTable": true
+    },
+    {
+      "acronym": "div_category",
+      "name": "break down of each category in predicted data",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    }
+  ],
+  "custom_script": "bootstrap/js/customized/analyses/view_classification.js",
+  "args": [
+    "task",
+    "ratio",
+    "labeled",
+    "model",
+    "uid"
+  ],
+  "get": {
+    "containers": [
+      {
+        "container-name": "select-task",
+        "container-label-name": "Select Task",
+        "input": {
+          "type": "select",
+          "name": "task",
+          "id": "task",
+          "options": [
+            {
+              "value": "split",
+              "label": "Step1 -- derive your training set from the corpus"
+            },
+            {
+              "value": "train",
+              "label": "Step2 -- train your classification model"
+            },
+            {
+              "value": "predict",
+              "label": " Step3 -- predict using your model"
+            }
+          ]
+        }
+      },
+      {
+        "container-classname": "split",
+        "container-label-name": "Training dataset size (%)",
+        "input": {
+          "type": "range",
+          "min": "5",
+          "max": "95",
+          "value": "30",
+          "name": "ratio",
+          "id": "ratio",
+          "onchange": "rangeNode.value=value",
+          "output_id": "rangeNode"
+        }
+      },
+      {
+        "container-classname": "train",
+        "container-label-name": "Labeled training set",
+        "input": {
+          "type": "file-upload",
+          "id": "labeled",
+          "name": "labeled",
+          "displayname": "upload-fname",
+          "style": "width: 0.1px; height: 0.1px; opacity: 0; overflow: hidden; position: absolute; z-index: -1;"
+        }
+      },
+      {
+        "container-classname": "train",
+        "container-label-name": "Select classification model",
+        "input": {
+          "type": "select",
+          "name": "model",
+          "id": "model",
+          "options": [
+            {
+              "value": "NaiveBayes",
+              "label": "Naive Bayes classifier for multinomial models"
+            },
+            {
+              "value": "Perceptron",
+              "label": "Perceptron"
+            },
+            {
+              "value": "SGD",
+              "label": "linear classifiers with Stochastic Gradient Descent learning"
+            },
+            {
+              "value": "RandomForest",
+              "label": "Random Forest classifier"
+            },
+            {
+              "value": "KNN",
+              "label": "K-Nearest Neighbors vote"
+            },
+            {
+              "value": "PassiveAggressive",
+              "label": "Passive Aggressive Classifier"
+            },
+            {
+              "value": "SupportVector",
+              "label": "C-Support Vector Classification"
+            },
+            {
+              "value": "DecisionTree",
+              "label": "Decision Tree classifier"
+            },
+            {
+              "value": "AdaBoost",
+              "label": "AdaBoost classifier"
+            }
+          ]
+        }
+      },
+      {
+        "container-classname": "uid",
+        "container-label-name": "Identification code",
+        "input": {
+          "type": "uid",
+          "name": "uid",
+          "id": "uid"
+        }
+      }
+    ],
+    "buttonGroups": [
+      {
+        "class": "btn btn-primary",
+        "value": "Clear",
+        "style": "margin: auto 5px;",
+        "onclick": "customized_reset();"
+      },
+      {
+        "class": "btn btn-danger split",
+        "value": "Split",
+        "style": "margin: auto 5px;",
+        "onclick": "split();"
+      },
+      {
+        "class": "btn btn-danger train",
+        "value": "Train",
+        "style": "margin: auto 5px;",
+        "onclick": "train();"
+      },
+      {
+        "class": "btn btn-danger predict",
+        "value": "Predict",
+        "style": "margin: auto 5px;",
+        "onclick": "predict();"
+      }
+    ],
+    "citation": {
+      "trigger_id": "task",
+      "content": [
+        {
+          "text": ["<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Scikit-learn%3A+Machine+learning+in+Python&btnG=\" target=\"_blank\">Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Vanderplas, J. (2011). Scikit-learn:Machine learning in Python. Journal of Machine Learning Research, 12(Oct), 2825-2830.</a>"],
+          "condition": "!"
+        }
+      ]
+    }
+  }
+}

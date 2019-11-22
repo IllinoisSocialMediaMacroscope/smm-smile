@@ -15,6 +15,7 @@ router.get('/login/box', function(req,res,next){
 	var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=`
 	+ config.box.client_id
 	+`&redirect_uri=https://socialmediamacroscope.org:8000` + req.query.currentURL +`login/box/callback`;
+	// +`&redirect_uri=http://localhost:8001` + req.query.currentURL +`login/box/callback`;
 
 	res.redirect(authUrl);
 });

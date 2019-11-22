@@ -108,7 +108,7 @@ function generate_space_list_dataset(){
 		url:'list-space', 
 		data: {},			
 		success:function(data){
-			// hide loading bar show selectSpace
+			// hide loading bar show selectSpaceInDataset
 			$("#selectSpaceInDataset").prev().hide();
 			$("#selectSpaceInDataset").show();
 			if ('ERROR' in data){
@@ -143,7 +143,7 @@ function generate_space_list_collection(){
         url:'list-space',
         data: {},
         success:function(data){
-            // hide loading bar show selectSpace
+            // hide loading bar show selectSpaceInDataset
             $("#selectSpaceInCollection").prev().hide();
             $("#selectSpaceInCollection").show();
 
@@ -338,12 +338,6 @@ $("#datasetMeta select").on('change',function(){
 	};
 });
 
-//tags
-$('#datasetTags').tagsinput({
-	freeInput: true
-});
-
-
 //save metadata
 function saveMeta(clickBtn){
 	// if value has content, save; if not, do not allow to save
@@ -404,16 +398,16 @@ function create_clowder_dataset(){
 				data['collection'] = [$("#selectCollection option:selected" ).val()]				
 		}
 		// space
-		var $space = $("#clowder-new-dataset").find(".selectSpace option:selected" );
+		var $space = $("#clowder-new-dataset").find("#selectSpaceInDataset option:selected");
 		if ($space.val() !== 'newSpace' && $space.val() !== 'Please Select...'){
 				data['space'] = [$space.val()]				
 		}
 
 		$.ajax({
 			type:'POST',
-			url:'clowder-dataset', 
-			data: JSON.stringify(data),	
-			contentType: "application/json",			
+			url:'clowder-dataset',
+			data: JSON.stringify(data),
+			contentType: "application/json",
 			success:function(data){
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
@@ -422,7 +416,7 @@ function create_clowder_dataset(){
 					//put id in the files block
 					var datasetID = data.id;
 					$("#datasetID").val(datasetID);
-					
+
 					//switch to files block
 					$(".clowder-dataset-block").hide();
 					$(".clowder-files-block").show();
@@ -430,9 +424,9 @@ function create_clowder_dataset(){
 			},
 			error: function(jqXHR, exception){
 				$("#modal-message").append(`<h4>Please enter a value before you save it.</h4>`);
-				$("#alert").modal('show');					
-			} 
-		}); 
+				$("#alert").modal('show');
+			}
+		});
 	}
 	
 	
@@ -473,7 +467,7 @@ function clowderFileGen(datalist){
 						<label class="form-check-label">` + val.name + `</label>
 						<a onclick="clowderFileAdvanceToggle(this);" href="#">
 							<span class="pull-right">
-								<span class="glyphicon glyphicon-pencil" style="vertical-align:middle;"></span>
+								<i class="fas fa-edit"></i>
 							</span>
 						</a>
 						<div class="clowderFileAdvance" style="display:none;">
@@ -565,7 +559,7 @@ function submit_clowder_files(){
 			// mark the configuration file
 			var filename = $(file).find(".form-check-label").text();
 			var url = $(file).find(".form-check-input").val();
-			if (filename === 'configuration'){
+			if (filename.indexOf('config') !== -1){
 				data['configuration'] = url;
 			}
 
@@ -730,16 +724,16 @@ function create_clowder_collection(){
 			data['descriptions'] = $("#collectionDesc").val();
 		}
 		// space
-		var $space = $("#clowder-new-collection").find(".selectSpace option:selected" )
+		var $space = $("#clowder-new-collection").find("#selectSpaceInCollection option:selected" )
 		if ($space.val() !== 'newSpace'	&& $space.val() !== 'Please Select...'){
-				data['space'] = $space.val();	
+				data['space'] = $space.val();
 		}
 
 		$.ajax({
 			type:'POST',
-			url:'clowder-collection', 
-			data: JSON.stringify(data),	
-			contentType: "application/json",			
+			url:'clowder-collection',
+			data: JSON.stringify(data),
+			contentType: "application/json",
 			success:function(data){
 				if ('ERROR' in data){
 					$("#error").val(JSON.stringify(data));
@@ -755,9 +749,9 @@ function create_clowder_collection(){
 			},
 			error: function(jqXHR, exception){
 				$("#modal-message").append(`<h4>Please enter a value before you save it.</h4>`);
-				$("#alert").modal('show');					
-			} 
-		}); 
+				$("#alert").modal('show');
+			}
+		});
 	}
 }
 

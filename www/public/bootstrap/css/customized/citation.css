@@ -1,0 +1,35 @@
+body{
+    background-color: #eae8e8;
+    font-family: "Ubuntu", sans-serif;
+}
+
+.citation{
+    background-color:#9d9d9d;
+    padding:50px;
+    width:850px;
+    margin:200px auto;
+    border-radius:6px;
+    overflow:auto;
+}
+
+.citation-header{
+    font-size:50px;
+    color:white;
+}
+
+.citation-content{
+    color:#ffffff;
+}
+
+#cite-next {
+    font-weight: 600;
+    color: #333;
+    font-size: 20px;
+    line-height: 28.8px;
+    background-color: #eee;
+    border-radius: 6px;
+    padding: 0.6em 1.6em;
+    text-decoration: none;
+    border: none;
+    margin:10px 0;
+}

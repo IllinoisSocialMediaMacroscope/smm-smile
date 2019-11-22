@@ -6,7 +6,7 @@ div(id="reddit-expand" class="modal fade" role="dialog" data-backdrop="static" d
 				h3(class="modal-title", id="modal-title", style="text-align:left;") Gather the replies for each Reddit Post?
 			
 			div(class="modal-body form")
-				div(id="modal-message")
+				div(class="modal-message")
 					div(class="form-group")
 						p Your selected dataset contains hundreds/thousands Reddit post, and for each reddit post, it might have thousands of comments and replies. 
 							| This process is very time consuming. Once you submit the request, we will have to place this on a job queue.
@@ -26,7 +26,7 @@ div(id="reddit-expand" class="modal fade" role="dialog" data-backdrop="static" d
 					div(class="form-group")
 						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Email Address
 						div(class="col-md-8 col-md-8 col-xs-12")
-							input(id="email-alert", class="form-control", type="email", name="email-alert")
+							input(class="form-control email-alert", type="email", name="email-alert")
 			div(class="modal-footer")
 				button(class="btn btn-yes",id="rdCommentReq") Request comments
 
@@ -35,8 +35,8 @@ div(id="reddit-expand-confirmation", class="modal fade", role="dialog", data-bac
 	div(class="modal-dialog")
 		div(class="modal-content")
 			div(class="modal-body confirmation")
-				div(id="modal-message")
-					img(src="bootstrap/img/gifs/success.gif", class="export-success", width="80px")
+				div
+					img(src="bootstrap/img/gifs/success.gif", width="80px")
 					p(style="f") Your request for the Reddit comments has been sent. You will receive an email from us once it's done!
 			div(class="modal-footer")
 				button(class="btn btn-no",data-dismiss="modal") Close	
@@ -46,7 +46,7 @@ div(id="reddit-expand-exist", class="modal fade", role="dialog", data-backdrop="
 		div(class="modal-content")
 			div(class="modal-body confirmation")
 				div(id="modal-message")
-					img(src="bootstrap/img/gifs/warning.gif", class="export-success", width="80px")
+					img(src="bootstrap/img/gifs/warning.gif", width="80px")
 					p You have already collected comments for this dataset. Do you still want to proceed?
 			div(class="modal-footer")
 				button(class="btn btn-yes",id="rdCommentYes") Yes	
@@ -54,4 +54,3 @@ div(id="reddit-expand-exist", class="modal fade", role="dialog", data-backdrop="
 			
 				
 script(src="bootstrap/js/customized/view_reddit_expand.js")
-	

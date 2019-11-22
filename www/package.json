@@ -40,7 +40,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "nodemon app.js",
-    "start": "concurrently \"node app.js\" \"cd graphql && npm start\" "
+    "start": "concurrently \"forever app.js\" \"cd graphql && npm start\" "
   },
   "author": "Chen Wang <cwang138@illinois>",
   "license": "MIT"

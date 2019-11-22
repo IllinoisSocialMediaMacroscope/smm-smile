@@ -1,0 +1,56 @@
+{
+    "sentiment": [
+        "text",
+        "user.description",
+        "description",
+        "_source.text",
+        "_source.user.description",
+        "body",
+        "title",
+        "_source.body",
+        "_source.title",
+        "contents"
+    ],
+    "network": [
+        "user.screen_name",
+        "text",
+        "_source.user.screen_name",
+        "_source.text"
+    ],
+    "autophrase": [
+        "text",
+        "user.description",
+        "_source.text",
+        "_source.user.description",
+        "description",
+        "body",
+        "title",
+        "_source.body",
+        "_source.title",
+        "contents"
+    ],
+    "preprocess": [
+        "text",
+        "user.description",
+        "_source.text",
+        "_source.user.description",
+        "description",
+        "body",
+        "title",
+        "_source.body",
+        "_source.title",
+        "contents"
+    ],
+    "classification": [
+        "text",
+        "user.description",
+        "_source.text",
+        "_source.user.description",
+        "description",
+        "title",
+        "body",
+        "_source.body",
+        "_source.title",
+        "contents"
+    ]
+}

@@ -4,13 +4,12 @@ div(id="reddit-callback" class="modal fade" role="dialog" data-backdrop="static"
         div(class="modal-content")
             div(class="modal-body", style="padding:30px;overflow:auto;")
                 button(class="close" data-dismiss="modal") &times;
-                div(id="reddit-login-header")
+                div(class="login-header")
                     img(src="bootstrap/img/logo/reddit-sm-logo.png", width=80)
                     h2 Reddit
-                div(id="twitter-login-notes")
-                    img(src="bootstrap/img/gifs/warning.gif")
+                div(class="login-notes")
                     p SMILE has registered a public APP to interact with Reddit. If you would like to acquire Reddit
                         |  data through us, you must agree with the
                         a(href="https://www.reddit.com/wiki/api-terms", target="_blank") API Term of Use.
                     iframe(src="api-terms/api-terms - reddit.com.html", width="100%", height="500", style="margin-top:30px;")
-                a(class="btn btn-yes pull-right" style="margin:10px;" id="reddit-agree") Agree
+                button(class="btn btn-primary pull-right" style="margin:10px;" id="reddit-agree") Agree

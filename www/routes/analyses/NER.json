@@ -1,0 +1,115 @@
+{
+  "path": "NER",
+  "title": "Named Entity Recognition",
+  "imgURL": "bootstrap/img/logo/NLP/NER.png",
+  "wiki": "https://en.wikipedia.org/wiki/Named-entity_recognition",
+  "introduction": [
+    "Named-entity recognition (NER) (also known as entity identification, entity chunking and entity extraction)",
+    "is a subtask of <a href=\"https://en.wikipedia.org/wiki/Information_extraction\" target=\"_blank\">information extraction",
+    "</a> that seeks to locate and classify <a href=\"https://en.wikipedia.org/wiki/Named_entity\" target=\"_blank\">named entity</a>",
+    "mentions in <a href=\"https://en.wikipedia.org/wiki/Unstructured_data\" target=\"_blank\">unstructured text</a>",
+    "into pre-defined categories such as the person names, organizations, locations, medical codes,",
+    "time expressions, quantities, monetary values, percentages, etc."
+  ],
+  "result_path": "/NLP/NER/",
+  "results": [
+    {
+      "acronym": "config",
+      "name": "configuration",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": true
+    },
+    {
+      "acronym": "div_category",
+      "name": "visualization of the name entity categories",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "div_freq",
+      "name": "visualization of the most frequent name entity",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "entity",
+      "name": "name entity list",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "freq",
+      "name": "frequency of name entity",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    }
+  ],
+  "args": [
+    "algorithm"
+  ],
+  "get": {
+    "containers": [
+      {
+        "container-name": "",
+        "container-label-name": "Algorithm",
+        "input": {
+          "type": "select",
+          "name": "algorithm",
+          "id": "algorithm",
+          "options": [
+            {
+              "value": "Please Select...",
+              "label": "Please Select..."
+            },
+            {
+              "value": "twitterNER",
+              "label": "Twitter Name Entity Extraction"
+            }
+          ]
+        }
+      }
+    ],
+    "buttonGroups": [
+      {
+        "id": "clear",
+        "class": "btn btn-primary",
+        "value": "Clear",
+        "style": "margin: auto 5px;",
+        "onclick": "customized_reset();"
+      },
+      {
+        "id": "submit",
+        "class": "btn btn-danger",
+        "value": "Submit",
+        "style": "margin: auto 5px;"
+      }
+    ],
+    "citation": {
+      "trigger_id": "algorithm",
+      "content": [
+        {
+          "text": ["Mishra, S., & Diesner, J. (2016). <a href=\"http://www.aclweb.org/anthology/W16-3927\" target=\"_blank\">Semi-supervised Named Entity Recognition in noisy-text.</a> In Proceedings of the 2nd Workshop on Noisy User-generated Text (WNUT) (pp. 203-212)."],
+          "condition": "twitterNER"
+        }
+      ]
+    }
+  },
+  "post": {
+    "batch_config": {
+      "batch_action": "python3.6",
+      "batch_script": "/scripts/batch_function.py",
+      "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_NER:1",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
+    }
+  }
+}

@@ -48,11 +48,6 @@ body {
 /* glyphicon font-awesome icons */
 .fab, .fas{
     padding:3px;
-    color:#ff5722;
-}
-
-.glyphicon{
-    margin-right:10px;
 }
 
 /* kbd style */

@@ -1,78 +1,168 @@
-var platforms = ['twitter', 'reddit', 'crimson'];
+function authorize(platform){
+    // showing the check mark
+    $("#" + platform + "-auth").find('img').show();
 
-$.each(platforms,function(i,platform){
-    if (platform === 'twitter'){
-        // newPath has already been calculated in the parse_session.js
-        $(".twitter-auth").find('a').attr("href","login/twitter?currentURL=" + newPath);
-	}
-	else if (platform === 'reddit'){
-		$("#reddit-agree").attr("href", "login/reddit?currentURL=" + newPath)
-	}
+    // toggle the second auth panel
+    $("#unauthorized").find("." + platform + "-auth").hide();
+    $("#authorized").find("#" + platform + "-authorized").show();
 
-	clickEffect(platform);
-});
-
-function clickEffect(platform){
-	// two ways to hide an authorization button
-	// 1. actually authorize it. this will show the search and also enable the dropdown in the search success cookie
-	// 2. click later button which shows the search page but without opening that specific search later cookie
-	if ($.cookie(platform + "-later") === "true"){
-		$("#" + platform + "-auth").hide();
-	}
-    
-    if ($.cookie(platform+ "-success") === "true"){
-		// click the icon to authorize hide
-		$("." + platform + "-auth").hide();
-		$("#" + platform + "-authorized").show();
-		//console.log("#" + platform + "-authorized");
-
-		if (platform === 'twitter'){
-			$("#social-media option[value='queryTweet']").removeAttr('disabled');
-			$("#social-media option[value='queryUser']").removeAttr('disabled');
-		}else if (platform === 'reddit'){
-			$("#social-media option[value='queryReddit']").removeAttr('disabled');
-			$("#social-media option[value='redditPost']").removeAttr('disabled');
-			$("#social-media option[value='redditComment']").removeAttr('disabled');
-		}else if (platform === 'crimson'){
-            $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
-		}
-	}
-	
-	// if there's no visible auth button, show the search page!
-	if($('#auth-panel').children(':visible').length == 1) {
-			$("#auth-panel").hide();
-			$("#searchPage").show();
-		}
-	
-	// if click "later" button, set the later cookie to true for 1 day so it doesn't bother the user anymore
-	$("." +platform+ "-auth").find(".button-later").on("click",function(){
-		$.cookie(platform + '-later',true, { expires: 1});
-		$("#" + platform + "-auth").hide();
-		if($('#auth-panel').children(':visible').length == 1) {
-			$("#auth-panel").hide();
-			$("#searchPage").show();
-		}
-	});
+    // enable the authorized platform selection
+    if (platform === 'twitter') {
+        $("#social-media option[value='queryTweet']").removeAttr('disabled');
+        $("#social-media option[value='getTimeline']").removeAttr('disabled');
+    } else if (platform === 'reddit') {
+        $("#social-media option[value='queryReddit']").removeAttr('disabled');
+        $("#social-media option[value='redditPost']").removeAttr('disabled');
+        $("#social-media option[value='redditComment']").removeAttr('disabled');
+    } else if (platform === 'crimson') {
+        $("#social-media option[value='crimsonHexagon']").removeAttr('disabled');
+    }
 }
 
-/****************************** CRIMSON Hexagon ******************************/
-$(".crimson-auth").find(".button").on('click', function(e){
-	e.preventDefault();
-    $("#crimson").modal('show');
+
+$(document).ready(function () {
+    var platforms = ['twitter', 'reddit', 'crimson'];
+    $.each(platforms, function (i, platform) {
+        if ($.cookie(platform + "-success") === "true") {
+            authorize(platform);
+        }
+    });
 });
 
-$(".crimson-auth").find("#crimson-icon-button").on('click', function(e){
+$("#auth-next").on("click", function () {
+    $("#auth-panel").hide();
+    $("#searchPage").show();
+});
+
+/****************************** CRIMSON Hexagon ******************************/
+$("#crimson-password").on('keyup', function (e) {
+    if (e.keyCode == 13 || e.keyCode == 10) {
+
+        $.ajax({
+            type: 'post',
+            url: 'login/crimson',
+            data: {
+                "crimson_username": $("#crimson-username").val(),
+                "crimson_password": $("#crimson-password").val(),
+            },
+            success: function (data) {
+                if ('ERROR' in data) {
+                    $("#error").val(JSON.stringify(data));
+                    $("#warning").modal('show');
+                }
+                else {
+                    location.reload(true);
+                }
+            },
+            error: function (jqXHR, exception) {
+                $("#error").val(jqXHR.responseText);
+                $("#warning").modal('show');
+            }
+        });
+    }
+});
+$("#crimson-auth-submit").on('click', function () {
+    $.ajax({
+        type: 'post',
+        url: 'login/crimson',
+        data: {
+            "crimson_username": $("#crimson-username").val(),
+            "crimson_password": $("#crimson-password").val(),
+        },
+        success: function (data) {
+            if ('ERROR' in data) {
+                $("#error").val(JSON.stringify(data));
+                $("#warning").modal('show');
+            }
+            else {
+                location.reload(true);
+            }
+        },
+        error: function (jqXHR, exception) {
+            $("#error").val(jqXHR.responseText);
+            $("#warning").modal('show');
+        }
+    });
+});
+$(".crimson-auth").find(".auth-button").on('click', function (e) {
     e.preventDefault();
-    $("#crimson").modal('show');
+    $("#crimson-callback").modal('show');
+});
+$(".crimson-auth").find("#crimson-icon-button").on('click', function (e) {
+    e.preventDefault();
+    $("#crimson-callback").modal('show');
 });
 
 /****************************** TWITTER ******************************/
-// display twitter pin callback input
-$(".twitter-auth").find('a').on('click', function(){
-	$("#twitter-callback").modal('show');
+$("#twitter-pin-submit").on('click', function () {
+    console.log('clicked');
+    $.ajax({
+        type: 'post',
+        url: 'login/twitter',
+        data: {
+            "twt_pin": $("#twitter-pin").val(),
+        },
+        success: function (data) {
+            if ('ERROR' in data) {
+                $("#error").val(JSON.stringify(data));
+                $("#warning").modal('show');
+            }
+            else {
+                location.reload(true);
+            }
+        },
+        error: function (jqXHR, exception) {
+            $("#error").val(jqXHR.responseText);
+            $("#warning").modal('show');
+        }
+    });
+});
+$("#twitter-pin").on('keyup', function (e) {
+    if (e.keyCode == 13 || e.keyCode == 10) {
+        $.ajax({
+            type: 'post',
+            url: 'login/twitter',
+            data: {"twt_pin": $("#twitter-pin").val()},
+            success: function (data) {
+                if ('ERROR' in data) {
+                    $("#error").val(JSON.stringify(data));
+                    $("#warning").modal('show');
+                }
+                else {
+                    location.reload(true);
+                }
+            },
+            error: function (jqXHR, exception) {
+                $("#error").val(jqXHR.responseText);
+                $("#warning").modal('show');
+            }
+        });
+    }
+});
+$(".twitter-auth").find('a').on('click', function () {
+    $("#twitter-callback").modal('show');
 });
 
 //***************************** REDDIT ******************************/
-$(".reddit-auth").find('a').on('click', function(){
-	$("#reddit-callback").modal('show');
+$("#reddit-agree").on('click', function () {
+    $.ajax({
+        type: 'get',
+        url: 'login/reddit',
+        success: function (data) {
+            if ('ERROR' in data) {
+                $("#error").val(JSON.stringify(data));
+                $("#warning").modal('show');
+            }
+            else {
+                location.reload(true);
+            }
+        },
+        error: function (jqXHR, exception) {
+            $("#error").val(jqXHR.responseText);
+            $("#warning").modal('show');
+        }
+    });
+});
+$(".reddit-auth").find('a').on('click', function () {
+    $("#reddit-callback").modal('show');
 });

@@ -1,49 +1,53 @@
-// Global variable currPrevNum
+// Global variables
 currPreviewNum = 0;
 
 //corresponding to query.pug and searchbox.pug
 function init(){
-	
-	// initialization
+
+    queryTerm = '';
+    Query ='';
+    parameters = { 	tweet: {},
+        twtTimeline: {},
+        rdSearch: {},
+        rdComment:{},
+        rdPost:{},
+        psPost:{},
+        psComment:{}
+    };
+
+    // initialization
 	$("#searchbox").prop('disabled',true);
 	$("#dropdownButton").prop('disabled',true);
-	$("#boolean-toggle").prop('disabled',true);
 	$("#simple-search-btn").prop('disabled',true);
-	
-	queryTerm = '';
-	Query ='';
-	parameters = { 	tweet: {},
-					twtUser: {},
-					es: {},
-					rdSearch: {},
-					rdComment:{},
-					rdPost:{},
-					psPost:{},
-					psComment:{}	
-				};
 
-	// save modal popup
+	// notification
+	$("#searchPage").find(".citation-notice button").on("click", function(){
+    	$(".citation-notice").hide();
+	});
+
+	// save result
 	$("#adv-search-btn").on('click', function(e){
-		modalPopUp('#input');
+		dryRun('#input');
 	});	
 	$("#simple-search-btn").on('click', function(e){
-		modalPopUp('#searchbox');
+		dryRun('#searchbox');
 	});
 	$("#searchbox").on('keypress', function(e){
 		if ( (e.keyCode == 13 || e.keycode == 10 )&& !$("#simple-search-btn").attr('disabled')){
 			e.preventDefault();
-			modalPopUp('#searchbox');
+			dryRun('#searchbox');
 		}
 	});
 	
-	// save modal click
+	// save button click
 	$("#saveButton").on('click',function(e){
-		saveModalClick()
+        e.preventDefault();
+        saveButtonClick()
 	});
 	$("#sn-filename").on('keypress',function(e){
 		if (e.keyCode === 13 || e.keycode == 10){
 			e.preventDefault(); 
-			saveModalClick()
+			saveButtonClick()
 		}
 	});
 	
@@ -54,19 +58,17 @@ function init(){
 		}
 	});
 			
-	// customize dropdown
-	$('#dropdownButton').on('click',function(event){
+	// customize advance dropdown
+	$('#dropdownButton').on('click',function(){
 		if ($("#searchbox").val() !== '' && $("#searchbox").val() !== undefined ){
 			$(this).parent().toggleClass('open');
 			if ($(this).parent().attr('class') === 'dropdown dropdown-lg open'){
 				// disable search and enable advanced search
 				$("#simple-search-btn").prop('disabled',true);
-				
-				// toggle css effect
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}else{
 				$("#simple-search-btn").prop('disabled',false);
-				pushDropdown('off');
+				pushAdvancedDropdown('off');
 			}
 			
 			// initialize the advanced panel
@@ -75,38 +77,24 @@ function init(){
 			var keyword = keyword.replace(/[\"]+/g, `\\"`);
 			
 			parameters['tweet']['q:'] = keyword;
-			parameters['tweet']['count:'] = 100;
-			parameters['tweet']['pages:'] = parseInt($("#tweet-count").val())/100;
 			parameters['tweet']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
 			`\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
 			`\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
 			`\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
 			`\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
 			`\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
-			`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang`+
-			`\n\t\t\t}\n\t\t\tentities{\n\t\t\t\turls\n\t\t\t\thashtags\n\t\t\t\tuser_mentions{\n\t\t\t\t\tauthor_id`+
-			`\n\t\t\t\t\tscreen_name\n\t\t\t\t}\n\t\t\t}`;
+			`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang\n\t\t\t}`+
+			`\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
 			
-			parameters['twtUser']['q:'] = keyword;
-			parameters['twtUser']['count:'] = 20;
-			parameters['twtUser']['fields'] = `\n\t\t\tauthor_id\n\t\t\tauthor_id_str\n\t\t\tname\n\t\t\tscreen_name\n\t\t\tdescription`+
-			`\n\t\t\tauthor_created_at\n\t\t\tprofile_image_url\n\t\t\tprofile_banner_url\n\t\t\turl\n\t\t\tlocation\n\t\t\ttweets_count`+
-			`\n\t\t\tfollowers_count\n\t\t\tfriends_count\n\t\t\tlisted_count\n\t\t\tfavourites_count\n\t\t\tstatuses_count\n\t\t\ttime_zone`+
-			`\n\t\t\tprotected\n\t\t\tverified\n\t\t\tis_translator\n\t\t\tcontributors_enabled\n\t\t\tgeo_enabled\n\t\t\tauthor_lang\n\t\t\ttimeline{`+
-			`\n\t\t\t\tid\n\t\t\t\tcreated_at\n\t\t\t\ttext\n\t\t\t\tretweet_count\n\t\t\t}`;
-				
-			parameters['es']['q:'] = keyword;
-			parameters['es']['perPage:'] =  1000;
-			parameters['es']['fields'] = `\n\t\t\t_id\n\t\t\t_type\n\t\t\t_index\n\t\t\t_score\n\t\t\t_source{`+
-			`\n\t\t\t\tid\n\t\t\t\tid_str\n\t\t\t\tcreated_at\n\t\t\t\ttext\n\t\t\t\tretweet_count\n\t\t\t\tfavorite_count`+
-			`\n\t\t\t\tretweeted\n\t\t\t\tfavorited\n\t\t\t\tpossibly_sensitive\n\t\t\t\ttruncated\n\t\t\t\tlang\n\t\t\t\tin_reply_to_user_id_str`+
-			`\n\t\t\t\tin_reply_to_status_id_str\n\t\t\t\tin_reply_to_screen_name\n\t\t\t\ttimestamp_ms\n\t\t\t\tmentions\n\t\t\t\thashtags`+
-			`\n\t\t\t\turls\n\t\t\t\tis_quote_status\n\t\t\t\temoticons\n\t\t\t\tsource\n\t\t\t\tsentiments\n\t\t\t\tfilter_level\n\t\t\t\tuser{`+
-			`\n\t\t\t\t\tauthor_id\n\t\t\t\t\tauthor_id_str\n\t\t\t\t\tname\n\t\t\t\t\tscreen_name\n\t\t\t\t\tdescription\n\t\t\t\t\tauthor_created_at`+
-			`\n\t\t\t\t\tprofile_image_url\n\t\t\t\t\tprofile_banner_url\n\t\t\t\t\turl\n\t\t\t\t\tlocation\n\t\t\t\t\ttweets_count\n\t\t\t\t\tfollowers_count`+
-			`\n\t\t\t\t\tfriends_count\n\t\t\t\t\tlisted_count\n\t\t\t\t\tfavourites_count\n\t\t\t\t\tstatuses_count\n\t\t\t\t\ttime_zone\n\t\t\t\t\tprotected`+
-			`\n\t\t\t\t\tverified\n\t\t\t\t\tis_translator\n\t\t\t\t\tcontributors_enabled\n\t\t\t\t\tgeo_enabled\n\t\t\t\t\tauthor_lang`+
-			`\n\t\t\t\t}\n\t\t\t\tcoordinates{\n\t\t\t\t\tlat\n\t\t\t\t\tlon\n\t\t\t\t}\n\t\t\t}`;
+			parameters['twtTimeline']['screen_name:'] = keyword;
+			parameters['twtTimeline']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
+                `\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
+                `\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
+                `\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
+                `\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
+                `\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
+                `\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang\n\t\t\t}`+
+                `\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
 			
 			parameters['rdSearch']['query:'] = keyword;
 			parameters['rdSearch']['time:'] =  'all';
@@ -134,11 +122,10 @@ function init(){
 			`\n\t\t\tscore_hidden\n\t\t\tstickied\n\t\t\tsubreddit_type\n\t\t\tcomment_ups`;
 			
 			parameters['psPost']['q:'] = keyword;
-			parameters['psPost']['size:'] = 1000;
-			parameters['psPost']['fields']=`\n\t\t\t_index\n\t\t\t_id\n\t\t\t_type\n\t\t\t_score\n\t\t\t_source{\n\t\t\t\tauthor_name\n\t\t\t\tcreated_utc`+
-			`\n\t\t\t\tdomain\n\t\t\t\tid\n\t\t\t\tis_self\n\t\t\t\tlocked\n\t\t\t\tnum_comments\n\t\t\t\tover_18\n\t\t\t\tpermalink\n\t\t\t\tfull_link`+
-			`\n\t\t\t\tpinned\n\t\t\t\tretrieved_on\n\t\t\t\tscore\n\t\t\t\tstickied\n\t\t\t\tspoiler\n\t\t\t\tsubreddit_display_name\n\t\t\t\tsubreddit_id`+
-			`\n\t\t\t\tsubreddit_name_prefixed\n\t\t\t\ttitle\n\t\t\t\turl\n\t\t\t}`;
+			parameters['psPost']['fields']=`\n\t\t\tauthor_name\n\t\t\tcreated_utc`+
+			`\n\t\t\tdomain\n\t\t\tid\n\t\t\tis_self\n\t\t\tlocked\n\t\t\tnum_comments\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tfull_link`+
+			`\n\t\t\tpinned\n\t\t\tretrieved_on\n\t\t\tscore\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id`+
+			`\n\t\t\tsubreddit_name_prefixed\n\t\t\ttitle\n\t\t\turl`;
 				
 			parameters['psComment']['q:'] = keyword;
 			parameters['psComment']['fields']=`\n\t\t\tcomment_author_name\n\t\t\tbody\n\t\t\tcomment_created\n\t\t\tid\n\t\t\tlink_id\n\t\t\tparent_id`+
@@ -168,17 +155,16 @@ function init(){
 		includeSelectAllOption: true,		
 		enableCollapsibleOptGroups: true,			
 		});
-	
-	// select box enable search/boolean/advanced
+
 	$("#social-media").change(function(){
+		$(".prompt").empty();
+
 		$("#searchbox").prop('disabled',false);
 		$("#dropdownButton").prop('disabled',false);
-		$("#boolean-toggle").prop('disabled',false);
 		$("#simple-search-btn").prop('disabled',false);
 		
 		$(".tweet").hide();
-		$(".user").hide();
-		$(".es-tweet").hide();
+		$(".timeline").hide();
 		$(".reddit-search").hide();
 		$(".reddit-post").hide();
 		$(".reddit-comment").hide();
@@ -187,9 +173,6 @@ function init(){
 		
 		$(".form-group.geocode").hide();
 		$(".form-group.dateRange").hide();
-		$(".form-group.es-geocode").hide();
-		$(".form-group.es-dateRange").hide();
-		$(".form-group.es-popularity").hide();
 		$(".form-group.rd-subreddit").hide();
 		$(".form-group.ps-subreddit").hide();
 		$(".form-group.ps-author").hide();
@@ -212,14 +195,9 @@ function init(){
                 .tooltip('fixTitle')
                 .tooltip('show');
 		}
-		else if ( queryTerm === 'queryUser'){
-			$(".user").show();
-			$("#searchbox").attr("placeholder","Username keywords that you wish to search...");
-            $("boolean").tooltip('hide');
-        }
-        else if ( queryTerm === 'streamTweet'){
-			$(".es-tweet").show();
-			$("#searchbox").attr("placeholder","Tweet keywords that you wish to search...");
+		else if ( queryTerm === 'getTimeline'){
+			$(".timeline").show();
+			$("#searchbox").attr("placeholder","User screen name starting after @");
             $("boolean").tooltip('hide');
         }
         else if ( queryTerm === 'queryReddit'){
@@ -260,11 +238,11 @@ function init(){
 	
 		Query = updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
-		
+
 		if ( $('.dropdown.dropdown-lg.open').length ){
-			pushDropdown('on');
+			pushAdvancedDropdown('on');
 		}else{
-			pushDropdown('off');
+			pushAdvancedDropdown('off');
 		}
 	});
 
@@ -282,27 +260,77 @@ function init(){
 	$("#until-start").val(until_start);
 			
 	/*---------------------------------------global search term---------------------------------------------------------------------------*/
-	$("#searchbox").on('keyup', function(e){
+	$("#searchbox").on('keyup', delay(function(e){
 		
 		if ( e.keyCode !== 13 && e.keycode !== 10 ){
-			// escape doule quotation mark
-			var keyword =  $("#searchbox").val();
-			var keyword = keyword.replace(/[\"]+/g, `\\"`);
-			
-			parameters['tweet']['q:'] = keyword;
-			parameters['twtUser']['q:'] = keyword;
-			parameters['es']['q:'] = keyword;
-			parameters['rdSearch']['query:'] = keyword;
-			parameters['rdPost']['subredditName:']= keyword;
-			parameters['rdComment']['subredditName:'] = keyword;
-			parameters['psPost']['q:'] = keyword;
-			parameters['psComment']['q:'] = keyword;
-			
-			Query =updateString(queryTerm,parameters);
-			$("#input").val(`{\n\n` + Query +`\n\n}`);
+			// user prompt
+			if (queryTerm === 'getTimeline'){
+                var $prompt = $(".prompt");
+                if ($(this).val() !== ""){
+                    $.ajax({
+                        url: "prompt",
+                        type: "post",
+                        data: {"screenName": $(this).val()},
+                        success: function (data) {
+                            $prompt.empty();
+                            $(data).each(function(i, user){
+                                $prompt.append('<div class="prompt-user">' +
+                                    '<img class="prompt-img" src="'+ user.profile_image_url + '"/>' +
+                                    '<p class="prompt-screen-name">' + user.screen_name + '</p>' +
+                                    '<p class="prompt-user-name">' + user.name + '</p>' +
+                                    '<p class="prompt-user-description">' + user.description + '</p></div>')
+                            });
+
+                            $(".prompt-user").on("click", function(){
+                                $("#searchbox").val($(this).find(".prompt-screen-name").text());
+
+                                var keyword =  $("#searchbox").val();
+                                var keyword = keyword.replace(/[\"]+/g, `\\"`);
+                                parameters['twtTimeline']['screen_name:'] = keyword;
+                                parameters['tweet']['q:'] = keyword;
+                                parameters['twtTimeline']['screen_name:'] = keyword;
+                                parameters['rdSearch']['query:'] = keyword;
+                                parameters['rdPost']['subredditName:']= keyword;
+                                parameters['rdComment']['subredditName:'] = keyword;
+                                parameters['psPost']['q:'] = keyword;
+                                parameters['psComment']['q:'] = keyword;
+                                Query =updateString(queryTerm,parameters);
+                                $("#input").val(`{\n\n` + Query +`\n\n}`);
+
+                                $prompt.hide();
+                            });
+                        },
+                        error: function (jqXHR, exception) {
+                            $("#error").val(jqXHR.responseText);
+                            $("#warning").modal('show');
+                        }
+                    });
+                }
+                else{
+                    $prompt.empty();
+                }
+            }
+
+            // escape doule quotation mark
+            var keyword =  $("#searchbox").val();
+            var keyword = keyword.replace(/[\"]+/g, `\\"`);
+
+            parameters['tweet']['q:'] = keyword;
+            parameters['twtTimeline']['screen_name:'] = keyword;
+            parameters['rdSearch']['query:'] = keyword;
+            parameters['rdPost']['subredditName:']= keyword;
+            parameters['rdComment']['subredditName:'] = keyword;
+            parameters['psPost']['q:'] = keyword;
+            parameters['psComment']['q:'] = keyword;
+
+            Query =updateString(queryTerm,parameters);
+            $("#input").val(`{\n\n` + Query +`\n\n}`);
 		}
-	});
-		
+	}, 300))
+	.click(function(){
+        $(this).siblings(".prompt").show();
+    });
+
 	/*---------------------------------------------query tweet ------------------------------------------------------------------------*/
 	// toggle date range checkbox
 	$("#dateRange").change(function(){
@@ -319,14 +347,14 @@ function init(){
 			});
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}else{
 			parameters['tweet']['until:'] = '';	
 			$(".form-group.dateRange").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}	
 		
@@ -362,7 +390,7 @@ function init(){
 			});
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		
 		}else{
@@ -370,7 +398,7 @@ function init(){
 			$(".form-group.geocode").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}
 		Query =updateString(queryTerm,parameters);
@@ -378,8 +406,6 @@ function init(){
 	});
 	// tweet
 	$("#tweet-count").change(function(){
-		parameters['tweet']['count:'] = 100;
-		parameters['tweet']['pages:'] = parseInt($("#tweet-count").val())/100;
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
@@ -387,7 +413,7 @@ function init(){
 	$("#twtTweetFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],AuthorInformation:[],TweetEntities:[]};
+		fields = {BasicFields:[],AuthorInformation:[], Entities:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -405,200 +431,47 @@ function init(){
 			});
 			fields_string += '\n\t\t\t}' ;
 		}
-		if (fields['TweetEntities'].length !== 0){
-			fields_string += '\n\t\t\tentities{' ;
-			$.each(fields['TweetEntities'],function(i,val){
-				if (val === 'user_mentions'){
-					fields_string += '\n\t\t\t\tuser_mentions{\n\t\t\t\t\tauthor_id\n\t\t\t\t\tscreen_name\n\t\t\t\t}';
-				}else{
-					fields_string += '\n\t\t\t\t' + val;
-				}
-			});
-			fields_string += '\n\t\t\t}' ;
+		if (fields['Entities'].length !== 0){
+            fields_string += '\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}';
 		}
 		
 		parameters['tweet']['fields'] = fields_string;
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});		
-	
-	
-	/*---------------------------------------------Elastic search ----------------------------------------------------------------------*/
-	// toggle es date range checkbox
-	$("#es-dateRange").change(function(){
-		parameters['es']['startDate:'] = $("#start").val();
-		parameters['es']['endDate:'] = $("#end").val();
-		
-		if ($("#es-dateRange").is(':checked')){
-			$(".form-group.es-dateRange").show();
-			
-			$("#start").change(function(){
-				parameters['es']['startDate:'] = $("#start").val();
-				Query =updateString(queryTerm,parameters);
-				$("#input").val(`{\n\n` + Query +`\n\n}`);
-			});
-			$("#end").change(function(){
-				parameters['es']['endDate:'] = $("#end").val();
-				Query =updateString(queryTerm,parameters);
-				$("#input").val(`{\n\n` + Query +`\n\n}`);
-			});
-			
-			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
-			}
-			
-		}else{
-			parameters['es']['startDate:']='';
-			parameters['es']['endDate:']  = '';
-			$(".form-group.es-dateRange").hide();
-			
-			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
-			}
-		}	
+	});
+
+	/*----------------------------------------------------- twitter timeline -------------------------------------------------------*/
+	$("#twtTimeline-count").change(function(){
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
-	// toggle es-geocode checkbox
-	$("#es-geocode").change(function(){
-		parameters['es']['lat:'] =  parseFloat($("#es-lat").val());
-		parameters['es']['lon:'] =  parseFloat($("#es-lon").val());
-		parameters['es']['distance:'] =  $("#es-radius").val().toString() + 'mi';
-		
-		if ($("#es-geocode").is(':checked')){
-			$(".form-group.es-geocode").show();
-			
-			$("#es-lat").change(function(){
-				parameters['es']['lat:'] =  parseFloat($("#es-lat").val());
-				Query =updateString(queryTerm,parameters);
-				$("#input").val(`{\n\n` + Query +`\n\n}`);
-			});
-			$("#es-lon").change(function(){
-				parameters['es']['lon:'] =  parseFloat($("#es-lon").val());
-				Query =updateString(queryTerm,parameters);
-				$("#input").val(`{\n\n` + Query +`\n\n}`);
-			});
-			$("#es-radius").change(function(){
-				parameters['es']['distance:'] =  $("#es-radius").val().toString() + 'mi';
-				Query =updateString(queryTerm,parameters);
-				$("#input").val(`{\n\n` + Query +`\n\n}`);
-			})
-			
-			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
-			}
-		
-		}else{
-			parameters['es']['lat:'] =  ''
-			parameters['es']['lon:'] =  ''
-			parameters['es']['distance:'] =  ''
-			$(".form-group.es-geocode").hide();
-			
-			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
-			}
+
+	$("#twtTimeline-exclude-replies").change(function(){
+        if ($("#twtTimeline-exclude-replies").is(":checked")){
+            parameters['twtTimeline']['exclude_replies:'] = true;
+        }
+        else{
+            parameters['twtTimeline']['exclude_replies:'] = false;
+        }
+        Query =updateString(queryTerm,parameters);
+        $("#input").val(`{\n\n` + Query +`\n\n}`);
+	});
+
+	$("#twtTimeline-exclude-rts").change(function(){
+		if ($("#twtTimeline-exclude-rts").is(":checked")){
+			parameters['twtTimeline']['include_rts:'] = false;
 		}
-		Query =updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
-	//toggle es-popularity checkbox
-	$("#es-popularity").change(function(){
-		parameters['es']['followers_count:'] = parseInt($("#followers_count").val());
-		parameters['es']['statuses_count:'] =  parseInt($("#statuses_count").val());
-		if ($("#es-popularity").is(':checked')){
-			$(".form-group.es-popularity").show();
-					
-			$("#followers_count").change(function(){
-				parameters['es']['followers_count:'] = parseInt($("#followers_count").val());
-				Query =updateString(queryTerm,parameters);
-				$("#input").val(`{\n\n` + Query +`\n\n}`);
-			});
-			$("#statuses_count").change(function(){
-				parameters['es']['statuses_count:'] =  parseInt($("#statuses_count").val());
-				Query =updateString(queryTerm,parameters);
-				$("#input").val(`{\n\n` + Query +`\n\n}`);
-			});
-			
-			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
-			}
-		
-		}else{
-			parameters['es']['followers_count:'] = '';
-			parameters['es']['statuses_count:'] =  '';
-			$(".form-group.es-popularity").hide();
-			
-			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
-			}
+		else{
+            parameters['twtTimeline']['include_rts:'] = true;
 		}
-		
-		Query =updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});	
-	// perPage
-	$("#perPage").change(function(){
-		parameters['es']['perPage:'] = 1000;
-		//parameters['es']['pageNum:']= parseInt($("#perPage").val())/1000;
-		Query =updateString(queryTerm,parameters);
-		//console.log(Query);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
+        Query =updateString(queryTerm,parameters);
+        $("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
-		
-	$("#twtStreamFields").change(function(){
+	
+	$("#twtTimelineFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],ElasticSearchMetadata:[],AuthorInformation:[],GeoLocation:[]};
-		$.each($(this).find(':selected'),function(i,val){
-			var label = $(val.parentNode)[0].label;
-			fields[label].push(val.value);
-		});
-		if (fields['ElasticSearchMetadata'].length !== 0){
-			$.each(fields['ElasticSearchMetadata'],function(i,val){
-				fields_string += '\n\t\t\t' + val;
-			});
-		}
-		if(fields['BasicFields'].length !== 0){
-			fields_string += '\n\t\t\t_source{' ;
-			$.each(fields['BasicFields'],function(i,val){
-				fields_string += '\n\t\t\t\t' + val;
-			});
-		
-			if (fields['AuthorInformation'].length !== 0){
-				fields_string += '\n\t\t\t\tuser{' ;
-				$.each(fields['AuthorInformation'],function(i,val){
-					fields_string += '\n\t\t\t\t\t' + val;
-				});
-				fields_string += '\n\t\t\t\t}' ;
-			}
-			if (fields['GeoLocation'].length !== 0){
-				fields_string += '\n\t\t\t\tcoordinates{' ;
-				$.each(fields['GeoLocation'],function(i,val){
-					fields_string += '\n\t\t\t\t\t' + val;
-				});
-				fields_string += '\n\t\t\t\t}' ;
-			}
-			fields_string += '\n\t\t\t}' ;
-		}
-		
-		parameters['es']['fields'] = fields_string;
-		Query =updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});		
-	
-	
-	/*----------------------------------------------------- twitter user-------------------------------------------------------*/
-	$("#twtUser-count").change(function(){
-		parameters['twtUser']['count:'] = 20;
-		//parameters['twtUser']['pageNum:'] = parseInt($("#twtUser-count").val())/20;
-		Query =updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
-	
-	$("#twtUserFields").change(function(){
-		fields_string = '';
-		
-		fields = {BasicFields:[],UserTimeline:[]};
+		fields = {BasicFields:[],AuthorInformation:[], Entities:[]};
 		$.each($(this).find(':selected'),function(i,val){
 			var label = $(val.parentNode)[0].label;
 			fields[label].push(val.value);
@@ -609,20 +482,23 @@ function init(){
 				fields_string += '\n\t\t\t' + val;
 			});
 		}
-		if (fields['UserTimeline'].length !== 0){
-			fields_string += '\n\t\t\ttimeline{' ;
-			$.each(fields['UserTimeline'],function(i,val){
-				fields_string += '\n\t\t\t\t' + val;
-			});
-			fields_string += '\n\t\t\t}' ;
-		}
+        if (fields['AuthorInformation'].length !== 0){
+            fields_string += '\n\t\t\tuser{' ;
+            $.each(fields['AuthorInformation'],function(i,val){
+                fields_string += '\n\t\t\t\t' + val;
+            });
+            fields_string += '\n\t\t\t}' ;
+        }
+
+        if (fields['Entities'].length !== 0){
+            fields_string += '\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}';
+        }
 		
-		parameters['twtUser']['fields'] = fields_string;
+		parameters['twtTimeline']['fields'] = fields_string;
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 
 	});
-	
 	
 	/*----------------------------------------------------- Reddit Search-------------------------------------------------------*/
 	$("input[name='time']").change(function(){
@@ -651,7 +527,7 @@ function init(){
 			});
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}else{
 			$("#subreddit").val("");
@@ -660,7 +536,7 @@ function init(){
 			$(".form-group.rd-subreddit").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}
 		
@@ -680,12 +556,8 @@ function init(){
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 
 	});
+
 	/*------------------------------pushshift Post ------------------------------------*/
-	$("#ps-size").change(function(){
-		parameters['psPost']['size:'] = parseInt($("#ps-size").val());
-		Query =updateString(queryTerm,parameters);
-		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});
 	$("#ps-subreddit").change(function(){
 		if ($("#ps-subreddit").is(':checked')){
 			$(".form-group.ps-subreddit").show();
@@ -697,7 +569,7 @@ function init(){
 			});
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}else{
 			$("#ps-subreddit-name").val("");
@@ -705,13 +577,14 @@ function init(){
 			$(".form-group.ps-subreddit").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
-	});	
+	});
+
 	$("#ps-author").change(function(){
 		if ($("#ps-author").is(':checked')){
 			$(".form-group.ps-author").show();
@@ -723,7 +596,7 @@ function init(){
 			});
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}else{
 			$("#ps-author-name").val("");
@@ -731,13 +604,14 @@ function init(){
 			$(".form-group.ps-author").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
+
 	$("#ps-dateRange").change(function(){
 		if ($("#ps-dateRange").is(':checked')){
 			$(".form-group.ps-dateRange").show();
@@ -754,7 +628,7 @@ function init(){
 			});
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}else{
 			parameters['psPost']['before:'] =  '';
@@ -762,37 +636,28 @@ function init(){
 			$(".form-group.ps-dateRange").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}
 		
 		Query =updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 	});
-	
 
 	$("#psPostFields").change(function(){
 		fields_string = '';
 		
-		fields = {BasicFields:[],psMetadata:[]};
+		fields = {BasicFields:[]};
 		$.each($(this).find(':selected'),function(i,val){
-			var label = $(val.parentNode)[0].label;
-			fields[label].push(val.value);
-			//fields_string += '\n\t\t\t' + val.value;
+            fields_string += '\n\t\t\t' + val.value;
 		});
-
-		if (fields['psMetadata'].length !== 0){
-			$.each(fields['psMetadata'],function(i,val){
-				fields_string += '\n\t\t\t' + val;
-			});
-		}
 
 		if(fields['BasicFields'].length !== 0){
 			fields_string += '\n\t\t\t_source{' ;
 			$.each(fields['BasicFields'],function(i,val){
 				fields_string += '\n\t\t\t\t' + val;
-			});	
-			fields_string += '\n\t\t\t}' ;	
+			});
+			fields_string += '\n\t\t\t}' ;
 		}
 		
 		parameters['psPost']['fields'] = fields_string;
@@ -800,7 +665,7 @@ function init(){
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 
 	});
-	
+
 		/*------------------------------pushshift Comment ------------------------------------*/
 	$("#ps-cm-subreddit").change(function(){
 		if ($("#ps-cm-subreddit").is(':checked')){
@@ -813,7 +678,7 @@ function init(){
 			});
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}else{
 			$("#ps-cm-subreddit-name").val("");
@@ -821,7 +686,7 @@ function init(){
 			$(".form-group.ps-cm-subreddit").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}
 		
@@ -838,7 +703,7 @@ function init(){
 				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			});
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 			
 		}else{
@@ -847,7 +712,7 @@ function init(){
 			$(".form-group.ps-cm-author").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}
 		
@@ -869,7 +734,7 @@ function init(){
 			});
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 			
 		}else{
@@ -878,7 +743,7 @@ function init(){
 			$(".form-group.ps-cm-dateRange").hide();
 			
 			if ( $('.dropdown.dropdown-lg.open').length ){
-				pushDropdown('on');
+				pushAdvancedDropdown('on');
 			}
 		}
 		
@@ -951,7 +816,6 @@ function epochTime(datestring){
 }
 
 function constructQuery(parameterObj){
-	//console.log(parameterObj);
 	var keys = [];
 	$.each(Object.keys(parameterObj),function(i,item){
 		if (item !== 'fields' && parameterObj[item] !== '' && item !=='pageNum:'){
@@ -980,55 +844,56 @@ function constructQuery(parameterObj){
 		
 function updateString(queryTerm,parameters){
 	var query = '';
-	if (queryTerm == 'queryUser'){
-		
-		query = `\ttwitter{\n\t\t`	+ queryTerm + `(` +  constructQuery(parameters.twtUser) +  `\n\t\t}\n\t}`;
-		
-	}else if(queryTerm == 'queryTweet'){ 
-		
-		query =  `\ttwitter{\n\t\t`	+ queryTerm + `(`+ constructQuery(parameters.tweet)	+ `\n\t\t}\n\t}`;  
-		
-	}else if (queryTerm === 'streamTweet'){
-		query =  `\telasticSearch{\n\t\t`+ queryTerm + `(`+  constructQuery(parameters.es) +  `\n\t\t}\n\t}`;  
-	}else if (queryTerm === 'queryReddit'){
+	if (queryTerm === 'getTimeline'){
+		query = `\ttwitter{\n\t\t`	+ queryTerm + `(` +  constructQuery(parameters.twtTimeline) +  `\n\t\t}\n\t}`;
+	}
+	else if(queryTerm === 'queryTweet'){
+		query =  `\ttwitter{\n\t\t`	+ queryTerm + `(`+ constructQuery(parameters.tweet)	+ `\n\t\t}\n\t}`;
+	}
+	else if (queryTerm === 'queryReddit'){
 		query =  `\treddit{\n\t\tsearch(`+  constructQuery(parameters.rdSearch) +  `\n\t\t}\n\t}`;  
-	}else if (queryTerm === 'redditPost'){
+	}
+	else if (queryTerm === 'redditPost'){
 		query =  `\treddit{\n\t\tgetNew(`+  constructQuery(parameters.rdPost) +  `\n\t\t}\n\t}`;  
-	}else if (queryTerm === 'redditComment'){
+	}
+	else if (queryTerm === 'redditComment'){
 		query =  `\treddit{\n\t\tgetNewComments(`+  constructQuery(parameters.rdComment) +  `\n\t\t}\n\t}`;  
-	}else if (queryTerm === 'pushshiftPost'){
+	}
+	else if (queryTerm === 'pushshiftPost'){
 		query =  `\treddit{\n\t\tpushshiftPost(`+  constructQuery(parameters.psPost) +  `\n\t\t}\n\t}`;  
-	}else if (queryTerm === 'pushshiftComment'){
+	}
+	else if (queryTerm === 'pushshiftComment'){
 		query =  `\treddit{\n\t\tpushshiftComment(`+  constructQuery(parameters.psComment) +  `\n\t\t}\n\t}`;  
 	}
 	
 	return query;
 }
 
-
-/* save file modal */
-function modalPopUp(searchID){
+/* submit a one page dry run search to allow the user see results */
+function dryRun(searchID){
 	if ( formValid(searchID)){
-		$("#save").modal('show');
-	}	
-	
-	//pass the searchID to somewhere
-	$("#saveButton").attr('name',searchID);
+        $("#saveButton").attr('name',searchID);
+		if (searchID === '#searchbox'){
+			submitSearchbox('#searchbox','#sn-filename', dryrun = true)
+		}
+		else if (searchID === '#input'){
+            submitQuery('#input','#sn-filename', dryrun = true);
+		}
+	}
 }
 
 /* save file modal click events */
-function saveModalClick(){
+function saveButtonClick(){
 	var searchID = $("#saveButton").attr('name');
-	
 	if (searchID === '#searchbox'){
 		if (saveValid('#sn-filename')){ 
-			submitSearchbox(`#searchbox`,`#sn-filename`);					
+			submitSearchbox('#searchbox','#sn-filename', dryrun = false);
 		}
 					
 	}
 	else if (searchID === '#input'){
 		if (saveValid('#sn-filename')){
-			submitQuery(`#input`,`#sn-filename`);
+			submitQuery('#input','#sn-filename', dryrun = false);
 		}
 	}
 }
@@ -1047,15 +912,11 @@ function setDate(){
 function setHitogramInterval(freq){
 	var filename = $("#sn-filename").val();
 	
-	if (s3FolderName == undefined) s3FolderName = 'local';
-	
 	var queryTerm = $("#social-media").find(':selected').val();
 	if (queryTerm === 'queryTweet'){
 		var prefix = 'twitter-Tweet';
-	}else if (queryTerm === 'queryUser'){
-		var prefix = 'twitter-User';
-	}else if (queryTerm === 'streamTweet'){
-		var prefix = 'twitter-Stream';
+	}else if (queryTerm === 'getTimeline'){
+		var prefix = 'twitter-Timeline';
 	}else if (queryTerm === 'queryReddit'){
 		var prefix = 'reddit-Search';
 	}else if (queryTerm === 'redditPost'){
@@ -1079,9 +940,9 @@ function setHitogramInterval(freq){
 		$.ajax({
 			type:'POST',
 			url:'histogram', 
-			data: JSON.stringify({'s3FolderName': s3FolderName,
+			data: JSON.stringify({
 					'filename':filename + '.csv',
-					'remoteReadPath': s3FolderName + '/GraphQL/' + prefix + '/' + filename,
+					'remoteReadPath': '/GraphQL/' + prefix + '/' + filename,
 					'interval': freq }),	
 			contentType: "application/json",			
 			success:function(data){
@@ -1112,12 +973,23 @@ function setHitogramInterval(freq){
 	}
 }
 
-function pushDropdown(state){
+function pushAdvancedDropdown(state){
 	if (state === 'on'){
-		var height = $('.dropdown-menu.dropdown-menu-right').height();
+		var height = $('.input-group-addon-btn').find('.dropdown-menu.dropdown-menu-right').height();
 		$(".input-group-addon-btn").css('margin-bottom',height);
 	}else if (state === 'off'){
 		$(".input-group-addon-btn").css('margin-bottom','0px');
 	}
+}
+
+function delay(callback, ms) {
+    var timer = 0;
+    return function() {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            callback.apply(context, args);
+        }, ms || 0);
+    };
 }
 

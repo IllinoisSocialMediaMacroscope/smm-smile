@@ -1,0 +1,211 @@
+{
+  "path": "networkx",
+  "title": "Network Analysis",
+  "imgURL": "bootstrap/img/logo/networkX-logo.png",
+  "wiki": "https://en.wikipedia.org/wiki/Social_network_analysis",
+  "introduction": [
+    "<b>Social network analysis</b> is the process of investigating social",
+    "structures through the use of <a href=\"https://en.wikipedia.org/wiki/Network_theory\">networks</a>",
+    "and <a href=\"https://en.wikipedia.org/wiki/Graph_theory\">graph theory",
+    "</a>.It characterizes networked structures in terms of <i>nodes</i> (individual actors, people, or",
+    "things within the network) and the <i>ties</i>, <i>edges</i>,",
+    "or <i>links</i> (relationships or interactions) that connect them."
+  ],
+  "result_path": "/NW/networkx/",
+  "results": [
+    {
+      "acronym": "config",
+      "name": "configuration",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": true
+    },
+    {
+      "acronym": "d3js",
+      "name": "graph exported in JSON format",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "gephi",
+      "name": "graph exported in GML (Gephi) format",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "pajek",
+      "name": "graph exported in NET (Pajek) format",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "div",
+      "name": "visualization",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "assortativity",
+      "name": "assortativity",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "node_attributes",
+      "name": "node attributes",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "edge_attributes",
+      "name": "edge attributes",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "strong_components",
+      "name": "strongly connected components",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "weak_components",
+      "name": "weakly connected components",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "triads",
+      "name": "triads",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    }
+  ],
+  "args": [
+    "relations",
+    "layout"
+  ],
+  "get": {
+    "containers": [
+      {
+        "container-name": "network-relation-container",
+        "container-label-name": "Network relation",
+        "input": {
+          "type": "select",
+          "name": "relations",
+          "id": "relations",
+          "options": [
+            {
+              "value": "Please Select...",
+              "label": "Please Select..."
+            },
+            {
+              "value": "retweet_from",
+              "label": "retweet from"
+            },
+            {
+              "value": "reply_to",
+              "label": "reply to"
+            },
+            {
+              "value": "mentions",
+              "label": "mentions"
+            }
+          ]
+        }
+      },
+      {
+        "container-name": "",
+        "container-label-name": "Select graph layout",
+        "input": {
+          "type": "select",
+          "name": "layout",
+          "id": "layout",
+          "options": [
+            {
+              "value": "Please Select...",
+              "label": "Please Select..."
+            },
+            {
+              "value": "random",
+              "label": "random layout"
+            },
+            {
+              "value": "circular",
+              "label": "circular layout"
+            },
+            {
+              "value": "fruchterman",
+              "label": " fruchterman layout"
+            },
+            {
+              "value": "shell",
+              "label": " shell layout"
+            },
+            {
+              "value": "spectral",
+              "label": " spectral layout"
+            }
+          ]
+        }
+      }
+    ],
+    "buttonGroups": [
+      {
+        "id": "clear",
+        "class": "btn btn-primary",
+        "value": "Clear",
+        "style": "margin: auto 5px;",
+        "onclick": "customized_reset();"
+      },
+      {
+        "id": "submit",
+        "class": "btn btn-danger",
+        "value": "Submit",
+        "style": "margin: auto 5px;"
+      }
+    ],
+    "citation": {
+      "trigger_id": "layout",
+      "content": [
+        {
+          "text": ["<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Exploring+network+structure%2C+dynamics%2C+and+function+using+NetworkX&btnG=\" target=\"_blank\">Hagberg, A., Swart, P., & S Chult, D. (2008). Exploring network structure, dynamics,and function using NetworkX (No. LA-UR-08-05495; LA-UR-08-5495). Los Alamos National Laboratory (LANL).</a><i>Large networks will be pruned to only display the 500 nodes with the highest degree centrality.</i>"],
+          "condition": "!"
+        }
+      ]
+    }
+  },
+  "post": {
+    "cutoff":5000,
+    "lambda_config": {
+      "aws_lambda_function": "lambda_network_analysis"
+    },
+    "batch_config": {
+      "batch_action": "python3.6",
+      "batch_script": "/scripts/batch_function.py",
+      "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_network_analysis:1",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "path": "preprocessing",
+  "title": "Natural Language Preprocessing",
+  "imgURL": "bootstrap/img/logo/NLP/NLP-preprocess.png",
+  "wiki": "http://pages.cs.wisc.edu/~jerryzhu/cs769/text_preprocessing.pdf",
+  "introduction": [
+    "<a href=\"https://en.wikipedia.org/wiki/Text_segmentation#Word_segmentation\"><b>Tokenization</b></a>",
+    "is the process of dividing written text into meaningful units, such as words, <a href=\"https://en.wikipedia.org/wiki/Sentence_(linguistics)\">sentences",
+    "</a>, or <a href=\"https://en.wikipedia.org/wiki/Topic_(linguistics)\" title=\"Topic (linguistics)\">topics</a>.",
+    "<a href=\"https://nlp.stanford.edu/IR-book/html/htmledition/stemming-and-lemmatization-1.html\"><b>Lemmatization and Stemming </b></a>",
+    "reduces word forms to common base words.<a href=\"https://en.wikipedia.org/wiki/Part-of-speech_tagging\">",
+    "<b>Part-of-speech Tagging</b></a> is the process of marking up a word in a text",
+    "(corpus) as corresponding to a particular",
+    "<a href=\"https://en.wikipedia.org/wiki/Parts_of_speech\">part of speech</a>, based on both",
+    "its definition and its context."
+  ],
+  "result_path": "/NLP/preprocessing/",
+  "results": [
+    {
+      "acronym": "config",
+      "name": "configuration",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": true
+    },
+    {
+      "acronym": "phrases",
+      "name": "phrases",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "wordtree": true,
+      "config": false
+    },
+    {
+      "acronym": "filtered",
+      "name": "words",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "processed",
+      "name": "processed text",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "most_common",
+      "name": "most common words by order",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "div",
+      "name": "visualization",
+      "download": true,
+      "img": true,
+      "preview": false,
+      "config": false
+    },
+    {
+      "acronym": "tagged",
+      "name": "tagged text",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": false
+    }
+  ],
+  "args": [
+    "process",
+    "tagger"
+  ],
+  "get": {
+    "containers": [
+      {
+        "container-name": "",
+        "container-label-name": "Preprocess step",
+        "input": {
+          "type": "select",
+          "name": "process",
+          "id": "process",
+          "options": [
+            {
+              "value": "Please Select...",
+              "label": "Please Select..."
+            },
+            {
+              "value": "stemming",
+              "label": "stemming"
+            }
+          ]
+        }
+      },
+      {
+        "container-name": "",
+        "container-label-name": "Tagging",
+        "input": {
+          "type": "select",
+          "name": "tagger",
+          "id": "tagger",
+          "options": [
+            {
+              "value": "Please Select...",
+              "label": "Please Select..."
+            },
+            {
+              "value": "posTag",
+              "label": "Natural Language Tool Kit Part of Speech Tagger"
+            }
+          ]
+        }
+      }
+    ],
+    "buttonGroups": [
+      {
+        "id": "clear",
+        "class": "btn btn-primary",
+        "value": "Clear",
+        "style": "margin: auto 5px;",
+        "onclick": "customized_reset();"
+      },
+      {
+        "id": "submit",
+        "class": "btn btn-danger",
+        "value": "Submit",
+        "style": "margin: auto 5px;"
+      }
+    ],
+    "citation": {
+      "trigger_id": "tagger",
+      "content": [
+        {
+          "text": ["<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=NLTK%3A+the+natural+language+toolkit.+In+Proceedings+of+the+COLING%2FACL+on+Interactive++++++++presentation+sessions+%28pp.+69-72%29.+Association+for+Computational+Linguistics&btnG=\" target=\"_blank\">Bird, S. (2006, July). NLTK: the natural language toolkit. In Proceedings of the COLING/ACL on Interactivepresentation sessions (pp. 69-72). Association for Computational Linguistics.</a>"],
+          "condition": "posTag"
+        }
+      ]
+    }
+  },
+  "post": {
+    "cutoff":20000,
+    "lambda_config": {
+      "aws_lambda_function": "lambda_preprocessing"
+    },
+    "batch_config": {
+      "batch_action": "python3.6",
+      "batch_script": "/scripts/batch_function.py",
+      "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_preprocessing:1",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
+    }
+  }
+}

@@ -1,0 +1,64 @@
+<!-- timeline -->
+div(class="timeline")
+    div(class="form-group")
+        label(class="label-control warning") maximum number of timeline tweets
+            span(class="warningText")
+                | Careful! This method can only return up to 3,200 of a user's most recent Tweets.
+                | Every 200 count is ONE http request, and you only have 900 requests allowed over 15 minutes window.
+        div(class="range range-node")
+            input(type="range" min="200" max="3200" value="1000" step="200" id="twtTimeline-count" onchange="twtTimelineRangeNode.value=value")
+            output(id="twtTimelineRangeNode") 1000
+    div(class="form-group")
+        label(class="label-control") exclude replies&nbsp;
+            input(type="checkbox", id="twtTimeline-exclude-replies")
+    div(class="form-group")
+        label(class="label-control") exclude retweets&nbsp;
+            input(type="checkbox", id="twtTimeline-exclude-rts")
+
+    div(class="form-group")
+        label(class="label-control") Select Fields
+        br
+        select(multiple, id="twtTimelineFields", class="fields")
+            optgroup(label="BasicFields")
+                option(value="id" selected) id
+                option(value="id_str" selected) id str
+                option(value="created_at" selected) created at
+                option(value="text" selected) text
+                option(value="retweet_count" selected) retweet count
+                option(value="favorite_count" selected) favorite count
+                option(value="retweeted" selected) retweeted
+                option(value="favorited" selected) favorited
+                option(value="possibly_sensitive" selected) possibly sensitive
+                option(value="truncated" selected) truncated
+                option(value="lang" selected) lang
+                option(value="is_quote_status" selected) is quote status
+                option(value="source" selected) source
+                option(value="in_reply_to_user_id_str" selected) in reply to user id
+                option(value="in_reply_to_status_id_str" selected) in reply to status id
+                option(value="in_reply_to_screen_name" selected) in reply to screen name
+            optgroup(label="AuthorInformation")
+                option(value="author_id" selected) author id
+                option(value="author_id_str" selected) author id str
+                option(value="name" selected) name
+                option(value="screen_name" selected) screen name
+                option(value="description" selected) description
+                option(value="author_created_at" selected) author created_at
+                option(value="profile_image_url" selected) profile image URL
+                option(value="profile_banner_url" selected) profile banner URL
+                option(value="url" selected) URL
+                option(value="location" selected) location
+                option(value="tweets_count" selected) tweets count
+                option(value="followers_count" selected) followers count
+                option(value="friends_count" selected) friends count
+                option(value="listed_count" selected) listed count
+                option(value="favourites_count" selected) favorites count
+                option(value="statuses_count" selected) statuses count
+                option(value="time_zone" selected) timezone
+                option(value="protected" selected) protected
+                option(value="verified" selected) verified
+                option(value="is_translator" selected) is translator
+                option(value="contributors_enabled" selected) contributors enabled
+                option(value="geo_enabled" selected) geo enabled
+                option(value="author_lang" selected) author lang
+            optgroup(label="Entities")
+                option(value="media_url" selected) media url
