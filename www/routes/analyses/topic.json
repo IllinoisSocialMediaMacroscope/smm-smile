@@ -68,7 +68,7 @@
         "input": {
           "type": "range",
           "min": "1",
-          "max": "20",
+          "max": "40",
           "value": "5",
           "name": "numTopics",
           "onchange": "rangeNode.value=value",
