@@ -193,7 +193,7 @@ function errorHandler(event) {
 
 function appendDownload(downloadID, downloadData) {
     $('#side-download-li').show();
-    $(downloadID).empty()
+    $(downloadID).empty();
     if (downloadData !== [] && downloadData !== '') {
         $.each(downloadData, function (i, val) {
             $(downloadID).append(`<li>
@@ -227,13 +227,17 @@ function appendImg(imgID, imgData) {
     if (imgData !== [] && imgData !== '') {
         $.each(imgData, function (i, val) {
             $(imgID).append(`<div class="x_title">
-								<h2>` + val.name + `</h2>
+								<h2 class="title-w-buttons">` + val.name + `</h2>
+								<button class="btn btn-danger share-btn" onclick="invokeShareModal('` + val.url + `')">
+								    <i class="fas fa-share-alt"></i>
+								    Share
+                                </button>
 							</div>
 							<div class="x_content">
 								<div class="note">
 									<li><b>click, drag, and mouseover</b> the graph will give you more information</li>
 									<li><b>hover</b> over top-right corner of the chart will present various operations</li>
-									<li>details please consult 
+									<li>details please consult
 										<a href="https://plot.ly/" target="_blank">
 											<img src="bootstrap/img/logo/plotly.png" width="18px"/>Plotly
 										</a>
@@ -243,6 +247,11 @@ function appendImg(imgID, imgData) {
 							<div class="x_content">` + val.content + `</div>`)
         });
     }
+}
+
+function invokeShareModal(url){
+    $("#share-link").val(url);
+    $("#share-modal").modal({show: true});
 }
 
 function appendPreview(previewID, previewData) {
@@ -573,7 +582,7 @@ function submitHistory(currItem, folderURL){
                     }
 
                     if('config' in data || 'donwload' in data){
-                        appendOverview("#overview-container",data.config,data.download);
+                        appendOverview("#overview-container",data.config, data.download);
                     }
 
                     if ('img' in data){
@@ -643,7 +652,7 @@ function deleteHistory(folderURL){
 }
 
 function appendTitle(container, title,ID){
-    $(container).append(`<h2 style="display:inline;vertical-align:middle">`+ title+ `</h2>
+    $(container).append(`<h2 class="title-w-buttons">`+ title+ `</h2>
 						<div style="display:inline;padding:0 20px;float:right;">
 							<button class="btn btn-yes favicon-button" id="tag-history-panel">
 								<i class="fas fa-tag"></i>Tag
@@ -685,7 +694,24 @@ function appendTitle(container, title,ID){
 }
 
 function appendOverview(container,config, download){
-    $("#overview-title").show();
+    $(container).empty();
+    $(container).append(
+       `<h2 id="overview-title">Overview&nbsp;
+            <i class="far fa-question-circle" data-toggle="tooltip" data-html="true" data-placement="right" 
+            title="Explanations for some of the common parameters: <ul>
+            <li>q - search keyword</li><li>screen_name - twitter user handle</li>
+            <li>page/pages - number of pages</li>
+            <li>fields - fields to include in the returning social media data</li>
+            <li>downloadables - links to download the results</li>
+            <li>remoteReadPath - aws s3 path where the input files are stored</li>
+            <li>resultPath - aws s3 path where the output results are stored</li>
+            <li>column - the field of the social media data that analysis is applied on</li>
+            <li>s3FolderName - aws s3 folder name that under the current user</li>
+            <li>uid - identification code of the current analysis</li></ul>">
+            </i>
+        </h2>`
+    );
+
     // vertical table
     var tableContent = `<div class="table-responsive"><table class="table table-striped table-bordered"><tbody>`;
     $.each(config, function(key,value){

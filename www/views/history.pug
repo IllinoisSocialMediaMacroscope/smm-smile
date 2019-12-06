@@ -37,6 +37,7 @@ html
         include components/image-crawler
         include components/tag.pug
         include components/clowder.pug
+        include components/share.pug
 
         div(class="container-fluid")
             div(class="row")
@@ -74,20 +75,6 @@ html
                 <!-- overview -->
                 div(class="row")
                     div(class="col-md-12 col-sm-12 col-xs-12")
-                        h2(id="overview-title", style="display:none;") Overview&nbsp;
-                            i(class="far fa-question-circle", data-toggle="tooltip", data-html="true", data-placement="right",
-                            title="Explanations for some of the common parameters: " +
-                            "<ul><li>q - search keyword</li>" +
-                                "<li>screen_name - twitter user handle</li>" +
-                                "<li>page/pages - number of pages</li>" +
-                                "<li>fields - fields to include in the returning social media data</li>" +
-                                "<li>downloadables - links to download the results</li>" +
-                                "<li>remoteReadPath - aws s3 path where the input files are stored</li>" +
-                                "<li>resultPath - aws s3 path where the output results are stored</li>" +
-                                "<li>column - the field of the social media data that analysis is applied on</li>" +
-                                "<li>s3FolderName - aws s3 folder name that under the current user</li>" +
-                                "<li>uid - identification code of the current analysis</li>" +
-                            "</ul>")
                         div(id="overview-container")
 
                 <!-- img -->
