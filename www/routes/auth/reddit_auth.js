@@ -8,8 +8,8 @@ router.get('/login/reddit',function(req,res,next){
 
 	//var grantType = 'https://oauth.reddit.com/grants/installed_client&';
 	
-	var user = config.reddit.client_id;
-	var password = config.reddit.client_secret;
+	var user = REDDIT_CLIENT_ID;
+	var password = REDDIT_CLIENT_SECRET;
 	var base64encodedData = new Buffer(user + ':' + password).toString('base64');
 	
 	crypto.randomBytes(24, function(err, buffer) {

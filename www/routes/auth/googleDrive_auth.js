@@ -3,8 +3,8 @@ var express = require('express');
 var router = express.Router();
 var config = require('../../main_config');
 
-var clientId = config.google.client_id;
-var clientSecret = config.google.client_secret;
+var clientId = GOOGLE_CLIENT_ID;
+var clientSecret = GOOGLE_CLIENT_SECRET;
 var redirectUrl = 'urn:ietf:wg:oauth:2.0:oob';
 var auth = new googleAuth();
 var oauth2Client = new auth.OAuth2(clientId, clientSecret,redirectUrl);

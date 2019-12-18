@@ -178,8 +178,8 @@ function uploadToGoogle(filename, buffer, google_access_token) {
 	return new Promise((resolve,reject) =>{
 
 		var oauth2Client = new OAuth2(
-            config.google.client_id,
-            config.google.client_secret,
+            GOOGLE_CLIENT_ID,
+            GOOGLE_CLIENT_SECRET,
             'http://localhost:8001/login/google/callback');
         oauth2Client.credentials = {'access_token': google_access_token}
         var drive = google.drive({version: 'v2', auth: oauth2Client});
@@ -243,8 +243,8 @@ function uploadToBox(filename, buffer, filesize, box_access_token){
     return new Promise((resolve,reject) => {
 
     	var sdk = new BoxSDK({
-            clientID: config.box.client_id,
-            clientSecret: config.box.client_secret
+            clientID: BOX_CLIENT_ID,
+            clientSecret: BOX_CLIENT_SECRET
         });
         var client = sdk.getBasicClient(box_access_token);
 

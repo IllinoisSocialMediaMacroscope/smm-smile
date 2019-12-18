@@ -254,8 +254,8 @@ router.post('/query', function (req, res) {
 
 router.post('/prompt', function (req, res) {
     lambda_invoke('bae_screen_name_prompt', {
-        consumer_key: config.twitter.client_id,
-        consumer_secret: config.twitter.client_secret,
+        consumer_key: TWITTER_CONSUMER_KEY,
+        consumer_secret: TWITTER_CONSUMER_SECRET,
         access_token: req.session.twt_access_token_key,
         access_token_secret: req.session.twt_access_token_secret,
         screen_name: req.body.screenName

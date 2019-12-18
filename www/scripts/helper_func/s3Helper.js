@@ -3,8 +3,8 @@ var config = require('../../main_config');
 var mime = require('mime');
 
 AWS.config.update({
-	accessKeyId: config.aws.access_key,
-	secretAccessKey:config.aws.access_key_secret });
+	accessKeyId: AWS_ACCESSKEY,
+	secretAccessKey:AWS_ACCESSKEYSECRET });
 	
 var s3 = new AWS.S3();
 var fs = require('fs');

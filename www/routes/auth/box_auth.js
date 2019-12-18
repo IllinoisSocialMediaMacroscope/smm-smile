@@ -13,7 +13,7 @@ router.get('/login/box', function(req,res,next){
 	req.session.save();
 	
 	var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=`
-	+ config.box.client_id
+	+ BOX_CLIENT_ID
 	+`&redirect_uri=https://socialmediamacroscope.org:8000` + req.query.currentURL +`login/box/callback`;
 	// +`&redirect_uri=http://localhost:8001` + req.query.currentURL +`login/box/callback`;
 
@@ -22,8 +22,8 @@ router.get('/login/box', function(req,res,next){
 
 router.get('/login/box/callback',function(req,res,next){
 	var box = new BoxSDK({
-		clientID: config.box.client_id,
-		clientSecret: config.box.client_secret
+		clientID: BOX_CLIENT_ID,
+		clientSecret: BOX_CLIENT_SECRET
 	});
 	
 	if (req.query.error !== undefined){

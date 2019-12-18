@@ -8,8 +8,8 @@ function twitterAPI(tokens,resolveName, id, args){
 	
 	// using twitterstreamingapi2sample@lists.illinonis.edu
 	var client = new Twitter({
-			consumer_key:config.twitter.client_id,
-			consumer_secret:config.twitter.client_secret,
+			consumer_key:TWITTER_CONSUMER_KEY,
+			consumer_secret:TWITTER_CONSUMER_SECRET,
 			access_token_key:tokens.twtaccesstokenkey,
 			access_token_secret:tokens.twtaccesstokensecret
 		});

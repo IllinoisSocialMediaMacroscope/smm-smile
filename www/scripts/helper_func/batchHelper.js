@@ -3,8 +3,8 @@ var config = require('../../main_config');
 var uuidv4 = require('./uuidv4.js');
 
 AWS.config.update({
-	accessKeyId: config.aws.access_key,
-	secretAccessKey: config.aws.access_key_secret });
+	accessKeyId: AWS_ACCESSKEY,
+	secretAccessKey: AWS_ACCESSKEYSECRET });
 
 var batch = new AWS.Batch({region: 'us-west-2', 
 	apiVersion: '2016-08-10',
