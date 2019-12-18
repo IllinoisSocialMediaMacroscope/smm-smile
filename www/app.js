@@ -223,3 +223,51 @@ function onListening() {
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }
+
+/**
+ * determine which version of deployment: dockerized vs usual
+ */
+if (process.env.DOCKERIZED) {
+    // determine credentials either from file or from environment variable
+    AWS_ACCESSKEY = process.env.AWS_ACCESSKEY;
+    AWS_ACCESSKEYSECRET = process.env.AWS_ACCESSKEYSECRET;
+    TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY;
+    TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET;
+    REDDIT_CLIENT_ID = process.env.REDDIT_CLIENT_ID;
+    REDDIT_CLIENT_SECRET = process.env.REDDIT_CLIENT_SECRET;
+    FLICKR_CONSUMER_KEY = process.env.FLICKR_CONSUMER_KEY;
+    FLICKR_CONSUMER_SECRET = process.env.FLICKR_CONSUMER_SECRET;
+    BOX_CLIENT_ID = process.env.BOX_CLIENT_ID;
+    BOX_CLIENT_SECRET = process.env.BOX_CLIENT_SECRET;
+    DROPBOX_CLIENT_ID = process.env.DROPBOX_CLIENT_ID;
+    DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET;
+    GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+    GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+
+    // decide what handler to use
+    handler = new RabbitmqSender();
+    s3 = new S3Helper(true, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
+}
+else{
+    var config = require('./main_config.json');
+    AWS_ACCESSKEY = config.aws.access_key;
+    AWS_ACCESSKEYSECRET = config.aws.access_key_secret;
+    TWITTER_CONSUMER_KEY = config.twitter.client_id;
+    TWITTER_CONSUMER_SECRET = config.twitter.client_secret;
+    REDDIT_CLIENT_ID = config.reddit.client_id;
+    REDDIT_CLIENT_SECRET = config.reddit.client_secret;
+    FLICKR_CONSUMER_KEY = config.flickr.consumer_key;
+    FLICKR_CONSUMER_SECRET = config.flickr.consumer_secret;
+    BOX_CLIENT_ID = config.box.client_id;
+    BOX_CLIENT_SECRET = config.box.client_secret;
+    DROPBOX_CLIENT_ID = config.dropbox.client_id;
+    DROPBOX_CLIENT_SECRET = config.dropbox.client_secret;
+    GOOGLE_CLIENT_ID = config.google.client_id;
+    GOOGLE_CLIENT_SECRET = config.google.client_secret;
+
+    handler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
+    s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
+}
+
+BUCKET_NAME = 'macroscope-smile';
+
