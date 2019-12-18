@@ -1,14 +1,17 @@
 var uuidv4 = require('./uuidv4.js');
+var getMultiRemote = require('./getRemote.js');
+var CSV = require('csv-string');
 
-function lambda_routes_template(req, config, handler ){
+function lambdaRoutesTemplate(req, config, handler ){
 
     return new Promise((resolve,reject) => {
+        var uid;
         if (req.body.uid === undefined || req.body.uid === ""){
-            var uid = uuidv4();
+            uid = uuidv4();
         }
         else{
             // over write uuid for text classification; since three steps share the same uid
-            var uid = req.body.uid;
+            uid = req.body.uid;
         }
 
         // set default lambda arguments
@@ -23,10 +26,10 @@ function lambda_routes_template(req, config, handler ){
             var arg_name = config.args[i];
             args[arg_name] = req.body[arg_name];
         }
-        // invoke lambda
+        // invoke depending on the handler could be lambda, could be rabbitmq
         if ('post' in config) var lambdaConfig = config.post.lambda_config;
         else if ('put' in config) var lambdaConfig = config.put.lambda_config;
-        lambda_invoke(lambdaConfig["aws_lambda_function"], args).then(results => {
+        handler.invoke(lambdaConfig["aws_lambda_function"], args).then(results => {
 
             // fetch all the data from url, and add those to the result content
             // this might be slow since we are fetching everything
@@ -124,4 +127,4 @@ function lambda_routes_template(req, config, handler ){
 
 }
 
-module.exports = { lambda_routes_template }
+module.exports = lambdaRoutesTemplate
