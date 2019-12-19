@@ -3,10 +3,9 @@ var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js')).submit_Batchjob;
-var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
 
 router.post('/reddit-expand',function(req,res,next){
-	list_files(req.body.prefix).then((data) =>{
+	s3.list_files(req.body.prefix).then((data) =>{
 		
 		// check if comment.zip already exist or not
 		var exist = false;

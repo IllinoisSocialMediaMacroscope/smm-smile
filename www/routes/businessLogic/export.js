@@ -13,9 +13,6 @@ var BoxSDK = require('box-node-sdk');
 
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var download_folder = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).download_folder;
-var list_files = require(path.join(appPath,'scripts','helper_func','s3Helper.js')).list_files;
-var deleteLocalFolders = require(path.join(appPath,'scripts','helper_func','deleteDir.js'));
 
 // if smile home folder doesn't exist, create one
 if (!fs.existsSync(smileHomePath)) {
@@ -24,11 +21,11 @@ if (!fs.existsSync(smileHomePath)) {
 var downloadPath = path.join(smileHomePath, 'downloads');
 
 router.post('/export',function(req,res,next){
-	list_files(s3FolderName + '/').then(files =>{
+	s3.list_files(s3FolderName + '/').then(files =>{
 		if (Object.keys(files).length === 0){
 			res.send({'ERROR':'You don\'t have any data associate with this session. Nothing to export!'});
 		}else{
-			download_folder(s3FolderName + '/', downloadPath).then(files =>{
+			s3.download_folder(s3FolderName + '/', downloadPath).then(files =>{
 				
 					var filename = 'SMILE-' + Date.now() + '.zip';
 					zipDownloads(filename).then(() => {
@@ -100,9 +97,9 @@ router.post('/export-single', function(req,res){
     // check if the requested folder matches the current user's identity
     var arrURL = req.body.folderURL.split('/');
 	if (arrURL[0] === s3FolderName) {
-        var p = list_files(req.body.folderURL);
+        var p = s3.list_files(req.body.folderURL);
         p.then(files => {
-            download_folder(req.body.folderURL, downloadPath).then(files => {
+            s3.download_folder(req.body.folderURL, downloadPath).then(files => {
                 var filename = arrURL[arrURL.length - 2] + '.zip';
                 zipDownloads(filename).then(() => {
                     //get zip file size and decide which upload method to take
@@ -200,7 +197,7 @@ function uploadToGoogle(filename, buffer, google_access_token) {
                 if (err) reject(err);
                 else {
                     fs.unlinkSync(filename);
-                    deleteLocalFolders(downloadPath).then(() => {
+                    s3.deleteLocalFolders(downloadPath).then(() => {
                     	resolve(response);
                     }).catch(err => {
                         reject(err);
@@ -227,7 +224,7 @@ function uploadToDropbox(filename, buffer, dropbox_access_token){
         })
         .then(function(response) {
             fs.unlinkSync(filename);
-            deleteLocalFolders(downloadPath).then(() => {
+            s3.deleteLocalFolders(downloadPath).then(() => {
                 resolve(response);
             }).catch(err => {
                 reject(err);
@@ -253,7 +250,7 @@ function uploadToBox(filename, buffer, filesize, box_access_token){
             	if (err) reject(err);
             	else{
                     fs.unlinkSync(filename);
-                    deleteLocalFolders(downloadPath).then(() => {
+                    s3.deleteLocalFolders(downloadPath).then(() => {
                        resolve(response);
                     })
 					.catch(err =>{
@@ -269,14 +266,14 @@ function uploadToBox(filename, buffer, filesize, box_access_token){
                 } else {
                     uploader.on('error', function (err) {
                         fs.unlinkSync(filename);
-                        deleteLocalFolders(downloadPath).then(() => {
+                        s3.deleteLocalFolders(downloadPath).then(() => {
                             reject(err);
                         });
                     });
 
                     uploader.on('uploadComplete', function (response) {
                         fs.unlinkSync(filename)
-                        deleteLocalFolders(downloadPath).then(() => {
+                        s3.deleteLocalFolders(downloadPath).then(() => {
                             resolve(response);
                         }).catch(err => {
                             reject(err);

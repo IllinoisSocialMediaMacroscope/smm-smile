@@ -15,7 +15,7 @@ class batchHelper{
         });
     }
 
-    submit_Batchjob(jobDefinition, jobName, jobQueue, command){
+    batch(jobDefinition, jobName, jobQueue, command){
 
         var params = {
             jobDefinition: jobDefinition,

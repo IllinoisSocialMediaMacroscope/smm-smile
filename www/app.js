@@ -10,8 +10,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 var lambdaRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'lambdaRoutesTemplate.js'));
-var batchRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'batchHelper.js'));
-var uploadToS3 = require(path.join(__dirname, 'scripts', 'helper_func', 's3Helper.js')).uploadToS3;
+var batchRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'batchRoutesTemplate.js'));
+var S3Helper = require(path.join(__dirname, 'scripts', 'helper_func', 's3Helper.js'));
 var fs = require('fs');
 var app = express();
 
@@ -126,7 +126,7 @@ analysesRoutesFiles.forEach(function(route, i){
                         });
                     }
                     else if (req.body.aws_identifier === 'batch') {
-                        batchRoutesTemplate(req, routesConfig).then(data => {
+                        batchRoutesTemplate(req, routesConfig, handler).then(data => {
                             res.send(data);
                         })
                         .catch(err => {
@@ -142,7 +142,7 @@ analysesRoutesFiles.forEach(function(route, i){
 
         if ("put" in routesConfig){
             app.put("/" + routesConfig.path, upload.single("labeled"), function(req, res){
-                uploadToS3(req.file.path, s3FolderName + routesConfig['result_path'] + req.body.uid
+                s3.uploadToS3(req.file.path, s3FolderName + routesConfig['result_path'] + req.body.uid
                     + '/' + req.body.labeledFilename)
                 .then(url => {
                     var remoteReadPath = s3FolderName + routesConfig['result_path'] + req.body.uid + '/';
@@ -157,7 +157,7 @@ analysesRoutesFiles.forEach(function(route, i){
                             });
                         }
                         else if (req.body.aws_identifier === 'batch') {
-                            batchRoutesTemplate(req, routesConfig).then(data => {
+                            batchRoutesTemplate(req, routesConfig, handler).then(data => {
                                 res.send(data);
                             })
                             .catch(err => {
@@ -220,7 +220,7 @@ var server = http.createServer(app);
 server.timeout = 1000 * 60 * 10; //10 minutes
 
 server.listen(port);
-console.log("App listening on \n\tlocalhost:" + port)
+console.log("App listening on \n\tlocalhost:" + port);
 server.on('error', onError);
 server.on('listening', onListening);
 

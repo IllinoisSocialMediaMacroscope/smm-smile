@@ -5,9 +5,6 @@ var fs = require('fs');
 var jsonexport = require('jsonexport');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var deleteLocalFolders = require(path.join(appPath, 'scripts', 'helper_func', 'deleteDir.js'));
-var uploadToS3 = require(path.join(appPath, 'scripts', 'helper_func', 's3Helper.js')).uploadToS3;
-var list_folders = require(path.join(appPath, 'scripts', 'helper_func', 's3Helper.js')).list_folders;
 var lambda_invoke = require(path.join(appPath, 'scripts', 'helper_func', 'lambdaHelper.js')).lambda_invoke;
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
 var config = require('../../main_config');
@@ -171,11 +168,11 @@ router.post('/query', function (req, res) {
                             // post to s3 bucket
                             promise_csv.then(() => {
                                 var promise_arr = [];
-                                promise_arr.push(uploadToS3(path.join(directory, processed),
+                                promise_arr.push(s3.uploadToS3(path.join(directory, processed),
                                     s3FolderName + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + processed));
-                                promise_arr.push(uploadToS3(path.join(directory, raw_json),
+                                promise_arr.push(s3.uploadToS3(path.join(directory, raw_json),
                                     s3FolderName + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + raw_json));
-                                promise_arr.push(uploadToS3(path.join(directory, "config.json"),
+                                promise_arr.push(s3.uploadToS3(path.join(directory, "config.json"),
                                     s3FolderName + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + "config.json"));
                                 Promise.all(promise_arr).then((URLs) => {
 
@@ -189,7 +186,7 @@ router.post('/query', function (req, res) {
 
                                         if (results['url'] === 'null') {
                                             var rendering = responseObj[key1][key2][key3].slice(0, 100);
-                                            deleteLocalFolders(directory.slice(0, -1)).then(() => {
+                                            s3.deleteLocalFolders(directory.slice(0, -1)).then(() => {
                                                 res.send({fname: processed, URLs: URLs, rendering: rendering});
                                             }).catch(err => {
                                                 console.log(err);
@@ -202,7 +199,7 @@ router.post('/query', function (req, res) {
 
                                                 var histogram = data;
                                                 var rendering = responseObj[key1][key2][key3].slice(0, 100);
-                                                deleteLocalFolders(directory.slice(0, -1)).then(() => {
+                                                s3.deleteLocalFolders(directory.slice(0, -1)).then(() => {
                                                     res.send({
                                                         fname: processed, URLs: URLs, rendering: rendering,
                                                         histogram: histogram
@@ -271,7 +268,7 @@ router.post('/prompt', function (req, res) {
 
 /****************************************************************** helper *****************************************************************************************/
 function checkExist(remotePrefix, localFolderName) {
-    var p = list_folders(remotePrefix);
+    var p = s3.list_folders(remotePrefix);
     return p.then(folderObj => {
         var subFolders = Object.keys(folderObj);
         for (var i = 0, length = subFolders.length; i < length; i++) {
