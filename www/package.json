@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "amqplib": "^0.5.5",
     "archiver": "^2.1.0",
     "aws-sdk": "^2.170.0",
     "body-parser": "^1.17.1",
