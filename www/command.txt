@@ -1,3 +1,2 @@
 # command to build and run this container
-docker build -t socialmediamacroscope/smile-server:latest .
-docker run -p 8001:8001 socialmediamacroscope/smile-server:latest
+docker build -t socialmediamacroscope/smile_server:latest .

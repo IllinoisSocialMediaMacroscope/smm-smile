@@ -1,22 +1,14 @@
-FROM node:8
+FROM mhart/alpine-node:latest
 
-# Create app directory
-WORKDIR /usr/src/app
+RUN mkdir -p /graphql
+WORKDIR /graphql
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+# copy paste express code
+# alternatively can pull directly from git
+COPY . ./
 
-# Build for development
-# RUN npm install
+# npm install
+RUN npm install
 
-# If you are building your code for production
-RUN npm install --only=production
-
-# Bundle app source
-COPY . .
-
+# start the server
 EXPOSE 5050
-
-CMD [ "npm", "start" ]

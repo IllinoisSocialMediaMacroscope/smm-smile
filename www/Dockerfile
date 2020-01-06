@@ -9,7 +9,6 @@ COPY . ./
 
 # npm install
 RUN npm install
-RUN cd graphql && npm install
 
 # patch the oauth library node_modules/oauth/lib/oauth.js, line 540 add: && extraParams["oauth_callback"]===undefined
 COPY ./oauth.js ./node_modules/oauth/lib
