@@ -2,7 +2,6 @@ var Twitter = require('twitter');
 var Promise = require('bluebird');
 var querystring = require('querystring');    // parse query parameters
 var bigInt = require("big-integer");
-var config = require('../graphql_config.json');
 
 function twitterAPI(tokens,resolveName, id, args){
 	

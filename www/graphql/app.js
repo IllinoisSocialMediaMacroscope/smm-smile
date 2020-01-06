@@ -11,6 +11,23 @@ const cors = require('cors');
 
 var app = express();
 
+/**
+ * determine which version of deployment: dockerized vs usual
+ */
+if (process.env.DOCKERIZED) {
+    TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY;
+    TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET;
+    FLICKR_CONSUMER_KEY = process.env.FLICKR_CONSUMER_KEY;
+    FLICKR_CONSUMER_SECRET = process.env.FLICKR_CONSUMER_SECRET;
+}
+else{
+    var config = require('./graphql_config.json');
+    TWITTER_CONSUMER_KEY = config.twitter.client_id;
+    TWITTER_CONSUMER_SECRET = config.twitter.client_secret;
+    FLICKR_CONSUMER_KEY = config.flickr.consumer_key;
+    FLICKR_CONSUMER_SECRET = config.flickr.consumer_secret;
+}
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
