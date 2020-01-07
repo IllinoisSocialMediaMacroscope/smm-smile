@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var fetch = require('node-fetch');
 var BoxSDK = require('box-node-sdk');
-var config = require('../../main_config');
 
 router.get('/login/box', function(req,res,next){
 	

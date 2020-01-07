@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
-var crypto = require('crypto');
-var config = require('../../main_config');
 
 router.post('/login/crimson', function(req,res,next){
 

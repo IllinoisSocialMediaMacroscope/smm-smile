@@ -7,7 +7,6 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var lambda_invoke = require(path.join(appPath, 'scripts', 'helper_func', 'lambdaHelper.js')).lambda_invoke;
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
-var config = require('../../main_config');
 
 router.get('/query', function (req, res) {
 

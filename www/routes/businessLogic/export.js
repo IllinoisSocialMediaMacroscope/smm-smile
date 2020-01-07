@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var archiver = require('archiver');
 var fs = require('fs');
-var config = require('../../main_config');
 
 var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;

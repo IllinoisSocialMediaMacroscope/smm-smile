@@ -1,7 +1,6 @@
 var googleAuth = require('google-auth-library');
 var express = require('express');
 var router = express.Router();
-var config = require('../../main_config');
 
 var clientId = GOOGLE_CLIENT_ID;
 var clientSecret = GOOGLE_CLIENT_SECRET;
