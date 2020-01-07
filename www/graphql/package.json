@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "forever ./bin/www",
+    "docker-start": "node ./bin/www",
     "test": "nodemon ./bin/www"
   },
   "dependencies": {
