@@ -305,7 +305,7 @@ function gatherMultiPost(query, headers, pageNum) {
 
 function gatherSinglePost(query, headers) {
     return new Promise((resolve, reject) => {
-        fetch('http://localhost:5050/graphql', {
+        fetch('http://' + SMILE_GRAPHQL + ':5050/graphql', {
             method: 'POST',
             headers: headers,
             body: JSON.stringify({"query": query})

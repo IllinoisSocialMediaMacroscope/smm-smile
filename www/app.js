@@ -42,6 +42,7 @@ if (process.env.DOCKERIZED) {
     DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET;
     GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+    SMILE_GRAPHQL = "smile_graphql";
 
     // decide what handler to use
     handler = new RabbitmqSender();
@@ -63,6 +64,7 @@ else{
     DROPBOX_CLIENT_SECRET = config.dropbox.client_secret;
     GOOGLE_CLIENT_ID = config.google.client_id;
     GOOGLE_CLIENT_SECRET = config.google.client_secret;
+    SMILE_GRAPHQL = "localhost";
 
     handler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
