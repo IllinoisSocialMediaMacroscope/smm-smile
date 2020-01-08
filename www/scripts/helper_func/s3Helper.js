@@ -43,12 +43,12 @@ class S3Helper {
                 Body: buffer,
                 ContentType:mime.getType(localFile)
             };
-            s3.upload(param, function(err,data){
+            this.s3.upload(param, function(err,data){
                 if (err){
                     console.log(err);
                     reject(err);
                 }else{
-                    var fileURL = s3.getSignedUrl('getObject',{Bucket:BUCKET_NAME,Key:remoteKey, Expires:604800});
+                    var fileURL = this.s3.getSignedUrl('getObject',{Bucket:BUCKET_NAME,Key:remoteKey, Expires:604800});
                     resolve(fileURL);
                 }
             });
@@ -58,7 +58,7 @@ class S3Helper {
 
     list_folders(prefix){
         return new Promise((resolve,reject) =>{
-            s3.listObjectsV2({
+            this.s3.listObjectsV2({
 				Bucket:BUCKET_NAME,
 				Prefix:prefix,
 				Delimiter:'/'
@@ -84,7 +84,7 @@ class S3Helper {
 
     list_files(prefix){
         return new Promise((resolve,reject) =>{
-            s3.listObjectsV2({
+            this.s3.listObjectsV2({
 				Bucket:BUCKET_NAME,
 				Prefix:prefix
 			},function(err,data){
@@ -101,7 +101,7 @@ class S3Helper {
                     for (var i=0, length=fileList.length; i< length; i++){
                         // generate downloadable URL
                         var filename = fileList[i].Key.split('/').slice(-1)[0];
-                        var fileURL = s3.getSignedUrl('getObject',
+                        var fileURL = this.s3.getSignedUrl('getObject',
                             {Bucket:BUCKET_NAME,Key:fileList[i].Key, Expires:604800});
                         folderObj[filename] = fileURL;
                     }
@@ -115,7 +115,7 @@ class S3Helper {
     download_folder(prefix, downloadPath){
 
         return new Promise((resolve,reject) =>{
-            s3.listObjectsV2({
+            this.s3.listObjectsV2({
 				Bucket:BUCKET_NAME,
 				Prefix:prefix
 			}, function(err,data){
@@ -139,7 +139,7 @@ class S3Helper {
                                 if (!fs.existsSync(currPath)) fs.mkdirSync(currPath);
                             }
                             p_arr.push(new Promise((resolve,reject) =>{
-                                s3.getObject({ Bucket:BUCKET_NAME, Key:val.Key},function(err,data){
+                                this.s3.getObject({ Bucket:BUCKET_NAME, Key:val.Key},function(err,data){
                                     if (err){
                                         console.log(err,err.stack);
                                         reject(err);
@@ -174,7 +174,7 @@ class S3Helper {
     deleteRemoteFolder(prefix){
 
         return new Promise((resolve,reject) =>{
-            s3.listObjectsV2({
+            this.s3.listObjectsV2({
 				Bucket:BUCKET_NAME,
 				Prefix:prefix
 			},function(err,data){
@@ -196,7 +196,7 @@ class S3Helper {
                                 params.Delete.Objects.push({Key: content.Key});
                             });
 
-                            s3.deleteObjects(params, function(err, data) {
+                            this.s3.deleteObjects(params, function(err, data) {
                                 if(err){
                                     console.log('cannot delete err');
                                     reject(err);
