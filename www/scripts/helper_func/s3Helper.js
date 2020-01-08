@@ -68,7 +68,7 @@ class S3Helper {
                     reject(err);
                 }
 
-                folderObj = {};
+                var folderObj = {};
                 var fileList = data.CommonPrefixes;
                 if (fileList !== []){
                     for (var i=0, length=fileList.length; i< length; i++){
