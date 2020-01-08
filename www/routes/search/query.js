@@ -285,7 +285,7 @@ function gatherMultiPost(query, headers, pageNum) {
         query = query.replace(/(\) *{)/g, ",pages:" + pageNum + "$1");
     }
     return new Promise((resolve, reject) => {
-        fetch('http://localhost:5050/graphql', {
+        fetch('http://'+ SMILE_GRAPHQL +'/graphql', {
             method: 'POST',
             headers: headers,
             body: JSON.stringify({"query": query})
