@@ -43,12 +43,14 @@ class S3Helper {
                 Body: buffer,
                 ContentType:mime.getType(localFile)
             };
-            this.s3.upload(param, function(err,data){
+
+            var s3 = this.s3;
+            s3.upload(param, function(err,data){
                 if (err){
                     console.log(err);
                     reject(err);
                 }else{
-                    var fileURL = this.s3.getSignedUrl('getObject',{Bucket:BUCKET_NAME,Key:remoteKey, Expires:604800});
+                    var fileURL = s3.getSignedUrl('getObject',{Bucket:BUCKET_NAME,Key:remoteKey, Expires:604800});
                     resolve(fileURL);
                 }
             });

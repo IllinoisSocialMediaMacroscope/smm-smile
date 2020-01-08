@@ -5,7 +5,6 @@ var fs = require('fs');
 var jsonexport = require('jsonexport');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var lambda_invoke = require(path.join(appPath, 'scripts', 'helper_func', 'lambdaHelper.js')).lambda_invoke;
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
 
 router.get('/query', function (req, res) {
@@ -181,7 +180,7 @@ router.post('/query', function (req, res) {
                                         'remoteReadPath': s3FolderName + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
                                     };
 
-                                    lambda_invoke('histogram', args).then(results => {
+                                    handler.invoke('histogram', args).then(results => {
 
                                         if (results['url'] === 'null') {
                                             var rendering = responseObj[key1][key2][key3].slice(0, 100);
@@ -249,7 +248,7 @@ router.post('/query', function (req, res) {
 });
 
 router.post('/prompt', function (req, res) {
-    lambda_invoke('bae_screen_name_prompt', {
+    handler.invoke('bae_screen_name_prompt', {
         consumer_key: TWITTER_CONSUMER_KEY,
         consumer_secret: TWITTER_CONSUMER_SECRET,
         access_token: req.session.twt_access_token_key,

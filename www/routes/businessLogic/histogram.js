@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var lambda_invoke = require(path.join(appPath,'scripts','helper_func','lambdaHelper.js')).lambda_invoke;
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
 
 router.post('/histogram',function(req,res,next){
@@ -13,7 +12,7 @@ router.post('/histogram',function(req,res,next){
 				'remoteReadPath':s3FolderName + req.body.remoteReadPath,
 				'interval': req.body.interval };
 			
-	lambda_invoke('histogram', args).then(results =>{
+	handler.invoke('histogram', args).then(results =>{
 		// download div file
 		if (results['url'] == 'null'){
 			res.send({'ERROR': 'this dataset does not contain timestamps! Hence, we cannot rendering a recap for you.'});
