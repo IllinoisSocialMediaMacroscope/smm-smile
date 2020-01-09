@@ -1,4 +1,4 @@
-function customized_reset() {
+function customized_reset(clearConfigForm = true) {
     // clear display sections
     $("#img-container").empty();
     $("#gaudge").empty();
@@ -12,11 +12,14 @@ function customized_reset() {
     $("#getComment").hide();
 
     // clear the configuration form
-    $("#analytics-config select option").prop("selected", false);
-    $previewContent = $("#selectFilePreview-container").children().find("div").empty();
-    $columnContent = $("#selectFileHeader-container").children().find("div").empty();
-    $preview = $("#selectFilePreview-container").hide();
-    $column = $("#selectFileHeader-container").hide();
+    if (clearConfigForm){
+        $("#analytics-config select option").prop("selected", false);
+        $previewContent = $("#selectFilePreview-container").children().find("div").empty();
+        $columnContent = $("#selectFileHeader-container").children().find("div").empty();
+        $preview = $("#selectFilePreview-container").hide();
+        $column = $("#selectFileHeader-container").hide();
+    }
+
     $("#citation-container").hide();
     $("#custom-citation-notice").empty();
 
@@ -817,7 +820,7 @@ function appendInstruction(ID){
 
 /*-----------------------split --------------------------------------------*/
 function split() {
-    customized_reset();
+    customized_reset(false);
 
     // first check if form valid or not
     formValidation().then(boolean => {
@@ -872,7 +875,8 @@ function split() {
 
 /*-----------------------train -------------------------------------------*/
 function train() {
-    customized_reset();
+
+    customized_reset(false);
 
     // first check if form valid or not
     formValidation().then(boolean => {
@@ -934,7 +938,7 @@ function train() {
 
 /*-----------------------predict -------------------------------------------*/
 function predict() {
-    customized_reset();
+    customized_reset(false);
 
     // first check if form valid or not
     formValidation().then(boolean => {
@@ -969,6 +973,7 @@ function predict() {
                         appendIntermediateDownload("#intermediate-download", data.download);
                         appendImg("#img-container", data.img);
                         appendDownload("#side-download", data.download);
+                        appendPreview('#result-container', data.preview);
                         appendPreview('#result-container', data.preview);
 
                         $("#tag-modal").modal("show");
