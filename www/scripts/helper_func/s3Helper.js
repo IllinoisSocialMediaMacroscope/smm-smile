@@ -86,7 +86,8 @@ class S3Helper {
 
     list_files(prefix){
         return new Promise((resolve,reject) =>{
-            this.s3.listObjectsV2({
+            var s3 = this.s3;
+            s3.listObjectsV2({
 				Bucket:BUCKET_NAME,
 				Prefix:prefix
 			},function(err,data){
@@ -103,7 +104,7 @@ class S3Helper {
                     for (var i=0, length=fileList.length; i< length; i++){
                         // generate downloadable URL
                         var filename = fileList[i].Key.split('/').slice(-1)[0];
-                        var fileURL = this.s3.getSignedUrl('getObject',
+                        var fileURL = s3.getSignedUrl('getObject',
                             {Bucket:BUCKET_NAME,Key:fileList[i].Key, Expires:604800});
                         folderObj[filename] = fileURL;
                     }
