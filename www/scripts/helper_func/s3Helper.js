@@ -177,7 +177,8 @@ class S3Helper {
     deleteRemoteFolder(prefix){
 
         return new Promise((resolve,reject) =>{
-            this.s3.listObjectsV2({
+            var s3 = this.s3;
+            s3.listObjectsV2({
 				Bucket:BUCKET_NAME,
 				Prefix:prefix
 			},function(err,data){
@@ -191,7 +192,7 @@ class S3Helper {
                         resolve();
                     }else{
                         if (!data.IsTruncated){
-                            params = {
+                            var params = {
                             	Bucket: BUCKET_NAME,
                                 Delete:{ Objects:[] }
                             };
@@ -199,7 +200,7 @@ class S3Helper {
                                 params.Delete.Objects.push({Key: content.Key});
                             });
 
-                            this.s3.deleteObjects(params, function(err, data) {
+                            s3.deleteObjects(params, function(err, data) {
                                 if(err){
                                     console.log('cannot delete err');
                                     reject(err);

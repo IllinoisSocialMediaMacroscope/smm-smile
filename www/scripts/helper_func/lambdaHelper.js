@@ -34,7 +34,7 @@ class LambdaHelper{
 					console.log("there is an lambda error happening");
 					reject(err);
 				} else {
-					response = JSON.parse(data.Payload);
+					var response = JSON.parse(data.Payload);
 					if ('errorMessage' in response) {
 						reject(response['errorMessage']);
 					}
