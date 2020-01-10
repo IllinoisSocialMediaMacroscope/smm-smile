@@ -43,6 +43,7 @@ if (process.env.DOCKERIZED) {
     GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
     SMILE_GRAPHQL = "smile_graphql";
+    BUCKET_NAME = process.env.BUCKET_NAME;
 
     // decide what handler to use
     handler = new RabbitmqSender();
@@ -65,12 +66,11 @@ else{
     GOOGLE_CLIENT_ID = config.google.client_id;
     GOOGLE_CLIENT_SECRET = config.google.client_secret;
     SMILE_GRAPHQL = "localhost";
+    BUCKET_NAME = 'macroscope-smile';
 
     handler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
 }
-
-BUCKET_NAME = 'macroscope-smile';
 
 
 // if smile home folder doesn't exist, create one
