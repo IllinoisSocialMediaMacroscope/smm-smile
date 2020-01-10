@@ -550,12 +550,11 @@ function submit_clowder_files(){
 		$("#clowder-prev").hide();
 		
 		/***************collect data******************************/
-		var data = {}
+		var data = {};
 		data['dataset_id'] = $("#datasetID").val();
-		
-		// loop through each file
-		$("#clowder-files-list .form-control").each(function(i,file){
+		data['files'] = [];
 
+		$("#clowder-files-list").children().each(function(i,file){
 			// mark the configuration file
 			var filename = $(file).find(".form-check-label").text();
 			var url = $(file).find(".form-check-input").val();
@@ -564,11 +563,12 @@ function submit_clowder_files(){
 			}
 
 			if ($(file).find(".form-check-input").is(':checked')){
-				data[url] = {};
-				
+                var fileItem = {};
+                fileItem['url'] = url;
+
 				// descriptions
 				if ($(file).find("textarea").val() !== ''){
-					data[url]['descriptions'] = $(file).find("textarea").val();
+                    fileItem['descriptions'] = $(file).find("textarea").val();
 				}
 				// metadata
 				if ($(file).find(".fileMeta-block").children().length >0){
@@ -583,18 +583,20 @@ function submit_clowder_files(){
 							metadata[metadata_field] = metadata_value
 						}
 					});
-					data[url]['metadata'] = metadata;
+                    fileItem['metadata'] = metadata;
 				}
 				// tags
 				if ($(file).find(".tag.label.label-info")[0]){
-					data[url]['tags'] = [];
+                    fileItem['tags'] = [];
 					$(file).find(".tag.label.label-info").each(function(i,val){
-						data[url]['tags'].push($(val).text());
+                        fileItem['tags'].push($(val).text());
 					});
-				}	
+				}
+
+                data['files'].push(fileItem);
 			}
 		});
-		
+
 		$.ajax({
 			type:'POST',
 			url:'clowder-files', 
