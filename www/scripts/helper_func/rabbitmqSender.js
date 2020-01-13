@@ -94,7 +94,7 @@ class RabbitmqSender {
                         });
 
                         // sender
-                        channel.sendToQueue(rabbitmqJobQueue, Buffer.from(JSON.stringify(msg)),
+                        channel.sendToQueue(rabbitmqJobQueue, Buffer.from(msg),
                             {correlationId: correlationId, replyTo: q.queue});
 
                     });
