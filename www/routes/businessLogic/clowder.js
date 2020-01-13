@@ -36,7 +36,7 @@ router.post('/list-dataset', function(req, res, next){
 			'item':'dataset'
 		};
 
-		handler.invoke('lambda_list_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_list_clowder', args).then(results =>{
 			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
@@ -60,7 +60,7 @@ router.post('/list-collection',function(req,res,next){
 			'password':req.session.clowder_password,
 			'item':'collection'
 		};
-		handler.invoke('lambda_list_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_list_clowder', args).then(results =>{
 			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
@@ -84,7 +84,7 @@ router.post('/list-space',function(req,res,next){
 			'password':req.session.clowder_password,
 			'item':'space'
 		};
-		handler.invoke('lambda_list_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_list_clowder', args).then(results =>{
 			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
@@ -108,7 +108,7 @@ router.post('/list-user',function(req,res,next){
 			'password':req.session.clowder_password,
 			'item':'user'
 		};
-		handler.invoke('lambda_list_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_list_clowder', args).then(results =>{
 			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
@@ -132,7 +132,7 @@ router.post('/clowder-dataset',function(req,res,next){
 			'password':req.session.clowder_password,
 			'payload':req.body
 		};
-		handler.invoke('lambda_invoke_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_invoke_clowder', args).then(results =>{
 			
 			if (results['id']  === 'null'){
 				res.send({'ERROR':'Creating new dataset failed!'});
@@ -154,15 +154,15 @@ router.post('/clowder-collection',function(req,res,next){
 		var args = {'username':req.session.clowder_username, 
 			'password':req.session.clowder_password,
 			'payload':req.body
-		}	
-		handler.invoke('clowder_create_collection', args).then(results =>{
+		};
+        lambdaHandler.invoke('clowder_create_collection', args).then(results =>{
 			if (results['id']  === 'null'){
 				res.send({'ERROR':'Creating new collection failed!'});
 			}else{
 				//console.log(results);
 				res.send(results);
 			}
-			
+
 		}).catch( error =>{
 			console.log(error);
 			res.send({'ERROR':JSON.stringify(error)});
@@ -174,18 +174,18 @@ router.post('/clowder-space',function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{
-		var args = {'username':req.session.clowder_username, 
+		var args = {'username':req.session.clowder_username,
 			'password':req.session.clowder_password,
 			'payload':req.body
 		};
-		handler.invoke('clowder_create_space', args).then(results =>{
+        lambdaHandler.invoke('clowder_create_space', args).then(results =>{
 			if (results['id']  === 'null'){
 				res.send({'ERROR':'Creating new space failed!'});
 			}else{
 				//console.log(results);
 				res.send(results);
 			}
-			
+
 		}).catch( error =>{
 			//console.log(error);
 			res.send({'ERROR':JSON.stringify(error)});
@@ -203,7 +203,7 @@ router.post('/clowder-files',function(req,res,next){
 			'password':req.session.clowder_password,
 			'payload':req.body
 		};
-		handler.invoke('lambda_upload_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_upload_clowder', args).then(results =>{
 			if (results['ids'].length === 0){
 				res.send({'ERROR':'Uploading files to dataset failed. ERROR:' + results['info']});
 			}else{

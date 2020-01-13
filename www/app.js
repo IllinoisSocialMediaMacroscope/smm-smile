@@ -12,6 +12,7 @@ var session = require('express-session');
 var lambdaRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'lambdaRoutesTemplate.js'));
 var batchRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'batchRoutesTemplate.js'));
 var LambdaHelper = require(path.join(__dirname, 'scripts', 'helper_func', 'lambdaHelper.js'));
+var BatchHelper = require(path.join(__dirname, 'scripts', 'helper_func', 'BatchHelper.js'));
 var RabbitmqSender = require(path.join(__dirname, 'scripts', 'helper_func', 'rabbitmqSender.js'));
 var S3Helper = require(path.join(__dirname, 'scripts', 'helper_func', 's3Helper.js'));
 var fs = require('fs');
@@ -46,7 +47,8 @@ if (process.env.DOCKERIZED) {
     BUCKET_NAME = process.env.BUCKET_NAME;
 
     // decide what handler to use
-    handler = new RabbitmqSender();
+    lambdaHandler = new RabbitmqSender();
+    batchHandler = new RabbitmqSender();
     s3 = new S3Helper(true, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
 }
 else{
@@ -68,7 +70,8 @@ else{
     SMILE_GRAPHQL = "localhost";
     BUCKET_NAME = 'macroscope-smile';
 
-    handler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
+    lambdaHandler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
+    batchHandler = new BatchHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
 }
 
@@ -122,7 +125,7 @@ analysesRoutesFiles.forEach(function(route, i){
             app.post("/" + routesConfig.path, function(req, res){
                 if (req.body.selectFile !== 'Please Select...') {
                     if (req.body.aws_identifier === 'lambda') {
-                        lambdaRoutesTemplate(req, routesConfig, handler).then(data => {
+                        lambdaRoutesTemplate(req, routesConfig, lambdaHandler).then(data => {
                             res.send(data);
                         })
                         .catch(err => {
@@ -130,7 +133,7 @@ analysesRoutesFiles.forEach(function(route, i){
                         });
                     }
                     else if (req.body.aws_identifier === 'batch') {
-                        batchRoutesTemplate(req, routesConfig, handler).then(data => {
+                        batchRoutesTemplate(req, routesConfig, batchHandler).then(data => {
                             res.send(data);
                         })
                         .catch(err => {
@@ -153,7 +156,7 @@ analysesRoutesFiles.forEach(function(route, i){
                     fs.unlinkSync(req.file.path);
                     if (req.body.selectFile !== 'Please Select...') {
                         if (req.body.aws_identifier === 'lambda') {
-                            lambdaRoutesTemplate(req, routesConfig, handler).then(data => {
+                            lambdaRoutesTemplate(req, routesConfig, lambdaHandler).then(data => {
                                 res.send(data);
                             })
                             .catch(err => {
@@ -161,7 +164,7 @@ analysesRoutesFiles.forEach(function(route, i){
                             });
                         }
                         else if (req.body.aws_identifier === 'batch') {
-                            batchRoutesTemplate(req, routesConfig, handler).then(data => {
+                            batchRoutesTemplate(req, routesConfig, batchHandler).then(data => {
                                 res.send(data);
                             })
                             .catch(err => {

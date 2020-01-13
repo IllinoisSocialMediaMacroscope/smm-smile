@@ -57,8 +57,7 @@ class RabbitmqSender {
         });
     }
 
-    // batch rabbitmq just runs and write to disk without notification
-    batch(obDefinition, jobName, jobQueue, command, msg){
+    batch(jobDefinition, jobName, jobQueue, rabbitmqJobQueue, msg){
 
         return new Promise((resolve, reject) => {
             amqp.connect('amqp://rabbitmq:5672', function (error0, connection) {
@@ -94,7 +93,7 @@ class RabbitmqSender {
                         });
 
                         // sender
-                        channel.sendToQueue(queue, Buffer.from(JSON.stringify(msg)),
+                        channel.sendToQueue(rabbitmqJobQueue, Buffer.from(JSON.stringify(msg)),
                             {correlationId: correlationId, replyTo: q.queue});
 
                     });

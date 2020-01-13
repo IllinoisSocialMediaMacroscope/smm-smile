@@ -1,7 +1,6 @@
 var AWS = require('aws-sdk');
 
-class batchHelper{
-
+class BatchHelper{
     constructor(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET){
         AWS.config.update({
             accessKeyId: AWS_ACCESSKEY,
@@ -15,7 +14,7 @@ class batchHelper{
         });
     }
 
-    batch(jobDefinition, jobName, jobQueue, command){
+    batch(jobDefinition, jobName, jobQueue, rabbitmqJobQueue, command){
 
         var params = {
             jobDefinition: jobDefinition,
@@ -43,3 +42,5 @@ class batchHelper{
     }
 
 }
+
+module.exports = BatchHelper;

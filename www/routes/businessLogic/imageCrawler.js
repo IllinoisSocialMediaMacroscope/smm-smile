@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js')).submit_Batchjob;
 
 router.post('/image-crawler',function(req,res,next){
     s3.list_files(req.body.prefix).then((data) =>{
@@ -23,10 +22,11 @@ router.post('/image-crawler',function(req,res,next){
                 "--email", req.body.email,
                 "--sessionURL", req.body.sessionURL];
 
-            submit_Batchjob(
+            batchHandler.batch(
                 "arn:aws:batch:us-west-2:083781070261:job-definition/smile_image_crawler:1",
                 jobName,
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
+                "batch_image_crawler",
                 command
             ).then(results =>{
                 res.end('done');

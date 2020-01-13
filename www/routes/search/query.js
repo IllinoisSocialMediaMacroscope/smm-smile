@@ -180,7 +180,7 @@ router.post('/query', function (req, res) {
                                         'remoteReadPath': s3FolderName + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
                                     };
 
-                                    handler.invoke('histogram', args).then(results => {
+                                    lambdaHandler.invoke('histogram', args).then(results => {
 
                                         if (results['url'] === 'null') {
                                             var rendering = responseObj[key1][key2][key3].slice(0, 100);
@@ -248,7 +248,7 @@ router.post('/query', function (req, res) {
 });
 
 router.post('/prompt', function (req, res) {
-    handler.invoke('bae_screen_name_prompt', {
+    lambdaHandler.invoke('bae_screen_name_prompt', {
         consumer_key: TWITTER_CONSUMER_KEY,
         consumer_secret: TWITTER_CONSUMER_SECRET,
         access_token: req.session.twt_access_token_key,

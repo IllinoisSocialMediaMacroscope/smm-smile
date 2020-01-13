@@ -27,7 +27,8 @@ function batchRoutesTemplate(req, config, handler){
             command.push(req.body[arg_name]);
         }
 
-        handler.batch(config.post.batch_config["batch_job_definition"], jobName, config.post.batch_config["batch_job_queue"], command)
+        handler.batch(config.post.batch_config["batch_job_definition"], jobName, config.post.batch_config["batch_job_queue"],
+            config.post.batch_config['batch_rabbitmq_queue'], command)
         .then(results =>{
             results["ID"] = s3FolderName + config["result_path"] + uid + '/';
             resolve(results);

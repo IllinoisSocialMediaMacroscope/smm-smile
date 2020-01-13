@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var submit_Batchjob = require(path.join(appPath,'scripts','helper_func','batchHelper.js')).submit_Batchjob;
 
 router.post('/reddit-expand',function(req,res,next){
 	s3.list_files(req.body.prefix).then((data) =>{
@@ -12,25 +11,27 @@ router.post('/reddit-expand',function(req,res,next){
 
 		
 		// check if user still wants to collect it; overwrite the exist 
-		if(exist == false || (exist == true && req.body.consent == 'true')){
+		if(exist === false || (exist === true && req.body.consent === 'true')){
 			var jobName = s3FolderName + '_RedditComment_sdk';
 			var command = [ "python3.6", "/scripts/RedditComment.py",
 					"--remoteReadPath", req.body.prefix,
 					"--s3FolderName", s3FolderName,
 					"--email", req.body.email,
-                	"--sessionURL", req.body.sessionURL]
+                	"--sessionURL", req.body.sessionURL];
 
-			submit_Batchjob(
+            batchHandler.batch(
                 "arn:aws:batch:us-west-2:083781070261:job-definition/smile:3",
-                jobName,
+				jobName,
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
-                command
-			).then(results =>{
-				res.end('done');
-			}).catch(err =>{
-				res.send({ERROR:err});
-			});	
-		}else if(exist == true && req.body.consent == undefined){
+                "batch_reddit_commment",
+				command)
+            .then(results =>{
+                res.end('done');
+            })
+            .catch(err =>{
+                res.send({ERROR:err});
+            });
+		}else if(exist === true && req.body.consent === undefined){
 			res.send('pop alert');
 		}else{
 			res.end('no information');

@@ -12,7 +12,7 @@ router.post('/histogram',function(req,res,next){
 				'remoteReadPath':s3FolderName + req.body.remoteReadPath,
 				'interval': req.body.interval };
 			
-	handler.invoke('histogram', args).then(results =>{
+	lambdaHandler.invoke('histogram', args).then(results =>{
 		// download div file
 		if (results['url'] == 'null'){
 			res.send({'ERROR': 'this dataset does not contain timestamps! Hence, we cannot rendering a recap for you.'});
