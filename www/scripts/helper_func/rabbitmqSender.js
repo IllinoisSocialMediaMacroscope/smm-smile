@@ -57,7 +57,7 @@ class RabbitmqSender {
         });
     }
 
-    batch(jobDefinition, jobName, jobQueue, rabbitmqJobQueue, msg){
+    batch(jobDefinition, jobName, jobQueue, rabbitmqJobQueue, command){
 
         return new Promise((resolve, reject) => {
             amqp.connect('amqp://rabbitmq:5672', function (error0, connection) {
@@ -75,6 +75,7 @@ class RabbitmqSender {
                         var correlationId = uuidv4();
 
                         // reply
+                        var msg = command.join(" ");
                         channel.consume(q.queue, function (msg) {
                             if (msg.properties.correlationId === correlationId) {
                                 var parsedMsg = JSON.parse(msg.content.toString());
