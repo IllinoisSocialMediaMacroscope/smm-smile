@@ -138,7 +138,8 @@
       "batch_action": "/bin/bash",
       "batch_script": "auto_phrase.sh",
       "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_autophrase_dev:2",
-      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
+      "batch_rabbitmq_queue":"autophrase"
     }
   }
 }
