@@ -9,6 +9,7 @@ router.get('/query-crimson',function(req,res,next){
         res.redirect('/query?error=You cannot access crimson hexagon if not providing your credentials!')
     }
     else {
+
         lambdaHandler.invoke('crimson_hexagon_monitors',
             {"crimson_access_token": req.session.crimson_access_token}).then(results => {
                 if (results['monitor_list'] === 'null') {

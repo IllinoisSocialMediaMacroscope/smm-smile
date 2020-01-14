@@ -180,43 +180,51 @@ router.post('/query', function (req, res) {
                                         'remoteReadPath': s3FolderName + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
                                     };
 
-                                    lambdaHandler.invoke('histogram', args).then(results => {
-
-                                        if (results['url'] === 'null') {
-                                            var rendering = responseObj[key1][key2][key3].slice(0, 100);
-                                            s3.deleteLocalFolders(directory.slice(0, -1)).then(() => {
-                                                res.send({fname: processed, URLs: URLs, rendering: rendering});
-                                            }).catch(err => {
-                                                console.log(err);
-                                                res.send({ERROR: err});
-                                            });
-                                        }
-
-                                        else {
-                                            getMultiRemote(results['url']).then(function (data) {
-
-                                                var histogram = data;
+                                    if (req.body.prefix !== ('crimson-Hexagon')){
+                                        lambdaHandler.invoke('histogram', args).then(results => {
+                                            if (results['url'] === 'null') {
                                                 var rendering = responseObj[key1][key2][key3].slice(0, 100);
                                                 s3.deleteLocalFolders(directory.slice(0, -1)).then(() => {
-                                                    res.send({
-                                                        fname: processed, URLs: URLs, rendering: rendering,
-                                                        histogram: histogram
-                                                    });
-                                                }).catch(err => { // deleteFolderERROR
+                                                    res.send({fname: processed, URLs: URLs, rendering: rendering});
+                                                }).catch(err => {
                                                     console.log(err);
                                                     res.send({ERROR: err});
                                                 });
-                                            }).catch(err => { // download div error
-                                                console.log(err);
-                                                res.send({ERROR: err});
-                                            });
-                                        }
+                                            }
 
-                                    }).catch(error => { // lambda histogram error
-                                        console.log(error);
-                                        res.send({'ERROR': error});
-                                    });
+                                            else {
+                                                getMultiRemote(results['url']).then(function (data) {
 
+                                                    var histogram = data;
+                                                    var rendering = responseObj[key1][key2][key3].slice(0, 100);
+                                                    s3.deleteLocalFolders(directory.slice(0, -1)).then(() => {
+                                                        res.send({
+                                                            fname: processed, URLs: URLs, rendering: rendering,
+                                                            histogram: histogram
+                                                        });
+                                                    }).catch(err => { // deleteFolderERROR
+                                                        console.log(err);
+                                                        res.send({ERROR: err});
+                                                    });
+                                                }).catch(err => { // download div error
+                                                    console.log(err);
+                                                    res.send({ERROR: err});
+                                                });
+                                            }
+
+                                        }).catch(error => { // lambda histogram error
+                                            console.log(error);
+                                            res.send({'ERROR': error});
+                                        });
+                                    }
+                                    else{
+                                        s3.deleteLocalFolders(directory.slice(0, -1)).then(() => {
+                                            res.send({fname: processed, URLs: URLs});
+                                        }).catch(err => {
+                                            console.log(err);
+                                            res.send({ERROR: err});
+                                        });
+                                    }
                                 }).catch(err => { // upload s3 ERROR
                                     console.log(err);
                                     res.send({ERROR: JSON.stringify(err)});
