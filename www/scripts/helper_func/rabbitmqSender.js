@@ -13,6 +13,14 @@ class RabbitmqSender {
 
     // real time rabbitmq sender with reply
     invoke(function_name, queue, msg) {
+        // determine if it's aws lambda or local lambda
+        if (process.env.LOCAL_ALGORITHM){
+            msg['platform'] = 'lambda';
+        }
+        else{
+            msg['platform'] = 'aws-labmda';
+        }
+
         return new Promise((resolve, reject) => {
             amqp.connect('amqp://rabbitmq:5672', function (error0, connection) {
                 if (error0) reject(error0);
@@ -47,14 +55,6 @@ class RabbitmqSender {
                         });
 
                         // sender
-                        // determine if it's aws lambda or local lambda
-                        if (process.env.LOCAL_ALGORITHM){
-                            msg['platform'] = 'lambda';
-                        }
-                        else{
-                            msg['platform'] = 'aws-labmda';
-                        }
-
                         channel.sendToQueue(queue, Buffer.from(JSON.stringify(msg)),
                             {correlationId: correlationId, replyTo: q.queue});
 
@@ -65,6 +65,15 @@ class RabbitmqSender {
     }
 
     batch(jobDefinition, jobName, jobQueue, rabbitmqJobQueue, command){
+
+        // determine if it's aws lambda or local lambda
+        var msg = {};
+        if (process.env.LOCAL_ALGORITHM){
+            msg['platform'] = 'lambda';
+        }
+        else{
+            msg['platform'] = 'aws-labmda';
+        }
 
         return new Promise((resolve, reject) => {
             amqp.connect('amqp://rabbitmq:5672', function (error0, connection) {
@@ -80,15 +89,6 @@ class RabbitmqSender {
                             reject(error2);
                         }
                         var correlationId = uuidv4();
-
-                        // reply
-                        var msg = {};
-                        if (process.env.LOCAL_ALGORITHM){
-                            msg['platform'] = 'batch';
-                        }
-                        else{
-                            msg['platform'] = 'aws-batch';
-                        }
                         msg['command'] = command.join(" ");
                         channel.consume(q.queue, function (msg) {
                             if (msg.properties.correlationId === correlationId) {
@@ -108,7 +108,7 @@ class RabbitmqSender {
                         });
 
                         // sender
-                        channel.sendToQueue(rabbitmqJobQueue, Buffer.from(msg),
+                        channel.sendToQueue(rabbitmqJobQueue, Buffer.from(JSON.stringify(msg)),
                             {correlationId: correlationId, replyTo: q.queue});
 
                     });
