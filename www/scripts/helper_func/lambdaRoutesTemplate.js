@@ -27,9 +27,15 @@ function lambdaRoutesTemplate(req, config, handler ){
             args[arg_name] = req.body[arg_name];
         }
         // invoke depending on the handler could be lambda, could be rabbitmq
-        if ('post' in config) var lambdaConfig = config.post.lambda_config;
-        else if ('put' in config) var lambdaConfig = config.put.lambda_config;
-        handler.invoke(lambdaConfig["aws_lambda_function"], args).then(results => {
+        if ('post' in config) {
+            var lambdaConfig = config.post.lambda_config;
+            if ('rabbitmq_queue' in config.post) var queue = config.post.rabbitmq_queue;
+        }
+        else if ('put' in config) {
+            var lambdaConfig = config.put.lambda_config;
+            if ('rabbitmq_queue' in config.put) var queue = config.put.rabbitmq_queue;
+        }
+        handler.invoke(lambdaConfig["aws_lambda_function"], queue, args).then(results => {
 
             // fetch all the data from url, and add those to the result content
             // this might be slow since we are fetching everything

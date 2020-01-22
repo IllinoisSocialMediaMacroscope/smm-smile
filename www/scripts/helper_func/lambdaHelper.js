@@ -19,7 +19,7 @@ class LambdaHelper{
      * @param function_name
      * @param args
      */
-	invoke(function_name, args) {
+	invoke(function_name, queue, args) {
 
 		var params = {
 			FunctionName: function_name,

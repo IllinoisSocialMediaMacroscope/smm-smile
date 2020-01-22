@@ -12,8 +12,7 @@ class RabbitmqSender {
     }
 
     // real time rabbitmq sender with reply
-    invoke(queue, msg) {
-
+    invoke(function_name, queue, msg) {
         return new Promise((resolve, reject) => {
             amqp.connect('amqp://rabbitmq:5672', function (error0, connection) {
                 if (error0) reject(error0);
@@ -55,6 +54,7 @@ class RabbitmqSender {
                         else{
                             msg['platform'] = 'aws-labmda';
                         }
+
                         channel.sendToQueue(queue, Buffer.from(JSON.stringify(msg)),
                             {correlationId: correlationId, replyTo: q.queue});
 
