@@ -2,7 +2,7 @@ var amqp = require('amqplib/callback_api');
 
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 }
@@ -48,6 +48,13 @@ class RabbitmqSender {
                         });
 
                         // sender
+                        // determine if it's aws lambda or local lambda
+                        if (process.env.LOCAL_ALGORITHM){
+                            msg['platform'] = 'lambda';
+                        }
+                        else{
+                            msg['platform'] = 'aws-labmda';
+                        }
                         channel.sendToQueue(queue, Buffer.from(JSON.stringify(msg)),
                             {correlationId: correlationId, replyTo: q.queue});
 
@@ -75,7 +82,14 @@ class RabbitmqSender {
                         var correlationId = uuidv4();
 
                         // reply
-                        var msg = command.join(" ");
+                        var msg = {};
+                        if (process.env.LOCAL_ALGORITHM){
+                            msg['platform'] = 'batch';
+                        }
+                        else{
+                            msg['platform'] = 'aws-batch';
+                        }
+                        msg['command'] = command.join(" ");
                         channel.consume(q.queue, function (msg) {
                             if (msg.properties.correlationId === correlationId) {
                                 var parsedMsg = JSON.parse(msg.content.toString());
