@@ -18,7 +18,7 @@ class RabbitmqSender {
             msg['platform'] = 'lambda';
         }
         else{
-            msg['platform'] = 'aws-labmda';
+            msg['platform'] = 'aws-lambda';
         }
 
         return new Promise((resolve, reject) => {
@@ -69,10 +69,10 @@ class RabbitmqSender {
         // determine if it's aws lambda or local lambda
         var msg = {};
         if (process.env.LOCAL_ALGORITHM){
-            msg['platform'] = 'lambda';
+            msg['platform'] = 'batch';
         }
         else{
-            msg['platform'] = 'aws-labmda';
+            msg['platform'] = 'aws-batch';
         }
 
         return new Promise((resolve, reject) => {
