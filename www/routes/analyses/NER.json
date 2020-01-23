@@ -110,7 +110,7 @@
       "batch_script": "/scripts/batch_function.py",
       "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_NER:1",
       "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
-      "batch_rabbitmq_queue":"name_entity_recognition"
-    }
+    },
+    "rabbitmq_queue":"name_entity_recognition"
   }
 }

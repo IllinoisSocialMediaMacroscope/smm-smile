@@ -89,6 +89,7 @@
   "post": {
     "lambda_config": {
       "aws_lambda_function": "lambda_classification_split_dev"
-    }
+    },
+    "rabbitmq_queue":"classification_split"
   }
 }

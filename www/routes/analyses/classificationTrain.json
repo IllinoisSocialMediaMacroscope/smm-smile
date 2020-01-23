@@ -91,6 +91,7 @@
   "put": {
     "lambda_config": {
       "aws_lambda_function": "lambda_classification_train"
-    }
+    },
+    "rabbitmq_queue":"classification_train"
   }
 }
