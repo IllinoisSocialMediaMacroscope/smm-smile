@@ -35,6 +35,7 @@ function lambdaRoutesTemplate(req, config, handler ){
             var lambdaConfig = config.put.lambda_config;
             if ('rabbitmq_queue' in config.put) var queue = config.put.rabbitmq_queue;
         }
+
         handler.invoke(lambdaConfig["aws_lambda_function"], queue, args).then(results => {
 
             // fetch all the data from url, and add those to the result content

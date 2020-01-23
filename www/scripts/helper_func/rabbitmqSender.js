@@ -19,6 +19,7 @@ class RabbitmqSender {
         }
         else{
             msg['platform'] = 'aws-lambda';
+            msg['function_name'] = function_name
         }
 
         return new Promise((resolve, reject) => {
@@ -73,7 +74,11 @@ class RabbitmqSender {
         }
         else{
             msg['platform'] = 'aws-batch';
+            msg['jobDefinition'] = jobDefinition;
+            msg['jobName'] = jobName;
+            msg['jobQueue'] = jobQueue;
         }
+        msg['command'] = command;
 
         return new Promise((resolve, reject) => {
             amqp.connect('amqp://rabbitmq:5672', function (error0, connection) {
@@ -89,7 +94,6 @@ class RabbitmqSender {
                             reject(error2);
                         }
                         var correlationId = uuidv4();
-                        msg['command'] = command.join(" ");
                         channel.consume(q.queue, function (msg) {
                             if (msg.properties.correlationId === correlationId) {
                                 var parsedMsg = JSON.parse(msg.content.toString());
