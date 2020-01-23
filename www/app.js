@@ -27,7 +27,7 @@ smileHomePath = path.join(process.env.HOME, 'smile');
 /**
  * determine which version of deployment: dockerized vs usual
  */
-if (process.env.DOCKERIZED) {
+if (process.env.DOCKERIZED === 'TRUE') {
     // determine credentials either from file or from environment variable
     AWS_ACCESSKEY = process.env.AWS_ACCESSKEY;
     AWS_ACCESSKEYSECRET = process.env.AWS_ACCESSKEYSECRET;

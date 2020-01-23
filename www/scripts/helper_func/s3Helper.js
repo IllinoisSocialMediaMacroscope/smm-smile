@@ -7,7 +7,7 @@ var rmdir = require('rimraf');
 class S3Helper {
 	constructor(DOCKERIZED, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET){
 		//use minio for dockerized version
-		if (DOCKERIZED) {
+		if (DOCKERIZED === 'TRUE') {
 			this.s3 = new AWS.S3({
 				accessKeyId: AWS_ACCESSKEY,
 				secretAccessKey: AWS_ACCESSKEYSECRET,
