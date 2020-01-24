@@ -115,7 +115,9 @@
       "trigger_id": "algorithm",
       "content": [
         {
-          "text": ["Rehurek, R., & Sojka, P. (2010). Software framework for topic modelling with large corpora. In <i>In Proceedings of the LREC 2010 Workshop on New Challenges for NLP Frameworks.</i> <a href=\"https://is.muni.cz/repo/884893/lrec2010-rehurek-sojka.pdf\" target=\"_blank\">https://is.muni.cz/repo/884893/lrec2010-rehurek-sojka.pdf</a>"],
+          "text": [
+            "Rehurek, R., & Sojka, P. (2010). Software framework for topic modelling with large corpora. In <i>In Proceedings of the LREC 2010 Workshop on New Challenges for NLP Frameworks.</i> <a href=\"https://is.muni.cz/repo/884893/lrec2010-rehurek-sojka.pdf\" target=\"_blank\">https://is.muni.cz/repo/884893/lrec2010-rehurek-sojka.pdf</a>"
+          ],
           "condition": "gensimLDA"
         }
       ]
@@ -126,8 +128,8 @@
       "batch_action": "python3",
       "batch_script": "/scripts/batch_function.py",
       "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_topic_modeling:1",
-      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
     },
-    "rabbitmq_queue":"topic_modeling"
+    "rabbitmq_queue": "topic_modeling"
   }
 }

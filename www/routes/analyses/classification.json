@@ -234,7 +234,9 @@
       "trigger_id": "task",
       "content": [
         {
-          "text": ["<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Scikit-learn%3A+Machine+learning+in+Python&btnG=\" target=\"_blank\">Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Vanderplas, J. (2011). Scikit-learn:Machine learning in Python. Journal of Machine Learning Research, 12(Oct), 2825-2830.</a>"],
+          "text": [
+            "<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Scikit-learn%3A+Machine+learning+in+Python&btnG=\" target=\"_blank\">Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Vanderplas, J. (2011). Scikit-learn:Machine learning in Python. Journal of Machine Learning Research, 12(Oct), 2825-2830.</a>"
+          ],
           "condition": "!"
         }
       ]

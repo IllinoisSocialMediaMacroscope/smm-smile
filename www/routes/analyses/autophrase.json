@@ -127,7 +127,9 @@
       "trigger_id": "algorithm",
       "content": [
         {
-          "text": ["Shang, J., Liu, J., Jiang, M., Ren, X., Voss, C. R., & Han, J. (2017).<a href=\"https://arxiv.org/pdf/1702.04457.pdf\" target=\"_blank\">Automated phrase mining from massive text corpora. arXiv preprint arXiv:1702.04457.</a>"],
+          "text": [
+            "Shang, J., Liu, J., Jiang, M., Ren, X., Voss, C. R., & Han, J. (2017).<a href=\"https://arxiv.org/pdf/1702.04457.pdf\" target=\"_blank\">Automated phrase mining from massive text corpora. arXiv preprint arXiv:1702.04457.</a>"
+          ],
           "condition": "autophrase"
         }
       ]
@@ -138,8 +140,8 @@
       "batch_action": "/bin/bash",
       "batch_script": "auto_phrase.sh",
       "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_autophrase_dev:2",
-      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
     },
-    "rabbitmq_queue":"autophrase"
+    "rabbitmq_queue": "autophrase"
   }
 }

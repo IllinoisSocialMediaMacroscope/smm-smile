@@ -138,14 +138,16 @@
       "trigger_id": "tagger",
       "content": [
         {
-          "text": ["<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=NLTK%3A+the+natural+language+toolkit.+In+Proceedings+of+the+COLING%2FACL+on+Interactive++++++++presentation+sessions+%28pp.+69-72%29.+Association+for+Computational+Linguistics&btnG=\" target=\"_blank\">Bird, S. (2006, July). NLTK: the natural language toolkit. In Proceedings of the COLING/ACL on Interactivepresentation sessions (pp. 69-72). Association for Computational Linguistics.</a>"],
+          "text": [
+            "<a href=\"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=NLTK%3A+the+natural+language+toolkit.+In+Proceedings+of+the+COLING%2FACL+on+Interactive++++++++presentation+sessions+%28pp.+69-72%29.+Association+for+Computational+Linguistics&btnG=\" target=\"_blank\">Bird, S. (2006, July). NLTK: the natural language toolkit. In Proceedings of the COLING/ACL on Interactivepresentation sessions (pp. 69-72). Association for Computational Linguistics.</a>"
+          ],
           "condition": "posTag"
         }
       ]
     }
   },
   "post": {
-    "cutoff":20000,
+    "cutoff": 20000,
     "lambda_config": {
       "aws_lambda_function": "lambda_preprocessing"
     },
@@ -153,8 +155,8 @@
       "batch_action": "python3",
       "batch_script": "/scripts/batch_function.py",
       "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_preprocessing:1",
-      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
     },
-    "rabbitmq_queue":"preprocessing"
+    "rabbitmq_queue": "preprocessing"
   }
 }

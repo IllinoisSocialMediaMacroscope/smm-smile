@@ -89,8 +89,8 @@
               "label": "sentiWordNet"
             },
             {
-              "value":"debias",
-              "label":"Sentiment Classification using Debiasing Word Embeddings"
+              "value": "debias",
+              "label": "Sentiment Classification using Debiasing Word Embeddings"
             }
           ]
         }
@@ -115,23 +115,29 @@
       "trigger_id": "algorithm",
       "content": [
         {
-          "text": ["Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014. <a href=\"http://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/download/8109/8122\" target=\"_blank\">http://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/download/8109/8122</a>"],
+          "text": [
+            "Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014. <a href=\"http://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/download/8109/8122\" target=\"_blank\">http://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/download/8109/8122</a>"
+          ],
           "condition": "vader"
         },
         {
-          "text": ["Baccianella, Stefano, Andrea Esuli, and Fabrizio Sebastiani. \"Sentiwordnet 3.0: an enhanced lexical resource for sentiment analysis and opinion mining.\" Lrec. Vol. 10. No. 2010. 2010. <a href=\"http://nmis.isti.cnr.it/sebastiani/Publications/LREC10.pdf\" target=\"_blank\">http://nmis.isti.cnr.it/sebastiani/Publications/LREC10.pdf</a>"],
+          "text": [
+            "Baccianella, Stefano, Andrea Esuli, and Fabrizio Sebastiani. \"Sentiwordnet 3.0: an enhanced lexical resource for sentiment analysis and opinion mining.\" Lrec. Vol. 10. No. 2010. 2010. <a href=\"http://nmis.isti.cnr.it/sebastiani/Publications/LREC10.pdf\" target=\"_blank\">http://nmis.isti.cnr.it/sebastiani/Publications/LREC10.pdf</a>"
+          ],
           "condition": "sentiWordNet"
         },
         {
-          "text":["Speer, R., Chin, J., & Havasi, C. (2017, February). Conceptnet 5.5: An open multilingual graph of general knowledge. In Thirty-First AAAI Conference on Artificial Intelligence. <a href=\"https://aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14972/14051\" target=\"_blank\">https://aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14972/14051</a>",
-            "Speer, R. (2017). How to make a racist AI without really trying. <a href=\"http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying\" target=\"_blank\">http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying</a>"],
+          "text": [
+            "Speer, R., Chin, J., & Havasi, C. (2017, February). Conceptnet 5.5: An open multilingual graph of general knowledge. In Thirty-First AAAI Conference on Artificial Intelligence. <a href=\"https://aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14972/14051\" target=\"_blank\">https://aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14972/14051</a>",
+            "Speer, R. (2017). How to make a racist AI without really trying. <a href=\"http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying\" target=\"_blank\">http://blog.conceptnet.io/posts/2017/how-to-make-a-racist-ai-without-really-trying</a>"
+          ],
           "condition": "debias"
         }
       ]
     }
   },
   "post": {
-    "cutoff":10000,
+    "cutoff": 10000,
     "lambda_config": {
       "aws_lambda_function": "lambda_sentiment_analysis"
     },
@@ -141,6 +147,6 @@
       "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_sentiment_analysis:3",
       "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
     },
-    "rabbitmq_queue":"sentiment_analysis"
+    "rabbitmq_queue": "sentiment_analysis"
   }
 }

@@ -90,6 +90,6 @@
     "lambda_config": {
       "aws_lambda_function": "lambda_classification_predict_dev"
     },
-    "rabbitmq_queue":"classification_predict"
+    "rabbitmq_queue": "classification_predict"
   }
 }

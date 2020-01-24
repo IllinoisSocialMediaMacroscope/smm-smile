@@ -98,7 +98,9 @@
       "trigger_id": "algorithm",
       "content": [
         {
-          "text": ["Mishra, S., & Diesner, J. (2016). <a href=\"http://www.aclweb.org/anthology/W16-3927\" target=\"_blank\">Semi-supervised Named Entity Recognition in noisy-text.</a> In Proceedings of the 2nd Workshop on Noisy User-generated Text (WNUT) (pp. 203-212)."],
+          "text": [
+            "Mishra, S., & Diesner, J. (2016). <a href=\"http://www.aclweb.org/anthology/W16-3927\" target=\"_blank\">Semi-supervised Named Entity Recognition in noisy-text.</a> In Proceedings of the 2nd Workshop on Noisy User-generated Text (WNUT) (pp. 203-212)."
+          ],
           "condition": "twitterNER"
         }
       ]
@@ -109,8 +111,8 @@
       "batch_action": "python3",
       "batch_script": "/scripts/batch_function.py",
       "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_NER:1",
-      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
     },
-    "rabbitmq_queue":"name_entity_recognition"
+    "rabbitmq_queue": "name_entity_recognition"
   }
 }
