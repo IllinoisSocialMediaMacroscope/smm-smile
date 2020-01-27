@@ -23,7 +23,7 @@ router.post('/reddit-expand',function(req,res,next){
                 "arn:aws:batch:us-west-2:083781070261:job-definition/smile:3",
 				jobName,
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
-                "batch_reddit_commment",
+                "reddit_commment",
 				command)
             .then(results =>{
                 res.end('done');

@@ -26,7 +26,7 @@ router.post('/image-crawler',function(req,res,next){
                 "arn:aws:batch:us-west-2:083781070261:job-definition/smile_image_crawler:1",
                 jobName,
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
-                "batch_image_crawler",
+                "image_crawler",
                 command
             ).then(results =>{
                 res.end('done');
