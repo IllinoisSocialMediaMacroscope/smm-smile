@@ -181,7 +181,7 @@ router.post('/query', function (req, res) {
                                     };
 
                                     if (req.body.prefix !== ('crimson-Hexagon')){
-                                        lambdaHandler.invoke('histogram', args).then(results => {
+                                        lambdaHandler.invoke('histogram', 'histogram', args).then(results => {
                                             if (results['url'] === 'null') {
                                                 var rendering = responseObj[key1][key2][key3].slice(0, 100);
                                                 s3.deleteLocalFolders(directory.slice(0, -1)).then(() => {
@@ -256,7 +256,7 @@ router.post('/query', function (req, res) {
 });
 
 router.post('/prompt', function (req, res) {
-    lambdaHandler.invoke('bae_screen_name_prompt', {
+    lambdaHandler.invoke('bae_screen_name_prompt', 'bae_screen_name_prompt', {
         consumer_key: TWITTER_CONSUMER_KEY,
         consumer_secret: TWITTER_CONSUMER_SECRET,
         access_token: req.session.twt_access_token_key,

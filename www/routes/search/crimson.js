@@ -10,7 +10,7 @@ router.get('/query-crimson',function(req,res,next){
     }
     else {
 
-        lambdaHandler.invoke('crimson_hexagon_monitors',
+        lambdaHandler.invoke('crimson_hexagon_monitors','crimson_hexagon_monitors',
             {"crimson_access_token": req.session.crimson_access_token}).then(results => {
                 if (results['monitor_list'] === 'null') {
                     res.send({'ERROR': results['info']});

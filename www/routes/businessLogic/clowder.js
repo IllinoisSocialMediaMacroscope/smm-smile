@@ -36,7 +36,7 @@ router.post('/list-dataset', function(req, res, next){
 			'item':'dataset'
 		};
 
-        lambdaHandler.invoke('lambda_list_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results =>{
 			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
@@ -60,7 +60,7 @@ router.post('/list-collection',function(req,res,next){
 			'password':req.session.clowder_password,
 			'item':'collection'
 		};
-        lambdaHandler.invoke('lambda_list_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results =>{
 			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
@@ -84,7 +84,7 @@ router.post('/list-space',function(req,res,next){
 			'password':req.session.clowder_password,
 			'item':'space'
 		};
-        lambdaHandler.invoke('lambda_list_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results =>{
 			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
@@ -108,7 +108,7 @@ router.post('/list-user',function(req,res,next){
 			'password':req.session.clowder_password,
 			'item':'user'
 		};
-        lambdaHandler.invoke('lambda_list_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results =>{
 			if (results['data'].indexOf('error') !== -1){
 				req.session.destroy();
 				res.send({'ERROR':results['info']});
@@ -132,7 +132,7 @@ router.post('/clowder-dataset',function(req,res,next){
 			'password':req.session.clowder_password,
 			'payload':req.body
 		};
-        lambdaHandler.invoke('lambda_invoke_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_invoke_clowder', 'lambda_invoke_clowder', args).then(results =>{
 			
 			if (results['id']  === 'null'){
 				res.send({'ERROR':'Creating new dataset failed!'});
@@ -155,7 +155,7 @@ router.post('/clowder-collection',function(req,res,next){
 			'password':req.session.clowder_password,
 			'payload':req.body
 		};
-        lambdaHandler.invoke('clowder_create_collection', args).then(results =>{
+        lambdaHandler.invoke('clowder_create_collection', 'clowder_create_collection', args).then(results =>{
 			if (results['id']  === 'null'){
 				res.send({'ERROR':'Creating new collection failed!'});
 			}else{
@@ -178,7 +178,7 @@ router.post('/clowder-space',function(req,res,next){
 			'password':req.session.clowder_password,
 			'payload':req.body
 		};
-        lambdaHandler.invoke('clowder_create_space', args).then(results =>{
+        lambdaHandler.invoke('clowder_create_space', 'clowder_create_space', args).then(results =>{
 			if (results['id']  === 'null'){
 				res.send({'ERROR':'Creating new space failed!'});
 			}else{
@@ -203,7 +203,7 @@ router.post('/clowder-files',function(req,res,next){
 			'password':req.session.clowder_password,
 			'payload':req.body
 		};
-        lambdaHandler.invoke('lambda_upload_clowder', args).then(results =>{
+        lambdaHandler.invoke('lambda_upload_clowder', 'lambda_upload_clowder', args).then(results =>{
 			if (results['ids'].length === 0){
 				res.send({'ERROR':'Uploading files to dataset failed. ERROR:' + results['info']});
 			}else{
