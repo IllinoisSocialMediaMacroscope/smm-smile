@@ -89,33 +89,40 @@ class RabbitmqSender {
                         reject(error1);
                     }
 
-                    channel.assertQueue('', {exclusive: true}, function (error2, q) {
-                        if (error2) {
-                            reject(error2);
-                        }
-                        var correlationId = uuidv4();
-                        channel.consume(q.queue, function (msg) {
-                            if (msg.properties.correlationId === correlationId) {
-                                var parsedMsg = JSON.parse(msg.content.toString());
-                                if ('ERROR' in parsedMsg){
-                                    reject(parsedMsg['ERROR']);
-                                }
-                                else{
-                                    resolve(parsedMsg);
-                                }
-                            }
-                            setTimeout(function () {
-                                connection.close();
-                            }, 500); // time out in 5 minutes
-                        }, {
-                            noAck: true
-                        });
-
-                        // sender
-                        channel.sendToQueue(rabbitmqJobQueue, Buffer.from(JSON.stringify(msg)),
-                            {correlationId: correlationId, replyTo: q.queue});
-
+                    channel.assertQueue(rabbitmqJobQueue, {durable:false});
+                    channel.sendToQueue(rabbitmqJobQueue, Buffer.from(JSON.stringify(msg)));
+                    resolve({
+                        "jobName":jobName,
+                        "jobId":"Not Applicable",
                     });
+
+                    // channel.assertQueue('', {exclusive: true}, function (error2, q) {
+                    //     if (error2) {
+                    //         reject(error2);
+                    //     }
+                    //     var correlationId = uuidv4();
+                    //     channel.consume(q.queue, function (msg) {
+                    //         if (msg.properties.correlationId === correlationId) {
+                    //             var parsedMsg = JSON.parse(msg.content.toString());
+                    //             if ('ERROR' in parsedMsg){
+                    //                 reject(parsedMsg['ERROR']);
+                    //             }
+                    //             else{
+                    //                 resolve(parsedMsg);
+                    //             }
+                    //         }
+                    //         setTimeout(function () {
+                    //             connection.close();
+                    //         }, 500); // time out in 5 minutes
+                    //     }, {
+                    //         noAck: true
+                    //     });
+                    //
+                    //     // sender
+                    //     channel.sendToQueue(rabbitmqJobQueue, Buffer.from(JSON.stringify(msg)),
+                    //         {correlationId: correlationId, replyTo: q.queue});
+                    //
+                    // });
                 });
             });
         });

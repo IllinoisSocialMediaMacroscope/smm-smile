@@ -1,12 +1,13 @@
 var AWS = require('aws-sdk');
 
 class BatchHelper{
+
     constructor(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET){
         AWS.config.update({
             accessKeyId: AWS_ACCESSKEY,
             secretAccessKey: AWS_ACCESSKEYSECRET });
 
-        this.batch = new AWS.Batch({region: 'us-west-2',
+        this.Batch = new AWS.Batch({region: 'us-west-2',
             apiVersion: '2016-08-10',
             maxRetries: 0,
             maxRedirects: 0,
@@ -28,9 +29,9 @@ class BatchHelper{
         };
 
         return new Promise((resolve,reject) =>{
-            batch.submitJob(params, function(err, data) {
+            this.Batch.submitJob(params, function(err, data) {
                 if (err){
-                    console.log("there is an lambda error happening");
+                    console.log("there is an error happening");
                     console.log(err,err.stack);
                     reject(err);
                 }else{
