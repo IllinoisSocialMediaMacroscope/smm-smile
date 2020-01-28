@@ -13,7 +13,7 @@ router.post('/reddit-expand',function(req,res,next){
 		// check if user still wants to collect it; overwrite the exist 
 		if(exist === false || (exist === true && req.body.consent === 'true')){
 			var jobName = s3FolderName + '_RedditComment_sdk';
-			var command = [ "python3.6", "/scripts/RedditComment.py",
+			var command = [ "python3", "/scripts/RedditComment.py",
 					"--remoteReadPath", req.body.prefix,
 					"--s3FolderName", s3FolderName,
 					"--email", req.body.email,
@@ -23,7 +23,7 @@ router.post('/reddit-expand',function(req,res,next){
                 "arn:aws:batch:us-west-2:083781070261:job-definition/smile:3",
 				jobName,
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
-                "reddit_commment",
+                "reddit_comment",
 				command)
             .then(results =>{
                 res.end('done');

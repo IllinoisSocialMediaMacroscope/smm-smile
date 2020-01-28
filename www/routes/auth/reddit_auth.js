@@ -9,7 +9,7 @@ router.get('/login/reddit',function(req,res,next){
 	
 	var user = REDDIT_CLIENT_ID;
 	var password = REDDIT_CLIENT_SECRET;
-	var base64encodedData = new Buffer(user + ':' + password).toString('base64');
+	var base64encodedData = new Buffer.from(user + ':' + password).toString('base64');
 	
 	crypto.randomBytes(24, function(err, buffer) {
 		var RANDOM_STRING = buffer.toString('hex');
