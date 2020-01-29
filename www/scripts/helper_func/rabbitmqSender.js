@@ -58,7 +58,6 @@ class RabbitmqSender {
                         // sender
                         channel.sendToQueue(queue, Buffer.from(JSON.stringify(msg)),
                             {correlationId: correlationId, replyTo: q.queue});
-
                     });
                 });
             });

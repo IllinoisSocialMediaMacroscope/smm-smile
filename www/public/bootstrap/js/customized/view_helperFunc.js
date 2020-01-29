@@ -883,7 +883,12 @@ function train() {
         var file = $("#labeled").get(0).files[0];
         var formData = new FormData();
         formData.append('labeled', file, file.name);
-        formData.append('labeledFilename', "LABELED_" + file.name);
+
+        // make sure no space
+        var labeledFilename = "LABELED_" + file.name;
+        labeledFilename = labeledFilename.replace(/\s+/g, "_");
+
+        formData.append('labeledFilename', labeledFilename);
         formData.append('uid', $("#uid").val());
         formData.append('model', $("#model option:selected").val());
         formData.append('aws_identifier', 'lambda');
