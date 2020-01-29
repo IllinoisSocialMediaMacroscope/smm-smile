@@ -113,6 +113,7 @@ analysesRoutesFiles.forEach(function(route, i){
             app.get("/" + routesConfig.path, function(req, res){
                 var formParam = routesConfig;
                 res.render('analytics/formTemplate', {
+                    DOCKERIZED:process.env.DOCKERIZED,
                     title: formParam.title,
                     introduction:formParam.introduction.join(" "),
                     wiki: formParam.wiki,

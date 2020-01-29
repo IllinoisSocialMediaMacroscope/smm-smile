@@ -7,7 +7,10 @@ var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
 
 router.get('/history', function (req, res, next) {
-    res.render('history', {parent: '/'});
+    res.render('history', {
+        parent: '/',
+        DOCKERIZED:process.env.DOCKERIZED
+    });
 });
 
 router.post('/history', function (req, res, next) {

@@ -46,7 +46,10 @@ router.get('/', function (req, res, next) {
         			data to extract interesting metadata and create web based data previews and visualizations.`
     });
 
-    res.render('index', {pages: pages});
+    res.render('index', {
+        pages: pages,
+        DOCKERIZED:process.env.DOCKERIZED
+    });
 });
 
 module.exports = router;
