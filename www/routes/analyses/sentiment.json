@@ -139,7 +139,7 @@
   "post": {
     "cutoff": 10000,
     "lambda_config": {
-      "aws_lambda_function": "lambda_sentiment_analysis"
+      "aws_lambda_function": "lambda_sentiment_analysis_dev"
     },
     "batch_config": {
       "batch_action": "python3",

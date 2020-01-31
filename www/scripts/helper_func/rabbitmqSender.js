@@ -14,7 +14,7 @@ class RabbitmqSender {
     // real time rabbitmq sender with reply
     invoke(function_name, queue, msg) {
         // determine if it's aws lambda or local lambda
-        if (process.env.LOCAL_ALGORITHM){
+        if (process.env.LOCAL_ALGORITHM==='true'){
             msg['platform'] = 'lambda';
         }
         else{
@@ -68,7 +68,7 @@ class RabbitmqSender {
 
         // determine if it's aws lambda or local lambda
         var msg = {};
-        if (process.env.LOCAL_ALGORITHM){
+        if (process.env.LOCAL_ALGORITHM==='true'){
             msg['platform'] = 'batch';
         }
         else{

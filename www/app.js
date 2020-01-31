@@ -27,7 +27,7 @@ smileHomePath = path.join(process.env.HOME, 'smile');
 /**
  * determine which version of deployment: dockerized vs usual
  */
-if (process.env.DOCKERIZED) {
+if (process.env.DOCKERIZED === 'true') {
     // determine credentials either from file or from environment variable
     AWS_ACCESSKEY = process.env.AWS_ACCESSKEY;
     AWS_ACCESSKEYSECRET = process.env.AWS_ACCESSKEYSECRET;
@@ -113,7 +113,7 @@ analysesRoutesFiles.forEach(function(route, i){
             app.get("/" + routesConfig.path, function(req, res){
                 var formParam = routesConfig;
                 res.render('analytics/formTemplate', {
-                    DOCKERIZED:process.env.DOCKERIZED,
+                    DOCKERIZED:process.env.DOCKERIZED==='true',
                     title: formParam.title,
                     introduction:formParam.introduction.join(" "),
                     wiki: formParam.wiki,

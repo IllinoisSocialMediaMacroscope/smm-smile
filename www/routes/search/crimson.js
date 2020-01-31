@@ -15,7 +15,7 @@ router.get('/query-crimson',function(req,res,next){
                 if (results['monitor_list'] === 'null') {
                     res.send({'ERROR': results['info']});
                 } else {
-                    results['DOCKERIZED'] = process.env.DOCKERIZED;
+                    results['DOCKERIZED'] = process.env.DOCKERIZED==='true';
                     res.render('search/crimson/crimson', results);
                 }
         }).catch(error => {

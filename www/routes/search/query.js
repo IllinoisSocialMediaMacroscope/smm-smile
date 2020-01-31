@@ -22,7 +22,7 @@ router.get('/query', function (req, res) {
     res.render('search/query', {
         parent: '/',
         error: req.query.error,
-        DOCKERIZED:process.env.DOCKERIZED
+        DOCKERIZED:process.env.DOCKERIZED==='true'
     });
 
 });

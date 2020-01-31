@@ -48,7 +48,7 @@ router.get('/', function (req, res, next) {
 
     res.render('index', {
         pages: pages,
-        DOCKERIZED:process.env.DOCKERIZED
+        DOCKERIZED:process.env.DOCKERIZED==='true'
     });
 });
 

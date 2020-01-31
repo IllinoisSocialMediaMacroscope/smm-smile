@@ -14,7 +14,7 @@ var app = express();
 /**
  * determine which version of deployment: dockerized vs usual
  */
-if (process.env.DOCKERIZED) {
+if (process.env.DOCKERIZED==='true') {
     TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY;
     TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET;
     FLICKR_CONSUMER_KEY = process.env.FLICKR_CONSUMER_KEY;
