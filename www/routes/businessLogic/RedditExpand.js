@@ -20,7 +20,7 @@ router.post('/reddit-expand',function(req,res,next){
                 	"--sessionURL", req.body.sessionURL];
 
             batchHandler.batch(
-                "arn:aws:batch:us-west-2:083781070261:job-definition/smile:3",
+                "arn:aws:batch:us-west-2:083781070261:job-definition/smile_reddit_comment:1",
 				jobName,
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
                 "reddit_comment",
