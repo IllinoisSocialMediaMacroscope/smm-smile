@@ -11,6 +11,7 @@ var session = require('express-session');
 var mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const flash = require('connect-flash');
 
 var lambdaRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'lambdaRoutesTemplate.js'));
 var batchRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'batchRoutesTemplate.js'));
@@ -100,12 +101,52 @@ else {
     batchHandler = new BatchHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
 
+    // // secure routes using passport
+    // function isLoggedIn(req, res, next){
+    //     return next();
+    // }
+
+    // connect to database
+    var User = require(path.join(__dirname, 'models', 'user.js'));
+    var mongourl = "mongodb://localhost:27017/?authSource=admin";
+    mongoose.connect(mongourl,
+        {useNewUrlParser: true, useUnifiedTopology: true});
+    mongoose.set('useCreateIndex', true);
+
+    // authentication
+    passport.use(new LocalStrategy(User.authenticate()));
+    passport.serializeUser(User.serializeUser());
+    passport.deserializeUser(User.deserializeUser());
+
     // secure routes using passport
     function isLoggedIn(req, res, next){
-        return next();
+        if(req.isAuthenticated() || req.user != null){
+            return next();
+        }
+        res.redirect("/login");
     }
 }
-
+app.get('/register', function(req, res){
+    res.render('register', {});
+});
+app.post('/register', function(req, res, next){
+    User.register(new User({username: req.body.username}, req.body.password, function(err){
+        if (err){
+            return next(err);
+        }
+        res.redirect('/');
+    }));
+});
+app.get('/login', function(req, res) {
+    res.render('smile-login', {user: req.user, message: req.flash})
+});
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true}), function(req,res){
+    res.redirect('/');
+});
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+});
 
 // if smile home folder doesn't exist, create one
 if (!fs.existsSync(smileHomePath)) {

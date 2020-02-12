@@ -1,0 +1,49 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+
+        <!-- Style Sheets -->
+        link(href="https://fonts.googleapis.com/css?family=Ubuntu:300", rel="stylesheet")
+        link(href="bootstrap/css/bootstrap.min.css", rel="stylesheet")
+        link(href="bootstrap/css/customized/customized.css",rel="stylesheet")
+        link(href="bootstrap/css/customized/global.css",rel="stylesheet")
+        link(rel="stylesheet",
+        href="https://use.fontawesome.com/releases/v5.0.10/css/all.css",
+        integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg",
+        crossorigin="anonymous")
+
+        <!-- scripts -->
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+        script(src="https://www.gstatic.com/charts/loader.js")
+        script(src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.js")
+        script(src="bootstrap/js/bootstrap.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js")
+
+        <!-- customized -->
+        script(src="bootstrap/js/customized/warning_trigger.js")
+        script(src="bootstrap/js/customized/modal_overlay.js")
+        script(src="bootstrap/js/customized/parse_session.js")
+    body
+        include components/topbar.pug
+        include components/export.pug
+        include components/terminate.pug
+        include components/warning.pug
+        include components/clientside-warning.pug
+        include components/cookie.pug
+
+        div(class="container-fluid")
+            form(action="/register", method="post")
+                div
+                    label Username
+                    input(type="text", name="username")
+                div
+                    label Password
+                    input(type="password", name="password")
+                div
+                    input(type="submit", value="Register")
+
+
+
