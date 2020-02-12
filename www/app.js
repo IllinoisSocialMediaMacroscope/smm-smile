@@ -8,6 +8,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var mongoose = require('mongoose');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 var lambdaRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'lambdaRoutesTemplate.js'));
 var batchRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'batchRoutesTemplate.js'));
@@ -50,8 +53,31 @@ if (process.env.DOCKERIZED === 'true') {
     lambdaHandler = new RabbitmqSender();
     batchHandler = new RabbitmqSender();
     s3 = new S3Helper(true, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
+
+    // connect to database
+    var User = require(path.join(__dirname, 'models', 'user.js'));
+    var mongourl = 'mongodb://' + process.env.MONGO_USERNAME + ':' + process.env.MONGO_PASSWORD + '@'
+        + process.env.MONGO_HOST + ':' + process.env.MONGO_PORT + '/' + process.env.name + '?authSource=admin';
+    mongoose.connect(mongourl,
+        {useNewUrlParser: true, useUnifiedTopology: true});
+    mongoose.set('useCreateIndex', true);
+
+    // authentication
+    passport.use(new LocalStrategy(User.authenticate()));
+    passport.serializeUser(User.serializeUser());
+    passport.deserializeUser(User.deserializeUser());
+
+    // secure routes using passport
+    function isLoggedIn(req, res, next){
+        if(req.isAuthenticated() || req.user != null){
+            return next();
+        }
+        // res.redirect("/login");
+        res.end("you need to login!");
+    }
 }
-else{
+
+else {
     var config = require('./main_config.json');
     AWS_ACCESSKEY = config.aws.access_key;
     AWS_ACCESSKEYSECRET = config.aws.access_key_secret;
@@ -73,6 +99,11 @@ else{
     lambdaHandler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     batchHandler = new BatchHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
+
+    // secure routes using passport
+    function isLoggedIn(req, res, next){
+        return next();
+    }
 }
 
 
@@ -80,7 +111,7 @@ else{
 if (!fs.existsSync(smileHomePath)) {
     fs.mkdirSync(smileHomePath);
 }
-var upload = multer({dest:path.join(smileHomePath, 'uploads')})
+var upload = multer({dest: path.join(smileHomePath, 'uploads')})
 
 app.use(session({
     secret: 'keyboard cat',
@@ -102,28 +133,28 @@ app.use('/', require('./routes/index.js'));
 // config analytics routes
 var analysesRoutesDir = path.join(__dirname, "routes", "analyses");
 var analysesRoutesFiles = fs.readdirSync(analysesRoutesDir);
-analysesRoutesFiles.forEach(function(route, i){
+analysesRoutesFiles.forEach(function (route, i) {
     if (route.split(".")[0] !== ""
         && route.split(".")[1] === "json"
-        && fs.lstatSync(path.join(analysesRoutesDir, route)).isFile()){
+        && fs.lstatSync(path.join(analysesRoutesDir, route)).isFile()) {
 
         var routesConfig = require(path.join(analysesRoutesDir, route));
 
-        if ("get" in routesConfig){
-            app.get("/" + routesConfig.path, function(req, res){
+        if ("get" in routesConfig) {
+            app.get("/" + routesConfig.path, isLoggedIn, function (req, res) {
                 var formParam = routesConfig;
                 res.render('analytics/formTemplate', {
-                    DOCKERIZED:process.env.DOCKERIZED==='true',
+                    DOCKERIZED: process.env.DOCKERIZED === 'true',
                     title: formParam.title,
-                    introduction:formParam.introduction.join(" "),
+                    introduction: formParam.introduction.join(" "),
                     wiki: formParam.wiki,
                     param: formParam,
                 });
             });
         }
 
-        if ("post" in routesConfig){
-            app.post("/" + routesConfig.path, function(req, res){
+        if ("post" in routesConfig) {
+            app.post("/" + routesConfig.path, isLoggedIn, function (req, res) {
                 if (req.body.selectFile !== 'Please Select...') {
                     if (req.body.aws_identifier === 'lambda') {
                         lambdaRoutesTemplate(req, routesConfig, lambdaHandler).then(data => {
@@ -148,8 +179,8 @@ analysesRoutesFiles.forEach(function(route, i){
             })
         }
 
-        if ("put" in routesConfig){
-            app.put("/" + routesConfig.path, upload.single("labeled"), function(req, res){
+        if ("put" in routesConfig) {
+            app.put("/" + routesConfig.path, isLoggedIn, upload.single("labeled"), function (req, res) {
                 s3.uploadToS3(req.file.path, s3FolderName + routesConfig['result_path'] + req.body.uid
                     + '/' + req.body.labeledFilename)
                 .then(url => {
@@ -189,33 +220,33 @@ analysesRoutesFiles.forEach(function(route, i){
 // business logics endpoints
 var busRoutesDir = path.join(__dirname, "routes", "businessLogic");
 var busRoutesFiles = fs.readdirSync(busRoutesDir);
-busRoutesFiles.forEach(function(route, i){
+busRoutesFiles.forEach(function (route, i) {
     if (route.split(".")[0] !== ""
         && route.split(".")[1] === "js"
-        && fs.lstatSync(path.join(busRoutesDir, route)).isFile()){
-        app.use('/', require('./routes/businessLogic/' + route));
+        && fs.lstatSync(path.join(busRoutesDir, route)).isFile()) {
+        app.use('/', isLoggedIn, require('./routes/businessLogic/' + route));
     }
 });
 
 // seach endpoints
 var searchRoutesDir = path.join(__dirname, "routes", "search");
 var searchRoutesFiles = fs.readdirSync(searchRoutesDir);
-searchRoutesFiles.forEach(function(route, i){
+searchRoutesFiles.forEach(function (route, i) {
     if (route.split(".")[0] !== ""
         && route.split(".")[1] === "js"
-        && fs.lstatSync(path.join(searchRoutesDir, route)).isFile()){
-        app.use('/', require('./routes/search/' + route));
+        && fs.lstatSync(path.join(searchRoutesDir, route)).isFile()) {
+        app.use('/', isLoggedIn, require('./routes/search/' + route));
     }
 });
 
 // auth endpoints
 var authRoutesDir = path.join(__dirname, "routes", "auth");
 var authRoutesFiles = fs.readdirSync(authRoutesDir);
-authRoutesFiles.forEach(function(route, i){
+authRoutesFiles.forEach(function (route, i) {
     if (route.split(".")[0] !== ""
         && route.split(".")[1] === "js"
-        && fs.lstatSync(path.join(authRoutesDir, route)).isFile()){
-        app.use('/', require('./routes/auth/' + route));
+        && fs.lstatSync(path.join(authRoutesDir, route)).isFile()) {
+        app.use('/', isLoggedIn, require('./routes/auth/' + route));
     }
 });
 
