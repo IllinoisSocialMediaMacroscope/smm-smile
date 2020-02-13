@@ -171,6 +171,7 @@ analysesRoutesFiles.forEach(function (route, i) {
                     introduction: formParam.introduction.join(" "),
                     wiki: formParam.wiki,
                     param: formParam,
+                    user: req.user
                 });
             });
         }

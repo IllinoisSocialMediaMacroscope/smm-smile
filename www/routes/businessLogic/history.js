@@ -8,6 +8,7 @@ var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRe
 
 router.get('/history', function (req, res, next) {
     res.render('history', {
+        user: req.user,
         parent: '/',
         DOCKERIZED:process.env.DOCKERIZED==='true'
     });

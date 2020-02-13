@@ -20,6 +20,7 @@ router.get('/query', function (req, res) {
     }
 
     res.render('search/query', {
+        user: req.user,
         parent: '/',
         error: req.query.error,
         DOCKERIZED:process.env.DOCKERIZED==='true'

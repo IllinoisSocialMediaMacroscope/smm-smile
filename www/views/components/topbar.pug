@@ -21,7 +21,10 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
                             i(class="fas fa-sign-out-alt")
                             | &nbsp;Exit SMILE
                 li
-                    a(href="account") Account
+                    if user
+                        a(href="account") #{user.username}
+                    else
+                        a(href="account") Account
                 li
                     a(href="citation") Cite
                 li

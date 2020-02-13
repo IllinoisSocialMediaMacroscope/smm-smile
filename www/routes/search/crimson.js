@@ -16,7 +16,9 @@ router.get('/query-crimson',function(req,res,next){
                     res.send({'ERROR': results['info']});
                 } else {
                     results['DOCKERIZED'] = process.env.DOCKERIZED==='true';
-                    res.render('search/crimson/crimson', results);
+                    results['user'] = req.user;
+                    res.render('search/crimson/crimson',
+                        results);
                 }
         }).catch(error => {
             console.log(error);
