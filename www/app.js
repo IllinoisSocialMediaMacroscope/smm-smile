@@ -73,7 +73,7 @@ if (process.env.DOCKERIZED === 'true') {
         if(req.isAuthenticated() || req.user != null){
             return next();
         }
-        res.redirect("/smile-login");
+        res.redirect("/account");
     }
 }
 
@@ -122,7 +122,7 @@ else {
         if(req.isAuthenticated() || req.user != null){
             return next();
         }
-        res.redirect("/smile-login");
+        res.redirect("/account");
     }
 }
 
@@ -150,7 +150,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-
 app.use('/', require('./routes/index.js'));
 
 // config analytics routes
@@ -164,7 +163,7 @@ analysesRoutesFiles.forEach(function (route, i) {
         var routesConfig = require(path.join(analysesRoutesDir, route));
 
         if ("get" in routesConfig) {
-            app.get("/" + routesConfig.path, function (req, res) {
+            app.get("/" + routesConfig.path, isLoggedIn, function (req, res) {
                 var formParam = routesConfig;
                 res.render('analytics/formTemplate', {
                     DOCKERIZED: process.env.DOCKERIZED === 'true',
@@ -177,7 +176,7 @@ analysesRoutesFiles.forEach(function (route, i) {
         }
 
         if ("post" in routesConfig) {
-            app.post("/" + routesConfig.path, function (req, res) {
+            app.post("/" + routesConfig.path, isLoggedIn, function (req, res) {
                 if (req.body.selectFile !== 'Please Select...') {
                     if (req.body.aws_identifier === 'lambda') {
                         lambdaRoutesTemplate(req, routesConfig, lambdaHandler).then(data => {
@@ -203,7 +202,7 @@ analysesRoutesFiles.forEach(function (route, i) {
         }
 
         if ("put" in routesConfig) {
-            app.put("/" + routesConfig.path, upload.single("labeled"), function (req, res) {
+            app.put("/" + routesConfig.path, upload.single("labeled"), isLoggedIn, function (req, res) {
                 s3.uploadToS3(req.file.path, s3FolderName + routesConfig['result_path'] + req.body.uid
                     + '/' + req.body.labeledFilename)
                 .then(url => {
@@ -286,7 +285,7 @@ app.get('/account', function(req, res) {
     res.render('account', {user: req.user, message:req.flash('error')});
 });
 app.post('/smile-login',
-    passport.authenticate('local', { failureRedirect: '/smile-login', failureFlash: true}),
+    passport.authenticate('local', { failureRedirect: '/account', failureFlash: true}),
     function(req, res){
         res.status(200).send({message: "successfully logged in!"});
 });
