@@ -20,7 +20,18 @@ $("#smile-login-submit").on("click",function(){
             type:'POST',
             url:'smile-login',
             data: data,
-            success:function(data){},
+            success:function(data) {
+                console.log(data);
+                if (data) {
+                    if ('ERROR' in data) {
+                        $("#error").val(JSON.stringify(data));
+                        $("#warning").modal('show');
+                    }
+                    else {
+                        window.location.href = "/";
+                    }
+                }
+            },
             error: function(jqXHR, exception){
                 $("#error").val(jqXHR.responseText);
                 $("#warning").modal('show');
@@ -51,7 +62,17 @@ $("#smile-register-submit").on("click",function(){
             type:'POST',
             url:'register',
             data: data,
-            success:function(data){},
+            success:function(data){
+                if (data) {
+                    if ('ERROR' in data) {
+                        $("#error").val(JSON.stringify(data));
+                        $("#warning").modal('show');
+                    }
+                    else {
+                        window.location.href = "/";
+                    }
+                }
+            },
             error: function(jqXHR, exception){
                 $("#error").val(jqXHR.responseText);
                 $("#warning").modal('show');

@@ -279,15 +279,16 @@ app.post('/register', function(req, res, next){
             console.log('error while user register!', err);
             return next(err);
         }
-        res.redirect('/');
+        res.status(200).send({message: "successfully registered!"});
     });
 });
 app.get('/account', function(req, res) {
     res.render('account', {user: req.user, message:req.flash('error')});
 });
 app.post('/smile-login',
-    passport.authenticate('local', { failureRedirect: '/smile-login', failureFlash: true}), function(req,res){
-    res.redirect('/');
+    passport.authenticate('local', { failureRedirect: '/smile-login', failureFlash: true}),
+    function(req, res){
+        res.status(200).send({message: "successfully logged in!"});
 });
 app.get('/smile-logout', function(req, res){
     req.logout();
