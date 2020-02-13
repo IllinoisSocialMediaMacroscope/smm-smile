@@ -1,8 +1,14 @@
 .smile-register-login{
-    /*background-color:#9d9d9d;*/
+    background-color:#ffffff;
     padding:50px;
     width:850px;
     margin:200px auto;
     border-radius:6px;
     overflow:auto;
+}
+
+.header{
+    text-align: center;
+    display:block;
+    margin:auto auto;
 }
