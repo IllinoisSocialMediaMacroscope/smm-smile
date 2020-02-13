@@ -18,7 +18,7 @@ router.post('/history', function (req, res, next) {
     var arrURL = req.body.folderURL.split('/');
 
     // check if the requested folder matches the current user's identity
-    if (arrURL[0] === s3FolderName) {
+    if (arrURL[0] === req.user.username) {
         if (arrURL[1] === 'GraphQL') {
             var p = s3.list_files(req.body.folderURL);
             p.then(folderObj => {
@@ -112,7 +112,7 @@ router.delete('/history', function (req, res, next) {
         });
     }
     else if (req.body.type === 'remote') {
-        if (req.body.folderURL.split("/")[0] === s3FolderName) {
+        if (req.body.folderURL.split("/")[0] === req.user.username) {
             var p = s3.deleteRemoteFolder(req.body.folderURL);
             p.then(() => {
                 res.send({'data': 'Successfully deleted!'});
@@ -131,7 +131,7 @@ function history_routes_template(req, config) {
     return new Promise((resolve, reject) => {
         var p = s3.list_files(req.body.folderURL);
         var arrURL = req.body.folderURL.split('/');
-        if (arrURL[0] === s3FolderName) {
+        if (arrURL[0] === req.user.username) {
             p.then(results => {
                 // fetch all the data from url, and add those to the result content
                 // this might be slow since we are fetching everything
