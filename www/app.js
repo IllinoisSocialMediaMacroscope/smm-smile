@@ -73,8 +73,7 @@ if (process.env.DOCKERIZED === 'true') {
         if(req.isAuthenticated() || req.user != null){
             return next();
         }
-        // res.redirect("/login");
-        res.end("you need to login!");
+        res.redirect("/smile-login");
     }
 }
 
@@ -108,7 +107,7 @@ else {
 
     // connect to database
     var User = require(path.join(__dirname, 'models', 'user.js'));
-    var mongourl = "mongodb://localhost:27017/?authSource=admin";
+    var mongourl = "mongodb://localhost:27017/test";
     mongoose.connect(mongourl,
         {useNewUrlParser: true, useUnifiedTopology: true});
     mongoose.set('useCreateIndex', true);
@@ -123,30 +122,9 @@ else {
         if(req.isAuthenticated() || req.user != null){
             return next();
         }
-        res.redirect("/login");
+        res.redirect("/smile-login");
     }
 }
-app.get('/register', function(req, res){
-    res.render('register', {});
-});
-app.post('/register', function(req, res, next){
-    User.register(new User({username: req.body.username}, req.body.password, function(err){
-        if (err){
-            return next(err);
-        }
-        res.redirect('/');
-    }));
-});
-app.get('/login', function(req, res) {
-    res.render('smile-login', {user: req.user, message: req.flash})
-});
-app.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true}), function(req,res){
-    res.redirect('/');
-});
-app.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/');
-});
 
 // if smile home folder doesn't exist, create one
 if (!fs.existsSync(smileHomePath)) {
@@ -182,7 +160,7 @@ analysesRoutesFiles.forEach(function (route, i) {
         var routesConfig = require(path.join(analysesRoutesDir, route));
 
         if ("get" in routesConfig) {
-            app.get("/" + routesConfig.path, isLoggedIn, function (req, res) {
+            app.get("/" + routesConfig.path, function (req, res) {
                 var formParam = routesConfig;
                 res.render('analytics/formTemplate', {
                     DOCKERIZED: process.env.DOCKERIZED === 'true',
@@ -195,7 +173,7 @@ analysesRoutesFiles.forEach(function (route, i) {
         }
 
         if ("post" in routesConfig) {
-            app.post("/" + routesConfig.path, isLoggedIn, function (req, res) {
+            app.post("/" + routesConfig.path, function (req, res) {
                 if (req.body.selectFile !== 'Please Select...') {
                     if (req.body.aws_identifier === 'lambda') {
                         lambdaRoutesTemplate(req, routesConfig, lambdaHandler).then(data => {
@@ -221,7 +199,7 @@ analysesRoutesFiles.forEach(function (route, i) {
         }
 
         if ("put" in routesConfig) {
-            app.put("/" + routesConfig.path, isLoggedIn, upload.single("labeled"), function (req, res) {
+            app.put("/" + routesConfig.path, upload.single("labeled"), function (req, res) {
                 s3.uploadToS3(req.file.path, s3FolderName + routesConfig['result_path'] + req.body.uid
                     + '/' + req.body.labeledFilename)
                 .then(url => {
@@ -265,7 +243,7 @@ busRoutesFiles.forEach(function (route, i) {
     if (route.split(".")[0] !== ""
         && route.split(".")[1] === "js"
         && fs.lstatSync(path.join(busRoutesDir, route)).isFile()) {
-        app.use('/', isLoggedIn, require('./routes/businessLogic/' + route));
+        app.use('/', require('./routes/businessLogic/' + route));
     }
 });
 
@@ -276,21 +254,40 @@ searchRoutesFiles.forEach(function (route, i) {
     if (route.split(".")[0] !== ""
         && route.split(".")[1] === "js"
         && fs.lstatSync(path.join(searchRoutesDir, route)).isFile()) {
-        app.use('/', isLoggedIn, require('./routes/search/' + route));
+        app.use('/', require('./routes/search/' + route));
     }
 });
 
-// auth endpoints
+// platform auth endpoints
 var authRoutesDir = path.join(__dirname, "routes", "auth");
 var authRoutesFiles = fs.readdirSync(authRoutesDir);
 authRoutesFiles.forEach(function (route, i) {
     if (route.split(".")[0] !== ""
         && route.split(".")[1] === "js"
         && fs.lstatSync(path.join(authRoutesDir, route)).isFile()) {
-        app.use('/', isLoggedIn, require('./routes/auth/' + route));
+        app.use('/', require('./routes/auth/' + route));
     }
 });
 
+app.post('/register', function(req, res, next){
+    User.register(new User({username: req.body.username}), req.body.password, function(err){
+        if (err){
+            console.log('error while user register!', err);
+            return next(err);
+        }
+        res.redirect('/');
+    });
+});
+app.get('/account', function(req, res) {
+    res.render('account', {user: req.user, message: req.flash})
+});
+app.post('/smile-login', passport.authenticate('local', { failureRedirect: '/smile-login', failureFlash: true}), function(req,res){
+    res.redirect('/');
+});
+app.get('/smile-logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+});
 
 /*--------------------set server----------------------*/
 var debug = require('debug');
