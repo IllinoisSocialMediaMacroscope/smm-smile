@@ -146,6 +146,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
 
 app.use('/', require('./routes/index.js'));
 
@@ -279,9 +283,10 @@ app.post('/register', function(req, res, next){
     });
 });
 app.get('/account', function(req, res) {
-    res.render('account', {user: req.user, message: req.flash})
+    res.render('account', {user: req.user, message:req.flash('error')});
 });
-app.post('/smile-login', passport.authenticate('local', { failureRedirect: '/smile-login', failureFlash: true}), function(req,res){
+app.post('/smile-login',
+    passport.authenticate('local', { failureRedirect: '/smile-login', failureFlash: true}), function(req,res){
     res.redirect('/');
 });
 app.get('/smile-logout', function(req, res){
