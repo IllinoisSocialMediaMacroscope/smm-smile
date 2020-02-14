@@ -42,8 +42,14 @@ router.post('/render-json', function (req, res, next) {
 
 router.post('/render', function (req, res, next) {
 
-    // if (req.body.prefix.split("/")[0] === s3FolderName) {
-    if (req.body.prefix.split("/")[0] === req.user.username) {
+    // decide if multiuser or not
+    if (s3FolderName !== undefined){
+        var userPath = s3FolderName;
+    }
+    else{
+        var userPath = req.user.username;
+    }
+    if (req.body.prefix.split("/")[0] === userPath) {
         if (req.body.prefix !== '' && req.body.prefix !== undefined) {
 
             var p = s3.list_files(req.body.prefix);
@@ -105,24 +111,23 @@ router.post('/list', function (req, res, next) {
     var directory = {};
 
     var promise_array = [];
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/twitter-Tweet/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/twitter-Timeline/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/reddit-Search/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/reddit-Post/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/reddit-Comment/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/reddit-Historical-Post/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/crimson-Hexagon/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/userspec-Others/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Tweet/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Timeline/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Search/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Post/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Comment/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Post/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Comment/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/crimson-Hexagon/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/userspec-Others/'));
+
+    // decide if multiuser or not
+    if (s3FolderName !== undefined){
+        var userPath = s3FolderName;
+    }
+    else{
+        var userPath = req.user.username;
+    }
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/twitter-Tweet/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/twitter-Timeline/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/reddit-Search/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/reddit-Post/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/reddit-Comment/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/reddit-Historical-Post/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/reddit-Historical-Comment/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/crimson-Hexagon/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/userspec-Others/'));
     Promise.all(promise_array).then(values => {
 
         directory['twitter-Tweet'] = values[0];
@@ -145,24 +150,23 @@ router.post('/list', function (req, res, next) {
 router.post('/list-all', function (req, res, next) {
 
     var promise_array = [];
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/twitter-Tweet/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/twitter-Timeline/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/reddit-Search/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/reddit-Post/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/reddit-Comment/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/reddit-Historical-Post/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/reddit-Historical-Comment/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/crimson-Hexagon/'));
-    // promise_array.push(s3.list_folders(s3FolderName + '/GraphQL/userspec-Others/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Tweet/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Timeline/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Search/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Post/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Comment/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Post/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Comment/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/crimson-Hexagon/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/userspec-Others/'));
+
+    // decide if multiuser or not
+    if (s3FolderName !== undefined){
+        var userPath = s3FolderName;
+    }
+    else{
+        var userPath = req.user.username;
+    }
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/twitter-Tweet/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/twitter-Timeline/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/reddit-Search/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/reddit-Post/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/reddit-Comment/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/reddit-Historical-Post/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/reddit-Historical-Comment/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/crimson-Hexagon/'));
+    promise_array.push(s3.list_folders(userPath + '/GraphQL/userspec-Others/'));
     var graphqlLength = promise_array.length;
 
     // loop through analyses setting files
@@ -178,8 +182,7 @@ router.post('/list-all', function (req, res, next) {
                 var parent = routesConfig['result_path'].split("/")[1];
                 var child = routesConfig['result_path'].split("/")[2];
                 order.push({order: j + graphqlLength, parent: parent, child: child});
-                // promise_array.push(s3.list_folders(s3FolderName + routesConfig['result_path']));
-                promise_array.push(s3.list_folders(req.user.username + routesConfig['result_path']));
+                promise_array.push(s3.list_folders(userPath + routesConfig['result_path']));
 
                 j++;
             }

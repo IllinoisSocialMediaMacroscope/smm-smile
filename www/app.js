@@ -25,7 +25,6 @@ var app = express();
 /**
  * read user name from environment file and set it global
  */
-// s3FolderName = process.env.USER || 'local';
 smileHomePath = path.join(process.env.HOME, 'smile');
 
 /**
@@ -99,6 +98,8 @@ else {
     lambdaHandler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     batchHandler = new BatchHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
+
+    // s3FolderName = process.env.USER || 'local';
 
     // // secure routes using passport
     // function isLoggedIn(req, res, next){
