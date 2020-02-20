@@ -20,11 +20,18 @@ if (!fs.existsSync(smileHomePath)) {
 var downloadPath = path.join(smileHomePath, 'downloads');
 
 router.post('/export',function(req,res,next){
-	s3.list_files(s3FolderName + '/').then(files =>{
+    // decide if multiuser or not
+    if (s3FolderName !== undefined){
+        var userPath = s3FolderName;
+    }
+    else{
+        var userPath = req.user.username;
+    }
+	s3.list_files(userPath + '/').then(files =>{
 		if (Object.keys(files).length === 0){
 			res.send({'ERROR':'You don\'t have any data associate with this session. Nothing to export!'});
 		}else{
-			s3.download_folder(s3FolderName + '/', downloadPath).then(files =>{
+			s3.download_folder(userPath + '/', downloadPath).then(files =>{
 				
 					var filename = 'SMILE-' + Date.now() + '.zip';
 					zipDownloads(filename).then(() => {
@@ -94,8 +101,15 @@ router.post('/export',function(req,res,next){
 
 router.post('/export-single', function(req,res){
     // check if the requested folder matches the current user's identity
+    // decide if multiuser or not
+    if (s3FolderName !== undefined){
+        var userPath = s3FolderName;
+    }
+    else{
+        var userPath = req.user.username;
+    }
     var arrURL = req.body.folderURL.split('/');
-	if (arrURL[0] === s3FolderName) {
+	if (arrURL[0] === userPath) {
         var p = s3.list_files(req.body.folderURL);
         p.then(files => {
             s3.download_folder(req.body.folderURL, downloadPath).then(files => {

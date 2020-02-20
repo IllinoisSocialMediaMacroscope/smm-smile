@@ -4,6 +4,14 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 
 router.post('/image-crawler',function(req,res,next){
+    // decide if multiuser or not
+    if (s3FolderName !== undefined){
+        var userPath = s3FolderName;
+    }
+    else{
+        var userPath = req.user.username;
+    }
+
     s3.list_files(req.body.prefix).then((data) =>{
 
         // check if img already exist or not
@@ -16,7 +24,7 @@ router.post('/image-crawler',function(req,res,next){
 
         // check if user still wants to collect it; overwrite the exist
         if(exist === false || (exist === true && req.body.consent === 'true')){
-            var jobName = s3FolderName + '_imageCrawler_sdk';
+            var jobName = userPath + '_imageCrawler_sdk';
                 var command = [ "python3.6", "/scripts/batch_function.py",
                 "--remoteReadPath", req.body.prefix,
                 "--email", req.body.email,

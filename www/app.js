@@ -26,6 +26,7 @@ var app = express();
  * read user name from environment file and set it global
  */
 smileHomePath = path.join(process.env.HOME, 'smile');
+s3FolderName = undefined;
 
 /**
  * determine which version of deployment: dockerized vs usual
@@ -205,10 +206,18 @@ analysesRoutesFiles.forEach(function (route, i) {
 
         if ("put" in routesConfig) {
             app.put("/" + routesConfig.path, upload.single("labeled"), isLoggedIn, function (req, res) {
-                s3.uploadToS3(req.file.path, s3FolderName + routesConfig['result_path'] + req.body.uid
+                // decide if multiuser or not
+                if (s3FolderName !== undefined){
+                    var userPath = s3FolderName;
+                }
+                else{
+                    var userPath = req.user.username;
+                }
+
+                s3.uploadToS3(req.file.path, userPath + routesConfig['result_path'] + req.body.uid
                     + '/' + req.body.labeledFilename)
                 .then(url => {
-                    var remoteReadPath = s3FolderName + routesConfig['result_path'] + req.body.uid + '/';
+                    var remoteReadPath = userPath + routesConfig['result_path'] + req.body.uid + '/';
                     fs.unlinkSync(req.file.path);
                     if (req.body.selectFile !== 'Please Select...') {
                         if (req.body.aws_identifier === 'lambda') {

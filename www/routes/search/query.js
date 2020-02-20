@@ -66,6 +66,15 @@ router.post('/query', function (req, res) {
     var platform = req.body.prefix.split('-')[0];
 
     if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
+
+        // decide if multiuser or not
+        if (s3FolderName !== undefined){
+            var userPath = s3FolderName;
+        }
+        else{
+            var userPath = req.user.username;
+        }
+
         if (!fs.existsSync(smileHomePath)) {
             fs.mkdirSync(smileHomePath);
         }
@@ -85,7 +94,7 @@ router.post('/query', function (req, res) {
             fs.mkdirSync(dir_downloads_graphql_prefix);
         }
 
-        checkExist(s3FolderName + '/GraphQL/' + req.body.prefix + '/', req.body.filename).then((value) => {
+        checkExist(userPath + '/GraphQL/' + req.body.prefix + '/', req.body.filename).then((value) => {
             if (value) {
 
                 var headers = {
@@ -172,17 +181,17 @@ router.post('/query', function (req, res) {
                             promise_csv.then(() => {
                                 var promise_arr = [];
                                 promise_arr.push(s3.uploadToS3(path.join(directory, processed),
-                                    s3FolderName + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + processed));
+                                    userPath + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + processed));
                                 promise_arr.push(s3.uploadToS3(path.join(directory, raw_json),
-                                    s3FolderName + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + raw_json));
+                                    userPath + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + raw_json));
                                 promise_arr.push(s3.uploadToS3(path.join(directory, "config.json"),
-                                    s3FolderName + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + "config.json"));
+                                    userPath + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + "config.json"));
                                 Promise.all(promise_arr).then((URLs) => {
 
                                     var args = {
-                                        's3FolderName': s3FolderName,
+                                        's3FolderName': userPath,
                                         'filename': processed,
-                                        'remoteReadPath': s3FolderName + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
+                                        'remoteReadPath': userPath + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
                                     };
 
                                     if (req.body.prefix !== ('crimson-Hexagon')){
