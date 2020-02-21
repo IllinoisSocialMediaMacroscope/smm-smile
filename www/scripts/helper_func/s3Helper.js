@@ -125,7 +125,8 @@ class S3Helper {
     download_folder(prefix, downloadPath){
 
         return new Promise((resolve,reject) =>{
-            this.s3.listObjectsV2({
+            var s3 = this.s3;
+            s3.listObjectsV2({
 				Bucket:BUCKET_NAME,
 				Prefix:prefix
 			}, function(err,data){
@@ -149,7 +150,7 @@ class S3Helper {
                                 if (!fs.existsSync(currPath)) fs.mkdirSync(currPath);
                             }
                             p_arr.push(new Promise((resolve,reject) =>{
-                                this.s3.getObject({ Bucket:BUCKET_NAME, Key:val.Key},function(err,data){
+                                s3.getObject({ Bucket:BUCKET_NAME, Key:val.Key},function(err,data){
                                     if (err){
                                         console.log(err,err.stack);
                                         reject(err);
