@@ -9,7 +9,10 @@ var client = redis.createClient();
 
 router.get('/query-crimson', isLoggedIn, function (req, res, next) {
     client.hgetall(req.user.username, function (err, obj) {
-        if (obj && obj['crimson_access_token'] !== undefined) {
+        if (err){
+            res.send({'ERROR': err});
+        }
+        else if (obj && obj['crimson_access_token'] !== undefined) {
             lambdaHandler.invoke('crimson_hexagon_monitors', 'crimson_hexagon_monitors',
                 {"crimson_access_token": obj['crimson_access_token']}).then(results => {
                 if (results['monitor_list'] === 'null') {
@@ -28,6 +31,7 @@ router.get('/query-crimson', isLoggedIn, function (req, res, next) {
         else {
             res.redirect('/query?error=You cannot access crimson hexagon if not providing your credentials!')
         }
+    });
 });
 
 module.exports = router;
