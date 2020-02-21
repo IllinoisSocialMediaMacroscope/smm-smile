@@ -2,30 +2,31 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-router.post('/image-crawler',function(req,res,next){
+router.post('/image-crawler', isLoggedIn, function (req, res, next) {
     // decide if multiuser or not
-    if (s3FolderName !== undefined){
+    if (s3FolderName !== undefined) {
         var userPath = s3FolderName;
     }
-    else{
+    else {
         var userPath = req.user.username;
     }
 
-    s3.list_files(req.body.prefix).then((data) =>{
+    s3.list_files(req.body.prefix).then((data) => {
 
         // check if img already exist or not
         var exist = false;
-        for (filename in data){
-            if (filename === 'images.zip'){
+        for (filename in data) {
+            if (filename === 'images.zip') {
                 exist = true;
             }
         }
 
         // check if user still wants to collect it; overwrite the exist
-        if(exist === false || (exist === true && req.body.consent === 'true')){
+        if (exist === false || (exist === true && req.body.consent === 'true')) {
             var jobName = userPath + '_imageCrawler_sdk';
-                var command = [ "python3.6", "/scripts/batch_function.py",
+            var command = ["python3.6", "/scripts/batch_function.py",
                 "--remoteReadPath", req.body.prefix,
                 "--email", req.body.email,
                 "--sessionURL", req.body.sessionURL];
@@ -36,25 +37,24 @@ router.post('/image-crawler',function(req,res,next){
                 "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch",
                 "image_crawler",
                 command
-            ).then(results =>{
+            ).then(results => {
                 res.end('done');
-            }).catch(err =>{
-                res.send({ERROR:err});
+            }).catch(err => {
+                res.send({ERROR: err});
             });
         }
-        else if(exist === true && req.body.consent === undefined){
+        else if (exist === true && req.body.consent === undefined) {
             res.send('pop alert');
         }
-        else{
+        else {
             res.end('no information');
         }
 
-    }).catch(err =>{
+    }).catch(err => {
         console.log(err);
     })
 
 });
-
 
 
 module.exports = router;

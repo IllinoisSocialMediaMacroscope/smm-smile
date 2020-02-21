@@ -3,7 +3,11 @@ var router = express.Router();
 var fetch = require('node-fetch');
 var crypto = require('crypto');
 
-router.get('/login/reddit',function(req,res,next){
+var path = require('path');
+var appPath = path.dirname(path.dirname(__dirname));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
+
+router.get('/login/reddit', isLoggedIn, function(req,res,next){
 
 	//var grantType = 'https://oauth.reddit.com/grants/installed_client&';
 	

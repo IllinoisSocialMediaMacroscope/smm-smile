@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+var appPath = path.dirname(path.dirname(__dirname));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 var fs = require('fs');
 
-router.get('/tag', function(req,res,next){
+router.get('/tag', isLoggedIn, function(req,res,next){
     // TODO cross compare with the current file list &
     // TODO when search, only show tags that current has a valid file path
     var tagIdMapPath = path.join(smileHomePath, 'map.json');
@@ -23,7 +25,7 @@ router.get('/tag', function(req,res,next){
     res.send(matchedTag);
 });
 
-router.post('/tag',function(req,res,next){
+router.post('/tag', isLoggedIn, function(req,res,next){
     if (req.body.tagName !== undefined && req.body.tagName.length > 0){
 
         // if smile home folder doesn't exist, create one
@@ -49,7 +51,7 @@ router.post('/tag',function(req,res,next){
 
 });
 
-router.delete('/tag', function(req, res, next){
+router.delete('/tag', isLoggedIn, function(req, res, next){
     if(req.body.jobId !== undefined && req.body.jobId !== ""){
 
         var tagIdMapPath = path.join(smileHomePath, 'map.json');

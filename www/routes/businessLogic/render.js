@@ -6,9 +6,10 @@ var appPath = path.dirname(path.dirname(__dirname));
 var routesDir = path.join(appPath, 'routes', 'analyses');
 var columnHeadersPath = path.join(appPath, 'columnHeaders.json');
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 var fs = require('fs');
 
-router.post('/render-json', function (req, res, next) {
+router.post('/render-json', isLoggedIn, function (req, res, next) {
     getMultiRemote(req.body.fileURL).then((preview_string) => {
         if (preview_string === '') {
             res.send({ERROR: 'Nothing to render'});
@@ -40,13 +41,13 @@ router.post('/render-json', function (req, res, next) {
     });
 });
 
-router.post('/render', function (req, res, next) {
+router.post('/render', isLoggedIn, function (req, res, next) {
 
     // decide if multiuser or not
-    if (s3FolderName !== undefined){
+    if (s3FolderName !== undefined) {
         var userPath = s3FolderName;
     }
-    else{
+    else {
         var userPath = req.user.username;
     }
     if (req.body.prefix.split("/")[0] === userPath) {
@@ -106,17 +107,17 @@ router.post('/render', function (req, res, next) {
 
 });
 
-router.post('/list', function (req, res, next) {
+router.post('/list', isLoggedIn, function (req, res, next) {
 
     var directory = {};
 
     var promise_array = [];
 
     // decide if multiuser or not
-    if (s3FolderName !== undefined){
+    if (s3FolderName !== undefined) {
         var userPath = s3FolderName;
     }
-    else{
+    else {
         var userPath = req.user.username;
     }
     promise_array.push(s3.list_folders(userPath + '/GraphQL/twitter-Tweet/'));
@@ -147,15 +148,15 @@ router.post('/list', function (req, res, next) {
 
 });
 
-router.post('/list-all', function (req, res, next) {
+router.post('/list-all', isLoggedIn, function (req, res, next) {
 
     var promise_array = [];
 
     // decide if multiuser or not
-    if (s3FolderName !== undefined){
+    if (s3FolderName !== undefined) {
         var userPath = s3FolderName;
     }
-    else{
+    else {
         var userPath = req.user.username;
     }
     promise_array.push(s3.list_folders(userPath + '/GraphQL/twitter-Tweet/'));
@@ -222,7 +223,7 @@ router.post('/list-all', function (req, res, next) {
 
 });
 
-router.post('/add-columnHead', function (req, res, next) {
+router.post('/add-columnHead', isLoggedIn, function (req, res, next) {
     // allow user to add custom column header name to the list
     // used when perform analyses on dataset
     // write to user's home direction under SMILE folder
@@ -265,7 +266,7 @@ router.post('/add-columnHead', function (req, res, next) {
     }
 });
 
-router.get('/list-columnHead', function (req, res, next) {
+router.get('/list-columnHead', isLoggedIn, function (req, res, next) {
     var columnHeaders = JSON.parse(fs.readFileSync(columnHeadersPath));
 
     var customColumnHeadersPath = path.join(smileHomePath, 'customColumnHeaders.json');

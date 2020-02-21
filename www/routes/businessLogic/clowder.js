@@ -2,8 +2,10 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-router.post('/check-clowder-login', function(req,res,next){
+
+router.post('/check-clowder-login', isLoggedIn, function(req,res,next){
 	if (req.session.clowder_username !== undefined && req.session.clowder_password !== undefined){
 		res.send('logged');
 	}else{
@@ -11,7 +13,7 @@ router.post('/check-clowder-login', function(req,res,next){
 	}
 });
 
-router.post('/clowder-login', function(req,res,next){
+router.post('/clowder-login', isLoggedIn, function(req,res,next){
 	// if success, notify the frontend by setting the cookie in the browser to true
 	if (req.body.clowder_username !== undefined && req.body.clowder_password !== undefined){
 		req.session.clowder_username = req.body.clowder_username;
@@ -26,7 +28,7 @@ router.post('/clowder-login', function(req,res,next){
 	
 });
 
-router.post('/list-dataset', function(req, res, next){
+router.post('/list-dataset', isLoggedIn, function(req, res, next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{
@@ -51,7 +53,7 @@ router.post('/list-dataset', function(req, res, next){
 	}
 });
 
-router.post('/list-collection',function(req,res,next){
+router.post('/list-collection', isLoggedIn, function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{
@@ -75,7 +77,7 @@ router.post('/list-collection',function(req,res,next){
 	}	
 });
 
-router.post('/list-space',function(req,res,next){
+router.post('/list-space', isLoggedIn, function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{
@@ -99,7 +101,7 @@ router.post('/list-space',function(req,res,next){
 	}	
 });
 
-router.post('/list-user',function(req,res,next){
+router.post('/list-user', isLoggedIn, function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{
@@ -123,7 +125,7 @@ router.post('/list-user',function(req,res,next){
 	}	
 });
 
-router.post('/clowder-dataset',function(req,res,next){
+router.post('/clowder-dataset', isLoggedIn, function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{
@@ -147,7 +149,7 @@ router.post('/clowder-dataset',function(req,res,next){
 	}
 });
 
-router.post('/clowder-collection',function(req,res,next){
+router.post('/clowder-collection', isLoggedIn, function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{
@@ -170,7 +172,7 @@ router.post('/clowder-collection',function(req,res,next){
 	}
 });
 
-router.post('/clowder-space',function(req,res,next){
+router.post('/clowder-space', isLoggedIn, function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{
@@ -194,7 +196,7 @@ router.post('/clowder-space',function(req,res,next){
 });
 
 
-router.post('/clowder-files',function(req,res,next){
+router.post('/clowder-files', isLoggedIn, function(req,res,next){
 	if (req.session.clowder_username === undefined || req.session.clowder_password === undefined){
 		res.send({ERROR:'Your login session has expired. Please login again!'});
 	}else{

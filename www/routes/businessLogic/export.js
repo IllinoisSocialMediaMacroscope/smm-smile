@@ -12,6 +12,7 @@ var BoxSDK = require('box-node-sdk');
 
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 // if smile home folder doesn't exist, create one
 if (!fs.existsSync(smileHomePath)) {
@@ -19,7 +20,7 @@ if (!fs.existsSync(smileHomePath)) {
 }
 var downloadPath = path.join(smileHomePath, 'downloads');
 
-router.post('/export',function(req,res,next){
+router.post('/export', isLoggedIn, function(req,res,next){
     // decide if multiuser or not
     if (s3FolderName !== undefined){
         var userPath = s3FolderName;
@@ -99,7 +100,7 @@ router.post('/export',function(req,res,next){
 	  
 });
 
-router.post('/export-single', function(req,res){
+router.post('/export-single', isLoggedIn, function(req,res){
     // check if the requested folder matches the current user's identity
     // decide if multiuser or not
     if (s3FolderName !== undefined){

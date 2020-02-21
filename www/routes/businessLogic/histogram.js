@@ -3,8 +3,9 @@ var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-router.post('/histogram',function(req,res,next){
+router.post('/histogram', isLoggedIn, function(req,res,next){
     // decide if multiuser or not
     if (s3FolderName !== undefined){
         var userPath = s3FolderName;
@@ -12,11 +13,13 @@ router.post('/histogram',function(req,res,next){
     else{
         var userPath = req.user.username;
     }
+
 	var args = {
 				's3FolderName': userPath,
 				'filename':req.body.filename,
 				'remoteReadPath':userPath + req.body.remoteReadPath,
-				'interval': req.body.interval };
+				'interval': req.body.interval
+    };
 			
 	lambdaHandler.invoke('histogram', 'histogram', args).then(results =>{
 		// download div file

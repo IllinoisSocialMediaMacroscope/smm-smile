@@ -8,7 +8,11 @@ var redirectUrl = 'urn:ietf:wg:oauth:2.0:oob';
 var auth = new googleAuth();
 var oauth2Client = new auth.OAuth2(clientId, clientSecret,redirectUrl);
 
-router.get('/login/google', function(req,res,next){
+var path = require('path');
+var appPath = path.dirname(path.dirname(__dirname));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
+
+router.get('/login/google', isLoggedIn, function(req,res,next){
 	
 	var authUrl = oauth2Client.generateAuthUrl({
 		access_type: 'offline',
@@ -18,7 +22,7 @@ router.get('/login/google', function(req,res,next){
 	res.redirect(authUrl);  
 });
 
-router.post('/login/google',function(req,res,next){
+router.post('/login/google', isLoggedIn, function(req,res,next){
 	
 	oauth2Client.getToken(req.body.authorizeCode, function(err, token) {
 		if (err) {

@@ -5,23 +5,25 @@ var CSV = require('csv-string');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-router.get('/history', function (req, res, next) {
+
+router.get('/history', isLoggedIn, function (req, res, next) {
     res.render('history', {
         user: req.user,
         parent: '/',
-        DOCKERIZED:process.env.DOCKERIZED==='true'
+        DOCKERIZED: process.env.DOCKERIZED === 'true'
     });
 });
 
-router.post('/history', function (req, res, next) {
+router.post('/history', isLoggedIn, function (req, res, next) {
     var arrURL = req.body.folderURL.split('/');
 
     // check if the requested folder matches the current user's identity
-    if (s3FolderName !== undefined){
+    if (s3FolderName !== undefined) {
         var userPath = s3FolderName;
     }
-    else{
+    else {
         var userPath = req.user.username;
     }
     if (arrURL[0] === userPath) {
@@ -45,7 +47,7 @@ router.post('/history', function (req, res, next) {
                     }
                     var download = [{name: 'CSV format', content: preview}];
                     if (comments !== undefined) download.push({name: 'Collection of comments', content: comments});
-                    if (images !== undefined) download.push({name:'Collection of images', content:images});
+                    if (images !== undefined) download.push({name: 'Collection of images', content: images});
 
                     promise_array.push(getMultiRemote(config));
                     promise_array.push(getMultiRemote(preview));
@@ -56,23 +58,23 @@ router.post('/history', function (req, res, next) {
                         config_data.fields = preview_arr[0];
 
                         var data =
-                        {
-                            title: 'Social Media',
-                            ID: req.body.folderURL,
-                            download: download,
-                            preview: [{name: "Preview the .csv file", content: preview_arr, dataTable: true}],
-                            length: preview_arr.length - 1, // display in the expand comments modal
-                            config: config_data,
-                            uid: arrURL[3]
-                        };
+                            {
+                                title: 'Social Media',
+                                ID: req.body.folderURL,
+                                download: download,
+                                preview: [{name: "Preview the .csv file", content: preview_arr, dataTable: true}],
+                                length: preview_arr.length - 1, // display in the expand comments modal
+                                config: config_data,
+                                uid: arrURL[3]
+                            };
 
-                        if (arrURL[2] === 'reddit-Search' || arrURL[2] === 'reddit-Post' || arrURL[2] === 'reddit-Historical-Post'){
+                        if (arrURL[2] === 'reddit-Search' || arrURL[2] === 'reddit-Post' || arrURL[2] === 'reddit-Historical-Post') {
                             data['expandable'] = req.body.folderURL;
                         }
 
                         if (arrURL[2] === 'reddit-Search' || arrURL[2] === 'reddit-Post'
                             || arrURL[2] === 'reddit-Historical-Post' || arrURL[2] === 'twitter-Tweet'
-                            || arrURL[2] === 'twitter-Timeline' || arrURL === 'crimson-Hexagon'){
+                            || arrURL[2] === 'twitter-Timeline' || arrURL === 'crimson-Hexagon') {
                             data['crawlImage'] = req.body.folderURL;
                         }
 
@@ -105,12 +107,12 @@ router.post('/history', function (req, res, next) {
     }
 });
 
-router.delete('/history', function (req, res, next) {
+router.delete('/history', isLoggedIn, function (req, res, next) {
     // check if the requested folder matches the current user's identity
-    if (s3FolderName !== undefined){
+    if (s3FolderName !== undefined) {
         var userPath = s3FolderName;
     }
-    else{
+    else {
         var userPath = req.user.username;
     }
 
@@ -142,10 +144,10 @@ router.delete('/history', function (req, res, next) {
 });
 
 function history_routes_template(req, config) {
-    if (s3FolderName !== undefined){
+    if (s3FolderName !== undefined) {
         var userPath = s3FolderName;
     }
-    else{
+    else {
         var userPath = req.user.username;
     }
 

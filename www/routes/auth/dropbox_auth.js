@@ -1,8 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
+var path = require('path');
+var appPath = path.dirname(path.dirname(__dirname));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-router.get('/login/dropbox', function(req,res,next){
+router.get('/login/dropbox', isLoggedIn, function(req,res,next){
 	var authUrl = "https://www.dropbox.com/oauth2/authorize?response_type=code&client_id=" + DROPBOX_CLIENT_ID;
 	res.redirect(authUrl);
 });

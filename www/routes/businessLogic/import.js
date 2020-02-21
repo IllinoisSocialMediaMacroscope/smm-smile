@@ -4,6 +4,7 @@ var path = require('path');
 var fs = require('fs');
 var CSV = require('csv-string');
 var appPath = path.dirname(path.dirname(__dirname));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 // if smile home folder doesn't exist, create one
 if (!fs.existsSync(smileHomePath)) {
@@ -14,7 +15,7 @@ var uploadPath = path.join(smileHomePath, 'uploads');
 var upload = multer({dest:uploadPath});
 
 
-router.post('/import',upload.single('importFile'),function(req,res,next){
+router.post('/import', isLoggedIn, upload.single('importFile'),function(req,res,next){
     if (req.file !== undefined) {
 
         // decide if multiuser or not

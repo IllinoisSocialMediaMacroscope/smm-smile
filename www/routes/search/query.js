@@ -8,6 +8,7 @@ var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
+
 router.get('/query', isLoggedIn, function (req, res) {
 
     // check if all the sessions have token, in case the server stops in the middle
