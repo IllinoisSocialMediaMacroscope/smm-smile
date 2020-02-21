@@ -388,9 +388,9 @@ function checkSessionToken(req) {
                 reject(err);
             }
             else{
-                if ('twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
-                if ('rd_access_token' in obj) response['reddit'] = true;
-                if ('crimson_access_token' in obj) response['crimson'] = true;
+                if (obj && 'twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
+                if (obj && 'rd_access_token' in obj) response['reddit'] = true;
+                if (obj && 'crimson_access_token' in obj) response['crimson'] = true;
                 resolve(response);
             }
         });
