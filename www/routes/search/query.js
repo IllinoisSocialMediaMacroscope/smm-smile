@@ -8,11 +8,13 @@ var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
+var redis = require('redis');
+var client = redis.createClient()
 
 router.get('/query', isLoggedIn, function (req, res) {
 
     // check if all the sessions have token, in case the server stops in the middle
-    var status = checkSessionToken(req.session);
+    var status = checkSessionToken(req);
     var platforms = Object.keys(status);
 
     for (var i = 0; i < platforms.length; i++) {
@@ -31,35 +33,40 @@ router.get('/query', isLoggedIn, function (req, res) {
 });
 
 router.post('/query-dryrun', isLoggedIn, function (req, res) {
-    var status = checkSessionToken(req.session);
-    var platform = req.body.prefix.split('-')[0];
+    checkSessionToken(req.session).then(status => {
+        var platform = req.body.prefix.split('-')[0];
 
-    if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
-        var headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'redditaccesstoken': req.session.rd_access_token,
-            'twtaccesstokenkey': req.session.twt_access_token_key,
-            'twtaccesstokensecret': req.session.twt_access_token_secret,
-            'crimsonaccesstoken': req.session.crimson_access_token
-        };
+        if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
+            var headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'redditaccesstoken': req.session.rd_access_token,
+                'twtaccesstokenkey': req.session.twt_access_token_key,
+                'twtaccesstokensecret': req.session.twt_access_token_secret,
+                'crimsonaccesstoken': req.session.crimson_access_token
+            };
 
-        gatherSinglePost(req.body.query, headers).then(responseObj => {
-            var key1 = Object.keys(responseObj)[0];
-            var key2 = Object.keys(responseObj[key1])[0];
-            var key3 = Object.keys(responseObj[key1][key2])[0];
-            res.send({
-                rendering: responseObj[key1][key2][key3]
+            gatherSinglePost(req.body.query, headers).then(responseObj => {
+                var key1 = Object.keys(responseObj)[0];
+                var key2 = Object.keys(responseObj[key1])[0];
+                var key3 = Object.keys(responseObj[key1][key2])[0];
+                res.send({
+                    rendering: responseObj[key1][key2][key3]
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                res.send({ERROR: err});
             });
-        })
-        .catch(err => {
-            console.log(err);
-            res.send({ERROR: err});
-        });
-    }
-    else {
-        res.send({ERROR: platform + " token expired! Please refresh the page."});
-    }
+        }
+        else {
+            res.send({ERROR: platform + " token expired! Please refresh the page."});
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.send({ERROR: err});
+    });
 });
 
 router.post('/query', isLoggedIn, function (req, res) {
@@ -367,27 +374,27 @@ function mergeJSON(values, keys) {
     return newJSON;
 };
 
-function checkSessionToken(session) {
-    var response = {
-        twitter: true,
-        reddit: true,
-        crimson: true
-    };
+function checkSessionToken(req) {
+    return new Promise((resolve, reject) => {
+        var response = {
+            twitter: false,
+            reddit: false,
+            crimson: false
+        };
 
-    if (session.twt_access_token_key === undefined || session.twt_access_token_secret === undefined) {
-        response['twitter'] = false;
-    }
-
-    if (session.rd_access_token === undefined) {
-        response['reddit'] = false;
-    }
-
-    if (session.crimson_access_token === undefined) {
-        response['crimson'] = false;
-    }
-
-    return response;
-
+        client.hgetall(req.user.username, function (err, obj){
+            if (err){
+                console.log(err);
+                reject(err);
+            }
+            else{
+                if ('twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
+                if ('rd_access_token' in obj) response['reddit'] = true;
+                if ('crimson_access_token' in obj) response['crimson'] = true;
+                resolve(response);
+            }
+        });
+    });
 }
 
 module.exports = router;

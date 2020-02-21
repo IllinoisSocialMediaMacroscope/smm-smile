@@ -2,13 +2,20 @@ var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
 var crypto = require('crypto');
+var redis = require('redis');
 
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-router.get('/login/reddit', isLoggedIn, function(req,res,next){
+var redis = require('redis');
+var client = redis.createClient();
 
+client.on('error', function (err) {
+    console.log('Error ' + err);
+});
+
+router.get('/login/reddit', isLoggedIn, function(req,res,next){
 	//var grantType = 'https://oauth.reddit.com/grants/installed_client&';
 	
 	var user = REDDIT_CLIENT_ID;
@@ -32,8 +39,15 @@ router.get('/login/reddit', isLoggedIn, function(req,res,next){
                     res.cookie('reddit-success', 'false', {maxAge: 1000000000, httpOnly: false});
                     res.send({ERROR: JSON.stringify(json)});
 				}else{
-					req.session.rd_access_token = json.access_token;
-					req.session.save();
+					// multiuser
+                    if (s3FolderName === undefined && req.user !== undefined) {
+                    	client.hset(req.user.username, 'rd_access_token', json['access_token'], redis.print);
+                    }
+                    // single user
+                    else{
+                        req.session.rd_access_token = json.access_token;
+                        req.session.save();
+					}
 					
 					// set the cookie as true for 29 minutes maybe?
 					res.cookie('reddit-success','true',{maxAge:1000*60*29, httpOnly:false});	
