@@ -6,8 +6,9 @@ var jsonexport = require('jsonexport');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
+var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-router.get('/query', function (req, res) {
+router.get('/query', isLoggedIn, function (req, res) {
 
     // check if all the sessions have token, in case the server stops in the middle
     var status = checkSessionToken(req.session);
@@ -28,7 +29,7 @@ router.get('/query', function (req, res) {
 
 });
 
-router.post('/query-dryrun', function (req, res) {
+router.post('/query-dryrun', isLoggedIn, function (req, res) {
     var status = checkSessionToken(req.session);
     var platform = req.body.prefix.split('-')[0];
 
@@ -60,7 +61,7 @@ router.post('/query-dryrun', function (req, res) {
     }
 });
 
-router.post('/query', function (req, res) {
+router.post('/query', isLoggedIn, function (req, res) {
 
     var status = checkSessionToken(req.session);
     var platform = req.body.prefix.split('-')[0];
@@ -269,7 +270,7 @@ router.post('/query', function (req, res) {
     }
 });
 
-router.post('/prompt', function (req, res) {
+router.post('/prompt', isLoggedIn, function (req, res) {
     lambdaHandler.invoke('bae_screen_name_prompt', 'bae_screen_name_prompt', {
         consumer_key: TWITTER_CONSUMER_KEY,
         consumer_secret: TWITTER_CONSUMER_SECRET,

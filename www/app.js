@@ -19,6 +19,7 @@ var LambdaHelper = require(path.join(__dirname, 'scripts', 'helper_func', 'lambd
 var BatchHelper = require(path.join(__dirname, 'scripts', 'helper_func', 'batchHelper.js'));
 var RabbitmqSender = require(path.join(__dirname, 'scripts', 'helper_func', 'rabbitmqSender.js'));
 var S3Helper = require(path.join(__dirname, 'scripts', 'helper_func', 's3Helper.js'));
+var isLoggedIn = require(path.join(__dirname, 'scripts', 'helper_func', 'loginMiddleware.js'));
 var fs = require('fs');
 var app = express();
 
@@ -67,14 +68,6 @@ if (process.env.DOCKERIZED === 'true') {
     passport.use(new LocalStrategy(User.authenticate()));
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
-
-    // secure routes using passport
-    function isLoggedIn(req, res, next){
-        if(req.isAuthenticated() || req.user != null){
-            return next();
-        }
-        res.redirect("/account");
-    }
 }
 
 else {
@@ -118,14 +111,6 @@ else {
     passport.use(new LocalStrategy(User.authenticate()));
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
-
-    // secure routes using passport
-    function isLoggedIn(req, res, next){
-        if(req.isAuthenticated() || req.user != null){
-            return next();
-        }
-        res.redirect("/account");
-    }
 }
 
 // if smile home folder doesn't exist, create one
@@ -205,7 +190,7 @@ analysesRoutesFiles.forEach(function (route, i) {
         }
 
         if ("put" in routesConfig) {
-            app.put("/" + routesConfig.path, upload.single("labeled"), isLoggedIn, function (req, res) {
+            app.put("/" + routesConfig.path, isLoggedIn, upload.single("labeled"), function (req, res) {
                 // decide if multiuser or not
                 if (s3FolderName !== undefined){
                     var userPath = s3FolderName;
