@@ -5,6 +5,9 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
+var redis = require('redis');
+var client = redis.createClient();
+
 router.get('/login/dropbox', isLoggedIn, function(req,res,next){
 	var authUrl = "https://www.dropbox.com/oauth2/authorize?response_type=code&client_id=" + DROPBOX_CLIENT_ID;
 	res.redirect(authUrl);
@@ -28,8 +31,7 @@ router.post('/login/dropbox',function(req,res,next){
 			if ('error' in json){
 				res.send({'ERROR':json.error});
 			}
-			req.session.dropbox_access_token = json.access_token;
-			req.session.save();
+        	client.hset(req.user.username, 'dropbox_access_token', json.access_token, redis.print);
 			res.send({'data':'success'});
 		});
 });

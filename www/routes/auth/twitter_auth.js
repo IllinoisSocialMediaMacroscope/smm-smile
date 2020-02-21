@@ -6,6 +6,9 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
+var redis = require('redis');
+var client = redis.createClient();
+
 var consumer = new OAuth1(
     "https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token",
     TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, "1.0", "http://localhost:8001/login/twitter/callback", "HMAC-SHA1");
@@ -16,32 +19,36 @@ router.get('/login/twitter', isLoggedIn, function (req, res, next) {
         if (error) {
             res.send({ERROR: JSON.stringify(error)});
         } else {
-            req.session.twt_oauthRequestToken = oauthToken;
-            req.session.twt_oauthRequestTokenSecret = oauthTokenSecret;
-            req.session.save();
-            res.redirect("https://twitter.com/oauth/authorize?oauth_token=" + req.session.twt_oauthRequestToken);
+            client.hset(req.user.username, 'twt_oauthRequestToken', oauthToken, redis.print);
+            client.hset(req.user.username, 'twt_oauthRequestTokenSecret', oauthTokenSecret, redis.print);
+            res.redirect("https://twitter.com/oauth/authorize?oauth_token=" + oauthToken);
         }
     });
 });
 
 router.post('/login/twitter', isLoggedIn, function (req, res, next) {
-    consumer.getOAuthAccessToken(req.session.twt_oauthRequestToken, req.session.twt_oauthRequestTokenSecret,
-        req.body.twt_pin, function (error, oauthAccessToken, oauthAccessTokenSecret, results) {
-            if (error) {
-                res.cookie('twitter-success', 'false', {maxAge: 1000000000, httpOnly: false});
-                res.send({ERROR: JSON.stringify(error)});
-            } else {
-                // save in the session
-                req.session.twt_access_token_key = oauthAccessToken;
-                req.session.twt_access_token_secret = oauthAccessTokenSecret;
-                req.session.save();
+    client.hgetall(req.user.username, function (err, obj) {
+        if (err) {
+            console.log(err);
+            reject(err);
+        }
+        else {
+            consumer.getOAuthAccessToken(obj['twt_oauthRequestToken'], obj['twt_oauthRequestTokenSecret'],
+                req.body.twt_pin, function (error, oauthAccessToken, oauthAccessTokenSecret, results) {
+                if (error) {
+                    res.cookie('twitter-success', 'false', {maxAge: 1000000000, httpOnly: false});
+                    res.send({ERROR: JSON.stringify(error)});
+                } else {
+                    client.hset(req.user.username, 'twt_access_token_key', oauthAccessToken, redis.print);
+                    client.hset(req.user.username, 'twt_access_token_secret', oauthAccessTokenSecret, redis.print);
 
-                // set the cookie as true for 29 minutes maybe?
-                res.cookie('twitter-success', 'true', {maxAge: 1000 * 60 * 29, httpOnly: false});
-                res.send({});
-            }
-        });
-
+                    // set the cookie as true for 29 minutes maybe?
+                    // res.cookie('twitter-success', 'true', {maxAge: 1000 * 60 * 29, httpOnly: false});
+                    res.send({});
+                }
+            });
+        }
+    });
 });
 
 module.exports = router;

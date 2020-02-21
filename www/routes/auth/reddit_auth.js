@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var fetch = require('node-fetch');
 var crypto = require('crypto');
-var redis = require('redis');
 
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
@@ -36,23 +35,13 @@ router.get('/login/reddit', isLoggedIn, function(req,res,next){
 				return response.json();
 			}).then(function(json){
 				if ('error' in json){
-                    res.cookie('reddit-success', 'false', {maxAge: 1000000000, httpOnly: false});
+                    // res.cookie('reddit-success', 'false', {maxAge: 1000000000, httpOnly: false});
                     res.send({ERROR: JSON.stringify(json)});
 				}else{
-					// multiuser
-                    if (s3FolderName === undefined && req.user !== undefined) {
-                    	client.hset(req.user.username, 'rd_access_token', json['access_token'], redis.print);
-                    }
-                    // single user
-                    else{
-                        req.session.rd_access_token = json.access_token;
-                        req.session.save();
-					}
-					
-					// set the cookie as true for 29 minutes maybe?
-					res.cookie('reddit-success','true',{maxAge:1000*60*29, httpOnly:false});	
+					client.hset(req.user.username, 'rd_access_token', json['access_token'], redis.print);
                     res.send({})
-
+					// set the cookie as true for 29 minutes maybe?
+					// res.cookie('reddit-success','true',{maxAge:1000*60*29, httpOnly:false});
 				}
 			});
 	});
