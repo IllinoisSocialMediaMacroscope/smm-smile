@@ -14,6 +14,9 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
+var redis = require('redis');
+var client = redis.createClient();
+
 // if smile home folder doesn't exist, create one
 if (!fs.existsSync(smileHomePath)) {
     fs.mkdirSync(smileHomePath);
@@ -21,168 +24,163 @@ if (!fs.existsSync(smileHomePath)) {
 var downloadPath = path.join(smileHomePath, 'downloads');
 
 router.post('/export', isLoggedIn, function(req,res,next){
-    // decide if multiuser or not
-    if (s3FolderName !== undefined){
-        var userPath = s3FolderName;
-    }
-    else{
-        var userPath = req.user.username;
-    }
-	s3.list_files(userPath + '/').then(files =>{
-		if (Object.keys(files).length === 0){
-			res.send({'ERROR':'You don\'t have any data associate with this session. Nothing to export!'});
-		}else{
-			s3.download_folder(userPath + '/', downloadPath).then(files =>{
-				
-					var filename = 'SMILE-' + Date.now() + '.zip';
-					zipDownloads(filename).then(() => {
-						//get zip file size and decide which upload method to take
-						var filesize = fs.statSync(filename).size;
-						var buffer = fs.readFileSync(filename);
-						if (req.body.id === 'google-export'){
-							if (req.session.google_access_token !== undefined){
-                                uploadToGoogle(filename, buffer, req.session.google_access_token)
-									.then(response => {
-										res.send({downloadUrl: response.alternateLink});
-									})
-									.catch(err => {
-										res.send({ERROR: err});
-									})
-							}else{
-								res.send({'ERROR':'Goolge Drive token has expired. Please authorize again!'});
-							}
-							
-						}else if (req.body.id === 'dropbox-export'){
-                            if (req.session.dropbox_access_token !== undefined && filesize <= 140*1024*1024){
-                                uploadToDropbox(filename,buffer, req.session.dropbox_access_token)
-								.then(response => {
+    client.hgetall(req.user.username, function (err, obj) {
+        s3.list_files(req.user.username + '/').then(files => {
+            if (Object.keys(files).length === 0) {
+                res.send({'ERROR': 'You don\'t have any data associate with this session. Nothing to export!'});
+            } else {
+                s3.download_folder(req.user.username + '/', downloadPath).then(files => {
+
+                    var filename = 'SMILE-' + Date.now() + '.zip';
+                    zipDownloads(filename).then(() => {
+                        //get zip file size and decide which upload method to take
+                        var filesize = fs.statSync(filename).size;
+                        var buffer = fs.readFileSync(filename);
+                        if (req.body.id === 'google-export') {
+                            if (obj && obj['google_access_token'] !== undefined) {
+                                uploadToGoogle(filename, buffer, obj['google_access_token'])
+                                .then(response => {
+                                    res.send({downloadUrl: response.alternateLink});
+                                })
+                                .catch(err => {
+                                    res.send({ERROR: err});
+                                })
+                            } else {
+                                res.send({'ERROR': 'Goolge Drive token has expired. Please authorize again!'});
+                            }
+
+                        } else if (req.body.id === 'dropbox-export') {
+                            if (obj && obj['dropbox_access_token'] !== undefined && filesize <= 140 * 1024 * 1024) {
+                                uploadToDropbox(filename, buffer, obj['dropbox_access_token'])
+                                .then(response => {
                                     res.send({downloadUrl: 'https://www.dropbox.com/personal?preview=' + response.name});
                                 })
                                 .catch(err => {
                                     res.send({ERROR: err});
                                 });
-                            }else if (filesize > 140*1024*1024){
-                                res.send({'ERROR':'We apologize that we are currently still working on the large file transfer function '
-                                    + 'for dropbox. Please switch to Google Drive uploads.'});
-                            }else{
-                                res.send({'ERROR':'Dropbox token has expired. Please authorize again!'});
+                            } else if (filesize > 140 * 1024 * 1024) {
+                                res.send({
+                                    'ERROR': 'We apologize that we are currently still working on the large file transfer function '
+                                    + 'for dropbox. Please switch to Google Drive uploads.'
+                                });
+                            } else {
+                                res.send({'ERROR': 'Dropbox token has expired. Please authorize again!'});
                             }
-						
-						}else if (req.body.id === 'box-export'){
-							if (req.session.box_access_token !== undefined){
-                                uploadToBox(filename, buffer, filesize, req.session.box_access_token)
+
+                        } else if (req.body.id === 'box-export') {
+                            if (obj && obj['box_access_token'] !== undefined) {
+                                uploadToBox(filename, buffer, filesize, obj['box_access_token'])
                                 .then(response => {
-                                    res.send({downloadUrl: 'https://uofi.app.box.com/file/'+ response.entries[0].id});
+                                    res.send({downloadUrl: 'https://uofi.app.box.com/file/' + response.entries[0].id});
                                 })
                                 .catch(err => {
                                     res.send({ERROR: err});
                                 });
-							}else{
-								res.send({'ERROR':'Dropbox token has expired. Please authorize again!'});
-							}
-						}
-						
-					}).catch((err) => {
-						// zip error
-						console.log(err);
-						res.send({ERROR:err});
-					});				
-			}).catch(err =>{
-				// retrieve s3 error
-				console.log(err);
-				res.send({ERROR:err});
-			});
-		}
-	}).catch(err =>{
-		console.log(err);
-		res.send({ERROR:err});
-	});
+                            } else {
+                                res.send({'ERROR': 'Dropbox token has expired. Please authorize again!'});
+                            }
+                        }
+
+                    }).catch((err) => {
+                        // zip error
+                        console.log(err);
+                        res.send({ERROR: err});
+                    });
+                }).catch(err => {
+                    // retrieve s3 error
+                    console.log(err);
+                    res.send({ERROR: err});
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+            res.send({ERROR: err});
+        });
+
+    });
 	  
 });
 
 router.post('/export-single', isLoggedIn, function(req,res){
-    // check if the requested folder matches the current user's identity
-    // decide if multiuser or not
-    if (s3FolderName !== undefined){
-        var userPath = s3FolderName;
-    }
-    else{
-        var userPath = req.user.username;
-    }
-    var arrURL = req.body.folderURL.split('/');
-	if (arrURL[0] === userPath) {
-        var p = s3.list_files(req.body.folderURL);
-        p.then(files => {
-            s3.download_folder(req.body.folderURL, downloadPath).then(files => {
-                var filename = arrURL[arrURL.length - 2] + '.zip';
-                zipDownloads(filename).then(() => {
-                    //get zip file size and decide which upload method to take
-                    var filesize = fs.statSync(filename).size;
-                    var buffer = fs.readFileSync(filename);
-                    if (req.body.id === 'google-export') {
-                        if (req.session.google_access_token !== undefined) {
-                            uploadToGoogle(filename, buffer, req.session.google_access_token)
-                            .then(response => {
-                                res.send({downloadUrl: response.alternateLink});
-                            })
-                            .catch(err => {
-                                res.send({ERROR: err});
-                            });
-                        } else {
-                            res.send({'ERROR': 'Goolge Drive token has expired. Please authorize again!'});
+
+    client.hgetall(req.user.username, function (err, obj) {
+        // check if the requested folder matches the current user's identity
+        // decide if multiuser or not
+        var arrURL = req.body.folderURL.split('/');
+        if (arrURL[0] === req.user.username) {
+            var p = s3.list_files(req.body.folderURL);
+            p.then(files => {
+                s3.download_folder(req.body.folderURL, downloadPath).then(files => {
+                    var filename = arrURL[arrURL.length - 2] + '.zip';
+                    zipDownloads(filename).then(() => {
+                        //get zip file size and decide which upload method to take
+                        var filesize = fs.statSync(filename).size;
+                        var buffer = fs.readFileSync(filename);
+                        if (req.body.id === 'google-export') {
+                            if (obj && obj['google_access_token'] !== undefined) {
+                                uploadToGoogle(filename, buffer, obj['google_access_token'])
+                                .then(response => {
+                                    res.send({downloadUrl: response.alternateLink});
+                                })
+                                .catch(err => {
+                                    res.send({ERROR: err});
+                                });
+                            } else {
+                                res.send({'ERROR': 'Goolge Drive token has expired. Please authorize again!'});
+                            }
+
+                        } else if (req.body.id === 'dropbox-export') {
+                            if (obj && obj['dropbox_access_token'] !== undefined && filesize <= 140 * 1024 * 1024) {
+                                uploadToDropbox(filename, buffer, obj['dropbox_access_token'])
+                                .then(response => {
+                                    res.send({downloadUrl: 'https://www.dropbox.com/personal?preview=' + response.name});
+                                })
+                                .catch(err => {
+                                    res.send({ERROR: err});
+                                });
+                            } else if (filesize > 140 * 1024 * 1024) {
+                                res.send({
+                                    'ERROR': 'We apologize that we are currently still working on the large file transfer function '
+                                    + 'for dropbox. Please switch to Google Drive uploads.'
+                                });
+                            } else {
+                                res.send({'ERROR': 'Dropbox token has expired. Please authorize again!'});
+                            }
+
+                        } else if (req.body.id === 'box-export') {
+                            if (obj && obj['box_access_token'] !== undefined) {
+                                uploadToBox(filename, buffer, obj['box_access_token'])
+                                .then(response => {
+                                    res.send({downloadUrl: 'https://uofi.app.box.com/file/' + response.entries[0].id});
+                                })
+                                .catch(err => {
+                                    res.send({ERROR: err});
+                                });
+                            } else {
+                                res.send({'ERROR': 'Dropbox token has expired. Please authorize again!'});
+                            }
                         }
 
-                    } else if (req.body.id === 'dropbox-export') {
-                        if (req.session.dropbox_access_token !== undefined && filesize <= 140 * 1024 * 1024) {
-                            uploadToDropbox(filename, buffer, req.session.dropbox_access_token)
-                            .then(response => {
-                                res.send({downloadUrl: 'https://www.dropbox.com/personal?preview=' + response.name});
-                            })
-                            .catch(err => {
-                                res.send({ERROR: err});
-                            });
-                        } else if (filesize > 140 * 1024 * 1024) {
-                            res.send({
-                                'ERROR': 'We apologize that we are currently still working on the large file transfer function '
-                                + 'for dropbox. Please switch to Google Drive uploads.'
-                            });
-                        } else {
-                            res.send({'ERROR': 'Dropbox token has expired. Please authorize again!'});
-                        }
-
-                    } else if (req.body.id === 'box-export') {
-                        if (req.session.box_access_token !== undefined) {
-                            uploadToBox(filename, buffer, req.session.box_access_token)
-                            .then(response => {
-                                res.send({downloadUrl: 'https://uofi.app.box.com/file/'+ response.entries[0].id});
-                            })
-                            .catch(err => {
-                                res.send({ERROR: err});
-                            });
-                        } else {
-                            res.send({'ERROR': 'Dropbox token has expired. Please authorize again!'});
-                        }
-                    }
-
-                }).catch((err) => {
-                    // zip error
+                    }).catch((err) => {
+                        // zip error
+                        console.log(err);
+                        res.send({ERROR: err});
+                    });
+                }).catch(err => {
+                    // retrieve s3 error
                     console.log(err);
                     res.send({ERROR: err});
                 });
             }).catch(err => {
-                // retrieve s3 error
+                // list s3 error
                 console.log(err);
                 res.send({ERROR: err});
             });
-        }).catch(err => {
-            // list s3 error
-            console.log(err);
-            res.send({ERROR: err});
-        });
-    }
-    else {
-        res.send({ERROR: "Access Denied!"});
-    }
+        }
+        else {
+            res.send({ERROR: "Access Denied!"});
+        }
+    });
 });
 
 function uploadToGoogle(filename, buffer, google_access_token) {
