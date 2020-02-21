@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var fetch = require('node-fetch');
 var OAuth1 = require('oauth').OAuth;
 
 var path = require('path');
