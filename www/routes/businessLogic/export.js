@@ -17,13 +17,19 @@ var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMidd
 var redis = require('redis');
 var client = redis.createClient();
 
-// if smile home folder doesn't exist, create one
-if (!fs.existsSync(smileHomePath)) {
-    fs.mkdirSync(smileHomePath);
-}
-var downloadPath = path.join(smileHomePath, 'downloads');
-
 router.post('/export', isLoggedIn, function(req,res,next){
+
+    // if smile home folder doesn't exist, create one
+    if (!fs.existsSync(smileHomePath)) {
+        fs.mkdirSync(smileHomePath);
+    }
+
+    if (!fs.existSync(path.join(smileHomePath, req.user.username))){
+        fs.mkdirSync(path.join(smileHomePath, req.user.username));
+    }
+
+    var downloadPath = path.join(smileHomePath, req.user.username, 'downloads');
+
     client.hgetall(req.user.username, function (err, obj) {
         s3.list_files(req.user.username + '/').then(files => {
             if (Object.keys(files).length === 0) {
@@ -32,7 +38,7 @@ router.post('/export', isLoggedIn, function(req,res,next){
                 s3.download_folder(req.user.username + '/', downloadPath).then(files => {
 
                     var filename = 'SMILE-' + Date.now() + '.zip';
-                    zipDownloads(filename).then(() => {
+                    zipDownloads(filename, downloadPath).then(() => {
                         //get zip file size and decide which upload method to take
                         var filesize = fs.statSync(filename).size;
                         var buffer = fs.readFileSync(filename);
@@ -40,7 +46,12 @@ router.post('/export', isLoggedIn, function(req,res,next){
                             if (obj && obj['google_access_token'] !== undefined) {
                                 uploadToGoogle(filename, buffer, obj['google_access_token'])
                                 .then(response => {
-                                    res.send({downloadUrl: response.alternateLink});
+                                    fs.unlinkSync(filename);
+                                    s3.deleteLocalFolders(downloadPath).then(() => {
+                                        res.send({downloadUrl: response.alternateLink});
+                                    }).catch(s3DeleteError => {
+                                        res.send({ERROR: s3DeleteError});
+                                    });
                                 })
                                 .catch(err => {
                                     client.hdel(req.user.username, 'google_access_token');
@@ -54,7 +65,12 @@ router.post('/export', isLoggedIn, function(req,res,next){
                             if (obj && obj['dropbox_access_token'] !== undefined && filesize <= 140 * 1024 * 1024) {
                                 uploadToDropbox(filename, buffer, obj['dropbox_access_token'])
                                 .then(response => {
-                                    res.send({downloadUrl: 'https://www.dropbox.com/personal?preview=' + response.name});
+                                    fs.unlinkSync(filename);
+                                    s3.deleteLocalFolders(downloadPath).then(() => {
+                                        res.send({downloadUrl: 'https://www.dropbox.com/personal?preview=' + response.name});
+                                    }).catch(s3DeleteError => {
+                                        res.send({ERROR: s3DeleteError});
+                                    });
                                 })
                                 .catch(err => {
                                     client.hdel(req.user.username, 'dropbox_access_token');
@@ -73,7 +89,12 @@ router.post('/export', isLoggedIn, function(req,res,next){
                             if (obj && obj['box_access_token'] !== undefined) {
                                 uploadToBox(filename, buffer, filesize, obj['box_access_token'])
                                 .then(response => {
-                                    res.send({downloadUrl: 'https://uofi.app.box.com/file/' + response.entries[0].id});
+                                    fs.unlinkSync(filename);
+                                    s3.deleteLocalFolders(downloadPath).then(() => {
+                                        res.send({downloadUrl: 'https://uofi.app.box.com/file/' + response.entries[0].id});
+                                    }).catch(s3DeleteError => {
+                                        res.send({ERROR: s3DeleteError});
+                                    });
                                 })
                                 .catch(err => {
                                     client.hdel(req.user.username, 'box_access_token');
@@ -84,27 +105,32 @@ router.post('/export', isLoggedIn, function(req,res,next){
                             }
                         }
 
-                    }).catch((err) => {
-                        // zip error
-                        console.log(err);
-                        res.send({ERROR: err});
+                    }).catch((zipError) => {
+                        res.send({ERROR: zipError});
                     });
-                }).catch(err => {
-                    // retrieve s3 error
-                    console.log(err);
-                    res.send({ERROR: err});
+                }).catch(s3RetreiveError => {
+                    res.send({ERROR: s3RetreiveError});
                 });
             }
-        }).catch(err => {
-            console.log(err);
-            res.send({ERROR: err});
+        }).catch(s3ListFileError => {
+            res.send({ERROR: s3ListFileError});
         });
-
     });
 	  
 });
 
 router.post('/export-single', isLoggedIn, function(req,res){
+
+    // if smile home folder doesn't exist, create one
+    if (!fs.existsSync(smileHomePath)) {
+        fs.mkdirSync(smileHomePath);
+    }
+
+    if (!fs.existSync(path.join(smileHomePath, req.user.username))){
+        fs.mkdirSync(path.join(smileHomePath, req.user.username));
+    }
+
+    var downloadPath = path.join(smileHomePath, req.user.username, 'downloads');
 
     client.hgetall(req.user.username, function (err, obj) {
         // check if the requested folder matches the current user's identity
@@ -115,7 +141,7 @@ router.post('/export-single', isLoggedIn, function(req,res){
             p.then(files => {
                 s3.download_folder(req.body.folderURL, downloadPath).then(files => {
                     var filename = arrURL[arrURL.length - 2] + '.zip';
-                    zipDownloads(filename).then(() => {
+                    zipDownloads(filename, downloadPath).then(() => {
                         //get zip file size and decide which upload method to take
                         var filesize = fs.statSync(filename).size;
                         var buffer = fs.readFileSync(filename);
@@ -123,7 +149,12 @@ router.post('/export-single', isLoggedIn, function(req,res){
                             if (obj && obj['google_access_token'] !== undefined) {
                                 uploadToGoogle(filename, buffer, obj['google_access_token'])
                                 .then(response => {
-                                    res.send({downloadUrl: response.alternateLink});
+                                    fs.unlinkSync(filename);
+                                    s3.deleteLocalFolders(downloadPath).then(() => {
+                                        res.send({downloadUrl: response.alternateLink});
+                                    }).catch(s3DeleteError => {
+                                        res.send({ERROR: s3DeleteError});
+                                    });
                                 })
                                 .catch(err => {
                                     res.send({ERROR: err});
@@ -136,7 +167,12 @@ router.post('/export-single', isLoggedIn, function(req,res){
                             if (obj && obj['dropbox_access_token'] !== undefined && filesize <= 140 * 1024 * 1024) {
                                 uploadToDropbox(filename, buffer, obj['dropbox_access_token'])
                                 .then(response => {
-                                    res.send({downloadUrl: 'https://www.dropbox.com/personal?preview=' + response.name});
+                                    fs.unlinkSync(filename);
+                                    s3.deleteLocalFolders(downloadPath).then(() => {
+                                        res.send({downloadUrl: 'https://www.dropbox.com/personal?preview=' + response.name});
+                                    }).catch(s3DeleteError => {
+                                        res.send({ERROR: s3DeleteError});
+                                    });
                                 })
                                 .catch(err => {
                                     client.hdel(req.user.username, 'dropbox_access_token');
@@ -155,7 +191,11 @@ router.post('/export-single', isLoggedIn, function(req,res){
                             if (obj && obj['box_access_token'] !== undefined) {
                                 uploadToBox(filename, buffer, obj['box_access_token'])
                                 .then(response => {
-                                    res.send({downloadUrl: 'https://uofi.app.box.com/file/' + response.entries[0].id});
+                                    s3.deleteLocalFolders(downloadPath).then(() => {
+                                        res.send({downloadUrl: 'https://uofi.app.box.com/file/' + response.entries[0].id});
+                                    }).catch(s3DeleteError => {
+                                        res.send({ERROR: s3DeleteError});
+                                    });
                                 })
                                 .catch(err => {
                                     client.hdel(req.user.username, 'box_access_token');
@@ -166,20 +206,14 @@ router.post('/export-single', isLoggedIn, function(req,res){
                             }
                         }
 
-                    }).catch((err) => {
-                        // zip error
-                        console.log(err);
-                        res.send({ERROR: err});
+                    }).catch((zipError) => {
+                        res.send({ERROR: zipError});
                     });
-                }).catch(err => {
-                    // retrieve s3 error
-                    console.log(err);
-                    res.send({ERROR: err});
+                }).catch(s3RetreiveError => {
+                    res.send({ERROR: s3RetreiveError});
                 });
-            }).catch(err => {
-                // list s3 error
-                console.log(err);
-                res.send({ERROR: err});
+            }).catch(s3ListFileError => {
+                res.send({ERROR: s3ListFileError});
             });
         }
         else {
@@ -212,14 +246,7 @@ function uploadToGoogle(filename, buffer, google_access_token) {
                 type: 'resumable'
             }, function (err, response) {
                 if (err) reject(err);
-                else {
-                    fs.unlinkSync(filename);
-                    s3.deleteLocalFolders(downloadPath).then(() => {
-                    	resolve(response);
-                    }).catch(err => {
-                        reject(err);
-                    });
-				}
+                else resolve(response);
 		});
     });
 }
@@ -240,12 +267,7 @@ function uploadToDropbox(filename, buffer, dropbox_access_token){
             mute: false
         })
         .then(function(response) {
-            fs.unlinkSync(filename);
-            s3.deleteLocalFolders(downloadPath).then(() => {
-                resolve(response);
-            }).catch(err => {
-                reject(err);
-            });
+            resolve(response);
         }).catch(function (err) {
             reject(err);
         });
@@ -266,13 +288,7 @@ function uploadToBox(filename, buffer, filesize, box_access_token){
             client.files.uploadFile('0', filename, buffer, function (err, response) {
             	if (err) reject(err);
             	else{
-                    fs.unlinkSync(filename);
-                    s3.deleteLocalFolders(downloadPath).then(() => {
-                       resolve(response);
-                    })
-					.catch(err =>{
-						reject(err);
-					});
+            	    resolve(response);
 				}
             });
         }
@@ -282,19 +298,11 @@ function uploadToBox(filename, buffer, filesize, box_access_token){
                     reject(err);
                 } else {
                     uploader.on('error', function (err) {
-                        fs.unlinkSync(filename);
-                        s3.deleteLocalFolders(downloadPath).then(() => {
-                            reject(err);
-                        });
+                        reject(err);
                     });
 
                     uploader.on('uploadComplete', function (response) {
-                        fs.unlinkSync(filename)
-                        s3.deleteLocalFolders(downloadPath).then(() => {
-                            resolve(response);
-                        }).catch(err => {
-                            reject(err);
-                        });
+                        resolve(response);
                     });
 
                     uploader.start();
@@ -304,7 +312,7 @@ function uploadToBox(filename, buffer, filesize, box_access_token){
     });
 }
 
-function zipDownloads(filename){
+function zipDownloads(filename, downloadPath){
 	
 	return new Promise((resolve,reject) => {
 		
@@ -318,7 +326,6 @@ function zipDownloads(filename){
 		});
 	
 		archive.on('error',function(err){
-			console.log(err);
 			reject(err);
 		});
 	

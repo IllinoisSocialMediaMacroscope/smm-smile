@@ -66,7 +66,7 @@ router.post('/render', isLoggedIn, function (req, res, next) {
                                 }
 
                                 // add custom setting headers
-                                var customColumnHeadersPath = path.join(smileHomePath, 'customColumnHeaders.json');
+                                var customColumnHeadersPath = path.join(smileHomePath, req.user.username, 'customColumnHeaders.json');
                                 if (fs.existsSync(customColumnHeadersPath)) {
                                     var customColumnHeaders = JSON.parse(fs.readFileSync(customColumnHeadersPath));
                                     for (var key in customColumnHeaders) {
@@ -215,8 +215,12 @@ router.post('/add-columnHead', isLoggedIn, function (req, res, next) {
             fs.mkdirSync(smileHomePath);
         }
 
+        if (!fs.existSync(path.join(smileHomePath, req.user.username))){
+            fs.mkdirSync(path.join(smileHomePath, req.user.username));
+        }
+
         // write user specific column header to customColumnHeaders.json file
-        var customColumnHeadersPath = path.join(smileHomePath, 'customColumnHeaders.json');
+        var customColumnHeadersPath = path.join(smileHomePath, req.user.username, 'customColumnHeaders.json');
         if (fs.existsSync(customColumnHeadersPath)) {
             var customColumnHeaders = JSON.parse(fs.readFileSync(customColumnHeadersPath));
             for (i = 0; i < data.analyses.length; i++) {
@@ -245,7 +249,7 @@ router.post('/add-columnHead', isLoggedIn, function (req, res, next) {
 router.get('/list-columnHead', isLoggedIn, function (req, res, next) {
     var columnHeaders = JSON.parse(fs.readFileSync(columnHeadersPath));
 
-    var customColumnHeadersPath = path.join(smileHomePath, 'customColumnHeaders.json');
+    var customColumnHeadersPath = path.join(smileHomePath, req.user.username, 'customColumnHeaders.json');
     if (fs.existsSync(customColumnHeadersPath)) {
         var customColumnHeaders = JSON.parse(fs.readFileSync(customColumnHeadersPath));
         for (var key in customColumnHeaders) {

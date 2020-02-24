@@ -2,7 +2,6 @@ require('dotenv').config();
 var express = require('express');
 
 var path = require('path');
-var multer = require('multer');
 var http = require('http');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -105,12 +104,6 @@ else {
     passport.deserializeUser(User.deserializeUser());
 }
 
-// if smile home folder doesn't exist, create one
-if (!fs.existsSync(smileHomePath)) {
-    fs.mkdirSync(smileHomePath);
-}
-var upload = multer({dest: path.join(smileHomePath, 'uploads')});
-
 app.use(session({
     secret: 'keyboard cat',
     resave: true,
@@ -182,6 +175,14 @@ analysesRoutesFiles.forEach(function (route, i) {
         }
 
         if ("put" in routesConfig) {
+
+            // define an upload location
+            if (!fs.existsSync(smileHomePath)) {
+                fs.mkdirSync(smileHomePath);
+            }
+            var multer = require('multer');
+            var upload = multer({dest: path.join(smileHomePath, 'uploads')});
+
             app.put("/" + routesConfig.path, isLoggedIn, upload.single("labeled"), function (req, res) {
                 s3.uploadToS3(req.file.path, req.user.username + routesConfig['result_path'] + req.body.uid
                     + '/' + req.body.labeledFilename)

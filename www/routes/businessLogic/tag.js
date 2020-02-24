@@ -8,7 +8,7 @@ var fs = require('fs');
 router.get('/tag', isLoggedIn, function(req,res,next){
     // TODO cross compare with the current file list &
     // TODO when search, only show tags that current has a valid file path
-    var tagIdMapPath = path.join(smileHomePath, 'map.json');
+    var tagIdMapPath = path.join(smileHomePath, req.user.username, 'map.json');
     var searchTag = req.query.tagName || "";
     var matchedTag = {};
 
@@ -21,8 +21,8 @@ router.get('/tag', isLoggedIn, function(req,res,next){
                 }
             }
         }
+        res.send(matchedTag);
     }
-    res.send(matchedTag);
 });
 
 router.post('/tag', isLoggedIn, function(req,res,next){
@@ -33,7 +33,12 @@ router.post('/tag', isLoggedIn, function(req,res,next){
             fs.mkdirSync(smileHomePath);
         }
 
-        var tagIdMapPath = path.join(smileHomePath, 'map.json');
+        // if that user path doesn't exist
+        if (!fs.existSync(path.join(smileHomePath, req.user.username))){
+            fs.mkdirSync(path.join(smileHomePath, req.user.username));
+        }
+
+        var tagIdMapPath = path.join(smileHomePath, req.user.username, 'map.json');
 
         if (fs.existsSync(tagIdMapPath)){
             var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
@@ -54,7 +59,7 @@ router.post('/tag', isLoggedIn, function(req,res,next){
 router.delete('/tag', isLoggedIn, function(req, res, next){
     if(req.body.jobId !== undefined && req.body.jobId !== ""){
 
-        var tagIdMapPath = path.join(smileHomePath, 'map.json');
+        var tagIdMapPath = path.join(smileHomePath, req.user.username, 'map.json');
         if (fs.existsSync(tagIdMapPath)){
             var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
             delete tagIdMap[req.body.jobId];

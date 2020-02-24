@@ -95,7 +95,12 @@ router.post('/query', isLoggedIn, function (req, res) {
                         fs.mkdirSync(smileHomePath);
                     }
 
-                    var dir_downloads = path.join(smileHomePath, 'downloads');
+                    // if that user path doesn't exist
+                    if (!fs.existSync(path.join(smileHomePath, req.user.username))){
+                        fs.mkdirSync(path.join(smileHomePath, req.user.username));
+                    }
+
+                    var dir_downloads = path.join(smileHomePath, req.user.username, 'downloads');
                     if (!fs.existsSync(dir_downloads)) {
                         fs.mkdirSync(dir_downloads);
                     }

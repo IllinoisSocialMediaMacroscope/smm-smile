@@ -14,7 +14,6 @@ var multer = require('multer');
 var uploadPath = path.join(smileHomePath, 'uploads');
 var upload = multer({dest:uploadPath});
 
-
 router.post('/import', isLoggedIn, upload.single('importFile'),function(req,res,next){
     if (req.file !== undefined) {
         var filepath = req.file.path;
@@ -42,10 +41,15 @@ router.post('/import', isLoggedIn, upload.single('importFile'),function(req,res,
             }
         }
         if (allEmptyFlag){
-            console.log('Your uploaded CSV is not valid, please make sure there is no empty line in your CSV file.');
             res.send({ERROR: 'Your uploaded CSV is not valid, please make sure there is no empty line in your CSV file.'});
-        }else{
-            var configPath = path.join(uploadPath, "config.json");
+        }
+        else{
+            // if that user path doesn't exist
+            if (!fs.existSync(path.join(uploadPath, req.user.username))){
+                fs.mkdirSync(path.join(uploadPath, req.user.username));
+            }
+
+            var configPath = path.join(uploadPath, req.user.username, "config.json");
             fs.writeFile(configPath, JSON.stringify(config), function (err) {
                 if (err) res.send({ERROR: err});
                 else {

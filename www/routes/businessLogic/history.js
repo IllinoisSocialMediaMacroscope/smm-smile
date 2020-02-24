@@ -104,7 +104,7 @@ router.post('/history', isLoggedIn, function (req, res, next) {
 router.delete('/history', isLoggedIn, function (req, res, next) {
     if (req.body.type === 'local') {
         var p = [];
-        p.push(s3.deleteLocalFolders(path.join(smileHomePath, 'downloads')));
+        p.push(s3.deleteLocalFolders(path.join(smileHomePath, req.user.username, 'downloads')));
         p.push(s3.deleteLocalFolders(path.join(smileHomePath, 'uploads')));
         Promise.all(p).then(() => {
             res.send({'data': 'Successfully purged!'});
