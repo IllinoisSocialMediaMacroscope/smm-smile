@@ -43,6 +43,7 @@ router.post('/export', isLoggedIn, function(req,res,next){
                                     res.send({downloadUrl: response.alternateLink});
                                 })
                                 .catch(err => {
+                                    client.hdel(req.user.username, 'google_access_token');
                                     res.send({ERROR: err});
                                 })
                             } else {
@@ -56,6 +57,7 @@ router.post('/export', isLoggedIn, function(req,res,next){
                                     res.send({downloadUrl: 'https://www.dropbox.com/personal?preview=' + response.name});
                                 })
                                 .catch(err => {
+                                    client.hdel(req.user.username, 'dropbox_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else if (filesize > 140 * 1024 * 1024) {
@@ -74,6 +76,7 @@ router.post('/export', isLoggedIn, function(req,res,next){
                                     res.send({downloadUrl: 'https://uofi.app.box.com/file/' + response.entries[0].id});
                                 })
                                 .catch(err => {
+                                    client.hdel(req.user.username, 'box_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else {
@@ -136,6 +139,7 @@ router.post('/export-single', isLoggedIn, function(req,res){
                                     res.send({downloadUrl: 'https://www.dropbox.com/personal?preview=' + response.name});
                                 })
                                 .catch(err => {
+                                    client.hdel(req.user.username, 'dropbox_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else if (filesize > 140 * 1024 * 1024) {
@@ -154,6 +158,7 @@ router.post('/export-single', isLoggedIn, function(req,res){
                                     res.send({downloadUrl: 'https://uofi.app.box.com/file/' + response.entries[0].id});
                                 })
                                 .catch(err => {
+                                    client.hdel(req.user.username, 'box_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else {

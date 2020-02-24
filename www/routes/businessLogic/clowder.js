@@ -13,10 +13,12 @@ router.post('/check-clowder-login', isLoggedIn, function(req, res, next){
             res.send({ERROR:err});
         }
         else if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
-            res.send('logged');
+            res.send('Logged in!');
         }
         else {
-            res.send('unlogged');
+            client.hdel(req.user.username, 'clowder_username');
+            client.hdel(req.user.username, 'clowder_password');
+            res.send('Not logged in!');
         }
     });
 });
@@ -28,6 +30,8 @@ router.post('/clowder-login', isLoggedIn, function(req,res,next){
         client.expire(req.user.username, 30 * 60);
 		res.send({success:'succesfully provided username and password information!'});
 	}else{
+        client.hdel(req.user.username, 'clowder_username');
+        client.hdel(req.user.username, 'clowder_password');
 		res.send({ERROR:'username and password incomplete!'});
 	}
 
@@ -48,6 +52,8 @@ router.post('/list-dataset', isLoggedIn, function(req, res, next){
 
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
+                    client.hdel(req.user.username, 'clowder_username');
+                    client.hdel(req.user.username, 'clowder_password');
 					res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);

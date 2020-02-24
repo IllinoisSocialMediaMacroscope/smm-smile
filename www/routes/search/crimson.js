@@ -24,7 +24,7 @@ router.get('/query-crimson', isLoggedIn, function (req, res, next) {
                         results);
                 }
             }).catch(error => {
-                console.log(error);
+                client.hdel(req.user.username, 'crimson_access_token');
                 res.send({'ERROR': JSON.stringify(error)});
             });
         }

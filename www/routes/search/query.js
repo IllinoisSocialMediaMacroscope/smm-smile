@@ -54,7 +54,7 @@ router.post('/query-dryrun', isLoggedIn, function (req, res) {
                         'crimsonaccesstoken': obj['crimson_access_token']
                     };
 
-                    gatherSinglePost(req.body.query, headers).then(responseObj => {
+                    gatherSinglePost(req, headers).then(responseObj => {
                         var key1 = Object.keys(responseObj)[0];
                         var key2 = Object.keys(responseObj[key1])[0];
                         var key3 = Object.keys(responseObj[key1][key2])[0];
@@ -127,18 +127,18 @@ router.post('/query', isLoggedIn, function (req, res) {
                             if (parseInt(req.body.pages) !== -999) {
                                 if (req.body.prefix === 'twitter-Tweet' || req.body.prefix === 'twitter-Timeline') {
                                     // post one time with all pages
-                                    p_array_2.push(gatherMultiPost(req.body.query, headers, parseInt(req.body.pages)));
+                                    p_array_2.push(gatherMultiPost(req, headers, parseInt(req.body.pages)));
                                 }
                                 else {
                                     // flipping through pages
                                     for (var i = 0; i < parseInt(req.body.pages); i++) {
-                                        p_array_2.push(gatherMultiPost(req.body.query, headers, i + 1));
+                                        p_array_2.push(gatherMultiPost(req, headers, i + 1));
                                     }
                                 }
                             }
                             else {
                                 // no pagination available
-                                p_array_2.push(gatherSinglePost(req.body.query, headers));
+                                p_array_2.push(gatherSinglePost(req, headers));
                             }
                             Promise.all(p_array_2).then(values => {
                                 // piece the json together here
@@ -338,49 +338,79 @@ function checkExist(remotePrefix, localFolderName) {
     });
 }
 
-function gatherMultiPost(query, headers, pageNum) {
+function gatherMultiPost(req, headers, pageNum) {
     // user regex to add a pages:pageNum in the query here
+    var query = req.body.query;
     if (pageNum !== -999) {
         query = query.replace(/(\) *{)/g, ",pages:" + pageNum + "$1");
     }
+
+    var platform = req.body.prefix.split('-')[0];
+
     return new Promise((resolve, reject) => {
         fetch('http://'+ SMILE_GRAPHQL +':5050/graphql', {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify({"query": query})
+            body: JSON.stringify({"query": query })
         }).then(function (response) {
             return response.text();
         }).then(function (responseBody) {
             responseBody = responseBody.replace(/\\r/g, '');
             var responseObj = JSON.parse(responseBody);
-            if (responseObj!==undefined && responseObj['errors'] !== undefined) reject(responseObj['errors']);
-            else resolve(responseObj);
-            resolve(responseObj);
+            if (responseObj!==undefined && responseObj['errors'] !== undefined){
+                reject(responseObj['errors']);
+                removeInvalidToken(req.user.username, platform);
+            }
+            else {
+                resolve(responseObj);
+            }
         }).catch((error) => {
+            removeInvalidToken(req.user.username, platform);
             reject(error);
         });
     });
-};
+}
 
-function gatherSinglePost(query, headers) {
+function gatherSinglePost(req, headers) {
+    var platform = req.body.prefix.split('-')[0];
+
     return new Promise((resolve, reject) => {
         fetch('http://' + SMILE_GRAPHQL + ':5050/graphql', {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify({"query": query})
+            body: JSON.stringify({"query": req.body.query})
         }).then(function (response) {
             return response.text();
         }).then(function (responseBody) {
             responseBody = responseBody.replace(/\\r/g, '');
             var responseObj = JSON.parse(responseBody);
-
-            if (responseObj!==undefined && responseObj['errors'] !== undefined) reject(responseObj['errors']);
-            else resolve(responseObj);
+            if (responseObj!==undefined && responseObj['errors'] !== undefined) {
+                reject(responseObj['errors']);
+                removeInvalidToken(req.user.username, platform);
+            }
+            else{
+                resolve(responseObj);
+            }
         }).catch((error) => {
+            removeInvalidToken(req.user.username, platform);
             reject(error);
         });
     });
-};
+}
+
+function removeInvalidToken(key, platform){
+    if (platform === 'twitter'){
+        client.hdel(key, 'twt_access_token_key');
+        client.hdel(key, 'twt_access_token_secret');
+    }
+    else if (platform === 'reddit'){
+        client.hdel(key, 'rd_access_token');
+    }
+    else if (platform === 'crimson'){
+        client.hdel(key, 'crimson_access_token');
+    }
+
+}
 
 function mergeJSON(values, keys) {
     /* {
@@ -390,8 +420,8 @@ function mergeJSON(values, keys) {
             }
         }
     }*/
-    var newJSON = {};
 
+    var newJSON = {};
     newJSON[keys[0]] = {};
     newJSON[keys[0]][keys[1]] = {};
     newJSON[keys[0]][keys[1]][keys[2]] = [];
@@ -401,7 +431,7 @@ function mergeJSON(values, keys) {
     }
 
     return newJSON;
-};
+}
 
 function checkAuthorized(req) {
     return new Promise((resolve, reject) => {
@@ -409,9 +439,9 @@ function checkAuthorized(req) {
             twitter: false,
             reddit: false,
             crimson: false,
-            dropbox: false,
-            googleDrive: false,
-            box: false,
+            // dropbox: false,
+            // googleDrive: false,
+            // box: false,
         };
 
         client.hgetall(req.user.username, function (err, obj){
@@ -422,9 +452,9 @@ function checkAuthorized(req) {
                 if (obj && 'twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
                 if (obj && 'rd_access_token' in obj) response['reddit'] = true;
                 if (obj && 'crimson_access_token' in obj) response['crimson'] = true;
-                if (obj && 'dropbox_access_token' in obj) response['dropbox'] = true;
-                if (obj && 'google_access_token' in obj) response['googleDrive'] = true;
-                if (obj && 'box_access_token' in obj) response['box'] = true;
+                // if (obj && 'dropbox_access_token' in obj) response['dropbox'] = true;
+                // if (obj && 'google_access_token' in obj) response['googleDrive'] = true;
+                // if (obj && 'box_access_token' in obj) response['box'] = true;
                 resolve(response);
             }
         });
