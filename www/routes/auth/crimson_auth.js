@@ -16,11 +16,9 @@ router.post('/login/crimson', isLoggedIn, function(req, res, next){
             return response.json();
     }).then(function(json){
         if ('message' in json){
-            // res.cookie('crimson-success', 'false', {maxAge: 1000000000, httpOnly: false});
             res.send({ERROR: JSON.stringify(json.message)})
         }else if ('auth' in json){
             client.hset(req.user.username, 'crimson_access_token', json.auth, redis.print);
-            // res.cookie('crimson-success', 'true', {maxAge: 1000 * 60 * 29, httpOnly: false});
             res.send({});
         }
     })

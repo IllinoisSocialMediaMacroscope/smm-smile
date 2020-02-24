@@ -36,14 +36,10 @@ router.post('/login/twitter', isLoggedIn, function (req, res, next) {
             consumer.getOAuthAccessToken(obj['twt_oauthRequestToken'], obj['twt_oauthRequestTokenSecret'],
                 req.body.twt_pin, function (error, oauthAccessToken, oauthAccessTokenSecret, results) {
                 if (error) {
-                    res.cookie('twitter-success', 'false', {maxAge: 1000000000, httpOnly: false});
                     res.send({ERROR: JSON.stringify(error)});
                 } else {
                     client.hset(req.user.username, 'twt_access_token_key', oauthAccessToken, redis.print);
                     client.hset(req.user.username, 'twt_access_token_secret', oauthAccessTokenSecret, redis.print);
-
-                    // set the cookie as true for 29 minutes maybe?
-                    // res.cookie('twitter-success', 'true', {maxAge: 1000 * 60 * 29, httpOnly: false});
                     res.send({});
                 }
             });

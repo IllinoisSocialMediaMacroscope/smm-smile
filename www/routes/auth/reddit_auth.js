@@ -35,13 +35,10 @@ router.get('/login/reddit', isLoggedIn, function(req,res,next){
 				return response.json();
 			}).then(function(json){
 				if ('error' in json){
-                    // res.cookie('reddit-success', 'false', {maxAge: 1000000000, httpOnly: false});
                     res.send({ERROR: JSON.stringify(json)});
 				}else{
 					client.hset(req.user.username, 'rd_access_token', json['access_token'], redis.print);
-                    res.send({})
-					// set the cookie as true for 29 minutes maybe?
-					// res.cookie('reddit-success','true',{maxAge:1000*60*29, httpOnly:false});
+                    res.send({});
 				}
 			});
 	});

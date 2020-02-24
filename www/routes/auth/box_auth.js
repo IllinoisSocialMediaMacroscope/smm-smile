@@ -34,7 +34,6 @@ router.get('/login/box/callback', isLoggedIn, function (req, res, next) {
         } else {
             box.getTokensAuthorizationCodeGrant(req.query.code, null, function (err, tokenInfo) {
                 if (err) {
-                    // res.cookie('box-success', 'false', {maxAge: 1000 * 60 * 60 * 24 * 365, httpOnly: false});
                     res.redirect(obj['boxCurrentURL'] + obj['boxPageURL'] + '?error=' + err);
                 } else {
                     client.hset(req.user.username, 'box_access_token', tokenInfo.accessToken, redis.print);

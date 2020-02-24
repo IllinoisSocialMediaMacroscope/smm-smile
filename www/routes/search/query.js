@@ -11,29 +11,32 @@ var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMidd
 var redis = require('redis');
 var client = redis.createClient();
 
+router.get('/authorized', isLoggedIn, function(req, res){
+    checkAuthorized(req).then(status => {
+        res.send(status);
+    })
+    .catch(err =>{
+        res.send({ERROR: err});
+    })
+});
+
 router.get('/query', isLoggedIn, function (req, res) {
-
-    // check if all the sessions have token, in case the server stops in the middle
-    var status = checkSessionToken(req);
-    var platforms = Object.keys(status);
-
-    for (var i = 0; i < platforms.length; i++) {
-        if (!status[platforms[i]]) {
-            res.cookie(platforms[i] + '-success', 'false', {maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false});
-        }
-    }
-
-    res.render('search/query', {
-        user: req.user,
-        parent: '/',
-        error: req.query.error,
-        DOCKERIZED:process.env.DOCKERIZED==='true'
+    checkAuthorized(req).then(status => {
+        res.render('search/query', {
+            user: req.user,
+            parent: '/',
+            error: req.query.error,
+            DOCKERIZED: process.env.DOCKERIZED === 'true',
+            status: status,
+        });
+    })
+    .catch(err =>{
+        res.send({ERROR: err});
     });
-
 });
 
 router.post('/query-dryrun', isLoggedIn, function (req, res) {
-    checkSessionToken(req).then(status => {
+    checkAuthorized(req).then(status => {
         var platform = req.body.prefix.split('-')[0];
 
         if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
@@ -74,13 +77,12 @@ router.post('/query-dryrun', isLoggedIn, function (req, res) {
         }
     })
     .catch(err => {
-        console.log(err);
         res.send({ERROR: err});
     });
 });
 
 router.post('/query', isLoggedIn, function (req, res) {
-    checkSessionToken(req).then(status => {
+    checkAuthorized(req).then(status => {
         var platform = req.body.prefix.split('-')[0];
 
         if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
@@ -401,12 +403,15 @@ function mergeJSON(values, keys) {
     return newJSON;
 };
 
-function checkSessionToken(req) {
+function checkAuthorized(req) {
     return new Promise((resolve, reject) => {
         var response = {
             twitter: false,
             reddit: false,
-            crimson: false
+            crimson: false,
+            dropbox: false,
+            googleDrive: false,
+            box: false,
         };
 
         client.hgetall(req.user.username, function (err, obj){
@@ -417,6 +422,9 @@ function checkSessionToken(req) {
                 if (obj && 'twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
                 if (obj && 'rd_access_token' in obj) response['reddit'] = true;
                 if (obj && 'crimson_access_token' in obj) response['crimson'] = true;
+                if (obj && 'dropbox_access_token' in obj) response['dropbox'] = true;
+                if (obj && 'google_access_token' in obj) response['googleDrive'] = true;
+                if (obj && 'box_access_token' in obj) response['box'] = true;
                 resolve(response);
             }
         });
