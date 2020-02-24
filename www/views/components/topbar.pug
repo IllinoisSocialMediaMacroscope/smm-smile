@@ -21,15 +21,9 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
                             i(class="fas fa-sign-out-alt")
                             | &nbsp;Exit SMILE
                 li
-                    if user
-                        a(href="account") #{user.username}
-                    else
-                        a(href="account") Account
-                li
                     a(href="citation") Cite
                 li
                     a(href="https://socialmediamacroscope.org/feedback/report_problems") Report Problems
-
 
             ul(class="nav navbar-nav navbar-right")
                 li
@@ -44,8 +38,25 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
                             span(class="caret")
                         ul(class="dropdown-menu", aria-labelledby="dropdownMenu1")
                 li
-                    a(href="history",id="topbar-history")
+                    a(href="history", id="topbar-history")
                         i(class="fas fa-history")
                         | &nbsp;Past Results
+
+                li
+                    if user
+                        div(class="dropdown")
+                            button(type="button", id="topbar-account-btn", class="btn btn-default dropdown-toggle",
+                            data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
+                                | #{user.username} &nbsp;
+                                span(class="caret")
+                            ul(class="dropdown-menu", aria-labelledby="dropdownMenu2")
+                                li
+                                    a(href="smile-logout") Logout
+                                li
+                                    a(href="account") Switch Account
+                    else
+                        a(href="account", id="topbar-account")
+                            i(class="fas fa-user")
+                            | &nbsp;Account
 
 script(src="bootstrap/js/customized/view_topbar.js")
