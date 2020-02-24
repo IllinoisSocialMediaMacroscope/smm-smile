@@ -17,15 +17,6 @@ var upload = multer({dest:uploadPath});
 
 router.post('/import', isLoggedIn, upload.single('importFile'),function(req,res,next){
     if (req.file !== undefined) {
-
-        // decide if multiuser or not
-        if (s3FolderName !== undefined){
-            var userPath = s3FolderName;
-        }
-        else{
-            var userPath = req.user.username;
-        }
-
         var filepath = req.file.path;
         var filename = req.file.originalname;
         var foldername = filename.slice(0, -4);
@@ -59,9 +50,9 @@ router.post('/import', isLoggedIn, upload.single('importFile'),function(req,res,
                 if (err) res.send({ERROR: err});
                 else {
                     var promise_arr = [];
-                    promise_arr.push(s3.uploadToS3(filepath, userPath + '/GraphQL/'
+                    promise_arr.push(s3.uploadToS3(filepath, req.user.username + '/GraphQL/'
                         + category + '/' + foldername + '/' + filename));
-                    promise_arr.push(s3.uploadToS3(configPath, userPath + '/GraphQL/'
+                    promise_arr.push(s3.uploadToS3(configPath, req.user.username + '/GraphQL/'
                         + category + '/' + foldername + '/config.json'));
                     Promise.all(promise_arr).then(urls => {
                         fs.unlinkSync(filepath);

@@ -6,18 +6,11 @@ var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemot
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 router.post('/histogram', isLoggedIn, function(req,res,next){
-    // decide if multiuser or not
-    if (s3FolderName !== undefined){
-        var userPath = s3FolderName;
-    }
-    else{
-        var userPath = req.user.username;
-    }
 
 	var args = {
-				's3FolderName': userPath,
+				's3FolderName': req.user.username,
 				'filename':req.body.filename,
-				'remoteReadPath':userPath + req.body.remoteReadPath,
+				'remoteReadPath':req.user.username + req.body.remoteReadPath,
 				'interval': req.body.interval
     };
 			

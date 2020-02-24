@@ -6,15 +6,6 @@ var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMidd
 
 
 router.post('/reddit-expand', isLoggedIn, function (req, res, next) {
-
-    // decide if multiuser or not
-    if (s3FolderName !== undefined) {
-        var userPath = s3FolderName;
-    }
-    else {
-        var userPath = req.user.username;
-    }
-
     s3.list_files(req.body.prefix).then((data) => {
 
         // check if comment.zip already exist or not
@@ -23,10 +14,10 @@ router.post('/reddit-expand', isLoggedIn, function (req, res, next) {
 
         // check if user still wants to collect it; overwrite the exist
         if (exist === false || (exist === true && req.body.consent === 'true')) {
-            var jobName = userPath + '_RedditComment_sdk';
+            var jobName = req.user.username + '_RedditComment_sdk';
             var command = ["python3", "/scripts/RedditComment.py",
                 "--remoteReadPath", req.body.prefix,
-                "--s3FolderName", userPath,
+                "--s3FolderName", req.user.username,
                 "--email", req.body.email,
                 "--sessionURL", req.body.sessionURL];
 

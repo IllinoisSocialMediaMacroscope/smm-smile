@@ -3,15 +3,6 @@ var getMultiRemote = require('./getRemote.js');
 var CSV = require('csv-string');
 
 function lambdaRoutesTemplate(req, config, handler ){
-
-    // decide if multiuser or not
-    if (s3FolderName !== undefined){
-        var userPath = s3FolderName;
-    }
-    else{
-        var userPath = req.user.username;
-    }
-
     return new Promise((resolve,reject) => {
         var uid;
         if (req.body.uid === undefined || req.body.uid === ""){
@@ -27,7 +18,7 @@ function lambdaRoutesTemplate(req, config, handler ){
             'remoteReadPath': req.body.prefix,
             'resultPath': config.result_path,
             'column': req.body.selectFileColumn,
-            's3FolderName': userPath,
+            's3FolderName': req.user.username,
             'uid': uid
         };
         for (var i = 0; i < config.args.length; i++) {
@@ -122,7 +113,7 @@ function lambdaRoutesTemplate(req, config, handler ){
                 }
 
                 var data = ({
-                    ID: userPath + config['result_path'] + uid + "/",
+                    ID: req.user.username + config['result_path'] + uid + "/",
                     img: img,
                     download: download,
                     preview: preview,

@@ -20,13 +20,7 @@ router.post('/history', isLoggedIn, function (req, res, next) {
     var arrURL = req.body.folderURL.split('/');
 
     // check if the requested folder matches the current user's identity
-    if (s3FolderName !== undefined) {
-        var userPath = s3FolderName;
-    }
-    else {
-        var userPath = req.user.username;
-    }
-    if (arrURL[0] === userPath) {
+    if (arrURL[0] === req.user.username) {
         if (arrURL[1] === 'GraphQL') {
             var p = s3.list_files(req.body.folderURL);
             p.then(folderObj => {
@@ -108,14 +102,6 @@ router.post('/history', isLoggedIn, function (req, res, next) {
 });
 
 router.delete('/history', isLoggedIn, function (req, res, next) {
-    // check if the requested folder matches the current user's identity
-    if (s3FolderName !== undefined) {
-        var userPath = s3FolderName;
-    }
-    else {
-        var userPath = req.user.username;
-    }
-
     if (req.body.type === 'local') {
         var p = [];
         p.push(s3.deleteLocalFolders(path.join(smileHomePath, 'downloads')));
@@ -128,7 +114,7 @@ router.delete('/history', isLoggedIn, function (req, res, next) {
         });
     }
     else if (req.body.type === 'remote') {
-        if (req.body.folderURL.split("/")[0] === userPath) {
+        if (req.body.folderURL.split("/")[0] === req.user.username) {
             var p = s3.deleteRemoteFolder(req.body.folderURL);
             p.then(() => {
                 res.send({'data': 'Successfully deleted!'});
@@ -144,17 +130,10 @@ router.delete('/history', isLoggedIn, function (req, res, next) {
 });
 
 function history_routes_template(req, config) {
-    if (s3FolderName !== undefined) {
-        var userPath = s3FolderName;
-    }
-    else {
-        var userPath = req.user.username;
-    }
-
     return new Promise((resolve, reject) => {
         var p = s3.list_files(req.body.folderURL);
         var arrURL = req.body.folderURL.split('/');
-        if (arrURL[0] === userPath) {
+        if (arrURL[0] === req.user.username) {
             p.then(results => {
                 // fetch all the data from url, and add those to the result content
                 // this might be slow since we are fetching everything

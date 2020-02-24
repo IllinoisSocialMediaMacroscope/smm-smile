@@ -27,7 +27,6 @@ var app = express();
  * read user name from environment file and set it global
  */
 smileHomePath = path.join(process.env.HOME, 'smile');
-s3FolderName = undefined;
 
 /**
  * determine which version of deployment: dockerized vs usual
@@ -93,13 +92,6 @@ else {
     batchHandler = new BatchHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
 
-    // s3FolderName = process.env.USER || 'local';
-
-    // // secure routes using passport
-    // function isLoggedIn(req, res, next){
-    //     return next();
-    // }
-
     // connect to database
     var User = require(path.join(__dirname, 'models', 'user.js'));
     var mongourl = "mongodb://localhost:27017/test";
@@ -117,7 +109,7 @@ else {
 if (!fs.existsSync(smileHomePath)) {
     fs.mkdirSync(smileHomePath);
 }
-var upload = multer({dest: path.join(smileHomePath, 'uploads')})
+var upload = multer({dest: path.join(smileHomePath, 'uploads')});
 
 app.use(session({
     secret: 'keyboard cat',
@@ -191,18 +183,10 @@ analysesRoutesFiles.forEach(function (route, i) {
 
         if ("put" in routesConfig) {
             app.put("/" + routesConfig.path, isLoggedIn, upload.single("labeled"), function (req, res) {
-                // decide if multiuser or not
-                if (s3FolderName !== undefined){
-                    var userPath = s3FolderName;
-                }
-                else{
-                    var userPath = req.user.username;
-                }
-
-                s3.uploadToS3(req.file.path, userPath + routesConfig['result_path'] + req.body.uid
+                s3.uploadToS3(req.file.path, req.user.username + routesConfig['result_path'] + req.body.uid
                     + '/' + req.body.labeledFilename)
                 .then(url => {
-                    var remoteReadPath = userPath + routesConfig['result_path'] + req.body.uid + '/';
+                    var remoteReadPath = req.user.username + routesConfig['result_path'] + req.body.uid + '/';
                     fs.unlinkSync(req.file.path);
                     if (req.body.selectFile !== 'Please Select...') {
                         if (req.body.aws_identifier === 'lambda') {

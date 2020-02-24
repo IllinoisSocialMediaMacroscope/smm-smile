@@ -2,18 +2,9 @@ var uuidv4 = require('./uuidv4.js');
 
 
 function batchRoutesTemplate(req, config, handler) {
-
-    // decide if multiuser or not
-    if (s3FolderName !== undefined){
-        var userPath = s3FolderName;
-    }
-    else{
-        var userPath = req.user.username;
-    }
-
     return new Promise((resolve, reject) => {
         var uid = uuidv4();
-        var jobName = userPath + '_' + uid;
+        var jobName = req.user.username + '_' + uid;
 
         // set default batch command
         if ('post' in config) {
@@ -24,7 +15,7 @@ function batchRoutesTemplate(req, config, handler) {
                 config.post.batch_config["batch_action"],
                 config.post.batch_config["batch_script"],
                 "--remoteReadPath", req.body.prefix,
-                "--s3FolderName", userPath,
+                "--s3FolderName", req.user.username,
                 "--column", req.body.selectFileColumn,
                 '--resultPath', config.result_path,
                 "--email", req.body.email,
@@ -42,7 +33,7 @@ function batchRoutesTemplate(req, config, handler) {
             handler.batch(config.post.batch_config["batch_job_definition"], jobName, config.post.batch_config["batch_job_queue"],
                 rabbitmqJobQueue, command)
             .then(results => {
-                results["ID"] = userPath + config["result_path"] + uid + '/';
+                results["ID"] = req.user.username + config["result_path"] + uid + '/';
                 resolve(results);
             })
             .catch(err => {
