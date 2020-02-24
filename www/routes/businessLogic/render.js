@@ -215,7 +215,7 @@ router.post('/add-columnHead', isLoggedIn, function (req, res, next) {
             fs.mkdirSync(smileHomePath);
         }
 
-        if (!fs.existSync(path.join(smileHomePath, req.user.username))){
+        if (!fs.existsSync(path.join(smileHomePath, req.user.username))){
             fs.mkdirSync(path.join(smileHomePath, req.user.username));
         }
 

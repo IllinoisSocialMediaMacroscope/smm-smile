@@ -45,7 +45,7 @@ router.post('/import', isLoggedIn, upload.single('importFile'),function(req,res,
         }
         else{
             // if that user path doesn't exist
-            if (!fs.existSync(path.join(uploadPath, req.user.username))){
+            if (!fs.existsSync(path.join(uploadPath, req.user.username))){
                 fs.mkdirSync(path.join(uploadPath, req.user.username));
             }
 

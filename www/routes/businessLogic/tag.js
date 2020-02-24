@@ -34,7 +34,7 @@ router.post('/tag', isLoggedIn, function(req,res,next){
         }
 
         // if that user path doesn't exist
-        if (!fs.existSync(path.join(smileHomePath, req.user.username))){
+        if (!fs.existsSync(path.join(smileHomePath, req.user.username))){
             fs.mkdirSync(path.join(smileHomePath, req.user.username));
         }
 

@@ -31,8 +31,8 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
                         i(class="fas fa-search")
                         | &nbsp;Get Data
                 li
-                    div(class="dropdown", id="topbar-analytics")
-                        button(type="button", id="topbar-analytics-btn", class="btn btn-default dropdown-toggle",
+                    div(class="topbar-dropdown", id="topbar-analytics")
+                        button(type="button", id="topbar-analytics-btn", class="btn btn-default topbar-dropdown-toggle",
                         data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
                             | Analytics Tools &nbsp;
                             span(class="caret")
@@ -44,8 +44,8 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
 
                 li
                     if user
-                        div(class="dropdown")
-                            button(type="button", id="topbar-account-btn", class="btn btn-default dropdown-toggle",
+                        div(class="topbar-dropdown")
+                            button(type="button", id="topbar-account-btn", class="btn btn-default topbar-dropdown-toggle",
                             data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
                                 | #{user.username} &nbsp;
                                 span(class="caret")

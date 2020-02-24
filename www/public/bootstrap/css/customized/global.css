@@ -4,12 +4,12 @@
 	font-size:14px;
 }
 
-.dropdown{
+.topbar-dropdown{
 	font-size:14px;
 	display:inline-block;
 	margin:10px 10px;
 }
-.dropdown-toggle{
+.topbar-dropdown-toggle{
 	padding:6px 30px;
 	color:white;
 	background-color:#1e325a;
