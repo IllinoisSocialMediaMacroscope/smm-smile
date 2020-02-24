@@ -32,6 +32,7 @@ router.post('/login/google', isLoggedIn, function (req, res, next) {
             res.send({'ERROR': err});
         } else {
             client.hset(req.user.username, 'google_access_token', token.access_token, redis.print);
+            client.expire(req.user.username, 30 * 60);
             res.send({'data': 'success'});
         }
     });

@@ -12,6 +12,7 @@ router.get('/login/box', isLoggedIn, function (req, res, next) {
 
     client.hset(req.user.username, 'boxPageURL', req.query.pageURL, redis.print);
     client.hset(req.user.username, 'boxCurrentURL', req.query.currentURL, redis.print);
+    client.expire(req.user.username, 30 * 60);
 
     var authUrl = `https://account.box.com/api/oauth2/authorize?response_type=code&client_id=`
         + BOX_CLIENT_ID
@@ -37,6 +38,7 @@ router.get('/login/box/callback', isLoggedIn, function (req, res, next) {
                     res.redirect(obj['boxCurrentURL'] + obj['boxPageURL'] + '?error=' + err);
                 } else {
                     client.hset(req.user.username, 'box_access_token', tokenInfo.accessToken, redis.print);
+                    client.expire(req.user.username, 30 * 60);
                     res.redirect(obj['boxCurrentURL'] + obj['boxPageURL'] + '?box=success');
                 }
             });

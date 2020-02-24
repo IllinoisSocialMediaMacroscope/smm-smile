@@ -19,6 +19,7 @@ router.post('/login/crimson', isLoggedIn, function(req, res, next){
             res.send({ERROR: JSON.stringify(json.message)})
         }else if ('auth' in json){
             client.hset(req.user.username, 'crimson_access_token', json.auth, redis.print);
+            client.expire(req.user.username, 30 * 60);
             res.send({});
         }
     })

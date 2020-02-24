@@ -38,6 +38,7 @@ router.get('/login/reddit', isLoggedIn, function(req,res,next){
                     res.send({ERROR: JSON.stringify(json)});
 				}else{
 					client.hset(req.user.username, 'rd_access_token', json['access_token'], redis.print);
+					client.expire(req.user.username, 30 * 60);
                     res.send({});
 				}
 			});

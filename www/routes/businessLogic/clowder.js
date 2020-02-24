@@ -25,6 +25,7 @@ router.post('/clowder-login', isLoggedIn, function(req,res,next){
 	if (req.body.clowder_username !== undefined && req.body.clowder_password !== undefined){
         client.hset(req.user.username, 'clowder_username', req.body.clowder_username, redis.print);
         client.hset(req.user.username, 'clowder_password', req.body.clowder_password, redis.print);
+        client.expire(req.user.username, 30 * 60);
 		res.send({success:'succesfully provided username and password information!'});
 	}else{
 		res.send({ERROR:'username and password incomplete!'});

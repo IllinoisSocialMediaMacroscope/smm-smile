@@ -21,6 +21,7 @@ router.get('/login/twitter', isLoggedIn, function (req, res, next) {
         } else {
             client.hset(req.user.username, 'twt_oauthRequestToken', oauthToken, redis.print);
             client.hset(req.user.username, 'twt_oauthRequestTokenSecret', oauthTokenSecret, redis.print);
+            client.expire(req.user.username, 30 * 60);
             res.redirect("https://twitter.com/oauth/authorize?oauth_token=" + oauthToken);
         }
     });
@@ -40,6 +41,7 @@ router.post('/login/twitter', isLoggedIn, function (req, res, next) {
                 } else {
                     client.hset(req.user.username, 'twt_access_token_key', oauthAccessToken, redis.print);
                     client.hset(req.user.username, 'twt_access_token_secret', oauthAccessTokenSecret, redis.print);
+                    client.expire(req.user.username, 30 * 60);
                     res.send({});
                 }
             });

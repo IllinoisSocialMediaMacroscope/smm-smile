@@ -32,6 +32,7 @@ router.post('/login/dropbox',function(req,res,next){
 				res.send({'ERROR':json.error});
 			}
         	client.hset(req.user.username, 'dropbox_access_token', json.access_token, redis.print);
+        	client.expire(req.user.username, 30 * 60);
 			res.send({'data':'success'});
 		});
 });

@@ -21,10 +21,22 @@ function authorize(platform){
 
 
 $(document).ready(function () {
-    var platforms = ['twitter', 'reddit', 'crimson'];
-    $.each(platforms, function (i, platform) {
-        if ($.cookie(platform + "-success") === "true") {
-            authorize(platform);
+    $.ajax({
+        type:'get',
+        url:"authorized",
+        success: function(data){
+            if ('ERROR' in data){
+                $("#error").val(JSON.stringify(data));
+                $("#warning").modal("show");
+            }
+            else{
+                var platforms = ['twitter', 'reddit', 'crimson'];
+                $.each(platforms, function (i, platform) {
+                    if (data[platform]) {
+                        authorize(platform);
+                    }
+                });
+            }
         }
     });
 });
@@ -36,7 +48,7 @@ $("#auth-next").on("click", function () {
 
 /****************************** CRIMSON Hexagon ******************************/
 $("#crimson-password").on('keyup', function (e) {
-    if (e.keyCode == 13 || e.keyCode == 10) {
+    if (e.keyCode === 13 || e.keyCode === 10) {
 
         $.ajax({
             type: 'post',
