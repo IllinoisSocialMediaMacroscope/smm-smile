@@ -4,11 +4,9 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-var redis = require('redis');
-var client = redis.createClient("redis://redis");
 
 router.post('/check-clowder-login', isLoggedIn, function(req, res, next){
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
         }
@@ -16,8 +14,8 @@ router.post('/check-clowder-login', isLoggedIn, function(req, res, next){
             res.send('Logged in!');
         }
         else {
-            client.hdel(req.user.username, 'clowder_username');
-            client.hdel(req.user.username, 'clowder_password');
+            redisClient.hdel(req.user.username, 'clowder_username');
+            redisClient.hdel(req.user.username, 'clowder_password');
             res.send('Not logged in!');
         }
     });
@@ -25,20 +23,20 @@ router.post('/check-clowder-login', isLoggedIn, function(req, res, next){
 
 router.post('/clowder-login', isLoggedIn, function(req,res,next){
 	if (req.body.clowder_username !== undefined && req.body.clowder_password !== undefined){
-        client.hset(req.user.username, 'clowder_username', req.body.clowder_username, redis.print);
-        client.hset(req.user.username, 'clowder_password', req.body.clowder_password, redis.print);
-        client.expire(req.user.username, 30 * 60);
+        redisClient.hset(req.user.username, 'clowder_username', req.body.clowder_username, redis.print);
+        redisClient.hset(req.user.username, 'clowder_password', req.body.clowder_password, redis.print);
+        redisClient.expire(req.user.username, 30 * 60);
 		res.send({success:'succesfully provided username and password information!'});
 	}else{
-        client.hdel(req.user.username, 'clowder_username');
-        client.hdel(req.user.username, 'clowder_password');
+        redisClient.hdel(req.user.username, 'clowder_username');
+        redisClient.hdel(req.user.username, 'clowder_password');
 		res.send({ERROR:'username and password incomplete!'});
 	}
 
 });
 
 router.post('/list-dataset', isLoggedIn, function(req, res, next){
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR: err});
         }
@@ -52,8 +50,8 @@ router.post('/list-dataset', isLoggedIn, function(req, res, next){
 
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    client.hdel(req.user.username, 'clowder_username');
-                    client.hdel(req.user.username, 'clowder_password');
+                    redisClient.hdel(req.user.username, 'clowder_username');
+                    redisClient.hdel(req.user.username, 'clowder_password');
 					res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
@@ -69,7 +67,7 @@ router.post('/list-dataset', isLoggedIn, function(req, res, next){
 });
 
 router.post('/list-collection', isLoggedIn, function(req,res,next){
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
         }
@@ -82,8 +80,8 @@ router.post('/list-collection', isLoggedIn, function(req,res,next){
             };
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    client.hdel(req.user.username, 'clowder_username');
-                    client.hdel(req.user.username, 'clowder_password');
+                    redisClient.hdel(req.user.username, 'clowder_username');
+                    redisClient.hdel(req.user.username, 'clowder_password');
                     res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
@@ -100,7 +98,7 @@ router.post('/list-collection', isLoggedIn, function(req,res,next){
 });
 
 router.post('/list-space', isLoggedIn, function(req,res,next){
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR: err});
         }
@@ -113,8 +111,8 @@ router.post('/list-space', isLoggedIn, function(req,res,next){
             };
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    client.hdel(req.user.username, 'clowder_username');
-                    client.hdel(req.user.username, 'clowder_password');
+                    redisClient.hdel(req.user.username, 'clowder_username');
+                    redisClient.hdel(req.user.username, 'clowder_password');
                     res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
@@ -131,7 +129,7 @@ router.post('/list-space', isLoggedIn, function(req,res,next){
 });
 
 router.post('/list-user', isLoggedIn, function(req,res,next){
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
         }
@@ -144,8 +142,8 @@ router.post('/list-user', isLoggedIn, function(req,res,next){
             };
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    client.hdel(req.user.username, 'clowder_username');
-                    client.hdel(req.user.username, 'clowder_password');
+                    redisClient.hdel(req.user.username, 'clowder_username');
+                    redisClient.hdel(req.user.username, 'clowder_password');
                     res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
@@ -162,7 +160,7 @@ router.post('/list-user', isLoggedIn, function(req,res,next){
 });
 
 router.post('/clowder-dataset', isLoggedIn, function(req,res,next){
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
         }
@@ -192,7 +190,7 @@ router.post('/clowder-dataset', isLoggedIn, function(req,res,next){
 });
 
 router.post('/clowder-collection', isLoggedIn, function(req,res,next){
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
         }
@@ -220,7 +218,7 @@ router.post('/clowder-collection', isLoggedIn, function(req,res,next){
 });
 
 router.post('/clowder-space', isLoggedIn, function(req,res,next){
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
         }
@@ -248,7 +246,7 @@ router.post('/clowder-space', isLoggedIn, function(req,res,next){
 });
 
 router.post('/clowder-files', isLoggedIn, function(req,res,next){
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
         }

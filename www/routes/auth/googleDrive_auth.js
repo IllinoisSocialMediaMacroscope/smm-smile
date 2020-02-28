@@ -12,9 +12,6 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-var redis = require('redis');
-var client = redis.createClient("redis://redis");
-
 router.get('/login/google', isLoggedIn, function (req, res, next) {
 
     var authUrl = oauth2Client.generateAuthUrl({
@@ -31,8 +28,8 @@ router.post('/login/google', isLoggedIn, function (req, res, next) {
         if (err) {
             res.send({'ERROR': err});
         } else {
-            client.hset(req.user.username, 'google_access_token', token.access_token, redis.print);
-            client.expire(req.user.username, 30 * 60);
+            redisClient.hset(req.user.username, 'google_access_token', token.access_token, redis.print);
+            redisClient.expire(req.user.username, 30 * 60);
             res.send({'data': 'success'});
         }
     });

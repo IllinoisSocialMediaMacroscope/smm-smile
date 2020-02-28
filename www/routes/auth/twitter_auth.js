@@ -6,8 +6,6 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-var redis = require('redis');
-var client = redis.createClient("redis://redis");
 
 var consumer = new OAuth1(
     "https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token",
@@ -19,16 +17,16 @@ router.get('/login/twitter', isLoggedIn, function (req, res, next) {
         if (error) {
             res.send({ERROR: JSON.stringify(error)});
         } else {
-            client.hset(req.user.username, 'twt_oauthRequestToken', oauthToken, redis.print);
-            client.hset(req.user.username, 'twt_oauthRequestTokenSecret', oauthTokenSecret, redis.print);
-            client.expire(req.user.username, 30 * 60);
+            redisClient.hset(req.user.username, 'twt_oauthRequestToken', oauthToken, redis.print);
+            redisClient.hset(req.user.username, 'twt_oauthRequestTokenSecret', oauthTokenSecret, redis.print);
+            redisClient.expire(req.user.username, 30 * 60);
             res.redirect("https://twitter.com/oauth/authorize?oauth_token=" + oauthToken);
         }
     });
 });
 
 router.post('/login/twitter', isLoggedIn, function (req, res, next) {
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err) {
             console.log(err);
             reject(err);
@@ -39,9 +37,9 @@ router.post('/login/twitter', isLoggedIn, function (req, res, next) {
                 if (error) {
                     res.send({ERROR: JSON.stringify(error)});
                 } else {
-                    client.hset(req.user.username, 'twt_access_token_key', oauthAccessToken, redis.print);
-                    client.hset(req.user.username, 'twt_access_token_secret', oauthAccessTokenSecret, redis.print);
-                    client.expire(req.user.username, 30 * 60);
+                    redisClient.hset(req.user.username, 'twt_access_token_key', oauthAccessToken, redis.print);
+                    redisClient.hset(req.user.username, 'twt_access_token_secret', oauthAccessTokenSecret, redis.print);
+                    redisClient.expire(req.user.username, 30 * 60);
                     res.send({});
                 }
             });

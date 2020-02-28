@@ -4,11 +4,9 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-var redis = require('redis');
-var client = redis.createClient("redis://redis");
 
 router.get('/query-crimson', isLoggedIn, function (req, res, next) {
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({'ERROR': err});
         }
@@ -24,7 +22,7 @@ router.get('/query-crimson', isLoggedIn, function (req, res, next) {
                         results);
                 }
             }).catch(error => {
-                client.hdel(req.user.username, 'crimson_access_token');
+                redisClient.hdel(req.user.username, 'crimson_access_token');
                 res.send({'ERROR': JSON.stringify(error)});
             });
         }

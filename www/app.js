@@ -21,6 +21,8 @@ var S3Helper = require(path.join(__dirname, 'scripts', 'helper_func', 's3Helper.
 var isLoggedIn = require(path.join(__dirname, 'scripts', 'helper_func', 'loginMiddleware.js'));
 var fs = require('fs');
 var app = express();
+var redis = require('redis');
+
 
 /**
  * read user name from environment file and set it global
@@ -65,6 +67,12 @@ if (process.env.DOCKERIZED === 'true') {
     passport.use(new LocalStrategy(User.authenticate()));
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
+
+    // configure redisclear
+    redisClient = redis.createClient("redis://redis");
+    redisClient.on('error', function (err) {
+        console.log('Error ' + err);
+    });
 }
 
 else {
@@ -101,6 +109,12 @@ else {
     passport.use(new LocalStrategy(User.authenticate()));
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
+
+    // configure redis
+    redisClient = redis.createClient();
+    redisClient.on('error', function (err) {
+        console.log('Error ' + err);
+    });
 }
 
 app.use(session({

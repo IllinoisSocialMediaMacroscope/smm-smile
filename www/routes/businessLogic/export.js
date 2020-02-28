@@ -14,8 +14,6 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-var redis = require('redis');
-var client = redis.createClient("redis://redis");
 
 router.post('/export', isLoggedIn, function(req,res,next){
 
@@ -30,7 +28,7 @@ router.post('/export', isLoggedIn, function(req,res,next){
 
     var downloadPath = path.join(smileHomePath, req.user.username, 'downloads');
 
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         s3.list_files(req.user.username + '/').then(files => {
             if (Object.keys(files).length === 0) {
                 res.send({'ERROR': 'You don\'t have any data associate with this session. Nothing to export!'});
@@ -54,7 +52,7 @@ router.post('/export', isLoggedIn, function(req,res,next){
                                     });
                                 })
                                 .catch(err => {
-                                    client.hdel(req.user.username, 'google_access_token');
+                                    redisClient.hdel(req.user.username, 'google_access_token');
                                     res.send({ERROR: err});
                                 })
                             } else {
@@ -73,7 +71,7 @@ router.post('/export', isLoggedIn, function(req,res,next){
                                     });
                                 })
                                 .catch(err => {
-                                    client.hdel(req.user.username, 'dropbox_access_token');
+                                    redisClient.hdel(req.user.username, 'dropbox_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else if (filesize > 140 * 1024 * 1024) {
@@ -97,7 +95,7 @@ router.post('/export', isLoggedIn, function(req,res,next){
                                     });
                                 })
                                 .catch(err => {
-                                    client.hdel(req.user.username, 'box_access_token');
+                                    redisClient.hdel(req.user.username, 'box_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else {
@@ -132,7 +130,7 @@ router.post('/export-single', isLoggedIn, function(req,res){
 
     var downloadPath = path.join(smileHomePath, req.user.username, 'downloads');
 
-    client.hgetall(req.user.username, function (err, obj) {
+    redisClient.hgetall(req.user.username, function (err, obj) {
         // check if the requested folder matches the current user's identity
         // decide if multiuser or not
         var arrURL = req.body.folderURL.split('/');
@@ -175,7 +173,7 @@ router.post('/export-single', isLoggedIn, function(req,res){
                                     });
                                 })
                                 .catch(err => {
-                                    client.hdel(req.user.username, 'dropbox_access_token');
+                                    redisClient.hdel(req.user.username, 'dropbox_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else if (filesize > 140 * 1024 * 1024) {
@@ -198,7 +196,7 @@ router.post('/export-single', isLoggedIn, function(req,res){
                                     });
                                 })
                                 .catch(err => {
-                                    client.hdel(req.user.username, 'box_access_token');
+                                    redisClient.hdel(req.user.username, 'box_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else {

@@ -5,8 +5,6 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-var redis = require('redis');
-var client = redis.createClient("redis://redis");
 
 router.post('/login/crimson', isLoggedIn, function(req, res, next){
 
@@ -18,8 +16,8 @@ router.post('/login/crimson', isLoggedIn, function(req, res, next){
         if ('message' in json){
             res.send({ERROR: JSON.stringify(json.message)})
         }else if ('auth' in json){
-            client.hset(req.user.username, 'crimson_access_token', json.auth, redis.print);
-            client.expire(req.user.username, 30 * 60);
+            redisClient.hset(req.user.username, 'crimson_access_token', json.auth, redis.print);
+            redisClient.expire(req.user.username, 30 * 60);
             res.send({});
         }
     })

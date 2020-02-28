@@ -8,8 +8,6 @@ var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-var redis = require('redis');
-var client = redis.createClient("redis://redis");
 
 router.get('/authorized', isLoggedIn, function(req, res){
     checkAuthorized(req).then(status => {
@@ -40,7 +38,7 @@ router.post('/query-dryrun', isLoggedIn, function (req, res) {
         var platform = req.body.prefix.split('-')[0];
 
         if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
-            client.hgetall(req.user.username, function (err, obj){
+            redisClient.hgetall(req.user.username, function (err, obj){
                 if (err){
                     res.send({ERROR: err})
                 }
@@ -86,7 +84,7 @@ router.post('/query', isLoggedIn, function (req, res) {
         var platform = req.body.prefix.split('-')[0];
 
         if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
-            client.hgetall(req.user.username, function (err, obj){
+            redisClient.hgetall(req.user.username, function (err, obj){
                 if (err){
                     res.send({ERROR: err});
                 }
@@ -307,7 +305,7 @@ router.post('/query', isLoggedIn, function (req, res) {
 });
 
 router.post('/prompt', isLoggedIn, function (req, res) {
-    client.hgetall(req.user.username, function (err, obj){
+    redisClient.hgetall(req.user.username, function (err, obj){
         if (err){
             res.send({ERROR: err});
         }
@@ -405,14 +403,14 @@ function gatherSinglePost(req, headers) {
 
 function removeInvalidToken(key, platform){
     if (platform === 'twitter'){
-        client.hdel(key, 'twt_access_token_key');
-        client.hdel(key, 'twt_access_token_secret');
+        redisClient.hdel(key, 'twt_access_token_key');
+        redisClient.hdel(key, 'twt_access_token_secret');
     }
     else if (platform === 'reddit'){
-        client.hdel(key, 'rd_access_token');
+        redisClient.hdel(key, 'rd_access_token');
     }
     else if (platform === 'crimson'){
-        client.hdel(key, 'crimson_access_token');
+        redisClient.hdel(key, 'crimson_access_token');
     }
 
 }
@@ -449,7 +447,7 @@ function checkAuthorized(req) {
             // box: false,
         };
 
-        client.hgetall(req.user.username, function (err, obj){
+        redisClient.hgetall(req.user.username, function (err, obj){
             if (err){
                 reject(err);
             }
