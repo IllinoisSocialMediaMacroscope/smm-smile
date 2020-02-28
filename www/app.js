@@ -21,7 +21,9 @@ var S3Helper = require(path.join(__dirname, 'scripts', 'helper_func', 's3Helper.
 var isLoggedIn = require(path.join(__dirname, 'scripts', 'helper_func', 'loginMiddleware.js'));
 var fs = require('fs');
 var app = express();
-var redis = require('redis');
+
+// make it global
+redis = require('redis');
 
 
 /**
@@ -48,7 +50,7 @@ if (process.env.DOCKERIZED === 'true') {
     DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET;
     GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-    SMILE_GRAPHQL = "smile_graphql";
+    SMILE_GRAPHQL = "smile-graphql";
     BUCKET_NAME = process.env.BUCKET_NAME;
 
     // decide what handler to use
