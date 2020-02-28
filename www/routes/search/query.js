@@ -9,7 +9,7 @@ var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRe
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 var redis = require('redis');
-var client = redis.createClient();
+var client = redis.createClient("redis://redis");
 
 router.get('/authorized', isLoggedIn, function(req, res){
     checkAuthorized(req).then(status => {

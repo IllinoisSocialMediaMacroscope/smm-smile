@@ -13,7 +13,7 @@ var appPath = path.dirname(path.dirname(__dirname));
 var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 var redis = require('redis');
-var client = redis.createClient();
+var client = redis.createClient("redis://redis");
 
 router.get('/login/google', isLoggedIn, function (req, res, next) {
 

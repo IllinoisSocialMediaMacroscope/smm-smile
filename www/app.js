@@ -56,8 +56,7 @@ if (process.env.DOCKERIZED === 'true') {
 
     // connect to database
     var User = require(path.join(__dirname, 'models', 'user.js'));
-    var mongourl = 'mongodb://' + process.env.MONGO_USERNAME + ':' + process.env.MONGO_PASSWORD + '@'
-        + process.env.MONGO_HOST + ':' + process.env.MONGO_PORT + '/' + process.env.name + '?authSource=admin';
+    var mongourl = 'mongodb://mongodb:27017/user';
     mongoose.connect(mongourl,
         {useNewUrlParser: true, useUnifiedTopology: true});
     mongoose.set('useCreateIndex', true);
