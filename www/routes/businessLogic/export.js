@@ -51,7 +51,7 @@ router.post('/export', checkIfLoggedIn, function(req,res,next){
                                     });
                                 })
                                 .catch(err => {
-                                    redisClient.hdel(req.user.username, 'google_access_token');
+                                    removeCredentials(req, 'google_access_token');
                                     res.send({ERROR: err});
                                 })
                             } else {
@@ -70,7 +70,7 @@ router.post('/export', checkIfLoggedIn, function(req,res,next){
                                     });
                                 })
                                 .catch(err => {
-                                    redisClient.hdel(req.user.username, 'dropbox_access_token');
+                                    removeCredentials(req, 'dropbox_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else if (filesize > 140 * 1024 * 1024) {
@@ -94,7 +94,7 @@ router.post('/export', checkIfLoggedIn, function(req,res,next){
                                     });
                                 })
                                 .catch(err => {
-                                    redisClient.hdel(req.user.username, 'box_access_token');
+                                    removeCredentials(req, 'box_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else {
@@ -172,7 +172,7 @@ router.post('/export-single', checkIfLoggedIn, function(req,res){
                                     });
                                 })
                                 .catch(err => {
-                                    redisClient.hdel(req.user.username, 'dropbox_access_token');
+                                    removeCredentials(req, 'dropbox_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else if (filesize > 140 * 1024 * 1024) {
@@ -195,7 +195,7 @@ router.post('/export-single', checkIfLoggedIn, function(req,res){
                                     });
                                 })
                                 .catch(err => {
-                                    redisClient.hdel(req.user.username, 'box_access_token');
+                                    removeCredentials(req, 'box_access_token');
                                     res.send({ERROR: err});
                                 });
                             } else {

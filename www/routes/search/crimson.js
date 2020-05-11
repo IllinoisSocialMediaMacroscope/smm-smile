@@ -16,7 +16,7 @@ router.get('/query-crimson', checkIfLoggedIn, function (req, res, next) {
                         results);
                 }
             }).catch(error => {
-                redisClient.hdel(req.user.username, 'crimson_access_token');
+                removeCredentials(req, 'crimson_access_token');
                 res.send({'ERROR': JSON.stringify(error)});
             });
         }

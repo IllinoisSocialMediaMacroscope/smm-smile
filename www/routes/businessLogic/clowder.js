@@ -1,8 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var path = require('path');
-var appPath = path.dirname(path.dirname(__dirname));
-
 
 router.post('/check-clowder-login', checkIfLoggedIn, function(req, res, next){
     retrieveCredentials(req).then(obj =>{
@@ -26,8 +23,8 @@ router.post('/clowder-login', checkIfLoggedIn, function(req,res,next){
         redisClient.expire(req.user.username, 30 * 60);
 		res.send({success:'succesfully provided username and password information!'});
 	}else{
-        redisClient.hdel(req.user.username, 'clowder_username');
-        redisClient.hdel(req.user.username, 'clowder_password');
+        removeCredentials(req, 'clowder_username');
+        removeCredentials(req, 'clowder_password');
 		res.send({ERROR:'username and password incomplete!'});
 	}
 
@@ -48,8 +45,8 @@ router.post('/list-dataset', checkIfLoggedIn, function(req, res, next){
 
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    redisClient.hdel(req.user.username, 'clowder_username');
-                    redisClient.hdel(req.user.username, 'clowder_password');
+                    removeCredentials(req, 'clowder_username');
+                    removeCredentials(req, 'clowder_password');
 					res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
@@ -78,8 +75,8 @@ router.post('/list-collection', checkIfLoggedIn, function(req,res,next){
             };
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    redisClient.hdel(req.user.username, 'clowder_username');
-                    redisClient.hdel(req.user.username, 'clowder_password');
+                    removeCredentials(req, 'clowder_username');
+                    removeCredentials(req, 'clowder_password');
                     res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
@@ -109,8 +106,8 @@ router.post('/list-space', checkIfLoggedIn, function(req,res,next){
             };
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    redisClient.hdel(req.user.username, 'clowder_username');
-                    redisClient.hdel(req.user.username, 'clowder_password');
+                    removeCredentials(req, 'clowder_username');
+                    removeCredentials(req, 'clowder_password');
                     res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
@@ -140,8 +137,8 @@ router.post('/list-user', checkIfLoggedIn, function(req,res,next){
             };
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    redisClient.hdel(req.user.username, 'clowder_username');
-                    redisClient.hdel(req.user.username, 'clowder_password');
+                    removeCredentials(req, 'clowder_username');
+                    removeCredentials(req, 'clowder_password');
                     res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
