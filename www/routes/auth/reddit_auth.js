@@ -25,7 +25,6 @@ router.get('/login/reddit', checkIfLoggedIn, function(req,res,next){
 				return response.json();
 			}).then(function(json){
 				if ('error' in json){
-					res.cookie('reddit-success', 'false', {maxAge: 1000000000, httpOnly: false});
                     res.send({ERROR: JSON.stringify(json)});
 				}else{
 					if (process.env.DOCKERIZED === 'true'){
@@ -37,7 +36,6 @@ router.get('/login/reddit', checkIfLoggedIn, function(req,res,next){
 						// save in the session
 						req.session.rd_access_token = json.access_token;
 						req.session.save();
-						res.cookie('reddit-success','true',{maxAge:1000*60*30, httpOnly:false});
 					}
 
                     res.send({});

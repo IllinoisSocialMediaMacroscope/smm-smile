@@ -55,7 +55,6 @@ router.get('/login/box/callback', checkIfLoggedIn, function (req, res, next) {
         }else{
             box.getTokensAuthorizationCodeGrant(req.query.code, null, function(err, tokenInfo) {
                 if (err){
-                    res.cookie('box-success','false',{maxAge:1000000000, httpOnly:false});
                     res.redirect(req.session.currentURL + req.session.pageURL + '?error=' + err);
                 }else{
                     req.session.box_access_token = tokenInfo.accessToken;
