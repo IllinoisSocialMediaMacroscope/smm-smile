@@ -77,30 +77,7 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
         if (status[platform] || req.body.prefix === 'reddit-Historical-Post'
             || req.body.prefix === 'reddit-Historical-Comment') {
             retrieveCredentials(req).then(obj => {
-                if (!fs.existsSync(smileHomePath)) {
-                    fs.mkdirSync(smileHomePath);
-                }
-
-                // if that user path doesn't exist
-                if (!fs.existsSync(path.join(smileHomePath, req.user.username))) {
-                    fs.mkdirSync(path.join(smileHomePath, req.user.username));
-                }
-
-                var dir_downloads = path.join(smileHomePath, req.user.username, 'downloads');
-                if (!fs.existsSync(dir_downloads)) {
-                    fs.mkdirSync(dir_downloads);
-                }
-
-                var dir_downloads_graphql = path.join(dir_downloads, 'GraphQL');
-                if (!fs.existsSync(dir_downloads_graphql)) {
-                    fs.mkdirSync(dir_downloads_graphql);
-                }
-
-                var dir_downloads_graphql_prefix = path.join(dir_downloads_graphql, req.body.prefix);
-                if (!fs.existsSync(dir_downloads_graphql_prefix)) {
-                    fs.mkdirSync(dir_downloads_graphql_prefix);
-                }
-
+                createLocalFolders(req);
                 checkExist(req.user.username + '/GraphQL/' + req.body.prefix + '/', req.body.filename)
                 .then((value) => {
                     if (value) {
@@ -114,23 +91,22 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                             'crimsonaccesstoken': obj['crimson_access_token']
                         };
 
-                        p_array_2 = [];
-
+                        multiPostPromises = [];
                         if (parseInt(req.body.pages) !== -999) {
                             if (req.body.prefix === 'twitter-Tweet' || req.body.prefix === 'twitter-Timeline') {
                                 // post one time with all pages
-                                p_array_2.push(gatherMultiPost(req, headers, parseInt(req.body.pages)));
+                                multiPostPromises.push(gatherMultiPost(req, headers, parseInt(req.body.pages)));
                             } else {
                                 // flipping through pages
                                 for (var i = 0; i < parseInt(req.body.pages); i++) {
-                                    p_array_2.push(gatherMultiPost(req, headers, i + 1));
+                                    multiPostPromises.push(gatherMultiPost(req, headers, i + 1));
                                 }
                             }
                         } else {
                             // no pagination available
-                            p_array_2.push(gatherSinglePost(req, headers));
+                            multiPostPromises.push(gatherSinglePost(req, headers));
                         }
-                        Promise.all(p_array_2).then(values => {
+                        Promise.all(multiPostPromises).then(values => {
                             // piece the json together here
                             var key1 = Object.keys(values[0])[0];
                             var key2 = Object.keys(values[0][key1])[0];
@@ -139,6 +115,7 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                                 res.send({ERROR: values[0]['errors'][0]['message']});
                             } else {
                                 responseObj = mergeJSON(values, [key1, key2, key3]);
+
                                 // ------------------------------------save csv file---------------------------------------------------------
                                 if (responseObj[key1][key2][key3].length > 0
                                     && responseObj[key1][key2][key3] !== 'null'
@@ -160,12 +137,12 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                                     // due to [{xxx:xxx},{xxx:xxx}...] is not a valid json format
                                     var jsonObj = {};
                                     jsonObj[req.body.prefix] = responseObj[key1][key2][key3];
-                                    var raw_json = req.body.filename + '.json';
-                                    fs.writeFileSync(path.join(directory, raw_json), JSON.stringify(jsonObj, null, 2), 'utf8');
+                                    var rawJson = req.body.filename + '.json';
+                                    fs.writeFileSync(path.join(directory, rawJson), JSON.stringify(jsonObj, null, 2), 'utf8');
 
                                     // save CSV; Async
                                     var processed = req.body.filename + '.csv';
-                                    var promise_csv = new Promise((resolve, reject) => {
+                                    new Promise((resolve, reject) => {
                                         jsonexport(jsonObj[req.body.prefix], {
                                             fillGaps: false,
                                             undefinedString: 'NaN'
@@ -181,18 +158,16 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                                                 });
                                             }
                                         });
-                                    });
-
-                                    // post to s3 bucket
-                                    promise_csv.then(() => {
-                                        var promise_arr = [];
-                                        promise_arr.push(s3.uploadToS3(path.join(directory, processed),
+                                    })
+                                    .then(() => {
+                                        var uploadToS3Promises = [];
+                                        uploadToS3Promises.push(s3.uploadToS3(path.join(directory, processed),
                                             req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + processed));
-                                        promise_arr.push(s3.uploadToS3(path.join(directory, raw_json),
-                                            req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + raw_json));
-                                        promise_arr.push(s3.uploadToS3(path.join(directory, "config.json"),
+                                        uploadToS3Promises.push(s3.uploadToS3(path.join(directory, rawJson),
+                                            req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + rawJson));
+                                        uploadToS3Promises.push(s3.uploadToS3(path.join(directory, "config.json"),
                                             req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + "config.json"));
-                                        Promise.all(promise_arr).then((URLs) => {
+                                        Promise.all(uploadToS3Promises).then((URLs) => {
 
                                             var args = {
                                                 's3FolderName': req.user.username,
@@ -312,6 +287,32 @@ function retrieveCredentials(req) {
             else reject("There is no credential exists in the session!");
         }
     });
+}
+
+function createLocalFolders(req){
+    if (!fs.existsSync(smileHomePath)) {
+        fs.mkdirSync(smileHomePath);
+    }
+    // if that user path doesn't exist
+    if (!fs.existsSync(path.join(smileHomePath, req.user.username))) {
+        fs.mkdirSync(path.join(smileHomePath, req.user.username));
+    }
+
+    var dir_downloads = path.join(smileHomePath, req.user.username, 'downloads');
+    if (!fs.existsSync(dir_downloads)) {
+        fs.mkdirSync(dir_downloads);
+    }
+
+    var dir_downloads_graphql = path.join(dir_downloads, 'GraphQL');
+    if (!fs.existsSync(dir_downloads_graphql)) {
+        fs.mkdirSync(dir_downloads_graphql);
+    }
+    var dir_downloads_graphql_prefix = path.join(dir_downloads_graphql, req.body.prefix);
+    if (!fs.existsSync(dir_downloads_graphql_prefix)) {
+        fs.mkdirSync(dir_downloads_graphql_prefix);
+    }
+
+    return null;
 }
 
 function checkExist(remotePrefix, localFolderName) {
