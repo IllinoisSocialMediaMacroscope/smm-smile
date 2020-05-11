@@ -1,15 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var path = require('path');
-var appPath = path.dirname(path.dirname(__dirname));
 
 
 router.get('/query-crimson', checkIfLoggedIn, function (req, res, next) {
-    redisClient.hgetall(req.user.username, function (err, obj) {
-        if (err){
-            res.send({'ERROR': err});
-        }
-        else if (obj && obj['crimson_access_token'] !== undefined) {
+    retrieveCredentials(req).then(obj => {
+        if (obj && obj['crimson_access_token'] !== undefined) {
             lambdaHandler.invoke('crimson_hexagon_monitors', 'crimson_hexagon_monitors',
                 {"crimson_access_token": obj['crimson_access_token']}).then(results => {
                 if (results['monitor_list'] === 'null') {
@@ -28,6 +23,9 @@ router.get('/query-crimson', checkIfLoggedIn, function (req, res, next) {
         else {
             res.redirect('/query?error=You cannot access crimson hexagon if not providing your credentials!')
         }
+    })
+    .catch( err =>{
+        res.send({'ERROR': err});
     });
 });
 

@@ -75,11 +75,27 @@ if (process.env.DOCKERIZED === 'true') {
         console.log('Error ' + err);
     });
 
-    checkIfLoggedIn = function(req, res, next){
+    global.checkIfLoggedIn = function(req, res, next){
         if(req.isAuthenticated() || req.user != null){
             return next();
         }
         res.redirect("/account");
+    }
+
+    global.retrieveCredentials = function(req) {
+        return new Promise((resolve, reject) => {
+            redisClient.hgetall(req.user.username, function (err, obj) {
+                if (err) {
+                    reject(err);
+                } else if (obj) {
+                    resolve(obj)
+                }
+            });
+        });
+    }
+
+    global.removeCredentials = function(req, entry){
+        redisClient.hdel(req.user.username, entry);
     }
 }
 else {
@@ -106,9 +122,21 @@ else {
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
 
     // backward compatibility; do not need multiuser capacity if deploying on macroscope
-    checkIfLoggedIn = function(req, res, next){
+    global.checkIfLoggedIn = function(req, res, next){
         req.user = {username: s3FolderName};
         return next();
+    }
+
+    global.retrieveCredentials = function(req) {
+        return new Promise((resolve, reject) => {
+            if (req.session) resolve(req.session);
+            else reject("There is no credential exists in the session!");
+        });
+    }
+
+    global.removeCredentials = function(req, entry){
+        req.session[entry] = null;
+        req.session.save();
     }
 }
 

@@ -5,18 +5,17 @@ var appPath = path.dirname(path.dirname(__dirname));
 
 
 router.post('/check-clowder-login', checkIfLoggedIn, function(req, res, next){
-    redisClient.hgetall(req.user.username, function (err, obj) {
-        if (err){
-            res.send({ERROR:err});
-        }
-        else if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
+    retrieveCredentials(req).then(obj =>{
+        if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
             res.send('Logged in!');
         }
         else {
-            redisClient.hdel(req.user.username, 'clowder_username');
-            redisClient.hdel(req.user.username, 'clowder_password');
+            removeCredentials(req, 'clowder_username');
+            removeCredentials(req, 'clowder_password');
             res.send('Not logged in!');
         }
+    }).catch(err =>{
+        res.send({ERROR:err});
     });
 });
 

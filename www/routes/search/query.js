@@ -267,23 +267,6 @@ router.post('/prompt', checkIfLoggedIn, function (req, res) {
 });
 
 /****************************************************************** helper *****************************************************************************************/
-function retrieveCredentials(req) {
-    return new Promise((resolve, reject) => {
-        if (process.env.DOCKERIZED === 'true') {
-            redisClient.hgetall(req.user.username, function (err, obj) {
-                if (err) {
-                    reject(err);
-                } else if (obj) {
-                    resolve(obj)
-                }
-            });
-        } else {
-            if (req.session) resolve(req.session);
-            else reject("There is no credential exists in the session!");
-        }
-    });
-}
-
 function createLocalFolders(req) {
     if (!fs.existsSync(smileHomePath)) {
         fs.mkdirSync(smileHomePath);
@@ -382,25 +365,13 @@ function gatherSinglePost(req, headers) {
 }
 
 function removeInvalidToken(req, platform) {
-    if (process.env.DOCKERIZED === 'true') {
-        if (platform === 'twitter') {
-            redisClient.hdel(req.user.username, 'twt_access_token_key');
-            redisClient.hdel(req.user.username, 'twt_access_token_secret');
-        } else if (platform === 'reddit') {
-            redisClient.hdel(req.user.username, 'rd_access_token');
-        } else if (platform === 'crimson') {
-            redisClient.hdel(req.user.username, 'crimson_access_token');
-        }
-    } else {
-        if (platform === 'twitter') {
-            req.session.twt_access_token_key = null;
-            req.session.twt_access_token_secret = null;
-        } else if (platform === 'reddit') {
-            req.session.rd_access_token = null;
-        } else if (platform === 'crimson') {
-            req.session.crimson_access_token = null;
-        }
-        req.session.save();
+    if (platform === 'twitter') {
+        removeCredentials(req, 'twt_access_token_key');
+        removeCredentials(req, 'twt_access_token_secret');
+    } else if (platform === 'reddit') {
+        removeCredentials(req, 'rd_access_token');
+    } else if (platform === 'crimson') {
+        removeCredentials(req, 'crimson_access_token');
     }
 }
 
