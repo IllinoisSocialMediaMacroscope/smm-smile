@@ -5,8 +5,8 @@ function isLoggedIn(req, res, next){
     res.redirect("/account");
 }
 
-// function isLoggedInPassing(req, res, next){
-//     return next();
-// }
+function isLoggedInPassing(req, res, next){
+    return next();
+}
 
-module.exports = isLoggedIn;
+module.exports = { isLoggedIn, isLoggedInPassing };

@@ -4,14 +4,13 @@ var OAuth1 = require('oauth').OAuth;
 
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 
 var consumer = new OAuth1(
     "https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token",
     TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, "1.0", "http://localhost:8001/login/twitter/callback", "HMAC-SHA1");
 
-router.get('/login/twitter', isLoggedIn, function (req, res, next) {
+router.get('/login/twitter', checkIfLoggedIn, function (req, res, next) {
     // patch the oauth library node_modules/oauth/lib/oauth.js, line 540 add: extraParams["oauth_callback"]===undefined
     consumer.getOAuthRequestToken({'oauth_callback': "oob"}, function (error, oauthToken, oauthTokenSecret, results) {
         if (error) {
@@ -25,7 +24,7 @@ router.get('/login/twitter', isLoggedIn, function (req, res, next) {
     });
 });
 
-router.post('/login/twitter', isLoggedIn, function (req, res, next) {
+router.post('/login/twitter', checkIfLoggedIn, function (req, res, next) {
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err) {
             console.log(err);

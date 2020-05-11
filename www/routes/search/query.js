@@ -6,10 +6,9 @@ var jsonexport = require('jsonexport');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 
-router.get('/authorized', isLoggedIn, function(req, res){
+router.get('/authorized', checkIfLoggedIn, function(req, res){
     checkAuthorized(req).then(status => {
         res.send(status);
     })
@@ -18,7 +17,7 @@ router.get('/authorized', isLoggedIn, function(req, res){
     })
 });
 
-router.get('/query', isLoggedIn, function (req, res) {
+router.get('/query', checkIfLoggedIn, function (req, res) {
     checkAuthorized(req).then(status => {
         res.render('search/query', {
             user: req.user,
@@ -33,7 +32,7 @@ router.get('/query', isLoggedIn, function (req, res) {
     });
 });
 
-router.post('/query-dryrun', isLoggedIn, function (req, res) {
+router.post('/query-dryrun', checkIfLoggedIn, function (req, res) {
     checkAuthorized(req).then(status => {
         var platform = req.body.prefix.split('-')[0];
 
@@ -79,7 +78,7 @@ router.post('/query-dryrun', isLoggedIn, function (req, res) {
     });
 });
 
-router.post('/query', isLoggedIn, function (req, res) {
+router.post('/query', checkIfLoggedIn, function (req, res) {
     checkAuthorized(req).then(status => {
         var platform = req.body.prefix.split('-')[0];
 
@@ -304,7 +303,7 @@ router.post('/query', isLoggedIn, function (req, res) {
     });
 });
 
-router.post('/prompt', isLoggedIn, function (req, res) {
+router.post('/prompt', checkIfLoggedIn, function (req, res) {
     redisClient.hgetall(req.user.username, function (err, obj){
         if (err){
             res.send({ERROR: err});

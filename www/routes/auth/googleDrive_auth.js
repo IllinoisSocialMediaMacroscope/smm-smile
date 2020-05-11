@@ -10,9 +10,8 @@ var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-router.get('/login/google', isLoggedIn, function (req, res, next) {
+router.get('/login/google', checkIfLoggedIn, function (req, res, next) {
 
     var authUrl = oauth2Client.generateAuthUrl({
         access_type: 'offline',
@@ -22,7 +21,7 @@ router.get('/login/google', isLoggedIn, function (req, res, next) {
     res.redirect(authUrl);
 });
 
-router.post('/login/google', isLoggedIn, function (req, res, next) {
+router.post('/login/google', checkIfLoggedIn, function (req, res, next) {
 
     oauth2Client.getToken(req.body.authorizeCode, function (err, token) {
         if (err) {

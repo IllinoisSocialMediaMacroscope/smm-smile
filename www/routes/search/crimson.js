@@ -2,10 +2,9 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 
-router.get('/query-crimson', isLoggedIn, function (req, res, next) {
+router.get('/query-crimson', checkIfLoggedIn, function (req, res, next) {
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({'ERROR': err});

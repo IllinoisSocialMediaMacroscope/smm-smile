@@ -3,10 +3,9 @@ var router = express.Router();
 var fetch = require('node-fetch');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 
-router.post('/login/crimson', isLoggedIn, function(req, res, next){
+router.post('/login/crimson', checkIfLoggedIn, function(req, res, next){
 
     fetch("https://api.crimsonhexagon.com/api/authenticate?username="
         + req.body.crimson_username + "&password="

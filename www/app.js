@@ -18,16 +18,15 @@ var LambdaHelper = require(path.join(__dirname, 'scripts', 'helper_func', 'lambd
 var BatchHelper = require(path.join(__dirname, 'scripts', 'helper_func', 'batchHelper.js'));
 var RabbitmqSender = require(path.join(__dirname, 'scripts', 'helper_func', 'rabbitmqSender.js'));
 var S3Helper = require(path.join(__dirname, 'scripts', 'helper_func', 's3Helper.js'));
-var isLoggedIn = require(path.join(__dirname, 'scripts', 'helper_func', 'loginMiddleware.js'));
+var { isLoggedIn, isLoggedInPassing } = require(path.join(__dirname, 'scripts', 'helper_func', 'loginMiddleware.js'));
 var fs = require('fs');
 var app = express();
 
 // make it global
 redis = require('redis');
 
-
 /**
- * read user name from environment file and set it global
+ * read HOME path from environment file and set it global
  */
 smileHomePath = path.join(process.env.HOME, 'smile');
 
@@ -75,8 +74,9 @@ if (process.env.DOCKERIZED === 'true') {
     redisClient.on('error', function (err) {
         console.log('Error ' + err);
     });
-}
 
+    checkIfLoggedIn = isLoggedIn;
+}
 else {
     var config = require('./main_config.json');
     AWS_ACCESSKEY = config.aws.access_key;
@@ -100,23 +100,8 @@ else {
     batchHandler = new BatchHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
 
-    // connect to database
-    var User = require(path.join(__dirname, 'models', 'user.js'));
-    var mongourl = "mongodb://localhost:27017/test";
-    mongoose.connect(mongourl,
-        {useNewUrlParser: true, useUnifiedTopology: true});
-    mongoose.set('useCreateIndex', true);
-
-    // authentication
-    passport.use(new LocalStrategy(User.authenticate()));
-    passport.serializeUser(User.serializeUser());
-    passport.deserializeUser(User.deserializeUser());
-
-    // configure redis
-    redisClient = redis.createClient();
-    redisClient.on('error', function (err) {
-        console.log('Error ' + err);
-    });
+    // backward compatibility; do not need multiuser capacity if deploying on macroscope
+    checkIfLoggedIn = isLoggedInPassing;
 }
 
 app.use(session({
@@ -150,7 +135,7 @@ analysesRoutesFiles.forEach(function (route, i) {
         var routesConfig = require(path.join(analysesRoutesDir, route));
 
         if ("get" in routesConfig) {
-            app.get("/" + routesConfig.path, isLoggedIn, function (req, res) {
+            app.get("/" + routesConfig.path, checkIfLoggedIn, function (req, res) {
                 var formParam = routesConfig;
                 res.render('analytics/formTemplate', {
                     DOCKERIZED: process.env.DOCKERIZED === 'true',
@@ -164,7 +149,7 @@ analysesRoutesFiles.forEach(function (route, i) {
         }
 
         if ("post" in routesConfig) {
-            app.post("/" + routesConfig.path, isLoggedIn, function (req, res) {
+            app.post("/" + routesConfig.path, checkIfLoggedIn, function (req, res) {
                 if (req.body.selectFile !== 'Please Select...') {
                     if (req.body.aws_identifier === 'lambda') {
                         lambdaRoutesTemplate(req, routesConfig, lambdaHandler).then(data => {
@@ -173,8 +158,7 @@ analysesRoutesFiles.forEach(function (route, i) {
                         .catch(err => {
                             res.send({ERROR: err});
                         });
-                    }
-                    else if (req.body.aws_identifier === 'batch') {
+                    } else if (req.body.aws_identifier === 'batch') {
                         batchRoutesTemplate(req, routesConfig, batchHandler).then(data => {
                             res.send(data);
                         })
@@ -182,8 +166,7 @@ analysesRoutesFiles.forEach(function (route, i) {
                             res.send({ERROR: err});
                         });
                     }
-                }
-                else {
+                } else {
                     res.end('no file selected!');
                 }
             })
@@ -198,7 +181,7 @@ analysesRoutesFiles.forEach(function (route, i) {
             var multer = require('multer');
             var upload = multer({dest: path.join(smileHomePath, 'uploads')});
 
-            app.put("/" + routesConfig.path, isLoggedIn, upload.single("labeled"), function (req, res) {
+            app.put("/" + routesConfig.path, checkIfLoggedIn, upload.single("labeled"), function (req, res) {
                 s3.uploadToS3(req.file.path, req.user.username + routesConfig['result_path'] + req.body.uid
                     + '/' + req.body.labeledFilename)
                 .then(url => {
@@ -212,8 +195,7 @@ analysesRoutesFiles.forEach(function (route, i) {
                             .catch(err => {
                                 res.send({ERROR: err});
                             });
-                        }
-                        else if (req.body.aws_identifier === 'batch') {
+                        } else if (req.body.aws_identifier === 'batch') {
                             batchRoutesTemplate(req, routesConfig, batchHandler).then(data => {
                                 res.send(data);
                             })
@@ -221,8 +203,7 @@ analysesRoutesFiles.forEach(function (route, i) {
                                 res.send({ERROR: err});
                             });
                         }
-                    }
-                    else {
+                    } else {
                         res.end('no file selected!');
                     }
                 }).catch(err => {
@@ -268,24 +249,24 @@ authRoutesFiles.forEach(function (route, i) {
     }
 });
 
-app.post('/register', function(req, res, next){
-    User.register(new User({username: req.body.username}), req.body.password, function(err){
-        if (err){
+app.post('/register', function (req, res, next) {
+    User.register(new User({username: req.body.username}), req.body.password, function (err) {
+        if (err) {
             console.log('error while user register!', err);
             return next(err);
         }
         res.status(200).send({message: "successfully registered!"});
     });
 });
-app.get('/account', function(req, res) {
-    res.render('account', {user: req.user, message:req.flash('error')});
+app.get('/account', function (req, res) {
+    res.render('account', {user: req.user, message: req.flash('error')});
 });
 app.post('/smile-login',
-    passport.authenticate('local', { failureRedirect: '/account', failureFlash: true}),
-    function(req, res){
+    passport.authenticate('local', {failureRedirect: '/account', failureFlash: true}),
+    function (req, res) {
         res.status(200).send({message: "successfully logged in!"});
-});
-app.get('/smile-logout', function(req, res){
+    });
+app.get('/smile-logout', function (req, res) {
     req.logout();
     res.redirect('/');
 });

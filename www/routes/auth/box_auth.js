@@ -3,10 +3,9 @@ var router = express.Router();
 var BoxSDK = require('box-node-sdk');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 
-router.get('/login/box', isLoggedIn, function (req, res, next) {
+router.get('/login/box', checkIfLoggedIn, function (req, res, next) {
 
     redisClient.hset(req.user.username, 'boxPageURL', req.query.pageURL, redis.print);
     redisClient.hset(req.user.username, 'boxCurrentURL', req.query.currentURL, redis.print);
@@ -20,7 +19,7 @@ router.get('/login/box', isLoggedIn, function (req, res, next) {
     res.redirect(authUrl);
 });
 
-router.get('/login/box/callback', isLoggedIn, function (req, res, next) {
+router.get('/login/box/callback', checkIfLoggedIn, function (req, res, next) {
 
     redisClient.hgetall(req.user.username, function (err, obj) {
         var box = new BoxSDK({

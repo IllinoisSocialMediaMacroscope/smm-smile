@@ -6,10 +6,9 @@ var appPath = path.dirname(path.dirname(__dirname));
 var routesDir = path.join(appPath, 'routes', 'analyses');
 var columnHeadersPath = path.join(appPath, 'columnHeaders.json');
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 var fs = require('fs');
 
-router.post('/render-json', isLoggedIn, function (req, res, next) {
+router.post('/render-json', checkIfLoggedIn, function (req, res, next) {
     getMultiRemote(req.body.fileURL).then((preview_string) => {
         if (preview_string === '') {
             res.send({ERROR: 'Nothing to render'});
@@ -41,7 +40,7 @@ router.post('/render-json', isLoggedIn, function (req, res, next) {
     });
 });
 
-router.post('/render', isLoggedIn, function (req, res, next) {
+router.post('/render', checkIfLoggedIn, function (req, res, next) {
     if (req.body.prefix.split("/")[0] === req.user.username) {
         if (req.body.prefix !== '' && req.body.prefix !== undefined) {
 
@@ -99,7 +98,7 @@ router.post('/render', isLoggedIn, function (req, res, next) {
 
 });
 
-router.post('/list', isLoggedIn, function (req, res, next) {
+router.post('/list', checkIfLoggedIn, function (req, res, next) {
 
     var directory = {};
 
@@ -132,7 +131,7 @@ router.post('/list', isLoggedIn, function (req, res, next) {
 
 });
 
-router.post('/list-all', isLoggedIn, function (req, res, next) {
+router.post('/list-all', checkIfLoggedIn, function (req, res, next) {
 
     var promise_array = [];
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Tweet/'));
@@ -199,7 +198,7 @@ router.post('/list-all', isLoggedIn, function (req, res, next) {
 
 });
 
-router.post('/add-columnHead', isLoggedIn, function (req, res, next) {
+router.post('/add-columnHead', checkIfLoggedIn, function (req, res, next) {
     // allow user to add custom column header name to the list
     // used when perform analyses on dataset
     // write to user's home direction under SMILE folder
@@ -246,7 +245,7 @@ router.post('/add-columnHead', isLoggedIn, function (req, res, next) {
     }
 });
 
-router.get('/list-columnHead', isLoggedIn, function (req, res, next) {
+router.get('/list-columnHead', checkIfLoggedIn, function (req, res, next) {
     var columnHeaders = JSON.parse(fs.readFileSync(columnHeadersPath));
 
     var customColumnHeadersPath = path.join(smileHomePath, req.user.username, 'customColumnHeaders.json');

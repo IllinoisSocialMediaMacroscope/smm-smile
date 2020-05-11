@@ -5,10 +5,9 @@ var CSV = require('csv-string');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 
-router.get('/history', isLoggedIn, function (req, res, next) {
+router.get('/history', checkIfLoggedIn, function (req, res, next) {
     res.render('history', {
         user: req.user,
         parent: '/',
@@ -16,7 +15,7 @@ router.get('/history', isLoggedIn, function (req, res, next) {
     });
 });
 
-router.post('/history', isLoggedIn, function (req, res, next) {
+router.post('/history', checkIfLoggedIn, function (req, res, next) {
     var arrURL = req.body.folderURL.split('/');
 
     // check if the requested folder matches the current user's identity
@@ -101,7 +100,7 @@ router.post('/history', isLoggedIn, function (req, res, next) {
     }
 });
 
-router.delete('/history', isLoggedIn, function (req, res, next) {
+router.delete('/history', checkIfLoggedIn, function (req, res, next) {
     if (req.body.type === 'local') {
         var p = [];
         p.push(s3.deleteLocalFolders(path.join(smileHomePath, req.user.username, 'downloads')));

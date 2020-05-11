@@ -2,9 +2,8 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-router.post('/image-crawler', isLoggedIn, function (req, res, next) {
+router.post('/image-crawler', checkIfLoggedIn, function (req, res, next) {
     s3.list_files(req.body.prefix).then((data) => {
 
         // check if img already exist or not

@@ -12,10 +12,9 @@ var BoxSDK = require('box-node-sdk');
 
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 
-router.post('/export', isLoggedIn, function(req,res,next){
+router.post('/export', checkIfLoggedIn, function(req,res,next){
 
     // if smile home folder doesn't exist, create one
     if (!fs.existsSync(smileHomePath)) {
@@ -117,7 +116,7 @@ router.post('/export', isLoggedIn, function(req,res,next){
 	  
 });
 
-router.post('/export-single', isLoggedIn, function(req,res){
+router.post('/export-single', checkIfLoggedIn, function(req,res){
 
     // if smile home folder doesn't exist, create one
     if (!fs.existsSync(smileHomePath)) {

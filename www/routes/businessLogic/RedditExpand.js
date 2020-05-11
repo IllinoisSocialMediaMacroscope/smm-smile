@@ -2,10 +2,9 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 
-router.post('/reddit-expand', isLoggedIn, function (req, res, next) {
+router.post('/reddit-expand', checkIfLoggedIn, function (req, res, next) {
     s3.list_files(req.body.prefix).then((data) => {
 
         // check if comment.zip already exist or not

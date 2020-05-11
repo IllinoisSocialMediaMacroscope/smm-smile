@@ -2,10 +2,9 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 
-router.post('/check-clowder-login', isLoggedIn, function(req, res, next){
+router.post('/check-clowder-login', checkIfLoggedIn, function(req, res, next){
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
@@ -21,7 +20,7 @@ router.post('/check-clowder-login', isLoggedIn, function(req, res, next){
     });
 });
 
-router.post('/clowder-login', isLoggedIn, function(req,res,next){
+router.post('/clowder-login', checkIfLoggedIn, function(req,res,next){
 	if (req.body.clowder_username !== undefined && req.body.clowder_password !== undefined){
         redisClient.hset(req.user.username, 'clowder_username', req.body.clowder_username, redis.print);
         redisClient.hset(req.user.username, 'clowder_password', req.body.clowder_password, redis.print);
@@ -35,7 +34,7 @@ router.post('/clowder-login', isLoggedIn, function(req,res,next){
 
 });
 
-router.post('/list-dataset', isLoggedIn, function(req, res, next){
+router.post('/list-dataset', checkIfLoggedIn, function(req, res, next){
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR: err});
@@ -66,7 +65,7 @@ router.post('/list-dataset', isLoggedIn, function(req, res, next){
     });
 });
 
-router.post('/list-collection', isLoggedIn, function(req,res,next){
+router.post('/list-collection', checkIfLoggedIn, function(req,res,next){
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
@@ -97,7 +96,7 @@ router.post('/list-collection', isLoggedIn, function(req,res,next){
     });
 });
 
-router.post('/list-space', isLoggedIn, function(req,res,next){
+router.post('/list-space', checkIfLoggedIn, function(req,res,next){
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR: err});
@@ -128,7 +127,7 @@ router.post('/list-space', isLoggedIn, function(req,res,next){
     });
 });
 
-router.post('/list-user', isLoggedIn, function(req,res,next){
+router.post('/list-user', checkIfLoggedIn, function(req,res,next){
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
@@ -159,7 +158,7 @@ router.post('/list-user', isLoggedIn, function(req,res,next){
     });
 });
 
-router.post('/clowder-dataset', isLoggedIn, function(req,res,next){
+router.post('/clowder-dataset', checkIfLoggedIn, function(req,res,next){
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
@@ -189,7 +188,7 @@ router.post('/clowder-dataset', isLoggedIn, function(req,res,next){
     });
 });
 
-router.post('/clowder-collection', isLoggedIn, function(req,res,next){
+router.post('/clowder-collection', checkIfLoggedIn, function(req,res,next){
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
@@ -217,7 +216,7 @@ router.post('/clowder-collection', isLoggedIn, function(req,res,next){
     });
 });
 
-router.post('/clowder-space', isLoggedIn, function(req,res,next){
+router.post('/clowder-space', checkIfLoggedIn, function(req,res,next){
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});
@@ -245,7 +244,7 @@ router.post('/clowder-space', isLoggedIn, function(req,res,next){
     });
 });
 
-router.post('/clowder-files', isLoggedIn, function(req,res,next){
+router.post('/clowder-files', checkIfLoggedIn, function(req,res,next){
     redisClient.hgetall(req.user.username, function (err, obj) {
         if (err){
             res.send({ERROR:err});

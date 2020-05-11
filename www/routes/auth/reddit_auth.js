@@ -5,10 +5,9 @@ var crypto = require('crypto');
 
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
 
-router.get('/login/reddit', isLoggedIn, function(req,res,next){
+router.get('/login/reddit', checkIfLoggedIn, function(req,res,next){
 	//var grantType = 'https://oauth.reddit.com/grants/installed_client&';
 	
 	var user = REDDIT_CLIENT_ID;

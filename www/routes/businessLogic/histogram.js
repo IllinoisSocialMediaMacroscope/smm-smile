@@ -3,9 +3,8 @@ var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemote.js'));
-var isLoggedIn = require(path.join(appPath, 'scripts', 'helper_func', 'loginMiddleware.js'));
 
-router.post('/histogram', isLoggedIn, function(req,res,next){
+router.post('/histogram', checkIfLoggedIn, function(req,res,next){
 
 	var args = {
 				's3FolderName': req.user.username,
