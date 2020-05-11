@@ -441,9 +441,6 @@ function checkAuthorized(req) {
             twitter: false,
             reddit: false,
             crimson: false,
-            // dropbox: false,
-            // googleDrive: false,
-            // box: false,
         };
 
         redisClient.hgetall(req.user.username, function (err, obj){
@@ -454,9 +451,6 @@ function checkAuthorized(req) {
                 if (obj && 'twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
                 if (obj && 'rd_access_token' in obj) response['reddit'] = true;
                 if (obj && 'crimson_access_token' in obj) response['crimson'] = true;
-                // if (obj && 'dropbox_access_token' in obj) response['dropbox'] = true;
-                // if (obj && 'google_access_token' in obj) response['googleDrive'] = true;
-                // if (obj && 'box_access_token' in obj) response['box'] = true;
                 resolve(response);
             }
         });

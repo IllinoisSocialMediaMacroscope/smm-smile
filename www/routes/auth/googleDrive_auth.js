@@ -8,9 +8,6 @@ var redirectUrl = 'urn:ietf:wg:oauth:2.0:oob';
 var auth = new googleAuth();
 var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
-var path = require('path');
-var appPath = path.dirname(path.dirname(__dirname));
-
 router.get('/login/google', checkIfLoggedIn, function (req, res, next) {
 
     var authUrl = oauth2Client.generateAuthUrl({
@@ -27,8 +24,16 @@ router.post('/login/google', checkIfLoggedIn, function (req, res, next) {
         if (err) {
             res.send({'ERROR': err});
         } else {
-            redisClient.hset(req.user.username, 'google_access_token', token.access_token, redis.print);
-            redisClient.expire(req.user.username, 30 * 60);
+            if (process.env.DOCKERIZED === 'true') {
+                // save in redis
+                redisClient.hset(req.user.username, 'google_access_token', token.access_token, redis.print);
+                redisClient.expire(req.user.username, 30 * 60);
+            }
+            else{
+                // save in local session
+                req.session.google_access_token = token.access_token;
+                req.session.save();
+            }
             res.send({'data': 'success'});
         }
     });
