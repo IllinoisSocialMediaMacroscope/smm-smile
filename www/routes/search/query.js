@@ -7,11 +7,11 @@ var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
 
-router.get('/authorized', checkIfLoggedIn, function(req, res){
+router.get('/authorized', checkIfLoggedIn, function (req, res) {
     checkAuthorized(req).then(status => {
         res.send(status);
     })
-    .catch(checkAuthorizedError =>{
+    .catch(checkAuthorizedError => {
         res.send({ERROR: checkAuthorizedError});
     })
 });
@@ -26,7 +26,7 @@ router.get('/query', checkIfLoggedIn, function (req, res) {
             status: status,
         });
     })
-    .catch(checkAuthorizedError =>{
+    .catch(checkAuthorizedError => {
         res.send({ERROR: checkAuthorizedError});
     });
 });
@@ -58,11 +58,10 @@ router.post('/query-dryrun', checkIfLoggedIn, function (req, res) {
                     res.send({ERROR: gatherSinglePostError});
                 });
             })
-            .catch(retrieveCredentialsError =>{
+            .catch(retrieveCredentialsError => {
                 res.send({ERROR: retrieveCredentialsError});
             });
-        }
-        else {
+        } else {
             res.send({ERROR: platform + " token expired! Please refresh the page."});
         }
     })
@@ -74,10 +73,9 @@ router.post('/query-dryrun', checkIfLoggedIn, function (req, res) {
 router.post('/query', checkIfLoggedIn, function (req, res) {
     checkAuthorized(req).then(status => {
         var platform = req.body.prefix.split('-')[0];
-        if (status[platform] || req.body.prefix === 'reddit-Historical-Post'
-            || req.body.prefix === 'reddit-Historical-Comment') {
+        if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
             retrieveCredentials(req).then(obj => {
-                createLocalFolders(req);
+                var prefixGraphqlDownloadsDir = createLocalFolders(req);
                 checkExist(req.user.username + '/GraphQL/' + req.body.prefix + '/', req.body.filename)
                 .then((value) => {
                     if (value) {
@@ -91,7 +89,7 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                             'crimsonaccesstoken': obj['crimson_access_token']
                         };
 
-                        multiPostPromises = [];
+                        var multiPostPromises = [];
                         if (parseInt(req.body.pages) !== -999) {
                             if (req.body.prefix === 'twitter-Tweet' || req.body.prefix === 'twitter-Timeline') {
                                 // post one time with all pages
@@ -114,7 +112,7 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                             if ("errors" in values[0]) {
                                 res.send({ERROR: values[0]['errors'][0]['message']});
                             } else {
-                                responseObj = mergeJSON(values, [key1, key2, key3]);
+                                var responseObj = mergeJSON(values, [key1, key2, key3]);
 
                                 // ------------------------------------save csv file---------------------------------------------------------
                                 if (responseObj[key1][key2][key3].length > 0
@@ -122,13 +120,13 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                                     && responseObj[key1][key2][key3] !== undefined) {
 
                                     // if no such folder, create that folder
-                                    var directory = path.join(dir_downloads_graphql_prefix, req.body.filename);
+                                    var directory = path.join(prefixGraphqlDownloadsDir, req.body.filename);
                                     if (!fs.existsSync(directory)) {
                                         fs.mkdirSync(directory);
                                     }
 
                                     // save query parameters to it so history page can use it! Synchronous method
-                                    params = JSON.parse(req.body.params);
+                                    var params = JSON.parse(req.body.params);
                                     if (parseInt(req.body.pages) !== -999) params['pages:'] = parseInt(req.body.pages);
                                     if (params['fields'] === "") params['fields'] = "DEFAULT";
                                     fs.writeFileSync(path.join(directory, "config.json"), JSON.stringify(params), 'utf8');
@@ -168,18 +166,16 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                                         uploadToS3Promises.push(s3.uploadToS3(path.join(directory, "config.json"),
                                             req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + "config.json"));
                                         Promise.all(uploadToS3Promises).then((URLs) => {
-
                                             var args = {
                                                 's3FolderName': req.user.username,
                                                 'filename': processed,
                                                 'remoteReadPath': req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
                                             };
-
                                             if (req.body.prefix !== ('crimson-Hexagon')) {
                                                 lambdaHandler.invoke('histogram', 'histogram', args).then(results => {
                                                     if (results['url'] === 'null') {
                                                         var rendering = responseObj[key1][key2][key3].slice(0, 100);
-                                                        s3.deleteLocalFolders(directory.slice(0, -1)).then(() => {
+                                                        s3.deleteLocalFolders(directory).then(() => {
                                                             res.send({
                                                                 fname: processed,
                                                                 URLs: URLs,
@@ -193,7 +189,7 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
 
                                                             var histogram = data;
                                                             var rendering = responseObj[key1][key2][key3].slice(0, 100);
-                                                            s3.deleteLocalFolders(directory.slice(0, -1)).then(() => {
+                                                            s3.deleteLocalFolders(directory).then(() => {
                                                                 res.send({
                                                                     fname: processed,
                                                                     URLs: URLs,
@@ -212,7 +208,7 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                                                     res.send({'ERROR': lambdaHandlerError});
                                                 });
                                             } else {
-                                                s3.deleteLocalFolders(directory.slice(0, -1)).then(() => {
+                                                s3.deleteLocalFolders(directory).then(() => {
                                                     res.send({fname: processed, URLs: URLs});
                                                 }).catch(deleteLocalFoldersError => {
                                                     res.send({ERROR: deleteLocalFoldersError});
@@ -242,8 +238,7 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
             .catch(retrieveCredentialsError => {
                 res.send({ERROR: retrieveCredentialsError});
             });
-        }
-        else{
+        } else {
             res.send({ERROR: platform + " token expired! Please refresh the page."})
         }
     }).catch(checkAuthorizedError => {
@@ -252,21 +247,21 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
 });
 
 router.post('/prompt', checkIfLoggedIn, function (req, res) {
-    retrieveCredentials(req).then(obj =>{
+    retrieveCredentials(req).then(obj => {
         lambdaHandler.invoke('bae_screen_name_prompt', 'bae_screen_name_prompt', {
-                consumer_key: TWITTER_CONSUMER_KEY,
-                consumer_secret: TWITTER_CONSUMER_SECRET,
-                access_token: obj['twt_access_token_key'],
-                access_token_secret: obj['twt_access_token_secret'],
-                screen_name: req.body.screenName
-            })
-            .then(userinfo => {
-                res.send(userinfo);
-            })
-            .catch(lambdaHandlerError => {
-                res.send({ERROR: lambdaHandlerError});
-            });
-        }).catch(retrieveCredentialsError =>{
+            consumer_key: TWITTER_CONSUMER_KEY,
+            consumer_secret: TWITTER_CONSUMER_SECRET,
+            access_token: obj['twt_access_token_key'],
+            access_token_secret: obj['twt_access_token_secret'],
+            screen_name: req.body.screenName
+        })
+        .then(userinfo => {
+            res.send(userinfo);
+        })
+        .catch(lambdaHandlerError => {
+            res.send({ERROR: lambdaHandlerError});
+        });
+    }).catch(retrieveCredentialsError => {
         res.send({ERROR: retrieveCredentialsError});
     });
 });
@@ -289,7 +284,7 @@ function retrieveCredentials(req) {
     });
 }
 
-function createLocalFolders(req){
+function createLocalFolders(req) {
     if (!fs.existsSync(smileHomePath)) {
         fs.mkdirSync(smileHomePath);
     }
@@ -298,21 +293,21 @@ function createLocalFolders(req){
         fs.mkdirSync(path.join(smileHomePath, req.user.username));
     }
 
-    var dir_downloads = path.join(smileHomePath, req.user.username, 'downloads');
-    if (!fs.existsSync(dir_downloads)) {
-        fs.mkdirSync(dir_downloads);
+    var downloadsDir = path.join(smileHomePath, req.user.username, 'downloads');
+    if (!fs.existsSync(downloadsDir)) {
+        fs.mkdirSync(downloadsDir);
     }
 
-    var dir_downloads_graphql = path.join(dir_downloads, 'GraphQL');
-    if (!fs.existsSync(dir_downloads_graphql)) {
-        fs.mkdirSync(dir_downloads_graphql);
+    var graphqlDownloadsDir = path.join(downloadsDir, 'GraphQL');
+    if (!fs.existsSync(graphqlDownloadsDir)) {
+        fs.mkdirSync(graphqlDownloadsDir);
     }
-    var dir_downloads_graphql_prefix = path.join(dir_downloads_graphql, req.body.prefix);
-    if (!fs.existsSync(dir_downloads_graphql_prefix)) {
-        fs.mkdirSync(dir_downloads_graphql_prefix);
+    var prefixGraphqlDownloadsDir = path.join(graphqlDownloadsDir, req.body.prefix);
+    if (!fs.existsSync(prefixGraphqlDownloadsDir)) {
+        fs.mkdirSync(prefixGraphqlDownloadsDir);
     }
 
-    return null;
+    return prefixGraphqlDownloadsDir;
 }
 
 function checkExist(remotePrefix, localFolderName) {
@@ -338,20 +333,19 @@ function gatherMultiPost(req, headers, pageNum) {
     var platform = req.body.prefix.split('-')[0];
 
     return new Promise((resolve, reject) => {
-        fetch('http://'+ SMILE_GRAPHQL +':5050/graphql', {
+        fetch('http://' + SMILE_GRAPHQL + ':5050/graphql', {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify({"query": query })
+            body: JSON.stringify({"query": query})
         }).then(function (response) {
             return response.text();
         }).then(function (responseBody) {
             responseBody = responseBody.replace(/\\r/g, '');
             var responseObj = JSON.parse(responseBody);
-            if (responseObj!==undefined && responseObj['errors'] !== undefined){
+            if (responseObj !== undefined && responseObj['errors'] !== undefined) {
                 reject(responseObj['errors']);
                 removeInvalidToken(req, platform);
-            }
-            else {
+            } else {
                 resolve(responseObj);
             }
         }).catch((fetchError) => {
@@ -374,11 +368,10 @@ function gatherSinglePost(req, headers) {
         }).then(function (responseBody) {
             responseBody = responseBody.replace(/\\r/g, '');
             var responseObj = JSON.parse(responseBody);
-            if (responseObj!==undefined && responseObj['errors'] !== undefined) {
+            if (responseObj !== undefined && responseObj['errors'] !== undefined) {
                 reject(responseObj['errors']);
                 removeInvalidToken(req, platform);
-            }
-            else{
+            } else {
                 resolve(responseObj);
             }
         }).catch((fetchError) => {
@@ -388,7 +381,7 @@ function gatherSinglePost(req, headers) {
     });
 }
 
-function removeInvalidToken(req, platform){
+function removeInvalidToken(req, platform) {
     if (process.env.DOCKERIZED === 'true') {
         if (platform === 'twitter') {
             redisClient.hdel(req.user.username, 'twt_access_token_key');
@@ -398,9 +391,8 @@ function removeInvalidToken(req, platform){
         } else if (platform === 'crimson') {
             redisClient.hdel(req.user.username, 'crimson_access_token');
         }
-    }
-    else{
-        if (platform === 'twitter'){
+    } else {
+        if (platform === 'twitter') {
             req.session.twt_access_token_key = null;
             req.session.twt_access_token_secret = null;
         } else if (platform === 'reddit') {
@@ -452,8 +444,7 @@ function checkAuthorized(req) {
                     resolve(response);
                 }
             });
-        }
-        else{
+        } else {
             if (req.session.twt_access_token_key && req.session.twt_access_token_secret) response['twitter'] = true;
             if (req.session.rd_access_token) response['reddit'] = true;
             if (req.session.crimson_access_token) response['crimson'] = true;
