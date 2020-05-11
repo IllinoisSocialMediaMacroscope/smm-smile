@@ -18,7 +18,6 @@ var LambdaHelper = require(path.join(__dirname, 'scripts', 'helper_func', 'lambd
 var BatchHelper = require(path.join(__dirname, 'scripts', 'helper_func', 'batchHelper.js'));
 var RabbitmqSender = require(path.join(__dirname, 'scripts', 'helper_func', 'rabbitmqSender.js'));
 var S3Helper = require(path.join(__dirname, 'scripts', 'helper_func', 's3Helper.js'));
-var { isLoggedIn, isLoggedInPassing } = require(path.join(__dirname, 'scripts', 'helper_func', 'loginMiddleware.js'));
 var fs = require('fs');
 var app = express();
 
@@ -26,9 +25,10 @@ var app = express();
 redis = require('redis');
 
 /**
- * read HOME path from environment file and set it global
+ * default path from environment file and set it global; maybe not be used
  */
 smileHomePath = path.join(process.env.HOME, 'smile');
+s3FolderName = process.env.USER || 'local';
 
 /**
  * determine which version of deployment: dockerized vs usual
@@ -75,7 +75,12 @@ if (process.env.DOCKERIZED === 'true') {
         console.log('Error ' + err);
     });
 
-    checkIfLoggedIn = isLoggedIn;
+    checkIfLoggedIn = function(req, res, next){
+        if(req.isAuthenticated() || req.user != null){
+            return next();
+        }
+        res.redirect("/account");
+    }
 }
 else {
     var config = require('./main_config.json');
@@ -101,7 +106,10 @@ else {
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
 
     // backward compatibility; do not need multiuser capacity if deploying on macroscope
-    checkIfLoggedIn = isLoggedInPassing;
+    checkIfLoggedIn = function(req, res, next){
+        req.user = {username: s3FolderName};
+        return next();
+    }
 }
 
 app.use(session({
