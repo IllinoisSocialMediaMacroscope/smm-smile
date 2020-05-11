@@ -42,21 +42,22 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
                         i(class="fas fa-history")
                         | &nbsp;Past Results
 
-                li
-                    if user
-                        div(class="topbar-dropdown")
-                            button(type="button", id="topbar-account-btn", class="btn btn-default topbar-dropdown-toggle",
-                            data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
-                                | #{user.username} &nbsp;
-                                span(class="caret")
-                            ul(class="dropdown-menu", aria-labelledby="dropdownMenu2")
-                                li
-                                    a(href="smile-logout") Logout
-                                li
-                                    a(href="account") Switch Account
-                    else
-                        a(href="account", id="topbar-account")
-                            i(class="fas fa-user")
-                            | &nbsp;Account
+                if DOCKERIZED
+                    li
+                        if user
+                            div(class="topbar-dropdown")
+                                button(type="button", id="topbar-account-btn", class="btn btn-default topbar-dropdown-toggle",
+                                data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
+                                    | #{user.username} &nbsp;
+                                    span(class="caret")
+                                ul(class="dropdown-menu", aria-labelledby="dropdownMenu2")
+                                    li
+                                        a(href="smile-logout") Logout
+                                    li
+                                        a(href="account") Switch Account
+                        else
+                            a(href="account", id="topbar-account")
+                                i(class="fas fa-user")
+                                | &nbsp;Account
 
 script(src="bootstrap/js/customized/view_topbar.js")
