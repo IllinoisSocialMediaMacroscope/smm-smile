@@ -11,6 +11,7 @@ var mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const flash = require('connect-flash');
+const redis = require('redis');
 
 var lambdaRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'lambdaRoutesTemplate.js'));
 var batchRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'batchRoutesTemplate.js'));
@@ -20,9 +21,6 @@ var RabbitmqSender = require(path.join(__dirname, 'scripts', 'helper_func', 'rab
 var S3Helper = require(path.join(__dirname, 'scripts', 'helper_func', 's3Helper.js'));
 var fs = require('fs');
 var app = express();
-
-// make it global
-redis = require('redis');
 
 /**
  * default path from environment file and set it global; maybe not be used
@@ -69,8 +67,8 @@ if (process.env.DOCKERIZED === 'true') {
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
 
-    // configure redisclear
-    redisClient = redis.createClient("redis://redis");
+    // configure redisClient
+    var redisClient = redis.createClient("redis://redis");
     redisClient.on('error', function (err) {
         console.log('Error ' + err);
     });
@@ -94,9 +92,14 @@ if (process.env.DOCKERIZED === 'true') {
         });
     }
 
-    global.removeCredentials = function(req, entry){
+    global.removeCredential = function(req, entry){
         redisClient.hdel(req.user.username, entry);
     }
+
+    global.setCredential = function(req, entry, credential){
+        redisClient.hset(req.user.username, entry, credential, redis.print);
+        redisClient.expire(req.user.username, 30 * 60);
+    };
 }
 else {
     var config = require('./main_config.json');
@@ -134,17 +137,22 @@ else {
         });
     }
 
-    global.removeCredentials = function(req, entry){
+    global.removeCredential = function(req, entry){
         req.session[entry] = null;
         req.session.save();
     }
+
+    global.setCredential = function(req, entry, credential){
+        req.session[entry] = credential;
+        req.session.save();
+    };
 }
 
 app.use(session({
     secret: 'keyboard cat',
     resave: true,
     saveUninitialized: true,
-    cookie: {maxAge: 1000 * 1800}, // last half an hour?
+    cookie: {maxAge: 1000 * 30 * 60}, // last half an hour?
     rolling: true
 }));
 app.use(express.static(path.join(__dirname, '/public')));

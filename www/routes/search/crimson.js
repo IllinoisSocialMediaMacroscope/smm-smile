@@ -16,7 +16,7 @@ router.get('/query-crimson', checkIfLoggedIn, function (req, res, next) {
                         results);
                 }
             }).catch(error => {
-                removeCredentials(req, 'crimson_access_token');
+                removeCredential(req, 'crimson_access_token');
                 res.send({'ERROR': JSON.stringify(error)});
             });
         }

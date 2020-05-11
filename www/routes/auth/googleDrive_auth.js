@@ -23,17 +23,9 @@ router.post('/login/google', checkIfLoggedIn, function (req, res, next) {
     oauth2Client.getToken(req.body.authorizeCode, function (err, token) {
         if (err) {
             res.send({'ERROR': err});
-        } else {
-            if (process.env.DOCKERIZED === 'true') {
-                // save in redis
-                redisClient.hset(req.user.username, 'google_access_token', token.access_token, redis.print);
-                redisClient.expire(req.user.username, 30 * 60);
-            }
-            else{
-                // save in local session
-                req.session.google_access_token = token.access_token;
-                req.session.save();
-            }
+        }
+        else {
+            setCredential(req, 'google_access_token', token.access_token);
             res.send({'data': 'success'});
         }
     });

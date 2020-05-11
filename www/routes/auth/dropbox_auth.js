@@ -27,18 +27,8 @@ router.post('/login/dropbox',function(req,res,next){
 				res.send({'ERROR':json.error});
 			}
 
-			if (process.env.DOCKERIZED === 'true') {
-				// save in redis
-				redisClient.hset(req.user.username, 'dropbox_access_token', json.access_token, redis.print);
-				redisClient.expire(req.user.username, 30 * 60);
-				res.send({'data': 'success'});
-			}
-			else {
-				// save in session
-				req.session.dropbox_access_token = json.access_token;
-				req.session.save();
-				res.send({'data':'success'});
-			}
+			setCredential(req, 'dropbox_access_token', json.access_token);
+			res.send({'data': 'success'});
 		});
 });
 

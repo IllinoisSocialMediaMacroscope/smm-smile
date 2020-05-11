@@ -26,18 +26,9 @@ router.get('/login/reddit', checkIfLoggedIn, function(req,res,next){
 			}).then(function(json){
 				if ('error' in json){
                     res.send({ERROR: JSON.stringify(json)});
-				}else{
-					if (process.env.DOCKERIZED === 'true'){
-						// save in redis
-						redisClient.hset(req.user.username, 'rd_access_token', json['access_token'], redis.print);
-						redisClient.expire(req.user.username, 30 * 60);
-					}
-					else{
-						// save in the session
-						req.session.rd_access_token = json.access_token;
-						req.session.save();
-					}
-
+				}
+				else{
+					setCredential(req, 'rd_access_token', json['access_token']);
                     res.send({});
 				}
 			});

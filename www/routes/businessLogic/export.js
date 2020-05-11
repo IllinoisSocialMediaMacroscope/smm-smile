@@ -10,10 +10,6 @@ var Dropbox = require('dropbox');
 
 var BoxSDK = require('box-node-sdk');
 
-var path = require('path');
-var appPath = path.dirname(path.dirname(__dirname));
-
-
 router.post('/export', checkIfLoggedIn, function(req,res,next){
 
     // if smile home folder doesn't exist, create one
@@ -27,7 +23,7 @@ router.post('/export', checkIfLoggedIn, function(req,res,next){
 
     var downloadPath = path.join(smileHomePath, req.user.username, 'downloads');
 
-    redisClient.hgetall(req.user.username, function (err, obj) {
+    retrieveCredentials(req).then(obj =>{
         s3.list_files(req.user.username + '/').then(files => {
             if (Object.keys(files).length === 0) {
                 res.send({'ERROR': 'You don\'t have any data associate with this session. Nothing to export!'});
@@ -50,9 +46,9 @@ router.post('/export', checkIfLoggedIn, function(req,res,next){
                                         res.send({ERROR: s3DeleteError});
                                     });
                                 })
-                                .catch(err => {
-                                    removeCredentials(req, 'google_access_token');
-                                    res.send({ERROR: err});
+                                .catch(uploadToGoogleError => {
+                                    removeCredential(req, 'google_access_token');
+                                    res.send({ERROR: uploadToGoogleError});
                                 })
                             } else {
                                 res.send({'ERROR': 'Goolge Drive token has expired. Please authorize again!'});
@@ -69,14 +65,14 @@ router.post('/export', checkIfLoggedIn, function(req,res,next){
                                         res.send({ERROR: s3DeleteError});
                                     });
                                 })
-                                .catch(err => {
-                                    removeCredentials(req, 'dropbox_access_token');
-                                    res.send({ERROR: err});
+                                .catch(uploadToDropbox => {
+                                    removeCredential(req, 'dropbox_access_token');
+                                    res.send({ERROR: uploadToDropbox});
                                 });
                             } else if (filesize > 140 * 1024 * 1024) {
                                 res.send({
                                     'ERROR': 'We apologize that we are currently still working on the large file transfer function '
-                                    + 'for dropbox. Please switch to Google Drive uploads.'
+                                        + 'for dropbox. Please switch to Google Drive uploads.'
                                 });
                             } else {
                                 res.send({'ERROR': 'Dropbox token has expired. Please authorize again!'});
@@ -93,9 +89,9 @@ router.post('/export', checkIfLoggedIn, function(req,res,next){
                                         res.send({ERROR: s3DeleteError});
                                     });
                                 })
-                                .catch(err => {
-                                    removeCredentials(req, 'box_access_token');
-                                    res.send({ERROR: err});
+                                .catch(uploadToBox => {
+                                    removeCredential(req, 'box_access_token');
+                                    res.send({ERROR: uploadToBox});
                                 });
                             } else {
                                 res.send({'ERROR': 'Dropbox token has expired. Please authorize again!'});
@@ -112,8 +108,10 @@ router.post('/export', checkIfLoggedIn, function(req,res,next){
         }).catch(s3ListFileError => {
             res.send({ERROR: s3ListFileError});
         });
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR: retrieveCredentialsError});
     });
-	  
 });
 
 router.post('/export-single', checkIfLoggedIn, function(req,res){
@@ -129,9 +127,8 @@ router.post('/export-single', checkIfLoggedIn, function(req,res){
 
     var downloadPath = path.join(smileHomePath, req.user.username, 'downloads');
 
-    redisClient.hgetall(req.user.username, function (err, obj) {
+    retrieveCredentials(req).then(obj =>{
         // check if the requested folder matches the current user's identity
-        // decide if multiuser or not
         var arrURL = req.body.folderURL.split('/');
         if (arrURL[0] === req.user.username) {
             var p = s3.list_files(req.body.folderURL);
@@ -153,8 +150,8 @@ router.post('/export-single', checkIfLoggedIn, function(req,res){
                                         res.send({ERROR: s3DeleteError});
                                     });
                                 })
-                                .catch(err => {
-                                    res.send({ERROR: err});
+                                .catch(uploadToGoogleError => {
+                                    res.send({ERROR: uploadToGoogleError});
                                 });
                             } else {
                                 res.send({'ERROR': 'Goolge Drive token has expired. Please authorize again!'});
@@ -171,9 +168,9 @@ router.post('/export-single', checkIfLoggedIn, function(req,res){
                                         res.send({ERROR: s3DeleteError});
                                     });
                                 })
-                                .catch(err => {
-                                    removeCredentials(req, 'dropbox_access_token');
-                                    res.send({ERROR: err});
+                                .catch(uploadToDropboxError => {
+                                    removeCredential(req, 'dropbox_access_token');
+                                    res.send({ERROR: uploadToDropboxError});
                                 });
                             } else if (filesize > 140 * 1024 * 1024) {
                                 res.send({
@@ -194,9 +191,9 @@ router.post('/export-single', checkIfLoggedIn, function(req,res){
                                         res.send({ERROR: s3DeleteError});
                                     });
                                 })
-                                .catch(err => {
-                                    removeCredentials(req, 'box_access_token');
-                                    res.send({ERROR: err});
+                                .catch(uploadToBoxError => {
+                                    removeCredential(req, 'box_access_token');
+                                    res.send({ERROR: uploadToBoxError});
                                 });
                             } else {
                                 res.send({'ERROR': 'Dropbox token has expired. Please authorize again!'});
@@ -216,7 +213,11 @@ router.post('/export-single', checkIfLoggedIn, function(req,res){
         else {
             res.send({ERROR: "Access Denied!"});
         }
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR:retrieveCredentialsError});
     });
+
 });
 
 function uploadToGoogle(filename, buffer, google_access_token) {

@@ -7,35 +7,32 @@ router.post('/check-clowder-login', checkIfLoggedIn, function(req, res, next){
             res.send('Logged in!');
         }
         else {
-            removeCredentials(req, 'clowder_username');
-            removeCredentials(req, 'clowder_password');
+            removeCredential(req, 'clowder_username');
+            removeCredential(req, 'clowder_password');
             res.send('Not logged in!');
         }
-    }).catch(err =>{
-        res.send({ERROR:err});
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR: retrieveCredentialsError});
     });
 });
 
 router.post('/clowder-login', checkIfLoggedIn, function(req,res,next){
 	if (req.body.clowder_username !== undefined && req.body.clowder_password !== undefined){
-        redisClient.hset(req.user.username, 'clowder_username', req.body.clowder_username, redis.print);
-        redisClient.hset(req.user.username, 'clowder_password', req.body.clowder_password, redis.print);
-        redisClient.expire(req.user.username, 30 * 60);
+        setCredential(req, 'clowder_username', req.body.clowder_username);
+        setCredential(req, 'clowder_password', req.body.clowder_password);
 		res.send({success:'succesfully provided username and password information!'});
 	}else{
-        removeCredentials(req, 'clowder_username');
-        removeCredentials(req, 'clowder_password');
+        removeCredential(req, 'clowder_username');
+        removeCredential(req, 'clowder_password');
 		res.send({ERROR:'username and password incomplete!'});
 	}
 
 });
 
 router.post('/list-dataset', checkIfLoggedIn, function(req, res, next){
-    redisClient.hgetall(req.user.username, function (err, obj) {
-        if (err){
-            res.send({ERROR: err});
-        }
-        else if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
+    retrieveCredentials(req).then(obj =>{
+        if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
             // invoke CLowder lambda function
             var args = {
                 'username': obj['clowder_username'],
@@ -45,28 +42,28 @@ router.post('/list-dataset', checkIfLoggedIn, function(req, res, next){
 
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    removeCredentials(req, 'clowder_username');
-                    removeCredentials(req, 'clowder_password');
+                    removeCredential(req, 'clowder_username');
+                    removeCredential(req, 'clowder_password');
 					res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
                 }
 
-            }).catch(error => {
-                res.send({'ERROR': JSON.stringify(error)});
+            }).catch(lambdaHandlerError => {
+                res.send({'ERROR': JSON.stringify(lambdaHandlerError)});
             });
         } else {
             res.send({ERROR: 'Your login session has expired. Please login again!'});
         }
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR: retrieveCredentialsError});
     });
 });
 
 router.post('/list-collection', checkIfLoggedIn, function(req,res,next){
-    redisClient.hgetall(req.user.username, function (err, obj) {
-        if (err){
-            res.send({ERROR:err});
-        }
-        else if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
+    retrieveCredentials(req).then(obj =>{
+        if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
             // invoke CLowder lambda function
             var args = {
                 'username': obj['clowder_username'],
@@ -75,28 +72,28 @@ router.post('/list-collection', checkIfLoggedIn, function(req,res,next){
             };
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    removeCredentials(req, 'clowder_username');
-                    removeCredentials(req, 'clowder_password');
+                    removeCredential(req, 'clowder_username');
+                    removeCredential(req, 'clowder_password');
                     res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
                 }
 
-            }).catch(error => {
-                res.send({'ERROR': JSON.stringify(error)});
+            }).catch(lambdaHandlerError => {
+                res.send({'ERROR': JSON.stringify(lambdaHandlerError)});
             });
         }
         else {
             res.send({ERROR: 'Your login session has expired. Please login again!'});
         }
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR: retrieveCredentialsError});
     });
 });
 
 router.post('/list-space', checkIfLoggedIn, function(req,res,next){
-    redisClient.hgetall(req.user.username, function (err, obj) {
-        if (err){
-            res.send({ERROR: err});
-        }
+    retrieveCredentials(req).then(obj =>{
         if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
             // invoke CLowder lambda function
             var args = {
@@ -106,29 +103,29 @@ router.post('/list-space', checkIfLoggedIn, function(req,res,next){
             };
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    removeCredentials(req, 'clowder_username');
-                    removeCredentials(req, 'clowder_password');
+                    removeCredential(req, 'clowder_username');
+                    removeCredential(req, 'clowder_password');
                     res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
                 }
 
-            }).catch(error => {
-                res.send({'ERROR': JSON.stringify(error)});
+            }).catch(lambdaHandlerError => {
+                res.send({'ERROR': JSON.stringify(lambdaHandlerError)});
             });
         }
         else {
             res.send({ERROR: 'Your login session has expired. Please login again!'});
         }
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR: retrieveCredentialsError});
     });
 });
 
 router.post('/list-user', checkIfLoggedIn, function(req,res,next){
-    redisClient.hgetall(req.user.username, function (err, obj) {
-        if (err){
-            res.send({ERROR:err});
-        }
-        else if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
+    retrieveCredentials(req).then(obj =>{
+        if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
             // invoke CLowder lambda function
             var args = {
                 'username': obj['clowder_username'],
@@ -137,29 +134,29 @@ router.post('/list-user', checkIfLoggedIn, function(req,res,next){
             };
             lambdaHandler.invoke('lambda_list_clowder', 'lambda_list_clowder', args).then(results => {
                 if (results['data'].indexOf('error') !== -1) {
-                    removeCredentials(req, 'clowder_username');
-                    removeCredentials(req, 'clowder_password');
+                    removeCredential(req, 'clowder_username');
+                    removeCredential(req, 'clowder_password');
                     res.send({'ERROR': results['info']});
                 } else {
                     res.send(results['data']);
                 }
 
-            }).catch(error => {
-                res.send({'ERROR': JSON.stringify(error)});
+            }).catch(lambdaHandlerError => {
+                res.send({'ERROR': JSON.stringify(lambdaHandlerError)});
             });
         }
         else {
             res.send({ERROR: 'Your login session has expired. Please login again!'});
         }
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR: retrieveCredentialsError});
     });
 });
 
 router.post('/clowder-dataset', checkIfLoggedIn, function(req,res,next){
-    redisClient.hgetall(req.user.username, function (err, obj) {
-        if (err){
-            res.send({ERROR:err});
-        }
-        else if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
+    retrieveCredentials(req).then(obj =>{
+        if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
             // invoke CLowder lambda function
             var args = {
                 'username': obj['clowder_username'],
@@ -174,22 +171,22 @@ router.post('/clowder-dataset', checkIfLoggedIn, function(req,res,next){
                     res.send(results);
                 }
 
-            }).catch(error => {
-                res.send({'ERROR': JSON.stringify(error)});
+            }).catch(lambdaHandlerError => {
+                res.send({'ERROR': JSON.stringify(lambdaHandlerError)});
             });
         }
         else {
             res.send({ERROR: 'Your login session has expired. Please login again!'});
         }
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR: retrieveCredentialsError});
     });
 });
 
 router.post('/clowder-collection', checkIfLoggedIn, function(req,res,next){
-    redisClient.hgetall(req.user.username, function (err, obj) {
-        if (err){
-            res.send({ERROR:err});
-        }
-        else if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
+    retrieveCredentials(req).then(obj =>{
+       if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
             var args = {
                 'username': obj['clowder_username'],
                 'password': obj['clowder_password'],
@@ -202,22 +199,22 @@ router.post('/clowder-collection', checkIfLoggedIn, function(req,res,next){
                     res.send(results);
                 }
 
-            }).catch(error => {
-                res.send({'ERROR': JSON.stringify(error)});
+            }).catch(lambdaHandlerError => {
+                res.send({'ERROR': JSON.stringify(lambdaHandlerError)});
             });
         }
         else {
             res.send({ERROR: 'Your login session has expired. Please login again!'});
         }
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR: retrieveCredentialsError});
     });
 });
 
 router.post('/clowder-space', checkIfLoggedIn, function(req,res,next){
-    redisClient.hgetall(req.user.username, function (err, obj) {
-        if (err){
-            res.send({ERROR:err});
-        }
-        else if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
+    retrieveCredentials(req).then(obj =>{
+        if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
             res.send({ERROR: 'Your login session has expired. Please login again!'});
         }
         else {
@@ -233,19 +230,19 @@ router.post('/clowder-space', checkIfLoggedIn, function(req,res,next){
                     res.send(results);
                 }
 
-            }).catch(error => {
-                res.send({'ERROR': JSON.stringify(error)});
+            }).catch(lambdaHandlerError => {
+                res.send({'ERROR': JSON.stringify(lambdaHandlerError)});
             });
         }
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR: retrieveCredentialsError});
     });
 });
 
 router.post('/clowder-files', checkIfLoggedIn, function(req,res,next){
-    redisClient.hgetall(req.user.username, function (err, obj) {
-        if (err){
-            res.send({ERROR:err});
-        }
-        else if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
+    retrieveCredentials(req).then(obj => {
+        if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
             var args = {
                 'username': obj['clowder_username'],
                 'password': obj['clowder_password'],
@@ -258,13 +255,16 @@ router.post('/clowder-files', checkIfLoggedIn, function(req,res,next){
                     res.send(results);
                 }
 
-            }).catch(error => {
-                res.send({'ERROR': JSON.stringify(error)});
+            }).catch(lambdaHandlerError => {
+                res.send({'ERROR': JSON.stringify(lambdaHandlerError)});
             });
         }
         else {
             res.send({ERROR: 'Your login session has expired. Please login again!'});
         }
+    })
+    .catch(retrieveCredentialsError =>{
+        res.send({ERROR: retrieveCredentialsError});
     });
 });
 

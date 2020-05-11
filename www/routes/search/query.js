@@ -366,12 +366,12 @@ function gatherSinglePost(req, headers) {
 
 function removeInvalidToken(req, platform) {
     if (platform === 'twitter') {
-        removeCredentials(req, 'twt_access_token_key');
-        removeCredentials(req, 'twt_access_token_secret');
+        removeCredential(req, 'twt_access_token_key');
+        removeCredential(req, 'twt_access_token_secret');
     } else if (platform === 'reddit') {
-        removeCredentials(req, 'rd_access_token');
+        removeCredential(req, 'rd_access_token');
     } else if (platform === 'crimson') {
-        removeCredentials(req, 'crimson_access_token');
+        removeCredential(req, 'crimson_access_token');
     }
 }
 
@@ -404,23 +404,15 @@ function checkAuthorized(req) {
             crimson: false,
         };
 
-        if (process.env.DOCKERIZED === 'true') {
-            redisClient.hgetall(req.user.username, function (err, obj) {
-                if (err) {
-                    reject(err);
-                } else {
-                    if (obj && 'twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
-                    if (obj && 'rd_access_token' in obj) response['reddit'] = true;
-                    if (obj && 'crimson_access_token' in obj) response['crimson'] = true;
-                    resolve(response);
-                }
-            });
-        } else {
-            if (req.session.twt_access_token_key && req.session.twt_access_token_secret) response['twitter'] = true;
-            if (req.session.rd_access_token) response['reddit'] = true;
-            if (req.session.crimson_access_token) response['crimson'] = true;
+        retrieveCredentials(req).then(obj =>{
+            if (obj && 'twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
+            if (obj && 'rd_access_token' in obj) response['reddit'] = true;
+            if (obj && 'crimson_access_token' in obj) response['crimson'] = true;
             resolve(response);
-        }
+        })
+        .catch(err =>{
+            reject(err);
+        });
     });
 }
 
