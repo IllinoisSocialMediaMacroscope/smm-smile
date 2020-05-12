@@ -1,8 +1,6 @@
 var Promise = require('bluebird');
 var appendQuery = require('append-query');
 var fetch = require('node-fetch');
-//var AWS = require('aws-sdk');
-//require('dotenv').config();
 
 function elasticSearchAPI(args){
 

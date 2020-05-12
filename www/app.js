@@ -10,7 +10,6 @@ var session = require('express-session');
 var mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const flash = require('connect-flash');
 const redis = require('redis');
 
 var lambdaRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'lambdaRoutesTemplate.js'));
@@ -164,7 +163,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
 
 app.use('/', require('./routes/index.js'));
 
@@ -303,10 +301,10 @@ app.post('/register', function (req, res, next) {
     });
 });
 app.get('/account', function (req, res) {
-    res.render('account', {user: req.user, message: req.flash('error')});
+    res.render('account', {user: req.user});
 });
 app.post('/smile-login',
-    passport.authenticate('local', {failureRedirect: '/account', failureFlash: true}),
+    passport.authenticate('local', {failureRedirect: '/account'}),
     function (req, res) {
         res.status(200).send({message: "successfully logged in!"});
     });
