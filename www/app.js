@@ -294,20 +294,26 @@ authRoutesFiles.forEach(function (route, i) {
 app.post('/register', function (req, res, next) {
     User.register(new User({username: req.body.username}), req.body.password, function (err) {
         if (err) {
-            console.log('error while user register!', err);
-            return next(err);
+            res.send({ERROR: "fail to register! ERROR: " + err  });
         }
-        res.status(200).send({message: "successfully registered!"});
+        else{
+            res.status(200).send({message: "successfully registered!"});
+        }
     });
 });
 app.get('/account', function (req, res) {
     res.render('account', {user: req.user});
 });
-app.post('/smile-login',
-    passport.authenticate('local', {failureRedirect: '/account'}),
-    function (req, res) {
-        res.status(200).send({message: "successfully logged in!"});
-    });
+app.post('/smile-login', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+        if (err) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
+        if (!user) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
+        req.logIn(user, function(err) {
+            if (err) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
+            return  res.status(200).send({message: "successfully logged in!"});
+        });
+    })(req, res, next);
+});
 app.get('/smile-logout', function (req, res) {
     req.logout();
     res.redirect('/');
