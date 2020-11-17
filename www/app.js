@@ -84,7 +84,7 @@ if (process.env.DOCKERIZED === 'true') {
             redisClient.hgetall(req.user.username, function (err, obj) {
                 if (err) {
                     reject(err);
-                } else if (obj) {
+                } else {
                     resolve(obj)
                 }
             });
