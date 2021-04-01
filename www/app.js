@@ -49,8 +49,10 @@ if (process.env.DOCKERIZED === 'true') {
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
     SMILE_GRAPHQL = "smile-graphql";
     BUCKET_NAME = process.env.BUCKET_NAME;
-    if (process.env.EMAIL_HOST === "" || process.env.EMAIL_PORT === "" || process.env.EMAIL_FROM_ADDRESS === ""
-        || process.env.EMAIL_PASSWORD === ""){
+    if (process.env.EMAIL_HOST === "" || process.env.EMAIL_HOST === undefined || process.env.EMAIL_HOST === null ||
+        process.env.EMAIL_PORT === "" || process.env.EMAIL_PORT === undefined || process.env.EMAIL_PORT === null ||
+        process.env.EMAIL_FROM_ADDRESS === "" || process.env.EMAIL_FROM_ADDRESS === undefined || process.env.EMAIL_FROM_ADDRESS === null ||
+        process.env.EMAIL_PASSWORD === "" || process.env.EMAIL_PASSWORD === undefined || process.env.EMAIL_PASSWORD === null ){
         email = false;
     }
 
