@@ -100,9 +100,9 @@ function checkImgCrawlerReq(){
         return false
     }
 
-    if($("#image-crawler").find(".email-alert").val() === ''
+    if($("#image-crawler").find(".email-alert").length && ($("#image-crawler").find(".email-alert").val() === ''
         || $("#image-crawler").find(".email-alert").val() === undefined
-        || $("#image-crawler").find(".email-alert").val().indexOf('@')<= -1){
+        || $("#image-crawler").find(".email-alert").val().indexOf('@')<= -1)){
         $("#modal-message").append(`<h4>Please provide a valid email address so we can reach to you once your collection has completed!</h4>`);
         $("#alert").modal('show');
         return false

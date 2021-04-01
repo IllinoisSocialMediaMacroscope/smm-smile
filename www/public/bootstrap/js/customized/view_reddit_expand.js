@@ -107,9 +107,9 @@ function checkRedditReq() {
         return false
     }
 
-    if ($("#reddit-expand").find(".email-alert").val() === ''
+    if ($("#reddit-expand").find(".email-alert").length && ($("#reddit-expand").find(".email-alert").val() === ''
         || $("#reddit-expand").find(".email-alert").val() === undefined
-        || $("#reddit-expand").find(".email-alert").val().indexOf('@') <= -1) {
+        || $("#reddit-expand").find(".email-alert").val().indexOf('@') <= -1)) {
         $("#modal-message").append(`<h4>Please provide a valid email address so we can reach to you once your collection has completed!</h4>`);
         $("#alert").modal('show');
         return false

@@ -504,9 +504,9 @@ function batchFormValidation() {
         return false
     }
 
-    if ($("#batch-email-alert").val() === ''
+    if ($("#batch-email-alert").length && ($("#batch-email-alert").val() === ''
         || $("#batch-email-alert").val() === undefined
-        || $("#batch-email-alert").val().indexOf('@') <= -1) {
+        || $("#batch-email-alert").val().indexOf('@') <= -1)) {
         $("#modal-message").append("<h4>Please provide a valid email address so we can reach to you " +
             "once your collection has completed!</h4>");
         $("#alert").modal('show');

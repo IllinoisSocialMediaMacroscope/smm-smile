@@ -21,10 +21,13 @@ div(id="aws-batch" class="modal fade" role="dialog" data-backdrop="static" data-
 					label(class="control-label col-md-4 col-md-4 col-xs-12") Number of posts
 					div(class="col-md-8 col-md-8 col-xs-12")
 						input(class="form-control length",disabled)
-				div(class="form-group")
-					label(class="control-label col-md-4 col-md-4 col-xs-12") Email Address
-					div(class="col-md-8 col-md-8 col-xs-12")
-						input(id="batch-email-alert", class="form-control", type="email", name="email-alert")
+
+				if enableEmail === true
+					div(class="form-group")
+						label(class="control-label col-md-4 col-md-4 col-xs-12") Email Address
+						div(class="col-md-8 col-md-8 col-xs-12")
+							input(id="batch-email-alert", class="form-control", type="email", name="email-alert")
+
 			div(class="modal-footer")
 				button(class="btn btn-yes", onclick="ajaxSubmit(`#analytics-config`,`batch`)") Submit
 

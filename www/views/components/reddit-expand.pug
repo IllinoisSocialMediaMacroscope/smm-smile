@@ -23,10 +23,11 @@ div(id="reddit-expand" class="modal fade" role="dialog" data-backdrop="static" d
 						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Number of posts
 						div(class="col-md-8 col-md-8 col-xs-12")
 							input(class="form-control length",disabled)
-					div(class="form-group")
-						label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Email Address
-						div(class="col-md-8 col-md-8 col-xs-12")
-							input(class="form-control email-alert", type="email", name="email-alert")
+					if enableEmail === true
+						div(class="form-group")
+							label(class="control-label col-md-4 col-md-4 col-xs-12",for="") Email Address
+							div(class="col-md-8 col-md-8 col-xs-12")
+								input(class="form-control email-alert", type="email", name="email-alert")
 			div(class="modal-footer")
 				button(class="btn btn-yes",id="rdCommentReq") Request comments
 

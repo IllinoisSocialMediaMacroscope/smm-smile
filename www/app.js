@@ -26,6 +26,7 @@ var app = express();
  */
 smileHomePath = path.join(process.env.HOME, 'smile');
 s3FolderName = process.env.USER || 'local';
+email = true;
 
 /**
  * determine which version of deployment: dockerized vs usual
@@ -48,6 +49,10 @@ if (process.env.DOCKERIZED === 'true') {
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
     SMILE_GRAPHQL = "smile-graphql";
     BUCKET_NAME = process.env.BUCKET_NAME;
+    if (process.env.EMAIL_HOST === "" || process.env.EMAIL_PORT === "" || process.env.EMAIL_FROM_ADDRESS === ""
+        || process.env.EMAIL_PASSWORD === ""){
+        email = false;
+    }
 
     // decide what handler to use
     lambdaHandler = new RabbitmqSender();
@@ -185,7 +190,8 @@ analysesRoutesFiles.forEach(function (route, i) {
                     introduction: formParam.introduction.join(" "),
                     wiki: formParam.wiki,
                     param: formParam,
-                    user: req.user
+                    user: req.user,
+                    enableEmail: email
                 });
             });
         }

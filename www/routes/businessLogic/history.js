@@ -11,7 +11,8 @@ router.get('/history', checkIfLoggedIn, function (req, res, next) {
     res.render('history', {
         user: req.user,
         parent: '/',
-        DOCKERIZED: process.env.DOCKERIZED === 'true'
+        DOCKERIZED: process.env.DOCKERIZED === 'true',
+        enableEmail: email
     });
 });
 
