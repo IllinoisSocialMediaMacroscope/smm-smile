@@ -62,6 +62,9 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                 else if (key1 === 'sentiment') {
                                     var secondLevel = 'Sentiment Analysis';
                                 }
+                                else if (key1 === 'personality') {
+                                    var secondLevel = 'Conversational Personality Detection';
+                                }
                                 else if (key1 === 'topic') {
                                     var secondLevel = 'Topic Modeling';
                                 }
@@ -85,9 +88,6 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                 }
                                 else if (key1 === 'reddit-Historical-Comment') {
                                     var secondLevel = 'Reddit Historical Comment';
-                                }
-                                else if (key1 === 'crimson-Hexagon') {
-                                    var secondLevel = 'Crimson Hexagon Data';
                                 }
                                 else if (key1 === 'networkx') {
                                     var secondLevel = 'Python NetworkX';

@@ -39,7 +39,6 @@ router.post('/query-dryrun', function (req, res) {
             'redditaccesstoken': req.session.rd_access_token,
             'twtaccesstokenkey': req.session.twt_access_token_key,
             'twtaccesstokensecret': req.session.twt_access_token_secret,
-            'crimsonaccesstoken': req.session.crimson_access_token
         };
 
         gatherSinglePost(req.body.query, headers).then(responseObj => {
@@ -94,7 +93,6 @@ router.post('/query', function (req, res) {
                     'redditaccesstoken': req.session.rd_access_token,
                     'twtaccesstokenkey': req.session.twt_access_token_key,
                     'twtaccesstokensecret': req.session.twt_access_token_secret,
-                    'crimsonaccesstoken': req.session.crimson_access_token
                 };
 
                 p_array_2 = [];
@@ -352,7 +350,6 @@ function checkSessionToken(session) {
     var response = {
         twitter: true,
         reddit: true,
-        crimson: true
     };
 
     if (session.twt_access_token_key === undefined || session.twt_access_token_secret === undefined) {
@@ -361,10 +358,6 @@ function checkSessionToken(session) {
 
     if (session.rd_access_token === undefined) {
         response['reddit'] = false;
-    }
-
-    if (session.crimson_access_token === undefined) {
-        response['crimson'] = false;
     }
 
     return response;

@@ -50,11 +50,15 @@ html
             <!-- logo -->
             div(class="row" id="header",style="")
                 img(src="bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
-            div(class="citation-notice")
+            div(class="citation-notice fixed-width")
                 button(class="close") &times;
                 p Due to issues with receiving a consistent stream of data from Twitter's API, our historical streamed
                     |  Twitter search/database has been deprecated. Please use the remaining Twitter non-historical
-                    |  search feature or connection to services such as Crimson Hexagon.
+                    |  search feature.
+            div(class="citation-notice fixed-width")
+                button(class="close") &times;
+                p Crimson Hexagon is now part of Brandwatch and due to this change the connection to Crimson Hexagon has
+                    |  been deprecated.
 
             <!-- secondary auth panel -->
             div(class="row", id="second-auth",style="display:block;margin:auto auto;margin-top:50px;text-align:center;color:#333;")
@@ -66,14 +70,10 @@ html
                     div(class="reddit-auth",style="display:inline-block;")
                         a
                             img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
-                    div(class="crimson-auth",style="display:inline-block;")
-                        button(id="crimson-icon-button")
-                            img(src='bootstrap/img/logo/crimson-sm-logo.png', width="35px",height="30px", style="margin-right:10px")
                 div(id="authorized",style="display:inline-block;")
                     p(style="display:inline-block;margin:10px 10px;") You have already authorized:
                     img(id="twitter-authorized", src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
                     img(id="reddit-authorized",src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
-                    img(id="crimson-authorized",src='bootstrap/img/logo/crimson-sm-logo.png', width="35px",height="30px", style="margin-right:10px;display:none;")
 
             <!-- search --->
             div(class="row")
@@ -90,7 +90,6 @@ html
                         optgroup(label="Partial Historical Database")
                             option(data-icon="fab fa-reddit-square" value="pushshiftPost") Historical Reddit Posts
                             option(data-icon="fas fa-comment-dots" value="pushshiftComment") Historical Reddit Comments
-                            option(data-icon="fas fa-share-alt" value="crimsonHexagon" disabled) Crimson Hexagon
                     include searchbox.pug
 
             div(id="save-result")
@@ -163,7 +162,6 @@ html
                         | &nbsp;Next
                 div(id="grid")
 
-        include crimson/crimson-login.pug
         include twitter/twitter-login.pug
         include reddit/reddit-login.pug
 

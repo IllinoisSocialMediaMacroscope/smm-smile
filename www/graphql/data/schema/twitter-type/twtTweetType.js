@@ -18,7 +18,15 @@ const tweetType = module.exports = new GraphQLObjectType({
 		id: 			{ type: GraphQLString },
 		id_str: 		{ type: GraphQLString },
 		created_at: 	{ type: GraphQLString },
-		text: 			{ type: GraphQLString },
+		text: 			{ type: GraphQLString, resolve: ({full_text}) => { return full_text; }},
+        display_text_range: {type: GraphQLString, resolve: ({display_text_range}) => {
+        	if (display_text_range !== undefined){
+                return "[" + display_text_range.join(",") + "]";
+			}
+			else{
+        		return "[]";
+			}
+		}},
 		retweet_count: 	{ type: GraphQLInt },
 		favorite_count:	{ type: GraphQLInt },  
 		retweeted:		{ type: GraphQLBoolean },

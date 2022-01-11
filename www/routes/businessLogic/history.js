@@ -65,7 +65,7 @@ router.post('/history', function (req, res, next) {
 
                         if (arrURL[2] === 'reddit-Search' || arrURL[2] === 'reddit-Post'
                             || arrURL[2] === 'reddit-Historical-Post' || arrURL[2] === 'twitter-Tweet'
-                            || arrURL[2] === 'twitter-Timeline' || arrURL === 'crimson-Hexagon'){
+                            || arrURL[2] === 'twitter-Timeline'){
                             data['crawlImage'] = req.body.folderURL;
                         }
 
@@ -150,17 +150,19 @@ function history_routes_template(req, config) {
                                     content: url
                                 })
                             }
+
                             // record the order of collected
                             promise_array_acronym.push(fname);
                             promise_array.push(getMultiRemote(url));
                         }
                     }
                 }
+
                 Promise.all(promise_array).then(values => {
                     // put together data to send
                     var preview = [];
-                    var config_data;
                     var img = [];
+                    var config_data;
                     var wordtree;
 
                     for (var i = 0; i < resultConfig.length; i++) {
@@ -191,7 +193,8 @@ function history_routes_template(req, config) {
                                 if (resultConfig[i]["img"]) {
                                     img.push({
                                         name: resultConfig[i]["name"],
-                                        content: values[j]
+                                        content: values[j],
+                                        url: results[resultConfig[i]["acronym"] + ".html"]
                                     })
                                 }
 

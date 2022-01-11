@@ -33,12 +33,14 @@ function twitterAPI(tokens,resolveName, id, args){
 				var max_pages = args['pages']-1;
 				delete args['pages']; //pages is a made up field that doesn't belong to the original twitter api parameters
 
+				// add extended tweets
+                args['tweet_mode'] = 'extended';
+
 				client.get('search/tweets',args,function(error,tweets,response){
 					if (error){
 						console.log(error);
 						reject(JSON.stringify(error));
 					}
-
                     if (tweets!== undefined && tweets['errors'] !== undefined){
                         reject(JSON.stringify(tweets['errors'][0]));
                     }
@@ -52,6 +54,7 @@ function twitterAPI(tokens,resolveName, id, args){
 						WaterfallOver(max_pages, tweets, function(item,report){
 
 							var newArgs = querystring.parse(item['search_metadata']['next_results'].slice(1));
+							newArgs = Object.assign(newArgs, args);
 
 							client.get('search/tweets',newArgs,function(error,newTweets,response){
 								if(error) reject(error);
@@ -69,6 +72,10 @@ function twitterAPI(tokens,resolveName, id, args){
             case 'searchTimeline':
                 var max_pages = args['pages']-1;
                 delete args['pages'];
+
+                // add extended tweets
+                args['tweet_mode'] = 'extended';
+
                 client.get('statuses/user_timeline',args,function(error,tweets,response){
                     if (error){
                         console.log(error);
@@ -119,8 +126,11 @@ function twitterAPI(tokens,resolveName, id, args){
 				break;
 
 			case 'fetchTimeline':
-				
+
+                // add extended tweets
+                args['tweet_mode'] = 'extended';
 				args['user_id'] = id;
+
 				client.get('statuses/user_timeline',args,function(error,tweets,response){
 					if (error) reject(error);
 					resolve(tweets);

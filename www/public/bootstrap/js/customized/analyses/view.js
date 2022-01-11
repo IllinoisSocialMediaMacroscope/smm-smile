@@ -119,7 +119,6 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                 if (directory === 'reddit-Post'
                                     || directory === 'reddit-Historical-Post'
                                     || directory === 'reddit-Search'
-                                    || directory === 'crimson-Hexagon'
                                     || directory === 'twitter-Tweet'
                                     || directory === 'twitter-Timeline'){
                                     $("#getImg").show();

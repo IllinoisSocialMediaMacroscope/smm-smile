@@ -15,13 +15,9 @@ $("#datasrc-category").on("change", function(){
     else if (selectedItem === 'reddit-Comment') {
         $("#datasrc-criteria").html("<p>Make sure your file has column <u>body</u>.</p>")
     }
-    else if (selectedItem === 'crimson-Hexagon') {
-        $("#datasrc-criteria").html("<p>Make sure your file has column <u>contents</u> and/or column <u>title</u>.</p>")
-    }
     else if (selectedItem === 'userspec-Others') {
         $("#datasrc-criteria").html("<p>You provide the <u>column headers</u> that you would like to analyze, as well as select " +
             "the <u>analyses</u> you would like to perform.</p>")
-
         $("#userspec-Others-metadata").show();
     }
     else{
@@ -163,14 +159,6 @@ function importFormValidate(){
         if (importedColumnHeaders.indexOf('body') === -1){
             $("#modal-message").append(`<h4>Your file must have <u>body</u> column to be ` +
                 `categorized as Reddit comment collection.</h4>`);
-            $("#alert").modal('show');
-            return false;
-        }
-    }
-    else if (category === 'crimson-Hexagon'){
-        if (importedColumnHeaders.indexOf('title') === -1 && importedColumnHeaders.indexOf('contents') === -1){
-            $("#modal-message").append(`<h4>Your file must have <u>contents</u> and/or <u>title</u> column to be ` +
-                `categorized as Crimson Hexagon.</h4>`);
             $("#alert").modal('show');
             return false;
         }

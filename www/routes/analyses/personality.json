@@ -1,0 +1,100 @@
+{
+  "path": "personality",
+  "title": "Conversational Personality Detection",
+  "imgURL": "bootstrap/img/logo/NLP/personality.png",
+  "wiki": "https://en.wikipedia.org/wiki/Personality_test",
+  "introduction": [
+    "Conversational personality detection is the process of using computational personality models to understand various",
+    "personality traits (e.g., sincerity, excitement) of conversations surrounding a entity (e.g., a brand). ",
+    "More details can be found at <a href=\"https://doi.org/10.13140/RG.2.2.15339.49444\" target=\"_blank\">https://doi.org/10.13140/RG.2.2.15339.49444</a>"
+  ],
+  "result_path": "/NLP/personality/",
+  "results": [
+    {
+      "acronym": "config",
+      "name": "configuration",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "config": true
+    },
+    {
+      "acronym": "personality",
+      "name": "predicted personality score",
+      "download": true,
+      "img": false,
+      "preview": true,
+      "dataTable": true,
+      "config": false
+    },
+    {
+      "acronym": "average",
+      "name": "unweighted average personality score for the whole corpus",
+      "download": true,
+      "img": false,
+      "preview": false,
+      "dataTable": false,
+      "config": false
+    }
+  ],
+  "args": [
+    "algorithm"
+  ],
+  "get": {
+    "containers": [
+      {
+        "container-name": "",
+        "container-label-name": "Algorithm",
+        "input": {
+          "type": "select",
+          "name": "algorithm",
+          "id": "algorithm",
+          "options": [
+            {
+              "value": "Please Select...",
+              "label": "Please Select..."
+            },
+            {
+              "value": "Pamuksuz-Personality",
+              "label": "Pamuksuz, Yun, Humphreys Brand Personality Model"
+            }
+          ]
+        }
+      }
+    ],
+    "buttonGroups": [
+      {
+        "id": "clear",
+        "class": "btn btn-primary",
+        "value": "Clear",
+        "style": "margin: auto 5px;",
+        "onclick": "customized_reset();"
+      },
+      {
+        "id": "submit",
+        "class": "btn btn-danger",
+        "value": "Submit",
+        "style": "margin: auto 5px;"
+      }
+    ],
+    "citation": {
+      "trigger_id": "algorithm",
+      "content": [
+        {
+          "text": [
+            "Pamuksuz, U., Yun, J. T., & Humphreys, A. (Preprint). A Brand-New Look at You: Predicting Brand Personality in Social Media Networks with Machine Learning. ResearchGate. Retrieved from <a href=\"https://doi.org/10.13140/RG.2.2.15339.49444\" target=\"_blank\">https://doi.org/10.13140/RG.2.2.15339.49444</a>"
+          ],
+          "condition": "Pamuksuz-Personality"
+        }
+      ]
+    }
+  },
+  "post": {
+    "batch_config": {
+      "batch_action": "python3.6",
+      "batch_script": "/scripts/batch_function.py",
+      "batch_job_definition": "arn:aws:batch:us-west-2:083781070261:job-definition/smile_personality_detection:1",
+      "batch_job_queue": "arn:aws:batch:us-west-2:083781070261:job-queue/SMILE_batch"
+    }
+  }
+}

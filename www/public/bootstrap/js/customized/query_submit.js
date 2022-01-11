@@ -125,6 +125,7 @@ function submitSearchbox(searchboxID, filenameID, dryrun = false){
 								  id_str
 								  created_at
 								  text
+								  display_text_range
 								  retweet_count
 								  favorite_count
 								  retweeted
@@ -184,6 +185,7 @@ function submitSearchbox(searchboxID, filenameID, dryrun = false){
 								  id_str
 								  created_at
 								  text
+								  display_text_range
 								  retweet_count
 								  favorite_count
 								  retweeted

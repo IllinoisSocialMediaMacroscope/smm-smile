@@ -123,7 +123,8 @@ function lambda_routes_template(req, config ){
                         if (resultConfig[i]["img"]) {
                             img.push({
                                 name: resultConfig[i]["name"],
-                                content: values[i]
+                                content: values[i],
+                                url: results[resultConfig[i]["acronym"]]
                             })
                         }
 

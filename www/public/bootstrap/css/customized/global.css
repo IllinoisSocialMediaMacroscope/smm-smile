@@ -90,9 +90,14 @@ cite{
     font-size: 16px;
     line-height:28px;
 	animation: slide 0.5s 1s ease-in-out both;
-	margin:auto auto;
+	margin:20px auto;
+	width: 100%;
+}
+
+.citation-notice.fixed-width{
 	max-width:800px;
 }
+
 .citation-notice ul li a,
 .citation-notice ul li a:hover,
 .citation-notice ul li a:focus{

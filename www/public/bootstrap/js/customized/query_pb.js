@@ -21,8 +21,9 @@ function init(){
 	$("#simple-search-btn").prop('disabled',true);
 
 	// notification
-	$("#searchPage").find(".citation-notice button").on("click", function(){
-    	$(".citation-notice").hide();
+	$("#searchPage").find(".citation-notice button").on("click", function(e){
+    	var citationButton = $(e.target);
+		citationButton.parents(".citation-notice").hide();
 	});
 
 	// save result
@@ -77,7 +78,7 @@ function init(){
 			var keyword = keyword.replace(/[\"]+/g, `\\"`);
 			
 			parameters['tweet']['q:'] = keyword;
-			parameters['tweet']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
+			parameters['tweet']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tdisplay_text_range\n\t\t\tretweet_count`+
 			`\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
 			`\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
 			`\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
@@ -87,7 +88,7 @@ function init(){
 			`\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
 			
 			parameters['twtTimeline']['screen_name:'] = keyword;
-			parameters['twtTimeline']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
+			parameters['twtTimeline']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tdisplay_text_range\n\t\t\tretweet_count`+
                 `\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
                 `\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
                 `\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
@@ -232,10 +233,7 @@ function init(){
 			$("#searchbox").attr("placeholder","Keyword that you wish to search...");
             $("boolean").tooltip('hide');
 		}
-		else if (queryTerm === 'crimsonHexagon'){
-		    window.location.href = 'query-crimson'
-        }
-	
+
 		Query = updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 
