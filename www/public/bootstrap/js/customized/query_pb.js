@@ -21,8 +21,9 @@ function init(){
 	$("#simple-search-btn").prop('disabled',true);
 
 	// notification
-	$("#searchPage").find(".citation-notice button").on("click", function(){
-    	$(".citation-notice").hide();
+	$("#searchPage").find(".citation-notice button").on("click", function(e){
+		var citationButton = $(e.target);
+		citationButton.parents(".citation-notice").hide();
 	});
 
 	// save result
