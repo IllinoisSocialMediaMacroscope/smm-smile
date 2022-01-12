@@ -22,7 +22,7 @@
     "form-data": "^2.2.0",
     "get-folder-size": "^1.0.0",
     "google-auth-library": "^0.11.0",
-    "googleapis": "^22.2.0",
+    "googleapis": "^59.0.0",
     "http-aws-es": "^2.0.5",
     "jsonexport": "^2.0.10",
     "lunr": "^2.1.2",
