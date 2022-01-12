@@ -42,8 +42,6 @@ router.post('/query-dryrun', checkIfLoggedIn, function (req, res) {
                     'Content-Type': 'application/json',
                     'redditaccesstoken': obj['rd_access_token'],
                     'twtaccesstokenkey': obj['twt_access_token_key'],
-                    'twtaccesstokensecret': obj['twt_access_token_secret'],
-                    'crimsonaccesstoken': obj['crimson_access_token']
                 };
 
                 gatherSinglePost(req, headers).then(responseObj => {
@@ -86,7 +84,6 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                             'redditaccesstoken': obj['rd_access_token'],
                             'twtaccesstokenkey': obj['twt_access_token_key'],
                             'twtaccesstokensecret': obj['twt_access_token_secret'],
-                            'crimsonaccesstoken': obj['crimson_access_token']
                         };
 
                         var multiPostPromises = [];
@@ -171,49 +168,43 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                                                 'filename': processed,
                                                 'remoteReadPath': req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
                                             };
-                                            if (req.body.prefix !== ('crimson-Hexagon')) {
-                                                lambdaHandler.invoke('histogram', 'histogram', args).then(results => {
-                                                    if (results['url'] === 'null') {
+
+                                            lambdaHandler.invoke('histogram', 'histogram', args).then(results => {
+                                                if (results['url'] === 'null') {
+                                                    var rendering = responseObj[key1][key2][key3].slice(0, 100);
+                                                    s3.deleteLocalFolders(directory).then(() => {
+                                                        res.send({
+                                                            fname: processed,
+                                                            URLs: URLs,
+                                                            rendering: rendering
+                                                        });
+                                                    }).catch(deleteLocalFoldersError => {
+                                                        res.send({ERROR: deleteLocalFoldersError});
+                                                    });
+                                                } else {
+                                                    getMultiRemote(results['url']).then(function (data) {
+
+                                                        var histogram = data;
                                                         var rendering = responseObj[key1][key2][key3].slice(0, 100);
                                                         s3.deleteLocalFolders(directory).then(() => {
                                                             res.send({
                                                                 fname: processed,
                                                                 URLs: URLs,
-                                                                rendering: rendering
+                                                                rendering: rendering,
+                                                                histogram: histogram
                                                             });
-                                                        }).catch(deleteLocalFoldersError => {
+                                                        }).catch(deleteLocalFoldersError => { // deleteFolderERROR
                                                             res.send({ERROR: deleteLocalFoldersError});
                                                         });
-                                                    } else {
-                                                        getMultiRemote(results['url']).then(function (data) {
+                                                    }).catch(getMultiRemoteError => {
+                                                        res.send({ERROR: getMultiRemoteError});
+                                                    });
+                                                }
 
-                                                            var histogram = data;
-                                                            var rendering = responseObj[key1][key2][key3].slice(0, 100);
-                                                            s3.deleteLocalFolders(directory).then(() => {
-                                                                res.send({
-                                                                    fname: processed,
-                                                                    URLs: URLs,
-                                                                    rendering: rendering,
-                                                                    histogram: histogram
-                                                                });
-                                                            }).catch(deleteLocalFoldersError => { // deleteFolderERROR
-                                                                res.send({ERROR: deleteLocalFoldersError});
-                                                            });
-                                                        }).catch(getMultiRemoteError => {
-                                                            res.send({ERROR: getMultiRemoteError});
-                                                        });
-                                                    }
+                                            }).catch(lambdaHandlerError => {
+                                                res.send({'ERROR': lambdaHandlerError});
+                                            });
 
-                                                }).catch(lambdaHandlerError => {
-                                                    res.send({'ERROR': lambdaHandlerError});
-                                                });
-                                            } else {
-                                                s3.deleteLocalFolders(directory).then(() => {
-                                                    res.send({fname: processed, URLs: URLs});
-                                                }).catch(deleteLocalFoldersError => {
-                                                    res.send({ERROR: deleteLocalFoldersError});
-                                                });
-                                            }
                                         }).catch(uploadToS3Error => {
                                             res.send({ERROR: JSON.stringify(uploadToS3Error)});
                                         });
@@ -370,8 +361,6 @@ function removeInvalidToken(req, platform) {
         removeCredential(req, 'twt_access_token_secret');
     } else if (platform === 'reddit') {
         removeCredential(req, 'rd_access_token');
-    } else if (platform === 'crimson') {
-        removeCredential(req, 'crimson_access_token');
     }
 }
 
@@ -401,13 +390,11 @@ function checkAuthorized(req) {
         var response = {
             twitter: false,
             reddit: false,
-            crimson: false,
         };
 
         retrieveCredentials(req).then(obj =>{
             if (obj && 'twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
             if (obj && 'rd_access_token' in obj) response['reddit'] = true;
-            if (obj && 'crimson_access_token' in obj) response['crimson'] = true;
             resolve(response);
         })
         .catch(err =>{

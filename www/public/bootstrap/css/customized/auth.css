@@ -55,18 +55,7 @@
     background-color:#deddde;
 }
 
-#crimson-icon-button{
-    border:none;
-    background:none;
-    padding:0;
-}
-#crimson-icon-button:focus{
-    outline:none;
-}
-
 /* login popup */
-#crimson-username,
-#crimson-password,
 #twitter-pin{
     margin-top:10px;
     width:500px;

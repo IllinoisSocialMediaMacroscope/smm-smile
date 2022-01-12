@@ -86,9 +86,6 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                 else if (key1 === 'reddit-Historical-Comment') {
                                     var secondLevel = 'Reddit Historical Comment';
                                 }
-                                else if (key1 === 'crimson-Hexagon') {
-                                    var secondLevel = 'Crimson Hexagon Data';
-                                }
                                 else if (key1 === 'networkx') {
                                     var secondLevel = 'Python NetworkX';
                                 }

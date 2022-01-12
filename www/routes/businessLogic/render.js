@@ -110,7 +110,6 @@ router.post('/list', checkIfLoggedIn, function (req, res, next) {
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Comment/'));
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Post/'));
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Comment/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/crimson-Hexagon/'));
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/userspec-Others/'));
     Promise.all(promise_array).then(values => {
 
@@ -121,8 +120,7 @@ router.post('/list', checkIfLoggedIn, function (req, res, next) {
         directory['reddit-Comment'] = values[4];
         directory['reddit-Historical-Post'] = values[5];
         directory['reddit-Historical-Comment'] = values[6];
-        directory['crimson-Hexagon'] = values[7];
-        directory['userspec-Others'] = values[8];
+        directory['userspec-Others'] = values[7];
 
         res.send(directory);
     }).catch(err => {
@@ -141,7 +139,6 @@ router.post('/list-all', checkIfLoggedIn, function (req, res, next) {
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Comment/'));
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Post/'));
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Comment/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/crimson-Hexagon/'));
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/userspec-Others/'));
     var graphqlLength = promise_array.length;
 
@@ -175,8 +172,7 @@ router.post('/list-all', checkIfLoggedIn, function (req, res, next) {
         directory['GraphQL']['reddit-Comment'] = values[4];
         directory['GraphQL']['reddit-Historical-Post'] = values[5];
         directory['GraphQL']['reddit-Historical-Comment'] = values[6];
-        directory['GraphQL']['crimson-Hexagon'] = values[7];
-        directory['GraphQL']['userspec-Others'] = values[8];
+        directory['GraphQL']['userspec-Others'] = values[7];
         for (i = 0; i < order.length; i++) {
             var parent = order[i]['parent'];
             var child = order[i]['child'];

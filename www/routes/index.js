@@ -36,15 +36,15 @@ router.get('/', function (req, res, next) {
         }
     });
 
-    pages.push({
-        name: 'Clowder',
-        url: '',
-        imgURL: 'bootstrap/img/logo/clowder-only-logo.png',
-        wiki: 'https://clowder.ncsa.illinois.edu',
-        introduction: `Clowder is a research data management system. You can choose to add search results
-        			and analytics outputs to Clowder within SMILE. A cluster of extraction services will process the
-        			data to extract interesting metadata and create web based data previews and visualizations.`
-    });
+    // pages.push({
+    //     name: 'Clowder',
+    //     url: '',
+    //     imgURL: 'bootstrap/img/logo/clowder-only-logo.png',
+    //     wiki: 'https://clowder.ncsa.illinois.edu',
+    //     introduction: `Clowder is a research data management system. You can choose to add search results
+    //     			and analytics outputs to Clowder within SMILE. A cluster of extraction services will process the
+    //     			data to extract interesting metadata and create web based data previews and visualizations.`
+    // });
 
     res.render('index', {
         user: req.user,

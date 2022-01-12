@@ -172,10 +172,6 @@ function processData(csv) {
         $("#datasrc-criteria-hint").html("<p>Based on the column of your imported file, it is likely that you uploaded a " +
             "<u>Reddit Comment</u> dataset.</p>")
     }
-    else if (previewLinesWords[0].indexOf('contents') > 0){
-        $("#datasrc-criteria-hint").html("<p>Based on the column of your imported file, it is likely that you uploaded a " +
-            "<u>Crimson Hexagon</u> dataset.</p>")
-    }
     else{
         $("#datasrc-criteria-hint").html("<p>We cannot detect the file category, make sure you choose <u>Others</u> in the category.</p>")
     }

@@ -232,9 +232,6 @@ function init(){
 			$("#searchbox").attr("placeholder","Keyword that you wish to search...");
             $("boolean").tooltip('hide');
 		}
-		else if (queryTerm === 'crimsonHexagon'){
-		    window.location.href = 'query-crimson'
-        }
 	
 		Query = updateString(queryTerm,parameters);
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
