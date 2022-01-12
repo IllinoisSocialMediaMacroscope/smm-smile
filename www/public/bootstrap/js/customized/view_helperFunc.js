@@ -660,9 +660,9 @@ function appendTitle(container, title,ID){
 							<button class="btn btn-yes favicon-button" id="tag-history-panel">
 								<i class="fas fa-tag"></i>Tag
 							</button>
-							<button class="btn btn-yes favicon-button" id="clowder-history-panel">
-								<img src="bootstrap/img/logo/clowder-sm-logo.png" width=20/>Clowder
-							</button>
+<!--							<button class="btn btn-yes favicon-button" id="clowder-history-panel">-->
+<!--								<img src="bootstrap/img/logo/clowder-sm-logo.png" width=20/>Clowder-->
+<!--							</button>-->
 							<button class="btn btn-yes favicon-button" id="getComment">
 						        <i class="fas fa-comments"></i>&nbsp;Comment
 						    </button>
