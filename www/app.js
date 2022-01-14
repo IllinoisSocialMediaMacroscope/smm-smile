@@ -66,7 +66,6 @@ if (process.env.DOCKERIZED === 'true') {
     var mongourl = 'mongodb://mongodb:27017/user';
     mongoose.connect(mongourl,
         {useNewUrlParser: true, useUnifiedTopology: true});
-    mongoose.set('useCreateIndex', true);
 
     // authentication
     passport.use(new LocalStrategy(User.authenticate()));
