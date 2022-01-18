@@ -15,30 +15,26 @@ router.get('/login/box', checkIfLoggedIn, function (req, res, next) {
     res.redirect(authUrl);
 });
 
-router.get('/login/box/callback', checkIfLoggedIn, function (req, res, next) {
+router.get('/login/box/callback', checkIfLoggedIn, async function (req, res, next) {
     var box = new BoxSDK({
         clientID: BOX_CLIENT_ID,
         clientSecret: BOX_CLIENT_SECRET
     });
 
-    retrieveCredentials(req).then(obj =>{
-        if (req.query.error !== undefined) {
-            res.redirect(obj['boxCurrentURL'] + obj['boxPageURL'] + '?error=' + req.query.error);
-        } else {
-            box.getTokensAuthorizationCodeGrant(req.query.code, null,
-                function (getTokensAuthorizationCodeGrantError, tokenInfo) {
-                if (getTokensAuthorizationCodeGrantError) {
-                    res.redirect(obj['boxCurrentURL'] + obj['boxPageURL'] + '?error=' + getTokensAuthorizationCodeGrantError);
-                } else {
-                    setCredential(req, 'box_access_token', tokenInfo.accessToken);
-                    res.redirect(obj['boxCurrentURL'] + obj['boxPageURL'] + '?box=success');
-                }
-            });
-        }
-    })
-    .catch(retrieveCredentialsError =>{
-        res.send({ERROR:retrieveCredentialsError});
-    });
+    var obj = await retrieveCredentials(req);
+    if (req.query.error !== undefined) {
+        res.redirect(obj['boxCurrentURL'] + obj['boxPageURL'] + '?error=' + req.query.error);
+    } else {
+        box.getTokensAuthorizationCodeGrant(req.query.code, null,
+            function (getTokensAuthorizationCodeGrantError, tokenInfo) {
+            if (getTokensAuthorizationCodeGrantError) {
+                res.redirect(obj['boxCurrentURL'] + obj['boxPageURL'] + '?error=' + getTokensAuthorizationCodeGrantError);
+            } else {
+                setCredential(req, 'box_access_token', tokenInfo.accessToken);
+                res.redirect(obj['boxCurrentURL'] + obj['boxPageURL'] + '?box=success');
+            }
+        });
+    }
 });
 
 module.exports = router;

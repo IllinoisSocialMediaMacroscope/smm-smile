@@ -26,6 +26,7 @@ var app = express();
  */
 smileHomePath = path.join(process.env.HOME, 'smile');
 s3FolderName = process.env.USER || 'local';
+SINGLE_USER = 'true';
 email = true;
 
 /**
@@ -49,10 +50,11 @@ if (process.env.DOCKERIZED === 'true') {
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
     SMILE_GRAPHQL = "smile-graphql";
     BUCKET_NAME = process.env.BUCKET_NAME;
+    SINGLE_USER = process.env.SINGLE_USER;
     if (process.env.EMAIL_HOST === "" || process.env.EMAIL_HOST === undefined || process.env.EMAIL_HOST === null ||
         process.env.EMAIL_PORT === "" || process.env.EMAIL_PORT === undefined || process.env.EMAIL_PORT === null ||
         process.env.EMAIL_FROM_ADDRESS === "" || process.env.EMAIL_FROM_ADDRESS === undefined || process.env.EMAIL_FROM_ADDRESS === null ||
-        process.env.EMAIL_PASSWORD === "" || process.env.EMAIL_PASSWORD === undefined || process.env.EMAIL_PASSWORD === null ){
+        process.env.EMAIL_PASSWORD === "" || process.env.EMAIL_PASSWORD === undefined || process.env.EMAIL_PASSWORD === null) {
         email = false;
     }
 
@@ -61,52 +63,70 @@ if (process.env.DOCKERIZED === 'true') {
     batchHandler = new RabbitmqSender();
     s3 = new S3Helper(true, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
 
-    // connect to database
-    var User = require(path.join(__dirname, 'models', 'user.js'));
-    var mongourl = 'mongodb://mongodb:27017/user';
-    mongoose.connect(mongourl,
-        {useNewUrlParser: true, useUnifiedTopology: true});
-
-    // authentication
-    passport.use(new LocalStrategy(User.authenticate()));
-    passport.serializeUser(User.serializeUser());
-    passport.deserializeUser(User.deserializeUser());
-
-    // configure redisClient
-    var redisClient = redis.createClient("redis://redis");
-    redisClient.on('error', function (err) {
-        console.log('Error ' + err);
-    });
-
-    global.checkIfLoggedIn = function(req, res, next){
-        if(req.isAuthenticated() || req.user != null){
+    if (SINGLE_USER === 'true') {
+        global.checkIfLoggedIn = function (req, res, next) {
+            req.user = {username: s3FolderName};
             return next();
         }
-        res.redirect("/account");
-    }
 
-    global.retrieveCredentials = function(req) {
-        return new Promise((resolve, reject) => {
-            redisClient.hgetall(req.user.username, function (err, obj) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(obj)
-                }
+        global.retrieveCredentials = async function (req) {
+            return new Promise((resolve, reject) => {
+                if (req.session) resolve(req.session);
+                else reject("There is no credential exists in the session!");
             });
-        });
+        }
+
+        global.removeCredential = async function (req, entry) {
+            req.session[entry] = null;
+            req.session.save();
+        }
+
+        global.setCredential = async function (req, entry, credential) {
+            req.session[entry] = credential;
+            req.session.save();
+        };
+    }
+    else {
+        // connect to database
+        var User = require(path.join(__dirname, 'models', 'user.js'));
+        var mongourl = 'mongodb://mongodb:27017/user';
+        mongoose.connect(mongourl,
+            {useNewUrlParser: true, useUnifiedTopology: true});
+
+        // authentication
+        passport.use(new LocalStrategy(User.authenticate()));
+        passport.serializeUser(User.serializeUser());
+        passport.deserializeUser(User.deserializeUser());
+
+        // configure redisClient
+        (async () => {
+            redisClient = redis.createClient({url:"redis://redis:6379"});
+            redisClient.on('error', (err) => console.log('Redis Client Error', err));
+            await redisClient.connect();
+        })();
+
+        global.checkIfLoggedIn = function (req, res, next) {
+            if (req.isAuthenticated() || req.user != null) {
+                return next();
+            }
+            res.redirect("/account");
+        }
+
+        global.retrieveCredentials = async function (req) {
+            return await redisClient.hGetAll(req.user.username);
+        }
+
+        global.removeCredential = async function (req, entry) {
+            await redisClient.hDel(req.user.username, entry);
+        }
+
+        global.setCredential = async function (req, entry, credential) {
+            await redisClient.hSet(req.user.username, entry, credential, redis.print);
+            await redisClient.expire(req.user.username, 30 * 60);
+        };
     }
 
-    global.removeCredential = function(req, entry){
-        redisClient.hdel(req.user.username, entry);
-    }
-
-    global.setCredential = function(req, entry, credential){
-        redisClient.hset(req.user.username, entry, credential, redis.print);
-        redisClient.expire(req.user.username, 30 * 60);
-    };
-}
-else {
+} else {
     var config = require('./main_config.json');
     AWS_ACCESSKEY = config.aws.access_key;
     AWS_ACCESSKEYSECRET = config.aws.access_key_secret;
@@ -130,24 +150,24 @@ else {
     s3 = new S3Helper(false, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
 
     // backward compatibility; do not need multiuser capacity if deploying on macroscope
-    global.checkIfLoggedIn = function(req, res, next){
+    global.checkIfLoggedIn = function (req, res, next) {
         req.user = {username: s3FolderName};
         return next();
     }
 
-    global.retrieveCredentials = function(req) {
+    global.retrieveCredentials = async function (req) {
         return new Promise((resolve, reject) => {
             if (req.session) resolve(req.session);
-            else reject("There is no credential exists in the session!");
+            else reject({error:"There is no credential exists in the session!"});
         });
     }
 
-    global.removeCredential = function(req, entry){
+    global.removeCredential = async function (req, entry) {
         req.session[entry] = null;
         req.session.save();
     }
 
-    global.setCredential = function(req, entry, credential){
+    global.setCredential = async function (req, entry, credential) {
         req.session[entry] = credential;
         req.session.save();
     };
@@ -301,9 +321,8 @@ authRoutesFiles.forEach(function (route, i) {
 app.post('/register', function (req, res, next) {
     User.register(new User({username: req.body.username}), req.body.password, function (err) {
         if (err) {
-            res.send({ERROR: "fail to register! ERROR: " + err  });
-        }
-        else{
+            res.send({ERROR: "fail to register! ERROR: " + err});
+        } else {
             res.status(200).send({message: "successfully registered!"});
         }
     });
@@ -311,13 +330,13 @@ app.post('/register', function (req, res, next) {
 app.get('/account', function (req, res) {
     res.render('account', {user: req.user});
 });
-app.post('/smile-login', function(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
+app.post('/smile-login', function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
         if (err) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
         if (!user) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
-        req.logIn(user, function(err) {
+        req.logIn(user, function (err) {
             if (err) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
-            return  res.status(200).send({message: "successfully logged in!"});
+            return res.status(200).send({message: "successfully logged in!"});
         });
     })(req, res, next);
 });

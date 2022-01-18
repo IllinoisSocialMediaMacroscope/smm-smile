@@ -19,23 +19,19 @@ router.get('/login/twitter', checkIfLoggedIn, function (req, res, next) {
     });
 });
 
-router.post('/login/twitter', checkIfLoggedIn, function (req, res, next) {
-    retrieveCredentials(req).then(obj =>{
-        consumer.getOAuthAccessToken(obj['twt_oauthRequestToken'], obj['twt_oauthRequestTokenSecret'],
-            req.body.twt_pin, function (error, oauthAccessToken, oauthAccessTokenSecret, results) {
-                if (error) {
-                    res.send({ERROR: JSON.stringify(error)});
-                }
-                else {
-                    setCredential(req, 'twt_access_token_key', oauthAccessToken);
-                    setCredential(req, 'twt_access_token_secret', oauthAccessTokenSecret);
-                    res.send({});
-                }
-            });
-    })
-    .catch(err =>{
-        res.send({ERROR: JSON.stringify(error)});
-    });
+router.post('/login/twitter', checkIfLoggedIn, async function (req, res, next) {
+    var obj = await retrieveCredentials(req);
+    consumer.getOAuthAccessToken(obj['twt_oauthRequestToken'], obj['twt_oauthRequestTokenSecret'],
+        req.body.twt_pin, function (error, oauthAccessToken, oauthAccessTokenSecret, results) {
+            if (error) {
+                res.send({ERROR: JSON.stringify(error)});
+            }
+            else {
+                setCredential(req, 'twt_access_token_key', oauthAccessToken);
+                setCredential(req, 'twt_access_token_secret', oauthAccessTokenSecret);
+                res.send({});
+            }
+        });
 });
 
 module.exports = router;

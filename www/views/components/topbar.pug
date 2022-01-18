@@ -15,7 +15,7 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
                         img(src="bootstrap/img/logo/smile-logos/small-logo.png", width=20)
                         | &nbsp SMILE
 
-                unless DOCKERIZED
+                unless SINGLE_USER
                     li
                         a(id="topbar-hub", href="")
                             i(class="fas fa-sign-out-alt")
@@ -42,7 +42,7 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
                         i(class="fas fa-history")
                         | &nbsp;Past Results
 
-                if DOCKERIZED
+                unless SINGLE_USER
                     li
                         if user
                             div(class="topbar-dropdown")

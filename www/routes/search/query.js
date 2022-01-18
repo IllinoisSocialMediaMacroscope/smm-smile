@@ -22,42 +22,39 @@ router.get('/query', checkIfLoggedIn, function (req, res) {
             user: req.user,
             parent: '/',
             error: req.query.error,
-            DOCKERIZED: process.env.DOCKERIZED === 'true',
+            SINGLE_USER: SINGLE_USER === 'true',
             status: status,
         });
     })
     .catch(checkAuthorizedError => {
-        res.send({ERROR: checkAuthorizedError});
+        res.send({ERROR: checkAuthorizedError.message});
     });
 });
 
 router.post('/query-dryrun', checkIfLoggedIn, function (req, res) {
-    checkAuthorized(req).then(status => {
+    checkAuthorized(req).then(async status => {
         var platform = req.body.prefix.split('-')[0];
 
         if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
-            retrieveCredentials(req).then(obj => {
-                var headers = {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'redditaccesstoken': obj['rd_access_token'],
-                    'twtaccesstokenkey': obj['twt_access_token_key'],
-                };
+            var obj = await retrieveCredentials(req);
+            var headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'redditaccesstoken': obj['rd_access_token'],
+                'twtaccesstokenkey': obj['twt_access_token_key'],
+                'twtaccesstokensecret': obj['twt_access_token_secret'],
+            };
 
-                gatherSinglePost(req, headers).then(responseObj => {
-                    var key1 = Object.keys(responseObj)[0];
-                    var key2 = Object.keys(responseObj[key1])[0];
-                    var key3 = Object.keys(responseObj[key1][key2])[0];
-                    res.send({
-                        rendering: responseObj[key1][key2][key3]
-                    });
-                })
-                .catch(gatherSinglePostError => {
-                    res.send({ERROR: gatherSinglePostError});
+            gatherSinglePost(req, headers).then(responseObj => {
+                var key1 = Object.keys(responseObj)[0];
+                var key2 = Object.keys(responseObj[key1])[0];
+                var key3 = Object.keys(responseObj[key1][key2])[0];
+                res.send({
+                    rendering: responseObj[key1][key2][key3]
                 });
             })
-            .catch(retrieveCredentialsError => {
-                res.send({ERROR: retrieveCredentialsError});
+            .catch(gatherSinglePostError => {
+                res.send({ERROR: gatherSinglePostError});
             });
         } else {
             res.send({ERROR: platform + " token expired! Please refresh the page."});
@@ -69,165 +66,161 @@ router.post('/query-dryrun', checkIfLoggedIn, function (req, res) {
 });
 
 router.post('/query', checkIfLoggedIn, function (req, res) {
-    checkAuthorized(req).then(status => {
+    checkAuthorized(req).then(async status => {
         var platform = req.body.prefix.split('-')[0];
         if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
-            retrieveCredentials(req).then(obj => {
-                var prefixGraphqlDownloadsDir = createLocalFolders(req);
-                checkExist(req.user.username + '/GraphQL/' + req.body.prefix + '/', req.body.filename)
-                .then((value) => {
-                    if (value) {
+            var obj = await retrieveCredentials(req);
+            var prefixGraphqlDownloadsDir = createLocalFolders(req);
+            checkExist(req.user.username + '/GraphQL/' + req.body.prefix + '/', req.body.filename)
+            .then((value) => {
+                if (value) {
 
-                        var headers = {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'redditaccesstoken': obj['rd_access_token'],
-                            'twtaccesstokenkey': obj['twt_access_token_key'],
-                            'twtaccesstokensecret': obj['twt_access_token_secret'],
-                        };
+                    var headers = {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'redditaccesstoken': obj['rd_access_token'],
+                        'twtaccesstokenkey': obj['twt_access_token_key'],
+                        'twtaccesstokensecret': obj['twt_access_token_secret'],
+                    };
 
-                        var multiPostPromises = [];
-                        if (parseInt(req.body.pages) !== -999) {
-                            if (req.body.prefix === 'twitter-Tweet' || req.body.prefix === 'twitter-Timeline') {
-                                // post one time with all pages
-                                multiPostPromises.push(gatherMultiPost(req, headers, parseInt(req.body.pages)));
-                            } else {
-                                // flipping through pages
-                                for (var i = 0; i < parseInt(req.body.pages); i++) {
-                                    multiPostPromises.push(gatherMultiPost(req, headers, i + 1));
-                                }
-                            }
+                    var multiPostPromises = [];
+                    if (parseInt(req.body.pages) !== -999) {
+                        if (req.body.prefix === 'twitter-Tweet' || req.body.prefix === 'twitter-Timeline') {
+                            // post one time with all pages
+                            multiPostPromises.push(gatherMultiPost(req, headers, parseInt(req.body.pages)));
                         } else {
-                            // no pagination available
-                            multiPostPromises.push(gatherSinglePost(req, headers));
+                            // flipping through pages
+                            for (var i = 0; i < parseInt(req.body.pages); i++) {
+                                multiPostPromises.push(gatherMultiPost(req, headers, i + 1));
+                            }
                         }
-                        Promise.all(multiPostPromises).then(values => {
-                            // piece the json together here
-                            var key1 = Object.keys(values[0])[0];
-                            var key2 = Object.keys(values[0][key1])[0];
-                            var key3 = Object.keys(values[0][key1][key2])[0];
-                            if ("errors" in values[0]) {
-                                res.send({ERROR: values[0]['errors'][0]['message']});
-                            } else {
-                                var responseObj = mergeJSON(values, [key1, key2, key3]);
+                    } else {
+                        // no pagination available
+                        multiPostPromises.push(gatherSinglePost(req, headers));
+                    }
+                    Promise.all(multiPostPromises).then(values => {
+                        // piece the json together here
+                        var key1 = Object.keys(values[0])[0];
+                        var key2 = Object.keys(values[0][key1])[0];
+                        var key3 = Object.keys(values[0][key1][key2])[0];
+                        if ("errors" in values[0]) {
+                            res.send({ERROR: values[0]['errors'][0]['message']});
+                        } else {
+                            var responseObj = mergeJSON(values, [key1, key2, key3]);
 
-                                // ------------------------------------save csv file---------------------------------------------------------
-                                if (responseObj[key1][key2][key3].length > 0
-                                    && responseObj[key1][key2][key3] !== 'null'
-                                    && responseObj[key1][key2][key3] !== undefined) {
+                            // ------------------------------------save csv file---------------------------------------------------------
+                            if (responseObj[key1][key2][key3].length > 0
+                                && responseObj[key1][key2][key3] !== 'null'
+                                && responseObj[key1][key2][key3] !== undefined) {
 
-                                    // if no such folder, create that folder
-                                    var directory = path.join(prefixGraphqlDownloadsDir, req.body.filename);
-                                    if (!fs.existsSync(directory)) {
-                                        fs.mkdirSync(directory);
-                                    }
+                                // if no such folder, create that folder
+                                var directory = path.join(prefixGraphqlDownloadsDir, req.body.filename);
+                                if (!fs.existsSync(directory)) {
+                                    fs.mkdirSync(directory);
+                                }
 
-                                    // save query parameters to it so history page can use it! Synchronous method
-                                    var params = JSON.parse(req.body.params);
-                                    if (parseInt(req.body.pages) !== -999) params['pages:'] = parseInt(req.body.pages);
-                                    if (params['fields'] === "") params['fields'] = "DEFAULT";
-                                    fs.writeFileSync(path.join(directory, "config.json"), JSON.stringify(params), 'utf8');
+                                // save query parameters to it so history page can use it! Synchronous method
+                                var params = JSON.parse(req.body.params);
+                                if (parseInt(req.body.pages) !== -999) params['pages:'] = parseInt(req.body.pages);
+                                if (params['fields'] === "") params['fields'] = "DEFAULT";
+                                fs.writeFileSync(path.join(directory, "config.json"), JSON.stringify(params), 'utf8');
 
-                                    // save json for future pagination purpose
-                                    // due to [{xxx:xxx},{xxx:xxx}...] is not a valid json format
-                                    var jsonObj = {};
-                                    jsonObj[req.body.prefix] = responseObj[key1][key2][key3];
-                                    var rawJson = req.body.filename + '.json';
-                                    fs.writeFileSync(path.join(directory, rawJson), JSON.stringify(jsonObj, null, 2), 'utf8');
+                                // save json for future pagination purpose
+                                // due to [{xxx:xxx},{xxx:xxx}...] is not a valid json format
+                                var jsonObj = {};
+                                jsonObj[req.body.prefix] = responseObj[key1][key2][key3];
+                                var rawJson = req.body.filename + '.json';
+                                fs.writeFileSync(path.join(directory, rawJson), JSON.stringify(jsonObj, null, 2), 'utf8');
 
-                                    // save CSV; Async
-                                    var processed = req.body.filename + '.csv';
-                                    new Promise((resolve, reject) => {
-                                        jsonexport(jsonObj[req.body.prefix], {
-                                            fillGaps: false,
-                                            undefinedString: 'NaN'
-                                        }, function (err, csv) {
-                                            if (err) reject(err);
-                                            if (csv !== '') {
-                                                fs.writeFile(path.join(directory, processed), csv, 'utf8', function (err) {
-                                                    if (err) {
-                                                        reject(err);
-                                                    } else {
-                                                        resolve();
-                                                    }
+                                // save CSV; Async
+                                var processed = req.body.filename + '.csv';
+                                new Promise((resolve, reject) => {
+                                    jsonexport(jsonObj[req.body.prefix], {
+                                        fillGaps: false,
+                                        undefinedString: 'NaN'
+                                    }, function (err, csv) {
+                                        if (err) reject(err);
+                                        if (csv !== '') {
+                                            fs.writeFile(path.join(directory, processed), csv, 'utf8', function (err) {
+                                                if (err) {
+                                                    reject(err);
+                                                } else {
+                                                    resolve();
+                                                }
+                                            });
+                                        }
+                                    });
+                                })
+                                .then(() => {
+                                    var uploadToS3Promises = [];
+                                    uploadToS3Promises.push(s3.uploadToS3(path.join(directory, processed),
+                                        req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + processed));
+                                    uploadToS3Promises.push(s3.uploadToS3(path.join(directory, rawJson),
+                                        req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + rawJson));
+                                    uploadToS3Promises.push(s3.uploadToS3(path.join(directory, "config.json"),
+                                        req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + "config.json"));
+                                    Promise.all(uploadToS3Promises).then((URLs) => {
+                                        var args = {
+                                            's3FolderName': req.user.username,
+                                            'filename': processed,
+                                            'remoteReadPath': req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
+                                        };
+
+                                        lambdaHandler.invoke('histogram', 'histogram', args).then(results => {
+                                            if (results['url'] === 'null') {
+                                                var rendering = responseObj[key1][key2][key3].slice(0, 100);
+                                                s3.deleteLocalFolders(directory).then(() => {
+                                                    res.send({
+                                                        fname: processed,
+                                                        URLs: URLs,
+                                                        rendering: rendering
+                                                    });
+                                                }).catch(deleteLocalFoldersError => {
+                                                    res.send({ERROR: deleteLocalFoldersError});
                                                 });
-                                            }
-                                        });
-                                    })
-                                    .then(() => {
-                                        var uploadToS3Promises = [];
-                                        uploadToS3Promises.push(s3.uploadToS3(path.join(directory, processed),
-                                            req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + processed));
-                                        uploadToS3Promises.push(s3.uploadToS3(path.join(directory, rawJson),
-                                            req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + rawJson));
-                                        uploadToS3Promises.push(s3.uploadToS3(path.join(directory, "config.json"),
-                                            req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + "config.json"));
-                                        Promise.all(uploadToS3Promises).then((URLs) => {
-                                            var args = {
-                                                's3FolderName': req.user.username,
-                                                'filename': processed,
-                                                'remoteReadPath': req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
-                                            };
+                                            } else {
+                                                getMultiRemote(results['url']).then(function (data) {
 
-                                            lambdaHandler.invoke('histogram', 'histogram', args).then(results => {
-                                                if (results['url'] === 'null') {
+                                                    var histogram = data;
                                                     var rendering = responseObj[key1][key2][key3].slice(0, 100);
                                                     s3.deleteLocalFolders(directory).then(() => {
                                                         res.send({
                                                             fname: processed,
                                                             URLs: URLs,
-                                                            rendering: rendering
+                                                            rendering: rendering,
+                                                            histogram: histogram
                                                         });
-                                                    }).catch(deleteLocalFoldersError => {
+                                                    }).catch(deleteLocalFoldersError => { // deleteFolderERROR
                                                         res.send({ERROR: deleteLocalFoldersError});
                                                     });
-                                                } else {
-                                                    getMultiRemote(results['url']).then(function (data) {
+                                                }).catch(getMultiRemoteError => {
+                                                    res.send({ERROR: getMultiRemoteError});
+                                                });
+                                            }
 
-                                                        var histogram = data;
-                                                        var rendering = responseObj[key1][key2][key3].slice(0, 100);
-                                                        s3.deleteLocalFolders(directory).then(() => {
-                                                            res.send({
-                                                                fname: processed,
-                                                                URLs: URLs,
-                                                                rendering: rendering,
-                                                                histogram: histogram
-                                                            });
-                                                        }).catch(deleteLocalFoldersError => { // deleteFolderERROR
-                                                            res.send({ERROR: deleteLocalFoldersError});
-                                                        });
-                                                    }).catch(getMultiRemoteError => {
-                                                        res.send({ERROR: getMultiRemoteError});
-                                                    });
-                                                }
-
-                                            }).catch(lambdaHandlerError => {
-                                                res.send({'ERROR': lambdaHandlerError});
-                                            });
-
-                                        }).catch(uploadToS3Error => {
-                                            res.send({ERROR: JSON.stringify(uploadToS3Error)});
+                                        }).catch(lambdaHandlerError => {
+                                            res.send({'ERROR': lambdaHandlerError});
                                         });
 
-                                    }).catch(jsonexportError => {
-                                        res.send({ERROR: JSON.stringify(jsonexportError)});
+                                    }).catch(uploadToS3Error => {
+                                        res.send({ERROR: JSON.stringify(uploadToS3Error)});
                                     });
 
-                                } else {
-                                    res.send({ERROR: "Sorry, we couldn't find results that matches your query..."});
-                                }
-                            }
+                                }).catch(jsonexportError => {
+                                    res.send({ERROR: JSON.stringify(jsonexportError)});
+                                });
 
-                        }).catch((gatherMultiPostError) => {
-                            res.send({ERROR: JSON.stringify(gatherMultiPostError)});
-                        })
-                    } else {
-                        res.send({ERROR: 'This filename ' + req.body.filename + ' already exist in your directory. Please rename it to something else!'});
-                    }
-                });
-            })
-            .catch(retrieveCredentialsError => {
-                res.send({ERROR: retrieveCredentialsError});
+                            } else {
+                                res.send({ERROR: "Sorry, we couldn't find results that matches your query..."});
+                            }
+                        }
+
+                    }).catch((gatherMultiPostError) => {
+                        res.send({ERROR: JSON.stringify(gatherMultiPostError)});
+                    })
+                } else {
+                    res.send({ERROR: 'This filename ' + req.body.filename + ' already exist in your directory. Please rename it to something else!'});
+                }
             });
         } else {
             res.send({ERROR: platform + " token expired! Please refresh the page."})
@@ -237,23 +230,20 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
     });
 });
 
-router.post('/prompt', checkIfLoggedIn, function (req, res) {
-    retrieveCredentials(req).then(obj => {
-        lambdaHandler.invoke('bae_screen_name_prompt', 'bae_screen_name_prompt', {
-            consumer_key: TWITTER_CONSUMER_KEY,
-            consumer_secret: TWITTER_CONSUMER_SECRET,
-            access_token: obj['twt_access_token_key'],
-            access_token_secret: obj['twt_access_token_secret'],
-            screen_name: req.body.screenName
-        })
-        .then(userinfo => {
-            res.send(userinfo);
-        })
-        .catch(lambdaHandlerError => {
-            res.send({ERROR: lambdaHandlerError});
-        });
-    }).catch(retrieveCredentialsError => {
-        res.send({ERROR: retrieveCredentialsError});
+router.post('/prompt', checkIfLoggedIn, async function (req, res) {
+    var obj = await retrieveCredentials(req);
+    lambdaHandler.invoke('bae_screen_name_prompt', 'bae_screen_name_prompt', {
+        consumer_key: TWITTER_CONSUMER_KEY,
+        consumer_secret: TWITTER_CONSUMER_SECRET,
+        access_token: obj['twt_access_token_key'],
+        access_token_secret: obj['twt_access_token_secret'],
+        screen_name: req.body.screenName
+    })
+    .then(userinfo => {
+        res.send(userinfo);
+    })
+    .catch(lambdaHandlerError => {
+        res.send({ERROR: lambdaHandlerError});
     });
 });
 
@@ -386,20 +376,17 @@ function mergeJSON(values, keys) {
 }
 
 function checkAuthorized(req) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         var response = {
             twitter: false,
             reddit: false,
         };
 
-        retrieveCredentials(req).then(obj =>{
-            if (obj && 'twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
-            if (obj && 'rd_access_token' in obj) response['reddit'] = true;
-            resolve(response);
-        })
-        .catch(err =>{
-            reject(err);
-        });
+        var obj = await retrieveCredentials(req);
+        if (obj && 'twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
+        if (obj && 'rd_access_token' in obj) response['reddit'] = true;
+        resolve(response);
+
     });
 }
 

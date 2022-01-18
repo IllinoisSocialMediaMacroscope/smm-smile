@@ -5,7 +5,7 @@ router.get('/citation', function (req, res) {
     res.render('citation', {
         user: req.user,
         parent: '/',
-        DOCKERIZED:process.env.DOCKERIZED==='true'
+        SINGLE_USER:SINGLE_USER==='true'
     });
 });
 

@@ -130,7 +130,6 @@ router.post('/list', checkIfLoggedIn, function (req, res, next) {
 });
 
 router.post('/list-all', checkIfLoggedIn, function (req, res, next) {
-
     var promise_array = [];
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Tweet/'));
     promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Timeline/'));

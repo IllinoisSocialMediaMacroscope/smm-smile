@@ -20,8 +20,9 @@ router.get('/tag', checkIfLoggedIn, function(req,res,next){
                 }
             }
         }
-        res.send(matchedTag);
     }
+
+    res.send(matchedTag);
 });
 
 router.post('/tag', checkIfLoggedIn, function(req,res,next){
