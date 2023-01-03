@@ -100,7 +100,7 @@ if (process.env.DOCKERIZED === 'true') {
                     return response.json();
                 })
                 .then(function (json) {
-                    process.nextTick((json) => cb(null, json));
+                    process.nextTick(() => cb(null, json));
                 })
             })
         );
@@ -115,8 +115,7 @@ if (process.env.DOCKERIZED === 'true') {
 
         // configure redisClient
         (async () => {
-            // redisClient = redis.createClient({url:"redis://redis:6379"});
-            redisClient = redis.createClient({url: "redis://localhost:6379"});
+            redisClient = redis.createClient({url:"redis://redis:6379"});
             redisClient.on('error', (err) => console.log('Redis Client Error', err));
             await redisClient.connect();
         })();
