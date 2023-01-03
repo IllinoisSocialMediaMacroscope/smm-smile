@@ -97,7 +97,9 @@ if (process.env.DOCKERIZED === 'true') {
                 clientSecret: process.env.CILOGON_CLIENT_SECRET,
                 callbackURL: process.env.CILOGON_CALLBACK_URL,
             },(accessToken, refreshToken, profile, cb) => {
+                // TODO need another trip to actually get profile
                 process.nextTick(() => cb(null, profile));
+
             })
         );
 
@@ -335,6 +337,7 @@ app.get('/smile-login', passport.authenticate('oauth2',{ scope: ['openid', 'emai
 
 app.get('/smile-login/callback', function(req, res, next) {
     passport.authenticate('oauth2', { failureRedirect: '/smile-login' }, function(err, user, info){
+        console.log(err, user, info)
         if (err) { return res.send({ERROR: "fail to login!"}); }
         if (!user) { return res.send({ERROR: "fail to login!"}); }
         req.logIn(user, function (err) {
