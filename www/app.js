@@ -11,7 +11,7 @@ var mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const OAuth2Strategy = require('passport-oauth2').Strategy;
-const redis = require('redis');
+// const redis = require('redis');
 
 var lambdaRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'lambdaRoutesTemplate.js'));
 var batchRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'batchRoutesTemplate.js'));
@@ -90,7 +90,8 @@ if (process.env.DOCKERIZED === 'true') {
     else {
         // connect to database
         var User = require(path.join(__dirname, 'models', 'user.js'));
-        var mongourl = 'mongodb://mongodb:27017/user';
+        // var mongourl = 'mongodb://mongodb:27017/user';
+        var mongourl = 'mongodb://localhost:27017/user';
         mongoose.connect(mongourl,
             {useNewUrlParser: true, useUnifiedTopology: true});
 
@@ -106,21 +107,22 @@ if (process.env.DOCKERIZED === 'true') {
                 tokenURL: 'https://cilogon.org/oauth2/token',
                 clientID: process.env.CILOGON_CLIENT_ID,
                 clientSecret: process.env.CILOGON_CLIENT_SECRET,
-                callbackURL: "http://localhost:8001/smile-login/callback"
+                callbackURL: process.env.CILOGON_CALLBACK_URL
             },
             function(accessToken, refreshToken, profile, cb) {
-                User.findOrCreate({ exampleId: profile.id }, function (err, user) {
-                    return cb(err, user);
-                });
+                console.log(accessToken, refreshToken, profile);
+                // User.findOrCreate({ exampleId: profile.id }, function (err, user) {
+                //     return cb(err, user);
+                // });
             }
         ));
 
-        // configure redisClient
-        (async () => {
-            redisClient = redis.createClient({url:"redis://redis:6379"});
-            redisClient.on('error', (err) => console.log('Redis Client Error', err));
-            await redisClient.connect();
-        })();
+        // // configure redisClient
+        // (async () => {
+        //     redisClient = redis.createClient({url:"redis://redis:6379"});
+        //     redisClient.on('error', (err) => console.log('Redis Client Error', err));
+        //     await redisClient.connect();
+        // })();
 
         global.checkIfLoggedIn = function (req, res, next) {
             if (req.isAuthenticated() || req.user != null) {
@@ -129,18 +131,18 @@ if (process.env.DOCKERIZED === 'true') {
             res.redirect("/account");
         }
 
-        global.retrieveCredentials = async function (req) {
-            return await redisClient.hGetAll(req.user.username);
-        }
-
-        global.removeCredential = async function (req, entry) {
-            await redisClient.hDel(req.user.username, entry);
-        }
-
-        global.setCredential = async function (req, entry, credential) {
-            await redisClient.hSet(req.user.username, entry, credential, redis.print);
-            await redisClient.expire(req.user.username, 30 * 60);
-        };
+        // global.retrieveCredentials = async function (req) {
+        //     return await redisClient.hGetAll(req.user.username);
+        // }
+        //
+        // global.removeCredential = async function (req, entry) {
+        //     await redisClient.hDel(req.user.username, entry);
+        // }
+        //
+        // global.setCredential = async function (req, entry, credential) {
+        //     await redisClient.hSet(req.user.username, entry, credential, redis.print);
+        //     await redisClient.expire(req.user.username, 30 * 60);
+        // };
     }
 
 } else {
@@ -349,20 +351,25 @@ app.get('/account', function (req, res) {
 });
 
 app.get('/smile-login', function (req, res, next) {
-    passport.authenticate('oauth2');
-    // passport.authenticate('local', function (err, user, info) {
-    //     if (err) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
-    //     if (!user) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
-    //     req.logIn(user, function (err) {
-    //         if (err) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
-    //         return res.status(200).send({message: "successfully logged in!"});
-    //     });
-    // })(req, res, next);
+    // passport.authenticate('oauth2', );
+    passport.authenticate('oauth2', function (err, user, info) {
+        if (err) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
+        if (!user) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
+        req.logIn(user, function (err) {
+            if (err) { return res.send({ERROR: "fail to login! Please check your usename and password."}); }
+            return res.status(200).send({message: "successfully logged in!"});
+        });
+    })(req, res, next);
 });
-app.get('/smile-login/callback',
-    passport.authenticate('oauth2', { failureRedirect: '/smile-login' }),
-    function(req, res) {
-        res.redirect('/');
+app.get('/smile-login/callback', function(req, res, next) {
+    passport.authenticate('oauth2', { failureRedirect: '/smile-login' }, function(err, user, info){
+        if (err) { return res.send({ERROR: "fail to login!"}); }
+        if (!user) { return res.send({ERROR: "fail to login!"}); }
+        req.logIn(user, function (err) {
+            if (err) { return res.send({ERROR: "fail to login!"}); }
+            res.redirect('/');
+        });
+    })(req, res, next);
 });
 
 app.get('/smile-logout', function (req, res) {
