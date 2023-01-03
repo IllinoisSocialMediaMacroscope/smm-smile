@@ -34,12 +34,12 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.1.0",
+    "passport-oauth2": "^1.6.1",
     "pug": "^2.0.0-rc.1",
     "redis": "^4.0.2",
     "rimraf": "^2.6.2",
     "serve-favicon": "^2.4.3"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "nodemon app.js",
     "start": "concurrently \"forever app.js\" \"cd graphql && npm start\" ",
