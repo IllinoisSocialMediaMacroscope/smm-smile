@@ -16,7 +16,7 @@ router.post('/image-crawler', checkIfLoggedIn, function (req, res, next) {
 
         // check if user still wants to collect it; overwrite the exist
         if (exist === false || (exist === true && req.body.consent === 'true')) {
-            var jobName = req.user.username + '_imageCrawler_sdk';
+            var jobName = req.user.email + '_imageCrawler_sdk';
             var command = ["python3.6", "/scripts/batch_function.py",
                 "--remoteReadPath", req.body.prefix,
                 "--email", req.body.email,

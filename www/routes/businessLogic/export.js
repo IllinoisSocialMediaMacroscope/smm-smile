@@ -17,18 +17,18 @@ router.post('/export', checkIfLoggedIn, async function (req, res, next) {
         fs.mkdirSync(smileHomePath);
     }
 
-    if (!fs.existsSync(path.join(smileHomePath, req.user.username))) {
-        fs.mkdirSync(path.join(smileHomePath, req.user.username));
+    if (!fs.existsSync(path.join(smileHomePath, req.user.email))) {
+        fs.mkdirSync(path.join(smileHomePath, req.user.email));
     }
 
-    var downloadPath = path.join(smileHomePath, req.user.username, 'downloads');
+    var downloadPath = path.join(smileHomePath, req.user.email, 'downloads');
 
     var obj = await retrieveCredentials(req);
-    s3.list_files(req.user.username + '/').then(files => {
+    s3.list_files(req.user.email + '/').then(files => {
         if (Object.keys(files).length === 0) {
             res.send({'ERROR': 'You don\'t have any data associate with this session. Nothing to export!'});
         } else {
-            s3.download_folder(req.user.username + '/', downloadPath).then(files => {
+            s3.download_folder(req.user.email + '/', downloadPath).then(files => {
 
                 var filename = 'SMILE-' + Date.now() + '.zip';
                 zipDownloads(filename, downloadPath).then(() => {
@@ -117,16 +117,16 @@ router.post('/export-single', checkIfLoggedIn, async function (req, res) {
         fs.mkdirSync(smileHomePath);
     }
 
-    if (!fs.existsSync(path.join(smileHomePath, req.user.username))) {
-        fs.mkdirSync(path.join(smileHomePath, req.user.username));
+    if (!fs.existsSync(path.join(smileHomePath, req.user.email))) {
+        fs.mkdirSync(path.join(smileHomePath, req.user.email));
     }
 
-    var downloadPath = path.join(smileHomePath, req.user.username, 'downloads');
+    var downloadPath = path.join(smileHomePath, req.user.email, 'downloads');
 
     var obj = await retrieveCredentials(req);
     // check if the requested folder matches the current user's identity
     var arrURL = req.body.folderURL.split('/');
-    if (arrURL[0] === req.user.username) {
+    if (arrURL[0] === req.user.email) {
         var p = s3.list_files(req.body.folderURL);
         p.then(files => {
             s3.download_folder(req.body.folderURL, downloadPath).then(files => {

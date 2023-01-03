@@ -44,18 +44,18 @@ router.post('/import', checkIfLoggedIn, upload.single('importFile'),function(req
         }
         else{
             // if that user path doesn't exist
-            if (!fs.existsSync(path.join(uploadPath, req.user.username))){
-                fs.mkdirSync(path.join(uploadPath, req.user.username));
+            if (!fs.existsSync(path.join(uploadPath, req.user.email))){
+                fs.mkdirSync(path.join(uploadPath, req.user.email));
             }
 
-            var configPath = path.join(uploadPath, req.user.username, "config.json");
+            var configPath = path.join(uploadPath, req.user.email, "config.json");
             fs.writeFile(configPath, JSON.stringify(config), function (err) {
                 if (err) res.send({ERROR: err});
                 else {
                     var promise_arr = [];
-                    promise_arr.push(s3.uploadToS3(filepath, req.user.username + '/GraphQL/'
+                    promise_arr.push(s3.uploadToS3(filepath, req.user.email + '/GraphQL/'
                         + category + '/' + foldername + '/' + filename));
-                    promise_arr.push(s3.uploadToS3(configPath, req.user.username + '/GraphQL/'
+                    promise_arr.push(s3.uploadToS3(configPath, req.user.email + '/GraphQL/'
                         + category + '/' + foldername + '/config.json'));
                     Promise.all(promise_arr).then(urls => {
                         fs.unlinkSync(filepath);

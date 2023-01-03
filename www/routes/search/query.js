@@ -71,7 +71,7 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
         if (status[platform] || req.body.prefix === 'reddit-Historical-Post' || req.body.prefix === 'reddit-Historical-Comment') {
             var obj = await retrieveCredentials(req);
             var prefixGraphqlDownloadsDir = createLocalFolders(req);
-            checkExist(req.user.username + '/GraphQL/' + req.body.prefix + '/', req.body.filename)
+            checkExist(req.user.email + '/GraphQL/' + req.body.prefix + '/', req.body.filename)
             .then((value) => {
                 if (value) {
 
@@ -154,16 +154,16 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                                 .then(() => {
                                     var uploadToS3Promises = [];
                                     uploadToS3Promises.push(s3.uploadToS3(path.join(directory, processed),
-                                        req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + processed));
+                                        req.user.email + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + processed));
                                     uploadToS3Promises.push(s3.uploadToS3(path.join(directory, rawJson),
-                                        req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + rawJson));
+                                        req.user.email + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + rawJson));
                                     uploadToS3Promises.push(s3.uploadToS3(path.join(directory, "config.json"),
-                                        req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + "config.json"));
+                                        req.user.email + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/' + "config.json"));
                                     Promise.all(uploadToS3Promises).then((URLs) => {
                                         var args = {
-                                            's3FolderName': req.user.username,
+                                            's3FolderName': req.user.email,
                                             'filename': processed,
-                                            'remoteReadPath': req.user.username + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
+                                            'remoteReadPath': req.user.email + '/GraphQL/' + req.body.prefix + '/' + req.body.filename + '/'
                                         };
 
                                         lambdaHandler.invoke('histogram', 'histogram', args).then(results => {
@@ -253,11 +253,11 @@ function createLocalFolders(req) {
         fs.mkdirSync(smileHomePath);
     }
     // if that user path doesn't exist
-    if (!fs.existsSync(path.join(smileHomePath, req.user.username))) {
-        fs.mkdirSync(path.join(smileHomePath, req.user.username));
+    if (!fs.existsSync(path.join(smileHomePath, req.user.email))) {
+        fs.mkdirSync(path.join(smileHomePath, req.user.email));
     }
 
-    var downloadsDir = path.join(smileHomePath, req.user.username, 'downloads');
+    var downloadsDir = path.join(smileHomePath, req.user.email, 'downloads');
     if (!fs.existsSync(downloadsDir)) {
         fs.mkdirSync(downloadsDir);
     }

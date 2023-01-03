@@ -10,8 +10,7 @@ var session = require('express-session');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 const redis = require('redis');
-const jwt = require('jsonwebtoken');
-
+const fetch = require('node-fetch');
 
 var lambdaRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'lambdaRoutesTemplate.js'));
 var batchRoutesTemplate = require(path.join(__dirname, 'scripts', 'helper_func', 'batchRoutesTemplate.js'));
@@ -66,7 +65,7 @@ if (process.env.DOCKERIZED === 'true') {
 
     if (SINGLE_USER === 'true') {
         global.checkIfLoggedIn = function (req, res, next) {
-            req.user = {username: s3FolderName};
+            req.user = {email: s3FolderName};
             return next();
         }
 
@@ -86,8 +85,7 @@ if (process.env.DOCKERIZED === 'true') {
             req.session[entry] = credential;
             req.session.save();
         };
-    }
-    else {
+    } else {
         // authenticate use CILogon
         passport.use(new OAuth2Strategy({
                 state: true,
@@ -96,10 +94,14 @@ if (process.env.DOCKERIZED === 'true') {
                 clientID: process.env.CILOGON_CLIENT_ID,
                 clientSecret: process.env.CILOGON_CLIENT_SECRET,
                 callbackURL: process.env.CILOGON_CALLBACK_URL,
-            },(accessToken, refreshToken, profile, cb) => {
-                // TODO need another trip to actually get profile
-                process.nextTick(() => cb(null, profile));
-
+            }, (accessToken, refreshToken, profile, cb) => {
+            fetch('https://cilogon.org/oauth2/userinfo?access_token=' + accessToken)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (json) {
+                    process.nextTick((json) => cb(null, json));
+                })
             })
         );
 
@@ -114,7 +116,7 @@ if (process.env.DOCKERIZED === 'true') {
         // configure redisClient
         (async () => {
             // redisClient = redis.createClient({url:"redis://redis:6379"});
-            redisClient = redis.createClient({url:"redis://localhost:6379"});
+            redisClient = redis.createClient({url: "redis://localhost:6379"});
             redisClient.on('error', (err) => console.log('Redis Client Error', err));
             await redisClient.connect();
         })();
@@ -127,16 +129,16 @@ if (process.env.DOCKERIZED === 'true') {
         }
 
         global.retrieveCredentials = async function (req) {
-            return await redisClient.hGetAll(req.user.username);
+            return await redisClient.hGetAll(req.user.email);
         }
 
         global.removeCredential = async function (req, entry) {
-            await redisClient.hDel(req.user.username, entry);
+            await redisClient.hDel(req.user.email, entry);
         }
 
         global.setCredential = async function (req, entry, credential) {
-            await redisClient.hSet(req.user.username, entry, credential, redis.print);
-            await redisClient.expire(req.user.username, 30 * 60);
+            await redisClient.hSet(req.user.email, entry, credential, redis.print);
+            await redisClient.expire(req.user.email, 30 * 60);
         };
     }
 
@@ -165,14 +167,14 @@ if (process.env.DOCKERIZED === 'true') {
 
     // backward compatibility; do not need multiuser capacity if deploying on macroscope
     global.checkIfLoggedIn = function (req, res, next) {
-        req.user = {username: s3FolderName};
+        req.user = {email: s3FolderName};
         return next();
     }
 
     global.retrieveCredentials = async function (req) {
         return new Promise((resolve, reject) => {
             if (req.session) resolve(req.session);
-            else reject({error:"There is no credential exists in the session!"});
+            else reject({error: "There is no credential exists in the session!"});
         });
     }
 
@@ -265,10 +267,10 @@ analysesRoutesFiles.forEach(function (route, i) {
             var upload = multer({dest: path.join(smileHomePath, 'uploads')});
 
             app.put("/" + routesConfig.path, checkIfLoggedIn, upload.single("labeled"), function (req, res) {
-                s3.uploadToS3(req.file.path, req.user.username + routesConfig['result_path'] + req.body.uid
+                s3.uploadToS3(req.file.path, req.user.email + routesConfig['result_path'] + req.body.uid
                     + '/' + req.body.labeledFilename)
                 .then(url => {
-                    var remoteReadPath = req.user.username + routesConfig['result_path'] + req.body.uid + '/';
+                    var remoteReadPath = req.user.email + routesConfig['result_path'] + req.body.uid + '/';
                     fs.unlinkSync(req.file.path);
                     if (req.body.selectFile !== 'Please Select...') {
                         if (req.body.aws_identifier === 'lambda') {
@@ -332,11 +334,12 @@ authRoutesFiles.forEach(function (route, i) {
     }
 });
 
-app.get('/smile-login', passport.authenticate('oauth2',{ scope: ['openid', 'email', 'profile']
+app.get('/smile-login', passport.authenticate('oauth2', {
+    scope: ['openid', 'email', 'profile']
 }));
 
-app.get('/smile-login/callback', function(req, res, next) {
-    passport.authenticate('oauth2', { failureRedirect: '/smile-login' }, function(err, user, info){
+app.get('/smile-login/callback', function (req, res, next) {
+    passport.authenticate('oauth2', {failureRedirect: '/smile-login'}, function (err, user, info) {
         console.log(err, user, info)
         if (err) { return res.send({ERROR: "fail to login!"}); }
         if (!user) { return res.send({ERROR: "fail to login!"}); }
