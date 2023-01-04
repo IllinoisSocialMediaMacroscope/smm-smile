@@ -339,7 +339,6 @@ app.get('/smile-login', passport.authenticate('oauth2', {
 
 app.get('/smile-login/callback', function (req, res, next) {
     passport.authenticate('oauth2', {failureRedirect: '/smile-login'}, function (err, user, info) {
-        console.log(err, user, info)
         if (err) { return res.send({ERROR: "fail to login!"}); }
         if (!user) { return res.send({ERROR: "fail to login!"}); }
         req.logIn(user, function (err) {
@@ -362,7 +361,6 @@ var server = http.createServer(app);
 server.timeout = 1000 * 60 * 10; //10 minutes
 
 server.listen(port);
-console.log("App listening on \n\tlocalhost:" + port);
 server.on('error', onError);
 server.on('listening', onListening);
 
