@@ -7,9 +7,9 @@ var getMultiRemote = require(path.join(appPath,'scripts','helper_func','getRemot
 router.post('/histogram', checkIfLoggedIn, function(req,res,next){
 
 	var args = {
-				's3FolderName': req.user.username,
+				's3FolderName': req.user.email,
 				'filename':req.body.filename,
-				'remoteReadPath':req.user.username + req.body.remoteReadPath,
+				'remoteReadPath':req.user.email + req.body.remoteReadPath,
 				'interval': req.body.interval
     };
 			

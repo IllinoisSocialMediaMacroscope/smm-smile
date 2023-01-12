@@ -48,16 +48,14 @@ nav(class="navbar navbar-inverse navbar-fixed-top")
                             div(class="topbar-dropdown")
                                 button(type="button", id="topbar-account-btn", class="btn btn-default topbar-dropdown-toggle",
                                 data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
-                                    | #{user.username} &nbsp;
+                                    | #{user.email} &nbsp;
                                     span(class="caret")
                                 ul(class="dropdown-menu", aria-labelledby="dropdownMenu2")
                                     li
                                         a(href="smile-logout") Logout
-                                    li
-                                        a(href="account") Switch Account
                         else
-                            a(href="account", id="topbar-account")
+                            a(href="smile-login", id="topbar-login")
                                 i(class="fas fa-user")
-                                | &nbsp;Account
+                                | &nbsp;Login
 
 script(src="bootstrap/js/customized/view_topbar.js")

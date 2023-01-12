@@ -18,7 +18,7 @@ function lambdaRoutesTemplate(req, config, handler ){
             'remoteReadPath': req.body.prefix,
             'resultPath': config.result_path,
             'column': req.body.selectFileColumn,
-            's3FolderName': req.user.username,
+            's3FolderName': req.user.email,
             'uid': uid
         };
         for (var i = 0; i < config.args.length; i++) {
@@ -113,7 +113,7 @@ function lambdaRoutesTemplate(req, config, handler ){
                 }
 
                 var data = ({
-                    ID: req.user.username + config['result_path'] + uid + "/",
+                    ID: req.user.email + config['result_path'] + uid + "/",
                     img: img,
                     download: download,
                     preview: preview,

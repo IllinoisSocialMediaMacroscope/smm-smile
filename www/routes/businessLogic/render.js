@@ -41,7 +41,7 @@ router.post('/render-json', checkIfLoggedIn, function (req, res, next) {
 });
 
 router.post('/render', checkIfLoggedIn, function (req, res, next) {
-    if (req.body.prefix.split("/")[0] === req.user.username) {
+    if (req.body.prefix.split("/")[0] === req.user.email) {
         if (req.body.prefix !== '' && req.body.prefix !== undefined) {
 
             var p = s3.list_files(req.body.prefix);
@@ -65,7 +65,7 @@ router.post('/render', checkIfLoggedIn, function (req, res, next) {
                                 }
 
                                 // add custom setting headers
-                                var customColumnHeadersPath = path.join(smileHomePath, req.user.username, 'customColumnHeaders.json');
+                                var customColumnHeadersPath = path.join(smileHomePath, req.user.email, 'customColumnHeaders.json');
                                 if (fs.existsSync(customColumnHeadersPath)) {
                                     var customColumnHeaders = JSON.parse(fs.readFileSync(customColumnHeadersPath));
                                     for (var key in customColumnHeaders) {
@@ -103,14 +103,14 @@ router.post('/list', checkIfLoggedIn, function (req, res, next) {
     var directory = {};
 
     var promise_array = [];
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Tweet/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Timeline/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Search/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Post/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Comment/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Post/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Comment/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/userspec-Others/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/twitter-Tweet/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/twitter-Timeline/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Search/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Post/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Comment/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Historical-Post/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Historical-Comment/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/userspec-Others/'));
     Promise.all(promise_array).then(values => {
 
         directory['twitter-Tweet'] = values[0];
@@ -131,14 +131,14 @@ router.post('/list', checkIfLoggedIn, function (req, res, next) {
 
 router.post('/list-all', checkIfLoggedIn, function (req, res, next) {
     var promise_array = [];
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Tweet/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/twitter-Timeline/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Search/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Post/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Comment/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Post/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/reddit-Historical-Comment/'));
-    promise_array.push(s3.list_folders(req.user.username + '/GraphQL/userspec-Others/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/twitter-Tweet/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/twitter-Timeline/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Search/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Post/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Comment/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Historical-Post/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Historical-Comment/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/userspec-Others/'));
     var graphqlLength = promise_array.length;
 
     // loop through analyses setting files
@@ -154,7 +154,7 @@ router.post('/list-all', checkIfLoggedIn, function (req, res, next) {
                 var parent = routesConfig['result_path'].split("/")[1];
                 var child = routesConfig['result_path'].split("/")[2];
                 order.push({order: j + graphqlLength, parent: parent, child: child});
-                promise_array.push(s3.list_folders(req.user.username + routesConfig['result_path']));
+                promise_array.push(s3.list_folders(req.user.email + routesConfig['result_path']));
 
                 j++;
             }
@@ -209,12 +209,12 @@ router.post('/add-columnHead', checkIfLoggedIn, function (req, res, next) {
             fs.mkdirSync(smileHomePath);
         }
 
-        if (!fs.existsSync(path.join(smileHomePath, req.user.username))){
-            fs.mkdirSync(path.join(smileHomePath, req.user.username));
+        if (!fs.existsSync(path.join(smileHomePath, req.user.email))){
+            fs.mkdirSync(path.join(smileHomePath, req.user.email));
         }
 
         // write user specific column header to customColumnHeaders.json file
-        var customColumnHeadersPath = path.join(smileHomePath, req.user.username, 'customColumnHeaders.json');
+        var customColumnHeadersPath = path.join(smileHomePath, req.user.email, 'customColumnHeaders.json');
         if (fs.existsSync(customColumnHeadersPath)) {
             var customColumnHeaders = JSON.parse(fs.readFileSync(customColumnHeadersPath));
             for (i = 0; i < data.analyses.length; i++) {
@@ -243,7 +243,7 @@ router.post('/add-columnHead', checkIfLoggedIn, function (req, res, next) {
 router.get('/list-columnHead', checkIfLoggedIn, function (req, res, next) {
     var columnHeaders = JSON.parse(fs.readFileSync(columnHeadersPath));
 
-    var customColumnHeadersPath = path.join(smileHomePath, req.user.username, 'customColumnHeaders.json');
+    var customColumnHeadersPath = path.join(smileHomePath, req.user.email, 'customColumnHeaders.json');
     if (fs.existsSync(customColumnHeadersPath)) {
         var customColumnHeaders = JSON.parse(fs.readFileSync(customColumnHeadersPath));
         for (var key in customColumnHeaders) {
