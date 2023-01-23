@@ -11,7 +11,7 @@ router.get('/login/dropbox', checkIfLoggedIn, function(req,res,next){
 router.post('/login/dropbox',function(req,res,next){
 	var user = DROPBOX_CLIENT_ID;
 	var password = DROPBOX_CLIENT_SECRET;
-	var base64encodedData = new Buffer(user + ':' + password).toString('base64');
+	var base64encodedData = new Buffer.from(user + ':' + password).toString('base64');
 	fetch('https://api.dropboxapi.com/1/oauth2/token', {method:'POST',
 											headers:{
 												'Authorization': 'Basic ' + base64encodedData,

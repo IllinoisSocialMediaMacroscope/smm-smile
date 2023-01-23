@@ -116,8 +116,7 @@ if (process.env.DOCKERIZED === 'true') {
 
         // configure redisClient
         (async () => {
-            // redisClient = redis.createClient({url:"redis://redis:6379"});
-            redisClient = redis.createClient({url:"http://127.0.0.1:6379"});
+            redisClient = redis.createClient({url:"redis://redis:6379"});
             redisClient.on('error', (err) => console.log('Redis Client Error', err));
             await redisClient.connect();
         })();

@@ -115,6 +115,3 @@ $("#reddit-agree").on('click', function () {
         }
     });
 });
-$(".reddit-auth").find('a').on('click', function () {
-    $("#reddit-callback").modal('show');
-});

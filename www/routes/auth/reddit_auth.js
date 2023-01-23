@@ -5,18 +5,12 @@ var crypto = require('crypto');
 
 
 router.get('/login/reddit', checkIfLoggedIn, function(req,res,next){
-	//var grantType = 'https://oauth.reddit.com/grants/installed_client&';
-	
-	// var user = REDDIT_CLIENT_ID;
-	// var password = REDDIT_CLIENT_SECRET;
-	// var base64encodedData = new Buffer.from(user + ':' + password).toString('base64');
-	
 	crypto.randomBytes(24, function(err, buffer) {
 		var RANDOM_STRING = buffer.toString('hex');
 		// store it in the redis for later comparison?
 		setCredential(req, 'rd_state', RANDOM_STRING);
 
-		var url = new URL("ttps://www.reddit.com/api/v1/authorize"),
+		var url = new URL("https://www.reddit.com/api/v1/authorize"),
 			params = {
 			client_id: REDDIT_CLIENT_ID,
 			response_type: "code",
@@ -26,7 +20,7 @@ router.get('/login/reddit', checkIfLoggedIn, function(req,res,next){
 			scope: "read"
 		}
 		Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-		res.redirezct(url);
+		res.redirect(url);
 	});
 });
 
@@ -38,21 +32,19 @@ router.get('/login/reddit/callback', checkIfLoggedIn, async function (req, res, 
 	var obj = await retrieveCredentials(req);
 	if (state === obj['rd_state']){
 		// get access token
-		var url = "https://www.reddit.com/api/v1/access_token", params = {
+		var url = new URL("https://www.reddit.com/api/v1/access_token"), params = {
 			grant_type: "authorization_code",
 			code: code,
 			redirect_uri: REDDIT_CALLBACK_URL
 		}
-
-		var user = REDDIT_CLIENT_ID;
-		var password = REDDIT_CLIENT_SECRET;
-		var base64encodedData = new Buffer(user + ':' + password).toString('base64');
-		fetch(url, {
+		Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+		var base64encodedData = new Buffer.from(REDDIT_CLIENT_ID + ':' + REDDIT_CLIENT_SECRET).toString('base64');
+		fetch(url.toString(), {
 			method:'POST',
 			headers:{
 				'Authorization': 'Basic ' + base64encodedData,
 				'Content-Type': "application/x-www-form-urlencoded",
-				'user-agent': 'smm.ncsa.illinois.edu',
+				'user-agent': 'TechServicesAnalytics@mx.uillinois.edu testing various things v0.1',
 			},
 		}).then(function(response){
 			return response.json();
