@@ -94,24 +94,3 @@ $("#twitter-pin").on('keyup', function (e) {
 $(".twitter-auth").find('a').on('click', function () {
     $("#twitter-callback").modal('show');
 });
-
-//***************************** REDDIT ******************************/
-$("#reddit-agree").on('click', function () {
-    $.ajax({
-        type: 'get',
-        url: 'login/reddit',
-        success: function (data) {
-            if ('ERROR' in data) {
-                $("#error").val(JSON.stringify(data));
-                $("#warning").modal('show');
-            }
-            else {
-                location.reload(true);
-            }
-        },
-        error: function (jqXHR, exception) {
-            $("#error").val(jqXHR.responseText);
-            $("#warning").modal('show');
-        }
-    });
-});

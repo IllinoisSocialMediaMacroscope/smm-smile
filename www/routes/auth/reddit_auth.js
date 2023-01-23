@@ -54,7 +54,7 @@ router.get('/login/reddit/callback', checkIfLoggedIn, async function (req, res, 
 			}
 			else{
 				setCredential(req, 'rd_access_token', json['access_token']);
-				res.send({});
+				res.redirect("/query");
 			}
 		});
 	}
