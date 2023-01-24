@@ -5,8 +5,8 @@
 
 ### For users or potential users:
 - Watch the **[Overview video](https://www.youtube.com/watch?v=ySb-8TwJ0Ds)**
-- Go to **[socialmediamacroscope.org](https://socialmediamacroscope.org)** and request for an account
 - Contact us the **[SRTI lab](https://srtilab.techservices.illinois.edu/about/)** if you have any question: <a href="mailto:srti-lab@illinois.edu">srti-lab@illinois.edu</a>
+- [SMILE Playground](https://smm-tester.ncsa.illinois.edu) coming soon...
 
 ### For developers:
 #### Structure of SMILE:
