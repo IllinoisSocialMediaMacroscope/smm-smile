@@ -50,16 +50,16 @@ html
             <!-- logo -->
             div(class="row" id="header",style="")
                 img(src="bootstrap/img/logo/queryPage-logo.png",width="500px",style="display:block;margin:auto auto;")
-            div(class="citation-notice fixed-width")
-                button(class="close") &times;
-                p Due to issues with receiving a consistent stream of data from Twitter's API, our historical streamed
-                    |  Twitter search/database has been deprecated. Please use the remaining Twitter non-historical
-                    |  search feature.
-
-            div(class="citation-notice fixed-width")
-                button(class="close") &times;
-                p Crimson Hexagon is now part of Brandwatch and due to this change the connection to Crimson Hexagon has
-                    |  been deprecated.
+            //div(class="citation-notice fixed-width")
+            //    button(class="close") &times;
+            //    p Due to issues with receiving a consistent stream of data from Twitter's API, our historical streamed
+            //        |  Twitter search/database has been deprecated. Please use the remaining Twitter non-historical
+            //        |  search feature.
+            //
+            //div(class="citation-notice fixed-width")
+            //    button(class="close") &times;
+            //    p Crimson Hexagon is now part of Brandwatch and due to this change the connection to Crimson Hexagon has
+            //        |  been deprecated.
 
             <!-- secondary auth panel -->
             div(class="row", id="second-auth",style="display:block;margin:auto auto;margin-top:50px;text-align:center;color:#333;")
@@ -88,9 +88,9 @@ html
                             option(data-icon="fab fa-reddit-alien" value="queryReddit" disabled) Search Reddit Posts
                             option(data-icon="fas fa-list-ul" value="redditPost" disabled) Posts in Subreddit
                             option(data-icon="far fa-comment" value="redditComment" disabled) Comments in Subreddit
-                        optgroup(label="Partial Historical Database")
-                            option(data-icon="fab fa-reddit-square" value="pushshiftPost") Historical Reddit Posts
-                            option(data-icon="fas fa-comment-dots" value="pushshiftComment") Historical Reddit Comments
+                        //optgroup(label="Partial Historical Database")
+                        //    option(data-icon="fab fa-reddit-square" value="pushshiftPost") Historical Reddit Posts
+                        //    option(data-icon="fas fa-comment-dots" value="pushshiftComment") Historical Reddit Comments
                     include searchbox.pug
 
             div(id="save-result")
@@ -164,7 +164,6 @@ html
                 div(id="grid")
 
         include twitter/twitter-login.pug
-        include reddit/reddit-login.pug
 
         <!-- side bar HELP-->
         div(class="documentation",id="documentation")
