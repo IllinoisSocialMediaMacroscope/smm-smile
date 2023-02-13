@@ -34,6 +34,7 @@ email = true;
  */
 if (process.env.DOCKERIZED === 'true') {
     // determine credentials either from file or from environment variable
+    REDIS_URL = process.env.REDIS_URL;
     AWS_ACCESSKEY = process.env.AWS_ACCESSKEY;
     AWS_ACCESSKEYSECRET = process.env.AWS_ACCESSKEYSECRET;
     TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY;
@@ -116,7 +117,7 @@ if (process.env.DOCKERIZED === 'true') {
 
         // configure redisClient
         (async () => {
-            redisClient = redis.createClient({url:"redis://redis:6379"});
+            redisClient = redis.createClient({url:REDIS_URL});
             redisClient.on('error', (err) => console.log('Redis Client Error', err));
             await redisClient.connect();
         })();
