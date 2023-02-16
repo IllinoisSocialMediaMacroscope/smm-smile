@@ -23,7 +23,7 @@ class RabbitmqSender {
         }
 
         return new Promise((resolve, reject) => {
-            amqp.connect('amqp://' + RABBITMQ_URL + ':5672', function (error0, connection) {
+            amqp.connect(RABBITMQ_URL, function (error0, connection) {
                 if (error0) reject(error0);
 
                 connection.createChannel(function (error1, channel) {
@@ -80,7 +80,7 @@ class RabbitmqSender {
         msg['command'] = command;
 
         return new Promise((resolve, reject) => {
-            amqp.connect('amqp://'+ RABBITMQ_URL + ':5672', function (error0, connection) {
+            amqp.connect(RABBITMQ_URL, function (error0, connection) {
                 if (error0) reject(error0);
 
                 connection.createChannel(function (error1, channel) {

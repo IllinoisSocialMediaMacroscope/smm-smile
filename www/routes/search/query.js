@@ -297,7 +297,7 @@ function gatherMultiPost(req, headers, pageNum) {
     var platform = req.body.prefix.split('-')[0];
 
     return new Promise((resolve, reject) => {
-        fetch('http://' + SMILE_GRAPHQL + ':5050/graphql', {
+        fetch(SMILE_GRAPHQL_URL, {
             method: 'POST',
             headers: headers,
             body: JSON.stringify({"query": query})
@@ -323,7 +323,7 @@ function gatherSinglePost(req, headers) {
     var platform = req.body.prefix.split('-')[0];
 
     return new Promise((resolve, reject) => {
-        fetch('http://' + SMILE_GRAPHQL + ':5050/graphql', {
+        fetch(SMILE_GRAPHQL_URL, {
             method: 'POST',
             headers: headers,
             body: JSON.stringify({"query": req.body.query})
