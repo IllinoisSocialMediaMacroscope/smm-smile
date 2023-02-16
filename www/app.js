@@ -35,6 +35,8 @@ email = true;
 if (process.env.DOCKERIZED === 'true') {
     // determine credentials either from file or from environment variable
     REDIS_URL = process.env.REDIS_URL;
+    RABBITMQ_URL = process.env.RABBITMQ_URL;
+    SMILE_GRAPHQL = process.env.SMILE_GRAPHQL;
     AWS_ACCESSKEY = process.env.AWS_ACCESSKEY;
     AWS_ACCESSKEYSECRET = process.env.AWS_ACCESSKEYSECRET;
     TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY;
@@ -50,7 +52,6 @@ if (process.env.DOCKERIZED === 'true') {
     DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET;
     GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-    SMILE_GRAPHQL = "smile-graphql";
     BUCKET_NAME = process.env.BUCKET_NAME;
     SINGLE_USER = process.env.SINGLE_USER;
     if (process.env.EMAIL_HOST === "" || process.env.EMAIL_HOST === undefined || process.env.EMAIL_HOST === null ||
