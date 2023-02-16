@@ -34,6 +34,9 @@ email = true;
  */
 if (process.env.DOCKERIZED === 'true') {
     // determine credentials either from file or from environment variable
+    REDIS_URL = process.env.REDIS_URL;
+    RABBITMQ_URL = process.env.RABBITMQ_URL;
+    SMILE_GRAPHQL_URL = process.env.SMILE_GRAPHQL_URL;
     AWS_ACCESSKEY = process.env.AWS_ACCESSKEY;
     AWS_ACCESSKEYSECRET = process.env.AWS_ACCESSKEYSECRET;
     TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY;
@@ -49,7 +52,6 @@ if (process.env.DOCKERIZED === 'true') {
     DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET;
     GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-    SMILE_GRAPHQL = "smile-graphql";
     BUCKET_NAME = process.env.BUCKET_NAME;
     SINGLE_USER = process.env.SINGLE_USER;
     if (process.env.EMAIL_HOST === "" || process.env.EMAIL_HOST === undefined || process.env.EMAIL_HOST === null ||
@@ -116,7 +118,7 @@ if (process.env.DOCKERIZED === 'true') {
 
         // configure redisClient
         (async () => {
-            redisClient = redis.createClient({url:"redis://redis:6379"});
+            redisClient = redis.createClient({url:REDIS_URL});
             redisClient.on('error', (err) => console.log('Redis Client Error', err));
             await redisClient.connect();
         })();
@@ -158,7 +160,7 @@ if (process.env.DOCKERIZED === 'true') {
     DROPBOX_CLIENT_SECRET = config.dropbox.client_secret;
     GOOGLE_CLIENT_ID = config.google.client_id;
     GOOGLE_CLIENT_SECRET = config.google.client_secret;
-    SMILE_GRAPHQL = "localhost";
+    SMILE_GRAPHQL_URL = "localhost";
     BUCKET_NAME = 'macroscope-smile';
 
     lambdaHandler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
