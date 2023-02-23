@@ -18,7 +18,7 @@ class S3Helper {
 			this.s3 = new AWS.S3({
 				accessKeyId: AWS_ACCESSKEY,
 				secretAccessKey: AWS_ACCESSKEYSECRET,
-                endpoint: S3_URL,
+                endpoint: process.env.S3_URL,
 				s3ForcePathStyle: true,
 				signatureVersion: 'v4'
 			});
