@@ -7,18 +7,19 @@ var rmdir = require('rimraf');
 class S3Helper {
 	constructor(DOCKERIZED, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET){
 		//use minio for dockerized version
-        if (process.env.HOST_IP){
-            var hostIp = process.env.HOST_IP;
+        if (process.env.MINIO_URL){
+            var minioUrl = process.env.MINIO_URL;
         }
         else {
-            var hostIp = 'minio';
+            var minioUrl = 'minio';
         }
 
 		if (DOCKERIZED) {
 			this.s3 = new AWS.S3({
 				accessKeyId: AWS_ACCESSKEY,
 				secretAccessKey: AWS_ACCESSKEYSECRET,
-                endpoint: process.env.S3_URL,
+                endpoint: minioUrl,
+                ingress_url: process.env.S3_URL,
 				s3ForcePathStyle: true,
 				signatureVersion: 'v4'
 			});
