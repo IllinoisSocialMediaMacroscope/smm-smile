@@ -7,6 +7,8 @@ WORKDIR /www
 # alternatively can pull directly from git
 COPY . ./
 
+RUN apk --no-cache add curl
+
 # npm install
 RUN npm install
 

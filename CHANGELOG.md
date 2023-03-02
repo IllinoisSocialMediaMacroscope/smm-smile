@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- made Redis URL as environement variable [16](https://github.com/ncsa/standalone-smm-smile/issues/16)
+- made Redis URL as environment variable [16](https://github.com/ncsa/standalone-smm-smile/issues/16)
+- convert s3 url to environment variable [18](https://github.com/ncsa/standalone-smm-smile/issues/16=8)
+
 ## [1.2.8] - 2020-01-09
 ### Changed
 - fix frontend bug on classification when click "split", "train", "predict" button
