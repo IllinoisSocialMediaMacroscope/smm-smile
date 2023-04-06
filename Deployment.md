@@ -1,6 +1,6 @@
 # Deployment of SMILE
 SMILE can be deployed using Kubernetes clusters. 
-For more information about kubernetes, pleaes visit [here](https://kubernetes.io/)
+For more information about kubernetes, please visit [here](https://kubernetes.io/)
 
 ## Prerequisite
 To deploy SMILE, kubernetes clusters be ready. 
@@ -35,10 +35,10 @@ create a secret using the following command
 kubectl -n smile create secret generic regcred --from-file=.dockerconfigjson=regcred.json --type=kubernetes.io/dockerconfigjson
 ```
 This command will create a secret named regcred from the file regcred.json,
-and regcred.json should contain the credential information about accesing the repository for the containers that are used to SMILE
+and regcred.json should contain the credential information about accessing the repository for the containers that are used to SMILE
 
 ### Modifying Values
-- All the necessary information, such as containter name, tags, and other controlling parameters are recorded in values.yaml
+- All the necessary information, such as container name, tags, and other controlling parameters are recorded in values.yaml
 - You can directly modify the values in there, 
 or you can create a supplementary files that contains the only information that you frequently modify and updates, 
 and name it something like values-smile.yaml.
