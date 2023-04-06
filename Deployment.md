@@ -13,9 +13,56 @@ that there is kubrenetes cluster already set up.
 ### Secrets
 There are some protected information that should not be revealed in the public repository.
 These information should be kept in the kubernetes secret file. 
-Currently, SMILE doesn't use any password of secret to be protected.
-If there is any necessity to create one, create a secret.yaml file under smile folder in helm chart, 
+Currently, SMILE needs several passwords or secret information to be protected.
+If there is any necessity to create one, create a secret.yaml file under smile/templates folder in helm chart, 
 then add necessary information in the file.
+```angular2svg
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "smile.fullname" . }}-server
+  labels:
+    {{- include "smile.labels" . | nindent 4 }}
+stringData:
+  HOST_IP: "smile-minio"
+  MINIO_URL: "URL for the minio"
+  REDIS_URL: "redis://smile-redis-master:6379"
+  RABBITMQ_URL: "amqp://smile-rabbitmq:5672"
+  SMILE_GRAPHQL_URL: "http://smile-graphql:5050/graphql"
+  RABBITMQ_HOST: "smile-rabbitmq"
+  REDDIT_CALLBACK_URL: "Call back url for REDDIT"
+  CILOGON_CLIENT_ID: "CILOGON client ID"
+  CILOGON_CLIENT_SECRET: "CILOGON client secret"
+  REDDIT_CLIENT_ID: "REDDIT client ID"
+  REDDIT_CLIENT_SECRET: "REDDIT client secret"
+  BOX_CLIENT_ID: "BOX client ID"
+  BOX_CLIENT_SECRET: "BOX client secret"
+  DROPBOX_CLIENT_ID: "DROPBOX client ID"
+  DROPBOX_CLIENT_SECRET: "DROPBOX client secret"
+  GOOGLE_CLIENT_ID: "Google client ID"
+  GOOGLE_CLIENT_SECRET: K8m-"Google client secret"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "smile.fullname" . }}-minio-secret
+  labels:
+    {{- include "smile.labels" . | nindent 4 }}
+stringData:
+  root-user: "minio root user"
+  root-password: "minio root user password"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "smile.fullname" . }}-graphql
+  labels:
+    {{- include "smile.labels" . | nindent 4 }}
+stringData:
+  TWITTER_CONSUMER_KEY: "Twitter consumer key"
+  TWITTER_CONSUMER_SECRET: Twitter consumer secret
+```
 
 ## Deployment Steps
 
