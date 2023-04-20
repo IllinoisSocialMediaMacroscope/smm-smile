@@ -1,4 +1,4 @@
-name: smile-docker
+name: smile-graphql
 
 defaults:
   run:
@@ -12,7 +12,9 @@ on:
     tags:
       - '*'
 
-  pull_request:
+    # only test with local branch
+    pull_request:
+      - 22-github-action-to-build-and-push
 
 # Certain actions will only run when this is the main repo.
 env:
@@ -157,6 +159,7 @@ jobs:
       - name: Build and push docker
         uses: docker/build-push-action@v3
         with:
+          context: ./www/graphql
           push: true
           platforms: ${{ env.PLATFORM }}
           cache-from: type=gha
