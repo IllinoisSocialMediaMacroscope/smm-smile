@@ -54,7 +54,7 @@ jobs:
 
           # calculate the version and all tags
           if [ "$BRANCH" == "main" ]; then
-            VERSION="$(awk '/^# \[/ { print $2; exit }' CHANGELOG.md | sed -e 's/\[//' -e 's/\]//')"
+            VERSION="$(awk '/^# \[/ { print $2; exit }' VERSION.md | sed -e 's/\[//' -e 's/\]//')"
             tags="latest"
             oldversion=""
             tmpversion="${VERSION}"
