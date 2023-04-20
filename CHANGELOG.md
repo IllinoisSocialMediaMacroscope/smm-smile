@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.3]
+### Changed
+- register new mailing list instead of srti lab [12](https://github.com/ncsa/standalone-smm-smile/issues/12)
+
+## [0.2.2]
 ### Changed
 - made Redis URL as environment variable [16](https://github.com/ncsa/standalone-smm-smile/issues/16)
 - convert s3 url to environment variable [18](https://github.com/ncsa/standalone-smm-smile/issues/16=8)
