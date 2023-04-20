@@ -1,6 +1,6 @@
 {
-  "name": "social-media-analytics",
-  "version": "1.0.0",
+  "name": "smile_server",
+  "version": "0.2.3",
   "description": "",
   "main": "app.js",
   "dependencies": {
