@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - register new mailing list instead of srti lab [#12](https://github.com/ncsa/standalone-smm-smile/issues/12)
 - add github action to automatic build and publish [#22](https://github.com/ncsa/standalone-smm-smile/issues/22)
 
-## [0.2.2] - 2022-04-20
+## [0.2.2] - 04-20-2023
 ### Changed
 - made Redis URL as environment variable [#16](https://github.com/ncsa/standalone-smm-smile/issues/16)
 - convert s3 url to environment variable [#18](https://github.com/ncsa/standalone-smm-smile/issues/16=8)
