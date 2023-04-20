@@ -1,3 +1,9 @@
 # command to build and run this container
-docker build -t socialmediamacroscope/smile_server:latest .
+docker build -t socialmediamacroscope/smile_server:{version_number} .
+
+# tag as latest
+docker tag socialmediamacroscope/smile_server:{version_number} socialmediamacroscope/smile_server:latest
+
+# push
+docker push socialmediamacroscope/smile_server:{version_number}
 docker push socialmediamacroscope/smile_server:latest
