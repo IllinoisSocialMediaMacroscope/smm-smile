@@ -12,10 +12,10 @@ on:
     tags:
       - '*'
 
-    # only test with local branch
-    pull_request:
-      push:
-        branches: "22-github-action-to-build-and-push"
+  # only test with local branch
+  pull_request:
+    push:
+      branches: "22-github-action-to-build-and-push"
 
 # Certain actions will only run when this is the main repo.
 env:
