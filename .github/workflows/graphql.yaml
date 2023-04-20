@@ -1,8 +1,8 @@
 name: smile-graphql
 
-defaults:
-  run:
-    working-directory: www/graphql
+#defaults:
+#  run:
+#    working-directory: www/graphql
 
 on:
   push:

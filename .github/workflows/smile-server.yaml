@@ -1,8 +1,8 @@
 name: smile-docker
 
-defaults:
-  run:
-    working-directory: www
+#defaults:
+#  run:
+#    working-directory: www
 
 on:
   push:
