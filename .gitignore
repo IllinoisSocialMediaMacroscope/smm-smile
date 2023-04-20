@@ -3,9 +3,9 @@ www/downloads
 www/uploads
 node_modules
 www/nltk_data
-.*
 main_config.json
 graphql_config.json
 map.json
 *.log
 *.swp
+.idea
