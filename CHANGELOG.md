@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - register new mailing list instead of srti lab [#12](https://github.com/ncsa/standalone-smm-smile/issues/12)
 - add github action to automatic build and publish [#22](https://github.com/ncsa/standalone-smm-smile/issues/22)
+- renamed minio related environment variable [#38](https://github.com/ncsa/standalone-smm-smile/issues/38)
 
 ## [0.2.2] - 04-20-2023
 ### Changed
