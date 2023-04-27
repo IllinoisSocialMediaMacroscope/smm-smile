@@ -15,7 +15,7 @@ on:
   # only test with local branch
   pull_request:
     push:
-      branches: "22-github-action-to-build-and-push"
+      branches: "36-fix-github-action-to-have-correct-version-number"
 
 # Certain actions will only run when this is the main repo.
 env:
