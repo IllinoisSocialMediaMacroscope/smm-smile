@@ -25,8 +25,8 @@ metadata:
   labels:
     {{- include "smile.labels" . | nindent 4 }}
 stringData:
-  HOST_IP: "smile-minio"
-  MINIO_URL: "URL for the minio"
+  MINIO_URL: "smile-minio"
+  MINIO_PUBLIC_ACCESS_URL: "Public access URL for the minio"
   REDIS_URL: "redis://smile-redis-master:6379"
   RABBITMQ_URL: "amqp://smile-rabbitmq:5672"
   SMILE_GRAPHQL_URL: "http://smile-graphql:5050/graphql"
