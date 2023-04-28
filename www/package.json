@@ -39,7 +39,7 @@
   },
   "scripts": {
     "test": "nodemon app.js",
-    "local-test": "export DOCKERIZED=false && npm test",
+    "local-test": "export DOCKERIZED=false && export SINGLE_USER=true && npm test",
     "start": "concurrently \"forever app.js\" \"cd graphql && npm start\" ",
     "docker-start": "node app.js"
   },

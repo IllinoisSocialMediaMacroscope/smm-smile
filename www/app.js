@@ -163,7 +163,7 @@ if (process.env.DOCKERIZED === 'true') {
     GOOGLE_CLIENT_SECRET = config.google.client_secret;
     SMILE_GRAPHQL_URL = "localhost";
     BUCKET_NAME = 'macroscope-smile';
-    SINGLE_USER = true;
+    SINGLE_USER = 'true';
 
     lambdaHandler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     batchHandler = new BatchHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
@@ -231,6 +231,7 @@ analysesRoutesFiles.forEach(function (route, i) {
                     introduction: formParam.introduction.join(" "),
                     wiki: formParam.wiki,
                     param: formParam,
+                    SINGLE_USER: SINGLE_USER==='true',
                     user: req.user,
                     enableEmail: email
                 });
