@@ -279,7 +279,7 @@ function submitSearchbox(searchboxID, filenameID, dryrun = false){
 	}
 	else if (queryTerm === 'redditPost'){
 		var extra = 2000;
-		if (dryrun) extra=1;
+		if (dryrun) extra=100;
 		var queryString = `{
 							  reddit {
 								getNew(subredditName:"`+ keyword + `", extra: `+ extra + `){
@@ -356,7 +356,7 @@ function submitSearchbox(searchboxID, filenameID, dryrun = false){
 	}
 	else if (queryTerm === 'redditComment'){
 		var extra = 2000;
-		if (dryrun) extra = 1;
+		if (dryrun) extra = 100;
 		var queryString = `{
 							reddit{
 							getNewComments(subredditName:"`+keyword + `",extra:` + extra + `){
