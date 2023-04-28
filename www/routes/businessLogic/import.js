@@ -4,6 +4,7 @@ var path = require('path');
 var fs = require('fs');
 var CSV = require('csv-string');
 var appPath = path.dirname(path.dirname(__dirname));
+var {createTags} = require(path.join(appPath, 'scripts', 'helper_func', 'helper.js'));
 
 // if smile home folder doesn't exist, create one
 if (!fs.existsSync(smileHomePath)) {
@@ -61,14 +62,7 @@ router.post('/import', checkIfLoggedIn, upload.single('importFile'),function(req
 
                     // tagging it with keywords
                     var tagIdMapPath = path.join(smileHomePath, req.user.email, 'map.json');
-                    if (fs.existsSync(tagIdMapPath)){
-                        var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
-                        tagIdMap[folderFullPath] = keywords;
-                    }else{
-                        tagIdMap = {};
-                        tagIdMap[folderFullPath] = keywords;
-                    }
-                    fs.writeFileSync(tagIdMapPath,JSON.stringify(tagIdMap, null, 2));
+                    createTags(tagIdMapPath, folderFullPath, keywords);
 
                     var promise_arr = [];
                     promise_arr.push(s3.uploadToS3(filepath, fileFullPath));
