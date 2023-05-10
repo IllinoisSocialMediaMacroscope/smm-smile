@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.4] - 2022-04-28
+### Changed
+- updated footer [#34](https://github.com/ncsa/standalone-smm-smile/issues/34)
+- update citation [#33](https://github.com/ncsa/standalone-smm-smile/issues/33)
+- disable hotkeys for now [#48](https://github.com/ncsa/standalone-smm-smile/issues/48)
+
+### Added
+- use import keywords to construct tag [#32](https://github.com/ncsa/standalone-smm-smile/issues/32)
+
+### Fixed
+- authorize reddit icon not clickable [#35](https://github.com/ncsa/standalone-smm-smile/issues/35)
+- top bar doesn't show user account on analysis page [#31](https://github.com/ncsa/standalone-smm-smile/issues/31)
+- delete data doesn't delete search tag [#28](https://github.com/ncsa/standalone-smm-smile/issues/28)
+- reddit search dry run increase result number [#29](https://github.com/ncsa/standalone-smm-smile/issues/29)
+
 ## [0.2.3] - 2022-04-20
 ### Changed
 - register new mailing list instead of srti lab [#12](https://github.com/ncsa/standalone-smm-smile/issues/12)
