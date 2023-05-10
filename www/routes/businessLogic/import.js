@@ -4,6 +4,7 @@ var path = require('path');
 var fs = require('fs');
 var CSV = require('csv-string');
 var appPath = path.dirname(path.dirname(__dirname));
+var {createTags} = require(path.join(appPath, 'scripts', 'helper_func', 'helper.js'));
 
 // if smile home folder doesn't exist, create one
 if (!fs.existsSync(smileHomePath)) {
@@ -19,12 +20,14 @@ router.post('/import', checkIfLoggedIn, upload.single('importFile'),function(req
         var filename = req.file.originalname;
         var foldername = filename.slice(0, -4);
         var category = req.body.selectedItem;
+        var keywords = req.body.keywords.split(',');
 
         var config = {
             "imported": true,
-            "keywords": req.body.keywords.split(',')
+            "keywords": keywords
         };
 
+        // TODO check empty string: this might be slow
         var importString = fs.readFileSync(filepath).toString();
         var importArr = CSV.parse(importString);
         for (var i = 0; i < importArr.length; i++) {
@@ -52,11 +55,18 @@ router.post('/import', checkIfLoggedIn, upload.single('importFile'),function(req
             fs.writeFile(configPath, JSON.stringify(config), function (err) {
                 if (err) res.send({ERROR: err});
                 else {
+
+                    var folderFullPath = req.user.email + '/GraphQL/' + category + '/' + foldername + '/';
+                    var fileFullPath = folderFullPath + filename;
+                    var configFullPath = folderFullPath + '/config.json';
+
+                    // tagging it with keywords
+                    var tagIdMapPath = path.join(smileHomePath, req.user.email, 'map.json');
+                    createTags(tagIdMapPath, folderFullPath, keywords);
+
                     var promise_arr = [];
-                    promise_arr.push(s3.uploadToS3(filepath, req.user.email + '/GraphQL/'
-                        + category + '/' + foldername + '/' + filename));
-                    promise_arr.push(s3.uploadToS3(configPath, req.user.email + '/GraphQL/'
-                        + category + '/' + foldername + '/config.json'));
+                    promise_arr.push(s3.uploadToS3(filepath, fileFullPath));
+                    promise_arr.push(s3.uploadToS3(configPath, configFullPath));
                     Promise.all(promise_arr).then(urls => {
                         fs.unlinkSync(filepath);
                         fs.unlinkSync(configPath);

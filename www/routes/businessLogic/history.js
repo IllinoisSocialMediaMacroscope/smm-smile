@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var fs = require('fs');
 var CSV = require('csv-string');
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var getMultiRemote = require(path.join(appPath, 'scripts', 'helper_func', 'getRemote.js'));
-
+var {deleteTags} = require(path.join(appPath, 'scripts', 'helper_func', 'helper.js'));
 
 router.get('/history', checkIfLoggedIn, function (req, res, next) {
     res.render('history', {
@@ -102,6 +101,10 @@ router.post('/history', checkIfLoggedIn, function (req, res, next) {
 });
 
 router.delete('/history', checkIfLoggedIn, function (req, res, next) {
+    // delete/overwrite tags
+    var tagIdMapPath = path.join(smileHomePath, req.user.email, 'map.json');
+    deleteTags(tagIdMapPath, req.body.folderURL)
+
     if (req.body.type === 'local') {
         var p = [];
         p.push(s3.deleteLocalFolders(path.join(smileHomePath, req.user.email, 'downloads')));

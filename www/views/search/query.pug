@@ -69,7 +69,7 @@ html
                         a(target="_blank", href="login/twitter")
                             img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
                     div(class="reddit-auth",style="display:inline-block;")
-                        a
+                        a(target="_blank", href="login/reddit")
                             img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
                 div(id="authorized",style="display:inline-block;")
                     p(style="display:inline-block;margin:10px 10px;") You have already authorized:
@@ -152,6 +152,7 @@ html
                 div(id="img-container", style="padding:50px 100px;")
             div(id="rendering")
                 h2 Preview
+                p Please note that the preview provided is not the complete set of result.
                 div(style="text-align:right;margin-right:50px;")
                     button(class="btn btn-no", onclick="renderPreviewPagination('prev');",
                     style="margin-right:10px; display:none;")
@@ -172,4 +173,4 @@ html
 
         script(src="bootstrap/js/customized/query_auth.js")
         script(src="bootstrap/js/customized/detect_cookie.js")
-        script(src="bootstrap/js/customized/hotkeys.js").
+        //script(src="bootstrap/js/customized/hotkeys.js").

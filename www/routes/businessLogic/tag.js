@@ -3,6 +3,8 @@ var router = express.Router();
 var path = require('path');
 var appPath = path.dirname(path.dirname(__dirname));
 var fs = require('fs');
+var {deleteTags, createTags} = require(path.join(appPath, 'scripts', 'helper_func', 'helper.js'));
+
 
 router.get('/tag', checkIfLoggedIn, function(req,res,next){
     // TODO cross compare with the current file list &
@@ -40,16 +42,7 @@ router.post('/tag', checkIfLoggedIn, function(req,res,next){
 
         var tagIdMapPath = path.join(smileHomePath, req.user.email, 'map.json');
 
-        if (fs.existsSync(tagIdMapPath)){
-            var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
-            tagIdMap[req.body.jobId] = req.body.tagName;
-        }else{
-            tagIdMap = {};
-            tagIdMap[req.body.jobId] = req.body.tagName;
-        }
-
-        // save it to file
-        fs.writeFileSync(tagIdMapPath,JSON.stringify(tagIdMap, null, 2));
+        createTags(tagIdMapPath, req.body.jobId, req.body.tagName);
     }
 
     res.send({tagName: req.body.tagName});
@@ -58,13 +51,8 @@ router.post('/tag', checkIfLoggedIn, function(req,res,next){
 
 router.delete('/tag', checkIfLoggedIn, function(req, res, next){
     if(req.body.jobId !== undefined && req.body.jobId !== ""){
-
         var tagIdMapPath = path.join(smileHomePath, req.user.email, 'map.json');
-        if (fs.existsSync(tagIdMapPath)){
-            var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
-            delete tagIdMap[req.body.jobId];
-            fs.writeFileSync(tagIdMapPath,JSON.stringify(tagIdMap, null, 2));
-        }
+        deleteTags(tagIdMapPath, req.body.jobId);
     }
 
     res.send({jobId: req.body.jobId});

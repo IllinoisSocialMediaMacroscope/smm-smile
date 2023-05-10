@@ -152,6 +152,7 @@ if (process.env.DOCKERIZED === 'true') {
     TWITTER_CONSUMER_SECRET = config.twitter.client_secret;
     REDDIT_CLIENT_ID = config.reddit.client_id;
     REDDIT_CLIENT_SECRET = config.reddit.client_secret;
+    REDDIT_CALLBACK_URL = config.reddit.callback_url;
     FLICKR_CONSUMER_KEY = config.flickr.consumer_key;
     FLICKR_CONSUMER_SECRET = config.flickr.consumer_secret;
     BOX_CLIENT_ID = config.box.client_id;
@@ -162,6 +163,7 @@ if (process.env.DOCKERIZED === 'true') {
     GOOGLE_CLIENT_SECRET = config.google.client_secret;
     SMILE_GRAPHQL_URL = "localhost";
     BUCKET_NAME = 'macroscope-smile';
+    SINGLE_USER = 'true';
 
     lambdaHandler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     batchHandler = new BatchHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
@@ -229,6 +231,7 @@ analysesRoutesFiles.forEach(function (route, i) {
                     introduction: formParam.introduction.join(" "),
                     wiki: formParam.wiki,
                     param: formParam,
+                    SINGLE_USER: SINGLE_USER==='true',
                     user: req.user,
                     enableEmail: email
                 });

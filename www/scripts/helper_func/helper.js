@@ -68,4 +68,24 @@ function readZip(path){
 	return {"Reddit Replies": rd_replies};
 }
 
-module.exports = {readDIR,readZip,traverseDirectory};
+function deleteTags(tagIdMapPath, entry){
+	if (fs.existsSync(tagIdMapPath)) {
+		var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
+		delete tagIdMap[entry];
+		fs.writeFileSync(tagIdMapPath,JSON.stringify(tagIdMap, null, 2));
+	}
+}
+
+function createTags(tagIdMapPath, entry, tags){
+	if (fs.existsSync(tagIdMapPath)){
+		var tagIdMap = JSON.parse(fs.readFileSync(tagIdMapPath));
+		tagIdMap[entry] = tags;
+	}else{
+		tagIdMap = {};
+		tagIdMap[entry] = tags;
+	}
+	// save it to file
+	fs.writeFileSync(tagIdMapPath,JSON.stringify(tagIdMap, null, 2));
+}
+
+module.exports = {readDIR, readZip, traverseDirectory, deleteTags, createTags};
