@@ -7,8 +7,8 @@ var rmdir = require('rimraf');
 class S3Helper {
 	constructor(DOCKERIZED, AWS_ACCESSKEY, AWS_ACCESSKEYSECRET){
 		//use minio for dockerized version
-        if (process.env.MINIO_URL){
-            var minioUrl = process.env.MINIO_URL;
+        if (process.env.MINIO_PUBLIC_ACCESS_URL){
+            var minioUrl = process.env.MINIO_PUBLIC_ACCESS_URL;
         }
         else {
             var minioUrl = 'minio';
