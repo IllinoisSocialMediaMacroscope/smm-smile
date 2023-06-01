@@ -49,7 +49,7 @@ router.post('/list-dataset', checkIfLoggedIn, async function(req, res, next){
             res.send({'ERROR': JSON.stringify(lambdaHandlerError)});
         });
     } else {
-        res.send({ERROR: 'Your login session has expired. Please login again!'});
+        res.send({ERROR: 'list datset: Your login session has expired. Please login again!'});
     }
 });
 
@@ -76,7 +76,7 @@ router.post('/list-collection', checkIfLoggedIn, async function(req,res,next){
         });
     }
     else {
-        res.send({ERROR: 'Your login session has expired. Please login again!'});
+        res.send({ERROR: 'list collection: Your login session has expired. Please login again!'});
     }
 });
 
@@ -103,7 +103,7 @@ router.post('/list-space', checkIfLoggedIn, async function(req,res,next){
         });
     }
     else {
-        res.send({ERROR: 'Your login session has expired. Please login again!'});
+        res.send({ERROR: 'list space: Your login session has expired. Please login again!'});
     }
 });
 
@@ -130,7 +130,7 @@ router.post('/list-user', checkIfLoggedIn, async function(req,res,next){
         });
     }
     else {
-        res.send({ERROR: 'Your login session has expired. Please login again!'});
+        res.send({ERROR: 'list user: Your login session has expired. Please login again!'});
     }
 });
 
@@ -156,7 +156,7 @@ router.post('/clowder-dataset', checkIfLoggedIn, async function(req,res,next){
         });
     }
     else {
-        res.send({ERROR: 'Your login session has expired. Please login again!'});
+        res.send({ERROR: 'create dataset: Your login session has expired. Please login again!'});
     }
 });
 
@@ -180,7 +180,7 @@ router.post('/clowder-collection', checkIfLoggedIn, async function(req,res,next)
         });
     }
     else {
-        res.send({ERROR: 'Your login session has expired. Please login again!'});
+        res.send({ERROR: 'create collection: Your login session has expired. Please login again!'});
     }
 
 });
@@ -188,9 +188,6 @@ router.post('/clowder-collection', checkIfLoggedIn, async function(req,res,next)
 router.post('/clowder-space', checkIfLoggedIn, async function(req,res,next){
     var obj = await retrieveCredentials(req);
     if (obj && obj['clowder_username'] !== undefined && obj['clowder_password'] !== undefined) {
-        res.send({ERROR: 'Your login session has expired. Please login again!'});
-    }
-    else {
         var args = {
             'username': obj['clowder_username'],
             'password': obj['clowder_password'],
@@ -206,6 +203,9 @@ router.post('/clowder-space', checkIfLoggedIn, async function(req,res,next){
         }).catch(lambdaHandlerError => {
             res.send({'ERROR': JSON.stringify(lambdaHandlerError)});
         });
+    }
+    else {
+        res.send({ERROR: 'create space: Your login session has expired. Please login again!'});
     }
 });
 
@@ -229,7 +229,7 @@ router.post('/clowder-files', checkIfLoggedIn, async function(req,res,next){
         });
     }
     else {
-        res.send({ERROR: 'Your login session has expired. Please login again!'});
+        res.send({ERROR: 'upload files: Your login session has expired. Please login again!'});
     }
 });
 

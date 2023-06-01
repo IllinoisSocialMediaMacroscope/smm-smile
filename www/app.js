@@ -27,6 +27,7 @@ var app = express();
 smileHomePath = path.join(process.env.HOME, 'smile');
 s3FolderName = process.env.USER || 'local';
 SINGLE_USER = 'true';
+CLOWDER_BASE_URL= process.env.CLOWDER_BASE_URL || "https://clowder.smm.ncsa.illinois.edu/";
 email = true;
 
 /**
@@ -54,6 +55,7 @@ if (process.env.DOCKERIZED === 'true') {
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
     BUCKET_NAME = process.env.BUCKET_NAME;
     SINGLE_USER = process.env.SINGLE_USER;
+
     if (process.env.EMAIL_HOST === "" || process.env.EMAIL_HOST === undefined || process.env.EMAIL_HOST === null ||
         process.env.EMAIL_PORT === "" || process.env.EMAIL_PORT === undefined || process.env.EMAIL_PORT === null ||
         process.env.EMAIL_FROM_ADDRESS === "" || process.env.EMAIL_FROM_ADDRESS === undefined || process.env.EMAIL_FROM_ADDRESS === null ||
