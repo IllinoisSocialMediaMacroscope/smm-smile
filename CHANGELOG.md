@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - environment variables related to minio from host_ip to minio_url [#62](https://github.com/ncsa/standalone-smm-smile/issues/62)
 - temporarily disable Twitter [#65](https://github.com/ncsa/standalone-smm-smile/issues/65)
 
-## [0.2.5] - 2023-05-11
+## [0.2.5] - 2022-05-11
 ### Changed
 - disable and hide image crawling and reddit comment collections [#56](https://github.com/ncsa/standalone-smm-smile/issues/56)
 - enable connection to clowder [#53](https://github.com/ncsa/standalone-smm-smile/issues/53)
