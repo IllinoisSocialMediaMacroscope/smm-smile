@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - environment variables related to minio from host_ip to minio_url [#62](https://github.com/ncsa/standalone-smm-smile/issues/62)
+- temporarily disable Twitter [#65](https://github.com/ncsa/standalone-smm-smile/issues/65)
 
 ## [0.2.5] - 2022-05-11
 ### Changed
