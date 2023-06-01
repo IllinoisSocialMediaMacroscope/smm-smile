@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - disable and hide image crawling and reddit comment collections [#56](https://github.com/ncsa/standalone-smm-smile/issues/56)
 - enable connection to clowder [#53](https://github.com/ncsa/standalone-smm-smile/issues/53)
 
+### Fixed
+- correct versioning for github action container building [#54](https://github.com/ncsa/standalone-smm-smile/issues/54)
+
 ## [0.2.4] - 2022-04-28
 ### Changed
 - updated footer [#34](https://github.com/ncsa/standalone-smm-smile/issues/34)
