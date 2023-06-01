@@ -4,12 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.6] - 2023-06-01
 ### Changed
 - environment variables related to minio from host_ip to minio_url [#62](https://github.com/ncsa/standalone-smm-smile/issues/62)
 - temporarily disable Twitter [#65](https://github.com/ncsa/standalone-smm-smile/issues/65)
 
-## [0.2.5] - 2022-05-11
+## [0.2.5] - 2023-05-11
 ### Changed
 - disable and hide image crawling and reddit comment collections [#56](https://github.com/ncsa/standalone-smm-smile/issues/56)
 - enable connection to clowder [#53](https://github.com/ncsa/standalone-smm-smile/issues/53)
@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - correct versioning for github action container building [#54](https://github.com/ncsa/standalone-smm-smile/issues/54)
 
-## [0.2.4] - 2022-04-28
+## [0.2.4] - 2023-04-28
 ### Changed
 - updated footer [#34](https://github.com/ncsa/standalone-smm-smile/issues/34)
 - update citation [#33](https://github.com/ncsa/standalone-smm-smile/issues/33)
@@ -32,13 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - delete data doesn't delete search tag [#28](https://github.com/ncsa/standalone-smm-smile/issues/28)
 - reddit search dry run increase result number [#29](https://github.com/ncsa/standalone-smm-smile/issues/29)
 
-## [0.2.3] - 2022-04-20
+## [0.2.3] - 2023-04-20
 ### Changed
 - register new mailing list instead of srti lab [#12](https://github.com/ncsa/standalone-smm-smile/issues/12)
 - add github action to automatic build and publish [#22](https://github.com/ncsa/standalone-smm-smile/issues/22)
 - renamed minio related environment variable [#38](https://github.com/ncsa/standalone-smm-smile/issues/38)
 
-## [0.2.2] - 04-20-2023
+## [0.2.2] - 2023-04-20
 ### Changed
 - made Redis URL as environment variable [#16](https://github.com/ncsa/standalone-smm-smile/issues/16)
 - convert s3 url to environment variable [#18](https://github.com/ncsa/standalone-smm-smile/issues/16=8)
