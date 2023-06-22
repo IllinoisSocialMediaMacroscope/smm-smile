@@ -13,7 +13,7 @@ RUN apk --no-cache add curl
 RUN npm install
 
 # patch the oauth library node_modules/oauth/lib/oauth.js, line 540 add: && extraParams["oauth_callback"]===undefined
-COPY ./oauth.js ./node_modules/oauth/lib
+COPY oauth.js ./node_modules/oauth/lib
 
 # start the server
 EXPOSE 8001

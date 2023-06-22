@@ -58,7 +58,7 @@ router.post('/import', checkIfLoggedIn, upload.single('importFile'),function(req
 
                     var folderFullPath = req.user.email + '/GraphQL/' + category + '/' + foldername + '/';
                     var fileFullPath = folderFullPath + filename;
-                    var configFullPath = folderFullPath + '/config.json';
+                    var configFullPath = folderFullPath + 'config.json';
 
                     // tagging it with keywords
                     var tagIdMapPath = path.join(smileHomePath, req.user.email, 'map.json');
