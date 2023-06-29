@@ -1,6 +1,0 @@
-.DS_Store
-node_modules
-.*
-*config.json
-*config.json.ignore
-*config.json.ignore2
