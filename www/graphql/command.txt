@@ -1,2 +1,0 @@
-# command to build and run this container
-docker build -t socialmediamacroscope/smile_graphql:latest .
