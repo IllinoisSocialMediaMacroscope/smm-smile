@@ -6,10 +6,10 @@ div(id="auth-panel")
         | requesting users to provide authorized account to log into their services. Users will only access data that
         | they have permission to, and the data will be collected following the protocol of each platform.
     div(class="twitter-auth", id="twitter-auth")
-        a(class="btn btn-primary btn-block auth-button", href="login/twitter", target="_blank")
+        a(class="btn btn-primary btn-block auth-button", href="login/twitter", target="_blank" disabled)
             img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px", height="30px")
-            | Authorize with your Twitter account
-            //| Twitter integration temporarily disabled
+            //| Authorize with your Twitter account
+            | Twitter integration temporarily disabled
             img(src="bootstrap/img/logo/checkbox.png", class="export-success", width="30px", style="display:none;")
     div(class="reddit-auth", id="reddit-auth")
         a(class="btn btn-primary btn-block auth-button", href="login/reddit")
