@@ -40,6 +40,7 @@
   "scripts": {
     "test": "nodemon app.js",
     "local-test": "export DOCKERIZED=false && export SINGLE_USER=true && npm test",
+    "local-test-windows": "set DOCKERIZED=false && set SINGLE_USER=true && npm test",
     "start": " forever app.js",
     "docker-start": "node app.js"
   },
