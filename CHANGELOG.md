@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Replace Twitter API v1 with X (Twitter) API v2 and implement OAUTH2
+- Environment variable to turn Clowder on and off [#86](https://github.com/ncsa/standalone-smm-smile/issues/86)
+- Replace Twitter API v1 with X (Twitter) API v2 and implement OAUTH2 [#10](https://github.com/ncsa/standalone-smm-smile/issues/10)
 
 ## [0.2.8] - 2023-07-20
 ### Changed

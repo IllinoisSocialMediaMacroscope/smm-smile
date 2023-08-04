@@ -27,7 +27,8 @@ var app = express();
 smileHomePath = path.join(process.env.HOME, 'smile');
 s3FolderName = process.env.USER || 'local';
 SINGLE_USER = 'true';
-CLOWDER_BASE_URL= process.env.CLOWDER_BASE_URL || "https://clowder.smm.ncsa.illinois.edu/";
+CLOWDER_ON = process.env.CLOWDER_ON || 'false';
+CLOWDER_BASE_URL= process.env.CLOWDER_BASE_URL || "http://clowder.localhost/";
 email = true;
 
 /**
@@ -58,6 +59,7 @@ if (process.env.DOCKERIZED === 'true') {
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
     BUCKET_NAME = process.env.BUCKET_NAME;
     SINGLE_USER = process.env.SINGLE_USER;
+    CLOWDER_ON = process.env.CLOWDER_ON;
 
     if (process.env.EMAIL_HOST === "" || process.env.EMAIL_HOST === undefined || process.env.EMAIL_HOST === null ||
         process.env.EMAIL_PORT === "" || process.env.EMAIL_PORT === undefined || process.env.EMAIL_PORT === null ||
@@ -172,6 +174,7 @@ if (process.env.DOCKERIZED === 'true') {
     SMILE_GRAPHQL_URL = "http://localhost:5050/graphql";
     BUCKET_NAME = 'macroscope-smile';
     SINGLE_USER = 'true';
+    CLOWDER_ON = 'false';
 
     lambdaHandler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     batchHandler = new BatchHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
@@ -240,6 +243,7 @@ analysesRoutesFiles.forEach(function (route, i) {
                     wiki: formParam.wiki,
                     param: formParam,
                     SINGLE_USER: SINGLE_USER==='true',
+                    CLOWDER_ON: CLOWDER_ON==='true',
                     user: req.user,
                     enableEmail: email
                 });

@@ -69,7 +69,20 @@ html
                 <!-- title -->
                 div(class="row")
                     div(class="col-md-12 col-sm-12 col-xs-12")
-                    div(id="title-container")
+                    div(id="title-container" style="display:none;")
+                        h2(id="title-w-buttons") title
+                        h4(id="title-id")
+                        div(style="display:inline;")
+                            button(class="btn btn-yes favicon-button", id="tag-history-panel")
+                                i(class="fas fa-tag")
+                                | Tag
+                            if CLOWDER_ON
+                                button(class="btn btn-yes favicon-button", id="clowder-history-panel")
+                                    img(src="bootstrap/img/logo/clowder-sm-logo.png", width=20)
+                                    | Export
+                            button(class="btn btn-yes favicon-button" id="deleteFile")
+                                i(class="fas fa-trash-alt")
+                                | &nbsp;Delete
 
                 br
                 <!-- overview -->
