@@ -5,8 +5,8 @@ $("#datasrc-category").on("change", function(){
 
     var selectedItem = $(this).find("option:selected").val();
 
-    if (selectedItem === 'twitter-Tweet' || selectedItem === 'twitter-Timeline'){
-        $("#datasrc-criteria").html("<p>Make sure your file has column <u>text</u> and/or column <u>user.description</u>.</p>")
+    if (selectedItem === 'twitter-Tweet' || selectedItem === 'twitterV2-Tweet' || selectedItem === 'twitter-Timeline'){
+        $("#datasrc-criteria").html("<p>Make sure your file has column <u>text</u>.</p>")
     }
     else if (selectedItem === 'reddit-Post') {
         $("#datasrc-criteria").html("<p>Make sure your file has column <u>title</u> " +
@@ -140,9 +140,9 @@ function importFormValidate(){
     $("#column-header-selection").find("input[type=checkbox]").each(function(i, val){
         importedColumnHeaders.push($(val).val());
     });
-    if (category === "twitter-Tweet" || category === "twitter-Timeline"){
-        if (importedColumnHeaders.indexOf('text') === -1 && importedColumnHeaders.indexOf('user.description') === -1){
-            $("#modal-message").append(`<h4>Your file must have <u>text</u> and/or <u>user.description</u> column to be categorized ` +
+    if (category === "twitter-Tweet" || category === 'twitterV2-Tweet' || category === "twitter-Timeline"){
+        if (importedColumnHeaders.indexOf('text') === -1){
+            $("#modal-message").append(`<h4>Your file must have <u>text</u> column to be categorized ` +
                 `as Twitter Tweet.</h4>`);
             $("#alert").modal('show');
             return false;

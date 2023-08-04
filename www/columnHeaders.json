@@ -1,10 +1,8 @@
 {
     "sentiment": [
         "text",
-        "user.description",
         "description",
         "_source.text",
-        "_source.user.description",
         "body",
         "title",
         "_source.body",
@@ -19,9 +17,7 @@
     ],
     "autophrase": [
         "text",
-        "user.description",
         "_source.text",
-        "_source.user.description",
         "description",
         "body",
         "title",
@@ -31,9 +27,7 @@
     ],
     "preprocess": [
         "text",
-        "user.description",
         "_source.text",
-        "_source.user.description",
         "description",
         "body",
         "title",
@@ -43,9 +37,7 @@
     ],
     "classification": [
         "text",
-        "user.description",
         "_source.text",
-        "_source.user.description",
         "description",
         "title",
         "body",

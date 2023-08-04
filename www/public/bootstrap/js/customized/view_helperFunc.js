@@ -160,7 +160,7 @@ function processData(csv) {
     });
     // detect Category based on the first line
     $("#datasrc-criteria-hint").text("");
-    if (previewLinesWords[0].indexOf('text') > 0 ||  previewLinesWords[0].indexOf('user.description') > 0 ){
+    if (previewLinesWords[0].indexOf('text') > 0){
         $("#datasrc-criteria-hint").html("<p>Based on the column of your imported file, it is likely that you uploaded a " +
             "<u>Tweet</u> dataset or <u>Twitter User Timeline</u> dataset.</p>")
     }

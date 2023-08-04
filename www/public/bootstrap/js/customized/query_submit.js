@@ -233,6 +233,43 @@ function submitSearchbox(searchboxID, filenameID, dryrun = false){
 		var params = parameters.twtTimeline;
 
 	}
+	else if (queryTerm === 'queryTweetV2'){
+		var additional_num = 100;
+		if (dryrun) additional_num = 0;
+		var queryString = `{
+							  twitter {
+								queryTweetV2(q:"` + keyword + `", additional_num:` + additional_num + `){
+								  id
+								  text
+								  edit_history_tweet_ids
+								  attachments {
+									poll_ids
+									media_keys
+								  }
+								  author_id
+								  conversation_id
+								  created_at
+								  in_reply_to_user_id
+								  lang
+								  possibly_sensitive
+								  referenced_tweets {
+									type
+									id
+								  }
+								  reply_settings
+								  source
+								  withheld {
+									copyright
+									country_codes
+								  }
+								}
+							  }
+							}
+							`;
+		var prefix = 'twitterV2-Tweet';
+		var pages = -999;
+		var params = parameters.tweetV2;
+	}
 	else if (queryTerm === 'queryReddit'){
 		var queryString = `{
 								reddit{
@@ -554,6 +591,24 @@ function renderPreview(rendering,prefix){
 									<p class="text-block">`+ text + `</p>
 									<p class="text-block"><i class="fas fa-retweet" style="color:#94dc41;"></i>&nbsp;`+ retweet_count +
 									`&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-heart heart"></i>&nbsp;` +favorite_count +`</p>
+							</div>`);
+		});
+	}
+	else if (prefix === 'twitterV2-Tweet'){
+		$.each(rendering, function(i,val){
+			var img_url = 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
+			var author_id = val.author_id || 'Not Provided';
+			var created_at = val.created_at || 'Not Provided' ;
+			var text = val.text || 'Not Provided'
+
+			$("#grid").append(`<div class="grid-element">
+									<img src="` + img_url + `" class="user-img" alt="user-img"/>
+									<div class="text-block">
+										<p class="screenname"><b>` + author_id + `‏<b></p>
+										<br>
+										<p class="utc">&nbsp;&bull;`+ created_at +`</p>
+									</div>
+									<p class="text-block">`+ text + `</p>
 							</div>`);
 		});
 	}

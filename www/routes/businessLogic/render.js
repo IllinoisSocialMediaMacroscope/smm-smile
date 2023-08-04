@@ -104,6 +104,7 @@ router.post('/list', checkIfLoggedIn, function (req, res, next) {
 
     var promise_array = [];
     promise_array.push(s3.list_folders(req.user.email + '/GraphQL/twitter-Tweet/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/twitterV2-Tweet/'));
     promise_array.push(s3.list_folders(req.user.email + '/GraphQL/twitter-Timeline/'));
     promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Search/'));
     promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Post/'));
@@ -114,13 +115,14 @@ router.post('/list', checkIfLoggedIn, function (req, res, next) {
     Promise.all(promise_array).then(values => {
 
         directory['twitter-Tweet'] = values[0];
-        directory['twitter-Timeline'] = values[1];
-        directory['reddit-Search'] = values[2];
-        directory['reddit-Post'] = values[3];
-        directory['reddit-Comment'] = values[4];
-        directory['reddit-Historical-Post'] = values[5];
-        directory['reddit-Historical-Comment'] = values[6];
-        directory['userspec-Others'] = values[7];
+        directory['twitterV2-Tweet'] = values[1];
+        directory['twitter-Timeline'] = values[2];
+        directory['reddit-Search'] = values[3];
+        directory['reddit-Post'] = values[4];
+        directory['reddit-Comment'] = values[5];
+        directory['reddit-Historical-Post'] = values[6];
+        directory['reddit-Historical-Comment'] = values[7];
+        directory['userspec-Others'] = values[8];
 
         res.send(directory);
     }).catch(err => {
@@ -132,6 +134,7 @@ router.post('/list', checkIfLoggedIn, function (req, res, next) {
 router.post('/list-all', checkIfLoggedIn, function (req, res, next) {
     var promise_array = [];
     promise_array.push(s3.list_folders(req.user.email + '/GraphQL/twitter-Tweet/'));
+    promise_array.push(s3.list_folders(req.user.email + '/GraphQL/twitterV2-Tweet/'));
     promise_array.push(s3.list_folders(req.user.email + '/GraphQL/twitter-Timeline/'));
     promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Search/'));
     promise_array.push(s3.list_folders(req.user.email + '/GraphQL/reddit-Post/'));
@@ -165,13 +168,14 @@ router.post('/list-all', checkIfLoggedIn, function (req, res, next) {
     Promise.all(promise_array).then(values => {
         directory['GraphQL'] = {};
         directory['GraphQL']['twitter-Tweet'] = values[0];
-        directory['GraphQL']['twitter-Timeline'] = values[1];
-        directory['GraphQL']['reddit-Search'] = values[2];
-        directory['GraphQL']['reddit-Post'] = values[3];
-        directory['GraphQL']['reddit-Comment'] = values[4];
-        directory['GraphQL']['reddit-Historical-Post'] = values[5];
-        directory['GraphQL']['reddit-Historical-Comment'] = values[6];
-        directory['GraphQL']['userspec-Others'] = values[7];
+        directory['GraphQL']['twitterV2-Tweet'] = values[1];
+        directory['GraphQL']['twitter-Timeline'] = values[2];
+        directory['GraphQL']['reddit-Search'] = values[3];
+        directory['GraphQL']['reddit-Post'] = values[4];
+        directory['GraphQL']['reddit-Comment'] = values[5];
+        directory['GraphQL']['reddit-Historical-Post'] = values[6];
+        directory['GraphQL']['reddit-Historical-Comment'] = values[7];
+        directory['GraphQL']['userspec-Others'] = values[8];
         for (i = 0; i < order.length; i++) {
             var parent = order[i]['parent'];
             var child = order[i]['child'];
