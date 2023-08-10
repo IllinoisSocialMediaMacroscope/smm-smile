@@ -43,6 +43,7 @@ router.post('/query-dryrun', checkIfLoggedIn, function (req, res) {
                 'redditaccesstoken': obj['rd_access_token'],
                 'twtaccesstokenkey': obj['twt_access_token_key'],
                 'twtaccesstokensecret': obj['twt_access_token_secret'],
+                'twtbearertoken': obj['twt_v2_access_token']
             };
 
             gatherSinglePost(req, headers).then(responseObj => {
@@ -74,13 +75,13 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
             checkExist(req.user.email + '/GraphQL/' + req.body.prefix + '/', req.body.filename)
             .then((value) => {
                 if (value) {
-
                     var headers = {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
                         'redditaccesstoken': obj['rd_access_token'],
                         'twtaccesstokenkey': obj['twt_access_token_key'],
                         'twtaccesstokensecret': obj['twt_access_token_secret'],
+                        'twtbearertoken': obj['twt_v2_access_token']
                     };
 
                     var multiPostPromises = [];
@@ -219,10 +220,15 @@ router.post('/query', checkIfLoggedIn, function (req, res) {
                         res.send({ERROR: JSON.stringify(gatherMultiPostError)});
                     })
                 } else {
-                    res.send({ERROR: 'This filename ' + req.body.filename + ' already exist in your directory. Please rename it to something else!'});
+                    res.send({ERROR: 'This filename ' + req.body.filename + ' already exist in your directory. ' +
+                            'Please rename it to something else!'});
                 }
+            })
+            .catch(checkExistError => {
+                res.send({ERROR: checkExistError });
             });
-        } else {
+        }
+        else {
             res.send({ERROR: platform + " token expired! Please refresh the page."})
         }
     }).catch(checkAuthorizedError => {
@@ -349,6 +355,9 @@ function removeInvalidToken(req, platform) {
     if (platform === 'twitter') {
         removeCredential(req, 'twt_access_token_key');
         removeCredential(req, 'twt_access_token_secret');
+    }
+    else if (platform === 'twitterV2') {
+        removeCredential(req, 'twt_v2_access_token');
     } else if (platform === 'reddit') {
         removeCredential(req, 'rd_access_token');
     }
@@ -379,14 +388,15 @@ function checkAuthorized(req) {
     return new Promise(async (resolve, reject) => {
         var response = {
             twitter: false,
+            twitterV2: false,
             reddit: false,
         };
 
         var obj = await retrieveCredentials(req);
         if (obj && 'twt_access_token_key' in obj && 'twt_access_token_secret' in obj) response['twitter'] = true;
+        if (obj && 'twt_v2_access_token' in obj) response['twitterV2'] = true;
         if (obj && 'rd_access_token' in obj) response['reddit'] = true;
         resolve(response);
-
     });
 }
 

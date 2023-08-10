@@ -120,6 +120,7 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                     || directory === 'reddit-Historical-Post'
                                     || directory === 'reddit-Search'
                                     || directory === 'twitter-Tweet'
+                                    || directory === 'twitterV2-Tweet'
                                     || directory === 'twitter-Timeline'){
                                     $("#getImg").show();
                                 }

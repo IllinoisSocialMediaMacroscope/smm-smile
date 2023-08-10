@@ -6,7 +6,9 @@ function init(){
 
     queryTerm = '';
     Query ='';
-    parameters = { 	tweet: {},
+    parameters = {
+    	tweet: {},
+    	tweetV2: {},
         twtTimeline: {},
         rdSearch: {},
         rdComment:{},
@@ -61,81 +63,88 @@ function init(){
 			
 	// customize advance dropdown
 	$('#dropdownButton').on('click',function(){
-		if ($("#searchbox").val() !== '' && $("#searchbox").val() !== undefined ){
-			$(this).parent().toggleClass('open');
-			if ($(this).parent().attr('class') === 'dropdown dropdown-lg open'){
-				// disable search and enable advanced search
-				$("#simple-search-btn").prop('disabled',true);
-				pushAdvancedDropdown('on');
-			}else{
-				$("#simple-search-btn").prop('disabled',false);
-				pushAdvancedDropdown('off');
+		if ($("#searchbox").val() !== '' && $("#searchbox").val() !== undefined){
+			if (queryTerm !==  "queryTweetV2"){
+				$(this).parent().toggleClass('open');
+				if ($(this).parent().attr('class') === 'dropdown dropdown-lg open'){
+					// disable search and enable advanced search
+					$("#simple-search-btn").prop('disabled',true);
+					pushAdvancedDropdown('on');
+				}else{
+					$("#simple-search-btn").prop('disabled',false);
+					pushAdvancedDropdown('off');
+				}
+
+				// initialize the advanced panel
+				// escape doule quotation mark
+				var keyword =  $("#searchbox").val();
+				var keyword = keyword.replace(/[\"]+/g, `\\"`);
+
+				parameters['tweet']['q:'] = keyword;
+				parameters['tweet']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
+					`\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
+					`\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
+					`\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
+					`\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
+					`\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
+					`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang\n\t\t\t}`+
+					`\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
+
+				parameters['twtTimeline']['screen_name:'] = keyword;
+				parameters['twtTimeline']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
+					`\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
+					`\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
+					`\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
+					`\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
+					`\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
+					`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang\n\t\t\t}`+
+					`\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
+
+				parameters['rdSearch']['query:'] = keyword;
+				parameters['rdSearch']['time:'] =  'all';
+				parameters['rdSearch']['sort:'] =  'relevance';
+				parameters['rdSearch']['fields'] = `\n\t\t\tarchived\n\t\t\tauthor_name\n\t\t\tbrand_safe\n\t\t\tcontest_mode\n\t\t\tclicked`+
+					`\n\t\t\tcreated\n\t\t\tcreated_utc\n\t\t\tdomain\n\t\t\tdowns\n\t\t\tedited\n\t\t\tgilded\n\t\t\thidden\n\t\t\thide_score`+
+					`\n\t\t\tid\n\t\t\tis_self\n\t\t\tlink_flair_text\n\t\t\tlocked\n\t\t\tname\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tscore`+
+					`\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id\n\t\t\tsubreddit_type\n\t\t\tsubreddit_name_prefixed`+
+					`\n\t\t\ttitle\n\t\t\turl\n\t\t\tups\n\t\t\tvisited`;
+
+				parameters['rdPost']['subredditName:'] = keyword;
+				parameters['rdPost']['extra:'] = 2000;
+				parameters['rdPost']['fields'] = `\n\t\t\tarchived\n\t\t\tauthor_name\n\t\t\tbrand_safe\n\t\t\tcontest_mode\n\t\t\tclicked`+
+					`\n\t\t\tcreated\n\t\t\tcreated_utc\n\t\t\tdomain\n\t\t\tdowns\n\t\t\tedited\n\t\t\tgilded\n\t\t\thidden\n\t\t\thide_score`+
+					`\n\t\t\tid\n\t\t\tis_self\n\t\t\tlink_flair_text\n\t\t\tlocked\n\t\t\tname\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tscore`+
+					`\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id\n\t\t\tsubreddit_type\n\t\t\tsubreddit_name_prefixed`+
+					`\n\t\t\ttitle\n\t\t\turl\n\t\t\tups\n\t\t\tvisited`;
+
+				parameters['rdComment']['subredditName:'] = keyword;
+				parameters['rdComment']['extra:'] = 2000;
+				parameters['rdComment']['fields'] = `\n\t\t\tcomment_author_name\n\t\t\tarchived\n\t\t\tbody\n\t\t\tbody_html\n\t\t\tsubreddit_display_name`+
+					`\n\t\t\tcreated_utc\n\t\t\tcomment_created\n\t\t\tcontroversiality\n\t\t\tcomment_downs\n\t\t\tedited\n\t\t\tgilded\n\t\t\tcomment_id`+
+					`\n\t\t\tlink_id\n\t\t\tlink_author\n\t\t\tlink_title\n\t\t\tlink_permalink\n\t\t\tlink_url\n\t\t\tcomment_over_18\n\t\t\tparent_id`+
+					`\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tcomment_score\n\t\t\tsubreddit_id\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_name_prefixed`+
+					`\n\t\t\tscore_hidden\n\t\t\tstickied\n\t\t\tsubreddit_type\n\t\t\tcomment_ups`;
+
+				parameters['psPost']['q:'] = keyword;
+				parameters['psPost']['fields']=`\n\t\t\tauthor_name\n\t\t\tcreated_utc`+
+					`\n\t\t\tdomain\n\t\t\tid\n\t\t\tis_self\n\t\t\tlocked\n\t\t\tnum_comments\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tfull_link`+
+					`\n\t\t\tpinned\n\t\t\tretrieved_on\n\t\t\tscore\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id`+
+					`\n\t\t\tsubreddit_name_prefixed\n\t\t\ttitle\n\t\t\turl`;
+
+				parameters['psComment']['q:'] = keyword;
+				parameters['psComment']['fields']=`\n\t\t\tcomment_author_name\n\t\t\tbody\n\t\t\tcomment_created\n\t\t\tid\n\t\t\tlink_id\n\t\t\tparent_id`+
+					`\n\t\t\tcomment_score\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_name_prefixed\n\t\t\tsubreddit_id`;
+
+				Query =updateString(queryTerm,parameters);
+				$("#input").val(`{\n\n` + Query +`\n\n}`);
 			}
-			
-			// initialize the advanced panel
-			// escape doule quotation mark
-			var keyword =  $("#searchbox").val();
-			var keyword = keyword.replace(/[\"]+/g, `\\"`);
-			
-			parameters['tweet']['q:'] = keyword;
-			parameters['tweet']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
-			`\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
-			`\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
-			`\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
-			`\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
-			`\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
-			`\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang\n\t\t\t}`+
-			`\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
-			
-			parameters['twtTimeline']['screen_name:'] = keyword;
-			parameters['twtTimeline']['fields'] = `\n\t\t\tid\n\t\t\tid_str\n\t\t\tcreated_at\n\t\t\ttext\n\t\t\tretweet_count`+
-                `\n\t\t\tfavorite_count\n\t\t\tfavorited\n\t\t\ttruncated\n\t\t\tlang\n\t\t\tis_quote_status\n\t\t\tsource`+
-                `\n\t\t\tin_reply_to_user_id_str\n\t\t\tin_reply_to_status_id_str\n\t\t\tin_reply_to_screen_name\n\t\t\tuser{`+
-                `\n\t\t\t\tauthor_id\n\t\t\t\tauthor_id_str\n\t\t\t\tname\n\t\t\t\tscreen_name\n\t\t\t\tdescription\n\t\t\t\tauthor_created_at`+
-                `\n\t\t\t\tprofile_image_url\n\t\t\t\tprofile_banner_url\n\t\t\t\turl\n\t\t\t\tlocation\n\t\t\t\ttweets_count`+
-                `\n\t\t\t\tfollowers_count\n\t\t\t\tfriends_count\n\t\t\t\tstatuses_count\n\t\t\t\ttime_zone\n\t\t\t\tprotected`+
-                `\n\t\t\t\tverified\n\t\t\t\tis_translator\n\t\t\t\tcontributors_enabled\n\t\t\t\tgeo_enabled\n\t\t\t\tauthor_lang\n\t\t\t}`+
-                `\n\t\t\tentities{\n\t\t\t\tmedia{\n\t\t\t\t\tmedia_url\n\t\t\t\t}\n\t\t\t}`;
-			
-			parameters['rdSearch']['query:'] = keyword;
-			parameters['rdSearch']['time:'] =  'all';
-			parameters['rdSearch']['sort:'] =  'relevance';
-			parameters['rdSearch']['fields'] = `\n\t\t\tarchived\n\t\t\tauthor_name\n\t\t\tbrand_safe\n\t\t\tcontest_mode\n\t\t\tclicked`+
-			`\n\t\t\tcreated\n\t\t\tcreated_utc\n\t\t\tdomain\n\t\t\tdowns\n\t\t\tedited\n\t\t\tgilded\n\t\t\thidden\n\t\t\thide_score`+
-			`\n\t\t\tid\n\t\t\tis_self\n\t\t\tlink_flair_text\n\t\t\tlocked\n\t\t\tname\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tscore`+
-			`\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id\n\t\t\tsubreddit_type\n\t\t\tsubreddit_name_prefixed`+
-			`\n\t\t\ttitle\n\t\t\turl\n\t\t\tups\n\t\t\tvisited`;
-			
-			parameters['rdPost']['subredditName:'] = keyword;
-			parameters['rdPost']['extra:'] = 2000;
-			parameters['rdPost']['fields'] = `\n\t\t\tarchived\n\t\t\tauthor_name\n\t\t\tbrand_safe\n\t\t\tcontest_mode\n\t\t\tclicked`+
-			`\n\t\t\tcreated\n\t\t\tcreated_utc\n\t\t\tdomain\n\t\t\tdowns\n\t\t\tedited\n\t\t\tgilded\n\t\t\thidden\n\t\t\thide_score`+
-			`\n\t\t\tid\n\t\t\tis_self\n\t\t\tlink_flair_text\n\t\t\tlocked\n\t\t\tname\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tscore`+
-			`\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id\n\t\t\tsubreddit_type\n\t\t\tsubreddit_name_prefixed`+
-			`\n\t\t\ttitle\n\t\t\turl\n\t\t\tups\n\t\t\tvisited`;
-			
-			parameters['rdComment']['subredditName:'] = keyword;
-			parameters['rdComment']['extra:'] = 2000;
-			parameters['rdComment']['fields'] = `\n\t\t\tcomment_author_name\n\t\t\tarchived\n\t\t\tbody\n\t\t\tbody_html\n\t\t\tsubreddit_display_name`+
-			`\n\t\t\tcreated_utc\n\t\t\tcomment_created\n\t\t\tcontroversiality\n\t\t\tcomment_downs\n\t\t\tedited\n\t\t\tgilded\n\t\t\tcomment_id`+
-			`\n\t\t\tlink_id\n\t\t\tlink_author\n\t\t\tlink_title\n\t\t\tlink_permalink\n\t\t\tlink_url\n\t\t\tcomment_over_18\n\t\t\tparent_id`+
-			`\n\t\t\tquarantine\n\t\t\tsaved\n\t\t\tcomment_score\n\t\t\tsubreddit_id\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_name_prefixed`+
-			`\n\t\t\tscore_hidden\n\t\t\tstickied\n\t\t\tsubreddit_type\n\t\t\tcomment_ups`;
-			
-			parameters['psPost']['q:'] = keyword;
-			parameters['psPost']['fields']=`\n\t\t\tauthor_name\n\t\t\tcreated_utc`+
-			`\n\t\t\tdomain\n\t\t\tid\n\t\t\tis_self\n\t\t\tlocked\n\t\t\tnum_comments\n\t\t\tover_18\n\t\t\tpermalink\n\t\t\tfull_link`+
-			`\n\t\t\tpinned\n\t\t\tretrieved_on\n\t\t\tscore\n\t\t\tstickied\n\t\t\tspoiler\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_id`+
-			`\n\t\t\tsubreddit_name_prefixed\n\t\t\ttitle\n\t\t\turl`;
-				
-			parameters['psComment']['q:'] = keyword;
-			parameters['psComment']['fields']=`\n\t\t\tcomment_author_name\n\t\t\tbody\n\t\t\tcomment_created\n\t\t\tid\n\t\t\tlink_id\n\t\t\tparent_id`+
-			`\n\t\t\tcomment_score\n\t\t\tsubreddit_display_name\n\t\t\tsubreddit_name_prefixed\n\t\t\tsubreddit_id`;
-			
-			Query =updateString(queryTerm,parameters);
-			$("#input").val(`{\n\n` + Query +`\n\n}`);
-			
-		}else{
+			else {
+				$("#modal-message").append(`<h4>We currently don't support advanced settings for search Twitter/X using V2 endpoints.</h4>`);
+				$("#alert").modal('show');
+				$("#searchbox").focus();
+			}
+		}
+		else{
 			$("#modal-message").append(`<h4>Advanced search disabled unless you provide some search keywords!</h4>`);
 			$("#alert").modal('show');
 			$("#searchbox").focus();
@@ -166,6 +175,7 @@ function init(){
 		
 		$(".tweet").hide();
 		$(".timeline").hide();
+		$(".tweetV2").hide();
 		$(".reddit-search").hide();
 		$(".reddit-post").hide();
 		$(".reddit-comment").hide();
@@ -201,6 +211,19 @@ function init(){
 			$("#searchbox").attr("placeholder","User screen name starting after @");
             $("boolean").tooltip('hide');
         }
+		if ( queryTerm === 'queryTweetV2'){
+			$(".tweetV2").show();
+			$("#searchbox").attr("placeholder","Tweet keywords that you wish to search...");
+
+			// tooltip to show twitter rules
+			$("boolean").attr('data-original-title',
+				"Twitter API supports a list of standard search operators to modify the behavior of the query. For example, " +
+				"<b>SPACE, OR, MINUS SIGN, HASHTAG and etc</b>. <br>Details please refer to the&nbsp" +
+				"<a href='https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators.html' target='_blank'>" +
+				"standard operators</a>")
+			.tooltip('fixTitle')
+			.tooltip('show');
+		}
         else if ( queryTerm === 'queryReddit'){
 			$(".reddit-search").show();
 			$("#searchbox").attr("placeholder","Keywords for the Reddit posts that you wish to search...");
@@ -287,7 +310,8 @@ function init(){
                                 parameters['twtTimeline']['screen_name:'] = keyword;
                                 parameters['tweet']['q:'] = keyword;
                                 parameters['twtTimeline']['screen_name:'] = keyword;
-                                parameters['rdSearch']['query:'] = keyword;
+								parameters['tweetV2']['q:'] = keyword;
+								parameters['rdSearch']['query:'] = keyword;
                                 parameters['rdPost']['subredditName:']= keyword;
                                 parameters['rdComment']['subredditName:'] = keyword;
                                 parameters['psPost']['q:'] = keyword;
@@ -315,6 +339,7 @@ function init(){
 
             parameters['tweet']['q:'] = keyword;
             parameters['twtTimeline']['screen_name:'] = keyword;
+			parameters['tweetV2']['q:'] = keyword;
             parameters['rdSearch']['query:'] = keyword;
             parameters['rdPost']['subredditName:']= keyword;
             parameters['rdComment']['subredditName:'] = keyword;
@@ -497,7 +522,7 @@ function init(){
 		$("#input").val(`{\n\n` + Query +`\n\n}`);
 
 	});
-	
+
 	/*----------------------------------------------------- Reddit Search-------------------------------------------------------*/
 	$("input[name='time']").change(function(){
 		parameters['rdSearch']['time:'] = $(this).val();
@@ -848,6 +873,9 @@ function updateString(queryTerm,parameters){
 	else if(queryTerm === 'queryTweet'){
 		query =  `\ttwitter{\n\t\t`	+ queryTerm + `(`+ constructQuery(parameters.tweet)	+ `\n\t\t}\n\t}`;
 	}
+	else if(queryTerm === 'queryTweetV2'){
+		query =  `\ttwitter{\n\t\t`	+ queryTerm + `(`+ constructQuery(parameters.tweetV2)	+ `\n\t\t}\n\t}`;
+	}
 	else if (queryTerm === 'queryReddit'){
 		query =  `\treddit{\n\t\tsearch(`+  constructQuery(parameters.rdSearch) +  `\n\t\t}\n\t}`;  
 	}
@@ -913,6 +941,8 @@ function setHitogramInterval(freq){
 	var queryTerm = $("#social-media").find(':selected').val();
 	if (queryTerm === 'queryTweet'){
 		var prefix = 'twitter-Tweet';
+	}else if (queryTerm === 'queryTweetV2'){
+		var prefix = 'twitterV2-Tweet';
 	}else if (queryTerm === 'getTimeline'){
 		var prefix = 'twitter-Timeline';
 	}else if (queryTerm === 'queryReddit'){

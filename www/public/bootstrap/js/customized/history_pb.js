@@ -68,6 +68,9 @@ $.getScript("bootstrap/js/customized/view_helperFunc.js", function(){
                                 else if (key1 === 'twitter-Tweet') {
                                     var secondLevel = 'Twitter Tweet';
                                 }
+                                else if (key1 === 'twitterV2-Tweet') {
+                                    var secondLevel = 'Twitter V2 Tweet';
+                                }
                                 else if (key1 === 'twitter-Timeline') {
                                     var secondLevel = 'Twitter User Timeline';
                                 }

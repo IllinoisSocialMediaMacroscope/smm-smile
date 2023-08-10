@@ -68,12 +68,16 @@ html
                     //div(class="twitter-auth",style="display:inline-block;")
                     //    a(target="_blank", href="login/twitter")
                     //        img(src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
+                    div(class="twitterV2-auth",style="display:inline-block;")
+                        a(href="login/twitterV2")
+                            img(src='bootstrap/img/logo/x-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
                     div(class="reddit-auth",style="display:inline-block;")
-                        a(target="_blank", href="login/reddit")
+                        a(href="login/reddit")
                             img(src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px")
                 div(id="authorized",style="display:inline-block;")
                     p(style="display:inline-block;margin:10px 10px;") You have already authorized:
-                    img(id="twitter-authorized", src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
+                    //img(id="twitter-authorized", src='bootstrap/img/logo/twitter-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
+                    img(id="twitterV2-authorized", src='bootstrap/img/logo/x-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
                     img(id="reddit-authorized",src='bootstrap/img/logo/reddit-sm-logo.png', width="30px",height="30px", style="margin-right:10px;display:none;")
 
             <!-- search --->
@@ -81,9 +85,11 @@ html
                 div(id="tabs")
                     boolean(data-toggle="tooltip", data-placement="top", data-html="true")
                     select(class="selectpicker show-tick" id="social-media" title="Choose a Data Source..." data-width="220px")
-                        optgroup(label="Search Twitter")
-                            option(data-icon="fab fa-twitter" value="queryTweet" disabled) Tweets
-                            option(data-icon="fas fa-user" value="getTimeline" disabled) User timeline
+                        optgroup(label="Search Twitter/X V2")
+                            option(data-icon="fab fa-twitter" value="queryTweetV2" disabled) Tweets
+                        //optgroup(label="Search Twitter")
+                        //    option(data-icon="fab fa-twitter" value="queryTweet" disabled) Tweets
+                        //    option(data-icon="fas fa-user" value="getTimeline" disabled) User timeline
                         optgroup(label="Search Reddit")
                             option(data-icon="fab fa-reddit-alien" value="queryReddit" disabled) Search Reddit Posts
                             option(data-icon="fas fa-list-ul" value="redditPost" disabled) Posts in Subreddit

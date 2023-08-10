@@ -160,7 +160,7 @@ function processData(csv) {
     });
     // detect Category based on the first line
     $("#datasrc-criteria-hint").text("");
-    if (previewLinesWords[0].indexOf('text') > 0 ||  previewLinesWords[0].indexOf('user.description') > 0 ){
+    if (previewLinesWords[0].indexOf('text') > 0){
         $("#datasrc-criteria-hint").html("<p>Based on the column of your imported file, it is likely that you uploaded a " +
             "<u>Tweet</u> dataset or <u>Twitter User Timeline</u> dataset.</p>")
     }
@@ -518,7 +518,7 @@ function submitHistory(currItem, folderURL){
     $(".historyTabs").css('color', '#ffffff').css('background', 'none');
     $(currItem).css('color','#333').css('background-color','#eae8e8');
 
-    $("#title-container").empty();
+    $("#title-container").hide();
     $("#overview-title").hide();
     $("#overview-container").empty();
     $("#img-container").empty();
@@ -558,7 +558,7 @@ function submitHistory(currItem, folderURL){
                     }
 
                     if ('title' in data || 'ID' in data){
-                        appendTitle("#title-container",data.title, data.ID);
+                        appendTitle(data.title, data.ID);
                         $("#tag-history-panel").show();
                         $("#clowder-history-panel").show();
                         $("#deleteFile").show();
@@ -650,25 +650,9 @@ function deleteHistory(folderURL){
 
 }
 
-function appendTitle(container, title,ID){
-    $(container).append(`<h2 class="title-w-buttons">`+ title+ `</h2>
-						<div style="display:inline;padding:0 20px;float:right;">
-							<button class="btn btn-yes favicon-button" id="tag-history-panel">
-								<i class="fas fa-tag"></i>Tag
-							</button>
-							<button class="btn btn-yes favicon-button" id="clowder-history-panel">
-								<img src="bootstrap/img/logo/clowder-sm-logo.png" width=20/>Clowder
-							</button>
-<!--							<button class="btn btn-yes favicon-button" id="getComment">-->
-<!--						        <i class="fas fa-comments"></i>&nbsp;Comment-->
-<!--						    </button>-->
-<!--						    <button class="btn btn-yes favicon-button" id="getImg">-->
-<!--						        <i class="fas fa-image"></i>&nbsp;Image-->
-<!--						    </button>-->
-						    <button class="btn btn-yes favicon-button" id="deleteFile" onclick=\"deleteModal('` + ID + `')\">
-						        <i class="fas fa-trash-alt"></i>&nbsp;Delete
-						    </button></div>
-						<h4>ID: ` + ID +`</h4>`);
+function appendTitle(title,ID){
+    $("#title-w-buttons").text(title);
+    $("#title-id").text(ID);
 
     $("#getComment").on('click',function(e){
         e.preventDefault();
@@ -690,6 +674,14 @@ function appendTitle(container, title,ID){
         e.preventDefault();
         $("#tag-modal").modal('show');
     });
+
+    // for delete
+    $("#deleteFile").on('click',function(e){
+        e.preventDefault();
+        deleteModal(ID);
+    });
+
+    $("#title-container").show();
 }
 
 function appendOverview(container,config, download){

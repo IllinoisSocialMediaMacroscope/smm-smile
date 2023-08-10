@@ -10,7 +10,12 @@ function authorize(platform){
     if (platform === 'twitter') {
         $("#social-media option[value='queryTweet']").removeAttr('disabled');
         $("#social-media option[value='getTimeline']").removeAttr('disabled');
-    } else if (platform === 'reddit') {
+    }
+    else if (platform === 'twitterV2') {
+        $("#social-media option[value='queryTweetV2']").removeAttr('disabled');
+        $("#social-media option[value='getTimelineV2']").removeAttr('disabled');
+    }
+    else if (platform === 'reddit') {
         $("#social-media option[value='queryReddit']").removeAttr('disabled');
         $("#social-media option[value='redditPost']").removeAttr('disabled');
         $("#social-media option[value='redditComment']").removeAttr('disabled');
@@ -28,7 +33,7 @@ $(document).ready(function () {
                 $("#warning").modal("show");
             }
             else{
-                var platforms = ['twitter', 'reddit'];
+                var platforms = ['twitter', 'twitterV2', 'reddit'];
                 $.each(platforms, function (i, platform) {
                     if (data[platform]) {
                         authorize(platform);

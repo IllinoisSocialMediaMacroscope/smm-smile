@@ -27,7 +27,8 @@ var app = express();
 smileHomePath = path.join(process.env.HOME, 'smile');
 s3FolderName = process.env.USER || 'local';
 SINGLE_USER = 'true';
-CLOWDER_BASE_URL= process.env.CLOWDER_BASE_URL || "https://clowder.smm.ncsa.illinois.edu/";
+CLOWDER_ON = process.env.CLOWDER_ON || 'false';
+CLOWDER_BASE_URL= process.env.CLOWDER_BASE_URL || "http://clowder.localhost/";
 email = true;
 
 /**
@@ -45,6 +46,9 @@ if (process.env.DOCKERIZED === 'true') {
     REDDIT_CLIENT_ID = process.env.REDDIT_CLIENT_ID;
     REDDIT_CLIENT_SECRET = process.env.REDDIT_CLIENT_SECRET;
     REDDIT_CALLBACK_URL = process.env.REDDIT_CALLBACK_URL;
+    TWITTER_V2_CLIENT_ID = process.env.TWITTER_V2_CLIENT_ID;
+    TWITTER_V2_CLIENT_SECRET = process.env.TWITTER_V2_CLIENT_SECRET;
+    TWITTER_V2_CALLBACK_URL = process.env.TWITTER_V2_CALLBACK_URL;
     FLICKR_CONSUMER_KEY = process.env.FLICKR_CONSUMER_KEY;
     FLICKR_CONSUMER_SECRET = process.env.FLICKR_CONSUMER_SECRET;
     BOX_CLIENT_ID = process.env.BOX_CLIENT_ID;
@@ -55,6 +59,7 @@ if (process.env.DOCKERIZED === 'true') {
     GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
     BUCKET_NAME = process.env.BUCKET_NAME;
     SINGLE_USER = process.env.SINGLE_USER;
+    CLOWDER_ON = process.env.CLOWDER_ON;
 
     if (process.env.EMAIL_HOST === "" || process.env.EMAIL_HOST === undefined || process.env.EMAIL_HOST === null ||
         process.env.EMAIL_PORT === "" || process.env.EMAIL_PORT === undefined || process.env.EMAIL_PORT === null ||
@@ -155,6 +160,9 @@ if (process.env.DOCKERIZED === 'true') {
     REDDIT_CLIENT_ID = config.reddit.client_id;
     REDDIT_CLIENT_SECRET = config.reddit.client_secret;
     REDDIT_CALLBACK_URL = config.reddit.callback_url;
+    TWITTER_V2_CLIENT_ID = config.twitterV2.client_id;
+    TWITTER_V2_CLIENT_SECRET = config.twitterV2.client_secret;
+    TWITTER_V2_CALLBACK_URL = config.twitterV2.callback_url;
     FLICKR_CONSUMER_KEY = config.flickr.consumer_key;
     FLICKR_CONSUMER_SECRET = config.flickr.consumer_secret;
     BOX_CLIENT_ID = config.box.client_id;
@@ -163,9 +171,10 @@ if (process.env.DOCKERIZED === 'true') {
     DROPBOX_CLIENT_SECRET = config.dropbox.client_secret;
     GOOGLE_CLIENT_ID = config.google.client_id;
     GOOGLE_CLIENT_SECRET = config.google.client_secret;
-    SMILE_GRAPHQL_URL = "localhost";
+    SMILE_GRAPHQL_URL = "http://localhost:5050/graphql";
     BUCKET_NAME = 'macroscope-smile';
     SINGLE_USER = 'true';
+    CLOWDER_ON = 'false';
 
     lambdaHandler = new LambdaHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
     batchHandler = new BatchHelper(AWS_ACCESSKEY, AWS_ACCESSKEYSECRET);
@@ -234,6 +243,7 @@ analysesRoutesFiles.forEach(function (route, i) {
                     wiki: formParam.wiki,
                     param: formParam,
                     SINGLE_USER: SINGLE_USER==='true',
+                    CLOWDER_ON: CLOWDER_ON==='true',
                     user: req.user,
                     enableEmail: email
                 });
