@@ -8,12 +8,17 @@ on:
   push:
     branches:
       - main
+      - develop
+      - 'release/*'
 
     tags:
       - '*'
 
-  # only test with local branch
   pull_request:
+    branches:
+      - main
+      - develop
+      - 'release/*'
 
 # Certain actions will only run when this is the main repo.
 env:

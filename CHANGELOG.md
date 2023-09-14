@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.9]
+## [0.3.0] - 2023-09-14
+### Fixed
+- Github action to auto generate docker container [#93](https://github.com/ncsa/standalone-smm-smile/issues/93)
+
+### Added
+- Enable email sending [#72](https://github.com/ncsa/standalone-smm-smile/issues/72)
+
+## [0.2.9] - 2023-08-04
 ### Added
 - Environment variable to turn Clowder on and off [#86](https://github.com/ncsa/standalone-smm-smile/issues/86)
 - Replace Twitter API v1 with X (Twitter) API v2 and implement OAUTH2 [#10](https://github.com/ncsa/standalone-smm-smile/issues/10)

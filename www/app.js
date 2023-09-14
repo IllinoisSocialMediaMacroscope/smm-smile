@@ -62,9 +62,7 @@ if (process.env.DOCKERIZED === 'true') {
     CLOWDER_ON = process.env.CLOWDER_ON;
 
     if (process.env.EMAIL_HOST === "" || process.env.EMAIL_HOST === undefined || process.env.EMAIL_HOST === null ||
-        process.env.EMAIL_PORT === "" || process.env.EMAIL_PORT === undefined || process.env.EMAIL_PORT === null ||
-        process.env.EMAIL_FROM_ADDRESS === "" || process.env.EMAIL_FROM_ADDRESS === undefined || process.env.EMAIL_FROM_ADDRESS === null ||
-        process.env.EMAIL_PASSWORD === "" || process.env.EMAIL_PASSWORD === undefined || process.env.EMAIL_PASSWORD === null) {
+        process.env.EMAIL_FROM_ADDRESS === "" || process.env.EMAIL_FROM_ADDRESS === undefined || process.env.EMAIL_FROM_ADDRESS === null) {
         email = false;
     }
 
