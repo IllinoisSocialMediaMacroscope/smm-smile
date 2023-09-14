@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Github action to auto generate docker container [#93](https://github.com/ncsa/standalone-smm-smile/issues/93)
 
+### Added
+- Enable email sending [#72](https://github.com/ncsa/standalone-smm-smile/issues/72)
+
 ## [0.2.9]
 ### Added
 - Environment variable to turn Clowder on and off [#86](https://github.com/ncsa/standalone-smm-smile/issues/86)
