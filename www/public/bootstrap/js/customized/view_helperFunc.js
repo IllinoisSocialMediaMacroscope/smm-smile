@@ -551,11 +551,10 @@ function submitHistory(currItem, folderURL){
 
                     // ADD TO CLOWDER MODAL
                     $("#clowder-files-list").empty();
-                    if (data.title != 'Social Media'){
-                        clowderFileGen(data.download);
-                        clowderFileMeta();
-                        $('.fileTags').tagsinput({ freeInput: true });
-                    }
+                    clowderFileGen(data.download);
+                    clowderFileMeta();
+                    $('.fileTags').tagsinput({ freeInput: true });
+
 
                     if ('title' in data || 'ID' in data){
                         appendTitle(data.title, data.ID);
